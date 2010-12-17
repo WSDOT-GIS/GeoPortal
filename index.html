@@ -41,6 +41,7 @@
         dojo.require("dijit.Toolbar");
         dojo.require("dijit.form.DropDownButton");
         dojo.require("dijit.Dialog");
+        dojo.require("dijit.Menu");
 
         dojo.require("esri.map");
         dojo.require("esri.virtualearth.VETiledLayer");
@@ -48,7 +49,8 @@
         dojo.require("esri.arcgis.utils");
 
         var map = null;
-
+        var extents = null;
+		
         function init() {
             var initExtent = new esri.geometry.Extent({
                 "xmin": -13938444.981854893,
@@ -59,6 +61,22 @@
                     "wkid": 102100
                 }
             });
+
+            extents = {
+                fullExtent: new esri.geometry.Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "SpatialReference": { "wkid": 102100} }),
+                regionExtents: {
+                    olympic: new esri.geometry.Extent({ "xmin": -13916338.105957599, "ymin": 5871905.0123298904, "ymax": 6199038.6563490899, "xmax": -13514456.876250001, "SpatialReference": { "wkid": 102100} })
+                    , southcentral: new esri.geometry.Extent({ "xmin": -13496692.0860734, "ymin": 5736869.3759225896, "ymax": 6051154.3698706599, "xmax": -13104714.794208299, "SpatialReference": { "wkid": 102100} })
+                    , eastern: new esri.geometry.Extent({ "xmin": -13333876.337269399, "ymin": 5899530.2303624898, "ymax": 6226811.1176396199, "xmax": -12931415.4339041, "SpatialReference": { "wkid": 102100} })
+                    , northcentral: new esri.geometry.Extent({ "xmin": -13539941.262809901, "ymin": 5920272.3836273896, "ymax": 6240012.4439044902, "xmax": -13139432.309131701, "SpatialReference": { "wkid": 102100} })
+                    , northwest: new esri.geometry.Extent({ "xmin": -13774801.1336015, "ymin": 5949816.6953899199, "ymax": 6273649.11963824, "xmax": -13372864.399699001, "SpatialReference": { "wkid": 102100} })
+                    , southwest: new esri.geometry.Extent({ "xmin": -13788347.769835001, "ymin": 5653732.0172728105, "ymax": 5967539.7998465998, "xmax": -13400171.8799819, "SpatialReference": { "wkid": 102100} })
+                },
+                countyExtents: {
+                    thurston: new esri.geometry.Extent({ "xmin": 974095.421861276, "ymin": 530229.35763827, "xmax": 1143693.18568344, "ymax": 683527.610096276, "spatialReference": { "wkid": 2927} })
+                }
+            };
+
             map = new esri.Map("map", {
                 logo: false,
                 extent: initExtent,
@@ -79,7 +97,7 @@
             });
             var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
             map.addLayer(initBasemap);
-            var hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer");
+            var hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "hpms" });
             map.addLayer(hpmsLayer);
 
             createBasemapGallery();
@@ -130,6 +148,29 @@
                     <div>Switch Basemap</div>
                     <div dojotype="dijit.TooltipDialog">
                         <div id="basemapGallery">
+                        </div>
+                    </div>
+                </div>
+                <div dojotype="dijit.form.DropDownButton">
+                    <div>Zoom to...</div>
+                    <div dojotype="dijit.Menu">
+                        <div onclick="map.setExtent(extents.fullExtent);" dojotype="dijit.MenuItem">Full Extent</div>
+                	    <div dojotype="dijit.PopupMenuItem">
+                            <span>Regions</span>
+                            <div dojotype="dijit.Menu">
+						        <div onclick="map.setExtent(extents.regionExtents.olympic);" dojotype="dijit.MenuItem">Olympic</div>
+						        <div onclick="map.setExtent(extents.regionExtents.southcentral);" dojotype="dijit.MenuItem">Southcentral</div>
+						        <div onclick="map.setExtent(extents.regionExtents.eastern);" dojotype="dijit.MenuItem">Eastern</div>
+						        <div onclick="map.setExtent(extents.regionExtents.northcentral);" dojotype="dijit.MenuItem">Northcentral</div>
+						        <div onclick="map.setExtent(extents.regionExtents.northwest);" dojotype="dijit.MenuItem">Northwest</div>
+						        <div onclick="map.setExtent(extents.regionExtents.southwest);" dojotype="dijit.MenuItem">Southwest</div>
+                            </div>
+                        </div>
+                        <div dojotype="dijit.PopupMenuItem">
+                            <span>Counties</span>
+                            <div dojotype="dijit.Menu">
+                                <div id="thurstonZoomMenuItem" onclick="map.setExtent(extents.countyExtents.thurston);" dojotype="dijit.MenuItem">Thurston</div>
+                            </div>
                         </div>
                     </div>
                 </div>
