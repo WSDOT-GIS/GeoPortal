@@ -50,6 +50,7 @@
 
         var map = null;
         var extents = null;
+        var hpmsLayer;
 		
         function init() {
             var initExtent = new esri.geometry.Extent({
@@ -97,11 +98,39 @@
             });
             var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
             map.addLayer(initBasemap);
-            var hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "hpms" });
+            hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "hpms" });
             map.addLayer(hpmsLayer);
 
             createBasemapGallery();
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
+            dojo.connect(hpmsLayer, "onLoad", null, setupToc);
+
+            function setupToc(layer) {
+                var layerInfo;
+                var ul = "<ul>";
+                for (var i in layer.layerInfos) {
+                    // Get the layer info for the current layer.
+                    layerInfo = layer.layerInfos[i];
+                    if (layerInfo.parentLayerId === -1) {
+                        ul += "<li>" + layerInfo.name;
+                        if (layerInfo.subLayerIds.length > 0) {
+                            ul += "<ul>";
+                            for (var j in layerInfo.subLayerIds) {
+                                innerLayerInfo = layer.layerInfos[layerInfo.subLayerIds[j]];
+                                ul += "<li>" + innerLayerInfo.name + "</li>";
+                            }
+                            ul += "</ul>";
+                        }
+                        ul += "</li>";
+                    }
+                    else {
+                    }
+                }
+                ul += "</ul>";
+                dojo.place(ul, "toc", "first");
+            }
+
+            
         }
 
         function createBasemapGallery() {
@@ -176,7 +205,9 @@
                 </div>
             </div>
         </div>
-        <div id="map" dojotype="dijit.layout.ContentPane" region="center">
+        <div id="map" dojotype="dijit.layout.ContentPane" region="center"></div>
+        <div id="tocPane" style="width:120px" dojotype="dijit.layout.ContentPane" region="left" splitter="true">
+            <div id="toc"></div>
         </div>
     </div>
 </body>
