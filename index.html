@@ -105,28 +105,53 @@
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
             dojo.connect(hpmsLayer, "onLoad", null, setupToc);
 
-            function setupToc(layer) {
-                var layerInfo;
-                var ul = "<ul>";
-                for (var i in layer.layerInfos) {
-                    // Get the layer info for the current layer.
-                    layerInfo = layer.layerInfos[i];
-                    if (layerInfo.parentLayerId === -1) {
-                        ul += "<li>" + layerInfo.name;
-                        if (layerInfo.subLayerIds.length > 0) {
-                            ul += "<ul>";
-                            for (var j in layerInfo.subLayerIds) {
-                                innerLayerInfo = layer.layerInfos[layerInfo.subLayerIds[j]];
-                                ul += "<li>" + innerLayerInfo.name + "</li>";
-                            }
-                            ul += "</ul>";
+            function LayerDescriptor(layerInfo, layerInfos) {
+                /// <summary>Describes a layer: its ID, name and child layers.</summary>
+                /// <param name="layerInfo" type="esri.layers.LayerInfo">The layer info that is being described.</param>
+                /// <param name="layerInfos" type="esri.layers.LayerInfo[]">The array of layer infos that layerInfo belongs to.</param>
+                /// <returns type="LayerDescriptor" />
+                this.id = layerInfo.id;
+                this.name = layerInfo.name;
+                this.children = [];
+
+                this.toListItem = function () {
+                    /// <summary>Converts the layer descriptor into an HTML &lt;li&gt;</summary>
+                    var output = "<li id='li" + this.id + "'>" + this.name;
+                    if (this.children.length > 0) {
+                        output += "<ul>";
+                        for (var i in this.children) {
+                            output += this.children[i].toListItem();
                         }
-                        ul += "</li>";
+                        output += "</ul>"
                     }
-                    else {
+                    output += "</li>";
+                    return output;
+                }
+
+                if (layerInfo.subLayerIds !== null && layerInfo.subLayerIds.length > 0) {
+                    for (var i in layerInfo.subLayerIds) {
+                        this.children.push(new LayerDescriptor(layerInfos[layerInfo.subLayerIds[i]], layerInfos));
                     }
                 }
+
+
+            }
+
+            function setupToc(layer) {
+                /// <summary>Converts the layer's layerInfos into a table of contents &lt;ul&gt;.</summary>
+                /// <param name="layer" type="esri.layers.Layer">A layer.</param>
+                var topLevelLayerInfos = dojo.filter(layer.layerInfos, function (item, index, array) { return item.parentLayerId === -1; });
+                console.debug(topLevelLayerInfos);
+                var layerDefs = dojo.map(topLevelLayerInfos, function (item, index, array) { return new LayerDescriptor(layer.layerInfos[item.id], layer.layerInfos); });
+
+                console.debug({ layerDefs: layerDefs });
+
+                var ul = "<ul>";
+                for (var i in layerDefs) {
+                    ul += layerDefs[i].toListItem();
+                }
                 ul += "</ul>";
+
                 dojo.place(ul, "toc", "first");
             }
 
