@@ -27,6 +27,10 @@
             border: 1px solid #000;
             padding: 0;
         }
+        #layerList *
+        {
+
+        }
     </style>
     <script type="text/javascript">
         var djConfig = {
@@ -37,6 +41,7 @@
     <script type="text/javascript">
         dojo.require("dijit.dijit"); // optimize: load dijit layer
         dojo.require("dijit.layout.BorderContainer");
+        dojo.require("dijit.layout.TabContainer");
         dojo.require("dijit.layout.ContentPane");
         dojo.require("dijit.Toolbar");
         dojo.require("dijit.form.DropDownButton");
@@ -47,10 +52,20 @@
         dojo.require("esri.virtualearth.VETiledLayer");
         dojo.require("esri.dijit.BasemapGallery");
         dojo.require("esri.arcgis.utils");
+        dojo.require("esri.dijit.Legend");
 
         var map = null;
         var extents = null;
         var hpmsLayer;
+
+        function handleLayerCheckboxClick(checkbox) {
+            var match = checkbox.id.match(/layer(\d+)checkbox/i);
+            var id = match ? match[1] : null;
+            if (id !== null) {
+                // TODO: Hide or show the layer.
+                console.debug(id);
+            }
+        }
 		
         function init() {
             var initExtent = new esri.geometry.Extent({
@@ -74,7 +89,7 @@
                     , southwest: new esri.geometry.Extent({ "xmin": -13788347.769835001, "ymin": 5653732.0172728105, "ymax": 5967539.7998465998, "xmax": -13400171.8799819, "SpatialReference": { "wkid": 102100} })
                 },
                 countyExtents: {
-                    thurston: new esri.geometry.Extent({ "xmin": 974095.421861276, "ymin": 530229.35763827, "xmax": 1143693.18568344, "ymax": 683527.610096276, "spatialReference": { "wkid": 2927} })
+                    thurston: new esri.geometry.Extent({ "xmin": -13712310.447719,"ymin": 5902426.25568371,"xmax": -13634694.6352888,"ymax": 5973211.36928832, "spatialReference": { "wkid": 102100}})
                 }
             };
 
@@ -105,6 +120,8 @@
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
             dojo.connect(hpmsLayer, "onLoad", null, setupToc);
 
+
+
             function LayerDescriptor(layerInfo, layerInfos) {
                 /// <summary>Describes a layer: its ID, name and child layers.</summary>
                 /// <param name="layerInfo" type="esri.layers.LayerInfo">The layer info that is being described.</param>
@@ -116,7 +133,7 @@
 
                 this.toListItem = function () {
                     /// <summary>Converts the layer descriptor into an HTML &lt;li&gt;</summary>
-                    var output = "<li id='li" + this.id + "'>" + this.name;
+                    var output = "<li id='li" + this.id + "'><input id='layer" + this.id + "checkbox' type='checkbox' onclick='handleLayerCheckboxClick(this)'><label for='layer" + this.id + "checkbox'>" + this.name + "</label>";
                     if (this.children.length > 0) {
                         output += "<ul>";
                         for (var i in this.children) {
@@ -144,7 +161,7 @@
                 console.debug(topLevelLayerInfos);
                 var layerDefs = dojo.map(topLevelLayerInfos, function (item, index, array) { return new LayerDescriptor(layer.layerInfos[item.id], layer.layerInfos); });
 
-                console.debug({ layerDefs: layerDefs });
+                ////console.debug({ layerDefs: layerDefs });
 
                 var ul = "<ul>";
                 for (var i in layerDefs) {
@@ -152,7 +169,13 @@
                 }
                 ul += "</ul>";
 
-                dojo.place(ul, "toc", "first");
+                dojo.place(ul, "layerList", "first");
+
+                var legend = new esri.dijit.Legend({
+                    map: map,
+                    layerInfos: [{layer:layer}],
+                }, "legend");
+                legend.startup();
             }
 
             
@@ -231,8 +254,15 @@
             </div>
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center"></div>
-        <div id="tocPane" style="width:120px" dojotype="dijit.layout.ContentPane" region="left" splitter="true">
-            <div id="toc"></div>
+        <div id="tabContainerPane" dojotype="dijit.layout.ContentPane" style="width:120px" region="left" splitter="true">
+            <div id="tabContainer" dojotype="dijit.layout.TabContainer">
+                <div id="tocPane" dojotype="dijit.layout.ContentPane"  title="Layers" >
+                    <div id="layerList"></div>
+                </div>
+                <div id="legendPane" title="Legend" dojotype="dijit.layout.ContentPane">
+                    <div id="legend"></div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
