@@ -58,13 +58,13 @@
         var extents = null;
         var hpmsLayer;
 
-        function handleLayerCheckboxClick(checkbox) {
-            var match = checkbox.id.match(/layer(\d+)checkbox/i);
-            var id = match ? match[1] : null;
-            if (id !== null) {
-                // TODO: Hide or show the layer.
-                console.debug(id);
-            }
+        function handleLayerCheckboxClick() {
+            // Get all of the checked checkboxes.
+            var checkedBoxes = dojo.query("[id^=layer]:checked");
+            var regex = /layer(\d+)checkbox/i
+            var visibleLayers = dojo.map(checkedBoxes, function(item, index, array) { return Number(item.id.match(regex)[1]); });
+            hpmsLayer.setVisibleLayers(visibleLayers);
+            hpmsLayer.refresh();
         }
 		
         function init() {
@@ -133,7 +133,7 @@
 
                 this.toListItem = function () {
                     /// <summary>Converts the layer descriptor into an HTML &lt;li&gt;</summary>
-                    var output = "<li id='li" + this.id + "'><input id='layer" + this.id + "checkbox' type='checkbox' onclick='handleLayerCheckboxClick(this)'><label for='layer" + this.id + "checkbox'>" + this.name + "</label>";
+                    var output = "<li id='li" + this.id + "'><input id='layer" + this.id + "checkbox' type='checkbox' checked='checked' onclick='handleLayerCheckboxClick()'><label for='layer" + this.id + "checkbox'>" + this.name + "</label>";
                     if (this.children.length > 0) {
                         output += "<ul>";
                         for (var i in this.children) {
