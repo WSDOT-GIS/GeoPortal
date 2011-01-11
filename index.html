@@ -29,7 +29,11 @@
         }
         #layerList *
         {
-
+            list-style-type: none;
+        }
+        #toolbar1 
+        {
+            overflow: hidden;
         }
     </style>
     <script type="text/javascript">
@@ -47,6 +51,9 @@
         dojo.require("dijit.form.DropDownButton");
         dojo.require("dijit.Dialog");
         dojo.require("dijit.Menu");
+        dojo.require("dijit.form.CheckBox");
+
+        dojo.require("dojo.parser");
 
         dojo.require("esri.map");
         dojo.require("esri.virtualearth.VETiledLayer");
@@ -158,12 +165,9 @@
                 /// <summary>Converts the layer's layerInfos into a table of contents &lt;ul&gt;.</summary>
                 /// <param name="layer" type="esri.layers.Layer">A layer.</param>
                 var topLevelLayerInfos = dojo.filter(layer.layerInfos, function (item, index, array) { return item.parentLayerId === -1; });
-                console.debug(topLevelLayerInfos);
                 var layerDefs = dojo.map(topLevelLayerInfos, function (item, index, array) { return new LayerDescriptor(layer.layerInfos[item.id], layer.layerInfos); });
-
-                ////console.debug({ layerDefs: layerDefs });
-
-                var ul = "<ul>";
+                
+                var ul = "<ul id='tocList'>";
                 for (var i in layerDefs) {
                     ul += layerDefs[i].toListItem();
                 }
@@ -171,9 +175,12 @@
 
                 dojo.place(ul, "layerList", "first");
 
+                // Make the checkboxes dojo checkbox dijits.
+                dojo.parser.instantiate(dojo.query("[type=checkbox]"), {dojoType: "dijit.form.CheckBox"});
+
                 var legend = new esri.dijit.Legend({
                     map: map,
-                    layerInfos: [{layer:layer}],
+                    layerInfos: [{layer:layer}]
                 }, "legend");
                 legend.startup();
             }
