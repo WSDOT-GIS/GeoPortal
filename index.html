@@ -35,6 +35,12 @@
         {
             overflow: hidden;
         }
+        #northArrow 
+        {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+        }
     </style>
     <script type="text/javascript">
         var djConfig = {
@@ -65,13 +71,18 @@
         var extents = null;
         var hpmsLayer;
 
-        function handleLayerCheckboxClick() {
-            // Get all of the checked checkboxes.
-            var checkedBoxes = dojo.query("[id^=layer]:checked");
-            var regex = /layer(\d+)checkbox/i
-            var visibleLayers = dojo.map(checkedBoxes, function(item, index, array) { return Number(item.id.match(regex)[1]); });
-            hpmsLayer.setVisibleLayers(visibleLayers);
-            hpmsLayer.refresh();
+        //function handleLayerCheckboxClick() {
+        //    // Get all of the checked checkboxes.
+        //    var checkedBoxes = dojo.query("[id^=layer]:checked");
+        //    var regex = /layer(\d+)checkbox/i
+        //    var visibleLayers = dojo.map(checkedBoxes, function(item, index, array) { return Number(item.id.match(regex)[1]); });
+        //    hpmsLayer.setVisibleLayers(visibleLayers);
+        //    hpmsLayer.refresh();
+        //}
+
+        function setupNorthArrow() {
+            // Create the north arrow.
+            dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
         }
 		
         function init() {
@@ -125,58 +136,56 @@
 
             createBasemapGallery();
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
-            dojo.connect(hpmsLayer, "onLoad", null, setupToc);
+            dojo.connect(hpmsLayer, "onLoad", null, setupLegend);
 
 
 
-            function LayerDescriptor(layerInfo, layerInfos) {
-                /// <summary>Describes a layer: its ID, name and child layers.</summary>
-                /// <param name="layerInfo" type="esri.layers.LayerInfo">The layer info that is being described.</param>
-                /// <param name="layerInfos" type="esri.layers.LayerInfo[]">The array of layer infos that layerInfo belongs to.</param>
-                /// <returns type="LayerDescriptor" />
-                this.id = layerInfo.id;
-                this.name = layerInfo.name;
-                this.children = [];
+            ////function LayerDescriptor(layerInfo, layerInfos) {
+            ////    /// <summary>Describes a layer: its ID, name and child layers.</summary>
+            ////    /// <param name="layerInfo" type="esri.layers.LayerInfo">The layer info that is being described.</param>
+            ////    /// <param name="layerInfos" type="esri.layers.LayerInfo[]">The array of layer infos that layerInfo belongs to.</param>
+            ////    /// <returns type="LayerDescriptor" />
+            ////    this.id = layerInfo.id;
+            ////    this.name = layerInfo.name;
+            ////    this.children = [];
 
-                this.toListItem = function () {
-                    /// <summary>Converts the layer descriptor into an HTML &lt;li&gt;</summary>
-                    var output = "<li id='li" + this.id + "'><input id='layer" + this.id + "checkbox' type='checkbox' checked='checked' onclick='handleLayerCheckboxClick()'><label for='layer" + this.id + "checkbox'>" + this.name + "</label>";
-                    if (this.children.length > 0) {
-                        output += "<ul>";
-                        for (var i in this.children) {
-                            output += this.children[i].toListItem();
-                        }
-                        output += "</ul>"
-                    }
-                    output += "</li>";
-                    return output;
-                }
+            ////    this.toListItem = function () {
+            ////        /// <summary>Converts the layer descriptor into an HTML &lt;li&gt;</summary>
+            ////        var output = "<li id='li" + this.id + "'><input id='layer" + this.id + "checkbox' type='checkbox' checked='checked' onclick='handleLayerCheckboxClick()'><label for='layer" + this.id + "checkbox'>" + this.name + "</label>";
+            ////        if (this.children.length > 0) {
+            ////            output += "<ul>";
+            ////            for (var i in this.children) {
+            ////                output += this.children[i].toListItem();
+            ////            }
+            ////            output += "</ul>"
+            ////        }
+            ////        output += "</li>";
+            ////        return output;
+            ////    }
 
-                if (layerInfo.subLayerIds !== null && layerInfo.subLayerIds.length > 0) {
-                    for (var i in layerInfo.subLayerIds) {
-                        this.children.push(new LayerDescriptor(layerInfos[layerInfo.subLayerIds[i]], layerInfos));
-                    }
-                }
+            ////    if (layerInfo.subLayerIds !== null && layerInfo.subLayerIds.length > 0) {
+            ////        for (var i in layerInfo.subLayerIds) {
+            ////            this.children.push(new LayerDescriptor(layerInfos[layerInfo.subLayerIds[i]], layerInfos));
+            ////        }
+            ////    }
+            ////}
 
-
-            }
-
-            function setupToc(layer) {
+            function setupLegend(layer) {
                 /// <summary>Converts the layer's layerInfos into a table of contents &lt;ul&gt;.</summary>
                 /// <param name="layer" type="esri.layers.Layer">A layer.</param>
-                var topLevelLayerInfos = dojo.filter(layer.layerInfos, function (item, index, array) { return item.parentLayerId === -1; });
-                var layerDefs = dojo.map(topLevelLayerInfos, function (item, index, array) { return new LayerDescriptor(layer.layerInfos[item.id], layer.layerInfos); });
-                
-                var ul = "<ul id='tocList'>";
-                for (var i in layerDefs) {
-                    ul += layerDefs[i].toListItem();
-                }
-                ul += "</ul>";
+            ////    var topLevelLayerInfos = dojo.filter(layer.layerInfos, function (item, index, array) { return item.parentLayerId === -1; });
+            ////    var layerDefs = dojo.map(topLevelLayerInfos, function (item, index, array) { return new LayerDescriptor(layer.layerInfos[item.id], layer.layerInfos); });
+            ////                
+            ////    var ul = "<ul id='tocList'>";
+            ////    for (var i in layerDefs) {
+            ////        ul += layerDefs[i].toListItem();
+            ////    }
+            ////    ul += "</ul>";
 
-                dojo.place(ul, "layerList", "first");
+            ////    dojo.place(ul, "layerList", "first");
 
-                // Make the checkboxes dojo checkbox dijits.
-                dojo.parser.instantiate(dojo.query("[type=checkbox]"), {dojoType: "dijit.form.CheckBox"});
+            ////    // Make the checkboxes dojo checkbox dijits.
+            ////    dojo.parser.instantiate(dojo.query("[type=checkbox]"), {dojoType: "dijit.form.CheckBox"});
 
                 var legend = new esri.dijit.Legend({
                     map: map,
@@ -185,7 +194,7 @@
                 legend.startup();
             }
 
-            
+            setupNorthArrow();
         }
 
         function createBasemapGallery() {
@@ -260,15 +269,19 @@
                 </div>
             </div>
         </div>
-        <div id="map" dojotype="dijit.layout.ContentPane" region="center"></div>
-        <div id="tabContainerPane" dojotype="dijit.layout.ContentPane" style="width:120px" region="left" splitter="true">
+        <div id="map" dojotype="dijit.layout.ContentPane" region="center" 
+            style="position: absolute; z-index: 9999; top: 0px; right: 0px;">
+            </div>
+        <div id="tabContainerPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
             <div id="tabContainer" dojotype="dijit.layout.TabContainer">
-                <div id="tocPane" dojotype="dijit.layout.ContentPane"  title="Layers" >
-                    <div id="layerList"></div>
-                </div>
                 <div id="legendPane" title="Legend" dojotype="dijit.layout.ContentPane">
                     <div id="legend"></div>
                 </div>
+                <!--                
+                <div id="tocPane" dojotype="dijit.layout.ContentPane"  title="Layers" >
+                    <div id="layerList"></div>
+                </div>
+                -->
             </div>
         </div>
     </div>
