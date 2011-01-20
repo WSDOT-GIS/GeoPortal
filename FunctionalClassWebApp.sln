@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hpms", "Hpms.csproj", "{DE0231BA-C28E-4C51-B8CD-C0D50145E717}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalClassWebApp", "FunctionalClassWebApp.csproj", "{DE0231BA-C28E-4C51-B8CD-C0D50145E717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
