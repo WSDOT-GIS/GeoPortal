@@ -6,8 +6,8 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>WSDOT Functional Classification Map</title>
-    <link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/2.1/js/dojo/dijit/themes/claro/claro.css" />
-    <link rel="shortcut icon" href="//www.wsdot.wa.gov/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.1/js/dojo/dijit/themes/claro/claro.css" />
+    <link rel="shortcut icon" href="http://www.wsdot.wa.gov/favicon.ico" />
     <style type="text/css">
         html, body
         {
@@ -40,6 +40,7 @@
             position: absolute;
             bottom: 30px;
             left: 30px;
+            z-index: 10;
         }
     </style>
     <script type="text/javascript">
@@ -132,61 +133,16 @@
             var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
             map.addLayer(initBasemap);
             hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "hpms" });
+            dojo.connect(hpmsLayer, "onLoad", null, setupLegend);
             map.addLayer(hpmsLayer);
 
+            setupNorthArrow();
+            
             createBasemapGallery();
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
-            dojo.connect(hpmsLayer, "onLoad", null, setupLegend);
-
-
-
-            ////function LayerDescriptor(layerInfo, layerInfos) {
-            ////    /// <summary>Describes a layer: its ID, name and child layers.</summary>
-            ////    /// <param name="layerInfo" type="esri.layers.LayerInfo">The layer info that is being described.</param>
-            ////    /// <param name="layerInfos" type="esri.layers.LayerInfo[]">The array of layer infos that layerInfo belongs to.</param>
-            ////    /// <returns type="LayerDescriptor" />
-            ////    this.id = layerInfo.id;
-            ////    this.name = layerInfo.name;
-            ////    this.children = [];
-
-            ////    this.toListItem = function () {
-            ////        /// <summary>Converts the layer descriptor into an HTML &lt;li&gt;</summary>
-            ////        var output = "<li id='li" + this.id + "'><input id='layer" + this.id + "checkbox' type='checkbox' checked='checked' onclick='handleLayerCheckboxClick()'><label for='layer" + this.id + "checkbox'>" + this.name + "</label>";
-            ////        if (this.children.length > 0) {
-            ////            output += "<ul>";
-            ////            for (var i in this.children) {
-            ////                output += this.children[i].toListItem();
-            ////            }
-            ////            output += "</ul>"
-            ////        }
-            ////        output += "</li>";
-            ////        return output;
-            ////    }
-
-            ////    if (layerInfo.subLayerIds !== null && layerInfo.subLayerIds.length > 0) {
-            ////        for (var i in layerInfo.subLayerIds) {
-            ////            this.children.push(new LayerDescriptor(layerInfos[layerInfo.subLayerIds[i]], layerInfos));
-            ////        }
-            ////    }
-            ////}
+            
 
             function setupLegend(layer) {
-                /// <summary>Converts the layer's layerInfos into a table of contents &lt;ul&gt;.</summary>
-                /// <param name="layer" type="esri.layers.Layer">A layer.</param>
-            ////    var topLevelLayerInfos = dojo.filter(layer.layerInfos, function (item, index, array) { return item.parentLayerId === -1; });
-            ////    var layerDefs = dojo.map(topLevelLayerInfos, function (item, index, array) { return new LayerDescriptor(layer.layerInfos[item.id], layer.layerInfos); });
-            ////                
-            ////    var ul = "<ul id='tocList'>";
-            ////    for (var i in layerDefs) {
-            ////        ul += layerDefs[i].toListItem();
-            ////    }
-            ////    ul += "</ul>";
-
-            ////    dojo.place(ul, "layerList", "first");
-
-            ////    // Make the checkboxes dojo checkbox dijits.
-            ////    dojo.parser.instantiate(dojo.query("[type=checkbox]"), {dojoType: "dijit.form.CheckBox"});
-
                 var legend = new esri.dijit.Legend({
                     map: map,
                     layerInfos: [{layer:layer}]
@@ -194,7 +150,6 @@
                 legend.startup();
             }
 
-            setupNorthArrow();
         }
 
         function createBasemapGallery() {
@@ -207,7 +162,7 @@
             ];
             var basemapGallery = new esri.dijit.BasemapGallery({
                 showArcGISBasemaps: true,
-                bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
+                //bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
                 basemaps: basemaps,
                 map: map
             }, "basemapGallery");
@@ -269,9 +224,7 @@
                 </div>
             </div>
         </div>
-        <div id="map" dojotype="dijit.layout.ContentPane" region="center" 
-            style="position: absolute; z-index: 9999; top: 0px; right: 0px;">
-            </div>
+        <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
         <div id="tabContainerPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
             <div id="tabContainer" dojotype="dijit.layout.TabContainer">
                 <div id="legendPane" title="Legend" dojotype="dijit.layout.ContentPane">
