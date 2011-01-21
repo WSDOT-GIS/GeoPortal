@@ -6,6 +6,9 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>WSDOT Functional Classification Map</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://www.wsdot.wa.gov/media/styles/styles.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="http://www.wsdot.wa.gov/media/styles/print.css" />
+
     <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.1/js/dojo/dijit/themes/claro/claro.css" />
     <link rel="shortcut icon" href="http://www.wsdot.wa.gov/favicon.ico" />
     <style type="text/css">
@@ -15,6 +18,7 @@
             width: 100%;
             margin: 0;
             padding: 0;
+            background: white;
         }
         #mainContainer
         {
@@ -67,6 +71,7 @@
         dojo.require("esri.dijit.BasemapGallery");
         dojo.require("esri.arcgis.utils");
         dojo.require("esri.dijit.Legend");
+        dojo.require("esri.dijit.Scalebar");
 
         var map = null;
         var extents = null;
@@ -137,6 +142,8 @@
             map.addLayer(hpmsLayer);
 
             setupNorthArrow();
+            var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
+
             
             createBasemapGallery();
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
@@ -190,7 +197,11 @@
 <body class="claro">
     <div id="mainContainer" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false">
         <div id="headerPane" dojotype="dijit.layout.ContentPane" region="top">
-            <h1>WSDOT Functional Classification Map</h1>
+            <div>
+                <img src="http://www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT Logo" style="position: absolute; right: 0px; top: 0px; margin-top: 5px; margin-right: 5px;" />
+                <h1>WSDOT Functional Classification Map</h1>
+            </div>
+            
             <div id="toolbar1" dojotype="dijit.Toolbar">
                 <div dojotype="dijit.form.DropDownButton" title="Switch Basemap">
                     <div>Switch Basemap</div>
