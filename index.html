@@ -184,6 +184,13 @@
             var basemaps = [
                 new esri.dijit.Basemap({
                     layers: [
+                            new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMSBaseMap/MapServer" })
+                        ],
+                    thumbnailUrl: "images/HpmsBasemapThumbnail.png",
+                    title: "HPMS Basemap"
+                }),
+                new esri.dijit.Basemap({
+                    layers: [
                         new esri.dijit.BasemapLayer({ url: "http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer" })
                     ],
                     thumbnailUrl: "images/WsdotBasemapThumbnail.jpg",
@@ -202,7 +209,7 @@
                     layers: [
                         basemapLayers.cities,
                         basemapLayers.counties,
-                        new esri.dijit.BasemapLayer({url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer"})
+                        new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" })
                     ],
                     thumbnailUrl: "http://www.arcgis.com/sharing/content/items/11742666e55b45b8a508751532d0c1ea/info/thumbnail/terrain.jpg",
                     title: "ESRI Terrain"
@@ -215,7 +222,15 @@
                     ],
                     thumbnailUrl: "http://www.arcgis.com/sharing/content/items/677cd0c509d842a98360c46186a2768e/info/thumbnail/bing_aerial.jpg",
                     title: "Bing Maps Imagery"
-                })
+                }),
+                new esri.dijit.Basemap({
+                    layers: [
+                        basemapLayers.cities,
+                        basemapLayers.counties
+                    ],
+
+                    title: "Counties and Cities Only"
+                }),
 
             ];
             var basemapGallery = new esri.dijit.BasemapGallery({
