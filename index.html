@@ -149,11 +149,12 @@
 
 		        ]
             });
-            var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
+            var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer");
             map.addLayer(initBasemap);
             hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "hpms" });
             dojo.connect(hpmsLayer, "onLoad", null, setupLegend);
             map.addLayer(hpmsLayer);
+
 
             setupNorthArrow();
             var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
@@ -174,6 +175,12 @@
         }
 
         function createBasemapGallery() {
+            var basemapLayers =
+            {
+                cities: new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/Cities/MapServer" }),
+                counties: new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/CountyBoundariesNoMaplex/MapServer" })
+            };
+
             var basemaps = [
                 new esri.dijit.Basemap({
                     layers: [
@@ -181,10 +188,38 @@
                     ],
                     thumbnailUrl: "images/WsdotBasemapThumbnail.jpg",
                     title: "WSDOT Basemap"
+                }),
+                new esri.dijit.Basemap({
+                    layers: [
+                        basemapLayers.cities,
+                        basemapLayers.counties,
+                        new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" })
+                    ],
+                    thumbnailUrl: "http://www.arcgis.com/sharing/content/items/c03a526d94704bfb839445e80de95495/info/thumbnail/imagery.jpg",
+                    title: "ESRI Imagery"
+                }),
+                new esri.dijit.Basemap({
+                    layers: [
+                        basemapLayers.cities,
+                        basemapLayers.counties,
+                        new esri.dijit.BasemapLayer({url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer"})
+                    ],
+                    thumbnailUrl: "http://www.arcgis.com/sharing/content/items/11742666e55b45b8a508751532d0c1ea/info/thumbnail/terrain.jpg",
+                    title: "ESRI Terrain"
+                }),
+                new esri.dijit.Basemap({
+                    layers: [
+                        basemapLayers.cities,
+                        basemapLayers.counties,
+                        new esri.dijit.BasemapLayer({ type: "BingMapsAerial" })
+                    ],
+                    thumbnailUrl: "http://www.arcgis.com/sharing/content/items/677cd0c509d842a98360c46186a2768e/info/thumbnail/bing_aerial.jpg",
+                    title: "Bing Maps Imagery"
                 })
+
             ];
             var basemapGallery = new esri.dijit.BasemapGallery({
-                showArcGISBasemaps: true,
+                showArcGISBasemaps: false,
                 bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
                 basemaps: basemaps,
                 map: map
@@ -296,9 +331,11 @@
                 <div id="legendPane" title="Legend" dojotype="dijit.layout.ContentPane">
                     <div id="legend"></div>
                 </div>
-                <!--                
+                <!--
                 <div id="tocPane" dojotype="dijit.layout.ContentPane"  title="Layers" >
-                    <div id="layerList"></div>
+                    <div id="layerList">
+                        
+                    </div>
                 </div>
                 -->
             </div>
