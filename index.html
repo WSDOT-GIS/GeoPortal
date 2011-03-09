@@ -82,7 +82,7 @@
 		}
 
     </style>
-
+    <link href="./style/legend.css" rel="stylesheet" />
 </head>
 <body class="claro">
     <noscript>
@@ -187,8 +187,37 @@
             </div>
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
-        <div id="tabContainerPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
-            <img src="images/fcLegend.png" alt="Feature Class Legend" />
+        <div id="legendPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true" class="legend">
+            <h2>Rural</h2>
+            <ul>
+                <li id="layer0legend0">01 -  Interstate</li>
+                <li id="layer0legend2">02 -  Other Principal Arterial</li>
+                <li id="layer0legend8">06 -  Minor Arterial</li>
+                <li id="layer0legend12">07 -  Major Collector</li>
+                <li id="layer0legend16">08 -  Minor Collector</li>
+                <!--<li id="layer0legend18">09 -  Local Access</li>-->
+
+                <li id="layer0legend4" class="proposed">22 - Proposed  Other Principal Arterial</li>
+                <li id="layer0legend10" class="proposed">26 - Proposed  Minor Arterial</li>
+                <li id="layer0legend14" class="proposed">27 - Proposed  Major Collector</li>
+                <li id="layer0legend17" class="proposed">28 - Proposed  Minor Collector</li>
+
+            </ul>
+            <h2>Urban</h2>
+            <ul>
+                <li id="layer0legend1">11 -  Interstate</li>
+                <li id="layer0legend3">12 -  Other Fwy Expwy</li>
+                <li id="layer0legend6">14 -  Other Principal Arterial</li>
+                <li id="layer0legend9">16 -  Minor Arterial</li>
+                <li id="layer0legend13">17 -  Collector</li>
+                <!--<li id="layer0legend19">19 -  Local Access</li>-->
+
+                <li id="layer0legend5" class="proposed">32 - Proposed Other  Fwy Expwy</li>
+                <li id="layer0legend7" class="proposed">34 - Proposed  Other Principal Arterial</li>
+                <li id="layer0legend11" class="proposed">36 - Proposed  Minor Arterial</li>
+                <li id="layer0legend15" class="proposed">37 - Proposed  Collector</li>
+
+            </ul>
         </div>
     </div>
         <script type="text/javascript">

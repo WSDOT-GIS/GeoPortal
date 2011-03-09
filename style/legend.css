@@ -1,0 +1,33 @@
+.legend
+{
+    font-family: 'Arial';
+    font-size: 8pt;
+}
+.legend li 
+{
+    padding-left: 3px;
+}
+.proposed 
+{
+    font-style: italic;
+}
+#layer0legend0 {list-style-image: url('../images/legend/layer0legend0.png')}
+#layer0legend1 {list-style-image: url('../images/legend/layer0legend1.png')}
+#layer0legend2 {list-style-image: url('../images/legend/layer0legend2.png')}
+#layer0legend3 {list-style-image: url('../images/legend/layer0legend3.png')}
+#layer0legend4 {list-style-image: url('../images/legend/layer0legend4.png')}
+#layer0legend5 {list-style-image: url('../images/legend/layer0legend5.png')}
+#layer0legend6 {list-style-image: url('../images/legend/layer0legend6.png')}
+#layer0legend7 {list-style-image: url('../images/legend/layer0legend7.png')}
+#layer0legend8 {list-style-image: url('../images/legend/layer0legend8.png')}
+#layer0legend9 {list-style-image: url('../images/legend/layer0legend9.png')}
+#layer0legend10 {list-style-image: url('../images/legend/layer0legend10.png')}
+#layer0legend11 {list-style-image: url('../images/legend/layer0legend11.png')}
+#layer0legend12 {list-style-image: url('../images/legend/layer0legend12.png')}
+#layer0legend13 {list-style-image: url('../images/legend/layer0legend13.png')}
+#layer0legend14 {list-style-image: url('../images/legend/layer0legend14.png')}
+#layer0legend15 {list-style-image: url('../images/legend/layer0legend15.png')}
+#layer0legend16 {list-style-image: url('../images/legend/layer0legend16.png')}
+#layer0legend17 {list-style-image: url('../images/legend/layer0legend17.png')}
+#layer0legend18 {list-style-image: url('../images/legend/layer0legend18.png')}
+#layer0legend19 {list-style-image: url('../images/legend/layer0legend19.png')}
