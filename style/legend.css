@@ -33,7 +33,7 @@
 }
 /* Left-align the fourth column. */
 .legend td:first-child + td + td + td { text-align: left; padding-right: 5px; }
-.legend td:first-child { padding-left: 5px; }
+.legend td:first-child { padding-left: 5px; padding-right: 5px; }
 
 /* Change the background color of alternating rows */
 .legend tbody tr:first-child + tr,
@@ -44,4 +44,15 @@
 .legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr
 {
      background: #eeeeee; 
+}
+
+tr td:first-child
+{
+    background: #999999; /* old browsers */
+
+    background: -moz-linear-gradient(left, #999999 0%, #EEE 100%); /* firefox */
+
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#999999), color-stop(100%,#EEE)); /* webkit */
+
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#999999', endColorstr='#EEE',GradientType=1 ); /* ie */
 }
