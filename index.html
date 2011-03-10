@@ -187,37 +187,27 @@
             </div>
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
-        <div id="legendPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true" class="legend">
-            <div>Rural</div>
-            <ul>
-                <li class="interstate">01 -  Interstate</li>
-                <li class="otherPrincipalArterial">02 -  Other Principal Arterial</li>
-                <li class="minorArterial">06 -  Minor Arterial</li>
-                <li class="majorCollector">07 -  Major Collector</li>
-                <li class="minorCollector">08 -  Minor Collector</li>
-                <!--<li class="localAccess">09 -  Local Access</li>-->
+        <div id="legendPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
+            <div class="legend">
+                <table>
+                    <caption>Legend</caption>
+                    <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
+                    <tbody>
+                        <tr><td><img src='../images/legend/Interstate.png' alt='interstate' /></td><td>01</td><td>11</td><td>Interstate</td></tr>
+                        <tr><td><img src='../images/legend/otherFwyExpwy.png' alt='otherFwyExpwy' /></td><td></td><td>12</td><td>Other Fwy Expwy</td></tr>
+                        <tr><td><img src='../images/legend/otherPrincipalArterial.png' alt='otherPrincipalArterial' /></td><td>02</td><td>14</td><td>Other Principal Arterial</td></tr>
+                        <tr><td><img src='../images/legend/minorArterial.png' alt='minorArterial' /></td><td>06</td><td>16</td><td>Minor Arterial</td></tr>
+                        <tr><td><img src='../images/legend/majorCollector.png' alt='majorCollector' /></td><td>07</td><td>17</td><td>Major Collector</td></tr>
+                        <tr><td><img src='../images/legend/minorCollector.png' alt='minorCollector' /></td><td>08</td><td></td><td>Minor Collector</td></tr>
 
-                <li class="proposedOtherPrincipalArterial">22 - Proposed  Other Principal Arterial</li>
-                <li class="proposedMinorArterial">26 - Proposed  Minor Arterial</li>
-                <li class="proposedMajorCollector">27 - Proposed  Major Collector</li>
-                <li class="proposedMinorCollector">28 - Proposed  Minor Collector</li>
-
-            </ul>
-            <div>Urban</div>
-            <ul>
-                <li class="interstate">11 -  Interstate</li>
-                <li class="otherFwyExpwy">12 -  Other Fwy Expwy</li>
-                <li class="otherPrincipalArterial">14 -  Other Principal Arterial</li>
-                <li class="minorArterial">16 -  Minor Arterial</li>
-                <li class="majorCollector">17 - Collector</li>
-                <!--<li class="localAccess">19 -  Local Access</li>-->
-
-                <li class="proposedOtherFwyExpwy">32 - Proposed Other  Fwy Expwy</li>
-                <li class="proposedOtherPrincipalArterial">34 - Proposed  Other Principal Arterial</li>
-                <li class="proposedMinorArterial">36 - Proposed  Minor Arterial</li>
-                <li class="proposedMajorCollector">37 - Proposed  Collector</li>
-
-            </ul>
+                        <tr><td><img src='../images/legend/proposedOtherFwyExpwy.png' alt='proposedOtherFwyExpwy' /></td><td></td><td>32</td><td>Proposed Other Fwy Expwy</td></tr>
+                        <tr><td><img src='../images/legend/proposedOtherPrincipalArterial.png' alt='proposedOtherPrincipalArterial' /></td><td>22</td><td>34</td><td>Proposed Other Principal Arterial</td></tr>
+                        <tr><td><img src='../images/legend/proposedMinorArterial.png' alt='proposedMinorArterial' /></td><td>26</td><td>36</td><td>Proposed Minor Arterial</td></tr>
+                        <tr><td><img src='../images/legend/proposedMajorCollector.png' alt='proposedMajorCollector' /></td><td>27</td><td>37</td><td>Proposed Major Collector</td></tr>
+                        <tr><td><img src='../images/legend/proposedMinorCollector.png' alt='proposedMinorCollector' /></td><td>28</td><td></td><td>Proposed Minor Collector</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
         <script type="text/javascript">

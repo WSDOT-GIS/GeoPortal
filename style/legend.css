@@ -1,32 +1,46 @@
+/*
+.legend 
+{
+    border: 1px solid black;
+    
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
 
-.legend li 
-{
-    margin-left: 10px;
-    font-family: 'Arial Narrow';
-    font-size: 10pt;
+    -webkit-box-shadow: 5px 5px 5px #354d36;
+    -moz-box-shadow: 5px 5px 5px #354d36;
+    box-shadow: 5px 5px 5px #354d36; 
 }
-.legend ul 
+*/
+
+.legend table
 {
-    margin-top: 0;
-}
-.legend > div 
-{
-    font-weight: bold;
+    font-family: 'Arial Narrow', Sans-Serif;
     text-align: center;
+    font-size: 10pt;
+    border-collapse: collapse;
+ 
+}
+
+.legend thead *
+{
     border-bottom: 1px solid black;
 }
-.proposedOtherPrincipalArterial, .proposedMinorArterial, .proposedMajorCollector, .proposedMinorCollector, .proposedOtherFwyExpwy
+
+.legend th 
 {
-    font-style: italic;
+    padding-left: 5px;
+    padding-right: 5px;
 }
-.interstate {list-style-image: url('../images/legend/Interstate.png')}
-.otherPrincipalArterial {list-style-image: url('../images/legend/otherPrincipalArterial.png')}
-.minorArterial {list-style-image: url('../images/legend/minorArterial.png')}
-.majorCollector {list-style-image: url('../images/legend/majorCollector.png')}
-.minorCollector {list-style-image: url('../images/legend/minorCollector.png')}
-.proposedOtherPrincipalArterial {list-style-image: url('../images/legend/proposedOtherPrincipalArterial.png')}
-.proposedMinorArterial {list-style-image: url('../images/legend/proposedMinorArterial.png')}
-.proposedMajorCollector {list-style-image: url('../images/legend/proposedMajorCollector.png')}
-.proposedMinorCollector {list-style-image: url('../images/legend/proposedMinorCollector.png')}
-.otherFwyExpwy {list-style-image: url('../images/legend/otherFwyExpwy.png')}
-.proposedOtherFwyExpwy {list-style-image: url('../images/legend/proposedOtherFwyExpwy.png')}
+/* Left-align the fourth column. */
+.legend td:first-child + td + td + td { text-align: left; padding-right: 5px; }
+.legend td:first-child { padding-left: 5px; }
+
+/* Change the background color of alternating rows */
+.legend tbody tr:first-child + tr,
+.legend tbody tr:first-child + tr + tr + tr,
+.legend tbody tr:first-child + tr + tr + tr + tr + tr,
+.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr,
+.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr
+{
+     background: #eeeeee; 
+}
