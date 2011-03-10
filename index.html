@@ -204,7 +204,7 @@
                 parseOnLoad: true
             };
     </script>
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2compact"></script>
+    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
     <script type="text/javascript">
         dojo.require("dijit.dijit"); // optimize: load dijit layer
         dojo.require("dijit.layout.BorderContainer");
@@ -311,7 +311,7 @@
             var basemaps = [
                 new esri.dijit.Basemap({
                     layers: [
-                            new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMSBaseMap/MapServer" })
+                            new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer" })
                         ],
                     thumbnailUrl: "images/HpmsBasemapThumbnail.png",
                     title: "Functional Class Basemap"
