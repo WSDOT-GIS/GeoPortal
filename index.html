@@ -176,9 +176,9 @@
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
         <div id="legendPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
-            <div class="legend">
-                <table>
-                    <caption>Legend</caption>
+            
+                <table id="fcLegend" class="legend alternatingLines">
+                    <caption>Functional Class</caption>
                     <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
                     <tbody>
                         <tr><td><img src='images/legend/Interstate.png' alt='interstate' /></td><td>01</td><td>11</td><td>Interstate</td></tr>
@@ -196,7 +196,16 @@
                         <tr><td><img src='images/legend/proposedMinorCollector.png' alt='proposedMinorCollector' /></td><td>28</td><td></td><td>Proposed Minor Collector</td></tr>
                     </tbody>
                 </table>
-            </div>
+            
+
+            <table id="basemapLegend" class="legend">
+                <caption>Other</caption>
+                <tbody>
+                    <tr><td><img src="images/legend/CityBoundaries.png" alt="City Boundaries symbol" /></td><td>City Boundaries</td></tr>
+                    <tr><td><img src="images/legend/UrbanizedArea.png" alt="UrbanizedArea symbol" /></td><td>Urbanized Area</td></tr>
+                </tbody>
+            </table>
+            
         </div>
     </div>
         <script type="text/javascript">
@@ -283,7 +292,7 @@
 
 		        ]
             });
-            var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer");
+            var initBasemap = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer");
             map.addLayer(initBasemap);
             hpmsLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "hpms" });
             map.addLayer(hpmsLayer);
@@ -310,6 +319,7 @@
 
             var basemaps = [
                 new esri.dijit.Basemap({
+                    id : "fcBasemap",
                     layers: [
                             new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer" })
                         ],
@@ -379,6 +389,16 @@
             basemapGallery.startup();
 
             dojo.connect(basemapGallery, "onError", function (msg) { console.log(msg); });
+            dojo.connect(basemapGallery, "onSelectionChange", function () {
+                var basemap = basemapGallery.getSelected();
+                if (basemap.id === "fcBasemap") {
+                    dojo.removeClass("basemapLegend", "hidden");
+                }
+                else {
+                    dojo.addClass("basemapLegend", "hidden");
+
+                }
+            });
         }
 
         function resizeMap() {

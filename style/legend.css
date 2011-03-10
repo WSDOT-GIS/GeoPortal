@@ -12,7 +12,7 @@
 }
 */
 
-.legend table
+.legend
 {
     font-family: 'Arial Narrow', Sans-Serif;
     text-align: center;
@@ -36,17 +36,17 @@
 .legend td:first-child { padding-left: 5px; padding-right: 5px; }
 
 /* Change the background color of alternating rows */
-.legend tbody tr:first-child + tr,
-.legend tbody tr:first-child + tr + tr + tr,
-.legend tbody tr:first-child + tr + tr + tr + tr + tr,
-.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr,
-.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr,
-.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr
+.alternatingLines tbody tr:first-child + tr,
+.alternatingLines tbody tr:first-child + tr + tr + tr,
+.alternatingLines tbody tr:first-child + tr + tr + tr + tr + tr,
+.alternatingLines tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr,
+.alternatingLines tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr,
+.alternatingLines tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr
 {
      background: #eeeeee; 
 }
 
-tr td:first-child
+#fcLegend tr td:first-child
 {
     background: #999999; /* old browsers */
 
@@ -55,4 +55,9 @@ tr td:first-child
     background: -webkit-gradient(linear, left top, right top, color-stop(0%,#999999), color-stop(100%,#EEE)); /* webkit */
 
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#999999', endColorstr='#EEE',GradientType=1 ); /* ie */
+}
+
+.hidden 
+{
+    display: none;
 }
