@@ -40,7 +40,8 @@
 .legend tbody tr:first-child + tr + tr + tr,
 .legend tbody tr:first-child + tr + tr + tr + tr + tr,
 .legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr,
-.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr
+.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr,
+.legend tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr
 {
      background: #eeeeee; 
 }
