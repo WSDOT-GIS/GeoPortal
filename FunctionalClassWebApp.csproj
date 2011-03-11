@@ -52,6 +52,7 @@
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
+    <Content Include="scripts\extentAutoComplete.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
