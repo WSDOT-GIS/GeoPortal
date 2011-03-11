@@ -373,6 +373,38 @@
             createBasemapGallery();
             dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 
+            /** 
+            * Sets up a zoom autocomplete box.
+            * @param {String} inputControl jQuery selector string pointing to an input control.
+            * @param {esri.tasks.FeatureSet} featureSet A set of features returned from ArcGIS Server.
+            * @param {string} name The name of the feature attribute that will be used to label items in the autocomplete dropdown.
+            * @param {esri.Map} mapToZoom The map that will be have its extent set when an item is selected from the autocomplete dropdown.
+            * @return returns the input control.
+            */
+            function setupZoomControl(inputControl, featureSet, nameAttribute, mapToZoom) {
+                var graphic;
+                var name;
+                var option
+                var extents = [];
+                for (var i in featureSet.features) {
+                    graphic = featureSet.features[i];
+                    name = graphic.attributes[nameAttribute];
+                    extents.push({ label: name, extent: graphic.geometry.getExtent() });
+                }
+                // Sort the array of cities.
+                extents.sort(function (a, b) { return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0; });
+                $(inputControl).autocomplete({
+                    source: extents,
+                    select: function (event, ui) {
+                        mapToZoom.setExtent(ui.item.extent);
+                        $(this).val('');
+                        return false;
+                    }
+
+                });
+                return $(inputControl);
+            }
+
 
             // TODO: Refactor zoom tool boxes into jQuery plug-in.
             // Setup extents for cities and urbanized area zoom tools.
@@ -381,56 +413,17 @@
             query.where = "1 = 1";
             query.returnGeometry = true;
             query.outFields = ["NAME"];
-            var cityExtents = [];
-            cityQueryTask.execute(query, function (featureSet) {
-                var graphic;
-                var name;
-                var option
-                for (var i in featureSet.features) {
-                    graphic = featureSet.features[i];
-                    name = graphic.attributes["NAME"];
-                    cityExtents.push({ label: name, extent: graphic.geometry.getExtent() });
-                }
-                // Sort the array of cities.
-                cityExtents.sort(function (a, b) { return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0; });
-                $("#cityZoomSelect").autocomplete({
-                    source: cityExtents,
-                    select: function (event, ui) {
-                        map.setExtent(ui.item.extent);
-                        $(this).val('');
-                        return false;
-                    }
 
-                });
+            cityQueryTask.execute(query, function (featureSet) {
+                setupZoomControl("#cityZoomSelect", featureSet, "NAME", map);
             });
 
 
             var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
             query.where = "1 = 1";
             query.returnGeometry = true;
-            var urbanAreaExtents = [];
             urbanAreaQueryTask.execute(query, function (featureSet) {
-                var graphic;
-                var name;
-                for (var i in featureSet.features) {
-                    graphic = featureSet.features[i];
-                    name = graphic.attributes["NAME"];
-                    urbanAreaExtents.push({
-                        label: name,
-                        extent: graphic.geometry.getExtent()
-                    });
-                }
-                // Sort the array of urban areas.
-                urbanAreaExtents.sort(function (a, b) { return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0; });
-                $("#urbanAreaZoomSelect").autocomplete({
-                    source: urbanAreaExtents,
-                    select: function (event, ui) {
-                        map.setExtent(ui.item.extent);
-                        $(this).val('');
-                        return false;
-                    }
-
-                });
+                setupZoomControl("#urbanAreaZoomSelect", featureSet, "NAME", map);
             });
         }
 
