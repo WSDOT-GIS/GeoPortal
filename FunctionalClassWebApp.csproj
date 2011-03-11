@@ -54,13 +54,13 @@
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
     <Content Include="scripts\countyfeatures.js" />
+    <Content Include="scripts\index.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="scripts\legend.json" />
     <Content Include="style\legend.css" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
