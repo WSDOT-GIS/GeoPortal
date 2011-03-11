@@ -115,7 +115,9 @@ function init() {
     * @param {String} inputControl jQuery selector string pointing to an input control.
     * @param featureSet Either an esri.tasks.FeatureSet or an array of data for a jQuery autocomplete, with each object in the array containing a label property (string) and extent property (esri.geometry.Extent).
     * @param {esri.Map} mapToZoom The map that will be have its extent set when an item is selected from the autocomplete dropdown.
-    * @param {string} nameAttribute The name of the feature attribute that will be used to label items in the autocomplete dropdown.  This parameter can be omitted if featureSet is not an esri.tasks.FeatureSet.
+    * @param {string} nameAttribute The name of the feature attribute that will be used to label items in the autocomplete dropdown.
+    *                               This parameter is ignored if featureSet is not an esri.tasks.Featureset, and can be omitted in this case.
+                                    If featureSet is an esri.tasks.FeatureSet and this parameter is omitted, the featureSet's displayFieldName property will be used.
     * @return returns the input control.
     */
     function setupZoomControl(inputControl, featureSet, mapToZoom, nameAttribute) {
@@ -125,6 +127,9 @@ function init() {
         var extents = [];
 
         if (featureSet.declaredClass === "esri.tasks.FeatureSet") {
+            if (!nameAttribute) {
+                nameAttribute = featureSet.displayFieldName;
+            }
             for (var i in featureSet.features) {
                 graphic = featureSet.features[i];
                 name = graphic.attributes[nameAttribute];
@@ -161,7 +166,7 @@ function init() {
     query.outFields = ["NAME"];
 
     cityQueryTask.execute(query, function (featureSet) {
-        setupZoomControl("#cityZoomSelect", featureSet, map, "NAME");
+        setupZoomControl("#cityZoomSelect", featureSet, map);
     });
 
 

@@ -32,7 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Counties.html" />
     <Content Include="images\fcLegendSmall.png" />
     <Content Include="images\greenlogo.png" />
     <Content Include="images\HpmsBasemapThumbnail.png" />
@@ -53,7 +52,6 @@
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
-    <Content Include="scripts\countyfeatures.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
