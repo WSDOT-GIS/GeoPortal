@@ -106,8 +106,15 @@
 	    * html .ui-autocomplete {
 		    height: 100px;
 	    }
-
-
+	    
+	    #zoomInstructions li
+	    {
+	        list-style-type: circle;
+	    }
+	    #zoomControls 
+	    {
+	        padding: 0;
+	    }
     </style>
     <link href="./style/legend.css" rel="stylesheet" />
 </head>
@@ -136,69 +143,6 @@
                     <div>Switch Basemap</div>
                     <div dojotype="dijit.TooltipDialog">
                         <div id="basemapGallery">
-                        </div>
-                    </div>
-                </div>
-                <div dojotype="dijit.form.DropDownButton">
-                    <div>Zoom to...</div>
-                    <div dojotype="dijit.Menu">
-                        <div onclick="map.setExtent(extents.fullExtent);" dojotype="dijit.MenuItem">Full Extent</div>
-                        <div dojotype="dijit.PopupMenuItem">
-                            <span>Counties</span>
-                            <div dojotype="dijit.Menu">
-                                <div dojotype="dijit.PopupMenuItem">
-                                    <span>A-K</span>
-                                    <div dojotype="dijit.Menu">
-                                        <div id="AdamsZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Adams);" dojotype="dijit.MenuItem">Adams</div> 
-                                        <div id="AsotinZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Asotin);" dojotype="dijit.MenuItem">Asotin</div> 
-                                        <div id="BentonZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Benton);" dojotype="dijit.MenuItem">Benton</div> 
-                                        <div id="ChelanZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Chelan);" dojotype="dijit.MenuItem">Chelan</div> 
-                                        <div id="ClallamZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Clallam);" dojotype="dijit.MenuItem">Clallam</div> 
-                                        <div id="ClarkZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Clark);" dojotype="dijit.MenuItem">Clark</div> 
-                                        <div id="ColumbiaZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Columbia);" dojotype="dijit.MenuItem">Columbia</div> 
-                                        <div id="CowlitzZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Cowlitz);" dojotype="dijit.MenuItem">Cowlitz</div> 
-                                        <div id="DouglasZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Douglas);" dojotype="dijit.MenuItem">Douglas</div> 
-                                        <div id="FerryZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Ferry);" dojotype="dijit.MenuItem">Ferry</div> 
-                                        <div id="FranklinZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Franklin);" dojotype="dijit.MenuItem">Franklin</div> 
-                                        <div id="GarfieldZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Garfield);" dojotype="dijit.MenuItem">Garfield</div> 
-                                        <div id="GrantZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Grant);" dojotype="dijit.MenuItem">Grant</div> 
-                                        <div id="Grays HarborZoomMenuItem" onclick="map.setExtent(extents.countyExtents['Grays Harbor']);" dojotype="dijit.MenuItem">Grays Harbor</div> 
-                                        <div id="IslandZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Island);" dojotype="dijit.MenuItem">Island</div> 
-                                        <div id="JeffersonZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Jefferson);" dojotype="dijit.MenuItem">Jefferson</div> 
-                                        <div id="KingZoomMenuItem" onclick="map.setExtent(extents.countyExtents.King);" dojotype="dijit.MenuItem">King</div> 
-                                        <div id="KitsapZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Kitsap);" dojotype="dijit.MenuItem">Kitsap</div> 
-                                        <div id="KittitasZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Kittitas);" dojotype="dijit.MenuItem">Kittitas</div> 
-                                        <div id="KlickitatZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Klickitat);" dojotype="dijit.MenuItem">Klickitat</div> 
-                                    </div>
-                                </div>
-                                <div dojotype="dijit.PopupMenuItem">
-                                    <span>L-Y</span>
-                                    <div dojotype="dijit.Menu">
-                                        <div id="LewisZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Lewis);" dojotype="dijit.MenuItem">Lewis</div> 
-                                        <div id="LincolnZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Lincoln);" dojotype="dijit.MenuItem">Lincoln</div> 
-                                        <div id="MasonZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Mason);" dojotype="dijit.MenuItem">Mason</div> 
-                                        <div id="OkanoganZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Okanogan);" dojotype="dijit.MenuItem">Okanogan</div> 
-                                        <div id="PacificZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Pacific);" dojotype="dijit.MenuItem">Pacific</div> 
-                                        <div id="Pend OreilleZoomMenuItem" onclick="map.setExtent(extents.countyExtents['Pend Oreille']);" dojotype="dijit.MenuItem">Pend Oreille</div> 
-                                        <div id="PierceZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Pierce);" dojotype="dijit.MenuItem">Pierce</div> 
-                                        <div id="San JuanZoomMenuItem" onclick="map.setExtent(extents.countyExtents['San Juan']);" dojotype="dijit.MenuItem">San Juan</div> 
-                                        <div id="SkagitZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Skagit);" dojotype="dijit.MenuItem">Skagit</div> 
-                                        <div id="SkamaniaZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Skamania);" dojotype="dijit.MenuItem">Skamania</div> 
-                                        <div id="SnohomishZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Snohomish);" dojotype="dijit.MenuItem">Snohomish</div> 
-                                        <div id="SpokaneZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Spokane);" dojotype="dijit.MenuItem">Spokane</div> 
-                                        <div id="StevensZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Stevens);" dojotype="dijit.MenuItem">Stevens</div> 
-                                        <div id="ThurstonZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Thurston);" dojotype="dijit.MenuItem">Thurston</div> 
-                                        <div id="WahkiakumZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Wahkiakum);" dojotype="dijit.MenuItem">Wahkiakum</div> 
-                                        <div id="Walla WallaZoomMenuItem" onclick="map.setExtent(extents.countyExtents['Walla Walla']);" dojotype="dijit.MenuItem">Walla Walla</div> 
-                                        <div id="WhatcomZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Whatcom);" dojotype="dijit.MenuItem">Whatcom</div> 
-                                        <div id="WhitmanZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Whitman);" dojotype="dijit.MenuItem">Whitman</div> 
-                                        <div id="YakimaZoomMenuItem" onclick="map.setExtent(extents.countyExtents.Yakima);" dojotype="dijit.MenuItem">Yakima</div> 
-                                    </div>
-                                </div>
-
-
-
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -245,14 +189,32 @@
                     </table>
                 </div>
                 <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
-                    <table>
-                        <tbody>
-                            <tr><td colspan="2"><a href="#">Full Extent</a></td></tr>
-                            <tr><td>City Boundaries</td><td><input id="cityZoomSelect" /></td></tr>
-                            <tr><td>Urbanized Area</td><td><input id="urbanAreaZoomSelect" /></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div id="zoomAcordion">
+                        <h2><a href="#">Zoom Controls</a></h2>
+                        <div id="zoomControls">
+                            <table>
+                                <caption>Zoom to...</caption>
+                                <tbody>
+                                    <tr><td /><td><button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);">Full Extent</button></td></tr>
+                                    <tr><td><label>County</label></td><td><input id="countyZoomSelect" disabled="disabled" /></td></tr>
+                                    <tr><td><label for="cityZoomSelect">City Boundaries</label></td><td><input id="cityZoomSelect" disabled="disabled" /></td></tr>
+                                    <tr><td><label for="urbanAreaZoomSelect">Urbanized Area</label></td><td><input id="urbanAreaZoomSelect" disabled="disabled" /></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h2><a href="#">Zoom Instructions</a></h2>
+                        <div id="zoomInstructions">
+                            <h3>Zoom by interacting with map</h3>
+                            <p>You can zoom by interacting with the map in the following ways.</p>
+                            <ul>
+                                <li>Double-click on a spot on the map to zoom in to that location.</li>
+                                <li>By holding down the shift key you can draw a box on the map.  When you release the mouse, the map will zoom to that extent.</li>
+                            </ul>
+                            <h3>Zoom to specific areas</h3>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
