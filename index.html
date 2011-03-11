@@ -121,7 +121,7 @@
                 <ul>
                   <li><a href="http://www.wsdot.wa.gov/news/">News</a></li>
                   <li><a href="http://www.wsdot.wa.gov/">WSDOT Home</a></li>
-                  <li><a href="http://www.wsdot.wa.gov/contact/">Contact Us</a></li>
+                  <li><a href="#" id="contactUsLink">Contact Us</a></li>
                   <li><a href="http://www.wsdot.wa.gov/goodtogo/">Good To Go!</a></li>
                   <li><a href="http://www.wsdot.wa.gov/employment/">Employment</a></li>
         		</ul>
@@ -259,15 +259,27 @@
             
         </div>
     </div>
-        <script type="text/javascript">
-            var djConfig = {
-                parseOnLoad: true
-            };
+    <div id="contactUsDialog">
+        <p><a href="http://www.wsdot.wa.gov/contact/">Click here to go to the main WSDOT contact page.</a></p>
+        <p>For questions or comments regarding the Functional Classification, please <a href="mailto:fc@wsdot.wa.gov">email the Functional Classification Section</a> or call (360) 570-2441.</p>
+    </div>
+    <script type="text/javascript">
+        var djConfig = {
+            parseOnLoad: true
+        };
     </script>
     <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+        // Setup the contact us dialog.
+        $(document).ready(function () {
+            $("#contactUsDialog").dialog({ title: "Contact Us", autoOpen: false, modal: true });
+            $("#contactUsLink").bind('click', function (eventObject) {
+                $("#contactUsDialog").dialog('open');
+            });
+        });
+
         dojo.require("dijit.dijit"); // optimize: load dijit layer
         dojo.require("dijit.layout.BorderContainer");
         dojo.require("dijit.layout.TabContainer");
@@ -379,6 +391,8 @@
                     name = graphic.attributes["NAME"];
                     cityExtents.push({ label: name, extent: graphic.geometry.getExtent() });
                 }
+                // Sort the array of cities.
+                cityExtents.sort(function (a, b) { return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0; });
                 $("#cityZoomSelect").autocomplete({
                     source: cityExtents,
                     select: function (event, ui) {
@@ -406,6 +420,8 @@
                         extent: graphic.geometry.getExtent()
                     });
                 }
+                // Sort the array of urban areas.
+                urbanAreaExtents.sort(function (a, b) { return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0; });
                 $("#urbanAreaZoomSelect").autocomplete({
                     source: urbanAreaExtents,
                     select: function (event, ui) {
