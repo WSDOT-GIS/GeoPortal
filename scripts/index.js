@@ -113,9 +113,9 @@ function init() {
     /** 
     * Sets up a jQueryUI autocomplete box that allows a user to select an extent.  Selecting an extent will then zoom the map to that extent.
     * @param {String} inputControl jQuery selector string pointing to an input control.
-    * @param featureSet Either an esri.tasks.FeatureSet or an array of data for a jQuery autocomplete.
+    * @param featureSet Either an esri.tasks.FeatureSet or an array of data for a jQuery autocomplete, with each object in the array containing a label property (string) and extent property (esri.geometry.Extent).
     * @param {esri.Map} mapToZoom The map that will be have its extent set when an item is selected from the autocomplete dropdown.
-    * @param {string} nameAttribute The name of the feature attribute that will be used to label items in the autocomplete dropdown.
+    * @param {string} nameAttribute The name of the feature attribute that will be used to label items in the autocomplete dropdown.  This parameter can be omitted if featureSet is not an esri.tasks.FeatureSet.
     * @return returns the input control.
     */
     function setupZoomControl(inputControl, featureSet, mapToZoom, nameAttribute) {
