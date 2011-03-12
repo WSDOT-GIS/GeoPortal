@@ -107,7 +107,25 @@
 		    height: 100px;
 	    }
 	    
-	    #zoomInstructions li
+	    #zoomInstructions 
+	    {
+	        padding: 0.5em;
+	    }
+	    
+	    #zoomInstructions h3, #zoomInstructions h4
+	    {
+	        color: inherit;
+	        font-weight: bold;
+	        font-size: inherit;
+	    }
+	    
+	    #zoomInstructions li 
+	    {
+	        font-size: 10pt;
+	        font-family: 'Arial Narrow', Sans-Serif;
+	    }
+	    
+	    #zoomInstructions ul > li
 	    {
 	        list-style-type: circle;
 	    }
@@ -192,10 +210,11 @@
                     <div id="zoomAcordion">
                         <h2><a href="#">Zoom Controls</a></h2>
                         <div id="zoomControls">
+                            <button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);">Full Extent</button>
+                            <button id="previousExtentButton" onclick="javascript:navToolbar.zoomToPrevExtent();">Previous Extent</button>
+                            <button id="nextExtentButton"  onclick="javascript:navToolbar.zoomToNextExtent();">Next Extent</button>
                             <table>
-                                <caption>Zoom to...</caption>
                                 <tbody>
-                                    <tr><td /><td><button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);">Full Extent</button></td></tr>
                                     <tr><td><label>County</label></td><td><input id="countyZoomSelect" disabled="disabled" /></td></tr>
                                     <tr><td><label for="cityZoomSelect">City Boundaries</label></td><td><input id="cityZoomSelect" disabled="disabled" /></td></tr>
                                     <tr><td><label for="urbanAreaZoomSelect">Urbanized Area</label></td><td><input id="urbanAreaZoomSelect" disabled="disabled" /></td>
@@ -209,9 +228,20 @@
                             <p>You can zoom by interacting with the map in the following ways.</p>
                             <ul>
                                 <li>Double-click on a spot on the map to zoom in to that location.</li>
+                                <li>Use the mouse's scroll wheel to zoom in and out on the map.</li>
                                 <li>By holding down the shift key you can draw a box on the map.  When you release the mouse, the map will zoom to that extent.</li>
                             </ul>
                             <h3>Zoom to specific areas</h3>
+                            <h4>Full Extent</h4>
+                            <p>Click the <em>Full Extent</em> button to zoom the map out to show the whole state.</p>
+                            <h4>Zoom to County, City Boundary, or Urbanized Area</h4>
+                            <p>You can zoom to a county, city or urbanized area using the corresponding text box.</p>
+                            <ol>
+                                <li>Begin typing into the text box.</li>
+                                <li>A list of items will appear in the box.  You can keep typing to further narrow down the results.</li>
+                                <li>Use the up and down arrow keys to select on of the items from the list.</li>
+                                <li>Press enter.  The map will zoom to the selected location.</li>
+                            </ol>
                         </div>
 
                     </div>

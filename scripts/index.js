@@ -9,8 +9,10 @@ $(document).ready(function () {
     $("#contactUsLink").bind('click', function (eventObject) {
         $("#contactUsDialog").dialog('open');
     });
-    $("#fullExtentButton").button({ icons: { primary: 'ui-icon-zoomout'} });
-    $("#zoomAcordion").accordion({autoHeight: false});
+    $("#fullExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrow-4-diag' }, text: false });
+    $("#previousExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-w' }, text: false })
+    $("#nextExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-e' }, text: false })
+    $("#zoomAcordion").accordion({ autoHeight: false });
 });
 
 dojo.require("dijit.dijit"); // optimize: load dijit layer
@@ -34,9 +36,11 @@ dojo.require("esri.arcgis.utils");
 dojo.require("esri.dijit.Legend");
 dojo.require("esri.dijit.Scalebar");
 dojo.require("esri.tasks.query");
+dojo.require("esri.toolbars.navigation");
 
 var map = null;
 var extents = null;
+var navToolbar;
 
 //function handleLayerCheckboxClick() {
 //    // Get all of the checked checkboxes.
@@ -103,6 +107,11 @@ function init() {
     var functionalClassLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "functionalClass" });
     map.addLayer(functionalClassLayer);
 
+    navToolbar = new esri.toolbars.Navigation(map);
+    dojo.connect(navToolbar, "onExtentHistoryChange", function () {
+        $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
+        $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
+    });
 
     setupNorthArrow();
     var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
