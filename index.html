@@ -114,7 +114,7 @@
 	    
 	    #zoomInstructions h3, #zoomInstructions h4
 	    {
-	        color: inherit;
+	        color: inherit; /* This is to support jQueryUI theming. */
 	        font-weight: bold;
 	        font-size: inherit;
 	    }
@@ -168,8 +168,12 @@
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
         <div id="legendPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
-            <div id="tabs" dojoType="dijit.layout.TabContainer">
-                <div id="legendTab" title="Legend" dojoType="dijit.layout.ContentPane" >
+            <div id="tabs">
+                <ul>
+                    <li><a href="#legendTab">Legend</a></li>
+                    <li><a href="#zoomTab">Zoom</a></li>
+                </ul>
+                <div id="legendTab" title="Legend">
                     <table id="fcLegend" class="legend alternatingLines">
                     <caption>Functional Class</caption>
                     <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
@@ -206,7 +210,7 @@
                     </tbody>
                     </table>
                 </div>
-                <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
+                <div id="zoomTab" title="Zoom">
                     <div id="zoomAcordion">
                         <h2><a href="#">Zoom Controls</a></h2>
                         <div id="zoomControls">

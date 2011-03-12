@@ -13,6 +13,7 @@ $(document).ready(function () {
     $("#previousExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-w' }, text: false })
     $("#nextExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-e' }, text: false })
     $("#zoomAcordion").accordion({ autoHeight: false });
+    $("#tabs").tabs();
 });
 
 dojo.require("dijit.dijit"); // optimize: load dijit layer
