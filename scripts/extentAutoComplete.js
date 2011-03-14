@@ -22,7 +22,7 @@
                 if (!nameAttribute) {
                     nameAttribute = featureSet.displayFieldName;
                 }
-                for (var i in featureSet.features) {
+                for (var i = 0, l = featureSet.features.length; i < l; i++) {
                     graphic = featureSet.features[i];
                     name = graphic.attributes[nameAttribute];
                     extents.push({ label: name, extent: graphic.geometry.getExtent() });
