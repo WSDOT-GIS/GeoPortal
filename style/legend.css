@@ -15,7 +15,6 @@
 .legend
 {
     font-family: 'Arial Narrow', Sans-Serif;
-    text-align: center;
     font-size: 10pt;
     border-collapse: collapse;
  
@@ -31,9 +30,14 @@
     padding-left: 5px;
     padding-right: 5px;
 }
+#fcLegend 
+{
+    text-align: center;
+    
+}
 /* Left-align the fourth column. */
-.legend td:first-child + td + td + td { text-align: left; padding-right: 5px; }
-.legend td:first-child { padding-left: 5px; padding-right: 5px; }
+#fcLegend td:first-child + td + td + td { text-align: left; padding-right: 5px; }
+#fcLegend td:first-child { padding-left: 5px; padding-right: 5px; }
 
 /* Change the background color of alternating rows */
 .alternatingLines tbody tr:first-child + tr,
