@@ -34,23 +34,14 @@
                 <img id="wsdotLogo" src="http://www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT Logo" />
                 <h1>WSDOT Functional Classification Map</h1>
             </div>
-            
-            <div id="toolbar1" dojotype="dijit.Toolbar">
-                <div dojotype="dijit.form.DropDownButton" title="Switch Basemap">
-                    <div>Switch Basemap</div>
-                    <div dojotype="dijit.TooltipDialog">
-                        <div id="basemapGallery">
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
-        <div id="legendPane" dojotype="dijit.layout.ContentPane" style="width:250px" region="left" splitter="true">
+        <div id="legendPane" dojotype="dijit.layout.ContentPane" region="left" splitter="true">
             <div id="tabs">
                 <ul>
                     <li><a href="#legendTab">Legend</a></li>
                     <li><a href="#zoomTab">Zoom</a></li>
+                    <li><a href="#basemapTab">Basemaps</a></li>
                 </ul>
                 <div id="legendTab" title="Legend">
                     <table id="fcLegend" class="legend alternatingLines">
@@ -128,6 +119,9 @@
                         </div>
 
                     </div>
+                </div>
+                <div id="basemapTab">
+                    <div id="basemapGallery"></div>
                 </div>
             </div>
 

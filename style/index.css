@@ -17,6 +17,10 @@
     border: 1px solid #000;
     padding: 0;
 }
+#legendPane 
+{
+    width: 250px;
+}
 #layerList *
 {
     list-style-type: none;
@@ -118,4 +122,19 @@ h1
 #zoomControls 
 {
 	padding: 0;
+}
+
+
+#zoomControls label
+{
+    font-family: 'Arial Narrow', Sans-Serif
+}
+
+.ui-tabs .ui-tabs-panel
+
+{
+    padding-top: 0.5em;
+    padding-right: 0.75em;
+    padding-bottom: 0.5em;
+    padding-left: 0.75em;
 }
