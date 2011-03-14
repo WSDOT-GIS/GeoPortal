@@ -48,6 +48,7 @@
 .alternatingLines tbody tr:first-child + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr + tr
 {
      background: #eeeeee; 
+     color: Black;
 }
 
 #fcLegend tr td:first-child

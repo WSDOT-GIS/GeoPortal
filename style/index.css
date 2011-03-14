@@ -51,6 +51,7 @@ h1
 .topNav ul {
 	text-align: right;
 	padding: 0px;
+	margin-top: 0px;
 }
 .topNav li {
 	border-left-width: 1px;
