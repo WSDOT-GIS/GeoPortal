@@ -107,7 +107,7 @@ function init() {
     });
     var initBasemap = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer");
     map.addLayer(initBasemap);
-    var functionalClassLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/HPMS/MapServer", { id: "functionalClass" });
+    var functionalClassLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassMap/MapServer", { id: "functionalClass" });
     map.addLayer(functionalClassLayer);
 
     navToolbar = new esri.toolbars.Navigation(map);
