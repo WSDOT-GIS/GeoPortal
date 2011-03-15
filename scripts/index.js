@@ -110,6 +110,29 @@ function init() {
     var functionalClassLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassMap/MapServer", { id: "functionalClass" });
     map.addLayer(functionalClassLayer);
 
+    dojo.connect(map, "onUpdateStart", map, function () {
+        if (typeof (notices.updatingMap) === "undefined") {
+            notices.updatingMap = $.pnotify({
+                pnotify_title: "Updating map...",
+                pnotify_text: "Please wait...",
+                pnotify_notice_icon: 'ui-icon ui-icon-transferthick-e-w',
+                pnotify_nonblock: true,
+                pnotify_hide: false,
+                pnotify_closer: false,
+                pnotify_history: false
+            });
+        }
+        else {
+            notices.updatingMap.pnotify_display();
+        }
+    });
+    dojo.connect(map, "onUpdateEnd", map, function () {
+        if (notices.updatingMap) {
+            notices.updatingMap.pnotify_remove();
+        }
+    });
+
+
     navToolbar = new esri.toolbars.Navigation(map);
     dojo.connect(navToolbar, "onExtentHistoryChange", function () {
         $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
@@ -223,25 +246,6 @@ function createBasemapGallery() {
     }, "basemapGallery");
 
     basemapGallery.startup();
-
-    // Add an event to the links in the basemap gallery to display "loading basemap" message.
-    $('.esriBasemapGalleryNode > a').bind("click", function (event) {
-        if (typeof (notices.loadingBasemap) === "undefined") {
-            notices.loadingBasemap = $.pnotify({
-                pnotify_title: "Loading basemap...",
-                pnotify_text: "Loading basemap...",
-                pnotify_notice_icon: 'ui-icon ui-icon-transferthick-e-w',
-                pnotify_nonblock: true,
-                pnotify_hide: false,
-                pnotify_closer: false,
-                pnotify_history: false
-            });
-        }
-        else {
-            notices.loadingBasemap.pnotify_display();
-        }
-    });
-
 
     dojo.connect(basemapGallery, "onError", function (msg) {
         // TODO: Show error message instead of just closing notification.

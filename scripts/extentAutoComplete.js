@@ -3,7 +3,6 @@
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.js"/>
 
 (function ($) {
-
     /** 
     * Sets up a jQueryUI autocomplete box that allows a user to select an extent.  Selecting an extent will then zoom the map to that extent.
     * @param featureSet Either an esri.tasks.FeatureSet or an array of data for a jQuery autocomplete, with each object in the array containing a label property (string) and extent property (esri.geometry.Extent).
@@ -12,6 +11,11 @@
     * @return returns the input control.
     */
     $.fn.extentAutoComplete = function (featureSet, mapToZoom, nameAttribute) {
+        /// <summary>Creates a jQueryUI autocomplete populated by a list of extents.</summary>
+        /// <param name="featureSet" type="Object">Either an esri.tasks.FeatureSet or an array of data for a jQuery autocomplete, with each object in the array containing a label property (string) and extent property (esri.geometry.Extent).</param>
+        /// <param name="mapToZoom" type="esri.Map">The map that will be have its extent set when an item is selected from the autocomplete dropdown.</param>
+        /// <param name="nameAttribute" type="String">The name of the feature attribute that will be used to label items in the autocomplete dropdown. This parameter is ignored if featureSet is not an esri.tasks.Featureset, and can be omitted in this case. If featureSet is an esri.tasks.FeatureSet and this parameter is omitted, the featureSet's displayFieldName property will be used.</param>
+        /// <returns type="Object" />
         return this.each(function () {
             var graphic;
             var name;
