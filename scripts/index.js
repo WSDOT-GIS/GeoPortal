@@ -230,7 +230,7 @@ function createBasemapGallery() {
             notices.loadingBasemap = $.pnotify({
                 pnotify_title: "Loading basemap...",
                 pnotify_text: "Loading basemap...",
-                //pnotify_error_icon: 'ui-icon ui-icon-transferthick-ew',
+                pnotify_notice_icon: 'ui-icon ui-icon-transferthick-e-w',
                 pnotify_nonblock: true,
                 pnotify_hide: false,
                 pnotify_closer: false,
