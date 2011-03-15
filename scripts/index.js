@@ -1,8 +1,11 @@
 ﻿/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.js"/>
-/// <reference path="scripts/extentAutoComplete.js"/>
+/// <reference path="extentAutoComplete.js"/>
 /// <reference path="jquery.pnotify.js"/>
+/// <reference path="jquery.ba-bbq.js" />
+/// <reference path="json2.js" />
+
 
 // Setup the contact us dialog.
 $(document).ready(function () {
@@ -110,41 +113,56 @@ function init() {
     var functionalClassLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassMap/MapServer", { id: "functionalClass" });
     map.addLayer(functionalClassLayer);
 
-    dojo.connect(map, "onUpdateStart", map, function () {
-        if (typeof (notices.updatingMap) === "undefined") {
-            notices.updatingMap = $.pnotify({
-                pnotify_title: "Updating map...",
-                pnotify_text: "Please wait...",
-                pnotify_notice_icon: 'ui-icon ui-icon-transferthick-e-w',
-                pnotify_nonblock: true,
-                pnotify_hide: false,
-                pnotify_closer: false,
-                pnotify_history: false
-            });
-        }
-        else {
+    notices.updatingMap = $.pnotify({
+        pnotify_title: "Updating map...",
+        pnotify_text: "Please wait...",
+        pnotify_notice_icon: 'ui-icon ui-icon-transferthick-e-w',
+        pnotify_nonblock: true,
+        pnotify_hide: false,
+        pnotify_closer: false,
+        pnotify_history: false
+    });
+
+    dojo.connect(map, "onLoad", map, function () {
+
+
+        // Setup update notifications.
+        dojo.connect(map, "onUpdateStart", map, function () {
             notices.updatingMap.pnotify_display();
+        });
+        dojo.connect(map, "onUpdateEnd", map, function () {
+            if (notices.updatingMap) {
+                notices.updatingMap.pnotify_remove();
+            }
+        });
+
+
+        // Setup the navigation toolbar.
+        navToolbar = new esri.toolbars.Navigation(map);
+        dojo.connect(navToolbar, "onExtentHistoryChange", function () {
+            $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
+            $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
+        });
+
+        setupNorthArrow();
+        var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
+
+
+        createBasemapGallery();
+        dojo.connect(dijit.byId('map'), 'resize', resizeMap);
+
+        // Zoom to the extent in the query string (if provided).
+        // Test example:
+        // xmin=-13677603.622831678&ymin=5956814.051290565&xmax=-13576171.686297385&ymax=6004663.630997022
+        var qsParams = $.deparam.querystring(true);
+        if (qsParams) { ////.xmin && qsParams.ymin && qsParams.xmax && qsParams.yMax) {
+            var extent = esri.geometry.fromJson(qsParams);
+            extent.spatialReference = map.spatialReference;
+            map.setExtent(extent);
         }
     });
-    dojo.connect(map, "onUpdateEnd", map, function () {
-        if (notices.updatingMap) {
-            notices.updatingMap.pnotify_remove();
-        }
-    });
 
 
-    navToolbar = new esri.toolbars.Navigation(map);
-    dojo.connect(navToolbar, "onExtentHistoryChange", function () {
-        $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
-        $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
-    });
-
-    setupNorthArrow();
-    var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
-
-
-    createBasemapGallery();
-    dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 
     $("#countyZoomSelect").extentAutoComplete(extents.countyExtents, map);
 

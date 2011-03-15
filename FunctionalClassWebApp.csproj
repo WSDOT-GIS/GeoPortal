@@ -55,6 +55,8 @@
     <Content Include="index.html" />
     <Content Include="scripts\extentAutoComplete.js" />
     <Content Include="scripts\index.js" />
+    <Content Include="scripts\jquery.ba-bbq.js" />
+    <Content Include="scripts\jquery.ba-bbq.min.js" />
     <Content Include="scripts\jquery.pnotify.js" />
     <Content Include="scripts\jquery.pnotify.min.js" />
     <Content Include="scripts\json2.js" />
