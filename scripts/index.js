@@ -2,6 +2,7 @@
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.js"/>
 /// <reference path="scripts/extentAutoComplete.js"/>
+/// <reference path="jquery.pnotify.js"/>
 
 // Setup the contact us dialog.
 $(document).ready(function () {
@@ -42,6 +43,7 @@ dojo.require("esri.toolbars.navigation");
 var map = null;
 var extents = null;
 var navToolbar;
+var notices = {};
 
 //function handleLayerCheckboxClick() {
 //    // Get all of the checked checkboxes.
@@ -222,10 +224,38 @@ function createBasemapGallery() {
 
     basemapGallery.startup();
 
-    dojo.connect(basemapGallery, "onError", function (msg) { console.log(msg); });
+    // Add an event to the links in the basemap gallery to display "loading basemap" message.
+    $('.esriBasemapGalleryNode > a').bind("click", function (event) {
+        if (typeof (notices.loadingBasemap) === "undefined") {
+            notices.loadingBasemap = $.pnotify({
+                pnotify_title: "Loading basemap...",
+                pnotify_text: "Loading basemap...",
+                //pnotify_error_icon: 'ui-icon ui-icon-transferthick-ew',
+                pnotify_nonblock: true,
+                pnotify_hide: false,
+                pnotify_closer: false,
+                pnotify_history: false
+            });
+        }
+        else {
+            notices.loadingBasemap.pnotify_display();
+        }
+    });
+
+
+    dojo.connect(basemapGallery, "onError", function (msg) {
+        // TODO: Show error message instead of just closing notification.
+        if (notices.loadingBasemap) {
+            notices.loadingBasemap.pnotify_remove();
+        }
+    });
 
     // Set up code to hide or display basemap-specific legends.
     dojo.connect(basemapGallery, "onSelectionChange", function () {
+        if (notices.loadingBasemap) {
+            notices.loadingBasemap.pnotify_remove();
+        }
+
         var basemap = basemapGallery.getSelected();
         if (basemap.id === "fcBasemap") {
             dojo.removeClass("basemapLegend", "hidden");

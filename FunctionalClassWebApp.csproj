@@ -55,6 +55,8 @@
     <Content Include="index.html" />
     <Content Include="scripts\extentAutoComplete.js" />
     <Content Include="scripts\index.js" />
+    <Content Include="scripts\jquery.pnotify.js" />
+    <Content Include="scripts\jquery.pnotify.min.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="style\index.css" />
+    <Content Include="style\jquery.pnotify.default.css" />
+    <Content Include="style\jquery.pnotify.default.icons.css" />
     <Content Include="style\legend.css" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

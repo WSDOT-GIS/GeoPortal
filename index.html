@@ -11,6 +11,10 @@
 
     <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css" />
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" type="text/css" media="all" />
+    
+	<link href="style/jquery.pnotify.default.css" rel="stylesheet" type="text/css" />
+	<link href="style/jquery.pnotify.default.icons.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="http://www.wsdot.wa.gov/favicon.ico" />
     <link href="style/index.css" rel="stylesheet" type="text/css" />
     <link href="./style/legend.css" rel="stylesheet" />
@@ -128,9 +132,13 @@
             
         </div>
     </div>
+
     <div id="contactUsDialog">
         <p><a href="http://www.wsdot.wa.gov/contact/">Click here to go to the main WSDOT contact page.</a></p>
         <p>For questions or comments regarding the Functional Classification, please <a href="mailto:fc@wsdot.wa.gov">email the Functional Classification Section</a> or call (360) 570-2441.</p>
+    </div>
+    <div id="loadingBasemapDialog">
+        Loading Basemap...
     </div>
     <script type="text/javascript">
         var djConfig = {
@@ -140,6 +148,7 @@
     <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="scripts/jquery.pnotify.js"></script>
     <script src="scripts/extentAutoComplete.js" type="text/javascript"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
 </body>
