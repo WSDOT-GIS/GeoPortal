@@ -19,13 +19,16 @@ $(document).ready(function () {
     $("#zoomAcordion").accordion({ autoHeight: false });
     $("#tabs").tabs();
 
-    // Set the links to other websites to open in a new window.
+    // Set the links to other websites to open in a new window.  
+    // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
     var anchors = $("a:[href]").filter(":not([href^=mailto])").filter(":not([href^=#])").each(function (index, element) {
+        // Store the current value of the href attribute.
         var href = element.href;
+        // Set a handler on the click event to open the url in a new window or tab.  (Window or tab is determined by the browser settings.)
         $(element).bind("click", { href: href }, function (event) { window.open(event.data.href); });
+        // Change the value of href to #.  (Otherwise the URL will still replace this application AND open in a new tab, which is not what we want.)
         element.href = "#";
     });
-    console.debug(anchors);
 });
 
 dojo.require("dijit.dijit"); // optimize: load dijit layer
