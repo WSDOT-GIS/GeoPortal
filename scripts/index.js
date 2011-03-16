@@ -58,6 +58,14 @@ function setupNorthArrow() {
     dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
 }
 
+function setExtentLink(extent) {
+    /// <summary>Sets the extent link in the bookmark tab to the given extent.</summary>
+    /// <param name="extent" type="esri.geometry.Envelope">The extent that the link will be set to.</param>
+    var extentJson = extent.toJson();
+    delete extentJson.spatialReference;
+    $("#extentLink").attr("href", window.location + $.param.querystring("", extentJson));
+}
+
 function init() {
     var initExtent = new esri.geometry.Extent({
         "xmin": -13938444.981854893,
@@ -137,6 +145,8 @@ function init() {
             extent.spatialReference = map.spatialReference;
             map.setExtent(extent);
         }
+
+        setExtentLink(map.extent);
     });
 
     ////// Used for debugging errors
@@ -164,6 +174,12 @@ function init() {
     });
 
 
+
+    dojo.connect(map, "onZoomEnd", function (extent, zoomFactor, anchor, level) {
+        setExtentLink(extent);
+    });
+
+
     // Setup the navigation toolbar.
     navToolbar = new esri.toolbars.Navigation(map);
     dojo.connect(navToolbar, "onExtentHistoryChange", function () {
@@ -171,8 +187,7 @@ function init() {
         $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
     });
 
-
-
+    // Setup the zoom controls.
     $("#countyZoomSelect").extentAutoComplete(extents.countyExtents, map);
 
 
