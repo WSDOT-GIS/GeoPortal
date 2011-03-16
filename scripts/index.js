@@ -18,24 +18,26 @@ $(document).ready(function () {
     $("#nextExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-e' }, text: false })
     $("#zoomAcordion").accordion({ autoHeight: false });
     $("#tabs").tabs();
+
+    // Set the links to other websites to open in a new window.
+    var anchors = $("a:[href]").filter(":not([href^=mailto])").filter(":not([href^=#])").each(function (index, element) {
+        var href = element.href;
+        $(element).bind("click", { href: href }, function (event) { window.open(event.data.href); });
+        element.href = "#";
+    });
+    console.debug(anchors);
 });
 
 dojo.require("dijit.dijit"); // optimize: load dijit layer
 dojo.require("dijit.layout.BorderContainer");
-dojo.require("dijit.layout.TabContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.Toolbar");
-dojo.require("dijit.form.DropDownButton");
-dojo.require("dijit.Dialog");
 dojo.require("dijit.Menu");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.form.FilteringSelect");
-dojo.require("dojo.data.ItemFileReadStore");
 
 dojo.require("dojo.parser");
 
 dojo.require("esri.map");
-dojo.require("esri.virtualearth.VETiledLayer");
+//dojo.require("esri.virtualearth.VETiledLayer");
 dojo.require("esri.dijit.BasemapGallery");
 dojo.require("esri.arcgis.utils");
 dojo.require("esri.dijit.Legend");
@@ -155,7 +157,7 @@ function init() {
         // Test example:
         // xmin=-13677603.622831678&ymin=5956814.051290565&xmax=-13576171.686297385&ymax=6004663.630997022
         var qsParams = $.deparam.querystring(true);
-        if (qsParams) { ////.xmin && qsParams.ymin && qsParams.xmax && qsParams.yMax) {
+        if (qsParams.xmin && qsParams.ymin && qsParams.xmax && qsParams.ymax) {
             var extent = esri.geometry.fromJson(qsParams);
             extent.spatialReference = map.spatialReference;
             map.setExtent(extent);
