@@ -7,8 +7,8 @@
 /// <reference path="json2.js" />
 
 
-// Setup the contact us dialog.
 $(document).ready(function () {
+    // Setup the contact us dialog.
     $("#contactUsDialog").dialog({ title: "Contact Us", autoOpen: false, modal: true });
     $("#contactUsLink").bind('click', function (eventObject) {
         $("#contactUsDialog").dialog('open');
@@ -53,15 +53,6 @@ var extents = null;
 var navToolbar;
 var notices = {};
 
-//function handleLayerCheckboxClick() {
-//    // Get all of the checked checkboxes.
-//    var checkedBoxes = dojo.query("[id^=layer]:checked");
-//    var regex = /layer(\d+)checkbox/i
-//    var visibleLayers = dojo.map(checkedBoxes, function(item, index, array) { return Number(item.id.match(regex)[1]); });
-//    functionalClassLayer.setVisibleLayers(visibleLayers);
-//    functionalClassLayer.refresh();
-//}
-
 function setupNorthArrow() {
     // Create the north arrow.
     dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
@@ -85,11 +76,12 @@ function init() {
     };
 
     var extentData = [];
+    var extentSpatialReference = new esri.SpatialReference({ wkid: 102100 });
 
     // Convert the county JSON objects into esri.geomtry.Extents.
     for (var i in extents.countyExtents) {
         // extents.countyExtents[i] = new esri.geometry.fromJson(extents.countyExtents[i]);
-        extentData.push({ label: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]) });
+        extentData.push({ label: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]).setSpatialReference(extentSpatialReference) });
     }
 
     extents.countyExtents = extentData;
@@ -129,26 +121,6 @@ function init() {
     });
 
     dojo.connect(map, "onLoad", map, function () {
-
-
-        // Setup update notifications.
-        dojo.connect(map, "onUpdateStart", map, function () {
-            notices.updatingMap.pnotify_display();
-        });
-        dojo.connect(map, "onUpdateEnd", map, function () {
-            if (notices.updatingMap) {
-                notices.updatingMap.pnotify_remove();
-            }
-        });
-
-
-        // Setup the navigation toolbar.
-        navToolbar = new esri.toolbars.Navigation(map);
-        dojo.connect(navToolbar, "onExtentHistoryChange", function () {
-            $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
-            $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
-        });
-
         setupNorthArrow();
         var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
@@ -165,6 +137,38 @@ function init() {
             extent.spatialReference = map.spatialReference;
             map.setExtent(extent);
         }
+    });
+
+    ////// Used for debugging errors
+    ////dojo.connect(map, "onLayerAddResult", function (layer, error) {
+    ////    if (error) {
+    ////        console.warn(error);
+    ////    }
+    ////    else {
+    ////        dojo.connect(layer, "onUpdateEnd", layer, function (error) {
+    ////            if (error) {
+    ////                console.warn(error);
+    ////            }
+    ////        });
+    ////    }
+    ////});
+
+    // Setup update notifications.
+    dojo.connect(map, "onUpdateStart", map, function () {
+        notices.updatingMap.pnotify_display();
+    });
+    dojo.connect(map, "onUpdateEnd", map, function () {
+        if (notices.updatingMap) {
+            notices.updatingMap.pnotify_remove();
+        }
+    });
+
+
+    // Setup the navigation toolbar.
+    navToolbar = new esri.toolbars.Navigation(map);
+    dojo.connect(navToolbar, "onExtentHistoryChange", function () {
+        $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
+        $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
     });
 
 
