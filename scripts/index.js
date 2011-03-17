@@ -246,8 +246,6 @@ function createBasemapGallery() {
         }),
         new esri.dijit.Basemap({
             layers: [
-                basemapLayers.cities,
-                basemapLayers.counties,
                 new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" })
             ],
             thumbnailUrl: "http://www.arcgis.com/sharing/content/items/c03a526d94704bfb839445e80de95495/info/thumbnail/imagery.jpg",
@@ -255,43 +253,36 @@ function createBasemapGallery() {
         }),
         new esri.dijit.Basemap({
             layers: [
-                new esri.dijit.BasemapLayer({url: "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"}),
-                new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" })
-            ],
-            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/716b600dbbac433faa4bec9220c76b3a/info/thumbnail/imagery_labels.jpg",
-            title: "ESRI Imagery w/ Labels"
-        }),
-        new esri.dijit.Basemap({
-            layers: [
-                basemapLayers.cities,
-                basemapLayers.counties,
                 new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" })
             ],
             thumbnailUrl: "http://www.arcgis.com/sharing/content/items/11742666e55b45b8a508751532d0c1ea/info/thumbnail/terrain.jpg",
             title: "ESRI Terrain"
         }),
-    //new esri.dijit.Basemap({
-    //    layers: [
-    //        basemapLayers.cities,
-    //        basemapLayers.counties,
-    //        new esri.dijit.BasemapLayer({ type: "BingMapsAerial" })
-    //    ],
-    //    thumbnailUrl: "http://www.arcgis.com/sharing/content/items/677cd0c509d842a98360c46186a2768e/info/thumbnail/bing_aerial.jpg",
-    //    title: "Bing Maps Imagery"
-    //}),
         new esri.dijit.Basemap({
             layers: [
-                basemapLayers.cities,
-                basemapLayers.counties
+                new esri.dijit.BasemapLayer({ type: "BingMapsAerial" })
             ],
-
-            title: "Counties and Cities Only"
+            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/677cd0c509d842a98360c46186a2768e/info/thumbnail/bing_aerial.jpg",
+            title: "Bing Maps Arial"
+        }),
+         new esri.dijit.Basemap({
+            layers: [
+                new esri.dijit.BasemapLayer({ type: "BingMapsHybrid" })
+            ],
+            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/89e292dc0b4b4bcd809a35b1a7c21149/info/thumbnail/bing_hybrid.jpg",
+            title: "Bing Maps Hybrid"
+        }),
+        new esri.dijit.Basemap({
+            layers: [
+                new esri.dijit.BasemapLayer({ type: "BingMapsRoad" })
+            ],
+            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/b28fe82cf6cd4efca92a30a10b95a461/info/thumbnail/bing_road.jpg",
+            title: "Bing Maps Road"
         })
-
     ];
     var basemapGallery = new esri.dijit.BasemapGallery({
         showArcGISBasemaps: false,
-        //bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
+        bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
         basemaps: basemaps,
         map: map
     }, "basemapGallery");

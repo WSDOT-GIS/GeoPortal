@@ -13,7 +13,6 @@
     <RootNamespace>Wsdot.Web.Mapping.FunctionalClass</RootNamespace>
     <AssemblyName>FunctionalClassWebApplication</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +49,7 @@
     <Content Include="images\legend\proposedOtherFwyExpwy.png" />
     <Content Include="images\legend\proposedOtherPrincipalArterial.png" />
     <Content Include="images\legend\UrbanizedArea.png" />
+    <Content Include="images\link.png" />
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
@@ -76,7 +76,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3829</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
