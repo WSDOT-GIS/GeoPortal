@@ -97,13 +97,23 @@ h1
 * html .ui-autocomplete {
 	height: 100px;
 }
-	    
-#zoomInstructions 
+
+.ui-accordion-content-active h3+p, .ui-accordion-content-active h4+p 
 {
-	padding: 0.5em;
+    margin-top: 0;
 }
-	    
-#zoomInstructions h3, #zoomInstructions h4
+.ui-accordion-content-active h3
+{
+    margin-top: 0;
+    text-decoration: underline;
+}
+.ui-accordion-content-active ul, .ui-accordion-content-active ol
+{
+    margin-top: 0;
+    padding-left: 1.5em;
+}
+
+h3,h4
 {
 	color: inherit; /* This is to support jQueryUI theming. */
 	font-weight: bold;
@@ -120,11 +130,6 @@ h1
 {
 	list-style-type: circle;
 }
-#zoomControls 
-{
-	padding: 0;
-}
-
 
 #zoomControls label
 {
@@ -132,7 +137,6 @@ h1
 }
 
 .ui-tabs .ui-tabs-panel
-
 {
     padding-top: 0.5em;
     padding-right: 0.75em;

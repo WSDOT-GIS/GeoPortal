@@ -29,6 +29,9 @@ $(document).ready(function () {
         // Change the value of href to #.  (Otherwise the URL will still replace this application AND open in a new tab, which is not what we want.)
         element.href = "#";
     });
+
+    // Set alternating row colors in legend
+    $(".alternatingLines tbody tr:odd").addClass("alternate-row");
 });
 
 dojo.require("dijit.dijit"); // optimize: load dijit layer
