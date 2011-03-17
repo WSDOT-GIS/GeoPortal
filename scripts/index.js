@@ -58,12 +58,18 @@ function setupNorthArrow() {
     dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
 }
 
+
+
+
+
 function setExtentLink(extent) {
     /// <summary>Sets the extent link in the bookmark tab to the given extent.</summary>
     /// <param name="extent" type="esri.geometry.Envelope">The extent that the link will be set to.</param>
     var extentJson = extent.toJson();
     delete extentJson.spatialReference;
-    $("#extentLink").attr("href", window.location + $.param.querystring("", extentJson));
+    $("#extentLink").attr("href",
+        $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, extentJson)
+    );
 }
 
 function init() {
