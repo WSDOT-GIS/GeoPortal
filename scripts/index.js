@@ -50,8 +50,6 @@ dojo.require("esri.dijit.Legend");
 dojo.require("esri.dijit.Scalebar");
 dojo.require("esri.tasks.query");
 dojo.require("esri.toolbars.navigation");
-dojo.require("dojox.layout.ExpandoPane");
-
 
 var map = null;
 var extents = null;
