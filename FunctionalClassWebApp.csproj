@@ -69,7 +69,6 @@
     <Content Include="style\index.css" />
     <Content Include="style\jquery.pnotify.default.css" />
     <Content Include="style\jquery.pnotify.default.icons.css" />
-    <Content Include="style\legend.css" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

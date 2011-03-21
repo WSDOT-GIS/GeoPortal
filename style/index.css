@@ -115,3 +115,50 @@ h3,h4
 .zoomfullextIcon{ background-position: 0 0; width: 16px; height: 16px; } 
 .zoomnextIcon{ background-position: -26px 0; width: 16px; height: 16px; } 
 .zoomprevIcon{ background-position: -52px 0; width: 16px; height: 16px; } 
+
+.legend
+{
+    font-family: 'Arial Narrow', Sans-Serif;
+    font-size: 10pt;
+    border-collapse: collapse;
+ 
+}
+
+.legend thead *
+{
+    border-bottom: 1px solid black;
+}
+
+.legend th 
+{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#fcLegend 
+{
+    text-align: center;
+    
+}
+
+/* Left-align the fourth column. */
+#fcLegend td:first-child + td + td + td { text-align: left; padding-right: 5px; }
+#fcLegend td:first-child { padding-left: 5px; padding-right: 5px; }
+
+/* Change the background color of alternating rows */
+.alternate-row 
+{
+    background-color: #eeeeee;
+    color: Black;
+}
+
+#fcLegend tr td:first-child
+{
+    background: black; /* old browsers */
+
+
+}
+
+.hidden 
+{
+    display: none;
+}
