@@ -14,10 +14,10 @@ $(document).ready(function () {
         $("#contactUsDialog").dialog('open');
     });
     $("#fullExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrow-4-diag' }, text: false });
-    $("#previousExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-w' }, text: false })
-    $("#nextExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-e' }, text: false })
-    $("#zoomAcordion").accordion({ autoHeight: false });
-    $("#tabs").tabs();
+    $("#previousExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-w' }, text: false });
+    $("#nextExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-e' }, text: false });
+    ////$("#zoomAcordion").accordion({ autoHeight: false });
+    ////$("#tabs").tabs();
 
     // Set the links to other websites to open in a new window.  
     // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
@@ -36,7 +36,11 @@ $(document).ready(function () {
 
 dojo.require("dijit.dijit"); // optimize: load dijit layer
 dojo.require("dijit.layout.BorderContainer");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.layout.AccordionContainer");
 dojo.require("dijit.layout.ContentPane");
+
+
 dojo.require("dijit.Toolbar");
 dojo.require("dijit.Menu");
 

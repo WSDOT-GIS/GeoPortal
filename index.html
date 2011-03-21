@@ -38,13 +38,8 @@
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
         <div id="legendPane" dojotype="dijit.layout.ContentPane" region="left" splitter="true">
-            <div id="tabs">
-                <ul>
-                    <li><a href="#legendTab">Legend</a></li>
-                    <li><a href="#zoomTab">Zoom</a></li>
-                    <li><a href="#basemapTab">Basemaps</a></li>
-                </ul>
-                <div id="legendTab" title="Legend">
+            <div id="tabs" dojoType="dijit.layout.TabContainer">
+                <div id="legendTab" title="Legend" dojoType="dijit.layout.ContentPane">
                     <table id="fcLegend" class="legend alternatingLines">
                     <caption>Functional Class</caption>
                     <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
@@ -81,10 +76,9 @@
                     </tbody>
                     </table>
                 </div>
-                <div id="zoomTab" title="Zoom">
-                    <div id="zoomAcordion">
-                        <h2><a href="#">Zoom Controls</a></h2>
-                        <div id="zoomControls">
+                <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
+                    <div id="zoomAcordion" dojoType="dijit.layout.AccordionContainer" >
+                        <div id="zoomControls" title="Zoom Controls" dojoType="dijit.layout.ContentPane">
                             <button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);">Full Extent</button>
                             <button id="previousExtentButton" onclick="javascript:navToolbar.zoomToPrevExtent();">Previous Extent</button>
                             <button id="nextExtentButton"  onclick="javascript:navToolbar.zoomToNextExtent();">Next Extent</button>
@@ -97,8 +91,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <h2><a href="#">Zoom Instructions</a></h2>
-                        <div id="zoomInstructions">
+                        <div id="zoomInstructions" title="Zoom Instructions" dojoType="dijit.layout.ContentPane">
                             <h3>Zoom by interacting with map</h3>
                             <p>You can zoom by interacting with the map in the following ways.</p>
                             <ul>
@@ -118,9 +111,7 @@
                                 <li>Press enter.  The map will zoom to the selected location.</li>
                             </ol>
                         </div>
-
-                        <h2><a href="#">Bookmark</a></h2>
-                        <div id="zoombookmark">
+                        <div id="zoombookmark" title="Bookmark" dojoType="dijit.layout.ContentPane">
                             <ul>
                                 <li class="link"><a id="extentLink" href="#">WSDOT Functional Classification Map</a></li>
                             </ul>
@@ -135,7 +126,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="basemapTab">
+                <div id="basemapTab" title="Basemap" dojoType="dijit.layout.ContentPane">
                     <div id="basemapGallery"></div>
                     
                 </div>
