@@ -8,6 +8,7 @@
     <title>WSDOT Functional Classification Map</title>
 
     <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css" />
+    <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" type="text/css" media="all" />
     
 	<link href="style/jquery.pnotify.default.css" rel="stylesheet" type="text/css" />
@@ -37,7 +38,7 @@
             </div>
         </div>
         <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
-        <div id="legendPane" dojotype="dijit.layout.ContentPane" region="left" splitter="true">
+        <div id="legendPane" title="Tools" dojotype="dojox.layout.ExpandoPane" region="left" splitter="true">
             <div id="tabs" dojoType="dijit.layout.TabContainer">
                 <div id="legendTab" title="Legend" dojoType="dijit.layout.ContentPane">
                     <table id="fcLegend" class="legend alternatingLines">
