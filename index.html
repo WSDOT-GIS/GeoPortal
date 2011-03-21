@@ -80,9 +80,9 @@
                 <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
                     <div id="zoomAcordion" dojoType="dijit.layout.AccordionContainer" >
                         <div id="zoomControls" title="Zoom Controls" dojoType="dijit.layout.ContentPane">
-                            <button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);">Full Extent</button>
-                            <button id="previousExtentButton" onclick="javascript:navToolbar.zoomToPrevExtent();">Previous Extent</button>
-                            <button id="nextExtentButton"  onclick="javascript:navToolbar.zoomToNextExtent();">Next Extent</button>
+                            <button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);" dojoType="dijit.form.Button" iconClass="zoomfullextIcon" showLabel="false">Full Extent</button>
+                            <button id="previousExtentButton" onclick="javascript:navToolbar.zoomToPrevExtent();" dojoType="dijit.form.Button" iconClass="zoomprevIcon" showLabel="false">Previous Extent</button>
+                            <button id="nextExtentButton"  onclick="javascript:navToolbar.zoomToNextExtent();" dojoType="dijit.form.Button" iconClass="zoomnextIcon" showLabel="false">Next Extent</button>
                             <table>
                                 <tbody>
                                     <tr><td><label>County</label></td><td><img id="countyZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>

@@ -34,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="images\ajax-loader.gif" />
-    <Content Include="images\fcLegendSmall.png" />
     <Content Include="images\greenlogo.png" />
     <Content Include="images\HpmsBasemapThumbnail.png" />
     <Content Include="images\legend\CityBoundaries.png" />
@@ -52,6 +51,9 @@
     <Content Include="images\legend\proposedOtherPrincipalArterial.png" />
     <Content Include="images\legend\UrbanizedArea.png" />
     <Content Include="images\link.png" />
+    <Content Include="images\navigation\nav_fullextent.png" />
+    <Content Include="images\navigation\nav_next.png" />
+    <Content Include="images\navigation\nav_previous.png" />
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />

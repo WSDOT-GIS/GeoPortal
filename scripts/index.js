@@ -13,9 +13,6 @@ $(document).ready(function () {
     $("#contactUsLink").bind('click', function (eventObject) {
         $("#contactUsDialog").dialog('open');
     });
-    $("#fullExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrow-4-diag' }, text: false });
-    $("#previousExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-w' }, text: false });
-    $("#nextExtentButton").button({ icons: { primary: 'ui-icon-search', secondary: 'ui-icon-arrowthick-1-e' }, text: false });
 
     // Set the links to other websites to open in a new window.  
     // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
@@ -200,8 +197,8 @@ function init() {
     // Setup the navigation toolbar.
     navToolbar = new esri.toolbars.Navigation(map);
     dojo.connect(navToolbar, "onExtentHistoryChange", function () {
-        $("#previousExtentButton").button({ disabled: navToolbar.isFirstExtent() });
-        $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
+        dijit.byId("previousExtentButton").disabled = navToolbar.isFirstExtent();
+        dijit.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
     });
 
     var setupFilteringSelect = function (featureSet, id) {
@@ -248,8 +245,6 @@ function init() {
     };
 
     // Setup the zoom controls.
-    ////$("#countyZoomSelect").extentAutoComplete(extents.countyExtents, map);
-
     setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
 
 
@@ -259,11 +254,7 @@ function init() {
     query.where = "1 = 1";
     query.returnGeometry = true;
     query.outFields = ["NAME"];
-
-
-
     cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
-
 
     var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
     query.where = "1 = 1";
