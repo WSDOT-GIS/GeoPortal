@@ -51,9 +51,7 @@
     <Content Include="images\legend\proposedOtherPrincipalArterial.png" />
     <Content Include="images\legend\UrbanizedArea.png" />
     <Content Include="images\link.png" />
-    <Content Include="images\navigation\nav_fullextent.png" />
-    <Content Include="images\navigation\nav_next.png" />
-    <Content Include="images\navigation\nav_previous.png" />
+    <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />

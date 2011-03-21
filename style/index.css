@@ -82,37 +82,6 @@ h1
 	text-decoration: underline;
 }
 		
-/* For autocomplete boxes. */
-.ui-autocomplete {
-	max-height: 100px;
-	overflow-y: auto;
-	/* prevent horizontal scrollbar */
-	overflow-x: hidden;
-	/* add padding to account for vertical scrollbar */
-	padding-right: 20px;
-}
-/* IE 6 doesn't support max-height
-	* we use height instead, but this forces the menu to always be this tall
-	*/
-* html .ui-autocomplete {
-	height: 100px;
-}
-
-.ui-accordion-content-active h3+p, .ui-accordion-content-active h4+p 
-{
-    margin-top: 0;
-}
-.ui-accordion-content-active h3
-{
-    margin-top: 0;
-    text-decoration: underline;
-}
-.ui-accordion-content-active ul, .ui-accordion-content-active ol
-{
-    margin-top: 0;
-    padding-left: 1.5em;
-}
-
 h3,h4
 {
 	color: inherit; /* This is to support jQueryUI theming. */
@@ -136,19 +105,13 @@ h3,h4
     font-family: 'Arial Narrow', Sans-Serif
 }
 
-.ui-tabs .ui-tabs-panel
-{
-    padding-top: 0.5em;
-    padding-right: 0.75em;
-    padding-bottom: 0.5em;
-    padding-left: 0.75em;
-}
-
 .link 
 {
     list-style-image: url('../images/link.png');
 }
 
-.zoomfullextIcon { background-image:url(../images/navigation/nav_fullextent.png); width:16px; height:16px; }
-.zoomprevIcon { background-image:url(../images/navigation/nav_previous.png); width:16px; height:16px; }
-.zoomnextIcon { background-image:url(../images/navigation/nav_next.png); width:16px; height:16px; }
+.zoomfullextIcon, .zoomprevIcon, .zoomnextIcon { background:url(../images/navigation/sprites.png) no-repeat top left; }
+
+.zoomfullextIcon{ background-position: 0 0; width: 16px; height: 16px; } 
+.zoomnextIcon{ background-position: -26px 0; width: 16px; height: 16px; } 
+.zoomprevIcon{ background-position: -52px 0; width: 16px; height: 16px; } 
