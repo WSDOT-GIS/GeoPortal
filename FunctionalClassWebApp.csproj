@@ -13,6 +13,7 @@
     <RootNamespace>Wsdot.Web.Mapping.FunctionalClass</RootNamespace>
     <AssemblyName>FunctionalClassWebApplication</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="images\ajax-loader.gif" />
     <Content Include="images\fcLegendSmall.png" />
     <Content Include="images\greenlogo.png" />
     <Content Include="images\HpmsBasemapThumbnail.png" />
@@ -53,7 +55,6 @@
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
-    <Content Include="scripts\extentAutoComplete.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />

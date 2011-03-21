@@ -44,6 +44,10 @@ dojo.require("dijit.Menu");
 
 dojo.require("dojox.layout.ExpandoPane");
 
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dojo.data.ItemFileReadStore");
+
+
 dojo.require("dojo.parser");
 
 dojo.require("esri.map");
@@ -102,7 +106,7 @@ function init() {
     // Convert the county JSON objects into esri.geomtry.Extents.
     for (var i in extents.countyExtents) {
         // extents.countyExtents[i] = new esri.geometry.fromJson(extents.countyExtents[i]);
-        extentData.push({ label: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]).setSpatialReference(extentSpatialReference) });
+        extentData.push({ name: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]).setSpatialReference(extentSpatialReference) });
     }
 
     extents.countyExtents = extentData;
@@ -200,8 +204,53 @@ function init() {
         $("#nextExtentButton").button({ disabled: navToolbar.isLastExtent() });
     });
 
+    var setupFilteringSelect = function (featureSet, id) {
+        var sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
+        var data;
+        if (featureSet.declaredClass === "esri.tasks.FeatureSet") {
+            var graphic;
+            var nameAttribute = "NAME";
+            data = { identifier: "name", label: "name", items: [] };
+            for (var i = 0, l = featureSet.features.length; i < l; i++) {
+                graphic = featureSet.features[i];
+                data.items.push({
+                    name: graphic.attributes[nameAttribute],
+                    extent: graphic.geometry.getExtent()
+                });
+            }
+            data.items.sort(sortByName);
+            data = new dojo.data.ItemFileReadStore({ data: data });
+        }
+        else {
+            featureSet.sort(sortByName);
+            data = new dojo.data.ItemFileReadStore({ data: { identifier: "name", label: "name", items: featureSet} });
+        }
+        var filteringSelect = new dijit.form.FilteringSelect({
+            id: id,
+            name: "name",
+            store: data,
+            searchAttr: "name",
+            required: false,
+            onChange: function (newValue) {
+                if (this.item != null && this.item.extent != null) {
+                    var extent = this.item.extent[0];
+
+                    try {
+                        map.setExtent(extent);
+                    }
+                    catch (e) {
+                        console.debug(e);
+                    }
+                }
+                this.reset();
+            }
+        }, id);
+    };
+
     // Setup the zoom controls.
-    $("#countyZoomSelect").extentAutoComplete(extents.countyExtents, map);
+    ////$("#countyZoomSelect").extentAutoComplete(extents.countyExtents, map);
+
+    setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
 
 
     // Setup extents for cities and urbanized area zoom tools.
@@ -211,17 +260,15 @@ function init() {
     query.returnGeometry = true;
     query.outFields = ["NAME"];
 
-    cityQueryTask.execute(query, function (featureSet) {
-        $("#cityZoomSelect").extentAutoComplete(featureSet, map);
-    });
+
+
+    cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
 
 
     var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
     query.where = "1 = 1";
     query.returnGeometry = true;
-    urbanAreaQueryTask.execute(query, function (featureSet) {
-        $("#urbanAreaZoomSelect").extentAutoComplete(featureSet, map, "NAME");
-    });
+    urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect") });
 }
 
 function createBasemapGallery() {
