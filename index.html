@@ -37,7 +37,6 @@
                 <h1>WSDOT Functional Classification Map</h1>
             </div>
         </div>
-        <!--<div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>-->
         <div id="mapContentPane" dojotype="dijit.layout.ContentPane" region="center">
             <div id="map"></div>
         </div>
@@ -76,14 +75,14 @@
                 <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
                     <div id="zoomAcordion" dojoType="dijit.layout.AccordionContainer" >
                         <div id="zoomControls" title="Zoom Controls" dojoType="dijit.layout.ContentPane">
-                            <button id="fullExtentButton" onclick="javascript:map.setExtent(extents.fullExtent);" dojoType="dijit.form.Button" iconClass="zoomfullextIcon" showLabel="false">Full Extent</button>
-                            <button id="previousExtentButton" onclick="javascript:navToolbar.zoomToPrevExtent();" dojoType="dijit.form.Button" iconClass="zoomprevIcon" showLabel="false">Previous Extent</button>
-                            <button id="nextExtentButton"  onclick="javascript:navToolbar.zoomToNextExtent();" dojoType="dijit.form.Button" iconClass="zoomnextIcon" showLabel="false">Next Extent</button>
+                            <button id="fullExtentButton">Full Extent</button>
+                            <button id="previousExtentButton">Previous Extent</button>
+                            <button id="nextExtentButton">Next Extent</button>
                             <table>
                                 <tbody>
-                                    <tr><td><label>County</label></td><td><img id="countyZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
-                                    <tr><td><label>City</label></td><td><img id="cityZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
-                                    <tr><td><label>Urban Area</label></td><td><img id="urbanAreaZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
+                                    <tr><td><label id="countyZoomLabel">County</label></td><td><img id="countyZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
+                                    <tr><td><label id="cityZoomLabel">City</label></td><td><img id="cityZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
+                                    <tr><td><label id="urbanAreaZoomLabel">Urban Area</label></td><td><img id="urbanAreaZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
                                 </tbody>
                             </table>
                         </div>

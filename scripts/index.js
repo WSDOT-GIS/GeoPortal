@@ -259,6 +259,38 @@ function init() {
     query.where = "1 = 1";
     query.returnGeometry = true;
     urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect") });
+
+    // Associate labels with select controls, so that clicking on a label activates the corresponding control.
+    $("#countyZoomLabel").attr("for", "countyZoomSelect");
+    $("#cityZoomLabel").attr("for", "cityZoomSelect");
+    $("#urbanAreaZoomLabel").attr("for", "urbanAreaZoomSelect");
+
+    // Create the button dijits.
+    var button = new dijit.form.Button({
+        iconClass: "zoomfullextIcon",
+        showLabel: false,
+        onClick: function () {
+            map.setExtent(extents.fullExtent);
+        }
+    }, "fullExtentButton");
+
+    button = new dijit.form.Button({
+        iconClass: "zoomprevIcon",
+        showLabel: false,
+        onClick: function () {
+            navToolbar.zoomToPrevExtent();
+        }
+    }, "previousExtentButton");
+
+    button = new dijit.form.Button({
+        iconClass: "zoomnextIcon",
+        showLabel: false,
+        onClick: function () {
+            navToolbar.zoomToNextExtent();
+        }
+    }, "nextExtentButton");
+
+    delete button;
 }
 
 function createBasemapGallery() {
