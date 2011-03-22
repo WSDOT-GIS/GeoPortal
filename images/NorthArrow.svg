@@ -7,12 +7,70 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="26.741739"
    height="32.667824"
-   id="svg2">
+   id="svg2"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="NorthArrow.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1600"
+     inkscape:window-height="1144"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="8.9690701"
+     inkscape:cx="13.37087"
+     inkscape:cy="16.333912"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
   <defs
-     id="defs4" />
+     id="defs4">
+    <filter
+       id="filter3369"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur3371"
+         in="SourceAlpha"
+         stdDeviation="2"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3373"
+         result="bluralpha"
+         type="matrix"
+         values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 0.75 0 " />
+      <feOffset
+         id="feOffset3375"
+         in="bluralpha"
+         dx="1"
+         dy="1"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3377">
+        <feMergeNode
+           id="feMergeNode3379"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3381"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -27,7 +85,11 @@
   </metadata>
   <g
      transform="translate(-637.97729,-762.06518)"
-     id="layer1">
+     id="layer1"
+     style="filter:url(#filter3369)"
+     inkscape:export-filename="C:\Documents and Settings\jacobsj\My Documents\Projects\FunctionalClassWebApp\WebApp\images\NorthArrow.png"
+     inkscape:export-xdpi="97.599998"
+     inkscape:export-ydpi="97.599998">
     <g
        id="g2984">
       <path
