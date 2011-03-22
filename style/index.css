@@ -160,9 +160,7 @@ h3,h4
 
 #fcLegend tr td:first-child
 {
-    background: black; /* old browsers */
-
-
+    background: black;
 }
 
 img[src="images/ajax-loader.gif"] 
