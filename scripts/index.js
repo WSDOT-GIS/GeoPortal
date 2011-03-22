@@ -51,7 +51,6 @@ dojo.require("esri.map");
 //dojo.require("esri.virtualearth.VETiledLayer");
 dojo.require("esri.dijit.BasemapGallery");
 dojo.require("esri.arcgis.utils");
-dojo.require("esri.dijit.Legend");
 dojo.require("esri.dijit.Scalebar");
 dojo.require("esri.tasks.query");
 dojo.require("esri.toolbars.navigation");

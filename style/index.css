@@ -8,6 +8,10 @@
     color: Black;
     font-family: Verdana, Arial, Helvetica, sans-serif;
 }
+#headerPane 
+{
+    padding: 0;
+}
 #mainContainer
 {
     width: 100%;
@@ -30,14 +34,7 @@
 {
     width: 250px;
 }
-#layerList *
-{
-    list-style-type: none;
-}
-#toolbar1 
-{
-    overflow: hidden;
-}
+
 #northArrow 
 {
     position: absolute;
@@ -60,6 +57,7 @@ h1
 .topNav {
 	color: #ffffff;
 	background-color: #017359;
+	padding-right: 50px
 }
 .topNav ul {
 	text-align: right;
@@ -167,7 +165,14 @@ h3,h4
 
 }
 
-.hidden 
+img[src="images/ajax-loader.gif"] 
 {
-    display: none;
+    width: 16px;
+    height: 16px;
+}
+
+img[src$="blank.gif"] 
+{
+    width: 1px;
+    height: 1px;
 }
