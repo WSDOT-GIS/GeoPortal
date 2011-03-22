@@ -45,39 +45,32 @@
             <div id="tabs" dojoType="dijit.layout.TabContainer">
                 <div id="legendTab" title="Legend" dojoType="dijit.layout.ContentPane">
                     <table id="fcLegend" class="legend alternatingLines">
-                    <caption>Functional Class</caption>
-                    <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
-                    <tbody>
-                        <tr><td><img src='images/legend/Interstate.png' alt='interstate' width="24" height="2" /></td><td>01</td><td>11</td><td>Interstate</td></tr>
-                        <tr><td><img src='images/legend/otherFwyExpwy.png' alt='otherFwyExpwy' width="24" height="2" /></td><td></td><td>12</td><td>Other Fwy Expwy</td></tr>
-                        <tr><td><img src='images/legend/otherPrincipalArterial.png' alt='otherPrincipalArterial' width="24" height="2" /></td><td>02</td><td>14</td><td>Other Principal Arterial</td></tr>
-                        <tr><td><img src='images/legend/minorArterial.png' alt='minorArterial' width="24" height="2" /></td><td>06</td><td>16</td><td>Minor Arterial</td></tr>
-                        <tr><td><img src='images/legend/majorCollector.png' alt='majorCollector' width="24" height="2" /></td><td>07</td><td></td><td>Major Collector</td></tr>
-                        <tr><td><img src='images/legend/majorCollector.png' alt='majorCollector' width="24" height="2" /></td><td></td><td>17</td><td>Collector</td></tr>
-                        <tr><td><img src='images/legend/minorCollector.png' alt='minorCollector' width="24" height="2" /></td><td>08</td><td></td><td>Minor Collector</td></tr>
+                        <caption>Functional Class</caption>
+                        <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
+                        <tbody>
+                            <tr><td><div class="legend-sprite legend-sprite-Interstate" /></td><td>01</td><td>11</td><td>Interstate</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-otherFwyExpwy" /></td><td></td><td>12</td><td>Other Fwy Expwy</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-otherPrincipalArterial" /></td><td>02</td><td>14</td><td>Other Principal Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-minorArterial" /></td><td>06</td><td>16</td><td>Minor Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-majorCollector" /></td><td>07</td><td></td><td>Major Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-majorCollector" /></td><td></td><td>17</td><td>Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-minorCollector" /></td><td>08</td><td></td><td>Minor Collector</td></tr>
 
-                        <tr><td><img src='images/legend/proposedOtherFwyExpwy.png' alt='proposedOtherFwyExpwy' width="20" height="2" /></td><td></td><td>32</td><td>Proposed Other Fwy Expwy</td></tr>
-                        <tr><td><img src='images/legend/proposedOtherPrincipalArterial.png' alt='proposedOtherPrincipalArterial' width="20" height="2" /></td><td>22</td><td>34</td><td>Proposed Other Principal Arterial</td></tr>
-                        <tr><td><img src='images/legend/proposedMinorArterial.png' alt='proposedMinorArterial' width="20" height="2" /></td><td>26</td><td>36</td><td>Proposed Minor Arterial</td></tr>
-                        <tr><td><img src='images/legend/proposedMajorCollector.png' alt='proposedMajorCollector' width="20" height="2" /></td><td>27</td><td>37</td><td>Proposed Major Collector</td></tr>
-                        <tr><td><img src='images/legend/proposedMinorCollector.png' alt='proposedMinorCollector' width="20" height="2" /></td><td>28</td><td></td><td>Proposed Minor Collector</td></tr>
-                    </tbody>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedOtherFwyExpwy" /></td><td></td><td>32</td><td>Proposed Other Fwy Expwy</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedOtherPrincipalArterial" /></td><td>22</td><td>34</td><td>Proposed Other Principal Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedMinorArterial" /></td><td>26</td><td>36</td><td>Proposed Minor Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedMajorCollector" /></td><td>27</td><td>37</td><td>Proposed Major Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedMinorCollector" /></td><td>28</td><td></td><td>Proposed Minor Collector</td></tr>
+                        </tbody>
                     </table>
             
 
                     <table id="basemapLegend" class="legend">
-                    <caption>Other</caption>
-                    <tbody>
-                        <tr>
-                            <td><img src="images/legend/CityBoundaries.png" alt="City Boundary symbol" width="22" height="22" /></td>
-                            <td>City Limit</td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/legend/UrbanizedArea.png" alt="Urban Area symbol" width="22" height="22" /></td>
-                            <td>Urban Area</td>
-                            
-                        </tr>
-                    </tbody>
+                        <caption>Other</caption>
+                        <tbody>
+                            <tr><td><div class="legend-sprite legend-sprite-CityBoundaries" /></td><td>City Limit</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-UrbanizedArea" /></td><td>Urban Area</td></tr>
+                        </tbody>
                     </table>
                 </div>
                 <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
