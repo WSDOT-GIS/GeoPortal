@@ -148,7 +148,7 @@ function init() {
 
 
         createBasemapGallery();
-        dojo.connect(dijit.byId('map'), 'resize', resizeMap);
+        dojo.connect(dijit.byId('mapContentPane'), 'resize', resizeMap);
 
         // Zoom to the extent in the query string (if provided).
         // Test example:

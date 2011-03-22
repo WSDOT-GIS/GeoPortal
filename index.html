@@ -26,10 +26,10 @@
         	<div class="topNav">
                 <ul>
                   <li><a class="newTab" href="http://www.wsdot.wa.gov/news/">News</a></li>
-                  <li><a class="newTab" href="http://www.wsdot.wa.gov/">WSDOT Home</a></li>
-                  <li><a href="#" id="contactUsLink">Contact Us</a></li>
-                  <li><a class="newTab" href="http://www.wsdot.wa.gov/goodtogo/">Good To Go!</a></li>
                   <li><a class="newTab" href="http://www.wsdot.wa.gov/employment/">Employment</a></li>
+                  <li><a class="newTab" href="http://www.wsdot.wa.gov/goodtogo/">Good To Go!</a></li>
+                  <li><a href="#" id="contactUsLink">Contact Us</a></li>
+                  <li><a class="newTab" href="http://www.wsdot.wa.gov/">WSDOT Home</a></li>
         		</ul>
         	</div>
             <div id="logoAndTitle">
@@ -37,8 +37,11 @@
                 <h1>WSDOT Functional Classification Map</h1>
             </div>
         </div>
-        <div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>
-        <div id="legendPane" title="Tools" dojotype="dojox.layout.ExpandoPane" region="left" splitter="true">
+        <!--<div id="map" dojotype="dijit.layout.ContentPane" region="center" style="position: absolute;  top: 0px; right: 0px;"></div>-->
+        <div id="mapContentPane" dojotype="dijit.layout.ContentPane" region="center">
+            <div id="map"></div>
+        </div>
+        <div id="legendPane" title="Tools" dojotype="dojox.layout.ExpandoPane" region="leading" splitter="true">
             <div id="tabs" dojoType="dijit.layout.TabContainer">
                 <div id="legendTab" title="Legend" dojoType="dijit.layout.ContentPane">
                     <table id="fcLegend" class="legend alternatingLines">
