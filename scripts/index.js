@@ -1,4 +1,5 @@
-﻿/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"/>
+﻿/// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
+/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.js"/>
 /// <reference path="extentAutoComplete.js"/>
@@ -143,10 +144,12 @@ function init() {
 
     dojo.connect(map, "onLoad", map, function () {
         setupNorthArrow();
+        delete setupNorthArrow;
         var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
 
         createBasemapGallery();
+        delete createBasemapGallery;
         dojo.connect(dijit.byId('mapContentPane'), 'resize', resizeMap);
 
         // Zoom to the extent in the query string (if provided).
@@ -200,70 +203,76 @@ function init() {
         dijit.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
     });
 
-    var setupFilteringSelect = function (featureSet, id) {
-        var sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
-        var data;
-        if (featureSet.declaredClass === "esri.tasks.FeatureSet") {
-            var graphic;
-            var nameAttribute = "NAME";
-            data = { identifier: "name", label: "name", items: [] };
-            for (var i = 0, l = featureSet.features.length; i < l; i++) {
-                graphic = featureSet.features[i];
-                data.items.push({
-                    name: graphic.attributes[nameAttribute],
-                    extent: graphic.geometry.getExtent()
-                });
-            }
-            data.items.sort(sortByName);
-            data = new dojo.data.ItemFileReadStore({ data: data });
-        }
-        else {
-            featureSet.sort(sortByName);
-            data = new dojo.data.ItemFileReadStore({ data: { identifier: "name", label: "name", items: featureSet} });
-        }
-        var filteringSelect = new dijit.form.FilteringSelect({
-            id: id,
-            name: "name",
-            store: data,
-            searchAttr: "name",
-            required: false,
-            onChange: function (newValue) {
-                if (this.item != null && this.item.extent != null) {
-                    var extent = this.item.extent[0];
-
-                    try {
-                        map.setExtent(extent);
-                    }
-                    catch (e) {
-                        console.debug(e);
-                    }
+    // Set up the zoom select boxes.
+    (function () {
+        function setupFilteringSelect(featureSet, id) {
+            /// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
+            /// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
+            var sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
+            var data;
+            if (featureSet.declaredClass === "esri.tasks.FeatureSet") {
+                var graphic;
+                var nameAttribute = "NAME";
+                data = { identifier: "name", label: "name", items: [] };
+                for (var i = 0, l = featureSet.features.length; i < l; i++) {
+                    graphic = featureSet.features[i];
+                    data.items.push({
+                        name: graphic.attributes[nameAttribute],
+                        extent: graphic.geometry.getExtent()
+                    });
                 }
-                this.reset();
+                data.items.sort(sortByName);
+                data = new dojo.data.ItemFileReadStore({ data: data });
             }
-        }, id);
-    };
+            else {
+                featureSet.sort(sortByName);
+                data = new dojo.data.ItemFileReadStore({ data: { identifier: "name", label: "name", items: featureSet} });
+            }
+            var filteringSelect = new dijit.form.FilteringSelect({
+                id: id,
+                name: "name",
+                store: data,
+                searchAttr: "name",
+                required: false,
+                onChange: function (newValue) {
+                    if (this.item != null && this.item.extent != null) {
+                        var extent = this.item.extent[0];
 
-    // Setup the zoom controls.
-    setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
+                        try {
+                            map.setExtent(extent);
+                        }
+                        catch (e) {
+                            console.debug(e);
+                        }
+                    }
+                    this.reset();
+                }
+            }, id);
+        };
+
+        // Setup the zoom controls.
+        setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
+        delete extents.countyExtents;
 
 
-    // Setup extents for cities and urbanized area zoom tools.
-    var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/23");
-    var query = new esri.tasks.Query();
-    query.where = "1 = 1";
-    query.returnGeometry = true;
-    query.outFields = ["NAME"];
-    cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
+        // Setup extents for cities and urbanized area zoom tools.
+        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/23");
+        var query = new esri.tasks.Query();
+        query.where = "1 = 1";
+        query.returnGeometry = true;
+        query.outFields = ["NAME"];
+        cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
 
-    var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
-    query.where = "1 = 1";
-    query.returnGeometry = true;
-    urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect") });
+        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
+        query.where = "1 = 1";
+        query.returnGeometry = true;
+        urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect") });
 
-    // Associate labels with select controls, so that clicking on a label activates the corresponding control.
-    $("#countyZoomLabel").attr("for", "countyZoomSelect");
-    $("#cityZoomLabel").attr("for", "cityZoomSelect");
-    $("#urbanAreaZoomLabel").attr("for", "urbanAreaZoomSelect");
+        // Associate labels with select controls, so that clicking on a label activates the corresponding control.
+        dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
+        dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
+        dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
+    })();
 
     // Create the button dijits.
     var button = new dijit.form.Button({
