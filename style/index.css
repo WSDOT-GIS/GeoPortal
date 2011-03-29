@@ -192,3 +192,8 @@ img[src$="blank.gif"]
 .legend-sprite-proposedMinorCollector{ background-position: -274px 0; width: 20px; height: 2px; } 
 .legend-sprite-proposedOtherFwyExpwy{ background-position: -296px 0; width: 20px; height: 2px; } 
 .legend-sprite-proposedOtherPrincipalArterial{ background-position: -318px 0; width: 20px; height: 2px; } 
+
+.hidden 
+{
+    display: none;
+}
