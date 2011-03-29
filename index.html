@@ -21,8 +21,8 @@
     <noscript>
     You need to have JavaScript enabled on your browser to view this page.
     </noscript>
-    <div id="mainContainer" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false">
-        <div id="headerPane" dojotype="dijit.layout.ContentPane" region="top">
+    <div id="mainContainer">
+        <div id="headerPane">
         	<div class="topNav">
                 <ul>
                   <li><a class="newTab" href="http://www.wsdot.wa.gov/news/">News</a></li>
@@ -37,29 +37,29 @@
                 <h1>WSDOT Functional Classification Map</h1>
             </div>
         </div>
-        <div id="mapContentPane" dojotype="dijit.layout.ContentPane" region="center">
+        <div id="mapContentPane">
             <div id="map"></div>
         </div>
-        <div id="legendPane" title="Tools" dojotype="dojox.layout.ExpandoPane" region="leading" splitter="true">
-            <div id="tabs" dojoType="dijit.layout.TabContainer">
-                <div id="legendTab" title="Legend" dojoType="dijit.layout.ContentPane">
+        <div id="legendPane" title="Tools">
+            <div id="tabs">
+                <div id="legendTab" title="Legend">
                     <table id="fcLegend" class="legend alternatingLines">
                         <caption>Functional Class</caption>
                         <thead><tr><th></th><th>Rural</th><th>Urban</th><th></th></tr></thead>
                         <tbody>
-                            <tr><td><div class="legend-sprite legend-sprite-Interstate" /></td><td>01</td><td>11</td><td>Interstate</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-otherFwyExpwy" /></td><td></td><td>12</td><td>Other Fwy Expwy</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-otherPrincipalArterial" /></td><td>02</td><td>14</td><td>Other Principal Arterial</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-minorArterial" /></td><td>06</td><td>16</td><td>Minor Arterial</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-majorCollector" /></td><td>07</td><td></td><td>Major Collector</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-majorCollector" /></td><td></td><td>17</td><td>Collector</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-minorCollector" /></td><td>08</td><td></td><td>Minor Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-Interstate"></div></td><td>01</td><td>11</td><td>Interstate</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-otherFwyExpwy"></div></td><td></td><td>12</td><td>Other Fwy Expwy</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-otherPrincipalArterial"></div></td><td>02</td><td>14</td><td>Other Principal Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-minorArterial"></div></td><td>06</td><td>16</td><td>Minor Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-majorCollector"></div></td><td>07</td><td></td><td>Major Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-majorCollector"></div></td><td></td><td>17</td><td>Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-minorCollector"></div></td><td>08</td><td></td><td>Minor Collector</td></tr>
 
-                            <tr><td><div class="legend-sprite legend-sprite-proposedOtherFwyExpwy" /></td><td></td><td>32</td><td>Proposed Other Fwy Expwy</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-proposedOtherPrincipalArterial" /></td><td>22</td><td>34</td><td>Proposed Other Principal Arterial</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-proposedMinorArterial" /></td><td>26</td><td>36</td><td>Proposed Minor Arterial</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-proposedMajorCollector" /></td><td>27</td><td>37</td><td>Proposed Major Collector</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-proposedMinorCollector" /></td><td>28</td><td></td><td>Proposed Minor Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedOtherFwyExpwy"></div></td><td></td><td>32</td><td>Proposed Other Fwy Expwy</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedOtherPrincipalArterial"></div></td><td>22</td><td>34</td><td>Proposed Other Principal Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedMinorArterial"></div></td><td>26</td><td>36</td><td>Proposed Minor Arterial</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedMajorCollector"></div></td><td>27</td><td>37</td><td>Proposed Major Collector</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-proposedMinorCollector"></div></td><td>28</td><td></td><td>Proposed Minor Collector</td></tr>
                         </tbody>
                     </table>
             
@@ -67,14 +67,14 @@
                     <table id="basemapLegend" class="legend">
                         <caption>Other</caption>
                         <tbody>
-                            <tr><td><div class="legend-sprite legend-sprite-CityBoundaries" /></td><td>City Limit</td></tr>
-                            <tr><td><div class="legend-sprite legend-sprite-UrbanizedArea" /></td><td>Urban Area</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-CityBoundaries"></div></td><td>City Limit</td></tr>
+                            <tr><td><div class="legend-sprite legend-sprite-UrbanizedArea"></div></td><td>Urban Area</td></tr>
                         </tbody>
                     </table>
                 </div>
-                <div id="zoomTab" title="Zoom" dojoType="dijit.layout.ContentPane">
-                    <div id="zoomAcordion" dojoType="dijit.layout.AccordionContainer" >
-                        <div id="zoomControls" title="Zoom Controls" dojoType="dijit.layout.ContentPane">
+                <div id="zoomTab" title="Zoom">
+                    <div id="zoomAccordion">
+                        <div id="zoomControls" title="Zoom Controls">
                             <button id="fullExtentButton">Full Extent</button>
                             <button id="previousExtentButton">Previous Extent</button>
                             <button id="nextExtentButton">Next Extent</button>
@@ -86,7 +86,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div id="zoomInstructions" title="Zoom Instructions" dojoType="dijit.layout.ContentPane">
+                        <div id="zoomInstructions" title="Zoom Instructions">
                             <h3>Zoom by interacting with map</h3>
                             <p>You can zoom by interacting with the map in the following ways.</p>
                             <ul>
@@ -106,7 +106,7 @@
                                 <li>Press enter.  The map will zoom to the selected location.</li>
                             </ol>
                         </div>
-                        <div id="zoombookmark" title="Bookmark" dojoType="dijit.layout.ContentPane">
+                        <div id="zoombookmark" title="Bookmark">
                             <ul>
                                 <li class="link"><a id="extentLink" href="#">WSDOT Functional Classification Map</a></li>
                             </ul>
@@ -121,10 +121,10 @@
                         </div>
                     </div>
                 </div>
-                <div id="basemapTab" title="Basemap" dojoType="dijit.layout.ContentPane">
+                <div id="basemapTab" title="Basemap">
                     <div id="basemapGallery"></div>
                 </div>
-                <div id="tipsTab" title="Tips" dojoType="dijit.layout.ContentPane">
+                <div id="tipsTab" title="Tips">
                     <ul>
                         <li>Press F11 to put your browser into full screen mode.  Press F11 again to exit full screen mode.</li>
                     </ul>
@@ -141,11 +141,13 @@
             <li><a class="newTab" href="http://www.wsdot.wa.gov/contact/">Main WSDOT contact page.</a></li>
         </ul>
     </div>
+<!--
     <script type="text/javascript">
         var djConfig = {
-            parseOnLoad: true
+            isDebug: true
         };
     </script>
+-->
     <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js" type="text/javascript"></script>

@@ -81,6 +81,30 @@ function setExtentLink(extent) {
 }
 
 function init() {
+    function SetupLayout() {
+        var mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
+        mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
+        mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
+
+        var legendPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Tools" }, "legendPane");
+        var tabs = new dijit.layout.TabContainer(null, "tabs");
+        tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
+        var zoomTab = new dijit.layout.ContentPane({ title: "Zoom" }, "zoomTab");
+        var zoomAccordion = new dijit.layout.AccordionContainer(null, "zoomAccordion");
+        zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
+        zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
+        zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
+        tabs.addChild(zoomTab);
+        tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
+        tabs.addChild(new dijit.layout.ContentPane({ title: "Tips" }, "tipsTab"));
+        legendPane.addChild(tabs);
+        mainContainer.addChild(legendPane);
+
+        mainContainer.startup();
+    }
+
+    SetupLayout();
+
     var initExtent = new esri.geometry.Extent({
         "xmin": -13938444.981854893,
         "ymin": 5800958.950617068,
