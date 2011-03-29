@@ -9,6 +9,7 @@
 
 
 $(document).ready(function () {
+    $("#mainContainer").css("display", "");
     // Setup the contact us dialog.
     $("#contactUsDialog").dialog({ title: "Contact Us", autoOpen: false, modal: true });
     $("#contactUsLink").bind('click', function (eventObject) {
