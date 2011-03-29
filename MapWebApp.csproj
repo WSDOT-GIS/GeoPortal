@@ -35,12 +35,9 @@
   <ItemGroup>
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\greenlogo.png" />
-    <Content Include="images\HpmsBasemapThumbnail.png" />
-    <Content Include="images\legend\LegendSprites.png" />
     <Content Include="images\link.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
-    <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
@@ -63,16 +60,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>3829</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3829/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

@@ -11,10 +11,6 @@
 $(document).ready(function () {
     $("#mainContainer").css("display", "");
     // Setup the contact us dialog.
-    $("#contactUsDialog").dialog({ title: "Contact Us", autoOpen: false, modal: true });
-    $("#contactUsLink").bind('click', function (eventObject) {
-        $("#contactUsDialog").dialog('open');
-    });
 
     // Set the links to other websites to open in a new window.  
     // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
@@ -56,6 +52,7 @@ dojo.require("esri.arcgis.utils");
 dojo.require("esri.dijit.Scalebar");
 dojo.require("esri.tasks.query");
 dojo.require("esri.toolbars.navigation");
+dojo.require("esri.dijit.Legend");
 
 var map = null;
 var extents = null;
@@ -152,11 +149,8 @@ function init() {
 
 		]
     });
-    var initBasemap = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer");
+    var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
     map.addLayer(initBasemap);
-    var functionalClassLayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassMap/MapServer", { id: "functionalClass" });
-    map.addLayer(functionalClassLayer);
-
     notices.updatingMap = $.pnotify({
         pnotify_title: "Updating map...",
         pnotify_text: "Please wait...",
@@ -189,6 +183,9 @@ function init() {
 
         setExtentLink(map.extent);
     });
+	
+	var legend = new esri.dijit.Legend({map:map},"legend");
+	legend.startup();
 
     ////// Used for debugging errors
     ////dojo.connect(map, "onLayerAddResult", function (layer, error) {
@@ -334,63 +331,9 @@ function createBasemapGallery() {
         counties: new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/CountyBoundariesNoMaplex/MapServer" })
     };
 
-    var basemaps = [
-        new esri.dijit.Basemap({
-            id : "fcBasemap",
-            layers: [
-                    new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer" })
-                ],
-            thumbnailUrl: "images/HpmsBasemapThumbnail.png",
-            title: "Functional Class Basemap"
-        })
-        ,
-        new esri.dijit.Basemap({
-            layers: [
-                new esri.dijit.BasemapLayer({ url: "http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer" })
-            ],
-            thumbnailUrl: "images/WsdotBasemapThumbnail.jpg",
-            title: "WSDOT Basemap"
-        }),
-        new esri.dijit.Basemap({
-            layers: [
-                new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" })
-            ],
-            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/c03a526d94704bfb839445e80de95495/info/thumbnail/imagery.jpg",
-            title: "ESRI Imagery"
-        }),
-        new esri.dijit.Basemap({
-            layers: [
-                new esri.dijit.BasemapLayer({ url: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" })
-            ],
-            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/11742666e55b45b8a508751532d0c1ea/info/thumbnail/terrain.jpg",
-            title: "ESRI Terrain"
-        }),
-        new esri.dijit.Basemap({
-            layers: [
-                new esri.dijit.BasemapLayer({ type: "BingMapsAerial" })
-            ],
-            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/677cd0c509d842a98360c46186a2768e/info/thumbnail/bing_aerial.jpg",
-            title: "Bing Maps Arial"
-        }),
-         new esri.dijit.Basemap({
-            layers: [
-                new esri.dijit.BasemapLayer({ type: "BingMapsHybrid" })
-            ],
-            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/89e292dc0b4b4bcd809a35b1a7c21149/info/thumbnail/bing_hybrid.jpg",
-            title: "Bing Maps Hybrid"
-        }),
-        new esri.dijit.Basemap({
-            layers: [
-                new esri.dijit.BasemapLayer({ type: "BingMapsRoad" })
-            ],
-            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/b28fe82cf6cd4efca92a30a10b95a461/info/thumbnail/bing_road.jpg",
-            title: "Bing Maps Road"
-        })
-    ];
     var basemapGallery = new esri.dijit.BasemapGallery({
-        showArcGISBasemaps: false,
+        showArcGISBasemaps: true,
         bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
-        basemaps: basemaps,
         map: map
     }, "basemapGallery");
 
