@@ -14,7 +14,7 @@ $(document).ready(function () {
 
     // Set the links to other websites to open in a new window.  
     // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
-    var anchors = $("a.newTab").each(function (index, element) {
+    $("a.newTab").each(function (index, element) {
         // Store the current value of the href attribute.
         var href = element.href;
         // Set a handler on the click event to open the url in a new window or tab.  (Window or tab is determined by the browser settings.)
@@ -325,12 +325,6 @@ function init() {
 }
 
 function createBasemapGallery() {
-    var basemapLayers =
-    {
-        cities: new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/Cities/MapServer" }),
-        counties: new esri.dijit.BasemapLayer({ url: "http://hqolymgis11t/ArcGIS/rest/services/HPMS/CountyBoundariesNoMaplex/MapServer" })
-    };
-
     var basemapGallery = new esri.dijit.BasemapGallery({
         showArcGISBasemaps: true,
         bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
@@ -353,13 +347,6 @@ function createBasemapGallery() {
         }
 
         var basemap = basemapGallery.getSelected();
-        if (basemap.id === "fcBasemap") {
-            dojo.removeClass("basemapLegend", "hidden");
-        }
-        else {
-            dojo.addClass("basemapLegend", "hidden");
-
-        }
     });
 }
 
