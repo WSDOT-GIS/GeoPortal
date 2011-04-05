@@ -1,0 +1,48 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>ArcGIS JavaScript API Application</Name>
+    <Description>ArcGIS JavaScript API Application</Description>
+    <ProjectType>Web</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ArcGIS JavaScript API Application</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.png</Icon>
+    <PreviewImage>__PreviewImage.png</PreviewImage>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="MapWebApp.csproj" File="MapWebApp.csproj" ReplaceParameters="true">
+      <Folder Name="images" TargetFolderName="images">
+        <ProjectItem ReplaceParameters="false" TargetFileName="ajax-loader.gif">ajax-loader.gif</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="greenlogo.png">greenlogo.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="link.png">link.png</ProjectItem>
+        <Folder Name="navigation" TargetFolderName="navigation">
+          <ProjectItem ReplaceParameters="false" TargetFileName="sprites.png">sprites.png</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="false" TargetFileName="NorthArrow.png">NorthArrow.png</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="index.html">index.html</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties" />
+      <Folder Name="scripts" TargetFolderName="scripts">
+        <ProjectItem ReplaceParameters="true" TargetFileName="index.js">index.js</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.ba-bbq.js">jquery.ba-bbq.js</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.ba-bbq.min.js">jquery.ba-bbq.min.js</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.pnotify.js">jquery.pnotify.js</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.pnotify.min.js">jquery.pnotify.min.js</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="json2.js">json2.js</ProjectItem>
+      </Folder>
+      <Folder Name="style" TargetFolderName="style">
+        <ProjectItem ReplaceParameters="true" TargetFileName="index.css">index.css</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.pnotify.default.css">jquery.pnotify.default.css</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.pnotify.default.icons.css">jquery.pnotify.default.icons.css</ProjectItem>
+      </Folder>
+    </Project>
+    <CustomParameters>
+      <CustomParameter Name="$PageTitle$" Value="Map Viewer"/>
+    </CustomParameters>
+  </TemplateContent>
+</VSTemplate>
