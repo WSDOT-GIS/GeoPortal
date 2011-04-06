@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\kmlGraphicsLayer.js" />
+    <Content Include="scripts\layerList.js" />
     <Content Include="style\index.css" />
     <Content Include="style\jquery.pnotify.default.css" />
     <Content Include="style\jquery.pnotify.default.icons.css" />

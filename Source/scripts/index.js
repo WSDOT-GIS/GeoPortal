@@ -6,6 +6,7 @@
 /// <reference path="jquery.ba-bbq.js" />
 /// <reference path="json2.js" />
 /// <reference path="kmlGraphicsLayer.js" />
+/// <reference path="layerList.js" />
 
 
 $(document).ready(function () {
@@ -89,6 +90,7 @@ function init() {
         var legendPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Tools" }, "legendPane");
         var tabs = new dijit.layout.TabContainer(null, "tabs");
         tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
+        tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
         var zoomTab = new dijit.layout.ContentPane({ title: "Zoom" }, "zoomTab");
         var zoomAccordion = new dijit.layout.AccordionContainer(null, "zoomAccordion");
         zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
@@ -96,7 +98,6 @@ function init() {
         zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
         tabs.addChild(zoomTab);
         tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
-        tabs.addChild(new dijit.layout.ContentPane({ title: "Tips" }, "tipsTab"));
         legendPane.addChild(tabs);
         mainContainer.addChild(legendPane);
 
@@ -184,7 +185,31 @@ function init() {
         }
 
         setExtentLink(map.extent);
-        /*var kmlLayer = */ $.addKml(map, "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx");
+
+        // Add a graphics layer made from KML.
+        $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx", {
+            success: function (data, textStatus, jqXHR) {
+                var kmlLayer = $(data).kmlLayer({ id: "Cameras" }, 12, 6);
+                map.addLayer(kmlLayer);
+            }
+        });
+
+        $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx", {
+            success: function (data, textStatus, jqXHR) {
+                var kmlLayer = $(data).kmlLayer({ id: "Highway Alerts" }, 25, 25);
+                map.addLayer(kmlLayer);
+            }
+        });
+
+        $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx", {
+            success: function (data, textStatus, jqXHR) {
+                var kmlLayer = $(data).kmlLayer({ id: "Mtn. Pass Conditions" }, 19, 15);
+                map.addLayer(kmlLayer);
+            }
+        });
+
+        $("#layerList").layerList(map);
+
     });
 	
 	var legend = new esri.dijit.Legend({map:map},"legend");
