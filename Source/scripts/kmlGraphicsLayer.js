@@ -1,9 +1,13 @@
 ﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
 
+/*global esri, dojo, jQuery */
+/*jslint white: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, maxerr: 50, indent: 4 */
+
 (function ($) {
+    "use strict";
     $.fn.kmlLayer = function (graphicsLayerOptions, iconWidth, iconHeight) {
         var kml = this;
-        var placemarks = $("Placemark", kml);
+        var placemarks = $("Placemark:has(Point)", kml);
 
         /// <summary>Creates a symbol from a KML style node.  Currently only supports Icon styles (Points)</summary>
         /// <param name="kmlStyleNode" type="Object">A KML Style DOM node.</param>
@@ -26,7 +30,7 @@
         /// <param name="height" type="Number">The height to use for the PictureMarkerSymbols in the renderer.  Defaults to 16.</param>
         /// <returns type="esri.renderer.Renderer" />
         function createRenderer(styleNodes, width, height) {
-            var renderer = new esri.renderer.UniqueValueRenderer(new esri.symbol.SimpleMarkerSymbol, "styleUrl");
+            var renderer = new esri.renderer.UniqueValueRenderer(new esri.symbol.SimpleMarkerSymbol(), "styleUrl");
             $(styleNodes).each(function (index, domElement) {
                 var value = $(domElement).attr("id");
                 var symbol = kmlStyleToMarkerSymbol(domElement, width, height);
@@ -56,6 +60,8 @@
             var attributes = {};
             attributes.id = $(domElement).attr("id");
             attributes.name = $("name", domElement).text();
+            // TODO: Add support for Extended Data. 
+            // if ($("ExtendedData", domElement).length !== 0) { console.debug($("ExtendedData", domElement).length); }
             attributes.description = $("description", domElement).text();
             attributes.styleUrl = $("styleUrl", domElement).text().replace(/^#/, "");
             var infoTemplate = null;
@@ -72,4 +78,4 @@
         layer.setInfoTemplate(new esri.InfoTemplate("${name}", "${description}"));
         return layer;
     };
-})(jQuery);
+}(jQuery));

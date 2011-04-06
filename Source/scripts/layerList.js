@@ -1,13 +1,12 @@
 ﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
+/*global jQuery, dojo */
+/*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
 (function ($) {
     /// <summary>Creates a list of layers for a map.  The "this" keyword is the DOM element that will be turned into the layer list.</summary>
-    $.fn.layerList = function (map, layerIds) {
-        if (!layerIds) {
-            layerIds = map.layerIds;
-        }
-
+    $.fn.layerList = function (map) {
         var layerListNode = this;
+        this.addClass("ui-esri-layer-list");
 
         // Add layer item to the layer list when it is added to the map.
         dojo.connect(map, "onLayerAddResult", layerListNode, function (layer, error) {
@@ -16,6 +15,7 @@
                 var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id);
                 var label = $("<label>").text(layer.id);
                 var layerDiv = $("<div>").attr("data-layerId", layer.id).append(checkBox).append(label);
+
                 // Add the div to the document.
                 this.append(layerDiv);
 
