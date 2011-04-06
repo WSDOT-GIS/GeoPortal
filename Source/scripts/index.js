@@ -292,7 +292,9 @@ function init() {
                             map.setExtent(extent);
                         }
                         catch (e) {
-                            console.debug(e);
+                            if (typeof (console) !== "undefined" && typeof(console.debug) !== "undefined") {
+                                console.debug(e);
+                            }
                         }
                     }
                     this.reset();

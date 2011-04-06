@@ -13,9 +13,19 @@
         dojo.connect(map, "onLayerAddResult", layerListNode, function (layer, error) {
             if (!error) {
                 var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id);
+
+                if (layer.visible === true) {
+                    checkBox.attr("checked", "checked");
+                }
                 var label = $("<label>").text(layer.id);
                 var layerDiv = $("<div>").attr("data-layerId", layer.id).append(checkBox).append(label);
                 this.append(layerDiv);
+
+                // Make the checkbox turn the layer on and off.
+                checkBox.click(function (eventObject) {
+                    layer.setVisibility(checkBox.attr("checked"));
+                });
+
             }
         });
 
