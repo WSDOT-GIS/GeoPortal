@@ -236,14 +236,14 @@
 
             $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx", {
                 success: function (data, textStatus, jqXHR) {
-                    var kmlLayer = $(data).kmlLayer({ id: "Highway Alerts" }, 25, 25);
+                    var kmlLayer = $(data).kmlLayer({ id: "Highway Alerts", visible: false }, 25, 25);
                     map.addLayer(kmlLayer);
                 }
             });
 
             $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx", {
                 success: function (data, textStatus, jqXHR) {
-                    var kmlLayer = $(data).kmlLayer({ id: "Mtn. Pass Conditions" }, 19, 15);
+                    var kmlLayer = $(data).kmlLayer({ id: "Mtn. Pass Conditions", visible: false }, 19, 15);
                     map.addLayer(kmlLayer);
                 }
             });

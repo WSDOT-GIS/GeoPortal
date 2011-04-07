@@ -3,6 +3,7 @@
 /*global esri, dojo, jQuery */
 /*jslint white: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, maxerr: 50, indent: 4 */
 
+// TODO: Make this a dojo object instead of jQuery plug-in.
 (function ($) {
     "use strict";
     $.fn.kmlLayer = function (graphicsLayerOptions, iconWidth, iconHeight) {
@@ -61,7 +62,16 @@
             attributes.id = $(domElement).attr("id");
             attributes.name = $("name", domElement).text();
             // TODO: Add support for Extended Data. 
-            // if ($("ExtendedData", domElement).length !== 0) { console.debug($("ExtendedData", domElement).length); }
+            var extendedData = $(["ExtendedData"], domElement);
+            if (extendedData.length !== 0) {
+                attributes.extendedData = {};
+                // Add a property for each ExtendedData/Data element to attributes.extendedData.
+                var el;
+                $(["Data", "SimpleData"], extendedData).each(function (index, element) {
+                    el = $(element);
+                    extendedData[el.attr("name")] = $("value", el).text();
+                });
+            }
             attributes.description = $("description", domElement).text();
             attributes.styleUrl = $("styleUrl", domElement).text().replace(/^#/, "");
             var infoTemplate = null;
@@ -78,4 +88,4 @@
         layer.setInfoTemplate(new esri.InfoTemplate("${name}", "${description}"));
         return layer;
     };
-}(jQuery));
+} (jQuery));

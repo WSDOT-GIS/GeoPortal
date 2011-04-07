@@ -11,6 +11,8 @@
         var layerListNode = this;
         this.addClass("ui-esri-layer-list");
 
+        // TODO: Add ablility to omit basemap layers OR omit layers with an ID matching a Regex.
+
         // Add layer item to the layer list when it is added to the map.
         dojo.connect(map, "onLayerAddResult", layerListNode, function (layer, error) {
             if (!error) {
@@ -23,7 +25,6 @@
                     max: 1.0,
                     step: 0.1,
                     value: 1.0,
-                    disabled: !layer.visible,
                     change: function (event, ui) {
                         layer.setOpacity(ui.value);
                     }
@@ -33,6 +34,8 @@
 
                 // Add the div to the document.
                 this.append(layerDiv);
+
+                opacitySlider.slider({ disabled: !layer.visible });
 
                 // Set the checked state to match the layer visibility of the layer.
                 if (layer.visible) {
