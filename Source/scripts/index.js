@@ -1,5 +1,6 @@
 ﻿/// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"/>
+/// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
 /// <reference path="extentAutoComplete.js"/>
 /// <reference path="jquery.pnotify.js"/>
@@ -8,7 +9,7 @@
 /// <reference path="kmlGraphicsLayer.js" />
 /// <reference path="layerList.js" />
 
-////(function () {
+(function () {
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
         // Setup the contact us dialog.
@@ -226,23 +227,34 @@
 
             setExtentLink(map.extent);
 
-            // Add a graphics layer made from KML.
-
-
-            dojo.connect(map, "onLayerAddResult", function (layer, error) {
-                if (layer) {
-                    console.debug("Layer Added: " + layer.id);
-                }
-                if (error) {
-                    console.error(error);
-                }
-            });
-
             $("#layerList").layerList(map);
 
-            map.addLayer(new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: true, iconWidth: 12, iconHeight: 6, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" }));
-            map.addLayer(new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" }));
-            map.addLayer(new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" }));
+            // Add a graphics layer made from KML.
+            var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
+            var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
+            var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
+
+            // Attach an event to each layer's onClick event that will show a jQuery dialog about the clicked graphic.
+            dojo.forEach([cameraLayer, alertLayer, mtnLayer], function (layer) {
+                map.addLayer(layer);
+                dojo.connect(layer, "onClick", map, function (event) {
+                    var graphic = event.graphic;
+                    if (graphic) {
+                        $("#kmlDialog").remove();
+                        var kmlDialog = $("#kmlDialog");
+                        if (kmlDialog.length < 1) {
+                            kmlDialog = $("<div>").attr("id", "kmlDialog");
+                        }
+                        var screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+                        kmlDialog.append(graphic.attributes.description).dialog({
+                            title: graphic.attributes.name,
+                            position: [screenPoint.x, screenPoint.y]
+                        });
+                    }
+                }, undefined);
+            });
+
+
         });
 
         var legend = new esri.dijit.Legend({ map: map }, "legend");
@@ -393,4 +405,4 @@
 
     //show map on load
     dojo.addOnLoad(init);
-////})();
+})();
