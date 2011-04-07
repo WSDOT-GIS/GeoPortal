@@ -229,28 +229,28 @@
             // Add a graphics layer made from KML.
             $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx", {
                 success: function (data, textStatus, jqXHR) {
-                    var kmlLayer = $(data).kmlLayer({ id: "Cameras", visible: false }, 12, 6);
+                    var kmlLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, data: data });
                     map.addLayer(kmlLayer);
                 }
             });
 
             $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx", {
                 success: function (data, textStatus, jqXHR) {
-                    var kmlLayer = $(data).kmlLayer({ id: "Highway Alerts", visible: false }, 25, 25);
+                    var kmlLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", visible: false, iconWidth: 25, iconHeight: 25, data: data });
                     map.addLayer(kmlLayer);
                 }
             });
 
             $.ajax("../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx", {
                 success: function (data, textStatus, jqXHR) {
-                    var kmlLayer = $(data).kmlLayer({ id: "Mtn. Pass Conditions", visible: false }, 19, 15);
+                    var kmlLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", visible: false, iconWidth: 19, iconHeight: 15, data: data});
                     map.addLayer(kmlLayer);
                 }
             });
 
             $("#layerList").layerList(map);
 
-        });
+        }); ;
 
         var legend = new esri.dijit.Legend({ map: map }, "legend");
         legend.startup();

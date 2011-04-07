@@ -3,11 +3,14 @@
 /*global esri, dojo, jQuery */
 /*jslint white: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, maxerr: 50, indent: 4 */
 
-// TODO: Make this a dojo object instead of jQuery plug-in.
-(function ($) {
-    "use strict";
-    $.fn.kmlLayer = function (graphicsLayerOptions, iconWidth, iconHeight) {
-        var kml = this;
+dojo.require("esri.layers.graphics");
+
+dojo.declare("wsdot.layers.KmlGraphicsLayer", esri.layers.GraphicsLayer, {
+    constructor: function (options) {
+        var iconWidth = options.iconWidth;
+        var iconHeight = options.iconHeight;
+        var kml = options.data;
+
         var placemarks = $("Placemark:has(Point)", kml);
 
         /// <summary>Creates a symbol from a KML style node.  Currently only supports Icon styles (Points)</summary>
@@ -79,13 +82,12 @@
             return graphic;
         });
 
-        var layer = new esri.layers.GraphicsLayer(graphicsLayerOptions);
+        this.setRenderer(createRenderer($("Style", kml), iconWidth, iconHeight));
 
-        layer.setRenderer(createRenderer($("Style", kml), iconWidth, iconHeight));
-        $(graphics).each(function (index, graphic) {
-            layer.add(graphic);
-        });
-        layer.setInfoTemplate(new esri.InfoTemplate("${name}", "${description}"));
-        return layer;
-    };
-} (jQuery));
+        dojo.forEach(graphics, function (item, index, array) {
+            this.add(item);
+        }, this);
+
+        this.setInfoTemplate(new esri.InfoTemplate("${name}", "${description}"));
+    }
+});
