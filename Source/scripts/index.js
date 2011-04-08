@@ -232,6 +232,7 @@
             // Add a graphics layer made from KML.
             // var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
             var cameraLayer = new wsdot.layers.CameraGraphicsLayer({ id: "Cameras", url: "../Cameras.ashx", toWebMercator: true });
+            cameraLayer.setRenderer(new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12)));
             var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
             var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
 

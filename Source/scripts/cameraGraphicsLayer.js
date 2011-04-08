@@ -21,7 +21,6 @@ dojo.declare("wsdot.layers.CameraGraphicsLayer", esri.layers.GraphicsLayer, {
         this.onRefreshStart();
 
         var layer = this;
-        this.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleMarkerSymbol()));
 
         return dojo.xhrGet({
             url: layer.url,
