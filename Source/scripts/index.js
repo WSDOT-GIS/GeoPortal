@@ -32,6 +32,8 @@
 
 
 
+
+
     dojo.require("dijit.dijit"); // optimize: load dijit layer
     dojo.require("dijit.layout.BorderContainer");
     dojo.require("dijit.layout.TabContainer");
@@ -73,6 +75,8 @@
 
 
     function init() {
+        esri.config.defaults.io.proxyUrl = "../proxy.ashx";
+
         function setExtentLink(extent) {
             /// <summary>Sets the extent link in the bookmark tab to the given extent.</summary>
             /// <param name="extent" type="esri.geometry.Envelope">The extent that the link will be set to.</param>
@@ -228,9 +232,9 @@
             $("#layerList").layerList(map);
 
             // Add a graphics layer made from KML.
-            var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
-            var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
-            var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "../GetRemoteXml.ashx?url=http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
+            var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
+            var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
+            var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
 
             // Attach an event to each layer's onClick event that will show a jQuery dialog about the clicked graphic.
             dojo.forEach([cameraLayer, alertLayer, mtnLayer], function (layer) {

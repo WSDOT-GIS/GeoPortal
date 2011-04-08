@@ -68,7 +68,7 @@
                 return point;
             }
 
-            return dojo.xhrGet({
+            return esri.request({
                 url: this.url,
                 handleAs: "xml",
                 load: function (data) {
@@ -122,7 +122,10 @@
                 error: function (error) {
                     layer.onRefreshEnd(error);
                 }
+            }, {
+                // TODO: Detect if the proxy is actually needed, and set "useProxy" accordingly.
+                usePost: true 
             });
         }
     });
-}(jQuery));
+} (jQuery));
