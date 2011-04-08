@@ -10,6 +10,7 @@
 /// <reference path="layerList.js" />
 
 (function () {
+    "use strict";
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
         // Setup the contact us dialog.
@@ -135,7 +136,6 @@
         }
 
         extents.countyExtents = extentData;
-        delete extentData;
 
         map = new esri.Map("map", {
             logo: false,
@@ -169,7 +169,6 @@
 
         dojo.connect(map, "onLoad", map, function () {
             setupNorthArrow();
-            delete setupNorthArrow;
             var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
             function createBasemapGallery() {
@@ -200,7 +199,6 @@
 
 
             createBasemapGallery();
-            delete createBasemapGallery;
 
             function resizeMap() {
                 //resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
@@ -246,9 +244,14 @@
                             kmlDialog = $("<div>").attr("id", "kmlDialog");
                         }
                         var screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+                        var screenPosition = [screenPoint.x, screenPoint.y]
                         kmlDialog.append(graphic.attributes.description).dialog({
                             title: graphic.attributes.name,
-                            position: [screenPoint.x, screenPoint.y]
+                            position: screenPosition
+                        });
+                        // When an image in the dialog loads, resize the dialog to fit it completely without scrolling and reposition so it is not off screen.
+                        $("img", kmlDialog).bind("load", undefined, function () {
+                            kmlDialog.dialog("option", "width", "auto").dialog("option", "height", "auto").dialog("option", "position", screenPosition);
                         });
                     }
                 }, undefined);
@@ -259,20 +262,6 @@
 
         var legend = new esri.dijit.Legend({ map: map }, "legend");
         legend.startup();
-
-        ////// Used for debugging errors
-        ////dojo.connect(map, "onLayerAddResult", function (layer, error) {
-        ////    if (error) {
-        ////        console.warn(error);
-        ////    }
-        ////    else {
-        ////        dojo.connect(layer, "onUpdateEnd", layer, function (error) {
-        ////            if (error) {
-        ////                console.warn(error);
-        ////            }
-        ////        });
-        ////    }
-        ////});
 
         // Setup update notifications.
         dojo.connect(map, "onUpdateStart", map, function () {
@@ -300,6 +289,7 @@
 
         // Set up the zoom select boxes.
         (function () {
+            // TODO: Make the zoom extent filtering select a dijit.
             function setupFilteringSelect(featureSet, id) {
                 /// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
                 /// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
@@ -396,7 +386,6 @@
             }
         }, "nextExtentButton");
 
-        delete button;
     }
 
 
