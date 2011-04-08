@@ -9,8 +9,6 @@
 /// <reference path="kmlGraphicsLayer.js" />
 /// <reference path="layerList.js" />
 
-(function () {
-    "use strict";
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
         // Setup the contact us dialog.
@@ -232,12 +230,15 @@
             $("#layerList").layerList(map);
 
             // Add a graphics layer made from KML.
-            var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
+            // var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
+            var cameraLayer = new wsdot.layers.CameraGraphicsLayer({ id: "Cameras", url: "../Cameras.ashx", toWebMercator: true });
             var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
             var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
 
+            map.addLayer(cameraLayer);
+
             // Attach an event to each layer's onClick event that will show a jQuery dialog about the clicked graphic.
-            dojo.forEach([cameraLayer, alertLayer, mtnLayer], function (layer) {
+            dojo.forEach([alertLayer, mtnLayer], function (layer) {
                 map.addLayer(layer);
                 dojo.connect(layer, "onClick", map, function (event) {
                     var graphic = event.graphic;
@@ -398,4 +399,3 @@
 
     //show map on load
     dojo.addOnLoad(init);
-})();
