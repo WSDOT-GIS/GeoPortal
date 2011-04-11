@@ -1,4 +1,8 @@
-﻿/// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
+﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery */
+/*jslint white: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, browser: true, strict: true, devel: true, maxerr: 50, indent: 4 */
+
+
+/// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"/>
 /// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
@@ -9,6 +13,8 @@
 /// <reference path="kmlGraphicsLayer.js" />
 /// <reference path="layerList.js" />
 
+(function ($) {
+    "use strict";
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
         // Setup the contact us dialog.
@@ -90,7 +96,7 @@
             dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
         }
 
-        function SetupLayout() {
+        function setupLayout() {
             var mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
@@ -112,7 +118,7 @@
             mainContainer.startup();
         }
 
-        SetupLayout();
+        setupLayout();
 
         var initExtent = new esri.geometry.Extent({
             "xmin": -13938444.981854893,
@@ -132,11 +138,12 @@
         };
 
         var extentData = [];
-
+        var i;
         // Convert the county JSON objects into esri.geomtry.Extents.
-        for (var i in extents.countyExtents) {
-            // extents.countyExtents[i] = new esri.geometry.fromJson(extents.countyExtents[i]);
-            extentData.push({ name: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]).setSpatialReference(extentSpatialReference) });
+        for (i in extents.countyExtents) {
+            if (extents.countyExtents.hasOwnProperty(i)) {
+                extentData.push({ name: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]).setSpatialReference(extentSpatialReference) });
+            }
         }
 
         extents.countyExtents = extentData;
@@ -145,19 +152,18 @@
             logo: false,
             extent: initExtent,
             lods: [
-		    { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
-		    { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
-		    { "level": 3, "resolution": 305.748113140558, "scale": 1155581.108577 },
-		    { "level": 4, "resolution": 152.874056570411, "scale": 577790.554289 },
-		    { "level": 5, "resolution": 76.4370282850732, "scale": 288895.277144 },
-		    { "level": 6, "resolution": 38.2185141425366, "scale": 144447.638572 },
-		    { "level": 7, "resolution": 19.1092570712683, "scale": 72223.819286 },
-		    { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
-		    { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
-		    { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
-		    { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
-
-		]
+		        { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
+		        { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
+		        { "level": 3, "resolution": 305.748113140558, "scale": 1155581.108577 },
+		        { "level": 4, "resolution": 152.874056570411, "scale": 577790.554289 },
+		        { "level": 5, "resolution": 76.4370282850732, "scale": 288895.277144 },
+		        { "level": 6, "resolution": 38.2185141425366, "scale": 144447.638572 },
+		        { "level": 7, "resolution": 19.1092570712683, "scale": 72223.819286 },
+		        { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
+		        { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
+		        { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
+		        { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
+		    ]
         });
         var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
         map.addLayer(initBasemap);
@@ -173,7 +179,7 @@
 
         dojo.connect(map, "onLoad", map, function () {
             setupNorthArrow();
-            var scalebar = new esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
+            esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
             function createBasemapGallery() {
                 var basemapGallery = new esri.dijit.BasemapGallery({
@@ -197,7 +203,7 @@
                         notices.loadingBasemap.pnotify_remove();
                     }
 
-                    var basemap = basemapGallery.getSelected();
+                    basemapGallery.getSelected();
                 });
             }
 
@@ -235,7 +241,8 @@
             // var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
             var cameraLayer = new wsdot.layers.CameraGraphicsLayer({
                 id: "Cameras",
-                url: "../Cameras.ashx", toWebMercator: true,
+                url: "../Cameras.ashx",
+                toWebMercator: true,
                 renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12))
             });
 
@@ -257,7 +264,7 @@
                             kmlDialog = $("<div>").attr("id", "kmlDialog");
                         }
                         var screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
-                        var screenPosition = [screenPoint.x, screenPoint.y]
+                        var screenPosition = [screenPoint.x, screenPoint.y];
                         kmlDialog.append(graphic.attributes.description).dialog({
                             title: graphic.attributes.name,
                             position: screenPosition
@@ -332,78 +339,76 @@
         });
 
         // Set up the zoom select boxes.
-        (function () {
-            // TODO: Make the zoom extent filtering select a dijit.
-            function setupFilteringSelect(featureSet, id) {
-                /// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
-                /// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
-                var sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
-                var data;
-                if (featureSet.declaredClass === "esri.tasks.FeatureSet") {
-                    var graphic;
-                    var nameAttribute = "NAME";
-                    data = { identifier: "name", label: "name", items: [] };
-                    for (var i = 0, l = featureSet.features.length; i < l; i++) {
-                        graphic = featureSet.features[i];
-                        data.items.push({
-                            name: graphic.attributes[nameAttribute],
-                            extent: graphic.geometry.getExtent()
-                        });
-                    }
-                    data.items.sort(sortByName);
-                    data = new dojo.data.ItemFileReadStore({ data: data });
+        // TODO: Make the zoom extent filtering select a dijit.
+        function setupFilteringSelect(featureSet, id) {
+            /// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
+            /// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
+            var sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
+            var data;
+            if (featureSet.isInstanceOf && featureSet.isInstanceOf(esri.tasks.FeatureSet)) {
+                var graphic;
+                var nameAttribute = "NAME";
+                data = { identifier: "name", label: "name", items: [] };
+                var i, l;
+                for (i = 0, l = featureSet.features.length; i < l; i += 1) {
+                    graphic = featureSet.features[i];
+                    data.items.push({
+                        name: graphic.attributes[nameAttribute],
+                        extent: graphic.geometry.getExtent()
+                    });
                 }
-                else {
-                    featureSet.sort(sortByName);
-                    data = new dojo.data.ItemFileReadStore({ data: { identifier: "name", label: "name", items: featureSet} });
-                }
-                var filteringSelect = new dijit.form.FilteringSelect({
-                    id: id,
-                    name: "name",
-                    store: data,
-                    searchAttr: "name",
-                    required: false,
-                    onChange: function (newValue) {
-                        if (this.item != null && this.item.extent != null) {
-                            var extent = this.item.extent[0];
+                data.items.sort(sortByName);
+                data = new dojo.data.ItemFileReadStore({ data: data });
+            } else {
+                featureSet.sort(sortByName);
+                data = new dojo.data.ItemFileReadStore({ data: { identifier: "name", label: "name", items: featureSet} });
+            }
+            var filteringSelect = new dijit.form.FilteringSelect({
+                id: id,
+                name: "name",
+                store: data,
+                searchAttr: "name",
+                required: false,
+                onChange: function (newValue) {
+                    if (this.item && this.item.extent) {
+                        var extent = this.item.extent[0];
 
-                            try {
-                                map.setExtent(extent);
-                            }
-                            catch (e) {
-                                if (typeof (console) !== "undefined" && typeof (console.debug) !== "undefined") {
-                                    console.debug(e);
-                                }
+                        try {
+                            map.setExtent(extent);
+                        } catch (e) {
+                            if (console && console.debug) {
+                                console.debug(e);
                             }
                         }
-                        this.reset();
                     }
-                }, id);
-            };
+                    this.reset();
+                }
+            }, id);
+            return filteringSelect;
+        }
 
-            // Setup the zoom controls.
-            setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
-            delete extents.countyExtents;
+        // Setup the zoom controls.
+        setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
+        delete extents.countyExtents;
 
 
-            // Setup extents for cities and urbanized area zoom tools.
-            var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/23");
-            var query = new esri.tasks.Query();
-            query.where = "1 = 1";
-            query.returnGeometry = true;
-            query.outFields = ["NAME"];
-            cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
+        // Setup extents for cities and urbanized area zoom tools.
+        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/23");
+        var query = new esri.tasks.Query();
+        query.where = "1 = 1";
+        query.returnGeometry = true;
+        query.outFields = ["NAME"];
+        cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
 
-            var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
-            query.where = "1 = 1";
-            query.returnGeometry = true;
-            urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect") });
+        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
+        query.where = "1 = 1";
+        query.returnGeometry = true;
+        urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect"); });
 
-            // Associate labels with select controls, so that clicking on a label activates the corresponding control.
-            dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
-            dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
-            dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
-        })();
+        // Associate labels with select controls, so that clicking on a label activates the corresponding control.
+        dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
+        dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
+        dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
 
         // Create the button dijits.
         var button = new dijit.form.Button({
@@ -438,3 +443,4 @@
 
     //show map on load
     dojo.addOnLoad(init);
+}(jQuery));
