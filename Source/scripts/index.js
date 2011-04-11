@@ -59,6 +59,8 @@
     dojo.require("esri.toolbars.navigation");
     dojo.require("esri.dijit.Legend");
 
+    dojo.require("dojox.image.Lightbox");
+
     var map = null;
     var extents = null;
     var navToolbar;
@@ -231,12 +233,17 @@
 
             // Add a graphics layer made from KML.
             // var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
-            var cameraLayer = new wsdot.layers.CameraGraphicsLayer({ id: "Cameras", url: "../Cameras.ashx", toWebMercator: true });
-            cameraLayer.setRenderer(new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12)));
+            var cameraLayer = new wsdot.layers.CameraGraphicsLayer({
+                id: "Cameras",
+                url: "../Cameras.ashx", toWebMercator: true,
+                renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12))
+            });
+
             var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
             var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
 
             map.addLayer(cameraLayer);
+
 
             // Attach an event to each layer's onClick event that will show a jQuery dialog about the clicked graphic.
             dojo.forEach([alertLayer, mtnLayer], function (layer) {
@@ -261,6 +268,37 @@
                         });
                     }
                 }, undefined);
+            });
+
+            dojo.connect(cameraLayer, "onClick", map, function (event) {
+                var cameras = event.graphic.attributes.cameras;
+                // Clear existing images from a lightbox dialog.
+                var dialog = dijit.byId("dojoxLightboxDialog");
+                if (dialog) {
+                    dialog.removeGroup("Cameras");
+                }
+                try {
+                    var cameraLightboxes = dojo.map(cameras, function (element, index) {
+                        var lightbox = dojox.image.Lightbox({ title: element.title, group: "Cameras", href: element.imageUrl });
+                        return lightbox;
+                    });
+                    dojo.forEach(cameraLightboxes, function (item, index, array) {
+                        item.startup();
+                    });
+
+                    var firstLightbox = cameraLightboxes[0];
+                    firstLightbox.show();
+                } catch (e) {
+                    if (console && console.error) {
+                        console.error(e);
+                    }
+                }
+
+                // The Lightbox icons (next, previous, and close) do not display in the claro theme.
+                // Force the lightbox to use the tundra theme instead to display the icons.
+                if (!dojo.hasClass("dojoxLightboxDialog", "tundra")) {
+                    dojo.addClass("dojoxLightboxDialog", "tundra");
+                }
             });
 
 
