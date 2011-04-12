@@ -435,6 +435,58 @@
             }
         }, "nextExtentButton");
 
+        if (navigator.geolocation) {
+            dijit.form.Button({
+                onClick: function () {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            console.debug(map);
+                            var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude));
+                            var attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+                            var infoTemplate = new esri.InfoTemplate("Your Location", "Lat: ${lat} <br />Long: ${long}");
+                            var symbol = new esri.symbol.SimpleMarkerSymbol();
+                            var graphic = new esri.Graphic(pt, symbol, attributes, infoTemplate);
+                            map.graphics.add(graphic);
+                            graphic.setGeometry(pt);
+                            map.centerAndZoom(pt, 8);
+                        },
+                        function (error) {
+                            var message = "";
+                            // Check for known errors
+                            switch (error.code) {
+                                case error.PERMISSION_DENIED:
+                                    message = "This website does not have permission to use the Geolocation API";
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    message = "The current position could not be determined.";
+                                    break;
+                                case error.PERMISSION_DENIED_TIMEOUT:
+                                    message = "The current position could not be determined within the specified timeout period.";
+                                    break;
+                            }
+
+                            // If it's an unknown error, build a message that includes 
+                            // information that helps identify the situation so that 
+                            // the error handler can be updated.
+                            if (message == "") {
+                                var strErrorCode = error.code.toString();
+                                message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+                            }
+                            alert(message);
+                        },
+                        {
+                            maximumAge: 0,
+                            timeout: 30000,
+                            enableHighAccuracy: true
+                        }
+                    );
+                }
+            }, "zoomToMyCurrentLocation");
+        }
+        else {
+            dojo.destroy("zoomToMyCurrentLocation");
+        }
+
     }
 
 
