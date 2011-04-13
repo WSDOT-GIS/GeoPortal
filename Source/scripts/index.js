@@ -83,6 +83,12 @@
     function init() {
         esri.config.defaults.io.proxyUrl = "../proxy.ashx";
 
+        // Opera doesn't display the zoom slider correctly.  This will make it look better.
+        // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
+        if (dojo.isOpera) {
+            esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
+        }
+
         function setExtentLink(extent) {
             /// <summary>Sets the extent link in the bookmark tab to the given extent.</summary>
             /// <param name="extent" type="esri.geometry.Envelope">The extent that the link will be set to.</param>
