@@ -253,7 +253,7 @@
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/CongressionalDistricts_2D/MapServer", { id: "Congressional Districts", visible: false }));
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/RegionBoundaries_2D/MapServer", { id: "Region Boundaries", visible: false }));
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/WinterOperations/MaintenanceAreas/MapServer", { id: "Maintenance Areas", visible: false }));
-            
+
             var interchangeLayer = esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/InterchangeDrawings/MapServer/0", {
                 id: "Interchange Drawings",
                 outFields: ["PDFURL", "SRID", "LOC_ERROR"],
@@ -281,6 +281,20 @@
 
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer", { id: "Traffic Flow", visible: false }));
 
+            var monumentsLayer = new esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0", {
+                id: "Survey Monuments (NGS)", 
+                outFields: ["*"],
+                infoTemplate: new esri.InfoTemplate("NGS Monument", "${*}"),
+                visible: false
+            });
+            ////map.addLayer(monumentsLayer);
+            ////var monumentsLayer = new esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4wsdot/MapServer/0", {
+            ////    id: "Survey Monuments (WSDOT)",
+            ////    outFields: ["*"],
+            ////    infoTemplate: new esri.InfoTemplate("WSDOT Monument", "${*}"),
+            ////    visible: false
+            ////});
+
             // Add a graphics layer made from KML.
             var cameraLayer = new wsdot.layers.CameraGraphicsLayer({
                 id: "Cameras",
@@ -289,6 +303,7 @@
                 renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12)),
                 visible: false
             });
+            map.addLayer(monumentsLayer);
 
             var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx", visible: false });
             var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx", visible: false });
@@ -512,7 +527,7 @@
                             // If it's an unknown error, build a message that includes 
                             // information that helps identify the situation so that 
                             // the error handler can be updated.
-                            if (message == "") {
+                            if (message === "") {
                                 var strErrorCode = error.code.toString();
                                 message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
                             }
@@ -526,8 +541,7 @@
                     );
                 }
             }, "zoomToMyCurrentLocation");
-        }
-        else {
+        } else {
             dojo.destroy("zoomToMyCurrentLocation");
         }
 
