@@ -253,7 +253,7 @@
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/CongressionalDistricts_2D/MapServer", { id: "Congressional Districts", visible: false }));
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/RegionBoundaries_2D/MapServer", { id: "Region Boundaries", visible: false }));
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/WinterOperations/MaintenanceAreas/MapServer", { id: "Maintenance Areas", visible: false }));
-            // TODO: Convert InterchangeDrawings to FeatureLayer.
+            
             var interchangeLayer = esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/InterchangeDrawings/MapServer/0", {
                 id: "Interchange Drawings",
                 outFields: ["PDFURL", "SRID", "LOC_ERROR"],
@@ -270,6 +270,13 @@
                     }
                 }
             });
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis18p/ArcGIS/rest/services/ILT_CityLimits/MapServer", { id: "City Limits", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis18p/ArcGIS/rest/services/WSDOTFunctionalClassMap/MapServer", { id: "Functional Class", visible: false }));
+
+
+
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis18p/ArcGIS/rest/services/ILT_RoadLabels/MapServer", { id: "Road Labels", visible: false }));
+
 
 
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer", { id: "Traffic Flow", visible: false }));
@@ -430,14 +437,14 @@
 
 
         // Setup extents for cities and urbanized area zoom tools.
-        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/23");
+        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis18p/ArcGIS/rest/services/ILT_CityLimits/MapServer/0");
         var query = new esri.tasks.Query();
         query.where = "1 = 1";
         query.returnGeometry = true;
         query.outFields = ["NAME"];
         cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
 
-        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis11t/ArcGIS/rest/services/HPMS/WSDOTFunctionalClassBaseMap/MapServer/24");
+        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis18p/ArcGIS/rest/services/WSDOTFunctionalClassBaseMap/MapServer/24");
         query.where = "1 = 1";
         query.returnGeometry = true;
         urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect"); });
