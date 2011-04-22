@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wsdot.Web.Mapping.Sample</RootNamespace>
-    <AssemblyName>SampleWebApplication</AssemblyName>
+    <RootNamespace>Wsdot.Grdo.Web.Mapping</RootNamespace>
+    <AssemblyName>WsdotGrdoMapApplication</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <TargetFrameworkProfile />
@@ -49,9 +49,7 @@
     <Content Include="scripts\jquery.pnotify.min.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="scripts\kmlGraphicsLayer.js" />
     <Content Include="scripts\layerList.js" />
@@ -99,6 +97,7 @@
       <DependentUpon>Cameras.ashx</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WsdotTraffic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
