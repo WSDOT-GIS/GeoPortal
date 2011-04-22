@@ -243,17 +243,48 @@
 
             $("#layerList").layerList(map);
 
+            map.addLayer(esri.layers.ArcGISTiledMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/GenericServices/StateRoutes_2D/MapServer", { id: "State Routes", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/MPO_2D/MapServer", { id: "MPO", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/RTPO_2D/MapServer", { id: "RTPO", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/TribalLands_2D/MapServer", { id: "Tribal Lands", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/TownshipSection_2D/MapServer", { id: "Township / Section", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/CountyBoundaries_2D/MapServer", { id: "County Boundaries", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/LegislativeDistricts_2D/MapServer", { id: "Legislative Districts", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/CongressionalDistricts_2D/MapServer", { id: "Congressional Districts", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/RegionBoundaries_2D/MapServer", { id: "Region Boundaries", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/WinterOperations/MaintenanceAreas/MapServer", { id: "Maintenance Areas", visible: false }));
+            // TODO: Convert InterchangeDrawings to FeatureLayer.
+            var interchangeLayer = esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/InterchangeDrawings/MapServer/0", {
+                id: "Interchange Drawings",
+                outFields: ["PDFURL", "SRID", "LOC_ERROR"],
+                visible: false
+            });
+            map.addLayer(interchangeLayer);
+            dojo.connect(interchangeLayer, "onClick", function (event) {
+                var graphic = event.graphic;
+                if (graphic) {
+                    var pdfUrl = graphic.attributes.PDFURL;
+                    if (pdfUrl) {
+                        // Show the PDF.
+                        window.open(pdfUrl);
+                    }
+                }
+            });
+
+
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer", { id: "Traffic Flow", visible: false }));
+
             // Add a graphics layer made from KML.
-            // var cameraLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Cameras", visible: false, iconWidth: 12, iconHeight: 6, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/kml.aspx" });
             var cameraLayer = new wsdot.layers.CameraGraphicsLayer({
                 id: "Cameras",
                 url: "../Cameras.ashx",
                 toWebMercator: true,
-                renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12))
+                renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12)),
+                visible: false
             });
 
-            var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx" });
-            var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx" });
+            var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx", visible: false });
+            var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx", visible: false });
 
             map.addLayer(cameraLayer);
 
