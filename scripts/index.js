@@ -111,12 +111,12 @@
             var tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
-            var zoomTab = new dijit.layout.ContentPane({ title: "Zoom" }, "zoomTab");
+            var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             var zoomAccordion = new dijit.layout.AccordionContainer(null, "zoomAccordion");
             zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
             zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
             zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
-            tabs.addChild(zoomTab);
+            tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
             legendPane.addChild(tabs);
             mainContainer.addChild(legendPane);
