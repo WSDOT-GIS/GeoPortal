@@ -189,9 +189,38 @@
 
             function createBasemapGallery() {
                 var basemapGallery = new esri.dijit.BasemapGallery({
-                    showArcGISBasemaps: true,
-                    bingMapsKey: 'Av1bH4keF8rXBtxWOegklgWGCYYz8UGYvBhsWKuvc4Z15kT76xVFOERk8jkKEDvT',
-                    map: map
+                    showArcGISBasemaps: false,
+                    map: map,
+                    basemaps: [
+                        new esri.dijit.Basemap({
+                            id: "wsdotBasemap",
+                            title: "WSDOT Basemap",
+                            layers: [
+                                new esri.dijit.BasemapLayer({
+                                    url: "http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer"
+                                })
+                            ]
+                        }),
+                        new esri.dijit.Basemap({
+                            id: "esriImageryBasemap",
+                            title: "ESRI Imagery",
+                            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/c03a526d94704bfb839445e80de95495/info/thumbnail/imagery.jpg",
+                            layers: [
+                                new esri.dijit.BasemapLayer({
+                                    url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+                                })
+                            ]
+                        }),
+                        new esri.dijit.Basemap({
+                            id: "functionalClassBasemap",
+                            title: "Functional Class",
+                            layers: [
+                                new esri.dijit.BasemapLayer({
+                                    url: "http://hqolymgis18p/ArcGIS/rest/services/WSDOTFunctionalClassBaseMap/MapServer"
+                                })
+                            ]
+                        })
+                    ]
                 }, "basemapGallery");
 
                 basemapGallery.startup();
