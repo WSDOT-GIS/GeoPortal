@@ -1,5 +1,5 @@
 ﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery */
-/*jslint white: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, browser: true, strict: true, devel: true, maxerr: 50, indent: 4 */
+/*jslint white: true, onevar: false, browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 50, indent: 4 */
 
 
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
@@ -81,7 +81,7 @@
 
 
     function init() {
-        esri.config.defaults.io.proxyUrl = "../proxy.ashx";
+        esri.config.defaults.io.proxyUrl = "proxy.ashx";
 
         // Opera doesn't display the zoom slider correctly.  This will make it look better.
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
@@ -189,7 +189,7 @@
 
             function createBasemapGallery() {
                 var basemapGallery = new esri.dijit.BasemapGallery({
-                    showArcGISBasemaps: false,
+                    showArcGISBasemaps: true,
                     map: map,
                     basemaps: [
                         new esri.dijit.Basemap({
@@ -198,16 +198,6 @@
                             layers: [
                                 new esri.dijit.BasemapLayer({
                                     url: "http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer"
-                                })
-                            ]
-                        }),
-                        new esri.dijit.Basemap({
-                            id: "esriImageryBasemap",
-                            title: "ESRI Imagery",
-                            thumbnailUrl: "http://www.arcgis.com/sharing/content/items/c03a526d94704bfb839445e80de95495/info/thumbnail/imagery.jpg",
-                            layers: [
-                                new esri.dijit.BasemapLayer({
-                                    url: "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
                                 })
                             ]
                         }),
@@ -327,9 +317,9 @@
             // Add a graphics layer made from KML.
             var cameraLayer = new wsdot.layers.CameraGraphicsLayer({
                 id: "Cameras",
-                url: "../Cameras.ashx",
+                url: "Cameras.ashx",
                 toWebMercator: true,
-                renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("../images/camera.png", 24, 12)),
+                renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("images/camera.png", 24, 12)),
                 visible: false
             });
             map.addLayer(monumentsLayer);
@@ -481,7 +471,7 @@
 
 
         // Setup extents for cities and urbanized area zoom tools.
-        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis18p/ArcGIS/rest/services/ILT_CityLimits/MapServer/0");
+        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis18p/ArcGIS/rest/services/ILT/ILT_CityLimits/MapServer/0");
         var query = new esri.tasks.Query();
         query.where = "1 = 1";
         query.returnGeometry = true;
@@ -528,7 +518,6 @@
                 onClick: function () {
                     navigator.geolocation.getCurrentPosition(
                         function (position) {
-                            console.debug(map);
                             var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude));
                             var attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
                             var infoTemplate = new esri.InfoTemplate("Your Location", "Lat: ${lat} <br />Long: ${long}");
@@ -542,15 +531,15 @@
                             var message = "";
                             // Check for known errors
                             switch (error.code) {
-                                case error.PERMISSION_DENIED:
-                                    message = "This website does not have permission to use the Geolocation API";
-                                    break;
-                                case error.POSITION_UNAVAILABLE:
-                                    message = "The current position could not be determined.";
-                                    break;
-                                case error.PERMISSION_DENIED_TIMEOUT:
-                                    message = "The current position could not be determined within the specified timeout period.";
-                                    break;
+                            case error.PERMISSION_DENIED:
+                                message = "This website does not have permission to use the Geolocation API";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                message = "The current position could not be determined.";
+                                break;
+                            case error.PERMISSION_DENIED_TIMEOUT:
+                                message = "The current position could not be determined within the specified timeout period.";
+                                break;
                             }
 
                             // If it's an unknown error, build a message that includes 
