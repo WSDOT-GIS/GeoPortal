@@ -301,7 +301,7 @@
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer", { id: "Traffic Flow", visible: false }));
 
             var monumentsLayer = new esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0", {
-                id: "Survey Monuments (NGS)", 
+                id: "Survey Monuments (NGS)",
                 outFields: ["*"],
                 infoTemplate: new esri.InfoTemplate("NGS Monument", "${*}"),
                 visible: false
@@ -359,32 +359,56 @@
                 var cameras = event.graphic.attributes.cameras;
                 // Clear existing images from a lightbox dialog.
                 var dialog = dijit.byId("dojoxLightboxDialog");
+                var groupName = "Cameras";
+
                 if (dialog) {
-                    dialog.removeGroup("Cameras");
+                    dialog.removeGroup(groupName);
                 }
                 try {
-                    var cameraLightboxes = dojo.map(cameras, function (element, index) {
-                        var lightbox = dojox.image.Lightbox({ title: element.title, group: "Cameras", href: element.imageUrl });
-                        return lightbox;
-                    });
-                    dojo.forEach(cameraLightboxes, function (item, index, array) {
-                        item.startup();
-                    });
+                    if (cameras.length === 1) {
+                        var camera = cameras[0];
+                        dialog.show({
+                            title: camera.title,
+                            href: camera.imageUrl
+                        }, groupName);
+                    } else {
+                        var camera;
 
-                    var firstLightbox = cameraLightboxes[0];
-                    firstLightbox.show();
+                        for (var i in cameras) {
+                            camera = cameras[i];
+                            dialog.addImage(
+                                {
+                                    title: camera.title,
+                                    href: camera.imageUrl
+                                },
+                                groupName
+                            );
+                        }
+
+                        // Show the dialog, passing in the last image.
+                        dialog.show(
+                            {
+                                title: cameras[0].title,
+                                href: cameras[0].imageUrl,
+                                group: groupName
+                            }
+                        );
+                    }
                 } catch (e) {
                     if (console && console.error) {
                         console.error(e);
                     }
                 }
 
-                // The Lightbox icons (next, previous, and close) do not display in the claro theme.
-                // Force the lightbox to use the tundra theme instead to display the icons.
-                if (!dojo.hasClass("dojoxLightboxDialog", "tundra")) {
-                    dojo.addClass("dojoxLightboxDialog", "tundra");
-                }
+
             });
+
+            dojox.image.LightboxDialog({ id: "dojoxLightboxDialog" }).startup();
+            // The Lightbox icons (next, previous, and close) do not display in the claro theme.
+            // Force the lightbox to use the tundra theme instead to display the icons.
+            if (!dojo.hasClass("dojoxLightboxDialog", "tundra")) {
+                dojo.addClass("dojoxLightboxDialog", "tundra");
+            }
 
 
         });
