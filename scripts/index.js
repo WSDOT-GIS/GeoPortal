@@ -50,6 +50,7 @@
 
     dojo.require("dojox.layout.ExpandoPane");
 
+    dojo.require("dijit.form.Select");
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.data.ItemFileReadStore");
 
@@ -61,8 +62,10 @@
     dojo.require("esri.dijit.BasemapGallery");
     dojo.require("esri.arcgis.utils");
     dojo.require("esri.dijit.Scalebar");
+    dojo.require("esri.tasks.geometry");
     dojo.require("esri.tasks.query");
     dojo.require("esri.toolbars.navigation");
+    dojo.require("esri.toolbars.draw");
     dojo.require("esri.dijit.Legend");
 
     dojo.require("dojox.image.Lightbox");
@@ -71,6 +74,8 @@
     var extents = null;
     var navToolbar;
     var notices = {};
+    var drawToolbar;
+    var geometryService;
 
 
 
@@ -82,6 +87,9 @@
 
     function init() {
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
+        //esri.config.defaults.geometryService = "http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer";
+
+        var geometryService = new esri.tasks.GeometryService("http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer");
 
         // Opera doesn't display the zoom slider correctly.  This will make it look better.
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
@@ -112,10 +120,19 @@
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
             var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
-            var zoomAccordion = new dijit.layout.AccordionContainer(null, "zoomAccordion");
-            zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
-            zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
-            zoomAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
+            var toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Measure" }, "measureControls"));
+            dijit.form.Button({
+                label: "Measure",
+                onClick: function (event) {
+                    drawToolbar.activate(esri.toolbars.Draw.POLYLINE);
+                }
+            }, "measureButton");
+            dijit.form.Select({ label: "Measure Units" }, "measureUnitSelect");
+            dijit.form.Select({ label: "Select draw geometry" }, "drawGeometrySelect");
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
             legendPane.addChild(tabs);
@@ -440,6 +457,68 @@
             dijit.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
         });
 
+        // Setup the draw toolbar.
+        drawToolbar = new esri.toolbars.Draw(map);
+        dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
+            drawToolbar.deactivate();
+            var lengthsParameters = new esri.tasks.LengthsParameters();
+            lengthsParameters.geodesic = true;
+            lengthsParameters.polylines = [geometry];
+            lengthsParameters.lengthUnit = esri.tasks.GeometryService[dijit.byId("measureUnitSelect").value];
+
+            geometryService.lengths(lengthsParameters,
+                function (lengths) {
+                    function unitConstNameToLabel(unitConstantName) {
+                        switch (unitConstantName) {
+                            case "UNIT_ACRES":
+                                return "acres";
+                            case "UNIT_ARES":
+                                return "ares";
+                            case "UNIT_FOOT":
+                                return "ft";
+                            case "UNIT_HECTARES":
+                                return "ha";
+                            case "UNIT_KILOMETER":
+                                return "km";
+                            case "UNIT_METER":
+                                return "m";
+                            case "UNIT_NAUTICAL_MILE":
+                                return "NM";
+                            case "UNIT_SQUARE_CENTIMETERS":
+                                return "cm²";
+                            case "UNIT_SQUARE_DECIMETERS":
+                                return "Square Decimeters";
+                            case "UNIT_SQUARE_FEET":
+                                return "ft²";
+                            case "UNIT_SQUARE_INCHES":
+                                return "in²";
+                            case "UNIT_SQUARE_KILOMETERS":
+                                return "km²";
+                            case "UNIT_SQUARE_METERS":
+                                return "m²";
+                            case "UNIT_SQUARE_MILES":
+                                return "mi²";
+                            case "UNIT_SQUARE_MILLIMETERS":
+                                return "mm²";
+                            case "UNIT_SQUARE_YARDS":
+                                return "yd²";
+                            case "UNIT_STATUTE_MILE":
+                                return "mi";
+                            case "UNIT_US_NAUTICAL_MILE":
+                                return "US Nautical Mile(s)";
+                            default:
+                                return "Unknown Unit";
+                        }
+                    }
+                    lengths = lengths.lengths
+                    if (lengths && lengths.length > 0) {
+                        alert(lengths[0] + " " + unitConstNameToLabel(dijit.byId("measureUnitSelect").value));
+                    }
+                },
+                function (error) { if (console && console.error) { console.error(error); } }
+            );
+        });
+
         // Set up the zoom select boxes.
         // TODO: Make the zoom extent filtering select a dijit.
         function setupFilteringSelect(featureSet, id) {
@@ -555,15 +634,15 @@
                             var message = "";
                             // Check for known errors
                             switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                message = "This website does not have permission to use the Geolocation API";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                message = "The current position could not be determined.";
-                                break;
-                            case error.PERMISSION_DENIED_TIMEOUT:
-                                message = "The current position could not be determined within the specified timeout period.";
-                                break;
+                                case error.PERMISSION_DENIED:
+                                    message = "This website does not have permission to use the Geolocation API";
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    message = "The current position could not be determined.";
+                                    break;
+                                case error.PERMISSION_DENIED_TIMEOUT:
+                                    message = "The current position could not be determined within the specified timeout period.";
+                                    break;
                             }
 
                             // If it's an unknown error, build a message that includes 
@@ -595,4 +674,4 @@
 
     //show map on load
     dojo.addOnLoad(init);
-}(jQuery));
+} (jQuery));
