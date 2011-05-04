@@ -53,28 +53,36 @@
                 <div id="toolsTab" title="Tools">
                     <div id="toolsAccordion">
                         <div id="measureControls" title="Measure">
-                            <label for="measureUnitSelect">Units</label>
-                            <select id="measureUnitSelect">
-                                <!--<option value="UNIT_ACRES">Acres (areal unit)</option>-->
-                                <!--<option value="UNIT_ARES">Ares (areal unit)</option>-->
-                                <option value="UNIT_FOOT" title="Feet">Foot</option>
-                                <!--<option value="UNIT_HECTARES">Hectares (areal unit)</option>-->
-                                <option value="UNIT_KILOMETER" title="km">Kilometer</option>
-                                <option value="UNIT_METER" title="m">International meters</option>
-                                <option value="UNIT_NAUTICAL_MILE" title="nautical miles">Nautical Miles (1,852 meters)</option>
-                                <!--<option value="UNIT_SQUARE_CENTIMETERS">Square Centimeters (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_DECIMETERS">Square Decimeters (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_FEET">Square Feet (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_INCHES">Square Inches (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_KILOMETERS">Square Kilometers (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_METERS">Square Meters (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_MILES">Square Miles (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_MILLIMETERS">Square Millimeters (areal unit)</option>-->
-                                <!--<option value="UNIT_SQUARE_YARDS">Square Yards (areal unit)</option>-->
-                                <option value="UNIT_STATUTE_MILE" title="mi" selected="selected">Miles</option>
-                                <option value="UNIT_US_NAUTICAL_MILE" title="US Nautical Miles">US Nautical Mile </option>
-                            </select>
-                            <button id="measureButton">Measure</button>
+                            <div>
+                                <label for="lengthUnitSelect">Linear Units</label>
+                                <select id="lengthUnitSelect">
+                                    <option value="UNIT_FOOT" title="Feet">Foot</option>
+                                    <option value="UNIT_KILOMETER" title="km">Kilometer</option>
+                                    <option value="UNIT_METER" title="m">International meters</option>
+                                    <option value="UNIT_NAUTICAL_MILE" title="nautical miles">Nautical Miles (1,852 meters)</option>
+                                    <option value="UNIT_STATUTE_MILE" title="mi" selected="selected">Miles</option>
+                                    <option value="UNIT_US_NAUTICAL_MILE" title="US Nautical Miles">US Nautical Mile </option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="arealUnitSelect">Areal Units</label>
+                                <select id="arealUnitSelect">
+                                    <option value="UNIT_ACRES">Acres</option>
+                                    <option value="UNIT_ARES">Ares</option>
+                                    <option value="UNIT_HECTARES">Hectares</option>
+                                    <option value="UNIT_SQUARE_CENTIMETERS">Square Centimeters</option>
+                                    <option value="UNIT_SQUARE_DECIMETERS">Square Decimeters</option>
+                                    <option value="UNIT_SQUARE_FEET">Square Feet</option>
+                                    <option value="UNIT_SQUARE_INCHES">Square Inches</option>
+                                    <option value="UNIT_SQUARE_KILOMETERS">Square Kilometers</option>
+                                    <option value="UNIT_SQUARE_METERS">Square Meters</option>
+                                    <option value="UNIT_SQUARE_MILES">Square Miles</option>
+                                    <option value="UNIT_SQUARE_MILLIMETERS">Square Millimeters</option>
+                                    <option value="UNIT_SQUARE_YARDS">Square Yards</option>
+                                </select>
+                            </div>
+                            <button id="measureLengthButton">Measure Length</button>
+                            <button id="measureAreaButton">Measure Area</button>
                         </div>
                         <div id="zoomControls" title="Zoom Controls">
                             <button id="fullExtentButton">Full Extent</button>

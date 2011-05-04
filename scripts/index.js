@@ -121,15 +121,25 @@
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
             var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             var toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
+
+            // Measure tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Measure" }, "measureControls"));
             dijit.form.Button({
-                label: "Measure",
                 onClick: function (event) {
                     drawToolbar.activate(esri.toolbars.Draw.POLYLINE);
                 }
-            }, "measureButton");
-            dijit.form.Select({ label: "Measure Units" }, "measureUnitSelect");
-            dijit.form.Select({ label: "Select draw geometry" }, "drawGeometrySelect");
+            }, "measureLengthButton");
+            dijit.form.Select({ label: "Measure Units" }, "lengthUnitSelect");
+
+            dijit.form.Button({
+                onClick: function (event) {
+                    drawToolbar.activate(esri.toolbars.Draw.POLYGON);
+                }
+            }, "measureAreaButton");
+            dijit.form.Select(null, "arealUnitSelect");
+
+
+            // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
@@ -460,63 +470,64 @@
         // Setup the draw toolbar.
         drawToolbar = new esri.toolbars.Draw(map);
         dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
-            drawToolbar.deactivate();
-            var lengthsParameters = new esri.tasks.LengthsParameters();
-            lengthsParameters.geodesic = true;
-            lengthsParameters.polylines = [geometry];
-            lengthsParameters.lengthUnit = esri.tasks.GeometryService[dijit.byId("measureUnitSelect").value];
 
-            geometryService.lengths(lengthsParameters,
-                function (lengths) {
-                    function unitConstNameToLabel(unitConstantName) {
-                        switch (unitConstantName) {
-                            case "UNIT_ACRES":
-                                return "acres";
-                            case "UNIT_ARES":
-                                return "ares";
-                            case "UNIT_FOOT":
-                                return "ft";
-                            case "UNIT_HECTARES":
-                                return "ha";
-                            case "UNIT_KILOMETER":
-                                return "km";
-                            case "UNIT_METER":
-                                return "m";
-                            case "UNIT_NAUTICAL_MILE":
-                                return "NM";
-                            case "UNIT_SQUARE_CENTIMETERS":
-                                return "cm²";
-                            case "UNIT_SQUARE_DECIMETERS":
-                                return "Square Decimeters";
-                            case "UNIT_SQUARE_FEET":
-                                return "ft²";
-                            case "UNIT_SQUARE_INCHES":
-                                return "in²";
-                            case "UNIT_SQUARE_KILOMETERS":
-                                return "km²";
-                            case "UNIT_SQUARE_METERS":
-                                return "m²";
-                            case "UNIT_SQUARE_MILES":
-                                return "mi²";
-                            case "UNIT_SQUARE_MILLIMETERS":
-                                return "mm²";
-                            case "UNIT_SQUARE_YARDS":
-                                return "yd²";
-                            case "UNIT_STATUTE_MILE":
-                                return "mi";
-                            case "UNIT_US_NAUTICAL_MILE":
-                                return "US Nautical Mile(s)";
-                            default:
-                                return "Unknown Unit";
+            var unitLabels = {
+                UNIT_ACRES: "acres",
+                UNIT_ARES: "ares",
+                UNIT_FOOT: "ft",
+                UNIT_HECTARES: "ha",
+                UNIT_KILOMETER: "km",
+                UNIT_METER: "m",
+                UNIT_NAUTICAL_MILE: "NM",
+                UNIT_SQUARE_CENTIMETERS: "cm²",
+                UNIT_SQUARE_DECIMETERS: "Square Decimeters",
+                UNIT_SQUARE_FEET: "ft²",
+                UNIT_SQUARE_INCHES: "in²",
+                UNIT_SQUARE_KILOMETERS: "km²",
+                UNIT_SQUARE_METERS: "m²",
+                UNIT_SQUARE_MILES: "mi²",
+                UNIT_SQUARE_MILLIMETERS: "mm²",
+                UNIT_SQUARE_YARDS: "yd²",
+                UNIT_STATUTE_MILE: "mi",
+                UNIT_US_NAUTICAL_MILE: "US Nautical Mile(s)"
+            };
+
+
+            drawToolbar.deactivate();
+            if (geometry.type === "polyline") {
+                var lengthsParameters = new esri.tasks.LengthsParameters();
+                lengthsParameters.geodesic = true;
+                lengthsParameters.polylines = [geometry];
+                lengthsParameters.lengthUnit = esri.tasks.GeometryService[dijit.byId("lengthUnitSelect").value];
+
+
+                geometryService.lengths(lengthsParameters,
+                    function (lengths) {
+                        lengths = lengths.lengths
+                        if (lengths && lengths.length > 0) {
+                            alert(lengths[0] + " " + unitLabels[dijit.byId("lengthUnitSelect").value]);
                         }
-                    }
-                    lengths = lengths.lengths
-                    if (lengths && lengths.length > 0) {
-                        alert(lengths[0] + " " + unitConstNameToLabel(dijit.byId("measureUnitSelect").value));
-                    }
-                },
-                function (error) { if (console && console.error) { console.error(error); } }
-            );
+                    },
+                    function (error) { if (console && console.error) { console.error(error); } }
+                );
+            } else if (geometry.type === "polygon") {
+                var areaAndLengthsParams = new esri.tasks.AreasAndLengthsParameters();
+                areaAndLengthsParams.areaUnit = esri.tasks.GeometryService[dijit.byId("arealUnitSelect").value];
+                areaAndLengthsParams.lengthUnit = esri.tasks.GeometryService[dijit.byId("lengthUnitSelect").value];
+                areaAndLengthsParams.polygons = [geometry];
+                geometryService.areasAndLengths(areaAndLengthsParams,
+                    function (areasAndLengths) {
+                        var areas = areasAndLengths.areas;
+                        var lengths = areasAndLengths.lengths;
+                        if (areas && areas.length > 0 && lengths && lengths.length > 0) {
+                            alert("area: " + areas[0] + " " + unitLabels[dijit.byId("arealUnitSelect").value] +
+                            "\nlength: " + lengths[0] + " " + unitLabels[dijit.byId("lengthUnitSelect").value]
+                            );
+                        }
+                    },
+                    function (error) { if (console && console.error) { console.error(error); } }
+                );
+            }
         });
 
         // Set up the zoom select boxes.
