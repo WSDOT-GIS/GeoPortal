@@ -12,6 +12,7 @@
 /// <reference path="json2.js" />
 /// <reference path="kmlGraphicsLayer.js" />
 /// <reference path="layerList.js" />
+/// <reference path="locationInfo.js" />
 
 (function ($) {
     "use strict";
@@ -121,6 +122,10 @@
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
             var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             var toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
+
+            // Location Informatoin tools
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
+            $("#locationInfoControl").locationInfo("proxy.ashx?http://hqolymgis19d/LocationInfo/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false")
 
             // Measure tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Measure" }, "measureControls"));
