@@ -1,9 +1,10 @@
 ﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.11/jquery-ui.js"/>
-/*global jQuery, dojo */
-/*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
+/*global jQuery, dojo, esri */
+/*jslint white: false, browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
 (function ($) {
+    "use strict";
     $.fn.locationInfo = function (layerListUrl) {
         /// <summary>Creates the location information UI.</summary>
         /// <param name="layerListUrl" type="String">URL for the layer list REST endpoint.</param>
@@ -17,9 +18,10 @@
             nodes.bufferControl = $("<div>");
             nodes.bufferControl.addClass("wsdot-location-info-buffer").append("<label>Buffer</label>");
 
-            nodes.bufferValue = $("<input type='number' value='0' class='wsdot-location-info-buffer-size'>");
+            nodes.bufferValue = $("<input type='number' value='0' min='0' class='wsdot-location-info-buffer-size'>");
             nodes.bufferControl.append(nodes.bufferValue);
 
+            // These are all of the measurement units for the buffer.
             var units = [
                 { "name": "Foot", "value": 9002, "description": "Feet" },
                 { "name": "InternationalInch", "value": 109008, "description": "Inches" },
@@ -76,8 +78,8 @@
                 { "name": "UKNauticalMile", "value": 109013, "description": "UK nautical mile (pre-1970)" }
             ];
 
-            nodes.bufferUnitSelect = $("<select class='unit-select'>");
-            // nodes.bufferUnitSelect.append("<option value='Foot'>Foot</option>");
+            nodes.bufferUnitSelect = $("<select id='wsdot-location-info-buffer-unit-select'>");
+            // Add an option for each measurement unit.
             $.each(units, function (index, value) {
                 nodes.bufferUnitSelect.append("<option value='" + value.name + "' data-wkid='" + value.value + "'>" + value.description + "</option>");
             });
@@ -89,11 +91,11 @@
             /*
             "data" (the layer list) looks like this:
             [
-                {"UniqueId":1,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":0,"LayerName":"County Boundary","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
-                {"UniqueId":2,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":1,"LayerName":"WSDOT Region","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
-                {"UniqueId":3,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":2,"LayerName":"Township Section Range","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
-                {"UniqueId":4,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":3,"LayerName":"City Limit","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
-                {"UniqueId":5,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":4,"LayerName":"Public Lands","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null}
+            {"UniqueId":1,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":0,"LayerName":"County Boundary","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
+            {"UniqueId":2,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":1,"LayerName":"WSDOT Region","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
+            {"UniqueId":3,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":2,"LayerName":"Township Section Range","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
+            {"UniqueId":4,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":3,"LayerName":"City Limit","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null},
+            {"UniqueId":5,"HostName":"hqolymgis06p","MapServiceName":"CGIS\/QueryMapService","MapId":0,"MapName":"QueryMapService","LayerId":4,"LayerName":"Public Lands","MapServiceUrl":"http:\/\/hqolymgis06p\/ArcGIS\/services\/CGIS\/QueryMapService\/MapServer","Metadata":null}
             ]
             */
 
@@ -106,6 +108,7 @@
 
             nodes.tbody = $("tbody", nodes.dataSetsTable);
 
+            // Add checkbox, label, and metadata button for each layer.
             $.each(data, function (index, layer) {
                 nodes.row = $("<tr>");
                 nodes.checkbox = $("<input type='checkbox'>");
@@ -118,8 +121,7 @@
                 nodes.button = $("<button>Metadata</button>");
                 if (layer.Metadata) {
                     nodes.button.attr("data-Metadata", layer.Metadata);
-                }
-                else {
+                } else {
                     nodes.button.attr("disabled", true);
                 }
                 nodes.td = $("<td class='metadata'>");
@@ -145,10 +147,5 @@
             load: createControl,
             error: function (error) { if (console && console.error) { console.error(error); } }
         }, { useProxy: true, usePost: false });
-
-
-
-
-
-    }
-})(jQuery);
+    };
+}(jQuery));
