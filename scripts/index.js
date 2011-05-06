@@ -125,7 +125,10 @@
 
             // Location Informatoin tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
-            $("#locationInfoControl").locationInfo("proxy.ashx?http://hqolymgis19d/LocationInfo/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false")
+            $("#locationInfoControl").locationInfo("http://hqolymgis19d/LocationInfo/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false");
+
+
+
 
             // Measure tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Measure" }, "measureControls"));
