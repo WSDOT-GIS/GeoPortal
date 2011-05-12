@@ -241,7 +241,7 @@
                             title: "Functional Class",
                             layers: [
                                 new esri.dijit.BasemapLayer({
-                                    url: "http://hqolymgis18p/ArcGIS/rest/services/WSDOTFunctionalClassBaseMap/MapServer"
+                                    url: "http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer"
                                 })
                             ]
                         })
@@ -324,14 +324,9 @@
                     }
                 }
             });
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis18p/ArcGIS/rest/services/ILT_CityLimits/MapServer", { id: "City Limits", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis18p/ArcGIS/rest/services/WSDOTFunctionalClassMap/MapServer", { id: "Functional Class", visible: false }));
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer", { id: "City Limits", visible: false })).setVisibleLayers([10,11,12,13 /*,22,23,24*/]);
 
-
-
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis18p/ArcGIS/rest/services/ILT_RoadLabels/MapServer", { id: "Road Labels", visible: false }));
-
-
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer", { id: "Functional Class", visible: false }));
 
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer", { id: "Traffic Flow", visible: false }));
 
@@ -593,14 +588,14 @@
 
 
         // Setup extents for cities and urbanized area zoom tools.
-        var cityQueryTask = new esri.tasks.QueryTask("http://hqolymgis18p/ArcGIS/rest/services/ILT/ILT_CityLimits/MapServer/0");
+        var cityQueryTask = new esri.tasks.QueryTask("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12");
         var query = new esri.tasks.Query();
         query.where = "1 = 1";
         query.returnGeometry = true;
         query.outFields = ["NAME"];
         cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
 
-        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://hqolymgis18p/ArcGIS/rest/services/WSDOTFunctionalClassBaseMap/MapServer/24");
+        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24");
         query.where = "1 = 1";
         query.returnGeometry = true;
         urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect"); });

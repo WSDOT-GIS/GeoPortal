@@ -156,6 +156,7 @@
             nodes.shapeButtons.append("<button id='wsdot-location-info-point' >Point</button>").append("<button id='wsdot-location-info-polyline'>Polyline</button>").append("<button id='wsdot-location-info-polygon'>Polygon</button>");
             uiNode.append(nodes.shapeButtons);
 
+            // TODO: Set up button click events to draw geometries.  When the geometries are drawn, call the location info service and display the results as graphics.
             dijit.form.Button({ label: "Point" }, "wsdot-location-info-point");
             dijit.form.Button({ label: "Line" }, "wsdot-location-info-polyline");
             dijit.form.Button({ label: "Polygon" }, "wsdot-location-info-polygon");
