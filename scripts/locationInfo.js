@@ -22,6 +22,8 @@
             // Set up an object for temprorarily holding DOM nodes as they are created.  Once added to "uiNode" they can be deleted from the nodes object.
             var nodes = {};
             nodes.bufferControl = $("<div>");
+            // TODO: Remove this notice when the control is finished.
+            nodes.bufferControl.append("<p style='font-weight:bold; color: red'>This control is not yet completed.  Please don't complain about it not working.</p>");
             nodes.bufferControl.addClass("wsdot-location-info-buffer").append("<label style='padding-right: 5px'>Buffer</label>");
 
             nodes.bufferValue = $("<input type='number' value='0' min='0' id='wsdot-location-info-buffer-size'>");
@@ -157,9 +159,9 @@
             uiNode.append(nodes.shapeButtons);
 
             // TODO: Set up button click events to draw geometries.  When the geometries are drawn, call the location info service and display the results as graphics.
-            dijit.form.Button({ label: "Point" }, "wsdot-location-info-point");
-            dijit.form.Button({ label: "Line" }, "wsdot-location-info-polyline");
-            dijit.form.Button({ label: "Polygon" }, "wsdot-location-info-polygon");
+            dijit.form.Button({ label: "Point" }, "wsdot-location-info-point").set("disabled", true);
+            dijit.form.Button({ label: "Line" }, "wsdot-location-info-polyline").set("disabled", true);
+            dijit.form.Button({ label: "Polygon" }, "wsdot-location-info-polygon").set("disabled", true);
         }
 
         esri.request({
