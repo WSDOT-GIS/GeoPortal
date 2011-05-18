@@ -8,9 +8,9 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>GRDO Map Application</title>
 
-    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css" />
-    <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" type="text/css" />
-    <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.2/js/dojo/dojox/image/resources/Lightbox.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.3/js/dojo/dijit/themes/claro/claro.css" />
+    <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.3/js/dojo/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" type="text/css" />
+    <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.3/js/dojo/dojox/image/resources/Lightbox.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" type="text/css" media="all" />
     
     <link rel="shortcut icon" href="http://www.wsdot.wa.gov/favicon.ico" />
@@ -57,36 +57,7 @@
                             </div>
                         </div>
                         <div id="measureControls" title="Measure">
-                            <div>
-                                <label for="lengthUnitSelect">Linear Units</label>
-                                <select id="lengthUnitSelect">
-                                    <option value="UNIT_FOOT" title="Feet">Foot</option>
-                                    <option value="UNIT_KILOMETER" title="km">Kilometer</option>
-                                    <option value="UNIT_METER" title="m">International meters</option>
-                                    <option value="UNIT_NAUTICAL_MILE" title="nautical miles">Nautical Miles (1,852 meters)</option>
-                                    <option value="UNIT_STATUTE_MILE" title="mi" selected="selected">Miles</option>
-                                    <option value="UNIT_US_NAUTICAL_MILE" title="US Nautical Miles">US Nautical Mile </option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="arealUnitSelect">Areal Units</label>
-                                <select id="arealUnitSelect">
-                                    <option value="UNIT_ACRES">Acres</option>
-                                    <option value="UNIT_ARES">Ares</option>
-                                    <option value="UNIT_HECTARES">Hectares</option>
-                                    <option value="UNIT_SQUARE_CENTIMETERS">Square Centimeters</option>
-                                    <option value="UNIT_SQUARE_DECIMETERS">Square Decimeters</option>
-                                    <option value="UNIT_SQUARE_FEET">Square Feet</option>
-                                    <option value="UNIT_SQUARE_INCHES">Square Inches</option>
-                                    <option value="UNIT_SQUARE_KILOMETERS">Square Kilometers</option>
-                                    <option value="UNIT_SQUARE_METERS">Square Meters</option>
-                                    <option value="UNIT_SQUARE_MILES">Square Miles</option>
-                                    <option value="UNIT_SQUARE_MILLIMETERS">Square Millimeters</option>
-                                    <option value="UNIT_SQUARE_YARDS">Square Yards</option>
-                                </select>
-                            </div>
-                            <button id="measureLengthButton">Measure Length</button>
-                            <button id="measureAreaButton">Measure Area</button>
+                            <div id="measureWidget"></div>
                         </div>
                         <div id="zoomControls" title="Zoom Controls">
                             <button id="fullExtentButton">Full Extent</button>
@@ -145,7 +116,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"></script>
+    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" type="text/javascript"></script>
 

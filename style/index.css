@@ -7,6 +7,7 @@
     background: white;
     color: Black;
     font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
 }
 #headerPane 
 {
@@ -38,7 +39,7 @@
 #northArrow 
 {
     position: absolute;
-    bottom: 20px;
+    bottom: 5px;
     right: 20px;
     z-index: 10;
     width: 43px;

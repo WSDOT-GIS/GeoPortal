@@ -68,6 +68,7 @@
     dojo.require("esri.toolbars.navigation");
     dojo.require("esri.toolbars.draw");
     dojo.require("esri.dijit.Legend");
+    dojo.require("esri.dijit.Measurement");
 
     dojo.require("dojox.image.Lightbox");
 
@@ -75,16 +76,7 @@
     var extents = null;
     var navToolbar;
     var notices = {};
-    var drawToolbar;
     var geometryService;
-
-
-
-
-
-
-
-
 
     function init() {
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
@@ -125,26 +117,12 @@
 
             // Location Informatoin tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
-            $("#locationInfoControl").locationInfo("http://hqolymgis19d/LocationInfo/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false");
-
-
+            
 
 
             // Measure tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Measure" }, "measureControls"));
-            dijit.form.Button({
-                onClick: function (event) {
-                    drawToolbar.activate(esri.toolbars.Draw.POLYLINE);
-                }
-            }, "measureLengthButton");
-            dijit.form.Select({ label: "Measure Units" }, "lengthUnitSelect");
 
-            dijit.form.Button({
-                onClick: function (event) {
-                    drawToolbar.activate(esri.toolbars.Draw.POLYGON);
-                }
-            }, "measureAreaButton");
-            dijit.form.Select(null, "arealUnitSelect");
 
 
             // Zoom tools
@@ -193,20 +171,25 @@
             logo: false,
             extent: initExtent,
             lods: [
-		        { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
-		        { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
-		        { "level": 3, "resolution": 305.748113140558, "scale": 1155581.108577 },
-		        { "level": 4, "resolution": 152.874056570411, "scale": 577790.554289 },
-		        { "level": 5, "resolution": 76.4370282850732, "scale": 288895.277144 },
-		        { "level": 6, "resolution": 38.2185141425366, "scale": 144447.638572 },
-		        { "level": 7, "resolution": 19.1092570712683, "scale": 72223.819286 },
-		        { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
-		        { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
-		        { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
-		        { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
-		    ]
+                { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
+                { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
+                { "level": 3, "resolution": 305.748113140558, "scale": 1155581.108577 },
+                { "level": 4, "resolution": 152.874056570411, "scale": 577790.554289 },
+                { "level": 5, "resolution": 76.4370282850732, "scale": 288895.277144 },
+                { "level": 6, "resolution": 38.2185141425366, "scale": 144447.638572 },
+                { "level": 7, "resolution": 19.1092570712683, "scale": 72223.819286 },
+                { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
+                { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
+                { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
+                { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
+            ]
         });
         var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
+
+        $("#locationInfoControl").locationInfo(map, "http://hqolymgis19d/LocationInfo");
+        esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
+
+
         map.addLayer(initBasemap);
         notices.updatingMap = $.pnotify({
             pnotify_title: "Updating map...",
@@ -324,7 +307,7 @@
                     }
                 }
             });
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer", { id: "City Limits", visible: false })).setVisibleLayers([10,11,12,13 /*,22,23,24*/]);
+            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer", { id: "City Limits", visible: false })).setVisibleLayers([10, 11, 12, 13 /*,22,23,24*/]);
 
             map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer", { id: "Functional Class", visible: false }));
 
@@ -468,69 +451,6 @@
         dojo.connect(navToolbar, "onExtentHistoryChange", function () {
             dijit.byId("previousExtentButton").disabled = navToolbar.isFirstExtent();
             dijit.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
-        });
-
-        // Setup the draw toolbar.
-        drawToolbar = new esri.toolbars.Draw(map);
-        dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
-
-            var unitLabels = {
-                UNIT_ACRES: "acres",
-                UNIT_ARES: "ares",
-                UNIT_FOOT: "ft",
-                UNIT_HECTARES: "ha",
-                UNIT_KILOMETER: "km",
-                UNIT_METER: "m",
-                UNIT_NAUTICAL_MILE: "NM",
-                UNIT_SQUARE_CENTIMETERS: "cm²",
-                UNIT_SQUARE_DECIMETERS: "Square Decimeters",
-                UNIT_SQUARE_FEET: "ft²",
-                UNIT_SQUARE_INCHES: "in²",
-                UNIT_SQUARE_KILOMETERS: "km²",
-                UNIT_SQUARE_METERS: "m²",
-                UNIT_SQUARE_MILES: "mi²",
-                UNIT_SQUARE_MILLIMETERS: "mm²",
-                UNIT_SQUARE_YARDS: "yd²",
-                UNIT_STATUTE_MILE: "mi",
-                UNIT_US_NAUTICAL_MILE: "US Nautical Mile(s)"
-            };
-
-
-            drawToolbar.deactivate();
-            if (geometry.type === "polyline") {
-                var lengthsParameters = new esri.tasks.LengthsParameters();
-                lengthsParameters.geodesic = true;
-                lengthsParameters.polylines = [geometry];
-                lengthsParameters.lengthUnit = esri.tasks.GeometryService[dijit.byId("lengthUnitSelect").value];
-
-
-                geometryService.lengths(lengthsParameters,
-                    function (lengths) {
-                        lengths = lengths.lengths
-                        if (lengths && lengths.length > 0) {
-                            alert(lengths[0] + " " + unitLabels[dijit.byId("lengthUnitSelect").value]);
-                        }
-                    },
-                    function (error) { if (console && console.error) { console.error(error); } }
-                );
-            } else if (geometry.type === "polygon") {
-                var areaAndLengthsParams = new esri.tasks.AreasAndLengthsParameters();
-                areaAndLengthsParams.areaUnit = esri.tasks.GeometryService[dijit.byId("arealUnitSelect").value];
-                areaAndLengthsParams.lengthUnit = esri.tasks.GeometryService[dijit.byId("lengthUnitSelect").value];
-                areaAndLengthsParams.polygons = [geometry];
-                geometryService.areasAndLengths(areaAndLengthsParams,
-                    function (areasAndLengths) {
-                        var areas = areasAndLengths.areas;
-                        var lengths = areasAndLengths.lengths;
-                        if (areas && areas.length > 0 && lengths && lengths.length > 0) {
-                            alert("area: " + areas[0] + " " + unitLabels[dijit.byId("arealUnitSelect").value] +
-                            "\nlength: " + lengths[0] + " " + unitLabels[dijit.byId("lengthUnitSelect").value]
-                            );
-                        }
-                    },
-                    function (error) { if (console && console.error) { console.error(error); } }
-                );
-            }
         });
 
         // Set up the zoom select boxes.

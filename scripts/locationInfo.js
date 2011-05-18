@@ -11,10 +11,17 @@
     dojo.require("dijit.form.NumberSpinner");
     dojo.require("dijit.form.Select");
 
-    $.fn.locationInfo = function (layerListUrl) {
+    dojo.require("esri.toolbars.draw");
+
+    $.fn.locationInfo = function (map, layerListUrl) {
         /// <summary>Creates the location information UI.</summary>
         /// <param name="layerListUrl" type="String">URL for the layer list REST endpoint.</param>
+
         var uiNode = this;
+
+        if (!map) {
+            throw new Error("No map was specified.");
+        }
 
         function createControl(data) {
             uiNode.addClass("ui-location-info");
@@ -158,14 +165,52 @@
             nodes.shapeButtons.append("<button id='wsdot-location-info-point' >Point</button>").append("<button id='wsdot-location-info-polyline'>Polyline</button>").append("<button id='wsdot-location-info-polygon'>Polygon</button>");
             uiNode.append(nodes.shapeButtons);
 
-            // TODO: Set up button click events to draw geometries.  When the geometries are drawn, call the location info service and display the results as graphics.
-            dijit.form.Button({ label: "Point" }, "wsdot-location-info-point").set("disabled", true);
-            dijit.form.Button({ label: "Line" }, "wsdot-location-info-polyline").set("disabled", true);
-            dijit.form.Button({ label: "Polygon" }, "wsdot-location-info-polygon").set("disabled", true);
+            var drawToolbar = new esri.toolbars.Draw(map, { showTooltips: true });
+            dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
+                drawToolbar.deactivate();
+                var points;
+                switch (geometry.type) {
+                    case "point":
+                        points = [geometry.x, geometry.y];
+                        break;
+                    case "polyline":
+                        points = geometry.paths;
+                        break;
+                    case "polygon":
+                        points = geometry.rings;
+                        break;
+                    default:
+                        throw new Error("Invalid geometry type.");
+                }
+                points = JSON.stringify(points);
+                var layerIds = [];
+                try {
+                    $("[id^=wsdot-location-info-layer-]:checked").map(function (index, element) { layerIds.push(dijit.byId($(element).attr("id")).value); });
+                    layerIds = JSON.stringify(layerIds);
+                } catch (err) {
+                    console.error(err)
+                }
+                var params = {
+                    locationInfoUrl: layerListUrl,
+                    geometries: points,
+                    sr: map.spatialReference.wkid,
+                    bufferUnit: dijit.byId("wsdot-location-info-buffer-unit-select").value,
+                    layerUniqueIds: layerIds
+                };
+                var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}"); // layerListUrl + "/Query.ashx?geometries
+                console.debug(url);
+            });
+
+            // Set up button click events to draw geometries.  When the geometries are drawn, call the location info service and display the results as graphics.
+            dijit.form.Button({ label: "Point", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POINT); } }, "wsdot-location-info-point");
+            dijit.form.Button({ label: "Line", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYLINE); } }, "wsdot-location-info-polyline");
+            dijit.form.Button({ label: "Polygon", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYGON); } }, "wsdot-location-info-polygon");
         }
 
+
+
         esri.request({
-            url: layerListUrl,
+            url: layerListUrl + "/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false",
             content: null,
             handleAs: "json",
             load: createControl,
