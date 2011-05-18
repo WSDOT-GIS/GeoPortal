@@ -29,8 +29,6 @@
             // Set up an object for temprorarily holding DOM nodes as they are created.  Once added to "uiNode" they can be deleted from the nodes object.
             var nodes = {};
             nodes.bufferControl = $("<div>");
-            // TODO: Remove this notice when the control is finished.
-            nodes.bufferControl.append("<p style='font-weight:bold; color: red'>This control is not yet completed.  Please don't complain about it not working.</p>");
             nodes.bufferControl.addClass("wsdot-location-info-buffer").append("<label style='padding-right: 5px'>Buffer</label>");
 
             nodes.bufferValue = $("<input type='number' value='0' min='0' id='wsdot-location-info-buffer-size'>");
@@ -144,7 +142,14 @@
                 nodes.tbody.append(nodes.row);
 
                 dijit.form.CheckBox({
-                    value: layer.UniqueId
+                    value: layer.UniqueId,
+                    onClick: function (e) {
+                        var shouldEnable = $("[id^=wsdot-location-info-layer-]:checked").length > 0;
+                        $.each(["wsdot-location-info-point", "wsdot-location-info-polyline", "wsdot-location-info-polygon"], function (index, valueOfElement) {
+                            dijit.byId(valueOfElement).set("disabled",!shouldEnable);
+                        });
+
+                    }
                 }, nodes.checkbox[0]);
 
                 nodes.button = dijit.form.Button({ label: "Metadata", id: "wsdot-location-info-metadata-button-" + layer.UniqueId }, nodes.button[0]);
@@ -194,17 +199,19 @@
                     locationInfoUrl: layerListUrl,
                     geometries: points,
                     sr: map.spatialReference.wkid,
+                    bufferDistance: dijit.byId("wsdot-location-info-buffer-size").value,
                     bufferUnit: dijit.byId("wsdot-location-info-buffer-unit-select").value,
                     layerUniqueIds: layerIds
                 };
-                var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}"); // layerListUrl + "/Query.ashx?geometries
-                console.debug(url);
+                var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
+
+                window.open(url);
             });
 
             // Set up button click events to draw geometries.  When the geometries are drawn, call the location info service and display the results as graphics.
-            dijit.form.Button({ label: "Point", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POINT); } }, "wsdot-location-info-point");
-            dijit.form.Button({ label: "Line", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYLINE); } }, "wsdot-location-info-polyline");
-            dijit.form.Button({ label: "Polygon", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYGON); } }, "wsdot-location-info-polygon");
+            dijit.form.Button({ label: "Point", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POINT); } }, "wsdot-location-info-point").set("disabled", true);
+            dijit.form.Button({ label: "Line", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYLINE); } }, "wsdot-location-info-polyline").set("disabled", true);
+            dijit.form.Button({ label: "Polygon", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYGON); } }, "wsdot-location-info-polygon").set("disabled", true);
         }
 
 
