@@ -13,9 +13,9 @@
 
     dojo.require("esri.toolbars.draw");
 
-    $.fn.locationInfo = function (map, layerListUrl) {
+    $.fn.locationInfo = function (map, locationInfoUrl) {
         /// <summary>Creates the location information UI.</summary>
-        /// <param name="layerListUrl" type="String">URL for the layer list REST endpoint.</param>
+        /// <param name="locationInfoUrl" type="String">URL for the layer list REST endpoint.</param>
 
         var uiNode = this;
 
@@ -196,15 +196,15 @@
                     console.error(err)
                 }
                 var params = {
-                    locationInfoUrl: layerListUrl,
+                    locationInfoUrl: locationInfoUrl,
                     geometries: points,
                     sr: map.spatialReference.wkid,
                     bufferDistance: dijit.byId("wsdot-location-info-buffer-size").value,
                     bufferUnit: dijit.byId("wsdot-location-info-buffer-unit-select").value,
                     layerUniqueIds: layerIds
                 };
-                var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
 
+                var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
                 window.open(url);
             });
 
@@ -217,7 +217,7 @@
 
 
         esri.request({
-            url: layerListUrl + "/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false",
+            url: locationInfoUrl + "/LocationInfoFinder.svc/rest/GetLayerList?includeMetadata=false",
             content: null,
             handleAs: "json",
             load: createControl,

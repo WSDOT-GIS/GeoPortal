@@ -213,6 +213,7 @@
                         new esri.dijit.Basemap({
                             id: "wsdotBasemap",
                             title: "WSDOT Basemap",
+                            thumbnailUrl: "images/WsdotBasemapThumbnail.jpg",
                             layers: [
                                 new esri.dijit.BasemapLayer({
                                     url: "http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer"
@@ -222,6 +223,7 @@
                         new esri.dijit.Basemap({
                             id: "functionalClassBasemap",
                             title: "Functional Class",
+                            thumbnailUrl: "images/HpmsBasemapThumbnail.png",
                             layers: [
                                 new esri.dijit.BasemapLayer({
                                     url: "http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer"

@@ -37,9 +37,11 @@
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
     <Content Include="images\greenlogo.png" />
+    <Content Include="images\HpmsBasemapThumbnail.png" />
     <Content Include="images\link.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
+    <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
     <Content Include="scripts\index.js" />
