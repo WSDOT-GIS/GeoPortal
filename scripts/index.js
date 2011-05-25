@@ -223,7 +223,7 @@
                         new esri.dijit.Basemap({
                             id: "functionalClassBasemap",
                             title: "Functional Class",
-                            thumbnailUrl: "images/HpmsBasemapThumbnail.png",
+                            thumbnailUrl: "images/FCBasemapThumbnail.png",
                             layers: [
                                 new esri.dijit.BasemapLayer({
                                     url: "http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer"
