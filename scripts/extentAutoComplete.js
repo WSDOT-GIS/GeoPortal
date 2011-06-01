@@ -1,4 +1,4 @@
-﻿/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.2"/>
+﻿/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"/>
 /// <reference path="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.js"/>
 
