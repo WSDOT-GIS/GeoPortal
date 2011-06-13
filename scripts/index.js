@@ -161,12 +161,18 @@
             esri.hide(dojo.byId("backContainer"));
 
             function createLocatedMilepostsLayer() {
-                /// <summary>Creates the "Located Mileposts" layer if it does not already exist.</summary>
+                /// <summary>
+                /// Creates the "Located Mileposts" layer if it does not already exist.  If the layer exists, visibility is turned on if it is not already visible.
+                /// </summary>
                 if (!locatedMilepostsLayer) {
                     locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
                     locatedMilepostsLayer.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleMarkerSymbol()));
                     locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", "${*}"));
                     map.addLayer(locatedMilepostsLayer);
+                }
+                // 
+                if (!locatedMilepostsLayer.visible) {
+                    locatedMilepostsLayer.show();
                 }
             }
 
@@ -185,9 +191,9 @@
                     "ArmCalcReturnCode": "ARM Calc Return Code",
                     "LrsType": "LRS Type",
                     "LOC_ANGLE": "Angle",
-                    "RouteID" : "Route",
-                    "OffsetDistance":"Offset Distance",
-                    "RightSide":"Right Side"
+                    "RouteID": "Route",
+                    "OffsetDistance": "Offset Distance",
+                    "RightSide": "Right Side"
                 };
                 for (var attr in result) {
                     if (attr.match(ignoreRe)) continue;
