@@ -41,9 +41,13 @@ wsdot.config = {
         }
     ],
     "basemapsToRemove": ["basemap_6"],
-    "gp": {
-        "Find Route Locations": "http://hqolymgis21t/ArcGIS/rest/services/Shared/WsdotLrs/GPServer/Find%20Route%20Locations",
-        "Locate Points Along All LRS":"http://hqolymgis21t/ArcGIS/rest/services/Shared/WsdotLrs/GPServer/Locate%20Points%20Along%20All%20LRS"
+    "locateMileposts": {
+        "url": "http://www.wsdot.wa.gov/Geospatial/Transformation/Coordinate/LocateMileposts.ashx",
+        "options": { "useProxy": false, "usePost": true }
+    },
+    "locateNearestMileposts": {
+        "url": "http://www.wsdot.wa.gov/Geospatial/Transformation/Coordinate/GetRouteCoordinatesNearestXYs.ashx",
+        "options": { "useProxy": false, "usePost": true }
     },
     "layers": [
         {

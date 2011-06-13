@@ -161,6 +161,7 @@
             esri.hide(dojo.byId("backContainer"));
 
             function createLocatedMilepostsLayer() {
+                /// <summary>Creates the "Located Mileposts" layer if it does not already exist.</summary>
                 if (!locatedMilepostsLayer) {
                     locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
                     locatedMilepostsLayer.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleMarkerSymbol()));
@@ -169,11 +170,11 @@
                 }
             }
 
-            function createAttributeTableForGraphic(graphic) {
+            function createAttributeTableForElcResult(result) {
                 var table = "<table>";
                 var value;
                 var dateRe = /^\w+Date$/i;
-                var ignoreRe = /(?:\w+Id)|(?:Back)/i // Define attributes that will not be in the info window.
+                var ignoreRe = /(?:Back)|(?:RoutePoint)|(?:EventPoint)/i // Define attributes that will not be in the info window.
                 var aliases = {
                     "Arm": "ARM",
                     "Measure": "ARM",
@@ -183,23 +184,29 @@
                     "RealignmentDate": "Realignment Date",
                     "ArmCalcReturnCode": "ARM Calc Return Code",
                     "LrsType": "LRS Type",
-                    "LOC_ANGLE": "Angle"
+                    "LOC_ANGLE": "Angle",
+                    "RouteID" : "Route",
+                    "OffsetDistance":"Offset Distance",
+                    "RightSide":"Right Side"
                 };
-                for (var attr in graphic.attributes) {
+                for (var attr in result) {
                     if (attr.match(ignoreRe)) continue;
-                    value = graphic.attributes[attr];
-                    if ((attr === "LOC_ERROR" && value === "NO ERROR") || (attr === "ArmCalcReturnCode" && value === 0)) continue;
+                    value = result[attr];
+                    if ((attr === "LocatingError" && value === "LOCATING_OK") || (attr === "Message" && value === "") || (attr === "OffsetDistance" && value === 0)) continue;
                     // Convert date values from long 
                     if (attr.match(dateRe)) {
                         value = new Date(value).toShortDateString();
                     }
-                    else if (attr === "Distance" && value < 0) {
-                        value = Math.abs(Math.round(value * 100) / 100);
+                    else if (attr === "OffsetDistance") {
+                        if (value < 0) {
+                            value = Math.abs(Math.round(value * 100) / 100);
+                        }
+                        value = value + "'";
                     }
-                    else if (attr === "Srmp" && Boolean(graphic.attributes["Back"]) === true) {
+                    else if (attr === "Srmp" && Boolean(result["Back"]) === true) {
                         value += "B";
                     }
-                    else if (attr.match(/(?:Distance)|(?:Measure)|(?:Arm)|(?:LOC_ANGLE)/i)) {
+                    else if (attr.match(/(?:\w*Distance)|(?:Measure)|(?:Arm)|(?:LOC_ANGLE)/i)) {
                         value = Math.round(value * 1000) / 1000
                     }
                     table += "<tr>"
@@ -219,99 +226,74 @@
             dijit.form.Button({ onClick: function () {
                 createLocatedMilepostsLayer();
 
-                var gp = esri.tasks.Geoprocessor(wsdot.config.gp["Find Route Locations"]);
-                gp.setOutSpatialReference(map.spatialReference);
-                var gpParameters = {
-                    locations: null
-                };
                 var location = {
-                    route: dijit.byId("routeTextBox").value,
-                    decrease: dijit.byId("decreaseCheckbox").checked
+                    Route: dijit.byId("routeTextBox").value,
+                    Decrease: dijit.byId("decreaseCheckbox").checked
                 }
                 if (dijit.byId("armRadioButton").checked) {
-                    location.arm = dijit.byId("milepostBox").value;
+                    location.Arm = dijit.byId("milepostBox").value;
                 }
                 else {
-                    location.srmp = dijit.byId("milepostBox").value;
-                    location.back = dijit.byId("backCheckBox").checked;
+                    location.Srmp = dijit.byId("milepostBox").value;
+                    location.Back = dijit.byId("backCheckBox").checked;
                 }
-                gpParameters.Locations = JSON.stringify([location]);
-                gpParameters.LrsYear = dijit.byId("lrsYearSelect").value;
-                gpParameters.ReferenceDate = dijit.byId("referenceDateBox").value;
 
                 esri.show(dojo.byId("milepostLoadingIcon"));
                 dijit.byId("findMilepostButton").set("disabled", true); ;
 
-                gp.execute(gpParameters, function (results, messages) {
-                    esri.hide(dojo.byId("milepostLoadingIcon"));
-                    dijit.byId("findMilepostButton").set("disabled", false);
-                    if (results.length >= 1 && results[0].value && results[0].value.features) {
-                        var features = results[0].value.features;
-                        var graphic;
-                        var geometry;
-                        for (i in features) {
-                            graphic = features[i];
-                            geometry = graphic.geometry;
-                            if (isNaN(geometry.x) || isNaN(geometry.y)) {
-                                $.pnotify({
-                                    pnotify_title: 'Unable to find route location',
-                                    pnotify_text: createAttributeTableForGraphic(graphic),
-                                    pnotify_hide: true
-                                });
-                            }
-                            else {
-                                graphic.setInfoTemplate(new esri.InfoTemplate("Route Location", createAttributeTableForGraphic(graphic)));
-                                locatedMilepostsLayer.add(graphic);
+
+                esri.request({
+                    url: wsdot.config.locateMileposts.url,
+                    content: {
+                        referenceDate: dijit.byId("referenceDateBox").value,
+                        routeLocations: JSON.stringify([location]),
+                        spatialReference: map.spatialReference.wkid
+                    },
+                    handleAs: "json",
+                    load: function (results) {
+                        esri.hide(dojo.byId("milepostLoadingIcon"));
+                        dijit.byId("findMilepostButton").set("disabled", false);
+
+                        // Process the results.
+                        if (results.length >= 1) {
+                            var graphic;
+                            var geometry = null;
+                            var result;
+                            for (i in results) {
+                                result = results[i];
+                                if (result.RoutePoint) {
+                                    geometry = new esri.geometry.Point(result.RoutePoint);
+                                    graphic = new esri.Graphic(geometry, null, result, new esri.InfoTemplate("Route Location", createAttributeTableForElcResult(result)));
+                                    locatedMilepostsLayer.add(graphic);
+                                }
+                                else {
+                                    $.pnotify({
+                                        pnotify_title: 'Unable to find route location',
+                                        pnotify_text: createAttributeTableForElcResult(result),
+                                        pnotify_hide: true
+                                    });
+                                }
+
+
                             }
                         }
 
                         // Zoom to the last geometry added to the map.
-                        if (geometry.type === "point") {
-                            if (!isNaN(geometry.x) && !isNaN(geometry.y)) {
-                                map.centerAndZoom(geometry, 12);
+                        if (geometry !== null) {
+                            if (geometry.type === "point") {
+                                if (!isNaN(geometry.x) && !isNaN(geometry.y)) {
+                                    map.centerAndZoom(geometry, 12);
+                                }
+                            }
+                            else {
+                                map.setExtent(geometry.getExtent(), true);
                             }
                         }
-                        else {
-                            map.setExtent(geometry.getExtent(), true);
-                        }
-
-                    }
-                }, function (error) {
-                    esri.hide(dojo.byId("milepostLoadingIcon"));
-                    dijit.byId("findMilepostButton").set("disabled", false);
-                    $.pnotify({
-                        pnotify_title: 'Geoprocessing Error',
-                        pnotify_text: error,
-                        pnotify_type: 'error',
-                        pnotify_hide: false
-                    });
-                });
-
+                    },
+                    error: function (error) { }
+                }, wsdot.config.locateMileposts.options)
             }
             }, "findMilepostButton");
-
-
-            // Load the list of LRS Years.  Upon completion, add these options to the list and create select dijit.
-            esri.request({
-                url: wsdot.config.gp["Find Route Locations"],
-                content: { f: "json" },
-                handleAs: "json",
-                load: function (data) {
-                    // Get a list of choices from the second parameter.
-                    var choiceList = data.parameters[1].choiceList;
-                    // Get all of the select items that need to be populated with this data.
-                    var select = $(".lrsYear");
-                    // Add options for each LRS year to each of the select controls.
-                    $(choiceList).each(function (index, value) {
-                        select.append("<option value=\"" + value + "\">" + value + "</option>");
-                    });
-                    // Now that the select controls are populated, convert them into dijits.
-                    select.each(function (index, element) { dijit.form.Select(null, element); })
-
-
-                },
-                error: function (error) { console.error("Error getting list of LRS Years."); }
-            }, { useProxy: false, usePost: true });
 
             esri.hide(dojo.byId("milepostLoadingIcon"));
 
@@ -330,48 +312,62 @@
                     esri.show(loadingIcon);
                     drawToolbar.deactivate();
                     button.set("disabled", true);
-                    var gpParams = {
-                        Points: JSON.stringify([[geometry.x, geometry.y]]),
-                        RouteLayer: dijit.byId("routeLayerSelect").value,
-                        Radius: dijit.byId("radiusBox").value,
-                        PointsCS: "",
-                        Calculate_SRMP: true,
-                        RoutePart: "",
-                        RoutePartIsExact: ""
-                    };
 
-                    var gp = new esri.tasks.Geoprocessor(wsdot.config.gp["Locate Points Along All LRS"]);
-                    gp.setOutSpatialReference(map.spatialReference);
-                    gp.execute(gpParams, function (results, messages) {
-                        esri.hide(loadingIcon);
-                        button.set("disabled", false);
-                        if (results && results.length > 0 && results[0].value && results[0].value.features && results[0].value.features.length > 0) {
-                            var features = results[0].value.features;
-                            var currentFeature = null;
-                            for (var i = 0, l = features.length; i < l; i++) {
-                                currentFeature = features[i];
-                                var table = createAttributeTableForGraphic(currentFeature);
-                                currentFeature.setInfoTemplate(new esri.InfoTemplate("Route Location", table));
-                                locatedMilepostsLayer.add(currentFeature);
+                    esri.request({
+                        url: wsdot.config.locateNearestMileposts.url,
+                        content: {
+                            spatialReference: map.spatialReference.wkid,
+                            coordinates: geometry.x + "," + geometry.y,
+                            maxSearchDistance: dijit.byId("radiusBox").value
+                        },
+                        handleAs: "json",
+                        load: function (results) {
+                            esri.hide(loadingIcon);
+                            button.set("disabled", false);
+
+                            if (results && results.length > 0) {
+                                var currentResult;
+                                var table;
+                                var graphic;
+                                var geometry;
+                                for (var i = 0, l = results.length; i < l; i++) {
+
+                                    currentResult = results[i];
+                                    table = createAttributeTableForElcResult(currentResult);
+                                    if (currentResult.RoutePoint) {
+                                        geometry = new esri.geometry.Point(currentResult.RoutePoint);
+                                        geometry.setSpatialReference(map.spatialReference);
+                                        graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult, "infoTemplate": new esri.InfoTemplate("Route Location", createAttributeTableForElcResult(currentResult)) });
+                                        locatedMilepostsLayer.add(graphic);
+                                    }
+                                    else {
+                                        $.pnotify({
+                                            pnotify_title: 'No routes found',
+                                            pnotify_text: currentResult.LocatingError,
+                                            pnotify_history: false
+                                        });
+                                    }
+                                }
                             }
-                        }
-                        else {
+                            else {
+                                $.pnotify({
+                                    pnotify_title: 'No routes found',
+                                    pnotify_text: 'No routes were found within the given search radius',
+                                    pnotify_history: false
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            esri.hide(loadingIcon);
+                            button.set("disabled", false);
                             $.pnotify({
-                                pnotify_title: 'No routes found',
-                                pnotify_text: 'No routes were found within the given search radius',
-                                pnotify_history: false
+                                pnotify_title: 'Locating Error',
+                                pnotify_text: error,
+                                pnotify_type: 'error',
+                                pnotify_hide: false
                             });
                         }
-                    }, function (error) {
-                        esri.hide(loadingIcon);
-                        button.set("disabled", false);
-                        $.pnotify({
-                            pnotify_title: 'Geoprocessing Error',
-                            pnotify_text: error,
-                            pnotify_type: 'error',
-                            pnotify_hide: false
-                        });
-                    });
+                    }, wsdot.config.locateNearestMileposts.options);
                 });
                 drawToolbar.activate(esri.toolbars.Draw.POINT);
             }
