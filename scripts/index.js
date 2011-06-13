@@ -194,10 +194,7 @@
                     value = result[attr];
                     if ((attr === "LocatingError" && value === "LOCATING_OK") || (attr === "Message" && value === "") || (attr === "OffsetDistance" && value === 0)) continue;
                     // Convert date values from long 
-                    if (attr.match(dateRe)) {
-                        value = new Date(value).toShortDateString();
-                    }
-                    else if (attr === "OffsetDistance") {
+                    if (attr === "OffsetDistance") {
                         if (value < 0) {
                             value = Math.abs(Math.round(value * 100) / 100);
                         }
