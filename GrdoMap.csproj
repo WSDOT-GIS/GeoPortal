@@ -43,7 +43,8 @@
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
-    <Content Include="scripts\cameraGraphicsLayer.js" />
+    <Content Include="scripts\config.js" />
+    <Content Include="scripts\config.Release.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
@@ -51,9 +52,10 @@
     <Content Include="scripts\jquery.pnotify.min.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="scripts\kmlGraphicsLayer.js" />
+    <Content Include="config.ashx" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\locationInfo.js" />
     <Content Include="style\index.css" />
@@ -95,11 +97,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cameras.ashx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Cameras.ashx.cs">
-      <DependentUpon>Cameras.ashx</DependentUpon>
+    <Compile Include="config.ashx.cs">
+      <DependentUpon>config.ashx</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

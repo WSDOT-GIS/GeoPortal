@@ -13,9 +13,19 @@
 /// <reference path="kmlGraphicsLayer.js" />
 /// <reference path="layerList.js" />
 /// <reference path="locationInfo.js" />
+/// <reference path="config.js" />
 
 (function ($) {
     "use strict";
+
+    // Add a method to the Date object that will return a short date string.
+    if (typeof (Date.toShortDateString) === "undefined") {
+        Date.prototype.toShortDateString = function () {
+            /// <summary>Returns a string representation of the date in the format Month-Date-Year.</summary>
+            return this.getMonth() + "-" + this.getDate() + "-" + this.getFullYear();
+        }
+    }
+
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
         // Setup the contact us dialog.
@@ -54,6 +64,8 @@
     dojo.require("dijit.form.Select");
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.data.ItemFileReadStore");
+    dojo.require("dijit.form.NumberSpinner");
+    dojo.require("dijit.form.DateTextBox");
 
 
     dojo.require("dojo.parser");
@@ -69,6 +81,7 @@
     dojo.require("esri.toolbars.draw");
     dojo.require("esri.dijit.Legend");
     dojo.require("esri.dijit.Measurement");
+    dojo.require("esri.tasks.gp");
 
     dojo.require("dojox.image.Lightbox");
 
@@ -77,12 +90,13 @@
     var navToolbar;
     var notices = {};
     var geometryService;
+    var locatedMilepostsLayer = null;
 
     function init() {
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
-        //esri.config.defaults.geometryService = "http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer";
+        //esri.config.defaults.geometryService = wsdot.config.geometryServer;
 
-        var geometryService = new esri.tasks.GeometryService("http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer");
+        var geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
 
         // Opera doesn't display the zoom slider correctly.  This will make it look better.
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
@@ -108,16 +122,14 @@
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
 
-            var legendPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Tools" }, "legendPane");
+            var legendPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "legendPane");
             var tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
             var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             var toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
-            // Location Informatoin tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
-            
+
 
 
             // Measure tools
@@ -129,6 +141,245 @@
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
+
+            // Location Informatoin tools
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
+
+
+            // LRS Tools
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find Milepost" }, "findMilepost"));
+            dijit.form.TextBox({ style: "width: 100px" }, "routeTextBox");
+            dijit.form.NumberSpinner({ constraints: { min: 0 }, value: 0, style: "width: 100px" }, "milepostBox");
+            dijit.form.DateTextBox({ value: new Date() }, "referenceDateBox");
+            dijit.form.RadioButton({ onClick: function () { esri.hide(dojo.byId("backContainer")); }, checked: true }, "armRadioButton");
+            dijit.form.RadioButton({ onClick: function () { esri.show(dojo.byId("backContainer")); } }, "srmpRadioButton");
+            $("#findMilepost label:first-child").css("display", "block");
+
+            dijit.form.CheckBox(null, "decreaseCheckbox");
+
+            dijit.form.CheckBox(null, "backCheckBox");
+            esri.hide(dojo.byId("backContainer"));
+
+            function createLocatedMilepostsLayer() {
+                if (!locatedMilepostsLayer) {
+                    locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
+                    locatedMilepostsLayer.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleMarkerSymbol()));
+                    locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", "${*}"));
+                    map.addLayer(locatedMilepostsLayer);
+                }
+            }
+
+            function createAttributeTableForGraphic(graphic) {
+                var table = "<table>";
+                var value;
+                var dateRe = /^\w+Date$/i;
+                var ignoreRe = /(?:\w+Id)|(?:Back)/i // Define attributes that will not be in the info window.
+                var aliases = {
+                    "Arm": "ARM",
+                    "Measure": "ARM",
+                    "Srmp": "SRMP",
+                    "ReferenceDate": "Reference Date",
+                    "ResponseDate": "Response Date",
+                    "RealignmentDate": "Realignment Date",
+                    "ArmCalcReturnCode": "ARM Calc Return Code",
+                    "LrsType": "LRS Type",
+                    "LOC_ANGLE": "Angle"
+                };
+                for (var attr in graphic.attributes) {
+                    if (attr.match(ignoreRe)) continue;
+                    value = graphic.attributes[attr];
+                    if ((attr === "LOC_ERROR" && value === "NO ERROR") || (attr === "ArmCalcReturnCode" && value === 0)) continue;
+                    // Convert date values from long 
+                    if (attr.match(dateRe)) {
+                        value = new Date(value).toShortDateString();
+                    }
+                    else if (attr === "Distance" && value < 0) {
+                        value = Math.abs(Math.round(value * 100) / 100);
+                    }
+                    else if (attr === "Srmp" && Boolean(graphic.attributes["Back"]) === true) {
+                        value += "B";
+                    }
+                    else if (attr.match(/(?:Distance)|(?:Measure)|(?:Arm)|(?:LOC_ANGLE)/i)) {
+                        value = Math.round(value * 1000) / 1000
+                    }
+                    table += "<tr>"
+                    if (aliases[attr]) {
+                        table += "<th>" + aliases[attr] + "</th>";
+                    } else {
+                        table += "<th>" + attr + "</th>";
+                    }
+                    table += "<td>" + value + "</td>";
+                    table += "</tr>"
+                }
+                table += "</table>";
+                return table;
+            }
+
+
+            dijit.form.Button({ onClick: function () {
+                createLocatedMilepostsLayer();
+
+                var gp = esri.tasks.Geoprocessor(wsdot.config.gp["Find Route Locations"]);
+                gp.setOutSpatialReference(map.spatialReference);
+                var gpParameters = {
+                    locations: null
+                };
+                var location = {
+                    route: dijit.byId("routeTextBox").value,
+                    decrease: dijit.byId("decreaseCheckbox").checked
+                }
+                if (dijit.byId("armRadioButton").checked) {
+                    location.arm = dijit.byId("milepostBox").value;
+                }
+                else {
+                    location.srmp = dijit.byId("milepostBox").value;
+                    location.back = dijit.byId("backCheckBox").checked;
+                }
+                gpParameters.Locations = JSON.stringify([location]);
+                gpParameters.LrsYear = dijit.byId("lrsYearSelect").value;
+                gpParameters.ReferenceDate = dijit.byId("referenceDateBox").value;
+
+                esri.show(dojo.byId("milepostLoadingIcon"));
+                dijit.byId("findMilepostButton").set("disabled", true); ;
+
+                gp.execute(gpParameters, function (results, messages) {
+                    esri.hide(dojo.byId("milepostLoadingIcon"));
+                    dijit.byId("findMilepostButton").set("disabled", false);
+                    if (results.length >= 1 && results[0].value && results[0].value.features) {
+                        var features = results[0].value.features;
+                        var graphic;
+                        var geometry;
+                        for (i in features) {
+                            graphic = features[i];
+                            geometry = graphic.geometry;
+                            if (isNaN(geometry.x) || isNaN(geometry.y)) {
+                                $.pnotify({
+                                    pnotify_title: 'Unable to find route location',
+                                    pnotify_text: createAttributeTableForGraphic(graphic),
+                                    pnotify_hide: true
+                                });
+                            }
+                            else {
+                                graphic.setInfoTemplate(new esri.InfoTemplate("Route Location", createAttributeTableForGraphic(graphic)));
+                                locatedMilepostsLayer.add(graphic);
+                            }
+                        }
+
+                        // Zoom to the last geometry added to the map.
+                        if (geometry.type === "point") {
+                            if (!isNaN(geometry.x) && !isNaN(geometry.y)) {
+                                map.centerAndZoom(geometry, 12);
+                            }
+                        }
+                        else {
+                            map.setExtent(geometry.getExtent(), true);
+                        }
+
+                    }
+                }, function (error) {
+                    esri.hide(dojo.byId("milepostLoadingIcon"));
+                    dijit.byId("findMilepostButton").set("disabled", false);
+                    $.pnotify({
+                        pnotify_title: 'Geoprocessing Error',
+                        pnotify_text: error,
+                        pnotify_type: 'error',
+                        pnotify_hide: false
+                    });
+                });
+
+            }
+            }, "findMilepostButton");
+
+
+            // Load the list of LRS Years.  Upon completion, add these options to the list and create select dijit.
+            esri.request({
+                url: wsdot.config.gp["Find Route Locations"],
+                content: { f: "json" },
+                handleAs: "json",
+                load: function (data) {
+                    // Get a list of choices from the second parameter.
+                    var choiceList = data.parameters[1].choiceList;
+                    // Get all of the select items that need to be populated with this data.
+                    var select = $(".lrsYear");
+                    // Add options for each LRS year to each of the select controls.
+                    $(choiceList).each(function (index, value) {
+                        select.append("<option value=\"" + value + "\">" + value + "</option>");
+                    });
+                    // Now that the select controls are populated, convert them into dijits.
+                    select.each(function (index, element) { dijit.form.Select(null, element); })
+
+
+                },
+                error: function (error) { console.error("Error getting list of LRS Years."); }
+            }, { useProxy: false, usePost: true });
+
+            esri.hide(dojo.byId("milepostLoadingIcon"));
+
+            esri.hide(dojo.byId("findNearestLoadingIcon"));
+
+            // Setup find nearest milepost tools
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find Nearest Milepost" }, "findNearestMilepost"));
+            dijit.form.NumberSpinner({ constraints: { min: 0 }, value: 200, style: "width:100px" }, "radiusBox");
+            dijit.form.Button({ onClick: function () {
+                button = dijit.byId("findNearestMPButton");
+                var loadingIcon = dojo.byId("findNearestLoadingIcon");
+
+                createLocatedMilepostsLayer();
+                var drawToolbar = new esri.toolbars.Draw(map);
+                dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
+                    esri.show(loadingIcon);
+                    drawToolbar.deactivate();
+                    button.set("disabled", true);
+                    var gpParams = {
+                        Points: JSON.stringify([[geometry.x, geometry.y]]),
+                        RouteLayer: dijit.byId("routeLayerSelect").value,
+                        Radius: dijit.byId("radiusBox").value,
+                        PointsCS: "",
+                        Calculate_SRMP: true,
+                        RoutePart: "",
+                        RoutePartIsExact: ""
+                    };
+
+                    var gp = new esri.tasks.Geoprocessor(wsdot.config.gp["Locate Points Along All LRS"]);
+                    gp.setOutSpatialReference(map.spatialReference);
+                    gp.execute(gpParams, function (results, messages) {
+                        esri.hide(loadingIcon);
+                        button.set("disabled", false);
+                        if (results && results.length > 0 && results[0].value && results[0].value.features && results[0].value.features.length > 0) {
+                            var features = results[0].value.features;
+                            var currentFeature = null;
+                            for (var i = 0, l = features.length; i < l; i++) {
+                                currentFeature = features[i];
+                                var table = createAttributeTableForGraphic(currentFeature);
+                                currentFeature.setInfoTemplate(new esri.InfoTemplate("Route Location", table));
+                                locatedMilepostsLayer.add(currentFeature);
+                            }
+                        }
+                        else {
+                            $.pnotify({
+                                pnotify_title: 'No routes found',
+                                pnotify_text: 'No routes were found within the given search radius',
+                                pnotify_history: false
+                            });
+                        }
+                    }, function (error) {
+                        esri.hide(loadingIcon);
+                        button.set("disabled", false);
+                        $.pnotify({
+                            pnotify_title: 'Geoprocessing Error',
+                            pnotify_text: error,
+                            pnotify_type: 'error',
+                            pnotify_hide: false
+                        });
+                    });
+                });
+                drawToolbar.activate(esri.toolbars.Draw.POINT);
+            }
+            }, "findNearestMPButton");
+            $("#findNearestMilepost label:first-child").css("display", "block");
+
+
+
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
             legendPane.addChild(tabs);
@@ -186,7 +437,7 @@
         });
         var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
 
-        $("#locationInfoControl").locationInfo(map, "http://hqolymgis19d/LocationInfo");
+        $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
         esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
 
 
@@ -206,34 +457,36 @@
             esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
             function createBasemapGallery() {
+                var basemaps = wsdot.config.basemaps;
+                for (var i = 0, l = basemaps.length; i < l; i++) {
+                    for (layeri in basemaps.layers) {
+                        basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
+                    }
+                }
+
                 var basemapGallery = new esri.dijit.BasemapGallery({
                     showArcGISBasemaps: true,
                     map: map,
-                    basemaps: [
-                        new esri.dijit.Basemap({
-                            id: "wsdotBasemap",
-                            title: "WSDOT Basemap",
-                            thumbnailUrl: "images/WsdotBasemapThumbnail.jpg",
-                            layers: [
-                                new esri.dijit.BasemapLayer({
-                                    url: "http://hqolymgis17p/ArcGIS/rest/services/WSDOTBaseMap/WSDOTBaseMap/MapServer"
-                                })
-                            ]
-                        }),
-                        new esri.dijit.Basemap({
-                            id: "functionalClassBasemap",
-                            title: "Functional Class",
-                            thumbnailUrl: "images/FCBasemapThumbnail.png",
-                            layers: [
-                                new esri.dijit.BasemapLayer({
-                                    url: "http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer"
-                                })
-                            ]
-                        })
-                    ]
+                    basemaps: basemaps
                 }, "basemapGallery");
 
                 basemapGallery.startup();
+
+                // Remove the unwanted default basemaps as defined in config.js (if any are defined).
+                if (wsdot.config.basemapsToRemove) {
+                    dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
+                        for (var i = 0; i < this.length; i++) {
+                            var removed = basemapGallery.remove(this[i]);
+                            if (console) {
+                                if (removed === null) {
+                                    console.warn("Basemap removal failed: basemap not found: " + this[i]);
+                                }
+                            }
+                        }
+                    });
+                }
+
+
 
                 dojo.connect(basemapGallery, "onError", function (msg) {
                     // TODO: Show error message instead of just closing notification.
@@ -247,8 +500,6 @@
                     if (notices.loadingBasemap) {
                         notices.loadingBasemap.pnotify_remove();
                     }
-
-                    basemapGallery.getSelected();
                 });
             }
 
@@ -282,24 +533,37 @@
 
             $("#layerList").layerList(map);
 
-            map.addLayer(esri.layers.ArcGISTiledMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/GenericServices/StateRoutes_2D/MapServer", { id: "State Routes", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/MPO_2D/MapServer", { id: "MPO", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/RTPO_2D/MapServer", { id: "RTPO", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/TribalLands_2D/MapServer", { id: "Tribal Lands", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/TownshipSection_2D/MapServer", { id: "Township / Section", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/CountyBoundaries_2D/MapServer", { id: "County Boundaries", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/LegislativeDistricts_2D/MapServer", { id: "Legislative Districts", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/CongressionalDistricts_2D/MapServer", { id: "Congressional Districts", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis06p/ArcGIS/rest/services/CGIS/RegionBoundaries_2D/MapServer", { id: "Region Boundaries", visible: false }));
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://hqolymgis17p/ArcGIS/rest/services/WinterOperations/MaintenanceAreas/MapServer", { id: "Maintenance Areas", visible: false }));
+            // Load the layers that are defined in the config file.
+            for (var i = 0, l = wsdot.config.layers.length; i < l; i++) {
+                var layerInfo = wsdot.config.layers[i];
+                var constructor;
+                switch (layerInfo.layerType) {
+                    case "esri.layers.ArcGISTiledMapServiceLayer":
+                        constructor = esri.layers.ArcGISTiledMapServiceLayer;
+                        break;
+                    case "esri.layers.ArcGISDynamicMapServiceLayer":
+                        constructor = esri.layers.ArcGISDynamicMapServiceLayer;
+                        break;
+                    case "esri.layers.FeatureLayer":
+                        constructor = esri.layers.FeatureLayer;
+                        break;
+                    default:
+                        // Unsupported type.
+                        continue;
+                }
+                // Create an info template object if paramters are defined.
+                if (layerInfo.options && layerInfo.options.infoTemplate) {
+                    layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate)
+                }
+                var layer = constructor(layerInfo.url, layerInfo.options);
+                map.addLayer(layer);
+                if (layerInfo.visibleLayers) {
+                    layer.setVisibleLayers(layerInfo.visibleLayers);
+                }
+            }
 
-            var interchangeLayer = esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/InterchangeDrawings/MapServer/0", {
-                id: "Interchange Drawings",
-                outFields: ["PDFURL", "SRID", "LOC_ERROR"],
-                visible: false
-            });
-            map.addLayer(interchangeLayer);
-            dojo.connect(interchangeLayer, "onClick", function (event) {
+            // Connect the interchange drawings layer's onClick event so that when a graphic is clicked the associated PDF is opened in a new window or tab (depends on user's settings).
+            dojo.connect(map.getLayer("Interchange Drawings"), "onClick", function (event) {
                 var graphic = event.graphic;
                 if (graphic) {
                     var pdfUrl = graphic.attributes.PDFURL;
@@ -309,122 +573,6 @@
                     }
                 }
             });
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer", { id: "City Limits", visible: false })).setVisibleLayers([10, 11, 12, 13 /*,22,23,24*/]);
-
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer", { id: "Functional Class", visible: false }));
-
-            map.addLayer(esri.layers.ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer", { id: "Traffic Flow", visible: false }));
-
-            var monumentsLayer = new esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0", {
-                id: "Survey Monuments (NGS)",
-                outFields: ["*"],
-                infoTemplate: new esri.InfoTemplate("NGS Monument", "${*}"),
-                visible: false
-            });
-            ////map.addLayer(monumentsLayer);
-            ////var monumentsLayer = new esri.layers.FeatureLayer("http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4wsdot/MapServer/0", {
-            ////    id: "Survey Monuments (WSDOT)",
-            ////    outFields: ["*"],
-            ////    infoTemplate: new esri.InfoTemplate("WSDOT Monument", "${*}"),
-            ////    visible: false
-            ////});
-
-            // Add a graphics layer made from KML.
-            var cameraLayer = new wsdot.layers.CameraGraphicsLayer({
-                id: "Cameras",
-                url: "Cameras.ashx",
-                toWebMercator: true,
-                renderer: new esri.renderer.SimpleRenderer(esri.symbol.PictureMarkerSymbol("images/camera.png", 24, 12)),
-                visible: false
-            });
-            map.addLayer(monumentsLayer);
-
-            var alertLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Highway Alerts", iconWidth: 25, iconHeight: 25, url: "http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/kml.aspx", visible: false });
-            var mtnLayer = new wsdot.layers.KmlGraphicsLayer({ id: "Mtn. Pass Conditions", iconWidth: 19, iconHeight: 15, url: "http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/kml.aspx", visible: false });
-
-            map.addLayer(cameraLayer);
-
-
-            // Attach an event to each layer's onClick event that will show a jQuery dialog about the clicked graphic.
-            dojo.forEach([alertLayer, mtnLayer], function (layer) {
-                map.addLayer(layer);
-                dojo.connect(layer, "onClick", map, function (event) {
-                    var graphic = event.graphic;
-                    if (graphic) {
-                        $("#kmlDialog").remove();
-                        var kmlDialog = $("#kmlDialog");
-                        if (kmlDialog.length < 1) {
-                            kmlDialog = $("<div>").attr("id", "kmlDialog");
-                        }
-                        var screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
-                        var screenPosition = [screenPoint.x, screenPoint.y];
-                        kmlDialog.append(graphic.attributes.description).dialog({
-                            title: graphic.attributes.name,
-                            position: screenPosition
-                        });
-                        // When an image in the dialog loads, resize the dialog to fit it completely without scrolling and reposition so it is not off screen.
-                        $("img", kmlDialog).bind("load", undefined, function () {
-                            kmlDialog.dialog("option", "width", "auto").dialog("option", "height", "auto").dialog("option", "position", screenPosition);
-                        });
-                    }
-                }, undefined);
-            });
-
-            dojo.connect(cameraLayer, "onClick", map, function (event) {
-                var cameras = event.graphic.attributes.cameras;
-                // Clear existing images from a lightbox dialog.
-                var dialog = dijit.byId("dojoxLightboxDialog");
-                var groupName = "Cameras";
-
-                if (dialog) {
-                    dialog.removeGroup(groupName);
-                }
-                try {
-                    if (cameras.length === 1) {
-                        var camera = cameras[0];
-                        dialog.show({
-                            title: camera.title,
-                            href: camera.imageUrl
-                        }, groupName);
-                    } else {
-                        var camera;
-
-                        for (var i in cameras) {
-                            camera = cameras[i];
-                            dialog.addImage(
-                                {
-                                    title: camera.title,
-                                    href: camera.imageUrl
-                                },
-                                groupName
-                            );
-                        }
-
-                        // Show the dialog, passing in the last image.
-                        dialog.show(
-                            {
-                                title: cameras[0].title,
-                                href: cameras[0].imageUrl,
-                                group: groupName
-                            }
-                        );
-                    }
-                } catch (e) {
-                    if (console && console.error) {
-                        console.error(e);
-                    }
-                }
-
-
-            });
-
-            dojox.image.LightboxDialog({ id: "dojoxLightboxDialog" }).startup();
-            // The Lightbox icons (next, previous, and close) do not display in the claro theme.
-            // Force the lightbox to use the tundra theme instead to display the icons.
-            if (!dojo.hasClass("dojoxLightboxDialog", "tundra")) {
-                dojo.addClass("dojoxLightboxDialog", "tundra");
-            }
-
 
         });
 
@@ -508,19 +656,25 @@
         setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
         delete extents.countyExtents;
 
+        function CreateQueryTask(qtName) {
+            /// <summary>Creates a query task and query using settings from config.js.</summary>
+            /// <param name="qtName" type="String">The name of a query task from config.js.</param>
+            var queryTaskSetting = wsdot.config.queryTasks[qtName];
+            var qt = new esri.tasks.QueryTask(queryTaskSetting.url);
+            var query = new esri.tasks.Query();
+            for (var n in queryTaskSetting.query) {
+                query[n] = queryTaskSetting.query[n];
+            };
+            return { "task": qt, "query": query };
+        }
+
 
         // Setup extents for cities and urbanized area zoom tools.
-        var cityQueryTask = new esri.tasks.QueryTask("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12");
-        var query = new esri.tasks.Query();
-        query.where = "1 = 1";
-        query.returnGeometry = true;
-        query.outFields = ["NAME"];
-        cityQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
+        var cityQueryTask = CreateQueryTask("city");
+        cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
 
-        var urbanAreaQueryTask = new esri.tasks.QueryTask("http://wwwi.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24");
-        query.where = "1 = 1";
-        query.returnGeometry = true;
-        urbanAreaQueryTask.execute(query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect"); });
+        var urbanAreaQueryTask = CreateQueryTask("urbanArea");
+        urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect"); });
 
         // Associate labels with select controls, so that clicking on a label activates the corresponding control.
         dojo.attr("countyZoomLabel", "for", "countyZoomSelect");

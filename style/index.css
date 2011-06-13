@@ -198,3 +198,14 @@ img[src$="blank.gif"]
 {
     display: none;
 }
+
+#map_infowindow table 
+{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#map_infowindow table td
+{
+    border: 1px solid black;
+}
