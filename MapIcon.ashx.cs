@@ -84,6 +84,7 @@ namespace Wsdot.Grdo.Web.Mapping
                 g.DrawImageUnscaled(basemap, 0, 0);
                 g.Save();
 
+                // TODO: FIX: Setting the DPI and size parameters will result in a cropped output image.
 
                 // Get the bitmap for the non-basemap service.
                 if (!qsDict.ContainsKey("format"))
@@ -121,7 +122,6 @@ namespace Wsdot.Grdo.Web.Mapping
 
 
             
-            ////context.Response.wr
 
         }
 
