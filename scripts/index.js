@@ -85,6 +85,9 @@
 
     dojo.require("dojox.image.Lightbox");
 
+    // Add a category property to the esri.layers.Layer class.
+    dojo.extend(esri.layers.Layer, { "wsdotCategory": null });
+
     var map = null;
     var extents = null;
     var navToolbar;
@@ -530,7 +533,9 @@
 
             setExtentLink(map.extent);
 
-            $("#layerList").layerList(map);
+            // $("#layerList").layerList(map);
+
+            var layers = [];
 
             // Load the layers that are defined in the config file.
             for (var i = 0, l = wsdot.config.layers.length; i < l; i++) {
@@ -555,11 +560,18 @@
                     layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate)
                 }
                 var layer = constructor(layerInfo.url, layerInfo.options);
+                // Set the category property if a category has been specified for this layer.
+                if (layerInfo.wsdotCategory) {
+                    layer.wsdotCategory = layerInfo.wsdotCategory;
+                }
                 map.addLayer(layer);
                 if (layerInfo.visibleLayers) {
                     layer.setVisibleLayers(layerInfo.visibleLayers);
                 }
+                layers.push(layer);
             }
+
+            $("#layerList").layerList(layers);
 
             // Connect the interchange drawings layer's onClick event so that when a graphic is clicked the associated PDF is opened in a new window or tab (depends on user's settings).
             dojo.connect(map.getLayer("Interchange Drawings"), "onClick", function (event) {

@@ -40,7 +40,7 @@ wsdot.config = {
             ]
         }
     ],
-    "basemapsToRemove": ["basemap_6"],
+    "basemapsToRemove": ["basemap_6", "basemap_9"],
     "locateMileposts": {
         "url": "http://www.wsdot.wa.gov/Geospatial/Transformation/Coordinate/LocateMileposts.ashx",
         "options": { "useProxy": false, "usePost": true }
@@ -56,7 +56,8 @@ wsdot.config = {
             "options": {
                 "id": "City Limits",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -64,7 +65,8 @@ wsdot.config = {
             "options": {
                 "id": "Congressional Districts",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -72,7 +74,8 @@ wsdot.config = {
             "options": {
                 "id": "County Boundaries",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
         {
             "layerType": "esri.layers.FeatureLayer",
@@ -81,7 +84,8 @@ wsdot.config = {
                 "id": "Interchange Drawings",
                 "outFields": ["PDFURL", "SRID", "Label"],
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Design"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -89,7 +93,8 @@ wsdot.config = {
             "options": {
                 "id": "Legislative Districts",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -97,7 +102,8 @@ wsdot.config = {
             "options": {
                 "id": "Maintenance Areas",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "WSDOT Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -105,7 +111,8 @@ wsdot.config = {
             "options": {
                 "id": "MPO",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -113,7 +120,8 @@ wsdot.config = {
             "options": {
                 "id": "State Routes",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Transportation Features"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -121,7 +129,8 @@ wsdot.config = {
             "options": {
                 "id": "Region Boundaries",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "WSDOT Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -129,7 +138,8 @@ wsdot.config = {
             "options": {
                 "id": "RTPO",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
 
 
@@ -139,7 +149,8 @@ wsdot.config = {
             "options": {
                 "id": "Township / Section",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -147,7 +158,8 @@ wsdot.config = {
             "options": {
                 "id": "Tribal Lands",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Political Boundaries"
         },
 
         {
@@ -156,7 +168,8 @@ wsdot.config = {
             "options": {
                 "id": "Functional Class",
                 "visible": false
-            }
+            },
+            "wsdotCategory": "Transportation Features"
         },
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -174,7 +187,8 @@ wsdot.config = {
                 "outFields": ["*"],
                 "infoTemplate": { "title": "NGS Monument", "content": "${*}" },
                 "visible": false
-            }
+            },
+            "wsdotCategory": "WSDOT Boundaries"
         }
     ]
 };
