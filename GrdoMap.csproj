@@ -43,6 +43,7 @@
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
+    <Content Include="MapIconGenerator.htm" />
     <Content Include="scripts\config.js" />
     <Content Include="scripts\config.Release.js" />
     <Content Include="scripts\index.js" />
