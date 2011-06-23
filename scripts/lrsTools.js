@@ -1,5 +1,5 @@
 ﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery */
-/*jslint white: true, onevar: false, browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 50, indent: 4 */
+/*jslint confusion: true */
 
 
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
@@ -29,6 +29,7 @@
         // LRS Tools
         var locatedMilepostsLayer = null;
 
+        // Add the HTML controls.
         $(this).append('<div id="findMilepost"><div><h3>Find Milepost</h3><label>Route</label><input type="text" id="routeTextBox" /><input type="checkbox" id="decreaseCheckbox" value="true" title="Decrease" /><label for="decreaseCheckBox">Decrease</label></div><div><input type="radio" value="ARM" name="armOrSrmp" checked="checked" id="armRadioButton" /><label for="armRadioButton">ARM</label><input type="radio" value="SRMP" name="armOrSrmp" id="srmpRadioButton" /><label for="srmpRadioButton">SRMP</label></div><div><label for="milepostBox">Milepost</label><input type="number" min="0" id="milepostBox" value="0" /><div id="backContainer"><input type="checkbox" id="backCheckBox" disabled="disabled" title="Back" value="true" /><label for="backCheckBox">Back</label></div></div><div><label>Reference Date</label><input type="date" id="referenceDateBox" /></div><button id="findMilepostButton" type="button">Find Milepost</button><img id="milepostLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /></div><div id="findNearestMilepost"><h3>Find Nearest Milepost</h3><div><label>Radius</label><input id="radiusBox" type="number" value="0" min="0" /><span> Feet</span></div><button type="button" id="findNearestMPButton">Find</button><img id="findNearestLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /></div><button type="button" id="clearMPResultsButton">Clear Results</button>');
 
         dijit.form.TextBox({ style: "width: 100px" }, "routeTextBox");
@@ -49,8 +50,9 @@
             /// </summary>
             if (!locatedMilepostsLayer) {
                 locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
-                var symbol = new esri.symbol.SimpleMarkerSymbol().setColor(new dojo.Color([48, 186, 0])).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE);
-                var renderer = new esri.renderer.SimpleRenderer(symbol);
+                var 
+                    symbol = new esri.symbol.SimpleMarkerSymbol().setColor(new dojo.Color([48, 186, 0])).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE),
+                    renderer = new esri.renderer.SimpleRenderer(symbol);
                 locatedMilepostsLayer.setRenderer(renderer);
                 locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", "${*}"));
                 map.addLayer(locatedMilepostsLayer);
@@ -62,49 +64,53 @@
         }
 
         function createAttributeTableForElcResult(result) {
-            var table = "<table>";
-            var value;
-            var dateRe = /^\w+Date$/i;
-            var ignoreRe = /(?:Back)|(?:RoutePoint)|(?:EventPoint)/i // Define attributes that will not be in the info window.
-            var aliases = {
-                "Arm": "ARM",
-                "Measure": "ARM",
-                "Srmp": "SRMP",
-                "ReferenceDate": "Reference Date",
-                "ResponseDate": "Response Date",
-                "RealignmentDate": "Realignment Date",
-                "ArmCalcReturnCode": "ARM Calc Return Code",
-                "LrsType": "LRS Type",
-                "LOC_ANGLE": "Angle",
-                "RouteID": "Route",
-                "OffsetDistance": "Offset Distance",
-                "RightSide": "Right Side"
-            };
-            for (var attr in result) {
-                if (attr.match(ignoreRe)) continue;
-                value = result[attr];
-                if ((attr === "LocatingError" && value === "LOCATING_OK") || (attr === "Message" && value === "") || (attr === "OffsetDistance" && value === 0)) continue;
-                // Convert date values from long 
-                if (attr === "OffsetDistance") {
-                    if (value < 0) {
-                        value = Math.abs(Math.round(value * 100) / 100);
+            var table = "<table>",
+                value,
+                ignoreRe = /(?:Back)|(?:RoutePoint)|(?:EventPoint)/i, // Define attributes that will not be in the info window.
+                aliases = {
+                    "Arm": "ARM",
+                    "Measure": "ARM",
+                    "Srmp": "SRMP",
+                    "ReferenceDate": "Reference Date",
+                    "ResponseDate": "Response Date",
+                    "RealignmentDate": "Realignment Date",
+                    "ArmCalcReturnCode": "ARM Calc Return Code",
+                    "LrsType": "LRS Type",
+                    "LOC_ANGLE": "Angle",
+                    "RouteID": "Route",
+                    "OffsetDistance": "Offset Distance",
+                    "RightSide": "Right Side"
+                },
+                attr;
+            for (attr in result) {
+                if (result.hasOwnProperty(attr)) {
+                    if (!attr.match(ignoreRe)) {
+                        value = result[attr];
+                        if (!((attr === "LocatingError" && value === "LOCATING_OK") || (attr === "Message" && value === "") || (attr === "OffsetDistance" && value === 0))) {
+                            // Convert date values from long 
+                            if (attr === "OffsetDistance") {
+                                if (value < 0) {
+                                    value = Math.abs(Math.round(value * 100) / 100);
+                                }
+                                value = value + "'";
+                            }
+                            else if (attr === "Srmp" && Boolean(result.Back) === true) {
+                                value += "B";
+                            }
+                            else if (attr.match(/(?:\w*Distance)|(?:Measure)|(?:Arm)|(?:LOC_ANGLE)/i)) {
+                                value = Math.round(value * 1000) / 1000;
+                            }
+                            table += "<tr>";
+                            if (aliases[attr]) {
+                                table += "<th>" + aliases[attr] + "</th>";
+                            } else {
+                                table += "<th>" + attr + "</th>";
+                            }
+                            table += "<td>" + value + "</td>";
+                            table += "</tr>";
+                        }
                     }
-                    value = value + "'";
                 }
-                else if (attr === "Srmp" && Boolean(result["Back"]) === true) {
-                    value += "B";
-                }
-                else if (attr.match(/(?:\w*Distance)|(?:Measure)|(?:Arm)|(?:LOC_ANGLE)/i)) {
-                    value = Math.round(value * 1000) / 1000
-                }
-                table += "<tr>"
-                if (aliases[attr]) {
-                    table += "<th>" + aliases[attr] + "</th>";
-                } else {
-                    table += "<th>" + attr + "</th>";
-                }
-                table += "<td>" + value + "</td>";
-                table += "</tr>"
             }
             table += "</table>";
             return table;
@@ -117,7 +123,7 @@
             var location = {
                 Route: dijit.byId("routeTextBox").value,
                 Decrease: dijit.byId("decreaseCheckbox").checked
-            }
+            };
             if (dijit.byId("armRadioButton").checked) {
                 location.Arm = dijit.byId("milepostBox").value;
             }
@@ -127,7 +133,7 @@
             }
 
             esri.show(dojo.byId("milepostLoadingIcon"));
-            dijit.byId("findMilepostButton").set("disabled", true); ;
+            dijit.byId("findMilepostButton").set("disabled", true);
 
 
             esri.request({
@@ -139,15 +145,15 @@
                 },
                 handleAs: "json",
                 load: function (results) {
+                    var geometry = null, graphic, result, i, l;
+
                     esri.hide(dojo.byId("milepostLoadingIcon"));
                     dijit.byId("findMilepostButton").set("disabled", false);
 
+
                     // Process the results.
                     if (results.length >= 1) {
-                        var graphic;
-                        var geometry = null;
-                        var result;
-                        for (var i in results) {
+                        for (i = 0, l = results.length; i < l; i += 1) {
                             result = results[i];
                             if (result.RoutePoint) {
                                 geometry = new esri.geometry.Point(result.RoutePoint);
@@ -178,8 +184,12 @@
                         }
                     }
                 },
-                error: function (error) { }
-            }, wsdot.config.locateMileposts.options)
+                error: function (error) {
+                    if (console && console.error) {
+                        console.error(error);
+                    }
+                }
+            }, wsdot.config.locateMileposts.options);
         }
         }, "findMilepostButton");
 
@@ -190,11 +200,12 @@
         // Setup find nearest milepost tools
         dijit.form.NumberSpinner({ constraints: { min: 0 }, value: 200, style: "width:100px" }, "radiusBox");
         dijit.form.Button({ onClick: function () {
-            button = dijit.byId("findNearestMPButton");
-            var loadingIcon = dojo.byId("findNearestLoadingIcon");
+            var button = dijit.byId("findNearestMPButton"),
+                loadingIcon = dojo.byId("findNearestLoadingIcon"),
+                drawToolbar;
 
             createLocatedMilepostsLayer();
-            var drawToolbar = new esri.toolbars.Draw(map);
+            drawToolbar = new esri.toolbars.Draw(map);
             dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
                 esri.show(loadingIcon);
                 drawToolbar.deactivate();
@@ -213,11 +224,8 @@
                         button.set("disabled", false);
 
                         if (results && results.length > 0) {
-                            var currentResult;
-                            var table;
-                            var graphic;
-                            var geometry;
-                            for (var i = 0, l = results.length; i < l; i++) {
+                            var currentResult, table, graphic, geometry, i, l;
+                            for (i = 0, l = results.length; i < l; i += 1) {
 
                                 currentResult = results[i];
                                 table = createAttributeTableForElcResult(currentResult);
@@ -270,5 +278,5 @@
 
 
 
-    }
+    };
 } (jQuery));
