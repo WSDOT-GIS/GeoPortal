@@ -151,8 +151,7 @@
                                 content = createAttributeTableForElcResult(result);
                                 graphic = new esri.Graphic(geometry, null, result, new esri.InfoTemplate("Route Location", content));
                                 locatedMilepostsLayer.add(graphic);
-                                console.debug(map);
-                                map.infoWindow.setContent(content).setTitle("Route Location").show(map.toScreen(geometry))
+                                map.infoWindow.setContent(content).setTitle("Route Location").show(map.toScreen(geometry));
                             }
                             else {
                                 $.pnotify({
@@ -226,8 +225,9 @@
                                 if (currentResult.RoutePoint) {
                                     geometry = new esri.geometry.Point(currentResult.RoutePoint);
                                     geometry.setSpatialReference(map.spatialReference);
-                                    graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult, "infoTemplate": new esri.InfoTemplate("Route Location", createAttributeTableForElcResult(currentResult)) });
+                                    graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult, "infoTemplate": new esri.InfoTemplate("Route Location", table) });
                                     locatedMilepostsLayer.add(graphic);
+                                    map.infoWindow.setContent(table).setTitle("Route Location").show(map.toScreen(geometry));
                                 }
                                 else {
                                     $.pnotify({
