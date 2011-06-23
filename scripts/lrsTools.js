@@ -4,16 +4,7 @@
 
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
-/// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
-/// <reference path="extentAutoComplete.js"/>
-/// <reference path="jquery.pnotify.js"/>
-/// <reference path="jquery.ba-bbq.js" />
-/// <reference path="json2.js" />
-/// <reference path="kmlGraphicsLayer.js" />
-/// <reference path="layerList.js" />
-/// <reference path="locationInfo.js" />
-/// <reference path="config.js" />
 
 (function ($) {
     "use strict";
@@ -145,7 +136,7 @@
                 },
                 handleAs: "json",
                 load: function (results) {
-                    var geometry = null, graphic, result, i, l;
+                    var geometry = null, graphic, result, i, l, content;
 
                     esri.hide(dojo.byId("milepostLoadingIcon"));
                     dijit.byId("findMilepostButton").set("disabled", false);
@@ -157,8 +148,11 @@
                             result = results[i];
                             if (result.RoutePoint) {
                                 geometry = new esri.geometry.Point(result.RoutePoint);
-                                graphic = new esri.Graphic(geometry, null, result, new esri.InfoTemplate("Route Location", createAttributeTableForElcResult(result)));
+                                content = createAttributeTableForElcResult(result);
+                                graphic = new esri.Graphic(geometry, null, result, new esri.InfoTemplate("Route Location", content));
                                 locatedMilepostsLayer.add(graphic);
+                                console.debug(map);
+                                map.infoWindow.setContent(content).setTitle("Route Location").show(map.toScreen(geometry))
                             }
                             else {
                                 $.pnotify({
