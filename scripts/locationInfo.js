@@ -247,33 +247,37 @@
                     };
 
                     function createTableRows(resultLayer) {
-                        var table = $("<table>");
-                        var resultRow;
+                        if (resultLayer.ResultTable.length < 1) {
+                            return $(esri.substitute(resultLayer.LayerInfo, "<p>No results for <a href='${MetadataUrl}'>${LayerName}</p>"));
+                        } else {
+                            var table = $("<table>");
+                            var resultRow;
 
-                        var omittedFields = /OBJECTID/i;
+                            var omittedFields = /OBJECTID/i;
 
-                        var tr;
-                        table.append(esri.substitute(resultLayer.LayerInfo, "<caption><a href='${MetadataUrl}'>${LayerName}</caption>"));
-                        for (var i = 0, l = resultLayer.ResultTable.length; i < l; i++) {
-                            resultRow = resultLayer.ResultTable[i];
-                            // Create the header row if this is the first row.
-                            if (i === 0) {
+                            var tr;
+                            table.append(esri.substitute(resultLayer.LayerInfo, "<caption><a href='${MetadataUrl}'>${LayerName}</caption>"));
+                            for (var i = 0, l = resultLayer.ResultTable.length; i < l; i++) {
+                                resultRow = resultLayer.ResultTable[i];
+                                // Create the header row if this is the first row.
+                                if (i === 0) {
+                                    tr = $("<tr>");
+                                    for (var heading in resultRow) {
+                                        if (heading.match(omittedFields)) continue;
+                                        tr.append("<th>" + heading + "</th>");
+                                    }
+                                    table.append(tr);
+                                }
                                 tr = $("<tr>");
                                 for (var heading in resultRow) {
                                     if (heading.match(omittedFields)) continue;
-                                    tr.append("<th>" + heading + "</th>");
+                                    tr.append("<td>" + resultRow[heading] + "</td>");
                                 }
                                 table.append(tr);
-                            }
-                            tr = $("<tr>");
-                            for (var heading in resultRow) {
-                                if (heading.match(omittedFields)) continue;
-                                tr.append("<td>" + resultRow[heading] + "</td>");
-                            }
-                            table.append(tr);
 
+                            }
+                            return table;
                         }
-                        return table;
                     }
 
                     var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
