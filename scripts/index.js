@@ -150,7 +150,7 @@
 
 
             // LRS Tools
-            
+
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
 
             tabs.addChild(toolsTab);
@@ -496,11 +496,7 @@
                         function (position) {
                             var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude));
                             var attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-                            var infoTemplate = new esri.InfoTemplate("Your Location", "Lat: ${lat} <br />Long: ${long}");
-                            var symbol = new esri.symbol.SimpleMarkerSymbol();
-                            var graphic = new esri.Graphic(pt, symbol, attributes, infoTemplate);
-                            map.graphics.add(graphic);
-                            graphic.setGeometry(pt);
+                            map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
                             map.centerAndZoom(pt, 8);
                         },
                         function (error) {
