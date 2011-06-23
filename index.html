@@ -103,34 +103,7 @@
                         <div id="locationInfo" title="Location Information">
                             <div id="locationInfoControl"></div>
                         </div>
-                        <div id="findMilepost">
-                            <div>
-                                <label>Route</label>
-                                <input type="text" id="routeTextBox" /><input type="checkbox" id="decreaseCheckbox" value="true" title="Decrease" /><label for="decreaseCheckBox">Decrease</label>
-                            </div>
-                            <div>
-                                <input type="radio" value="ARM" name="armOrSrmp" checked="checked" id="armRadioButton" /><label for="armRadioButton">ARM</label>
-                                <input type="radio" value="SRMP" name="armOrSrmp" id="srmpRadioButton" /><label for="srmpRadioButton">SRMP</label>
-                            </div>
-                            <div>
-                                <label for="milepostBox">Milepost</label>
-                                <input type="number" min="0" id="milepostBox" value="0" />
-                                <div id="backContainer">
-                                    <input type="checkbox" id="backCheckBox" disabled="disabled" title="Back" value="true" /><label for="backCheckBox">Back</label>
-                                </div>
-                            </div>
-                            <div>
-                                <label>Reference Date</label>
-                                <input type="date" id="referenceDateBox" />
-                            </div>
-                            <button id="findMilepostButton" type="button">Find Milepost</button><img id="milepostLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" />
-                        </div>
-                        <div id="findNearestMilepost">
-                            <div>
-                                <label>Radius</label><input id="radiusBox" type="number" value="0" min="0" /><span> Feet</span>
-                            </div>
-                            <button type="button" id="findNearestMPButton">Find</button>
-                            <img id="findNearestLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" />
+                        <div id="lrsTools">
                         </div>
                     </div>
                 </div>
@@ -152,9 +125,11 @@
     <!--<script src="scripts/kmlGraphicsLayer.js" type="text/javascript"></script>-->
     <!--<script src="scripts/cameraGraphicsLayer.js" type="text/javascript"></script>-->
     <script type="text/javascript" src="config.ashx"></script>
+    <script src="scripts/lrsTools.js" type="text/javascript"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
     <script src="scripts/layerList.js" type="text/javascript"></script>
     <script src="scripts/locationInfo.js" type="text/javascript"></script>
+    
     <script src="scripts/json2.js" type="text/javascript"></script>
 </body>
 </html>

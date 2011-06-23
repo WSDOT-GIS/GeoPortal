@@ -59,6 +59,7 @@
   <ItemGroup>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\locationInfo.js" />
+    <Content Include="scripts\lrsTools.js" />
     <Content Include="style\index.css" />
     <Content Include="style\jquery.pnotify.default.css" />
     <Content Include="style\jquery.pnotify.default.icons.css" />

@@ -216,3 +216,13 @@ img[src$="blank.gif"]
     font-weight: bold;
     margin-bottom: 3px;
 }
+
+#lrsTools > div 
+{
+    border: 2px inset #769DC0;
+    margin-bottom: 5px;
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
+}
