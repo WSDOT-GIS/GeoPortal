@@ -169,7 +169,9 @@
                 /// </summary>
                 if (!locatedMilepostsLayer) {
                     locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
-                    locatedMilepostsLayer.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleMarkerSymbol()));
+                    var symbol = new esri.symbol.SimpleMarkerSymbol().setColor(new dojo.Color([48, 186, 0])).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE);
+                    var renderer = new esri.renderer.SimpleRenderer(symbol);
+                    locatedMilepostsLayer.setRenderer(renderer);
                     locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", "${*}"));
                     map.addLayer(locatedMilepostsLayer);
                 }
