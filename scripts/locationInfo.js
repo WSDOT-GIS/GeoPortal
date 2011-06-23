@@ -246,7 +246,7 @@
                         f: "json"
                     };
 
-                    function createTableRows(resultLayer) {
+                    function createHtmlTable(resultLayer) {
                         if (resultLayer.ResultTable.length < 1) {
                             return $(esri.substitute(resultLayer.LayerInfo, "<p>No results for <a href='${MetadataUrl}'>${LayerName}</p>"));
                         } else {
@@ -293,7 +293,7 @@
                             var tablesContainer = $("<div>");
                             for (var i = 0, resultCount = data.QueryResults.length; i < resultCount; i++) {
                                 resultLayer = data.QueryResults[i];
-                                tablesContainer.append(createTableRows(resultLayer));
+                                tablesContainer.append(createHtmlTable(resultLayer));
                             }
                             var graphic = new esri.Graphic(data.SearchGeometry, null, data, new esri.InfoTemplate("Location Info.", tablesContainer.html()));
                             layer.add(graphic);
