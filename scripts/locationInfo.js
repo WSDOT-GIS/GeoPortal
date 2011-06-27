@@ -36,6 +36,7 @@
                 polylines: null,
                 polygons: null
             };
+            var tabContainer;
 
             if (!map) {
                 throw new Error("No map was specified.");
@@ -96,8 +97,10 @@
                 var queryResult;
                 var resultTable;
 
+
+
                 // Create the div element that will become the tab container
-                var tabContainer = dojo.create("div", null, dojo.doc.body);
+                tabContainer = dojo.create("div", {id: "wsdot-location-info-tab-container"}, dojo.doc.body);
                 var contentPane;
                 ////// Add the tabContainer div to the InfoWindow.  Once it is added to the DOM we can start to create dijits.
                 ////map.infoWindow.setContent(tabContainer).setTitle("Location Information");
@@ -112,18 +115,23 @@
                 }
 
                 tabContainer.startup();
-                dojo.connect(tabContainer, "selectChild", function (child) {
-                    ////console.debug(dojo.contentBox(child.containerNode));
-                    ////child.resize();
-                    ////console.debug(dojo.contentBox(child.containerNode));
-                    ////tabContainer.resize();
-                    ////console.debug(dojo.contentBox(child.containerNode));
-                });
 
                 ////map.infoWindow.show(event.screenPoint);
                 tabContainer.resize();
 
-                $(tabContainer.domNode).dialog({ title: 'Location Information' });
+                // Show a jQuery UI dialog.
+                $(tabContainer.domNode).dialog({
+                    title: 'Location Information',
+                    modal: true,
+                    close: function () {
+                        // Destroy the dialog, TabContainer, and associated DOM elements.
+                        if (tabContainer) {
+                            $(tabContainer.domNode).dialog("destroy");
+                            tabContainer.destroyRecursive(false);
+                        }
+                    }
+
+                });
             }
 
             dojo.connect(map, "onLoad", locationInfoLayers, function () {
