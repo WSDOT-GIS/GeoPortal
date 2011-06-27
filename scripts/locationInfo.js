@@ -17,6 +17,14 @@
     dojo.require("esri.toolbars.draw");
     dojo.require("esri.layers.graphics");
 
+    // Add a method to the Date object that will return a short date string.
+    if (typeof (Date.toShortDateString) === "undefined") {
+        Date.prototype.toShortDateString = function () {
+            /// <summary>Returns a string representation of the date in the format Month-Date-Year.</summary>
+            return this.getMonth() + "-" + this.getDate() + "-" + this.getFullYear();
+        }
+    }
+
     var methods = {
         init: function (map, locationInfoUrl) {
             /// <summary>Creates the location information UI.</summary>
@@ -46,6 +54,9 @@
                         var resultRow;
 
                         var omittedFields = /OBJECTID/i;
+                        var dotNetDateRe = /\/Date\((.+)\)\//i;
+                        var resultValue;
+                        var resultMatch;
 
                         var tr;
                         ////table.append(esri.substitute(queryResult.LayerInfo, "<caption><a href='${MetadataUrl}'>${LayerName}</caption>"));
@@ -64,7 +75,15 @@
                             tr = $("<tr>");
                             for (var heading in resultRow) {
                                 if (!heading.match(omittedFields)) {
-                                    tr.append("<td>" + resultRow[heading] + "</td>");
+                                    resultValue = resultRow[heading];
+                                    // Convert the .NET JSON Date string into a Date object.
+                                    if (typeof (resultValue) === "string") {
+                                        resultMatch = resultValue.match(dotNetDateRe);
+                                        if (resultMatch) {
+                                            resultValue = (new Date(new Number(resultMatch[1]))).toShortDateString();
+                                        }
+                                    }
+                                    tr.append("<td>" + resultValue + "</td>");
                                 }
                             }
                             table.append(tr);
@@ -78,10 +97,10 @@
                 var resultTable;
 
                 // Create the div element that will become the tab container
-                var tabContainer = dojo.create("div");
+                var tabContainer = dojo.create("div", null, dojo.doc.body);
                 var contentPane;
-                // Add the tabContainer div to the InfoWindow.  Once it is added to the DOM we can start to create dijits.
-                map.infoWindow.setContent(tabContainer).setTitle("Location Information");
+                ////// Add the tabContainer div to the InfoWindow.  Once it is added to the DOM we can start to create dijits.
+                ////map.infoWindow.setContent(tabContainer).setTitle("Location Information");
                 // Create the tabContainer.
                 tabContainer = new dijit.layout.TabContainer({ style: "width: 100%; height: 100%" }, tabContainer);
 
@@ -101,8 +120,10 @@
                     ////console.debug(dojo.contentBox(child.containerNode));
                 });
 
-                map.infoWindow.show(event.screenPoint);
+                ////map.infoWindow.show(event.screenPoint);
                 tabContainer.resize();
+
+                $(tabContainer.domNode).dialog({ title: 'Location Information' });
             }
 
             dojo.connect(map, "onLoad", locationInfoLayers, function () {

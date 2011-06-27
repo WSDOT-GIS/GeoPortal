@@ -226,3 +226,13 @@ img[src$="blank.gif"]
     -moz-border-radius: 5px;
     border-radius: 5px; 
 }
+
+.ui-widget-content table
+{
+    border: 1px solid black;
+}
+
+.ui-widget-content td, .ui-widget-content th
+{
+    border: 1px solid black;
+}
