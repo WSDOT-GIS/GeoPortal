@@ -11,6 +11,9 @@
     dojo.require("dijit.form.NumberSpinner");
     dojo.require("dijit.form.Select");
 
+    dojo.require("dijit.layout.TabContainer");
+    dojo.require("dijit.layout.ContentPane");
+
     dojo.require("esri.toolbars.draw");
     dojo.require("esri.layers.graphics");
 
@@ -30,7 +33,81 @@
                 throw new Error("No map was specified.");
             }
 
+            function handleClickEvent(event) {
+                /// <summary>Handles the graphics layer's onClick event.</summary>
+                /// <param name="event" type="Object">An object that contains screenPoint, mapPoint, and graphic properties.</param>
+
+                function createHtmlTable(queryResult) {
+                    /// <summary>Creates an HTML table for the results of a Location Information query.</summary>
+                    if (queryResult.ResultTable.length < 1) {
+                        return $(esri.substitute(queryResult.LayerInfo, "<p>No results for <a href='${MetadataUrl}'>${LayerName}</p>"));
+                    } else {
+                        var table = $("<table>");
+                        var resultRow;
+
+                        var omittedFields = /OBJECTID/i;
+
+                        var tr;
+                        ////table.append(esri.substitute(queryResult.LayerInfo, "<caption><a href='${MetadataUrl}'>${LayerName}</caption>"));
+                        for (var i = 0, l = queryResult.ResultTable.length; i < l; i++) {
+                            resultRow = queryResult.ResultTable[i];
+                            // Create the header row if this is the first row.
+                            if (i === 0) {
+                                tr = $("<tr>");
+                                for (var heading in resultRow) {
+                                    if (!heading.match(omittedFields)) {
+                                        tr.append("<th>" + heading + "</th>");
+                                    }
+                                }
+                                table.append(tr);
+                            }
+                            tr = $("<tr>");
+                            for (var heading in resultRow) {
+                                if (!heading.match(omittedFields)) {
+                                    tr.append("<td>" + resultRow[heading] + "</td>");
+                                }
+                            }
+                            table.append(tr);
+
+                        }
+                        return table;
+                    }
+                }
+
+                var queryResult;
+                var resultTable;
+
+                // Create the div element that will become the tab container
+                var tabContainer = dojo.create("div");
+                var contentPane;
+                // Add the tabContainer div to the InfoWindow.  Once it is added to the DOM we can start to create dijits.
+                map.infoWindow.setContent(tabContainer).setTitle("Location Information");
+                // Create the tabContainer.
+                tabContainer = new dijit.layout.TabContainer({ style: "width: 100%; height: 100%" }, tabContainer);
+
+                // Create a content pane for each layer's result data and add to the tab container.
+                for (var i = 0, l = event.graphic.attributes.QueryResults.length; i < l; i += 1) {
+                    queryResult = event.graphic.attributes.QueryResults[i];
+                    contentPane = new dijit.layout.ContentPane({ title: queryResult.LayerInfo.LayerName, content: createHtmlTable(queryResult) });
+                    tabContainer.addChild(contentPane);
+                }
+
+                tabContainer.startup();
+                dojo.connect(tabContainer, "selectChild", function (child) {
+                    ////console.debug(dojo.contentBox(child.containerNode));
+                    ////child.resize();
+                    ////console.debug(dojo.contentBox(child.containerNode));
+                    ////tabContainer.resize();
+                    ////console.debug(dojo.contentBox(child.containerNode));
+                });
+
+                map.infoWindow.show(event.screenPoint);
+                tabContainer.resize();
+            }
+
             dojo.connect(map, "onLoad", locationInfoLayers, function () {
+                var layer;
+
                 locationInfoLayers.points = new esri.layers.GraphicsLayer({ id: "locationInfoPoints" });
                 locationInfoLayers.polylines = new esri.layers.GraphicsLayer({ id: "locationInfoLines" });
                 locationInfoLayers.polygons = new esri.layers.GraphicsLayer({ id: "locationInfoPolygons" });
@@ -41,8 +118,11 @@
                 locationInfoLayers.polylines.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleLineSymbol()));
                 locationInfoLayers.polygons.setRenderer(new esri.renderer.SimpleRenderer(new esri.symbol.SimpleFillSymbol()));
 
+
                 for (var l in locationInfoLayers) {
-                    map.addLayer(locationInfoLayers[l]);
+                    layer = locationInfoLayers[l];
+                    map.addLayer(layer);
+                    dojo.connect(layer, "onClick", handleClickEvent);
                 }
             });
 
@@ -246,40 +326,6 @@
                         f: "json"
                     };
 
-                    function createHtmlTable(resultLayer) {
-                        if (resultLayer.ResultTable.length < 1) {
-                            return $(esri.substitute(resultLayer.LayerInfo, "<p>No results for <a href='${MetadataUrl}'>${LayerName}</p>"));
-                        } else {
-                            var table = $("<table>");
-                            var resultRow;
-
-                            var omittedFields = /OBJECTID/i;
-
-                            var tr;
-                            table.append(esri.substitute(resultLayer.LayerInfo, "<caption><a href='${MetadataUrl}'>${LayerName}</caption>"));
-                            for (var i = 0, l = resultLayer.ResultTable.length; i < l; i++) {
-                                resultRow = resultLayer.ResultTable[i];
-                                // Create the header row if this is the first row.
-                                if (i === 0) {
-                                    tr = $("<tr>");
-                                    for (var heading in resultRow) {
-                                        if (heading.match(omittedFields)) continue;
-                                        tr.append("<th>" + heading + "</th>");
-                                    }
-                                    table.append(tr);
-                                }
-                                tr = $("<tr>");
-                                for (var heading in resultRow) {
-                                    if (heading.match(omittedFields)) continue;
-                                    tr.append("<td>" + resultRow[heading] + "</td>");
-                                }
-                                table.append(tr);
-
-                            }
-                            return table;
-                        }
-                    }
-
                     var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
                     esri.request({
                         url: locationInfoUrl + "/Query.ashx",
@@ -290,12 +336,12 @@
                             data.BufferedGeometry = esri.geometry.fromJson(data.BufferedGeometry);
                             // Format the results into a table.
                             var resultLayer;
-                            var tablesContainer = $("<div>");
+                            ////var tablesContainer = $("<div>");
                             for (var i = 0, resultCount = data.QueryResults.length; i < resultCount; i++) {
                                 resultLayer = data.QueryResults[i];
-                                tablesContainer.append(createHtmlTable(resultLayer));
+                                ////tablesContainer.append(createHtmlTable(resultLayer));
                             }
-                            var graphic = new esri.Graphic(data.SearchGeometry, null, data, new esri.InfoTemplate("Location Info.", tablesContainer.html()));
+                            var graphic = new esri.Graphic(data.SearchGeometry, null, data, null); ////new esri.InfoTemplate("Location Info.", tablesContainer.html()));
                             layer.add(graphic);
 
                         },
