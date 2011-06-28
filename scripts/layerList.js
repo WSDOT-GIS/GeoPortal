@@ -15,13 +15,17 @@
         map: null
     };
 
-    function formatForHtmlId(s) {
+    function formatForHtmlId(s, prefix) {
         /// <summary>Removes invalid characters from a string so that it can be used an the ID for an HTML element.</summary>
         var invalidCharRe = /[\s\/\()]+/
         while (invalidCharRe.test(s)) {
             s = s.replace(invalidCharRe, "-");
         }
         s = s.replace(/-$/, "");
+        // Add the prefix if one was provided.
+        if (prefix) {
+            s = prefix + "-" + s;
+        }
         return s;
     }
 
@@ -33,6 +37,8 @@
             /// <param name="layerSource" type="Object">This can be either an esri.Map or an array of esri.layer.Layer</param>
             /// <param name="options" type="Object">Options for this control.</param>
             var layerListNode = this;
+            var basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm))/i;
+
             if (options) {
                 $.extend(settings, options);
             }
@@ -47,20 +53,25 @@
             this.addClass("ui-esri-layer-list");
 
             function createControlsForLayer(layer, autoAppend) {
-                var layerIdForHtml = formatForHtmlId(layer.id);
+                var checkboxId = formatForHtmlId(layer.id, "checkbox");
+                var sliderId = formatForHtmlId(layer.id, "slider");
 
                 // Create a checkbox and label and place inside of a div.
-                var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", layerIdForHtml);
+                var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId);
                 var label = $("<label>").text(layer.id);
 
                 // Create a unique ID for the slider for this layer.
-                var sliderId = "layerSlider-" + layerIdForHtml;
+
                 var opacitySlider = $("<div>").attr("id", sliderId).css("width", "300px");
                 var layerDiv = $("<div>").attr("data-layerId", layer.id).append(checkBox).append(label).append(opacitySlider);
 
                 // Assign layer to a category if not already assigned to one.
                 if (!layer.wsdotCategory) {
-                    layer.wsdotCategory = "Other";
+                    if (layer.id.match(basemapLayerIdRe)) {
+                        layer.wsdotCategory = "Basemap";
+                    } else {
+                        layer.wsdotCategory = "Other";
+                    }
                 }
 
 
@@ -91,6 +102,9 @@
                         opacitySlider.set("disabled", !value);
                     }
                 }, dojo.byId(checkBox.attr("id")));
+
+                // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
+                layerDiv.data("dijits", [opacitySlider, checkBox]);
 
                 return layerDiv;
             }
@@ -132,7 +146,7 @@
             var groupNames = [];
             var hasOther = false;
 
-            
+
             for (var g in layerGroups) {
                 if (g === "Other") {
                     hasOther = true;
@@ -184,19 +198,22 @@
                 dojo.connect(settings.map, "onLayerAddResult", layerListNode, function (layer, error) {
                     var existingControlsForThisLayer = $("div[data-layerId='" + layer.id + "']");
                     if (!existingControlsForThisLayer || existingControlsForThisLayer.length < 1 && !error) {
-                        if (!layer.wsdotCategory) {
+                        if (layer.id.match(basemapLayerIdRe)) {
+                            layer.wsdotCategory = "Basemap";
+                        } else {
                             layer.wsdotCategory = "Other";
                         }
                         var layerDiv = createControlsForLayer(layer);
 
                         // Get the div for the group this layer belongs to.
-                        var groupDiv = $("div[data-group='" + layer.wsdotCategory + "']", layerListNode);
+                        var groupDiv = $("div[data-group='" + layer.wsdotCategory + "']");
 
                         // If the group div does not already exist, create it.
                         if (!groupDiv || groupDiv.length < 1) {
                             groupDiv = $("<div>");
-                            groupDiv.attr("data-group", groupName);
-                            groupDiv.append($("<span>").html(groupName).addClass("esriLegendServiceLabel"));
+                            groupDiv.attr("data-group", layer.wsdotCategory);
+                            groupDiv.append($("<span>").html(layer.wsdotCategory).addClass("esriLegendServiceLabel"));
+                            layerListNode.append(groupDiv);
                         }
 
                         groupDiv.append(layerDiv);
@@ -205,7 +222,15 @@
 
                 // When a layerSource layer is removed, also remove it from the layer list.
                 dojo.connect(settings.map, "onLayerRemove", layerListNode, function (layer) {
-                    $("div[data-layerId='" + layer.id + "']").remove();
+                    var layerDiv = $("div[data-layerId='" + layer.id + "']");
+                    // Destroy dijits in the layerDiv.
+                    var dijits = layerDiv.data("dijits");
+                    dojo.forEach(dijits, function (item) {
+                        if (item.destroyRecursive) {
+                            item.destroyRecursive(false);
+                        }
+                    });
+                    layerDiv.remove();
                 });
             }
 
