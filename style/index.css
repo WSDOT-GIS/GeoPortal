@@ -230,6 +230,7 @@ img[src$="blank.gif"]
 .ui-widget-content table
 {
     border: 1px solid black;
+    font-size: 10pt;
 }
 
 .ui-widget-content td, .ui-widget-content th

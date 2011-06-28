@@ -5,7 +5,7 @@
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
 /// <reference path="dojo.js.uncompressed.js" />
-/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
+/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
 /// <reference path="extentAutoComplete.js"/>
 /// <reference path="jquery.pnotify.js"/>
 /// <reference path="jquery.ba-bbq.js" />
@@ -343,7 +343,7 @@
                 layers.push(layer);
             }
 
-            $("#layerList").layerList(layers);
+            $("#layerList").layerList({ "layerSource":layers, "map": map });
 
             // Connect the interchange drawings layer's onClick event so that when a graphic is clicked the associated PDF is opened in a new window or tab (depends on user's settings).
             dojo.connect(map.getLayer("Interchange Drawings"), "onClick", function (event) {
