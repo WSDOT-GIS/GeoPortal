@@ -101,6 +101,22 @@
     }
     });
 
+    dojo.extend(esri.Map, { "getVisibleLayers": function () {
+        /// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
+        var layer;
+        var visibleLayers = [];
+        for (var i = 0, l = this.layerIds.length; i < l; i++) {
+            layer = this.getLayer(this.layerIds[i]);
+            if (layer.visible === true && (typeof(layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
+                visibleLayers.push(layer);
+            }
+        }
+        return visibleLayers;
+    }
+    });
+
+
+
     var map = null;
     var extents = null;
     var navToolbar;
@@ -120,10 +136,21 @@
             esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
         }
 
-        function setExtentLink(extent) {
-            /// <summary>Sets the extent link in the bookmark tab to the given extent.</summary>
-            /// <param name="extent" type="esri.geometry.Envelope">The extent that the link will be set to.</param>
-            $("#extentLink").attr("href", $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, { "extent": extent.toCsv() }));
+        function setExtentLink() {
+            /// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
+            var qsParams = {
+                "extent": map.extent.toCsv()
+            };
+            $(map.getVisibleLayers()).each(function (index, layer) {
+                if (index === 0) {
+                    qsParams.visibleLayers = layer.id + ":" + Math.round(layer.opacity * 100) / 100;
+                }
+                else {
+                    qsParams.visibleLayers += "," + layer.id + ":" + Math.round(layer.opacity * 100) / 100;
+                }
+            });
+
+            $("#extentLink").attr("href", $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams));
         }
 
         function setupNorthArrow() {
@@ -314,9 +341,7 @@
                 map.setExtent(extent);
             }
 
-            setExtentLink(map.extent);
-
-            // $("#layerList").layerList(map);
+            setExtentLink();
 
             var layers = [];
 
@@ -381,6 +406,7 @@
             if (notices.updatingMap) {
                 notices.updatingMap.pnotify_remove();
             }
+            setExtentLink();
         });
 
 
