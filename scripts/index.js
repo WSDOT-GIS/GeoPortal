@@ -88,6 +88,19 @@
     // Add a category property to the esri.layers.Layer class.
     dojo.extend(esri.layers.Layer, { "wsdotCategory": null });
 
+    dojo.extend(esri.geometry.Extent, { "toCsv": function () {
+        var propNames = ["xmin", "ymin", "xmax", "ymax"];
+        var output = ""
+        for (var i = 0, l = propNames.length; i < l; i++) {
+            if (i > 0) {
+                output += ","
+            }
+            output += this[propNames[i]];
+        }
+        return output;
+    }
+    });
+
     var map = null;
     var extents = null;
     var navToolbar;
@@ -110,9 +123,7 @@
         function setExtentLink(extent) {
             /// <summary>Sets the extent link in the bookmark tab to the given extent.</summary>
             /// <param name="extent" type="esri.geometry.Envelope">The extent that the link will be set to.</param>
-            var extentJson = extent.toJson();
-            delete extentJson.spatialReference;
-            $("#extentLink").attr("href", $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, extentJson));
+            $("#extentLink").attr("href", $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, { "extent": extent.toCsv() }));
         }
 
         function setupNorthArrow() {
@@ -142,7 +153,6 @@
 
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Instructions" }, "zoomInstructions"));
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
 
             // Location Informatoin tools
@@ -295,11 +305,12 @@
 
             // Zoom to the extent in the query string (if provided).
             // Test example:
-            // xmin=-13677603.622831678&ymin=5956814.051290565&xmax=-13576171.686297385&ymax=6004663.630997022
+            // extent=-13677603.622831678,5956814.051290565,-13576171.686297385,6004663.630997022
             var qsParams = $.deparam.querystring(true);
-            if (qsParams.xmin && qsParams.ymin && qsParams.xmax && qsParams.ymax) {
-                var extent = esri.geometry.fromJson(qsParams);
-                extent.spatialReference = map.spatialReference;
+            if (qsParams.extent) {
+                // Split the extent into its four coordinates.  Create the extent object and set the map's extent.
+                var coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val) });
+                var extent = new esri.geometry.Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
                 map.setExtent(extent);
             }
 
@@ -343,7 +354,7 @@
                 layers.push(layer);
             }
 
-            $("#layerList").layerList({ "layerSource":layers, "map": map });
+            $("#layerList").layerList({ "layerSource": layers, "map": map });
 
             // Connect the interchange drawings layer's onClick event so that when a graphic is clicked the associated PDF is opened in a new window or tab (depends on user's settings).
             dojo.connect(map.getLayer("Interchange Drawings"), "onClick", function (event) {
