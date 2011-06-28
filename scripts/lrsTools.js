@@ -16,13 +16,18 @@
     dojo.require("dijit.form.CheckBox");
     dojo.require("dijit.form.Button");
 
+    dojo.require("dijit.layout.BorderContainer");
+    dojo.require("dijit.layout.TabContainer");
+    dojo.require("dijit.layout.ContentPane");
+
     $.fn.lrsTools = function (map) {
         // LRS Tools
         var locatedMilepostsLayer = null;
 
         // Add the HTML controls.
-        $(this).append('<div id="findMilepost"><div><h3>Find Milepost</h3><label>Route</label><input type="text" id="routeTextBox" /><input type="checkbox" id="decreaseCheckbox" value="true" title="Decrease" /><label for="decreaseCheckBox">Decrease</label></div><div><input type="radio" value="ARM" name="armOrSrmp" checked="checked" id="armRadioButton" /><label for="armRadioButton">ARM</label><input type="radio" value="SRMP" name="armOrSrmp" id="srmpRadioButton" /><label for="srmpRadioButton">SRMP</label></div><div><label for="milepostBox">Milepost</label><input type="number" min="0" id="milepostBox" value="0" /><div id="backContainer"><input type="checkbox" id="backCheckBox" disabled="disabled" title="Back" value="true" /><label for="backCheckBox">Back</label></div></div><div><label>Reference Date</label><input type="date" id="referenceDateBox" /></div><button id="findMilepostButton" type="button">Find Milepost</button><img id="milepostLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /></div><div id="findNearestMilepost"><h3>Find Nearest Milepost</h3><div><label>Radius</label><input id="radiusBox" type="number" value="0" min="0" /><span> Feet</span></div><button type="button" id="findNearestMPButton">Find</button><img id="findNearestLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /></div><button type="button" id="clearMPResultsButton">Clear Results</button>');
+        this.append('<div id="milepostContainer"> <div id="milepostContainerCenter"> <div id="milepostTabs"> <div id="findMilepost"> <div><label>Route</label> <input type="text" id="routeTextBox" /> <input type="checkbox" id="decreaseCheckbox" value="true" title="Decrease" /> <label for="decreaseCheckBox">Decrease</label> </div> <div> <input type="radio" value="ARM" name="armOrSrmp" checked="checked" id="armRadioButton" /> <label for="armRadioButton">ARM</label> <input type="radio" value="SRMP" name="armOrSrmp" id="srmpRadioButton" /> <label for="srmpRadioButton">SRMP</label> </div> <div> <label for="milepostBox">Milepost</label> <input type="number" min="0" id="milepostBox" value="0" /> <div id="backContainer"> <input type="checkbox" id="backCheckBox" disabled="disabled" title="Back" value="true" /> <label for="backCheckBox">Back</label> </div> </div> <div> <label>Reference Date</label> <input type="date" id="referenceDateBox" /> </div> <button id="findMilepostButton" type="button">Find Milepost</button> <img id="milepostLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /> </div> <div id="findNearestMilepost"><div> <label>Radius</label> <input id="radiusBox" type="number" value="0" min="0" /> <span>Feet</span> </div> <button type="button" id="findNearestMPButton">Find</button> <img id="findNearestLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /> </div> </div> </div> <div id="milepostContainerBottom"> <button type="button" id="clearMPResultsButton">Clear Results</button> </div> </div>');
 
+        // Convert the HTML controls into dijits.
         dijit.form.TextBox({ style: "width: 100px" }, "routeTextBox");
         dijit.form.NumberSpinner({ constraints: { min: 0 }, value: 0, style: "width: 100px" }, "milepostBox");
         dijit.form.DateTextBox({ value: new Date() }, "referenceDateBox");
@@ -33,6 +38,18 @@
         dijit.form.CheckBox(null, "decreaseCheckbox");
 
         dijit.form.CheckBox(null, "backCheckBox");
+
+
+        var tabContainer = new dijit.layout.TabContainer({ style: "width: 100%; height: 100%; padding: 0" }, "milepostTabs");
+        tabContainer.addChild(new dijit.layout.ContentPane({ title: "Find Milepost", style: "margin: 0" }, "findMilepost"));
+        tabContainer.addChild(new dijit.layout.ContentPane({ title: "Find Nearest Milepost", style: "margin: 0" }, "findNearestMilepost"));
+
+        tabContainer.startup();
+
+        var borderContainer = new dijit.layout.BorderContainer({style: "padding: 0; margin: 0"}, "milepostContainer");
+        borderContainer.addChild(new dijit.layout.ContentPane({ region: "center", style: "padding: 0; border: none" }, "milepostContainerCenter"));
+        borderContainer.addChild(new dijit.layout.ContentPane({ region: "bottom", style: "border: none; text-align: center" }, "milepostContainerBottom"));
+        borderContainer.startup();
         esri.hide(dojo.byId("backContainer"));
 
         function createLocatedMilepostsLayer() {
