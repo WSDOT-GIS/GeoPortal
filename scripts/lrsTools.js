@@ -40,15 +40,15 @@
         dijit.form.CheckBox(null, "backCheckBox");
 
 
-        var tabContainer = new dijit.layout.TabContainer({ style: "width: 100%; height: 100%; padding: 0" }, "milepostTabs");
-        tabContainer.addChild(new dijit.layout.ContentPane({ title: "Find Milepost", style: "margin: 0" }, "findMilepost"));
-        tabContainer.addChild(new dijit.layout.ContentPane({ title: "Find Nearest Milepost", style: "margin: 0" }, "findNearestMilepost"));
+        var tabContainer = new dijit.layout.TabContainer({ style: "width: 100%; height: 100%" }, "milepostTabs");
+        tabContainer.addChild(new dijit.layout.ContentPane({ title: "Find Milepost" }, "findMilepost"));
+        tabContainer.addChild(new dijit.layout.ContentPane({ title: "Find Nearest Milepost" }, "findNearestMilepost"));
 
         tabContainer.startup();
 
-        var borderContainer = new dijit.layout.BorderContainer({style: "padding: 0; margin: 0"}, "milepostContainer");
-        borderContainer.addChild(new dijit.layout.ContentPane({ region: "center", style: "padding: 0; border: none" }, "milepostContainerCenter"));
-        borderContainer.addChild(new dijit.layout.ContentPane({ region: "bottom", style: "border: none; text-align: center" }, "milepostContainerBottom"));
+        var borderContainer = new dijit.layout.BorderContainer({style: "width: 100%; height: 100%", gutters: false}, "milepostContainer");
+        borderContainer.addChild(new dijit.layout.ContentPane({ region: "center", style: "padding: 0;"}, "milepostContainerCenter"));
+        borderContainer.addChild(new dijit.layout.ContentPane({ region: "bottom", style: "text-align: center" }, "milepostContainerBottom"));
         borderContainer.startup();
         esri.hide(dojo.byId("backContainer"));
 
