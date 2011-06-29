@@ -28,7 +28,7 @@ wsdot.config = {
             "title": "WSDOT Basemap",
             "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
             "layers": [
-                { "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+                { "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
             ]
         },
         {

@@ -165,8 +165,8 @@
 
             var legendPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "legendPane");
             var tabs = new dijit.layout.TabContainer(null, "tabs");
-            tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
+            tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
             var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             var toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
