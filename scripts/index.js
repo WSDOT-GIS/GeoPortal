@@ -43,6 +43,8 @@
 
         // Set alternating row colors in legend
         $(".alternatingLines tbody tr:odd").addClass("alternate-row");
+
+        $("<div>").attr("id", "linkDialog").append($("#extentLink")).dialog({ "autoOpen": false, title: "Link" });
     });
 
 
@@ -192,6 +194,13 @@
                     window.open("help/default.html", "GRDO Map Help");
                 }
             }, "helpButton");
+            dijit.form.Button({
+                iconClass: "linkIcon",
+                showLabel: false,
+                onClick: function () {
+                    $("#linkDialog").dialog("open");
+                }
+            }, "linkButton");
         }
 
         function setupLayout() {

@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="help\default.html" />
+    <Content Include="help\navigation.html" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
