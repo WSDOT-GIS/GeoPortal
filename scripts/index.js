@@ -163,8 +163,8 @@
                 iconClass: "helpIcon",
                 showLabel: false,
                 onClick: function () {
-                window.open("help.html", "GRDO Map Help");
-            } 
+                    window.open("help.html", "GRDO Map Help");
+                }
             }, "helpButton");
         }
 
@@ -209,15 +209,9 @@
 
         setupLayout();
 
-        var initExtent = new esri.geometry.Extent({
-            "xmin": -13938444.981854893,
-            "ymin": 5800958.950617068,
-            "ymax": 6257746.631649259,
-            "xmax": -12960051.019804686,
-            "spatialReference": {
-                "wkid": 102100
-            }
-        });
+        // Convert the extent definition in the options into an esri.geometry.Extent object.
+        wsdot.config.mapOptions.extent = new esri.geometry.fromJson(wsdot.config.mapOptions.extent);
+
 
         // Define zoom extents for menu.
         var extentSpatialReference = new esri.SpatialReference({ wkid: 102100 });
@@ -237,24 +231,11 @@
 
         extents.countyExtents = extentData;
 
-        map = new esri.Map("map", {
-            logo: false,
-            extent: initExtent,
-            lods: [
-                { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
-                { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
-                { "level": 3, "resolution": 305.748113140558, "scale": 1155581.108577 },
-                { "level": 4, "resolution": 152.874056570411, "scale": 577790.554289 },
-                { "level": 5, "resolution": 76.4370282850732, "scale": 288895.277144 },
-                { "level": 6, "resolution": 38.2185141425366, "scale": 144447.638572 },
-                { "level": 7, "resolution": 19.1092570712683, "scale": 72223.819286 },
-                { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
-                { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
-                { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
-                { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
-            ]
-        });
-        var initBasemap = new esri.layers.ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
+        map = new esri.Map("map", wsdot.config.mapOptions);
+        var initBasemap = null;
+        if (wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
+            initBasemap = new esri.layers.ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
+        }
 
         $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
         esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
