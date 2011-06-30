@@ -58,7 +58,7 @@
 
                 // Create a checkbox and label and place inside of a div.
                 var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId);
-                var label = $("<label>").text(layer.id);
+                var label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id +")" : layer.id);
 
                 // Create a unique ID for the slider for this layer.
 

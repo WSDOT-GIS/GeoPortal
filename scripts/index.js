@@ -107,7 +107,7 @@
         var visibleLayers = [];
         for (var i = 0, l = this.layerIds.length; i < l; i++) {
             layer = this.getLayer(this.layerIds[i]);
-            if (layer.visible === true && (typeof(layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
+            if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
                 visibleLayers.push(layer);
             }
         }
@@ -158,6 +158,16 @@
             dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
         }
 
+        function setupToolbar() {
+            dijit.form.Button({
+                iconClass: "helpIcon",
+                showLabel: false,
+                onClick: function () {
+                window.open("help.html", "GRDO Map Help");
+            } 
+            }, "helpButton");
+        }
+
         function setupLayout() {
             var mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
@@ -180,7 +190,6 @@
 
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Bookmark" }, "zoombookmark"));
 
             // Location Informatoin tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
@@ -265,6 +274,7 @@
         dojo.connect(map, "onLoad", map, function () {
             $("#lrsTools").lrsTools(map);
             setupNorthArrow();
+            setupToolbar();
             esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
             function createBasemapGallery() {

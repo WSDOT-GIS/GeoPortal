@@ -38,7 +38,15 @@
             </div>
         </div>
         <div id="mapContentPane">
-            <div id="map"></div>
+            <div id="map">
+                <div id="toolbar">
+                    <a id="extentLink" href="#"><img src="images/link.png" alt="link" /></a>
+                    <button id="fullExtentButton">Full Extent</button>
+                    <button id="previousExtentButton">Previous Extent</button>
+                    <button id="nextExtentButton">Next Extent</button>
+                    <button id="helpButton">Help</button>
+                </div>
+            </div>
         </div>
         <div id="legendPane" title="Map Controls">
             <div id="tabs">
@@ -56,9 +64,6 @@
                             <div id="measureWidget"></div>
                         </div>
                         <div id="zoomControls" title="Zoom Controls">
-                            <button id="fullExtentButton">Full Extent</button>
-                            <button id="previousExtentButton">Previous Extent</button>
-                            <button id="nextExtentButton">Next Extent</button>
                             <button id="zoomToMyCurrentLocation">Zoom to my current location</button>
                             <table>
                                 <tbody>
@@ -67,18 +72,6 @@
                                     <tr><td><label id="urbanAreaZoomLabel">Urban Area</label></td><td><img id="urbanAreaZoomSelect" src="images/ajax-loader.gif" alt="Loading..." /></td></tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div id="zoombookmark" title="Bookmark">
-                            <ul>
-                                <li class="link"><a id="extentLink" href="#">GRDO Map Application</a></li>
-                            </ul>
-                            <p>The link above can be used to create a bookmark that will open this application and zoom it to the current extent.</p>
-                            <h3>Internet Explorer</h3>
-                            <p>Right-click on the link and select <em>Add to Favorites...</em> from the context menu.</p>
-                            <h3>Firefox</h3>
-                            <p>Right-click on the link and select <em>Bookmark This Link</em> from the context menu.</p>
-                            <h3>Chrome</h3>
-                            <p>Drag the link onto the bookmarks bar.</p>
                         </div>
                         <div id="locationInfo" title="Location Information">
                             <div id="locationInfoControl"></div>

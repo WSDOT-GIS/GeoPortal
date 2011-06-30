@@ -45,6 +45,17 @@
     width: 43px;
     height: 52px;
 }
+#toolbar 
+{
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    z-index: 1000;
+}
+#toolbar > * 
+{
+    margin: 0;
+}
 #wsdotLogo 
 {
     vertical-align: middle;
@@ -115,16 +126,17 @@ h3,h4
     font-family: 'Arial Narrow', Sans-Serif
 }
 
-.link 
-{
-    list-style-image: url('../images/link.png');
-}
-
 .zoomfullextIcon, .zoomprevIcon, .zoomnextIcon { background:url(../images/navigation/sprites.png) no-repeat top left; }
 
 .zoomfullextIcon{ background-position: 0 0; width: 16px; height: 16px; } 
 .zoomnextIcon{ background-position: -26px 0; width: 16px; height: 16px; } 
 .zoomprevIcon{ background-position: -52px 0; width: 16px; height: 16px; } 
+
+.helpIcon  
+{
+    background:url(../images/HelpIcon_16.png);
+    background-position: 0 0; width: 16px; height: 16px;
+}
 
 .legend
 {
