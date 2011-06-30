@@ -43,8 +43,6 @@
 
         // Set alternating row colors in legend
         $(".alternatingLines tbody tr:odd").addClass("alternate-row");
-
-        $("<div>").attr("id", "linkDialog").append($("#extentLink")).dialog({ "autoOpen": false, title: "Link" });
     });
 
 
@@ -151,6 +149,23 @@
     var notices = {};
     var geometryService;
 
+    function getExtentLink() {
+        /// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
+        var qsParams = {
+            "extent": map.extent.toCsv()
+        };
+        $(map.getVisibleLayers()).each(function (index, layer) {
+            if (index === 0) {
+                qsParams.visibleLayers = layer.id + ":" + Math.round(layer.opacity * 100) / 100;
+            }
+            else {
+                qsParams.visibleLayers += "," + layer.id + ":" + Math.round(layer.opacity * 100) / 100;
+            }
+        });
+
+        return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+    }
+
 
     function init() {
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
@@ -162,23 +177,6 @@
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
         if (dojo.isOpera) {
             esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
-        }
-
-        function setExtentLink() {
-            /// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
-            var qsParams = {
-                "extent": map.extent.toCsv()
-            };
-            $(map.getVisibleLayers()).each(function (index, layer) {
-                if (index === 0) {
-                    qsParams.visibleLayers = layer.id + ":" + Math.round(layer.opacity * 100) / 100;
-                }
-                else {
-                    qsParams.visibleLayers += "," + layer.id + ":" + Math.round(layer.opacity * 100) / 100;
-                }
-            });
-
-            $("#extentLink").attr("href", $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams));
         }
 
         function setupNorthArrow() {
@@ -198,7 +196,13 @@
                 iconClass: "linkIcon",
                 showLabel: false,
                 onClick: function () {
-                    $("#linkDialog").dialog("open");
+                    var linkDialog = $("#linkDialog");
+                    var url = getExtentLink();
+                    if (linkDialog.length === 0) {
+                        linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal":true, "title": "Bookmark" });
+                    }
+                    $("#linkDialog a").attr("href", url).text(url);
+                    linkDialog.dialog("open");
                 }
             }, "linkButton");
         }
@@ -382,8 +386,6 @@
                 map.setExtent(extent);
             }
 
-            setExtentLink();
-
             var layers = [];
 
             // Load the layers that are defined in the config file.
@@ -447,13 +449,11 @@
             if (notices.updatingMap) {
                 notices.updatingMap.pnotify_remove();
             }
-            setExtentLink();
         });
 
 
 
         dojo.connect(map, "onZoomEnd", function (extent, zoomFactor, anchor, level) {
-            setExtentLink(extent);
             setScaleLabel(level);
         });
 
