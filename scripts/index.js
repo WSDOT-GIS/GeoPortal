@@ -189,7 +189,7 @@
                 iconClass: "helpIcon",
                 showLabel: false,
                 onClick: function () {
-                    window.open("help.html", "GRDO Map Help");
+                    window.open("help/default.html", "GRDO Map Help");
                 }
             }, "helpButton");
         }
