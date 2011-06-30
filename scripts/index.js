@@ -28,7 +28,6 @@
 
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
-        // Setup the contact us dialog.
 
         // Set the links to other websites to open in a new window.  
         // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
@@ -196,8 +195,10 @@
                 iconClass: "linkIcon",
                 showLabel: false,
                 onClick: function () {
-                    var linkDialog = $("#linkDialog");
-                    var url = getExtentLink();
+                    /// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
+                    var url = getExtentLink(),
+                        linkDialog = $("#linkDialog");
+                    // Create the link dialog if it does not already exist.
                     if (linkDialog.length === 0) {
                         linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal":true, "title": "Bookmark" });
                     }
