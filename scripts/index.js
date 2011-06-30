@@ -101,21 +101,47 @@
     }
     });
 
-    dojo.extend(esri.Map, { "getVisibleLayers": function () {
-        /// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
-        var layer;
-        var visibleLayers = [];
-        for (var i = 0, l = this.layerIds.length; i < l; i++) {
-            layer = this.getLayer(this.layerIds[i]);
-            if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
-                visibleLayers.push(layer);
+    dojo.extend(esri.Map, {
+        "getVisibleLayers": function () {
+            /// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
+            /// <returns type="Array" />
+            var layer;
+            var visibleLayers = [];
+            for (var i = 0, l = this.layerIds.length; i < l; i++) {
+                layer = this.getLayer(this.layerIds[i]);
+                if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
+                    visibleLayers.push(layer);
+                }
+            }
+            return visibleLayers;
+        },
+        "getLOD": function (level) {
+            /// <summary>Gets the current level of detail (LOD) for the map.</summary>
+            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+            /// <returns type="esri.layers.LOD" />
+            var firstLayer = this.getLayer(this.layerIds[0]);
+            var lod = null;
+            if (firstLayer.tileInfo) {
+                if (typeof (level) === "undefined" || level === null) {
+                    level = this.getLevel();
+                }
+                lod = firstLayer.tileInfo.lods[level];
+            }
+            return lod;
+        },
+        "getScale": function (level) {
+            /// <summary>Returns the current scale of the map.</summary>
+            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+            /// <returns type="Number" />
+            var lod = this.getLOD(level);
+            if (lod !== null) {
+                return lod.scale;
+            }
+            else {
+                return null;
             }
         }
-        return visibleLayers;
-    }
     });
-
-
 
     var map = null;
     var extents = null;
@@ -207,6 +233,18 @@
             mainContainer.startup();
         }
 
+        function setScaleLabel(level) {
+            // Set the scale.
+            var scale = map.getScale(level);
+            if (scale === null) {
+                scale = "";
+            }
+            else {
+                scale = "1:" + scale;
+            }
+            $("#scaleText").text(scale);
+        }
+
         setupLayout();
 
         // Convert the extent definition in the options into an esri.geometry.Extent object.
@@ -253,6 +291,9 @@
         });
 
         dojo.connect(map, "onLoad", map, function () {
+            // Set the scale.
+            setScaleLabel();
+
             $("#lrsTools").lrsTools(map);
             setupNorthArrow();
             setupToolbar();
@@ -404,6 +445,7 @@
 
         dojo.connect(map, "onZoomEnd", function (extent, zoomFactor, anchor, level) {
             setExtentLink(extent);
+            setScaleLabel(level);
         });
 
 
