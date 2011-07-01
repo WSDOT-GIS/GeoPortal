@@ -39,6 +39,7 @@
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\greenlogo.png" />
+    <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />

@@ -54,10 +54,6 @@
     dojo.require("dijit.layout.AccordionContainer");
     dojo.require("dijit.layout.ContentPane");
 
-
-    dojo.require("dijit.Toolbar");
-    dojo.require("dijit.Menu");
-
     dojo.require("dojox.layout.ExpandoPane");
 
     dojo.require("dijit.form.Select");
@@ -200,12 +196,19 @@
                         linkDialog = $("#linkDialog");
                     // Create the link dialog if it does not already exist.
                     if (linkDialog.length === 0) {
-                        linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal":true, "title": "Bookmark" });
+                        linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal": true, "title": "Bookmark" });
                     }
                     $("#linkDialog a").attr("href", url).text(url);
                     linkDialog.dialog("open");
                 }
             }, "linkButton");
+            dijit.form.Button({
+                iconClass: "feedbackIcon",
+                showLabel: false,
+                onClick: function () {
+                    window.open("mailto:feedback@example.com", "Feedback", null, true);
+                }
+            }, "feedbackButton");
         }
 
         function setupLayout() {
