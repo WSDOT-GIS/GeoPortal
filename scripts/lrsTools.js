@@ -74,7 +74,7 @@
         function createAttributeTableForElcResult(result) {
             var table = "<table>",
                 value,
-                ignoreRe = /(?:Back)|(?:RoutePoint)|(?:EventPoint)/i, // Define attributes that will not be in the info window.
+                includeRe = /(?:Arm)|(?:Srmp)|(?:RouteId)/i,  // Define which attributes will be shown in the output window.
                 aliases = {
                     "Arm": "ARM",
                     "Measure": "ARM",
@@ -85,14 +85,14 @@
                     "ArmCalcReturnCode": "ARM Calc Return Code",
                     "LrsType": "LRS Type",
                     "LOC_ANGLE": "Angle",
-                    "RouteID": "Route",
+                    "RouteId": "Route",
                     "OffsetDistance": "Offset Distance",
                     "RightSide": "Right Side"
                 },
                 attr;
             for (attr in result) {
                 if (result.hasOwnProperty(attr)) {
-                    if (!attr.match(ignoreRe)) {
+                    if (attr.match(includeRe)) {
                         value = result[attr];
                         if (!((attr === "LocatingError" && value === "LOCATING_OK") || (attr === "Message" && value === "") || (attr === "OffsetDistance" && value === 0))) {
                             // Convert date values from long 
