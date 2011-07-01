@@ -202,13 +202,6 @@
                     linkDialog.dialog("open");
                 }
             }, "linkButton");
-            dijit.form.Button({
-                iconClass: "feedbackIcon",
-                showLabel: false,
-                onClick: function () {
-                    window.open("mailto:feedback@example.com", "Feedback", null, true);
-                }
-            }, "feedbackButton");
         }
 
         function setupLayout() {
