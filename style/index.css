@@ -130,15 +130,13 @@ h3,h4
     font-family: 'Arial Narrow', Sans-Serif
 }
 
-.zoomfullextIcon, .zoomprevIcon, .zoomnextIcon, .helpIcon, .linkIcon, .feedbackIcon { background:url(../images/navigation/sprites.png) no-repeat top left; }
+.zoomfullextIcon, .zoomprevIcon, .zoomnextIcon, .helpIcon, .linkIcon { background:url(../images/navigation/sprites.png) no-repeat top left; }
 
-.feedbackIcon{ background-position: 0 0; width: 16px; height: 16px; } 
-.helpIcon{ background-position: 0 -21px; width: 16px; height: 16px; } 
-.linkIcon{ background-position: 0 -42px; width: 18px; height: 7px; } 
-.zoomfullextIcon{ background-position: 0 -54px; width: 16px; height: 16px; } 
-.zoomnextIcon{ background-position: 0 -75px; width: 16px; height: 16px; } 
-.zoomprevIcon{ background-position: 0 -96px; width: 16px; height: 16px; } 
-
+.helpIcon{ background-position: 0 0; width: 16px; height: 16px; } 
+.linkIcon{ background-position: -21px 0; width: 18px; height: 7px; } 
+.zoomfullextIcon{ background-position: -44px 0; width: 16px; height: 16px; } 
+.zoomnextIcon{ background-position: -65px 0; width: 16px; height: 16px; } 
+.zoomprevIcon{ background-position: -86px 0; width: 16px; height: 16px; } 
 
 #scaleText 
 {
@@ -149,13 +147,6 @@ h3,h4
     color: #666666;
     font-size: 11px;
     font-weight: bolder;
-}
-
-#feedbackButton 
-{
-    display: inline;
-    vertical-align: middle;
-    text-align: center;
 }
 
 /* Change the background color of alternating rows */
