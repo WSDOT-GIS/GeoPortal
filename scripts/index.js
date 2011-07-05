@@ -23,7 +23,7 @@
         Date.prototype.toShortDateString = function () {
             /// <summary>Returns a string representation of the date in the format Month-Date-Year.</summary>
             return this.getMonth() + "-" + this.getDate() + "-" + this.getFullYear();
-        }
+        };
     }
 
     $(document).ready(function () {
@@ -85,7 +85,7 @@
 
     dojo.extend(esri.geometry.Extent, { "toCsv": function () {
         var propNames = ["xmin", "ymin", "xmax", "ymax"];
-        var output = ""
+        var output = "";
         for (var i = 0, l = propNames.length; i < l; i++) {
             if (i > 0) {
                 output += ","
@@ -94,6 +94,15 @@
         }
         return output;
     }
+    });
+
+    dojo.extend(esri.layers.GraphicsLayer, {
+        "getGraphicsAsJson": function () {
+            /// <summary>Returns an array of ArcGIS Server JSON graphics.</summary>
+            return dojo.map(this.graphics, function (item) {
+                return item.toJson();
+            })
+        }
     });
 
     dojo.extend(esri.Map, {
@@ -135,14 +144,72 @@
             else {
                 return null;
             }
+        },
+        "getGraphicsLayers": function () {
+            /// <summary>Returns all graphics layers in the map.</summary>
+            /// <param name="excludeInternalGraphicsLayer" type="Boolean">Set to true to exclude the map object's internal graphics layer, false to include it.</param>
+            var gfxLayers = [];
+            var layer, id;
+            for (var i = 0; i < this.graphicsLayerIds.length; i++) {
+                id = this.graphicsLayerIds[i];
+                layer = this.getLayer(id);
+                if (layer.isInstanceOf(esri.layers.GraphicsLayer) && !layer.isInstanceOf(esri.layers.FeatureLayer)) {
+                    gfxLayers.push(layer);
+                }
+            }
+            return gfxLayers;
+
+        },
+        "getGraphicsAsJson": function (options) {
+            /// <summary>Returns all of the graphics in all of the graphics layers in the map.</summary>
+            var graphicsLayers = this.getGraphicsLayers(),
+                output = {};
+
+            // Set default values for omitted options.
+            if (typeof (options) === "undefined") {
+                options = {
+                    removeInfoTemplate: true,
+                    removeSymbol: true
+                }
+            }
+            if (typeof (options.removeInfoTemplate) === "undefined") {
+                options.removeInfoTemplate = true;
+            }
+            if (typeof (options.removeSymbol) === "undefined") {
+                options.removeSymbol = true;
+            }
+
+            // For each layer, get a collection of JSON graphic representations
+            dojo.forEach(graphicsLayers, function (layer, layerIndex) {
+                var graphics;
+                if (layer.graphics.length > 0) {
+                    graphics = layer.getGraphicsAsJson();
+                    if (options.removeInfoTemplate === true || options.removeSymbol === true) {
+                        // Remove unwanted properties from each graphic representation as specified in the options object.
+                        dojo.forEach(graphics, function (graphic, gIndex) {
+                            if (typeof (graphic.infoTemplate) !== "undefined" && options.removeInfoTemplate === true) {
+                                delete graphic.infoTemplate;
+                            }
+                            if (typeof (graphic.symbol) !== "undefined" && options.removeSymbol === true) {
+                                delete graphic.symbol;
+                            }
+                        })
+                    }
+                    output[layer.id] = graphics;
+                }
+            });
+            return output;
         }
     });
+
+
 
     var map = null;
     var extents = null;
     var navToolbar;
     var notices = {};
     var geometryService;
+    var exportDialog = null;
 
     function getExtentLink() {
         /// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
@@ -202,6 +269,41 @@
                     linkDialog.dialog("open");
                 }
             }, "linkButton");
+
+            var button = dojo.create("button", { id: "saveButton" }, "toolbar", "first");
+            dijit.form.Button({
+                label: "Save",
+                showLabel: false,
+                iconClass: "dijitEditorIcon dijitEditorIconSave",
+                onClick: function () {
+                    // Create the export dialog if it does not already exist.
+                    if (!exportDialog) {
+                        exportDialog = $("<div>").attr("id", "exportDialog").dialog({ autoOpen: false, title: "Save Graphics", modal: true });
+                        $("<p>").text("Warning!  Clicking on the submit button will navigate you away from this page.").appendTo(exportDialog);
+                        var form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").appendTo(exportDialog);
+
+                        var formatSelect = $("<select name='f'>").appendTo(form);
+                        $(["json"]).each(function (index, element) {
+                            $("<option>").attr("value", element).text(element).appendTo(formatSelect);
+                        });
+
+                        $("<button>").attr("type", "button").text("Export").appendTo(form).click(function () {
+                            // Get all of the graphics and store in a cookie.
+                            var graphicsJson = JSON.stringify(map.getGraphicsAsJson());
+                            $.cookie("graphics", graphicsJson);
+
+                            var url = $.param.querystring("GraphicExport.ashx", { "f": formatSelect.val() });
+                            window.open(url);
+                        });
+                    }
+
+                    // Set the hidden graphics element's value.
+
+
+                    // Show the export dialog
+                    exportDialog.dialog("open");
+                }
+            }, "saveButton");
         }
 
         function setupLayout() {
@@ -330,7 +432,7 @@
                     dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
                         for (var i = 0; i < this.length; i++) {
                             var removed = basemapGallery.remove(this[i]);
-                            if (console) {
+                            if (console && console.warn) {
                                 if (removed === null) {
                                     console.warn("Basemap removal failed: basemap not found: " + this[i]);
                                 }

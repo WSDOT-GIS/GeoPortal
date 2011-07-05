@@ -50,6 +50,7 @@
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
+    <Content Include="scripts\jquery.cookie.js" />
     <Content Include="scripts\jquery.pnotify.js" />
     <Content Include="scripts\jquery.pnotify.min.js" />
     <Content Include="scripts\json2.js" />
@@ -107,6 +108,9 @@
       <DependentUpon>config.ashx</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
+    <Compile Include="GraphicExport.ashx.cs">
+      <DependentUpon>GraphicExport.ashx</DependentUpon>
+    </Compile>
     <Compile Include="MapIcon.ashx.cs">
       <DependentUpon>MapIcon.ashx</DependentUpon>
     </Compile>
@@ -115,6 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MapIcon.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GraphicExport.ashx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
