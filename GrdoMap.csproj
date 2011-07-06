@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="help\navigation.html" />
+    <Content Include="help\zoom_controls.html" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />

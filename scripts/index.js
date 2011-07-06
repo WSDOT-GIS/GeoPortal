@@ -18,6 +18,14 @@
 (function ($) {
     "use strict";
 
+    var map = null,
+        extents = null,
+        navToolbar,
+        notices = {},
+        geometryService,
+        exportDialog = null,
+        helpDialog;
+
     // Add a method to the Date object that will return a short date string.
     if (typeof (Date.toShortDateString) === "undefined") {
         Date.prototype.toShortDateString = function () {
@@ -43,6 +51,8 @@
         // Set alternating row colors in legend
         $(".alternatingLines tbody tr:odd").addClass("alternate-row");
     });
+
+
 
 
 
@@ -204,12 +214,7 @@
 
 
 
-    var map = null;
-    var extents = null;
-    var navToolbar;
-    var notices = {};
-    var geometryService;
-    var exportDialog = null;
+
 
     function getExtentLink() {
         /// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
@@ -226,6 +231,30 @@
         });
 
         return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+    }
+
+    function showHelpDialog(helpUrl) {
+        /// <summary>Opens the help dialog and adds content from the given URL.</summary>
+        /// <param name="helpUrl" type="String">The URL that containts the content that will be shown in the help dialog.</param>
+        var helpContent;
+        if (!helpDialog) {
+            // Create the help dialog if it does not already exist.
+            helpDialog = $("<div>").attr("id", "helpDialog").dialog({ autoOpen: false, title: "Help", height: 480 });
+            helpContent = $("<div>").attr("id", "helpContent").appendTo(helpDialog);
+        }
+        else {
+            // Clear the contents
+            helpContent = $("#helpContent").empty();
+        }
+
+        helpDialog.dialog("open");
+
+        helpContent.load(helpUrl, function (responseText, textStatus, XMLHttpRequest) {
+            // Handle case where content could not be loaded.
+            if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
+                helpContent.text("Error loading help text.");
+            }
+        });
     }
 
 
@@ -251,7 +280,8 @@
                 iconClass: "helpIcon",
                 showLabel: false,
                 onClick: function () {
-                    window.open("help/default.html", "GRDO Map Help");
+                    // window.open("help/default.html", "GRDO Map Help");
+                    showHelpDialog("help/navigation.html");
                 }
             }, "helpButton");
             dijit.form.Button({
