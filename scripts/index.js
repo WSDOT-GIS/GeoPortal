@@ -270,6 +270,8 @@
                 }
             }, "linkButton");
 
+
+            // TODO: Make drop-down button instead of popping up a dialog.
             var button = dojo.create("button", { id: "saveButton" }, "toolbar", "first");
             dijit.form.Button({
                 label: "Save",
@@ -279,21 +281,25 @@
                     // Create the export dialog if it does not already exist.
                     if (!exportDialog) {
                         exportDialog = $("<div>").attr("id", "exportDialog").dialog({ autoOpen: false, title: "Save Graphics", modal: true });
-                        $("<p>").text("Warning!  Clicking on the submit button will navigate you away from this page.").appendTo(exportDialog);
                         var form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").appendTo(exportDialog);
 
-                        var formatSelect = $("<select name='f'>").appendTo(form);
-                        $(["json"]).each(function (index, element) {
-                            $("<option>").attr("value", element).text(element).appendTo(formatSelect);
+                        $("<label>").attr("for", "graphic-export-format").text("Select an export format:").appendTo(form);
+                        var formatSelect = $("<select name='f' id='graphic-export-format'>").appendTo(form);
+
+                        $([["json", "JSON"]]).each(function (index, element) {
+                            $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
                         });
 
-                        $("<button>").attr("type", "button").text("Export").appendTo(form).click(function () {
+                        $("<button>").css("display", "block").attr("type", "button").text("Export").appendTo(form).button().click(function () {
                             // Get all of the graphics and store in a cookie.
                             var graphicsJson = JSON.stringify(map.getGraphicsAsJson());
                             $.cookie("graphics", graphicsJson);
 
+                            // Create the request URL.
                             var url = $.param.querystring("GraphicExport.ashx", { "f": formatSelect.val() });
+                            // Open the URL in a new window.
                             window.open(url);
+                            exportDialog.dialog("close");
                         });
                     }
 
