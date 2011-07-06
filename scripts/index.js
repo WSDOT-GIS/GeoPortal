@@ -370,17 +370,28 @@
                 showLabel: false,
                 iconClass: "helpIcon",
                 onClick: function () {
-                    showHelpDialog("../help/zoom_controls.html");
+                    showHelpDialog("help/zoom_controls.html");
                 }
             }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
             // Location Informatoin tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
+            dijit.form.Button({
+                label: "Location Info. Help",
+                iconClass: "helpIcon",
+                showLabel: false,
+                onClick: function () {
+                    showHelpDialog("help/location_info.html");
+                }
+            }, dojo.create("button", { type: "button" }, "locationInfo"));
 
 
             // LRS Tools
 
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
+
+
+
 
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
@@ -438,7 +449,7 @@
             iconClass: "helpIcon",
             label: "Measure tool help",
             showLabel: false,
-            onClick: function() {
+            onClick: function () {
                 showHelpDialog("help/measure.html");
             }
         }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureControls"));
@@ -460,6 +471,16 @@
             setScaleLabel();
 
             $("#lrsTools").lrsTools(map);
+            // Add help button to the LrsTools control.
+            dijit.form.Button({
+                label: "Milepost Help",
+                iconClass: "helpIcon",
+                showLabel: false,
+                onClick: function () {
+                    showHelpDialog("help/milepost.html");
+                }
+            }, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+
             setupNorthArrow();
             setupToolbar();
             esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
