@@ -364,6 +364,15 @@
 
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
+            // Add the help button for the zoom controls.
+            dijit.form.Button({
+                label: "Zoom Help",
+                showLabel: false,
+                iconClass: "helpIcon",
+                onClick: function () {
+                    showHelpDialog("../help/zoom_controls.html");
+                }
+            }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
             // Location Informatoin tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
