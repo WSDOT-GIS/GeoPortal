@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="help\measure.html" />
     <Content Include="help\navigation.html" />
     <Content Include="help\zoom_controls.html" />
     <Content Include="images\ajax-loader.gif" />

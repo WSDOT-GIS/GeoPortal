@@ -434,6 +434,14 @@
 
         $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
         esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
+        dijit.form.Button({
+            iconClass: "helpIcon",
+            label: "Measure tool help",
+            showLabel: false,
+            onClick: function() {
+                showHelpDialog("help/measure.html");
+            }
+        }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureControls"));
 
 
         map.addLayer(initBasemap);
