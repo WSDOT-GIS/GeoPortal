@@ -4,41 +4,49 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GRDO Map Application Help</title>
     <link rel="shortcut icon" href="http://www.wsdot.wa.gov/favicon.ico" />
-
 </head>
 <body>
-    <div>
-        <h2>Zoom Controls</h2>
-        <h3>Zoom by interacting with map</h3>
-        <p>You can zoom by interacting with the map in the following ways.</p>
-        <ul>
-            <li>Double-click on a spot on the map to zoom in to that location.</li>
-            <li>Use the mouse's scroll wheel to zoom in and out on the map.</li>
-            <li>By holding down the shift key you can draw a box on the map.  When you release the mouse, the map will zoom to that extent.</li>
-        </ul>
-        <h3>Zoom to specific areas</h3>
-        <h4>Full Extent</h4>
-        <p>Click the <em>Full Extent</em> button to zoom the map out to show the whole state.</p>
-        <h4>Zoom to County, City, or Urban Area</h4>
-        <p>You can zoom to a county, city or urban area using the corresponding text box.</p>
-        <ol>
-            <li>Begin typing into the text box.</li>
-            <li>A list of items will appear in the box.  You can keep typing to further narrow down the results.</li>
-            <li>Use the up and down arrow keys to select on of the items from the list.</li>
-            <li>Press enter.  The map will zoom to the selected location.</li>
-        </ol>
-    </div>
-    <div id="zoombookmark" title="Bookmark">
-        <ul>
-            <li class="link"><a id="extentLink" href="#">GRDO Map Application</a></li>
-        </ul>
-        <p>The link above can be used to create a bookmark that will open this application and zoom it to the current extent.</p>
-        <h3>Internet Explorer</h3>
-        <p>Right-click on the link and select <em>Add to Favorites...</em> from the context menu.</p>
-        <h3>Firefox</h3>
-        <p>Right-click on the link and select <em>Bookmark This Link</em> from the context menu.</p>
-        <h3>Chrome</h3>
-        <p>Drag the link onto the bookmarks bar.</p>
-    </div>
+    <h2>Map Navigation</h2>
+    <p>You can zoom and pan the map in the following ways.</p>
+    <ul>
+      <li>Drag the mouse to pan</li>
+      <li>Mouse Scroll Forward to zoom in</li>
+      <li>Mouse Scroll Backward to zoom out</li>
+      <li>SHIFT + Drag the mouse to zoom in</li>
+      <li>SHIFT + CTRL + Drag the mouse to zoom out</li>
+      <li>SHIFT + Click to recenter</li>
+      <li>Double Click to Center and Zoom in</li>
+      <li>SHIFT + Double Click to Center and Zoom in</li>
+      <li>Use arrow keys to pan</li>
+      <li>Use + key to zoom in a level</li>
+      <li>Use - key to zoom out a level</li>
+      
+    </ul>
+
+    <h3>Zoom Controls</h3>
+    <ul>
+        <li>Zoom in and out using the zoom slider on the left side of the map.</li>
+        <li>The toolbar in the upper-right corner of the map contains the following controls
+            <ul>
+                <li>Zoom to full extent</li>
+                <li>Zoom to previous extent (Only available if there is a previous extent to return to.)</li>
+                <li>Zoom to next extent (Only available if you have previously used the Zoom to previous extent button.)</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <h3>Zoom to specific areas</h3>
+    <p>To access these controls, click on the Tools tab and then the Zoom Controls header within that tab.</p>
+    <h4>Zoom to my current location</h4>
+    <p>Clicking the <em>Zoom to my current location</em> button will use the W3C <a href="http://en.wikipedia.org/wiki/W3C_Geolocation_API">Geolocation API.</a> 
+    to determine your current location.</p>
+    <h4>Zoom to County, City, or Urban Area</h4>
+    <p>You can zoom to a county, city or urban area using the corresponding text box.</p>
+    <ol>
+        <li>Begin typing into the text box.</li>
+        <li>A list of items will appear in the box.  You can keep typing to further narrow down the results.</li>
+        <li>Use the up and down arrow keys to select on of the items from the list.</li>
+        <li>Press enter.  The map will zoom to the selected location.</li>
+    </ol>
 </body>
 </html>
