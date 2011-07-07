@@ -643,7 +643,6 @@
         });
 
         // Set up the zoom select boxes.
-        // TODO: Make the zoom extent filtering select a dijit.
         function setupFilteringSelect(featureSet, id) {
             /// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
             /// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
