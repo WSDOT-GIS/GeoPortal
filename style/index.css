@@ -225,7 +225,7 @@ img[src$="blank.gif"]
     border: 1px solid black;
 }
 
-.ui-esri-layer-list table, .ui-esri-layer-list td 
+.ui-esri-layer-list .ui-widget-content table, .ui-esri-layer-list .ui-widget-content td 
 {
     border: none;
 }
