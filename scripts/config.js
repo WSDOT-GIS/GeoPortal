@@ -83,7 +83,7 @@ wsdot.config = {
             "Political Boundaries": [
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/CityLimits/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CityLimits/MapServer",
                     "options": {
                         "id": "City Limits",
                         "visible": false
@@ -91,7 +91,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/CongressionalDistricts/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
                     "options": {
                         "id": "Congressional Districts",
                         "visible": false
@@ -99,7 +99,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/CountyBoundaries/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
                     "options": {
                         "id": "County Boundaries",
                         "visible": false
@@ -107,7 +107,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/LegisativeDistricts/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
                     "options": {
                         "id": "Legislative Districts",
                         "visible": false
@@ -115,7 +115,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/MPO/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/MPO/MapServer",
                     "options": {
                         "id": "MPO",
                         "visible": false
@@ -123,7 +123,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/RTPO/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer",
                     "options": {
                         "id": "RTPO",
                         "visible": false
@@ -131,7 +131,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/TownshipSection/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
                     "options": {
                         "id": "Township / Section",
                         "visible": false
@@ -139,7 +139,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/TribalLands/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TribalLands/MapServer",
                     "options": {
                         "id": "Tribal Lands",
                         "visible": false
@@ -149,7 +149,7 @@ wsdot.config = {
             "Design": [
                {
                    "layerType": "esri.layers.FeatureLayer",
-                   "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/InterchangeDrawings/MapServer/0",
+                   "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer/0",
                    "options": {
                        "id": "Interchange Drawings",
                        "outFields": ["PDFURL", "SRID", "Label"],
@@ -160,7 +160,7 @@ wsdot.config = {
             "WSDOT Boundaries": [
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/MaintenanceAreas/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
                     "options": {
                         "id": "Maintenance Areas",
                         "visible": false
@@ -168,7 +168,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/RegionBoundaries/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
                     "options": {
                         "id": "Region Boundaries",
                         "visible": false
@@ -188,7 +188,7 @@ wsdot.config = {
             "Transportation Features": [
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/StateRoutes/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
                     "options": {
                         "id": "State Routes",
                         "visible": false

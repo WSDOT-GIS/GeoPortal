@@ -451,6 +451,9 @@
 
 
         map.addLayer(initBasemap);
+        
+        var stack_loading = {"dir1" : "left", "dir2": "up", "push": "top"};
+
         notices.updatingMap = $.pnotify({
             pnotify_title: "Updating map...",
             pnotify_text: "Please wait...",
@@ -458,7 +461,9 @@
             pnotify_nonblock: true,
             pnotify_hide: false,
             pnotify_closer: false,
-            pnotify_history: false
+            pnotify_history: false,
+            pnotify_addclass: "stack-loading",
+            pnotify_stack: stack_loading
         });
 
         dojo.connect(map, "onLoad", map, function () {
