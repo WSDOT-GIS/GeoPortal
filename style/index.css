@@ -212,6 +212,8 @@ img[src$="blank.gif"]
     margin-bottom: 3px;
 }
 
+
+
 .ui-widget-content table
 {
     border: 1px solid black;
@@ -221,4 +223,9 @@ img[src$="blank.gif"]
 .ui-widget-content td, .ui-widget-content th
 {
     border: 1px solid black;
+}
+
+.ui-esri-layer-list table, .ui-esri-layer-list td 
+{
+    border: none;
 }

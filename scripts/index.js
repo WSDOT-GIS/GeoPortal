@@ -88,11 +88,6 @@
     dojo.require("esri.dijit.Measurement");
     dojo.require("esri.tasks.gp");
 
-    dojo.require("dojox.image.Lightbox");
-
-    // Add a category property to the esri.layers.Layer class.
-    dojo.extend(esri.layers.Layer, { "wsdotCategory": null });
-
     dojo.extend(esri.geometry.Extent, { "toCsv": function () {
         var propNames = ["xmin", "ymin", "xmax", "ymax"];
         var output = "";
@@ -559,40 +554,43 @@
                 map.setExtent(extent);
             }
 
-            var layers = [];
+            var layers = {};
+            var layersInGroup;
 
             // Load the layers that are defined in the config file.
-            for (var i = 0, l = wsdot.config.layers.length; i < l; i++) {
-                var layerInfo = wsdot.config.layers[i];
-                var constructor;
-                switch (layerInfo.layerType) {
-                    case "esri.layers.ArcGISTiledMapServiceLayer":
-                        constructor = esri.layers.ArcGISTiledMapServiceLayer;
-                        break;
-                    case "esri.layers.ArcGISDynamicMapServiceLayer":
-                        constructor = esri.layers.ArcGISDynamicMapServiceLayer;
-                        break;
-                    case "esri.layers.FeatureLayer":
-                        constructor = esri.layers.FeatureLayer;
-                        break;
-                    default:
-                        // Unsupported type.
-                        continue;
+            for (var tabName in wsdot.config.layers) {
+                layers[tabName] = {};
+                for (var groupName in wsdot.config.layers[tabName]) {
+                    layers[tabName][groupName] = [];
+                    for (var i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i++) {
+                        var layerInfo = wsdot.config.layers[tabName][groupName][i];
+                        var constructor;
+                        switch (layerInfo.layerType) {
+                            case "esri.layers.ArcGISTiledMapServiceLayer":
+                                constructor = esri.layers.ArcGISTiledMapServiceLayer;
+                                break;
+                            case "esri.layers.ArcGISDynamicMapServiceLayer":
+                                constructor = esri.layers.ArcGISDynamicMapServiceLayer;
+                                break;
+                            case "esri.layers.FeatureLayer":
+                                constructor = esri.layers.FeatureLayer;
+                                break;
+                            default:
+                                // Unsupported type.
+                                continue;
+                        }
+                        // Create an info template object if paramters are defined.
+                        if (layerInfo.options && layerInfo.options.infoTemplate) {
+                            layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate)
+                        }
+                        var layer = constructor(layerInfo.url, layerInfo.options);
+                        map.addLayer(layer);
+                        if (layerInfo.visibleLayers) {
+                            layer.setVisibleLayers(layerInfo.visibleLayers);
+                        }
+                        layers[tabName][groupName].push(layer);
+                    }
                 }
-                // Create an info template object if paramters are defined.
-                if (layerInfo.options && layerInfo.options.infoTemplate) {
-                    layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate)
-                }
-                var layer = constructor(layerInfo.url, layerInfo.options);
-                // Set the category property if a category has been specified for this layer.
-                if (layerInfo.wsdotCategory) {
-                    layer.wsdotCategory = layerInfo.wsdotCategory;
-                }
-                map.addLayer(layer);
-                if (layerInfo.visibleLayers) {
-                    layer.setVisibleLayers(layerInfo.visibleLayers);
-                }
-                layers.push(layer);
             }
 
             $("#layerList").layerList({ "layerSource": layers, "map": map });

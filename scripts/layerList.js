@@ -4,15 +4,21 @@
 /*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
 (function ($) {
+    "use strict"
+
+    dojo.require("dijit.layout.TabContainer");
+    dojo.require("dijit.layout.ContentPane");
     dojo.require("dijit.form.Slider");
     dojo.require("dijit.form.CheckBox");
+
 
     //// Code snippet: List IDS of all data layers controlled by the layer list.
     // $("*[data-layerId]").map(function(index, value) { return $(value).attr("data-layerId");});
 
     var settings = {
         layerSource: null,
-        map: null
+        map: null,
+        tabs: true
     };
 
     function formatForHtmlId(s, prefix) {
@@ -27,6 +33,41 @@
             s = prefix + "-" + s;
         }
         return s;
+    }
+
+    function createSortedPropertyNameList(obj, propNamesAtEnd) {
+        /// <summary>Returns a sorted array of property names for an object.</summary>
+        /// <param name="obj" type="Object">An object that has properties.</param>
+        /// <param name="propNamesAtEnd" type="Array">An array of property names that will be placed at the end of the list (instead of being sorted).</param>
+        var propNames = [], skippedPropNames = [], re;
+
+        if (propNamesAtEnd && propNamesAtEnd.length > 0) {
+            re = "";
+            $.each(propNamesAtEnd, function (index, propName) {
+                if (index > 0) {
+                    re += "|"
+                }
+                re += "(" + propName + ")";
+            });
+            re = new RegExp(re, "gi");
+        }
+
+        for (var propName in obj) {
+            if (re && propName.match(re)) {
+                skippedPropNames.push(propName);
+            }
+            else {
+                propNames.push(propName);
+            }
+        }
+        propNames.sort();
+        skippedPropNames.sort();
+        // propNames = propNames.concat(skippedPropNames);
+        dojo.forEach(skippedPropNames, function (propName) {
+            propNames.push(propName);
+        });
+
+        return propNames;
     }
 
     var methods = {
@@ -52,33 +93,28 @@
 
             this.addClass("ui-esri-layer-list");
 
-            function createControlsForLayer(layer, autoAppend) {
+            // Add tab container
+            var tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
+
+
+            function createControlsForLayer(layer, elementToAppendTo) {
+                // TODO: Create new ContentPane for "tab" if one does not already exist.
                 var checkboxId = formatForHtmlId(layer.id, "checkbox");
                 var sliderId = formatForHtmlId(layer.id, "slider");
 
                 // Create a checkbox and label and place inside of a div.
                 var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId);
-                var label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id +")" : layer.id);
+                var label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id);
 
                 // Create a unique ID for the slider for this layer.
 
                 var opacitySlider = $("<div>").attr("id", sliderId).css("width", "300px");
                 var layerDiv = $("<div>").attr("data-layerId", layer.id).append(checkBox).append(label).append(opacitySlider);
 
-                // Assign layer to a category if not already assigned to one.
-                if (!layer.wsdotCategory) {
-                    if (layer.id.match(basemapLayerIdRe)) {
-                        layer.wsdotCategory = "Basemap";
-                    } else {
-                        layer.wsdotCategory = "Other";
-                    }
-                }
-
-
 
                 // Add the div to the document.
-                if (typeof (autoAppend) === "undefined" || autoAppend) {
-                    layerListNode.append(layerDiv);
+                if (elementToAppendTo) {
+                    layerDiv.appendTo(elementToAppendTo);
                 }
 
                 // Create an opacity slider for the layer.
@@ -117,79 +153,60 @@
                 });
             }
 
-            // Group layers into categories.
-            var layerGroups = {};
-            var layer;
-            for (var i = 0, layerCount = layerSource.length; i < layerCount; i++) {
-                layer = layerSource[i];
-                if (layer.wsdotCategory) {
-                    // Create the category if it is not already defined.
-                    if (!layerGroups[layer.wsdotCategory]) {
-                        layerGroups[layer.wsdotCategory] = [layer];
-                    }
-                    else {
-                        layerGroups[layer.wsdotCategory].push(layer);
-                    }
-                } else {
-                    if (!layerGroups.Other) {
-                        layerGroups.Other = [layer];
-                    }
-                    else {
-                        layerGroups.Other.push(layer);
-                    }
-                }
+            // Create a sorted list of tab names.
+            var tabNames = createSortedPropertyNameList(layerSource);
+
+            var sortById = function (a, b) {
+                /// <summary>Used by the Array.sort method to sort elements by their ID property.</summary>
+                if (a.id > b.id) { return 1; }
+                else if (a.id < b.id) { return -1; }
+                else { return 0; }
             }
 
+            var tabIds = [];
 
-            // Create an array of group names.
-            // If one of the groups is called "Other", do not add this item until after the array has been sorted so that "Other" appears at the end of the list.
-            var groupNames = [];
-            var hasOther = false;
+            dojo.forEach(tabNames, function (tabName) {
+                // Create an array of group names.
+                // If one of the groups is called "Other", do not add this item until after the array has been sorted so that "Other" appears at the end of the list.
+                var groupNames = createSortedPropertyNameList(layerSource[tabName], ["Other"]);
 
+                var tabId = formatForHtmlId(tabName, "tab");
+                tabIds.push(tabId);
 
-            for (var g in layerGroups) {
-                if (g === "Other") {
-                    hasOther = true;
-                }
-                else {
-                    groupNames.push(g);
-                }
-            }
+                var tabPane = $("<div>").attr("id", tabId).appendTo(tabContainer).attr("data-tab-name", tabName);
 
-            groupNames.sort();
-            if (hasOther) {
-                groupNames.push("Other");
-            }
+                dojo.forEach(groupNames, function (groupName) {
+                    var layers = layerSource[tabName][groupName];
+                    // Sort the layers in each group by the value of their id properties
+                    layers.sort(sortById);
 
+                    // Create a new div for each group.
+                    var groupDiv = $("<div>").attr("data-group", groupName).append($("<span>").html(groupName).addClass("esriLegendServiceLabel")).appendTo(tabPane);
 
-
-            var layerGroup;
-            var groupDiv;
-            var groupName;
-
-            for (var groupNameIndex in groupNames) {
-                groupName = groupNames[groupNameIndex];
-                layerGroup = layerGroups[groupName];
-                // Sort the layers in each group by the value of their id properties
-                layerGroup.sort(function (a, b) {
-                    if (a.id > b.id) { return 1; }
-                    else if (a.id < b.id) { return -1; }
-                    else { return 0; }
+                    // Add controls for each layer in the group.
+                    dojo.forEach(layers, function (layer) {
+                        createControlsForLayer(layer, groupDiv);
+                    });
                 });
 
-                // Create a new div for each group.
-                groupDiv = $("<div>");
-                groupDiv.attr("data-group", groupName);
-                groupDiv.append($("<span>").html(groupName).addClass("esriLegendServiceLabel"));
 
-                // Add controls for each layer in the group.
-                for (var i = 0, l = layerGroup.length; i < l; i++) {
-                    layer = layerGroup[i];
-                    layerDiv = createControlsForLayer(layer);
-                    groupDiv.append(layerDiv);
-                }
-                layerListNode.append(groupDiv);
-            }
+            });
+
+            ////tabContainer = dijit.layout.TabContainer({ style: "height: 100%; width: 100%" }, tabContainer[0]);
+            ////dojo.forEach(tabIds, function (tabId) {
+            ////    var tabName = $("#" + tabId).attr("data-tab-name")
+            ////    var contentPane = new dijit.layout.ContentPane({ title: tabName }, tabId);
+            ////    tabContainer.addChild(contentPane);
+            ////});
+            ////tabContainer.startup();
+
+            var anchorList = $("<ul>").prependTo(tabContainer);
+            $(tabIds).each(function (index, tabId) {
+                var tabName = $("#" + tabId).attr("data-tab-name")
+                $("<a>").attr("href", "#" + tabId).text(tabName).appendTo($("<li>").appendTo(anchorList));
+            });
+            tabContainer.tabs();
+
 
 
             // If a map setting has been specified, add event handlers to the map so that the layer list contents are updated when a layer is added or removed from the map.
@@ -198,23 +215,26 @@
                 dojo.connect(settings.map, "onLayerAddResult", layerListNode, function (layer, error) {
                     var existingControlsForThisLayer = $("div[data-layerId='" + layer.id + "']");
                     if (!existingControlsForThisLayer || existingControlsForThisLayer.length < 1 && !error) {
+                        var category;
                         if (layer.id.match(basemapLayerIdRe)) {
-                            layer.wsdotCategory = "Basemap";
+                            category = "Basemap";
                         } else {
-                            layer.wsdotCategory = "Other";
+                            category = "Other";
                         }
-                        var layerDiv = createControlsForLayer(layer);
+
 
                         // Get the div for the group this layer belongs to.
-                        var groupDiv = $("div[data-group='" + layer.wsdotCategory + "']");
+                        var groupDiv = $("div[data-group='" + category + "']");
+
+                        var tabDiv = $("div[data-tab-name='Main']");
+
 
                         // If the group div does not already exist, create it.
                         if (!groupDiv || groupDiv.length < 1) {
-                            groupDiv = $("<div>");
-                            groupDiv.attr("data-group", layer.wsdotCategory);
-                            groupDiv.append($("<span>").html(layer.wsdotCategory).addClass("esriLegendServiceLabel"));
-                            layerListNode.append(groupDiv);
+                            groupDiv = $("<div>").attr("data-group", category).append($("<span>").html(category).addClass("esriLegendServiceLabel")).appendTo(tabDiv);
                         }
+
+                        var layerDiv = createControlsForLayer(layer, groupDiv);
 
                         groupDiv.append(layerDiv);
                     }
