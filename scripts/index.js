@@ -488,7 +488,6 @@
             pnotify_history: false,
             pnotify_addclass: "stack-loading",
             pnotify_stack: stack_loading,
-            pnotify_shadow: true
         });
 
         dojo.connect(map, "onLoad", map, function () {

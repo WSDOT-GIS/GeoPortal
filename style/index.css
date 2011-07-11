@@ -234,6 +234,7 @@ img[src$="blank.gif"]
     top: 50%;
     left: 50%;
     right: auto;
+    height: 100px;
 }
 
 #measureWidget
