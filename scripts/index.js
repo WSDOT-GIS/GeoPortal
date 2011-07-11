@@ -643,55 +643,10 @@
         });
 
         // Set up the zoom select boxes.
-        function setupFilteringSelect(featureSet, id) {
-            /// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
-            /// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
-            var sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
-            var data;
-            if (featureSet.isInstanceOf && featureSet.isInstanceOf(esri.tasks.FeatureSet)) {
-                var graphic;
-                var nameAttribute = "NAME";
-                data = { identifier: "name", label: "name", items: [] };
-                var i, l;
-                for (i = 0, l = featureSet.features.length; i < l; i += 1) {
-                    graphic = featureSet.features[i];
-                    data.items.push({
-                        name: graphic.attributes[nameAttribute],
-                        extent: graphic.geometry.getExtent()
-                    });
-                }
-                data.items.sort(sortByName);
-                data = new dojo.data.ItemFileReadStore({ data: data });
-            } else {
-                featureSet.sort(sortByName);
-                data = new dojo.data.ItemFileReadStore({ data: { identifier: "name", label: "name", items: featureSet} });
-            }
-            var filteringSelect = new dijit.form.FilteringSelect({
-                id: id,
-                name: "name",
-                store: data,
-                searchAttr: "name",
-                required: false,
-                onChange: function (newValue) {
-                    if (this.item && this.item.extent) {
-                        var extent = this.item.extent[0];
 
-                        try {
-                            map.setExtent(extent);
-                        } catch (e) {
-                            if (console && console.debug) {
-                                console.debug(e);
-                            }
-                        }
-                    }
-                    this.reset();
-                }
-            }, id);
-            return filteringSelect;
-        }
 
         // Setup the zoom controls.
-        setupFilteringSelect(extents.countyExtents, "countyZoomSelect");
+        $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
         delete extents.countyExtents;
 
         function CreateQueryTask(qtName) {
@@ -709,10 +664,10 @@
 
         // Setup extents for cities and urbanized area zoom tools.
         var cityQueryTask = CreateQueryTask("city");
-        cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { setupFilteringSelect(featureSet, "cityZoomSelect"); });
+        cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
 
         var urbanAreaQueryTask = CreateQueryTask("urbanArea");
-        urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { setupFilteringSelect(featureSet, "urbanAreaZoomSelect"); });
+        urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
 
         // Associate labels with select controls, so that clicking on a label activates the corresponding control.
         dojo.attr("countyZoomLabel", "for", "countyZoomSelect");

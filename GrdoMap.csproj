@@ -51,6 +51,7 @@
     <Content Include="MapIconGenerator.htm" />
     <Content Include="scripts\config.js" />
     <Content Include="scripts\config.Release.js" />
+    <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
