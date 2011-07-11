@@ -2,18 +2,18 @@
     wsdot = {};
 }
 wsdot.config = {
-    "mapOptions":{
-            "logo": false,
-            "extent": {
-                "xmin": -13938444.981854893,
-                "ymin": 5800958.950617068,
-                "ymax": 6257746.631649259,
-                "xmax": -12960051.019804686,
-                "spatialReference": {
-                    "wkid": 102100
-                }
-            }/*,
-            "lods": [
+    "mapOptions": {
+        "logo": false,
+        "extent": {
+            "xmin": -13938444.981854893,
+            "ymin": 5800958.950617068,
+            "ymax": 6257746.631649259,
+            "xmax": -12960051.019804686,
+            "spatialReference": {
+                "wkid": 102100
+            }
+        },
+        "lods": [
                 { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
                 { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
                 { "level": 3, "resolution": 305.748113140558, "scale": 1155581.108577 },
@@ -26,7 +26,6 @@ wsdot.config = {
                 { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
                 { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
             ]
-            */
     },
     "mapInitialLayer": {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -79,146 +78,141 @@ wsdot.config = {
         "url": "http://www.wsdot.wa.gov/Geospatial/Transformation/Coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
-    "layers": [
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/CityLimits/MapServer",
-            "options": {
-                "id": "City Limits",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/CongressionalDistricts/MapServer",
-            "options": {
-                "id": "Congressional Districts",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/CountyBoundaries/MapServer",
-            "options": {
-                "id": "County Boundaries",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-        {
-            "layerType": "esri.layers.FeatureLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/InterchangeDrawings/MapServer/0",
-            "options": {
-                "id": "Interchange Drawings",
-                "outFields": ["PDFURL", "SRID", "Label"],
-                "visible": false
-            },
-            "wsdotCategory": "Design"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/LegisativeDistricts/MapServer",
-            "options": {
-                "id": "Legislative Districts",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/MaintenanceAreas/MapServer",
-            "options": {
-                "id": "Maintenance Areas",
-                "visible": false
-            },
-            "wsdotCategory": "WSDOT Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/MPO/MapServer",
-            "options": {
-                "id": "MPO",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/StateRoutes/MapServer",
-            "options": {
-                "id": "State Routes",
-                "visible": false
-            },
-            "wsdotCategory": "Transportation Features"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/RegionBoundaries/MapServer",
-            "options": {
-                "id": "Region Boundaries",
-                "visible": false
-            },
-            "wsdotCategory": "WSDOT Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/RTPO/MapServer",
-            "options": {
-                "id": "RTPO",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-
-
-        {
-            "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/TownshipSection/MapServer",
-            "options": {
-                "id": "Township / Section",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/TransMapper/TribalLands/MapServer",
-            "options": {
-                "id": "Tribal Lands",
-                "visible": false
-            },
-            "wsdotCategory": "Political Boundaries"
-        },
-
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
-            "options": {
-                "id": "Functional Class",
-                "visible": false
-            },
-            "wsdotCategory": "Transportation Features"
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
-            "options": {
-                "id": "Traffic Flow",
-                "visible": false
-            }
-        },
-        {
-            "layerType": "esri.layers.FeatureLayer",
-            "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
-            "options": {
-                "id": "Survey Monuments (NGS)",
-                "outFields": ["*"],
-                "infoTemplate": { "title": "NGS Monument", "content": "${*}" },
-                "visible": false
-            },
-            "wsdotCategory": "WSDOT Boundaries"
-        }
-    ]
+    "layers": {
+        "Main": {
+            "Political Boundaries": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+                    "options": {
+                        "id": "City Limits",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
+                    "options": {
+                        "id": "Congressional Districts",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+                    "options": {
+                        "id": "County Boundaries",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+                    "options": {
+                        "id": "Legislative Districts",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/MPO/MapServer",
+                    "options": {
+                        "id": "MPO",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer",
+                    "options": {
+                        "id": "RTPO",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+                    "options": {
+                        "id": "Township / Section",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+                    "options": {
+                        "id": "Tribal Lands",
+                        "visible": false
+                    }
+                }
+          ],
+            "Design": [
+               {
+                   "layerType": "esri.layers.FeatureLayer",
+                   "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer/0",
+                   "options": {
+                       "id": "Interchange Drawings",
+                       "outFields": ["PDFURL", "SRID", "Label"],
+                       "visible": false
+                   }
+               }
+           ],
+            "WSDOT Boundaries": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
+                    "options": {
+                        "id": "Maintenance Areas",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+                    "options": {
+                        "id": "Region Boundaries",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
+                    "options": {
+                        "id": "Survey Monuments (NGS)",
+                        "outFields": ["*"],
+                        "infoTemplate": { "title": "NGS Monument", "content": "${*}" },
+                        "visible": false
+                    }
+                }
+            ],
+            "Transportation Features": [
+                {
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+                    "options": {
+                        "id": "State Routes",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+                    "options": {
+                        "id": "Functional Class",
+                        "visible": false
+                    }
+                }
+            ],
+            "Other": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
+                    "options": {
+                        "id": "Traffic Flow",
+                        "visible": false
+                    }
+                }
+            ]
+        } 
+    }
 };
