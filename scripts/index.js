@@ -335,6 +335,50 @@
                     exportDialog.dialog("open");
                 }
             }, "saveButton");
+
+            dijit.form.Button({
+                label: "Measure",
+                showLabel: false,
+                iconClass: "distanceIcon",
+                onClick: function () {
+                    var measureDialog = $("#measureWidgetContainer"),
+                        measureWidget;
+
+                    // Create the measure dialog if it does not already exist.
+                    if (!measureDialog || measureDialog.length < 1) {
+                        // Create the dialog.
+                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#toolbar")).draggable();
+                        $("<div>").attr("id", "measureWidget").appendTo(measureDialog);
+                        // Create the widget.
+                        esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
+                        // Create the help button for the measure tools.
+                        dijit.form.Button({
+                            iconClass: "helpIcon",
+                            label: "Measure tool help",
+                            showLabel: false,
+                            onClick: function () {
+                                showHelpDialog("help/measure.html");
+                            }
+                        }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureWidgetContainer"));
+                    } else {
+                        var measureDialog = $("#measureWidgetContainer:visible");
+                        console.debug(measureDialog);
+                        if (measureDialog && measureDialog.length > 0) {
+                            // Hide the dialog and disable all of the tools.
+                            measureWidget = dijit.byId("measureWidget");
+                            measureWidget.clearResult();
+                            dojo.forEach(["area", "distance", "location"], function (toolName) {
+                                measureWidget.setTool(toolName, false);
+                            });
+                            measureDialog.hide();
+                        }
+                        else {
+                            // Show the dialog.
+                            $("#measureWidgetContainer").show();
+                        }
+                    }
+                }
+            }, "measureButton");
         }
 
         function setupLayout() {
@@ -348,14 +392,6 @@
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
             var toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             var toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
-
-
-
-
-            // Measure tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Measure" }, "measureControls"));
-
-
 
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
@@ -439,20 +475,10 @@
         }
 
         $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
-        esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
-        dijit.form.Button({
-            iconClass: "helpIcon",
-            label: "Measure tool help",
-            showLabel: false,
-            onClick: function () {
-                showHelpDialog("help/measure.html");
-            }
-        }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureControls"));
-
 
         map.addLayer(initBasemap);
-        
-        var stack_loading = {"dir1" : "left", "dir2": "up", "push": "top"};
+
+        var stack_loading = { "dir1": "left", "dir2": "up", "push": "top" };
 
         notices.updatingMap = $.pnotify({
             pnotify_title: "Updating map...",
@@ -464,7 +490,7 @@
             pnotify_history: false,
             pnotify_addclass: "stack-loading",
             pnotify_stack: stack_loading,
-            pnotify_shadow : true
+            pnotify_shadow: true
         });
 
         dojo.connect(map, "onLoad", map, function () {
