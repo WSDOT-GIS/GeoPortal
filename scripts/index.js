@@ -361,8 +361,9 @@
                             }
                         }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureWidgetContainer"));
                     } else {
+                        // If the dialog already exists, toggle its visibility.
                         var measureDialog = $("#measureWidgetContainer:visible");
-                        console.debug(measureDialog);
+
                         if (measureDialog && measureDialog.length > 0) {
                             // Hide the dialog and disable all of the tools.
                             measureWidget = dijit.byId("measureWidget");
