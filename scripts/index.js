@@ -338,8 +338,19 @@
                 showLabel: false,
                 iconClass: "distanceIcon",
                 onClick: function () {
-                    var measureDialog = $("#measureWidgetContainer"),
-                        measureWidget;
+                    var measureDialog = $("#measureWidgetContainer");
+
+                    function hideMeasureWidget() {
+                        // Hide the dialog and disable all of the tools.
+                        var measureWidget = dijit.byId("measureWidget");
+                        measureWidget.clearResult();
+                        dojo.forEach(["area", "distance", "location"], function (toolName) {
+                            measureWidget.setTool(toolName, false);
+                        });
+                        measureDialog.hide();
+
+                        $("#measureWidgetContainer").hide();
+                    }
 
                     // Create the measure dialog if it does not already exist.
                     if (!measureDialog || measureDialog.length < 1) {
@@ -357,18 +368,17 @@
                                 showHelpDialog("help/measure.html");
                             }
                         }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureWidgetContainer"));
+                        dijit.form.Button({
+                            label: "Close",
+                            showLabel: true,
+                            onClick: hideMeasureWidget
+                        }, dojo.create("button", { id: "measureClose", type: "button" }, "measureWidgetContainer"));
                     } else {
                         // If the dialog already exists, toggle its visibility.
                         var measureDialog = $("#measureWidgetContainer:visible");
 
                         if (measureDialog && measureDialog.length > 0) {
-                            // Hide the dialog and disable all of the tools.
-                            measureWidget = dijit.byId("measureWidget");
-                            measureWidget.clearResult();
-                            dojo.forEach(["area", "distance", "location"], function (toolName) {
-                                measureWidget.setTool(toolName, false);
-                            });
-                            measureDialog.hide();
+                            hideMeasureWidget();
                         }
                         else {
                             // Show the dialog.
