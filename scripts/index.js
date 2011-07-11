@@ -22,7 +22,6 @@
         extents = null,
         navToolbar,
         notices = {},
-        geometryService,
         exportDialog = null,
         helpDialog;
 
@@ -255,9 +254,7 @@
 
     function init() {
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
-        //esri.config.defaults.geometryService = wsdot.config.geometryServer;
-
-        var geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
+        esri.config.defaults.geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
 
         // Opera doesn't display the zoom slider correctly.  This will make it look better.
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
