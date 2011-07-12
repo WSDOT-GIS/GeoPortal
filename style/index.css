@@ -236,3 +236,32 @@ img[src$="blank.gif"]
     right: auto;
     height: 100px;
 }
+
+
+
+.metadata-list:before 
+{
+    content:"Metadata: ";
+}
+.metadata-list 
+{
+    display: block;
+    padding: 0;
+    margin: 0;
+    margin-left: 20px;
+}
+
+.metadata-list li 
+{
+    display: inline;
+}
+
+.metadata-list li:before 
+{
+    content:", ";
+}
+
+.metadata-list li:first-of-type:before
+{
+    content:"";
+}

@@ -619,6 +619,9 @@
                 var layers = {},
                 tabName, groupName, i, l, layerInfo, constructor, layer;
 
+                function getMetadataUrl(id) {
+                    return "Metadata.ashx?oid=" + String(id);
+                }
 
                 // Load the layers that are defined in the config file.
                 for (tabName in wsdot.config.layers) {
@@ -653,6 +656,10 @@
                                         map.addLayer(layer);
                                         if (layerInfo.visibleLayers) {
                                             layer.setVisibleLayers(layerInfo.visibleLayers);
+                                        }
+                                        // Add a property containing metadata IDs.
+                                        if (layerInfo.metadataIds) {
+                                            layer.metadataUrls = dojo.map(layerInfo.metadataIds, getMetadataUrl);
                                         }
                                         layers[tabName][groupName].push(layer);
                                     }

@@ -87,7 +87,8 @@ wsdot.config = {
                     "options": {
                         "id": "City Limits",
                         "visible": false
-                    }
+                    },
+                    "metadataIds":[23]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -103,7 +104,8 @@ wsdot.config = {
                     "options": {
                         "id": "County Boundaries",
                         "visible": false
-                    }
+                    },
+                    "metadataIds":[25]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -135,7 +137,8 @@ wsdot.config = {
                     "options": {
                         "id": "Township / Section",
                         "visible": false
-                    }
+                    },
+                    "metadataIds":[5]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -172,7 +175,8 @@ wsdot.config = {
                     "options": {
                         "id": "Region Boundaries",
                         "visible": false
-                    }
+                    },
+                    "metadataIds":[19]
                 },
                 {
                     "layerType": "esri.layers.FeatureLayer",
@@ -192,7 +196,8 @@ wsdot.config = {
                     "options": {
                         "id": "State Routes",
                         "visible": false
-                    }
+                    },
+                    "metadataIds":[16,15,17]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -200,7 +205,8 @@ wsdot.config = {
                     "options": {
                         "id": "Functional Class",
                         "visible": false
-                    }
+                    },
+                    "metadataIds":[8,14]
                 }
             ],
             "Other": [

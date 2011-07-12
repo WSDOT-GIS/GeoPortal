@@ -98,18 +98,30 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
+                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList;
+
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
-                var checkboxId = formatForHtmlId(layer.id, "checkbox");
-                var sliderId = formatForHtmlId(layer.id, "slider");
+                checkboxId = formatForHtmlId(layer.id, "checkbox");
+                sliderId = formatForHtmlId(layer.id, "slider");
+
+                layerDiv = $("<div>").attr("data-layerId", layer.id);
 
                 // Create a checkbox and label and place inside of a div.
-                var checkBox = $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId);
-                var label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id);
+                $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
+                $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
+
+                if (layer.metadataUrls && layer.metadataUrls.length > 0) {
+                    metadataList = $("<ul>").addClass("metadata-list").appendTo(layerDiv);
+                    $.each(layer.metadataUrls, function (index, metadataUrl) {
+                        $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
+                    });
+                }
 
                 // Create a unique ID for the slider for this layer.
+                $("<div>").attr("id", sliderId).css("width", "300px").appendTo(layerDiv);
 
-                var opacitySlider = $("<div>").attr("id", sliderId).css("width", "300px");
-                var layerDiv = $("<div>").attr("data-layerId", layer.id).append(checkBox).append(label).append(opacitySlider);
+
+
 
 
                 // Add the div to the document.
@@ -137,7 +149,7 @@
                         layer.setVisibility(value);
                         opacitySlider.set("disabled", !value);
                     }
-                }, dojo.byId(checkBox.attr("id")));
+                }, dojo.byId(checkboxId));
 
                 // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
                 layerDiv.data("dijits", [opacitySlider, checkBox]);
