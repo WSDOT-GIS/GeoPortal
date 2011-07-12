@@ -100,7 +100,7 @@
 
 
                 // Create the div element that will become the tab container
-                tabContainer = dojo.create("div", {id: "wsdot-location-info-tab-container"}, dojo.doc.body);
+                tabContainer = dojo.create("div", { id: "wsdot-location-info-tab-container" }, dojo.doc.body);
                 var contentPane;
                 ////// Add the tabContainer div to the InfoWindow.  Once it is added to the DOM we can start to create dijits.
                 ////map.infoWindow.setContent(tabContainer).setTitle("Location Information");
@@ -269,11 +269,11 @@
                     nodes.td.append(nodes.checkbox);
                     nodes.row.append(nodes.td);
                     nodes.row.append("<td>" + layer.LayerName + "</td>");
-                    nodes.button = $("<button>Metadata</button>");
 
-                    nodes.td = $("<td class='metadata'>");
-                    nodes.td.append(nodes.button);
-                    nodes.td.appendTo(nodes.row);
+                    if (layer.MetadataUrl) {
+                        nodes.button = $("<button>").text("Metadata");
+                        nodes.td = $("<td class='metadata'>").append(nodes.button).appendTo(nodes.row);
+                    }
                     nodes.tbody.append(nodes.row);
 
                     dijit.form.CheckBox({
@@ -287,11 +287,14 @@
                         }
                     }, nodes.checkbox[0]);
 
-                    nodes.button = dijit.form.Button({ label: "Metadata", id: "wsdot-location-info-metadata-button-" + layer.UniqueId }, nodes.button[0]);
-                    if (layer.Metadata) {
-                        nodes.button.attr("data-Metadata", layer.Metadata);
-                    } else {
-                        nodes.button.set("disabled", true);
+                    if (layer.MetadataUrl) {
+                        nodes.button = dijit.form.Button({
+                            label: "Metadata",
+                            id: "wsdot-location-info-metadata-button-" + layer.UniqueId,
+                            onClick: function () {
+                                window.open(layer.MetadataUrl + "&xslt=FGDC%20Plus.xsl");
+                            }
+                        }, nodes.button[0]);
                     }
 
                 });
