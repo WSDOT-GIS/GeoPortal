@@ -1,5 +1,5 @@
 ﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery */
-/*jslint white: true, onevar: false, browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 50, indent: 4 */
+/*jslint browser: true, devel: true, white: true, onevar: false, browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 50, indent: 4 */
 
 
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
@@ -29,7 +29,7 @@
     if (typeof (Date.toShortDateString) === "undefined") {
         Date.prototype.toShortDateString = function () {
             /// <summary>Returns a string representation of the date in the format Month-Date-Year.</summary>
-            return this.getMonth() + "-" + this.getDate() + "-" + this.getFullYear();
+            return String(this.getMonth()) + "-" + String(this.getDate()) + "-" + String(this.getFullYear());
         };
     }
 
@@ -187,13 +187,13 @@
             }
 
             // For each layer, get a collection of JSON graphic representations
-            dojo.forEach(graphicsLayers, function (layer, layerIndex) {
+            dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
                 var graphics;
                 if (layer.graphics.length > 0) {
                     graphics = layer.getGraphicsAsJson();
                     if (options.removeInfoTemplate === true || options.removeSymbol === true) {
                         // Remove unwanted properties from each graphic representation as specified in the options object.
-                        dojo.forEach(graphics, function (graphic, gIndex) {
+                        dojo.forEach(graphics, function (graphic /*, gIndex*/) {
                             if (typeof (graphic.infoTemplate) !== "undefined" && options.removeInfoTemplate === true) {
                                 delete graphic.infoTemplate;
                             }
@@ -220,10 +220,10 @@
         };
         $(map.getVisibleLayers()).each(function (index, layer) {
             if (index === 0) {
-                qsParams.visibleLayers = layer.id + ":" + Math.round(layer.opacity * 100) / 100;
+                qsParams.visibleLayers = String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
             }
             else {
-                qsParams.visibleLayers += "," + layer.id + ":" + Math.round(layer.opacity * 100) / 100;
+                qsParams.visibleLayers += "," + String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
             }
         });
 
@@ -246,7 +246,7 @@
 
         helpDialog.dialog("open");
 
-        helpContent.load(helpUrl, function (responseText, textStatus, XMLHttpRequest) {
+        helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
             // Handle case where content could not be loaded.
             if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
                 helpContent.text("Error loading help text.");
@@ -297,7 +297,6 @@
 
 
             // TODO: Make drop-down button instead of popping up a dialog.
-            var button = dojo.create("button", { id: "saveButton" }, "toolbar", "first");
             dijit.form.Button({
                 label: "Save",
                 showLabel: false,
@@ -336,7 +335,7 @@
                     // Show the export dialog
                     exportDialog.dialog("open");
                 }
-            }, "saveButton");
+            }, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
 
             dijit.form.Button({
                 label: "Measure",
@@ -539,7 +538,9 @@
 
                 for (i = 0, l = basemaps.length; i < l; i++) {
                     for (layeri in basemaps.layers) {
-                        basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
+                        if (basemaps.layers.hasOwnProperty(layeri)) {
+                            basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
+                        }
                     }
                 }
 
@@ -568,7 +569,7 @@
 
 
 
-                dojo.connect(basemapGallery, "onError", function (msg) {
+                dojo.connect(basemapGallery, "onError", function (/*msg*/) {
                     // TODO: Show error message instead of just closing notification.
                     if (notices.loadingBasemap) {
                         notices.loadingBasemap.pnotify_remove();
@@ -618,39 +619,44 @@
                 var layers = {},
                 tabName, groupName, i, l, layerInfo, constructor, layer;
 
+
                 // Load the layers that are defined in the config file.
                 for (tabName in wsdot.config.layers) {
-                    layers[tabName] = {};
-                    for (groupName in wsdot.config.layers[tabName]) {
-                        layers[tabName][groupName] = [];
-                        for (i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i += 1) {
-                            layerInfo = wsdot.config.layers[tabName][groupName][i];
-                            switch (layerInfo.layerType) {
-                                case "esri.layers.ArcGISTiledMapServiceLayer":
-                                    constructor = esri.layers.ArcGISTiledMapServiceLayer;
-                                    break;
-                                case "esri.layers.ArcGISDynamicMapServiceLayer":
-                                    constructor = esri.layers.ArcGISDynamicMapServiceLayer;
-                                    break;
-                                case "esri.layers.FeatureLayer":
-                                    constructor = esri.layers.FeatureLayer;
-                                    break;
-                                default:
-                                    // Unsupported type.
-                                    constructor = null;
-                                    break;
-                            }
-                            if (constructor) {
-                                // Create an info template object if paramters are defined.
-                                if (layerInfo.options && layerInfo.options.infoTemplate) {
-                                    layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
+                    if (wsdot.config.layers.hasOwnProperty(tabName)) {
+                        layers[tabName] = {};
+                        for (groupName in wsdot.config.layers[tabName]) {
+                            if (wsdot.config.layers[tabName].hasOwnProperty(groupName)) {
+                                layers[tabName][groupName] = [];
+                                for (i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i += 1) {
+                                    layerInfo = wsdot.config.layers[tabName][groupName][i];
+                                    switch (layerInfo.layerType) {
+                                        case "esri.layers.ArcGISTiledMapServiceLayer":
+                                            constructor = esri.layers.ArcGISTiledMapServiceLayer;
+                                            break;
+                                        case "esri.layers.ArcGISDynamicMapServiceLayer":
+                                            constructor = esri.layers.ArcGISDynamicMapServiceLayer;
+                                            break;
+                                        case "esri.layers.FeatureLayer":
+                                            constructor = esri.layers.FeatureLayer;
+                                            break;
+                                        default:
+                                            // Unsupported type.
+                                            constructor = null;
+                                            break;
+                                    }
+                                    if (constructor) {
+                                        // Create an info template object if paramters are defined.
+                                        if (layerInfo.options && layerInfo.options.infoTemplate) {
+                                            layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
+                                        }
+                                        layer = constructor(layerInfo.url, layerInfo.options);
+                                        map.addLayer(layer);
+                                        if (layerInfo.visibleLayers) {
+                                            layer.setVisibleLayers(layerInfo.visibleLayers);
+                                        }
+                                        layers[tabName][groupName].push(layer);
+                                    }
                                 }
-                                layer = constructor(layerInfo.url, layerInfo.options);
-                                map.addLayer(layer);
-                                if (layerInfo.visibleLayers) {
-                                    layer.setVisibleLayers(layerInfo.visibleLayers);
-                                }
-                                layers[tabName][groupName].push(layer);
                             }
                         }
                     }
@@ -710,26 +716,34 @@
         $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
         delete extents.countyExtents;
 
-        function CreateQueryTask(qtName) {
+
+
+
+        function createQueryTask(qtName) {
             /// <summary>Creates a query task and query using settings from config.js.</summary>
             /// <param name="qtName" type="String">The name of a query task from config.js.</param>
             var queryTaskSetting = wsdot.config.queryTasks[qtName],
-                qt = new esri.tasks.QueryTask(queryTaskSetting.url),
-                query = new esri.tasks.Query(),
-                n;
+            qt = new esri.tasks.QueryTask(queryTaskSetting.url),
+            query = new esri.tasks.Query(),
+            n;
             for (n in queryTaskSetting.query) {
-                query[n] = queryTaskSetting.query[n];
+                if (queryTaskSetting.query.hasOwnProperty(n)) {
+                    query[n] = queryTaskSetting.query[n];
+                }
             }
             return { "task": qt, "query": query };
         }
+        function runQueryTasks() {
+            var cityQueryTask, urbanAreaQueryTask;
+            // Setup extents for cities and urbanized area zoom tools.
+            cityQueryTask = createQueryTask("city");
+            cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
 
+            urbanAreaQueryTask = createQueryTask("urbanArea");
+            urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
+        }
 
-        // Setup extents for cities and urbanized area zoom tools.
-        var cityQueryTask = new CreateQueryTask("city");
-        cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
-
-        var urbanAreaQueryTask = new CreateQueryTask("urbanArea");
-        urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
+        runQueryTasks();
 
         // Associate labels with select controls, so that clicking on a label activates the corresponding control.
         dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
@@ -737,7 +751,7 @@
         dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
 
         // Create the button dijits.
-        var button = new dijit.form.Button({
+        dijit.form.Button({
             iconClass: "zoomfullextIcon",
             showLabel: false,
             onClick: function () {
@@ -745,7 +759,7 @@
             }
         }, "fullExtentButton");
 
-        button = new dijit.form.Button({
+        dijit.form.Button({
             iconClass: "zoomprevIcon",
             showLabel: false,
             onClick: function () {
@@ -753,7 +767,7 @@
             }
         }, "previousExtentButton");
 
-        button = new dijit.form.Button({
+        dijit.form.Button({
             iconClass: "zoomnextIcon",
             showLabel: false,
             onClick: function () {
@@ -766,13 +780,13 @@
                 onClick: function () {
                     navigator.geolocation.getCurrentPosition(
                         function (position) {
-                            var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude));
-                            var attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+                            var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude)),
+                                attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
                             map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
                             map.centerAndZoom(pt, 8);
                         },
                         function (error) {
-                            var message = "";
+                            var message = "", strErrorCode;
                             // Check for known errors
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
@@ -790,7 +804,7 @@
                             // information that helps identify the situation so that 
                             // the error handler can be updated.
                             if (message === "") {
-                                var strErrorCode = error.code.toString();
+                                strErrorCode = error.code.toString();
                                 message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
                             }
                             alert(message);
