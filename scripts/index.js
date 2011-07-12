@@ -88,11 +88,12 @@
     dojo.require("esri.tasks.gp");
 
     dojo.extend(esri.geometry.Extent, { "toCsv": function () {
-        var propNames = ["xmin", "ymin", "xmax", "ymax"];
-        var output = "";
-        for (var i = 0, l = propNames.length; i < l; i++) {
+        var propNames = ["xmin", "ymin", "xmax", "ymax"],
+            output = "",
+            i, l;
+        for (i = 0, l = propNames.length; i < l; i++) {
             if (i > 0) {
-                output += ","
+                output += ",";
             }
             output += this[propNames[i]];
         }
@@ -105,7 +106,7 @@
             /// <summary>Returns an array of ArcGIS Server JSON graphics.</summary>
             return dojo.map(this.graphics, function (item) {
                 return item.toJson();
-            })
+            });
         }
     });
 
@@ -113,9 +114,10 @@
         "getVisibleLayers": function () {
             /// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
             /// <returns type="Array" />
-            var layer;
-            var visibleLayers = [];
-            for (var i = 0, l = this.layerIds.length; i < l; i++) {
+            var layer,
+                visibleLayers = [],
+                i, l;
+            for (i = 0, l = this.layerIds.length; i < l; i++) {
                 layer = this.getLayer(this.layerIds[i]);
                 if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
                     visibleLayers.push(layer);
@@ -152,9 +154,10 @@
         "getGraphicsLayers": function () {
             /// <summary>Returns all graphics layers in the map.</summary>
             /// <param name="excludeInternalGraphicsLayer" type="Boolean">Set to true to exclude the map object's internal graphics layer, false to include it.</param>
-            var gfxLayers = [];
-            var layer, id;
-            for (var i = 0; i < this.graphicsLayerIds.length; i++) {
+            var gfxLayers = [],
+                layer, id,
+                i;
+            for (i = 0; i < this.graphicsLayerIds.length; i++) {
                 id = this.graphicsLayerIds[i];
                 layer = this.getLayer(id);
                 if (layer.isInstanceOf(esri.layers.GraphicsLayer) && !layer.isInstanceOf(esri.layers.FeatureLayer)) {
@@ -174,7 +177,7 @@
                 options = {
                     removeInfoTemplate: true,
                     removeSymbol: true
-                }
+                };
             }
             if (typeof (options.removeInfoTemplate) === "undefined") {
                 options.removeInfoTemplate = true;
@@ -197,7 +200,7 @@
                             if (typeof (graphic.symbol) !== "undefined" && options.removeSymbol === true) {
                                 delete graphic.symbol;
                             }
-                        })
+                        });
                     }
                     output[layer.id] = graphics;
                 }
@@ -375,7 +378,7 @@
                         }, dojo.create("button", { id: "measureClose", type: "button" }, "measureWidgetContainer"));
                     } else {
                         // If the dialog already exists, toggle its visibility.
-                        var measureDialog = $("#measureWidgetContainer:visible");
+                        measureDialog = $("#measureWidgetContainer:visible");
 
                         if (measureDialog && measureDialog.length > 0) {
                             hideMeasureWidget();
@@ -520,8 +523,9 @@
             esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
             function createBasemapGallery() {
-                var basemaps = wsdot.config.basemaps;
-                for (var i = 0, l = basemaps.length; i < l; i++) {
+                var basemaps = wsdot.config.basemaps,
+                i, l, layeri;
+                for (i = 0, l = basemaps.length; i < l; i++) {
                     for (layeri in basemaps.layers) {
                         basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
                     }
@@ -538,7 +542,8 @@
                 // Remove the unwanted default basemaps as defined in config.js (if any are defined).
                 if (wsdot.config.basemapsToRemove) {
                     dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
-                        for (var i = 0; i < this.length; i++) {
+                        var i;
+                        for (i = 0; i < this.length; i++) {
                             var removed = basemapGallery.remove(this[i]);
                             if (console && console.warn) {
                                 if (removed === null) {
@@ -588,51 +593,56 @@
             var qsParams = $.deparam.querystring(true);
             if (qsParams.extent) {
                 // Split the extent into its four coordinates.  Create the extent object and set the map's extent.
-                var coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val) });
+                var coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val); });
                 var extent = new esri.geometry.Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
                 map.setExtent(extent);
             }
 
-            var layers = {};
-            var layersInGroup;
+            function setupLayers() {
+                var layers = {},
+                tabName, groupName, i, l;
 
-            // Load the layers that are defined in the config file.
-            for (var tabName in wsdot.config.layers) {
-                layers[tabName] = {};
-                for (var groupName in wsdot.config.layers[tabName]) {
-                    layers[tabName][groupName] = [];
-                    for (var i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i++) {
-                        var layerInfo = wsdot.config.layers[tabName][groupName][i];
-                        var constructor;
-                        switch (layerInfo.layerType) {
-                            case "esri.layers.ArcGISTiledMapServiceLayer":
-                                constructor = esri.layers.ArcGISTiledMapServiceLayer;
-                                break;
-                            case "esri.layers.ArcGISDynamicMapServiceLayer":
-                                constructor = esri.layers.ArcGISDynamicMapServiceLayer;
-                                break;
-                            case "esri.layers.FeatureLayer":
-                                constructor = esri.layers.FeatureLayer;
-                                break;
-                            default:
-                                // Unsupported type.
-                                continue;
+                // Load the layers that are defined in the config file.
+                for (tabName in wsdot.config.layers) {
+                    layers[tabName] = {};
+                    for (groupName in wsdot.config.layers[tabName]) {
+                        layers[tabName][groupName] = [];
+                        for (i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i += 1) {
+                            var layerInfo = wsdot.config.layers[tabName][groupName][i];
+                            var constructor;
+                            switch (layerInfo.layerType) {
+                                case "esri.layers.ArcGISTiledMapServiceLayer":
+                                    constructor = esri.layers.ArcGISTiledMapServiceLayer;
+                                    break;
+                                case "esri.layers.ArcGISDynamicMapServiceLayer":
+                                    constructor = esri.layers.ArcGISDynamicMapServiceLayer;
+                                    break;
+                                case "esri.layers.FeatureLayer":
+                                    constructor = esri.layers.FeatureLayer;
+                                    break;
+                                default:
+                                    // Unsupported type.
+                                    continue;
+                            }
+                            // Create an info template object if paramters are defined.
+                            if (layerInfo.options && layerInfo.options.infoTemplate) {
+                                layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
+                            }
+                            var layer = constructor(layerInfo.url, layerInfo.options);
+                            map.addLayer(layer);
+                            if (layerInfo.visibleLayers) {
+                                layer.setVisibleLayers(layerInfo.visibleLayers);
+                            }
+                            layers[tabName][groupName].push(layer);
                         }
-                        // Create an info template object if paramters are defined.
-                        if (layerInfo.options && layerInfo.options.infoTemplate) {
-                            layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate)
-                        }
-                        var layer = constructor(layerInfo.url, layerInfo.options);
-                        map.addLayer(layer);
-                        if (layerInfo.visibleLayers) {
-                            layer.setVisibleLayers(layerInfo.visibleLayers);
-                        }
-                        layers[tabName][groupName].push(layer);
                     }
                 }
+
+                return layers;
             }
 
-            $("#layerList").layerList({ "layerSource": layers, "map": map });
+
+            $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
 
             // Connect the interchange drawings layer's onClick event so that when a graphic is clicked the associated PDF is opened in a new window or tab (depends on user's settings).
             dojo.connect(map.getLayer("Interchange Drawings"), "onClick", function (event) {
@@ -685,21 +695,22 @@
         function CreateQueryTask(qtName) {
             /// <summary>Creates a query task and query using settings from config.js.</summary>
             /// <param name="qtName" type="String">The name of a query task from config.js.</param>
-            var queryTaskSetting = wsdot.config.queryTasks[qtName];
-            var qt = new esri.tasks.QueryTask(queryTaskSetting.url);
-            var query = new esri.tasks.Query();
-            for (var n in queryTaskSetting.query) {
+            var queryTaskSetting = wsdot.config.queryTasks[qtName],
+                qt = new esri.tasks.QueryTask(queryTaskSetting.url),
+                query = new esri.tasks.Query(),
+                n;
+            for (n in queryTaskSetting.query) {
                 query[n] = queryTaskSetting.query[n];
-            };
+            }
             return { "task": qt, "query": query };
         }
 
 
         // Setup extents for cities and urbanized area zoom tools.
-        var cityQueryTask = CreateQueryTask("city");
+        var cityQueryTask = new CreateQueryTask("city");
         cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
 
-        var urbanAreaQueryTask = CreateQueryTask("urbanArea");
+        var urbanAreaQueryTask = new CreateQueryTask("urbanArea");
         urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
 
         // Associate labels with select controls, so that clicking on a label activates the corresponding control.
