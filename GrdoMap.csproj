@@ -43,6 +43,7 @@
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\greenlogo.png" />
+    <Content Include="images\locationInfo\sprites.png" />
     <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
@@ -89,6 +90,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="style\locationInfo.css" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>

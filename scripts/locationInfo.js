@@ -37,6 +37,7 @@
                 polygons: null
             };
             var tabContainer;
+            var drawToolbar;
 
             if (!map) {
                 throw new Error("No map was specified.");
@@ -308,23 +309,10 @@
                 uiNode.append(nodes.dataSetsTable);
 
                 nodes = {
-                    shapeButtons: $("<div>")
+                    shapeButtons: $("<div>").appendTo(uiNode)
                 };
 
-                nodes.shapeButtons.append("<button id='wsdot-location-info-point' >Point</button>").append("<button id='wsdot-location-info-polyline'>Polyline</button>").append("<button id='wsdot-location-info-polygon'>Polygon</button>");
-                // Add the clear button.
-                uiNode.append(nodes.shapeButtons).append("<button id='wsdot-location-info-clear-results'>Clear Results</button>");
-                dijit.form.Button({
-                    label: "Clear Results",
-                    onClick: function () {
-                        for (var layer in locationInfoLayers) {
-                            locationInfoLayers[layer].clear();
-                        }
-                    }
-                }, 'wsdot-location-info-clear-results');
-
-
-                var drawToolbar = new esri.toolbars.Draw(map, { showTooltips: true });
+                drawToolbar = new esri.toolbars.Draw(map, { showTooltips: true });
                 dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
                     drawToolbar.deactivate();
                     var points;
@@ -388,10 +376,34 @@
                     // window.open(url);
                 });
 
+                // Setup the buttons.
+                $.each([{ id: "wsdot-location-info-point", label: "Point" },
+                { id: "wsdot-location-info-polyline", label: "Polyline" },
+                { id: "wsdot-location-info-polygon", label: "Polygon"}], function (index, element) {
+                    $("<button>").attr("id", element.id).text(element.label).appendTo(nodes.shapeButtons);
+                });
                 // Set up button click events to draw geometries.  When the geometries are drawn, call the location info service and display the results as graphics.
-                dijit.form.Button({ label: "Point", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POINT); } }, "wsdot-location-info-point").set("disabled", true);
-                dijit.form.Button({ label: "Line", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYLINE); } }, "wsdot-location-info-polyline").set("disabled", true);
-                dijit.form.Button({ label: "Polygon", onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYGON); } }, "wsdot-location-info-polygon").set("disabled", true);
+                dijit.form.Button({ label: "Point", iconClass: "iconPoint", showLabel: false, onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POINT); } }, "wsdot-location-info-point").set("disabled", true);
+                dijit.form.Button({ label: "Line", iconClass: "iconLine", showLabel: false, onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYLINE); } }, "wsdot-location-info-polyline").set("disabled", true);
+                dijit.form.Button({ label: "Polygon", iconClass: "iconPolygon", showLabel: false, onClick: function (event) { drawToolbar.activate(esri.toolbars.Draw.POLYGON); } }, "wsdot-location-info-polygon").set("disabled", true);
+
+                // Add the clear button.
+                $("<button>").attr("id", "wsdot-location-info-clear-results").text("Clear Results").appendTo(uiNode);
+                // Make it a dojo control.
+                dijit.form.Button({
+                    label: "Clear Results",
+                    onClick: function () {
+                        for (var layer in locationInfoLayers) {
+                            locationInfoLayers[layer].clear();
+                        }
+                    }
+                }, 'wsdot-location-info-clear-results');
+
+
+                
+                
+
+
             }
 
 
