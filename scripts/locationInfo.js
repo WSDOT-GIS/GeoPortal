@@ -30,7 +30,7 @@
             /// <summary>Creates the location information UI.</summary>
             /// <param name="locationInfoUrl" type="String">URL for the layer list REST endpoint.</param>
 
-            var uiNode = $("<div>").attr("id", this.attr("id")).replaceAll(this);
+            var uiNode = this;
             var locationInfoLayers = {
                 points: null,
                 polylines: null,
@@ -159,10 +159,13 @@
 
 
             function createControl(data) {
-                uiNode.addClass("ui-location-info");
+                var newUiNode,
+                nodes = {},
+                units;
 
+                newUiNode = $("<div>").attr("id", uiNode.attr("id")).replaceAll(uiNode).addClass("ui-location-info");
+                uiNode = newUiNode;
                 // Set up an object for temprorarily holding DOM nodes as they are created.  Once added to "uiNode" they can be deleted from the nodes object.
-                var nodes = {};
                 nodes.bufferControl = $("<div>");
                 nodes.bufferControl.addClass("wsdot-location-info-buffer").append("<label style='padding-right: 5px'>Buffer</label>");
 
