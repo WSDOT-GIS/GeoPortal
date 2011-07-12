@@ -266,20 +266,21 @@
 
                 // Add checkbox, label, and metadata button for each layer.
                 $.each(data, function (index, layer) {
-                    nodes.row = $("<tr>");
-                    nodes.checkbox = $("<input type='checkbox'>");
-                    //nodes.checkbox.attr("data-UniqueId", layer.UniqueId);
-                    nodes.checkbox.attr("id", "wsdot-location-info-layer-" + layer.UniqueId);
-                    nodes.td = $("<td>");
-                    nodes.td.append(nodes.checkbox);
-                    nodes.row.append(nodes.td);
-                    nodes.row.append("<td>" + layer.LayerName + "</td>");
+                    var row, checkbox, td, button;
+                    row = $("<tr>");
+                    checkbox = $("<input type='checkbox'>");
+                    //checkbox.attr("data-UniqueId", layer.UniqueId);
+                    checkbox.attr("id", "wsdot-location-info-layer-" + layer.UniqueId);
+                    td = $("<td>");
+                    td.append(checkbox);
+                    row.append(td);
+                    row.append("<td>" + layer.LayerName + "</td>");
 
                     if (layer.MetadataUrl) {
-                        nodes.button = $("<button>").text("Metadata");
-                        nodes.td = $("<td class='metadata'>").append(nodes.button).appendTo(nodes.row);
+                        button = $("<button>").text("Metadata");
+                        td = $("<td class='metadata'>").append(button).appendTo(row);
                     }
-                    nodes.tbody.append(nodes.row);
+                    nodes.tbody.append(row);
 
                     dijit.form.CheckBox({
                         value: layer.UniqueId,
@@ -290,16 +291,16 @@
                             });
 
                         }
-                    }, nodes.checkbox[0]);
+                    }, checkbox[0]);
 
                     if (layer.MetadataUrl) {
-                        nodes.button = dijit.form.Button({
+                        button = dijit.form.Button({
                             label: "Metadata",
                             id: "wsdot-location-info-metadata-button-" + layer.UniqueId,
                             onClick: function () {
                                 window.open(layer.MetadataUrl + "&xslt=FGDC%20Plus.xsl");
                             }
-                        }, nodes.button[0]);
+                        }, button[0]);
                     }
 
                 });
