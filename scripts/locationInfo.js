@@ -173,14 +173,16 @@
                 // These are all of the measurement units for the buffer.
                 var units = [
                     { "name": "Foot", "value": 9002, "description": "ft." },
-                    { "name": "InternationalInch", "value": 109008, "description": "in." },
-                    { "name": "Meter", "value": 9001, "description": "m." },
+                    { "name": "StatuteMile", "value": 9093, "description": "miles" },
                     { "name": "Kilometer", "value": 9036, "description": "km." },
                     { "name": "Decimeter", "value": 109005, "description": "dm." },
-                    { "name": "Centimeter", "value": 109006, "description": "cm." },
-                    { "name": "Millimeter", "value": 109007, "description": "mm." }
+                    { "name": "Meter", "value": 9001, "description": "m." }
+
                 /*
-                ,{ "name": "FiftyKilometerLength", "value": 109030, "description": "50 Kilometer Length" },
+                ,{ "name": "InternationalInch", "value": 109008, "description": "in." },
+                { "name": "Centimeter", "value": 109006, "description": "cm." },
+                { "name": "Millimeter", "value": 109007, "description": "mm." },
+                { "name": "FiftyKilometerLength", "value": 109030, "description": "50 Kilometer Length" },
                 { "name": "OneHundredFiftyKilometerLength", "value": 109031, "description": "150 Kilometer Length" },
                 { "name": "GermanMeter", "value": 9031, "description": "German legal meter" },
                 { "name": "SurveyFoot", "value": 9003, "description": "US survey foot" },
