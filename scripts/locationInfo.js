@@ -30,7 +30,7 @@
             /// <summary>Creates the location information UI.</summary>
             /// <param name="locationInfoUrl" type="String">URL for the layer list REST endpoint.</param>
 
-            var uiNode = this;
+            var uiNode = $("<div>").attr("id", this.attr("id")).replaceAll(this);
             var locationInfoLayers = {
                 points: null,
                 polylines: null,
@@ -231,10 +231,10 @@
                 */
                 ];
 
-                nodes.bufferUnitSelect = $("<select id='wsdot-location-info-buffer-unit-select'>");
+                nodes.bufferUnitSelect = $("<select>").attr("id", 'wsdot-location-info-buffer-unit-select');
                 // Add an option for each measurement unit.
                 $.each(units, function (index, value) {
-                    nodes.bufferUnitSelect.append("<option value='" + value.name + "' data-wkid='" + value.value + "'>" + value.description + "</option>");
+                    $("<option>").attr("value", value.name).attr("data-wkid", value.value).text(value.description).appendTo(nodes.bufferUnitSelect);
                 });
                 nodes.bufferControl.append(nodes.bufferUnitSelect);
                 dijit.form.Select(null, nodes.bufferUnitSelect[0]);
@@ -399,6 +399,8 @@
                 load: createControl,
                 error: function (error) { if (console && console.error) { console.error(error); } }
             }, { useProxy: true, usePost: false });
+
+            return uiNode;
         }
     }
 
