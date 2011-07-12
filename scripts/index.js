@@ -355,7 +355,7 @@
                     // Create the measure dialog if it does not already exist.
                     if (!measureDialog || measureDialog.length < 1) {
                         // Create the dialog.
-                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#toolbar")).draggable();
+                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#toolbar")).draggable().addClass("ui-widget").addClass("ui-widget-content");
                         $("<div>").attr("id", "measureWidget").appendTo(measureDialog);
                         // Create the widget.
                         esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
@@ -497,7 +497,7 @@
             pnotify_closer: false,
             pnotify_history: false,
             pnotify_addclass: "stack-loading",
-            pnotify_stack: stack_loading,
+            pnotify_stack: stack_loading
         });
 
         dojo.connect(map, "onLoad", map, function () {
