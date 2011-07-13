@@ -258,30 +258,26 @@
 
                 nodes = {};
                 // Create the table of layers.
-                nodes.dataSetsTable = $("<table class='wsdot-location-info-layer-table'><!-- <thead><tr><th></th><th>Layer</th><th>Metadata</th></tr></thead> --><tbody></tbody></table>");
+                nodes.dataSetsTable = $("<div>");
                 // Populate the table.
 
-                nodes.dataSetsTable.append("<caption>Select data sets</caption>");
-
-                nodes.tbody = $("tbody", nodes.dataSetsTable);
+                $("<p>").text("Select data sets").appendTo(nodes.dataSetsTable);
 
                 // Add checkbox, label, and metadata button for each layer.
                 $.each(data, function (index, layer) {
-                    var row, checkbox, td, button;
-                    row = $("<tr>");
-                    checkbox = $("<input type='checkbox'>");
-                    //checkbox.attr("data-UniqueId", layer.UniqueId);
-                    checkbox.attr("id", "wsdot-location-info-layer-" + layer.UniqueId);
-                    td = $("<td>");
-                    td.append(checkbox);
-                    row.append(td);
-                    row.append("<td>" + layer.LayerName + "</td>");
+                    var row, checkbox, td, button, label;
+                    row = $("<div>");
+                    checkbox = $("<input type='checkbox'>").attr("id", "wsdot-location-info-layer-" + layer.UniqueId).appendTo(row);
+                    label = $("<label>").attr("for", checkbox.attr("id")).appendTo(row);
 
                     if (layer.MetadataUrl) {
-                        button = $("<button>").text("Metadata");
-                        td = $("<td class='metadata'>").append(button).appendTo(row);
+                        $("<a>").text(layer.LayerName).attr("href", "#").click(function () { window.open(layer.MetadataUrl + "&xslt=FGDC%20Plus.xsl"); }).appendTo(label);
                     }
-                    nodes.tbody.append(row);
+                    else {
+                        label.text(layer.LayerName);
+                    }
+
+                    row.appendTo(nodes.dataSetsTable);
 
                     dijit.form.CheckBox({
                         value: layer.UniqueId,
@@ -293,16 +289,6 @@
 
                         }
                     }, checkbox[0]);
-
-                    if (layer.MetadataUrl) {
-                        button = dijit.form.Button({
-                            label: "Metadata",
-                            id: "wsdot-location-info-metadata-button-" + layer.UniqueId,
-                            onClick: function () {
-                                window.open(layer.MetadataUrl + "&xslt=FGDC%20Plus.xsl");
-                            }
-                        }, button[0]);
-                    }
 
                 });
 
@@ -398,12 +384,6 @@
                         }
                     }
                 }, 'wsdot-location-info-clear-results');
-
-
-                
-                
-
-
             }
 
 
