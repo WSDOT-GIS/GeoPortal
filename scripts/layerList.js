@@ -98,7 +98,7 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
-                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList;
+                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text;
 
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
                 checkboxId = formatForHtmlId(layer.id, "checkbox");
@@ -111,10 +111,22 @@
                 $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
 
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
-                    metadataList = $("<ul>").addClass("metadata-list").appendTo(layerDiv);
-                    $.each(layer.metadataUrls, function (index, metadataUrl) {
-                        $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
-                    });
+                    if (dojo.isIE && dojo.isIE < 9) {
+                        // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
+                        metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
+                        $.each(layer.metadataUrls, function (index, metadataUrl) {
+                            if (index > 0) {
+                                $("<span>").text(",").appendTo(metadataList);
+                            }
+                            $("<a>").attr("href", "#").text(index + 1).appendTo(metadataList).click(function () { window.open(metadataUrl); });
+                        });
+                    } else {
+                        // Create an unordered list, which will be styled via CSS.
+                        metadataList = $("<ul>").addClass("metadata-list").appendTo(layerDiv);
+                        $.each(layer.metadataUrls, function (index, metadataUrl) {
+                            $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
+                        });
+                    }
                 }
 
                 // Create a unique ID for the slider for this layer.
