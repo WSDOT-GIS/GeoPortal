@@ -74,6 +74,13 @@
     <Content Include="style\jquery.pnotify.default.icons.css" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Google.KML">
+      <HintPath>.\Google.KML.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.1.271, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />

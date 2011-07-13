@@ -14,19 +14,26 @@ namespace Wsdot.Grdo.Web.Mapping
         public void ProcessRequest(HttpContext context)
         {
             // Get the JSON string representing the saved graphics from the cookies.
-            string json = context.Request.Cookies["graphics"].Value;
+            var graphicsCookie = context.Request.Cookies["graphics"];
+            string json;
+            if (graphicsCookie != null)
+            {
+                json = context.Request.Cookies["graphics"].Value;
+                // The cookie needs to be decoded to become valid JSON.
+                json = context.Server.UrlDecode(json);
+
+            }
+            else
+            {
+                json = context.Request.Params["graphics"];
+            }
 
             if (json == null)
             {
                 // Write an error message if the cookie was not found.
-                context.Response.Write("Cookie not found for this site: \"graphics\"");
+                context.Response.Write("Cookie or parameter not found: \"graphics\"");
                 context.Response.StatusCode = 500;
                 return;
-            }
-            else
-            {
-                // The cookie needs to be decoded to become valid JSON.
-                json = context.Server.UrlDecode(json);
             }
 
 

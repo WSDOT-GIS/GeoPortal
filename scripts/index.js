@@ -6,11 +6,9 @@
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
 /// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
-/// <reference path="extentAutoComplete.js"/>
 /// <reference path="jquery.pnotify.js"/>
 /// <reference path="jquery.ba-bbq.js" />
 /// <reference path="json2.js" />
-/// <reference path="kmlGraphicsLayer.js" />
 /// <reference path="layerList.js" />
 /// <reference path="locationInfo.js" />
 /// <reference path="config.js" />
@@ -167,6 +165,17 @@
             return gfxLayers;
 
         },
+        "getGraphicsCount": function () {
+            /// <summary>Returns the total number of graphics displayed on the map (in all graphics layers).</summary>
+            var graphicsLayers = this.getGraphicsLayers(),
+                output = 0;
+
+            // For each layer, get a collection of JSON graphic representations
+            dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
+                output += layer.graphics.length;
+            });
+            return output;
+        },
         "getGraphicsAsJson": function (options) {
             /// <summary>Returns all of the graphics in all of the graphics layers in the map.</summary>
             var graphicsLayers = this.getGraphicsLayers(),
@@ -305,32 +314,45 @@
                     var form, formatSelect;
                     // Create the export dialog if it does not already exist.
                     if (!exportDialog) {
-                        exportDialog = $("<div>").attr("id", "exportDialog").dialog({ autoOpen: false, title: "Save Graphics", modal: true });
-                        form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").appendTo(exportDialog);
+                        exportDialog = $("<div>").attr("id", "exportDialog").dialog({
+                            autoOpen: false,
+                            title: "Save Graphics",
+                            modal: true,
+                            close: function () {
+                                // Remove the value from the hidden input element named "graphics".
+                                $("input[name=graphics]", this).attr("value", null);
+                            },
+                            open: function () {
+                                // Show / hide the form and "no graphics" message based on the number of graphics in the map.
+                                if (map.getGraphicsCount() < 1) {
+                                    $(".no-graphics-message", exportDialog).show();
+                                    $("form", exportDialog).hide();
+                                } else {
+                                    $(".no-graphics-message", exportDialog).hide();
+                                    $("form", exportDialog).show();
+                                }
+
+                                // Set the hidden graphics element's value.
+                                $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(map.getGraphicsAsJson()));
+                            }
+                        });
+                        // Create the message that will appear when this form is opened but the user has no graphics in their map.  This message will be hidden initially.
+                        $("<p>").addClass("no-graphics-message").text("You do not currently have any graphics in your map to export.").appendTo(exportDialog).hide();
+                        // Create a form that will open its submit action in a new window.
+                        form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").attr("target", "_blank").appendTo(exportDialog);
 
                         $("<label>").attr("for", "graphic-export-format").text("Select an export format:").appendTo(form);
-                        formatSelect = $("<select name='f' id='graphic-export-format'>").appendTo(form);
+                        formatSelect = $("<select>").attr("name", 'f').attr("id", 'graphic-export-format').appendTo(form);
 
+                        // Populate the output format select element with options.
                         $([["json", "JSON"]]).each(function (index, element) {
                             $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
                         });
 
-                        $("<button>").css("display", "block").attr("type", "button").text("Export").appendTo(form).button().click(function () {
-                            // Get all of the graphics and store in a cookie.
-                            var graphicsJson = JSON.stringify(map.getGraphicsAsJson()),
-                                url;
-                            $.cookie("graphics", graphicsJson);
+                        $("<input>").attr("type", "hidden").attr("name", "graphics").appendTo(form);
 
-                            // Create the request URL.
-                            url = $.param.querystring("GraphicExport.ashx", { "f": formatSelect.val() });
-                            // Open the URL in a new window.
-                            window.open(url);
-                            exportDialog.dialog("close");
-                        });
+                        $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
                     }
-
-                    // Set the hidden graphics element's value.
-
 
                     // Show the export dialog
                     exportDialog.dialog("open");
