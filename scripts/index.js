@@ -20,7 +20,6 @@
         extents = null,
         navToolbar,
         notices = {},
-        exportDialog = null,
         helpDialog;
 
     // Add a method to the Date object that will return a short date string.
@@ -103,7 +102,11 @@
         "getGraphicsAsJson": function () {
             /// <summary>Returns an array of ArcGIS Server JSON graphics.</summary>
             return dojo.map(this.graphics, function (item) {
-                return item.toJson();
+                // TODO: Make the projection to geographic optional.  For the purposes of this application, though, this works just fine.
+                var geometry = esri.geometry.webMercatorToGeographic(item.geometry),
+                    json = item.toJson();
+                json.geometry = geometry.toJson();
+                return json;
             });
         }
     });
@@ -311,9 +314,10 @@
                 showLabel: false,
                 iconClass: "dijitEditorIcon dijitEditorIconSave",
                 onClick: function () {
-                    var form, formatSelect;
+                    var form, formatSelect, exportDialog = $("#exportDialog");
+
                     // Create the export dialog if it does not already exist.
-                    if (!exportDialog) {
+                    if (exportDialog.length < 1) {
                         exportDialog = $("<div>").attr("id", "exportDialog").dialog({
                             autoOpen: false,
                             title: "Save Graphics",
@@ -323,17 +327,21 @@
                                 $("input[name=graphics]", this).attr("value", null);
                             },
                             open: function () {
+                                var graphics;
                                 // Show / hide the form and "no graphics" message based on the number of graphics in the map.
                                 if (map.getGraphicsCount() < 1) {
                                     $(".no-graphics-message", exportDialog).show();
                                     $("form", exportDialog).hide();
                                 } else {
+                                    graphics = map.getGraphicsAsJson();
+
+                                    // Set the hidden graphics element's value.
+                                    $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(graphics));
+
                                     $(".no-graphics-message", exportDialog).hide();
                                     $("form", exportDialog).show();
                                 }
 
-                                // Set the hidden graphics element's value.
-                                $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(map.getGraphicsAsJson()));
                             }
                         });
                         // Create the message that will appear when this form is opened but the user has no graphics in their map.  This message will be hidden initially.
@@ -345,12 +353,14 @@
                         formatSelect = $("<select>").attr("name", 'f').attr("id", 'graphic-export-format').appendTo(form);
 
                         // Populate the output format select element with options.
-                        $([["json", "JSON"]]).each(function (index, element) {
+                        $([["kml","KML"],["kmz","KMZ"],["json", "JSON"]]).each(function (index, element) {
                             $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
                         });
 
+                        // This hidden element will hold the graphics information while the dialog is opened.
                         $("<input>").attr("type", "hidden").attr("name", "graphics").appendTo(form);
 
+                        // Create the submit button and convert it to a jQueryUI button.
                         $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
                     }
 

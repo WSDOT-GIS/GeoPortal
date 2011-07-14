@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Google.KML;
+using System.Web.Script.Serialization;
+using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Wsdot.Grdo.Web.Mapping
 {
@@ -44,9 +48,75 @@ namespace Wsdot.Grdo.Web.Mapping
                 format = string.Empty;
             }
 
-            if (string.Compare(format, "kml", true) == 0)
+            if (Regex.IsMatch(format, "(?i)km[lz]")) //string.Compare(format, "kml", true) == 0)
             {
-                throw new NotImplementedException();
+                var kmlDocument = new geDocument();
+                var jsSerializer = new JavaScriptSerializer();
+
+                // Loop through the layers.
+                var layers = jsSerializer.Deserialize<Dictionary<string, object>>(json);
+
+                foreach (var kvp in layers)
+                {
+                    var folder = new geFolder { Name = kvp.Key };
+                    kmlDocument.Features.Add(folder);
+                    var graphics = kvp.Value as ArrayList;
+                    foreach (Dictionary<string, object> graphic in graphics)
+                    {
+                        var placemark = new gePlacemark();
+                        folder.Features.Add(placemark);
+                        var geometry = graphic["geometry"] as Dictionary<string, object>;
+                        if (geometry.Keys.Contains("x"))
+                        {
+                            // x and y are decimals;
+                            var x = Convert.ToDouble(geometry["x"]);
+                            var y = Convert.ToDouble(geometry["y"]);
+                            placemark.Geometry = new gePoint(new geCoordinates(new geAngle90(y), new geAngle180(x)));
+                        }
+                        else if (geometry.Keys.Contains("rings"))
+                        {
+                            // var rings = (IEnumerable<IEnumerable<IEnumerable<object>>>)geometry["rings"];
+                            var rings = (ArrayList)geometry["rings"];
+
+                            var linearRings = from ArrayList ring in rings
+                                              select new geLinearRing((from ArrayList point in ring
+                                                                       select new geCoordinates(
+                                                                           new geAngle90(Convert.ToDouble(point[1])),
+                                                                           new geAngle180(Convert.ToDouble(point[0]))
+                                                                        )).ToList());
+                            var polygon = new gePolygon(new geOuterBoundaryIs(linearRings.ElementAt(0)));
+                            if (linearRings.Count() > 0)
+                            {
+                                polygon.InnerBoundaries.AddRange(from ring in linearRings.Skip(1)
+                                                                 select new geInnerBoundaryIs(ring));
+                                
+                            }
+                            placemark.Geometry = polygon;
+                        }
+                        ////else if (geometry.Keys.Contains("paths"))
+                        ////{
+                        ////    throw new NotImplementedException();
+
+                        ////    var paths = (IEnumerable<IEnumerable<object>>)geometry["paths"];
+                        ////}                        
+                    }
+                }
+
+                var kml = new geKML(kmlDocument);
+
+                byte[] bytes;
+
+                if (string.Compare(format, "kmz", true) == 0)
+                {
+                    bytes = kml.ToKMZ();
+                    context.Response.ContentType = "application/vnd.google-earth.kmz";
+                }
+                else
+                {
+                    bytes = kml.ToKML();
+                    context.Response.ContentType = "application/vnd.google-earth.kml+xml";
+                }
+                context.Response.BinaryWrite(bytes);
             }
             else
             {
