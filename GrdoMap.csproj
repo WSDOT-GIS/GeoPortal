@@ -43,6 +43,7 @@
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\greenlogo.png" />
+    <Content Include="images\loading-bar.gif" />
     <Content Include="images\locationInfo\sprites.png" />
     <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />

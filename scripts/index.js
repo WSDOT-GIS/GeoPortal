@@ -19,7 +19,6 @@
     var map = null,
         extents = null,
         navToolbar,
-        notices = {},
         helpDialog;
 
     // Add a method to the Date object that will return a short date string.
@@ -47,12 +46,6 @@
         // Set alternating row colors in legend
         $(".alternatingLines tbody tr:odd").addClass("alternate-row");
     });
-
-
-
-
-
-
 
     dojo.require("dijit.dijit"); // optimize: load dijit layer
     dojo.require("dijit.layout.BorderContainer");
@@ -308,66 +301,68 @@
             }, "linkButton");
 
 
-            // TODO: Make drop-down button instead of popping up a dialog.
-            dijit.form.Button({
-                label: "Save",
-                showLabel: false,
-                iconClass: "dijitEditorIcon dijitEditorIconSave",
-                onClick: function () {
-                    var form, formatSelect, exportDialog = $("#exportDialog");
+            if (!dojo.isIE) {
+                // TODO: Make drop-down button instead of popping up a dialog.
+                dijit.form.Button({
+                    label: "Export Graphics",
+                    showLabel: false,
+                    iconClass: "dijitEditorIcon dijitEditorIconSave",
+                    onClick: function () {
+                        var form, formatSelect, exportDialog = $("#exportDialog");
 
-                    // Create the export dialog if it does not already exist.
-                    if (exportDialog.length < 1) {
-                        exportDialog = $("<div>").attr("id", "exportDialog").dialog({
-                            autoOpen: false,
-                            title: "Save Graphics",
-                            modal: true,
-                            close: function () {
-                                // Remove the value from the hidden input element named "graphics".
-                                $("input[name=graphics]", this).attr("value", null);
-                            },
-                            open: function () {
-                                var graphics;
-                                // Show / hide the form and "no graphics" message based on the number of graphics in the map.
-                                if (map.getGraphicsCount() < 1) {
-                                    $(".no-graphics-message", exportDialog).show();
-                                    $("form", exportDialog).hide();
-                                } else {
-                                    graphics = map.getGraphicsAsJson();
+                        // Create the export dialog if it does not already exist.
+                        if (exportDialog.length < 1) {
+                            exportDialog = $("<div>").attr("id", "exportDialog").dialog({
+                                autoOpen: false,
+                                title: "Save Graphics",
+                                modal: true,
+                                close: function () {
+                                    // Remove the value from the hidden input element named "graphics".
+                                    $("input[name=graphics]", this).attr("value", null);
+                                },
+                                open: function () {
+                                    var graphics;
+                                    // Show / hide the form and "no graphics" message based on the number of graphics in the map.
+                                    if (map.getGraphicsCount() < 1) {
+                                        $(".no-graphics-message", exportDialog).show();
+                                        $("form", exportDialog).hide();
+                                    } else {
+                                        graphics = map.getGraphicsAsJson();
 
-                                    // Set the hidden graphics element's value.
-                                    $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(graphics));
+                                        // Set the hidden graphics element's value.
+                                        $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(graphics));
 
-                                    $(".no-graphics-message", exportDialog).hide();
-                                    $("form", exportDialog).show();
+                                        $(".no-graphics-message", exportDialog).hide();
+                                        $("form", exportDialog).show();
+                                    }
+
                                 }
+                            });
+                            // Create the message that will appear when this form is opened but the user has no graphics in their map.  This message will be hidden initially.
+                            $("<p>").addClass("no-graphics-message").text("You do not currently have any graphics in your map to export.").appendTo(exportDialog).hide();
+                            // Create a form that will open its submit action in a new window.
+                            form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").attr("target", "_blank").appendTo(exportDialog);
 
-                            }
-                        });
-                        // Create the message that will appear when this form is opened but the user has no graphics in their map.  This message will be hidden initially.
-                        $("<p>").addClass("no-graphics-message").text("You do not currently have any graphics in your map to export.").appendTo(exportDialog).hide();
-                        // Create a form that will open its submit action in a new window.
-                        form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").attr("target", "_blank").appendTo(exportDialog);
+                            $("<label>").attr("for", "graphic-export-format").text("Select an export format:").appendTo(form);
+                            formatSelect = $("<select>").attr("name", 'f').attr("id", 'graphic-export-format').appendTo(form);
 
-                        $("<label>").attr("for", "graphic-export-format").text("Select an export format:").appendTo(form);
-                        formatSelect = $("<select>").attr("name", 'f').attr("id", 'graphic-export-format').appendTo(form);
+                            // Populate the output format select element with options.
+                            $([["kml", "KML"], ["kmz", "KMZ"], ["json", "JSON"]]).each(function (index, element) {
+                                $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
+                            });
 
-                        // Populate the output format select element with options.
-                        $([["kml","KML"],["kmz","KMZ"],["json", "JSON"]]).each(function (index, element) {
-                            $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
-                        });
+                            // This hidden element will hold the graphics information while the dialog is opened.
+                            $("<input>").attr("type", "hidden").attr("name", "graphics").appendTo(form);
 
-                        // This hidden element will hold the graphics information while the dialog is opened.
-                        $("<input>").attr("type", "hidden").attr("name", "graphics").appendTo(form);
+                            // Create the submit button and convert it to a jQueryUI button.
+                            $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
+                        }
 
-                        // Create the submit button and convert it to a jQueryUI button.
-                        $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
+                        // Show the export dialog
+                        exportDialog.dialog("open");
                     }
-
-                    // Show the export dialog
-                    exportDialog.dialog("open");
-                }
-            }, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
+                }, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
+            }
 
             dijit.form.Button({
                 label: "Measure",
@@ -526,24 +521,6 @@
 
         map.addLayer(initBasemap);
 
-        function setupNotices() {
-            var stack_loading = { "dir1": "left", "dir2": "up", "push": "top" };
-
-            notices.updatingMap = $.pnotify({
-                pnotify_title: "Updating map...",
-                pnotify_text: "Please wait...",
-                pnotify_notice_icon: 'ui-icon ui-icon-transferthick-e-w',
-                pnotify_nonblock: true,
-                pnotify_hide: false,
-                pnotify_closer: false,
-                pnotify_history: false,
-                pnotify_addclass: "stack-loading",
-                pnotify_stack: stack_loading
-            });
-        }
-
-        setupNotices();
-
         dojo.connect(map, "onLoad", map, function () {
             // Set the scale.
             setScaleLabel();
@@ -601,18 +578,9 @@
 
 
 
-                dojo.connect(basemapGallery, "onError", function (/*msg*/) {
+                dojo.connect(basemapGallery, "onError", function (msg) {
                     // TODO: Show error message instead of just closing notification.
-                    if (notices.loadingBasemap) {
-                        notices.loadingBasemap.pnotify_remove();
-                    }
-                });
-
-                // Set up code to hide or display basemap-specific legends.
-                dojo.connect(basemapGallery, "onSelectionChange", function () {
-                    if (notices.loadingBasemap) {
-                        notices.loadingBasemap.pnotify_remove();
-                    }
+                    alert(msg);
                 });
             }
 
@@ -726,12 +694,10 @@
 
         // Setup update notifications.
         dojo.connect(map, "onUpdateStart", map, function () {
-            notices.updatingMap.pnotify_display();
+            $("#loading-bar").show();
         });
         dojo.connect(map, "onUpdateEnd", map, function () {
-            if (notices.updatingMap) {
-                notices.updatingMap.pnotify_remove();
-            }
+            $("#loading-bar").hide();
         });
 
 
