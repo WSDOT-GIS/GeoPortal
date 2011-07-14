@@ -19,6 +19,7 @@
     var map = null,
         extents = null,
         navToolbar,
+        lods,
         helpDialog;
 
     // Add a method to the Date object that will return a short date string.
@@ -118,32 +119,6 @@
                 }
             }
             return visibleLayers;
-        },
-        "getLOD": function (level) {
-            /// <summary>Gets the current level of detail (LOD) for the map.</summary>
-            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-            /// <returns type="esri.layers.LOD" />
-            var firstLayer = this.getLayer(this.layerIds[0]),
-                lod = null;
-            if (firstLayer.tileInfo) {
-                if (typeof (level) === "undefined" || level === null) {
-                    level = this.getLevel();
-                }
-                lod = firstLayer.tileInfo.lods[level];
-            }
-            return lod;
-        },
-        "getScale": function (level) {
-            /// <summary>Returns the current scale of the map.</summary>
-            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-            /// <returns type="Number" />
-            var lod = this.getLOD(level);
-            if (lod !== null) {
-                return lod.scale;
-            }
-            else {
-                return null;
-            }
         },
         "getGraphicsLayers": function () {
             /// <summary>Returns all graphics layers in the map.</summary>
@@ -263,6 +238,28 @@
     function init() {
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
         esri.config.defaults.geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
+
+        function getLOD(level) {
+            /// <summary>Gets the current level of detail (LOD) for the map.</summary>
+            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+            /// <returns type="esri.layers.LOD" />
+            if (typeof (level) === "undefined") {
+                level = map.getLevel();
+            }
+            return lods[level];
+        }
+        function getScale(level) {
+            /// <summary>Returns the current scale of the map.</summary>
+            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+            /// <returns type="Number" />
+            var lod = getLOD(level);
+            if (lod) {
+                return lod.scale;
+            }
+            else {
+                return null;
+            }
+        }
 
         // Opera doesn't display the zoom slider correctly.  This will make it look better.
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
@@ -474,14 +471,14 @@
 
         function setScaleLabel(level) {
             // Set the scale.
-            var scale = map.getScale(level);
-            if (scale === null) {
-                scale = "";
+            var scale = getScale(level);
+            if (typeof(scale) === "undefined" || scale === null) {
+                $("#scaleText").text("");
             }
             else {
-                scale = "1:" + scale;
+                $("#scaleText").text("1:" + dojo.number.format(scale));
             }
-            $("#scaleText").text(scale);
+            
         }
 
         setupLayout();
@@ -522,6 +519,10 @@
         map.addLayer(initBasemap);
 
         dojo.connect(map, "onLoad", map, function () {
+
+            lods = map.getLayer(map.layerIds[0]).tileInfo.lods
+            lods = dojo.clone(lods);
+
             // Set the scale.
             setScaleLabel();
 
