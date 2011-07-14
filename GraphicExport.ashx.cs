@@ -75,7 +75,6 @@ namespace Wsdot.Grdo.Web.Mapping
                         }
                         else if (geometry.Keys.Contains("rings"))
                         {
-                            // var rings = (IEnumerable<IEnumerable<IEnumerable<object>>>)geometry["rings"];
                             var rings = (ArrayList)geometry["rings"];
 
                             var linearRings = from ArrayList ring in rings
@@ -84,21 +83,40 @@ namespace Wsdot.Grdo.Web.Mapping
                                                                            new geAngle90(Convert.ToDouble(point[1])),
                                                                            new geAngle180(Convert.ToDouble(point[0]))
                                                                         )).ToList());
-                            var polygon = new gePolygon(new geOuterBoundaryIs(linearRings.ElementAt(0)));
                             if (linearRings.Count() > 0)
                             {
+                                var polygon = new gePolygon(new geOuterBoundaryIs(linearRings.ElementAt(0)));
                                 polygon.InnerBoundaries.AddRange(from ring in linearRings.Skip(1)
                                                                  select new geInnerBoundaryIs(ring));
-                                
+                                placemark.Geometry = polygon;
                             }
-                            placemark.Geometry = polygon;
+                            else
+                            {
+                                placemark.Geometry = linearRings.First();
+                            }
                         }
-                        ////else if (geometry.Keys.Contains("paths"))
-                        ////{
-                        ////    throw new NotImplementedException();
+                        else if (geometry.Keys.Contains("paths"))
+                        {
+                            var paths = (ArrayList)geometry["paths"];
 
-                        ////    var paths = (IEnumerable<IEnumerable<object>>)geometry["paths"];
-                        ////}                        
+                            var lineStrings = from ArrayList ring in paths
+                                              select new geLineString((from ArrayList point in ring
+                                                                       select new geCoordinates(
+                                                                           new geAngle90(Convert.ToDouble(point[1])),
+                                                                           new geAngle180(Convert.ToDouble(point[0]))
+                                                                        )).ToList());
+                            if (lineStrings.Count() > 0)
+                            {
+                                var multiGeo = new geMultiGeometry();
+                                multiGeo.Geometries.AddRange(lineStrings);
+                                placemark.Geometry = multiGeo;
+                            }
+                            else
+                            {
+                                placemark.Geometry = lineStrings.First();
+                            }
+                            
+                        }                        
                     }
                 }
 
