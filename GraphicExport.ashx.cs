@@ -68,6 +68,7 @@ namespace Wsdot.Grdo.Web.Mapping
                         var geometry = graphic["geometry"] as Dictionary<string, object>;
                         if (geometry.Keys.Contains("x"))
                         {
+                            // Create point geometry
                             // x and y are decimals;
                             var x = Convert.ToDouble(geometry["x"]);
                             var y = Convert.ToDouble(geometry["y"]);
@@ -75,6 +76,7 @@ namespace Wsdot.Grdo.Web.Mapping
                         }
                         else if (geometry.Keys.Contains("rings"))
                         {
+                            // Create polygon geometry
                             var rings = (ArrayList)geometry["rings"];
 
                             var linearRings = from ArrayList ring in rings
@@ -83,7 +85,7 @@ namespace Wsdot.Grdo.Web.Mapping
                                                                            new geAngle90(Convert.ToDouble(point[1])),
                                                                            new geAngle180(Convert.ToDouble(point[0]))
                                                                         )).ToList());
-                            if (linearRings.Count() > 0)
+                            if (linearRings.Count() > 1)
                             {
                                 var polygon = new gePolygon(new geOuterBoundaryIs(linearRings.ElementAt(0)));
                                 polygon.InnerBoundaries.AddRange(from ring in linearRings.Skip(1)
@@ -97,6 +99,7 @@ namespace Wsdot.Grdo.Web.Mapping
                         }
                         else if (geometry.Keys.Contains("paths"))
                         {
+                            // Create line geometry
                             var paths = (ArrayList)geometry["paths"];
 
                             var lineStrings = from ArrayList ring in paths
@@ -105,7 +108,7 @@ namespace Wsdot.Grdo.Web.Mapping
                                                                            new geAngle90(Convert.ToDouble(point[1])),
                                                                            new geAngle180(Convert.ToDouble(point[0]))
                                                                         )).ToList());
-                            if (lineStrings.Count() > 0)
+                            if (lineStrings.Count() > 1)
                             {
                                 var multiGeo = new geMultiGeometry();
                                 multiGeo.Geometries.AddRange(lineStrings);
@@ -128,17 +131,20 @@ namespace Wsdot.Grdo.Web.Mapping
                 {
                     bytes = kml.ToKMZ();
                     context.Response.ContentType = "application/vnd.google-earth.kmz";
+                    context.Response.AddHeader("Content-Disposition", "filename=ExportedGraphics.kmz");
                 }
                 else
                 {
                     bytes = kml.ToKML();
                     context.Response.ContentType = "application/vnd.google-earth.kml+xml";
+                    context.Response.AddHeader("Content-Disposition", "filename=ExportedGraphics.kml");
                 }
                 context.Response.BinaryWrite(bytes);
             }
             else
             {
                 context.Response.ContentType = "text/plain";
+                context.Response.AddHeader("Content-Disposition", "filename=ExportedGraphics.json.txt");
                 context.Response.Write(json);
             }
         }
