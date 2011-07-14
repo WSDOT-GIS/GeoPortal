@@ -178,11 +178,21 @@
                                 map.infoWindow.setContent(content).setTitle("Route Location").show(map.toScreen(geometry));
                             }
                             else {
-                                $.pnotify({
-                                    pnotify_title: 'Unable to find route location',
-                                    pnotify_text: createAttributeTableForElcResult(result),
-                                    pnotify_hide: true
-                                });
+                                if ($.pnotify) {
+                                    $.pnotify({
+                                        pnotify_title: 'Unable to find route location',
+                                        pnotify_text: createAttributeTableForElcResult(result),
+                                        pnotify_hide: true
+                                    }).effect("bounce");
+                                }
+                                else {
+                                    $("<div>").html(createAttributeTableForElcResult(result)).dialog({
+                                        title: "Unable to find route location",
+                                        dialogClass: "alert",
+                                        modal: true,
+                                        close: function () { $(this).dialog("destroy"); $(this).remove(); }
+                                    });
+                                }
                             }
 
 

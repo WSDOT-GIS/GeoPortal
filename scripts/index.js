@@ -6,7 +6,6 @@
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
 /// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
-/// <reference path="jquery.pnotify.js"/>
 /// <reference path="jquery.ba-bbq.js" />
 /// <reference path="json2.js" />
 /// <reference path="layerList.js" />
@@ -430,6 +429,9 @@
             toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
+            // LRS Tools
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
+
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
             // Add the help button for the zoom controls.
@@ -442,7 +444,7 @@
                 }
             }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
-            // Location Informatoin tools
+            // Location Information tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
             dijit.form.Button({
                 label: "Location Info. Help",
@@ -454,9 +456,7 @@
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
 
-            // LRS Tools
 
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
 
 
 
