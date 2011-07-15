@@ -436,12 +436,12 @@
         }
 
         function setupLayout() {
-            var mainContainer, legendPane, tabs, toolsTab, toolsAccordion;
+            var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion;
             mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
             mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
 
-            legendPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "legendPane");
+            mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
             tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
@@ -476,8 +476,8 @@
 
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
-            legendPane.addChild(tabs);
-            mainContainer.addChild(legendPane);
+            mapControlsPane.addChild(tabs);
+            mainContainer.addChild(mapControlsPane);
 
             mainContainer.startup();
         }
