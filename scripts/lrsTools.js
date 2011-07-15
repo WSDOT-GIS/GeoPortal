@@ -31,7 +31,7 @@
         // Convert the HTML controls into dijits.
         dijit.form.ValidationTextBox({ style: "width: 100px", required: true, regExp: "\\d{3}(\\w{2}\\w{6})?", invalidMessage: "Invalid state route ID",
             onBlur: function () {
-                // If a one or two digit number is enter, pad with zeros until there are three digits.
+                // If a one or two digit number is entered, pad with zeros until there are three digits.
                 if (this.displayedValue.match(/^\d{1,2}$/)) {
                     this.set("displayedValue",dojo.number.format(Number(this.displayedValue), { pattern: "000" }));
                 }
