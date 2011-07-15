@@ -294,8 +294,10 @@
 
                 uiNode.append(nodes.dataSetsTable);
 
+                $("<img>").attr("src", "images/ajax-loader.gif").appendTo(uiNode).hide();
+
                 nodes = {
-                    shapeButtons: $("<div>").appendTo(uiNode)
+                    shapeButtons: $("<div>").attr("id", "wsdot-location-info-button-container").appendTo(uiNode)
                 };
 
                 drawToolbar = new esri.toolbars.Draw(map, { showTooltips: true });
@@ -339,11 +341,19 @@
                     };
 
                     var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
+
+                    $("img", uiNode).show();
+                    $("#wsdot-location-info-button-container").hide();
+
                     esri.request({
                         url: locationInfoUrl + "/Query.ashx",
                         content: params,
                         handleAs: "json",
                         load: function (data) {
+
+                            $("img", uiNode).hide();
+                            $("#wsdot-location-info-button-container").show();
+
                             data.SearchGeometry = esri.geometry.fromJson(data.SearchGeometry);
                             data.BufferedGeometry = esri.geometry.fromJson(data.BufferedGeometry);
                             // Format the results into a table.
@@ -357,10 +367,17 @@
                             layer.add(graphic);
 
                         },
-                        error: function (error) { console.error(error); }
+                        error: function (error) {
+                            $("img", uiNode).hide();
+                            $("#wsdot-location-info-button-container").show();
+
+                            $("<div>").text(String(error)).dialog({ close: function () { $(this).dialog("destroy").remove(); } });
+                        }
                     }, { usePost: true });
                     // window.open(url);
                 });
+
+
 
                 // Setup the buttons.
                 $.each([{ id: "wsdot-location-info-point", label: "Point" },
@@ -384,6 +401,8 @@
                         }
                     }
                 }, 'wsdot-location-info-clear-results');
+
+
             }
 
 
