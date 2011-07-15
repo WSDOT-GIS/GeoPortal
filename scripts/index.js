@@ -288,25 +288,33 @@
                 }
             }, "helpButton");
 
-            if (dojo.isIE && dojo.isIE < 9) {
-                $("#linkButton").remove();
-            } else {
-                dijit.form.Button({
-                    iconClass: "linkIcon",
-                    showLabel: false,
-                    onClick: function () {
-                        /// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
-                        var url = getExtentLink(),
-                        linkDialog = $("#linkDialog");
-                        // Create the link dialog if it does not already exist.
-                        if (linkDialog.length === 0) {
-                            linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal": true, "title": "Bookmark" });
-                        }
-                        $("a", linkDialog).attr("href", url).text(url);
-                        linkDialog.dialog("open");
+
+            dijit.form.Button({
+                iconClass: "linkIcon",
+                showLabel: false,
+                onClick: function () {
+                    /// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
+                    var linkDialog = $("#linkDialog");
+                    // Create the link dialog if it does not already exist.
+                    if (linkDialog.length === 0) {
+                        linkDialog = $("<div>").attr("id", "linkDialog").dialog({
+                            "autoOpen": true,
+                            "modal": true,
+                            "title": "Bookmark",
+                            "open": function () {
+                                var url = getExtentLink();
+                                $("<p>").text("This link can be used to open this application, zoomed to the current extent.").appendTo(this);
+                                $("<input>").attr("type", "url").attr("value", url).css("width", "100%").appendTo(this).select();
+                            },
+                            "close": function () {
+                                // Remove the dialog from the DOM.
+                                $(this).dialog("destroy").remove();
+                            }
+                        });
                     }
-                }, "linkButton");
-            }
+
+                }
+            }, "linkButton");
 
             if (!dojo.isIE || dojo.isIE >= 9) {
                 // TODO: Make drop-down button instead of popping up a dialog.
