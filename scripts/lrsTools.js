@@ -9,6 +9,7 @@
 (function ($) {
     "use strict";
 
+    dojo.require("dojo.number");
     dojo.require("dijit.form.ValidationTextBox");
     dojo.require("dijit.form.NumberSpinner");
     dojo.require("dijit.form.DateTextBox");
@@ -28,7 +29,14 @@
         this.append('<div id="milepostContainer"> <div id="milepostContainerCenter"> <div id="milepostTabs"> <div id="findMilepost"> <div><label>Route</label> <input type="text" id="routeTextBox" /> <input type="checkbox" id="decreaseCheckbox" value="true" title="Decrease" /> <label for="decreaseCheckBox">Decrease</label> </div> <div> <input type="radio" value="ARM" name="armOrSrmp" checked="checked" id="armRadioButton" /> <label for="armRadioButton">ARM</label> <input type="radio" value="SRMP" name="armOrSrmp" id="srmpRadioButton" /> <label for="srmpRadioButton">SRMP</label> </div> <div> <label for="milepostBox">Milepost</label> <input type="number" min="0" id="milepostBox" value="0" /> <div id="backContainer"> <input type="checkbox" id="backCheckBox" disabled="disabled" title="Back" value="true" /> <label for="backCheckBox">Back</label> </div> </div> <div> <label>Reference Date</label> <input type="date" id="referenceDateBox" /> </div> <button id="findMilepostButton" type="button">Find Milepost</button> <img id="milepostLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /> </div> <div id="findNearestMilepost"><div> <label>Radius</label> <input id="radiusBox" type="number" value="0" min="0" /> <span>Feet</span> </div> <button type="button" id="findNearestMPButton">Find</button> <img id="findNearestLoadingIcon" src="images/ajax-loader.gif" alt="loading icon" /> </div> </div> </div> <div id="milepostContainerBottom"> <button type="button" id="clearMPResultsButton">Clear Results</button> </div> </div>');
 
         // Convert the HTML controls into dijits.
-        dijit.form.ValidationTextBox({ style: "width: 100px", required: true, regExp: "\\d{3}(\\w{2}\\w{6})?", invalidMessage: "Invalid state route ID" }, "routeTextBox");
+        dijit.form.ValidationTextBox({ style: "width: 100px", required: true, regExp: "\\d{3}(\\w{2}\\w{6})?", invalidMessage: "Invalid state route ID",
+            onBlur: function () {
+                // If a one or two digit number is enter, pad with zeros until there are three digits.
+                if (this.displayedValue.match(/^\d{1,2}$/)) {
+                    this.set("displayedValue",dojo.number.format(Number(this.displayedValue), { pattern: "000" }));
+                }
+            }
+        }, "routeTextBox");
         dijit.form.NumberSpinner({ constraints: { min: 0 }, value: 0, style: "width: 100px" }, "milepostBox");
         dijit.form.DateTextBox({ value: new Date() }, "referenceDateBox");
         dijit.form.RadioButton({ onClick: function () { esri.hide(dojo.byId("backContainer")); }, checked: true }, "armRadioButton");

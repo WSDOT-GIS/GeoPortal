@@ -47,6 +47,7 @@
         $(".alternatingLines tbody tr:odd").addClass("alternate-row");
     });
 
+    dojo.require("dojo.number");
     dojo.require("dijit.dijit"); // optimize: load dijit layer
     dojo.require("dijit.layout.BorderContainer");
     dojo.require("dijit.layout.TabContainer");
