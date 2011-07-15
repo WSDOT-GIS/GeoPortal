@@ -43,9 +43,19 @@
                 throw new Error("No map was specified.");
             }
 
-            function handleClickEvent(event) {
-                /// <summary>Handles the graphics layer's onClick event.</summary>
-                /// <param name="event" type="Object">An object that contains screenPoint, mapPoint, and graphic properties.</param>
+            function handleClickEvent(eventOrGraphic) {
+                /// <summary>Handles the graphics layer's onClick eventOrGraphic.</summary>
+                /// <param name="eventOrGraphic" type="Object">An object that contains screenPoint, mapPoint, and graphic properties.</param>
+                var event, graphic;
+
+                if (typeof (eventOrGraphic.isInstanceOf) !== "undefined" && eventOrGraphic.isInstanceOf(esri.Graphic)) {
+                    graphic = eventOrGraphic;
+                }
+                else {
+                    event = eventOrGraphic;
+                    graphic = event.graphic;
+                }
+
 
                 function createHtmlTable(queryResult) {
                     /// <summary>Creates an HTML table for the results of a Location Information query.</summary>
@@ -109,8 +119,8 @@
                 tabContainer = new dijit.layout.TabContainer({ style: "width: 100%; height: 100%" }, tabContainer);
 
                 // Create a content pane for each layer's result data and add to the tab container.
-                for (var i = 0, l = event.graphic.attributes.QueryResults.length; i < l; i += 1) {
-                    queryResult = event.graphic.attributes.QueryResults[i];
+                for (var i = 0, l = graphic.attributes.QueryResults.length; i < l; i += 1) {
+                    queryResult = graphic.attributes.QueryResults[i];
                     contentPane = new dijit.layout.ContentPane({ title: queryResult.LayerInfo.LayerName, content: createHtmlTable(queryResult) });
                     tabContainer.addChild(contentPane);
                 }
@@ -163,6 +173,21 @@
                 var newUiNode,
                 nodes = {},
                 units;
+
+                function setUILoadingStatus(isLoading) {
+                    var buttons = dojo.map(["wsdot-location-info-point", "wsdot-location-info-polyline", "wsdot-location-info-polygon"], function (id) { return dijit.byId(id); });
+                    if (isLoading) {
+                        $("img", uiNode).show();
+                        ////$("#wsdot-location-info-button-container").hide();
+
+                    } else {
+                        $("img", uiNode).hide();
+                        ////$("#wsdot-location-info-button-container").show();
+                    }
+                    dojo.forEach(buttons, function (button) {
+                        button.set("disabled", Boolean(isLoading));
+                    });
+                }
 
                 newUiNode = $("<div>").attr("id", uiNode.attr("id")).replaceAll(uiNode).addClass("ui-location-info");
                 uiNode = newUiNode;
@@ -342,8 +367,7 @@
 
                     var url = esri.substitute(params, "${locationInfoUrl}/Query.ashx?geometries=${geometries}&sr=${sr}&bufferDistance=${bufferDistance}&bufferUnit=${bufferUnit}&layerUniqueIds=${layerUniqueIds}&xslt=XSLT/ResultsToHtml.xslt");
 
-                    $("img", uiNode).show();
-                    $("#wsdot-location-info-button-container").hide();
+                    setUILoadingStatus(true);
 
                     esri.request({
                         url: locationInfoUrl + "/Query.ashx",
@@ -351,8 +375,9 @@
                         handleAs: "json",
                         load: function (data) {
 
-                            $("img", uiNode).hide();
-                            $("#wsdot-location-info-button-container").show();
+                            setUILoadingStatus(false);
+
+
 
                             data.SearchGeometry = esri.geometry.fromJson(data.SearchGeometry);
                             data.BufferedGeometry = esri.geometry.fromJson(data.BufferedGeometry);
@@ -366,12 +391,12 @@
                             var graphic = new esri.Graphic(data.SearchGeometry, null, data, null); ////new esri.InfoTemplate("Location Info.", tablesContainer.html()));
                             layer.add(graphic);
 
+                            handleClickEvent(graphic);
+
                         },
                         error: function (error) {
-                            $("img", uiNode).hide();
-                            $("#wsdot-location-info-button-container").show();
-
-                            $("<div>").text(String(error)).dialog({ close: function () { $(this).dialog("destroy").remove(); } });
+                            setUILoadingStatus(false);
+                            $("<div>").text(String(error)).dialog({ dialogClass: "alert", title: "Location Info Query Error", close: function () { $(this).dialog("destroy").remove(); } });
                         }
                     }, { usePost: true });
                     // window.open(url);
