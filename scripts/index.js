@@ -273,6 +273,12 @@
         }
 
         function setupToolbar() {
+            // Set the background color for the extent link.
+            if (dojo.isIE && dojo.isIE < 9) {
+                $("a", "#toolbar").css("background-color", "white");
+            } else {
+                $("a", "#toolbar").css("background-color", "rgba(255, 255, 255, 0.5)");
+            }
             dijit.form.Button({
                 iconClass: "helpIcon",
                 showLabel: false,
@@ -281,24 +287,28 @@
                     showHelpDialog("help/navigation.html");
                 }
             }, "helpButton");
-            dijit.form.Button({
-                iconClass: "linkIcon",
-                showLabel: false,
-                onClick: function () {
-                    /// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
-                    var url = getExtentLink(),
+
+            if (dojo.isIE && dojo.isIE < 9) {
+                $("#linkButton").remove();
+            } else {
+                dijit.form.Button({
+                    iconClass: "linkIcon",
+                    showLabel: false,
+                    onClick: function () {
+                        /// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
+                        var url = getExtentLink(),
                         linkDialog = $("#linkDialog");
-                    // Create the link dialog if it does not already exist.
-                    if (linkDialog.length === 0) {
-                        linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal": true, "title": "Bookmark" });
+                        // Create the link dialog if it does not already exist.
+                        if (linkDialog.length === 0) {
+                            linkDialog = $("<div>").attr("id", "linkDialog").append("<a>").dialog({ "autoOpen": false, "modal": true, "title": "Bookmark" });
+                        }
+                        $("a", linkDialog).attr("href", url).text(url);
+                        linkDialog.dialog("open");
                     }
-                    $("#linkDialog a").attr("href", url).text(url);
-                    linkDialog.dialog("open");
-                }
-            }, "linkButton");
+                }, "linkButton");
+            }
 
-
-            if (!dojo.isIE) {
+            if (!dojo.isIE || dojo.isIE >= 9) {
                 // TODO: Make drop-down button instead of popping up a dialog.
                 dijit.form.Button({
                     label: "Export Graphics",
@@ -467,13 +477,13 @@
         function setScaleLabel(level) {
             // Set the scale.
             var scale = getScale(level);
-            if (typeof(scale) === "undefined" || scale === null) {
+            if (typeof (scale) === "undefined" || scale === null) {
                 $("#scaleText").text("");
             }
             else {
                 $("#scaleText").text("1:" + dojo.number.format(scale));
             }
-            
+
         }
 
         setupLayout();
@@ -515,7 +525,7 @@
 
         dojo.connect(map, "onLoad", map, function () {
 
-            lods = map.getLayer(map.layerIds[0]).tileInfo.lods
+            lods = map.getLayer(map.layerIds[0]).tileInfo.lods;
             lods = dojo.clone(lods);
 
             // Set the scale.

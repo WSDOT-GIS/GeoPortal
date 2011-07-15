@@ -3,7 +3,7 @@
 
 
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
-/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
+/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.4"/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
 
 (function ($) {
