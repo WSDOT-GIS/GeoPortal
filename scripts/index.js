@@ -455,12 +455,6 @@
                 }
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
-
-
-
-
-
-
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
             legendPane.addChild(tabs);

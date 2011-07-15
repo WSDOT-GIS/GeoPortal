@@ -224,12 +224,15 @@
             ////});
             ////tabContainer.startup();
 
-            var anchorList = $("<ul>").prependTo(tabContainer);
-            $(tabIds).each(function (index, tabId) {
-                var tabName = $("#" + tabId).attr("data-tab-name")
-                $("<a>").attr("href", "#" + tabId).text(tabName).appendTo($("<li>").appendTo(anchorList));
-            });
-            tabContainer.tabs();
+            // Create the jQueryUI tab container only if there is more than one tab.
+            if (tabIds.length > 1) {
+                var anchorList = $("<ul>").prependTo(tabContainer);
+                $(tabIds).each(function (index, tabId) {
+                    var tabName = $("#" + tabId).attr("data-tab-name")
+                    $("<a>").attr("href", "#" + tabId).text(tabName).appendTo($("<li>").appendTo(anchorList));
+                });
+                tabContainer.tabs();
+            }
 
 
 
