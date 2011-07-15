@@ -43,8 +43,32 @@
             element.href = "#";
         });
 
-        // Set alternating row colors in legend
-        $(".alternatingLines tbody tr:odd").addClass("alternate-row");
+        // Show a warning for old versions of IE.
+        if (dojo.isIE && dojo.isIE < 9) {
+            var slowDialog = $("<div>");
+            $("<img>").attr("src", "images/turtle.png").css("width", "64px").css("height", "92px").css("float", "left").appendTo(slowDialog);
+            $("<p>").text("You are using Internet Explorer " + String(dojo.isIE) + ".").appendTo(slowDialog);
+            $("<p>").text("This is an old browser that runs JavaScript very, very slowly.  As this is a very JavaScript intensive site, you will get much better performance if you use a modern web browser.").appendTo(slowDialog);
+            var list = $("<ul>").appendTo(slowDialog);
+            $("<li>").append($("<a>").attr("href", "http://www.firefox.com/").text("Mozilla Firefox")).appendTo(list);
+            $("<li>").append($("<a>").attr("href", "http://www.google.com/chrome/").text("Google Chrome")).appendTo(list);
+            $("<li>").append($("<a>").attr("href", "http://www.apple.com/safari/").text("Apple Safari")).appendTo(list);
+            if (dojo.isIE > 7) {
+                $("<li>").append($("<a>").attr("href", "http://www.microsoft.com/windows/internet-explorer/").text("Internet Explorer 9 or higher (Windows 7 or higher only)")).appendTo(list);
+            }
+            slowDialog.dialog({
+                title: "Warning: IE is slow",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                },
+                close: function () {
+                    $(this).dialog("destroy").remove();
+                }
+            });
+        }
+
     });
 
     dojo.require("dojo.number");

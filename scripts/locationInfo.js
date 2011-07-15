@@ -43,7 +43,7 @@
                 throw new Error("No map was specified.");
             }
 
-            function handleClickEvent(eventOrGraphic) {
+            function showInfoTable(eventOrGraphic) {
                 /// <summary>Handles the graphics layer's onClick eventOrGraphic.</summary>
                 /// <param name="eventOrGraphic" type="Object">An object that contains screenPoint, mapPoint, and graphic properties.</param>
                 var event, graphic;
@@ -162,7 +162,7 @@
                 for (var l in locationInfoLayers) {
                     layer = locationInfoLayers[l];
                     map.addLayer(layer);
-                    dojo.connect(layer, "onClick", handleClickEvent);
+                    dojo.connect(layer, "onClick", showInfoTable);
                 }
             });
 
@@ -391,7 +391,7 @@
                             var graphic = new esri.Graphic(data.SearchGeometry, null, data, null); ////new esri.InfoTemplate("Location Info.", tablesContainer.html()));
                             layer.add(graphic);
 
-                            handleClickEvent(graphic);
+                            showInfoTable(graphic);
 
                         },
                         error: function (error) {
