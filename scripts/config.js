@@ -219,7 +219,7 @@ wsdot.config = {
                     }
                 }
             ]
-        } /*,
+        },
         "RFIP": {
             "RFIP": [
                 {
@@ -248,6 +248,5 @@ wsdot.config = {
                 }
             ]
         }
-        */
     }
 };
