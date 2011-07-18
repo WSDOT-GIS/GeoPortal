@@ -267,3 +267,10 @@ img[src$="blank.gif"]
     left: 50%;
     z-index: 100;
 }
+#measureWidgetContainer 
+{
+    width: 250px;
+    position: absolute;
+    top: 40px;
+    right: 5px;
+}

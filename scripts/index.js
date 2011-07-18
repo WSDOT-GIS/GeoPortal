@@ -427,7 +427,7 @@
                     // Create the measure dialog if it does not already exist.
                     if (!measureDialog || measureDialog.length < 1) {
                         // Create the dialog.
-                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#toolbar")).draggable().addClass("ui-widget").addClass("ui-widget-content");
+                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-widget-content");
                         $("<div>").attr("id", "measureWidget").appendTo(measureDialog);
                         // Create the widget.
                         esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
