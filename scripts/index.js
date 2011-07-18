@@ -482,7 +482,94 @@
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
 
             // Zoom tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls", onShow: function () {
+                // Set up the zoom select boxes.
+                // Setup the zoom controls.
+                $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
+                delete extents.countyExtents;
+
+
+
+
+                function createQueryTask(qtName) {
+                    /// <summary>Creates a query task and query using settings from config.js.</summary>
+                    /// <param name="qtName" type="String">The name of a query task from config.js.</param>
+                    var queryTaskSetting = wsdot.config.queryTasks[qtName],
+            qt = new esri.tasks.QueryTask(queryTaskSetting.url),
+            query = new esri.tasks.Query(),
+            n;
+                    for (n in queryTaskSetting.query) {
+                        if (queryTaskSetting.query.hasOwnProperty(n)) {
+                            query[n] = queryTaskSetting.query[n];
+                        }
+                    }
+                    return { "task": qt, "query": query };
+                }
+                function runQueryTasks() {
+                    var cityQueryTask, urbanAreaQueryTask;
+                    // Setup extents for cities and urbanized area zoom tools.
+                    cityQueryTask = createQueryTask("city");
+                    cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
+
+                    urbanAreaQueryTask = createQueryTask("urbanArea");
+                    urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
+                }
+
+                runQueryTasks();
+
+                // Associate labels with select controls, so that clicking on a label activates the corresponding control.
+                dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
+                dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
+                dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
+
+
+
+                if (navigator.geolocation) {
+                    dijit.form.Button({
+                        onClick: function () {
+                            navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude)),
+                                attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+                            map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
+                            map.centerAndZoom(pt, 8);
+                        },
+                        function (error) {
+                            var message = "", strErrorCode;
+                            // Check for known errors
+                            switch (error.code) {
+                                case error.PERMISSION_DENIED:
+                                    message = "This website does not have permission to use the Geolocation API";
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    message = "The current position could not be determined.";
+                                    break;
+                                case error.PERMISSION_DENIED_TIMEOUT:
+                                    message = "The current position could not be determined within the specified timeout period.";
+                                    break;
+                            }
+
+                            // If it's an unknown error, build a message that includes 
+                            // information that helps identify the situation so that 
+                            // the error handler can be updated.
+                            if (message === "") {
+                                strErrorCode = error.code.toString();
+                                message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+                            }
+                            alert(message);
+                        },
+                        {
+                            maximumAge: 0,
+                            timeout: 30000,
+                            enableHighAccuracy: true
+                        }
+                    );
+                        }
+                    }, "zoomToMyCurrentLocation");
+                } else {
+                    dojo.destroy("zoomToMyCurrentLocation");
+                }
+            } }, "zoomControls"));
             // Add the help button for the zoom controls.
             dijit.form.Button({
                 label: "Zoom Help",
@@ -496,7 +583,8 @@
             // Location Information tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information", onShow: function () {
                 $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
-            } }, "locationInfo"));
+            } 
+            }, "locationInfo"));
             dijit.form.Button({
                 label: "Location Info. Help",
                 iconClass: "helpIcon",
@@ -507,7 +595,7 @@
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
             tabs.addChild(toolsTab);
-            tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", onShow: function() {
+            tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", onShow: function () {
                 var basemaps = wsdot.config.basemaps,
                 i, l, layeri,
                 basemapGallery;
@@ -549,7 +637,7 @@
                     // TODO: Show error message instead of just closing notification.
                     alert(msg);
                 });
-            } 
+            }
             }, "basemapTab"));
             mapControlsPane.addChild(tabs);
             mainContainer.addChild(mapControlsPane);
@@ -629,7 +717,7 @@
             setupToolbar();
             esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
-            
+
 
             function resizeMap() {
                 //resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
@@ -758,47 +846,6 @@
             dijit.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
         });
 
-        // Set up the zoom select boxes.
-
-
-        // Setup the zoom controls.
-        $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
-        delete extents.countyExtents;
-
-
-
-
-        function createQueryTask(qtName) {
-            /// <summary>Creates a query task and query using settings from config.js.</summary>
-            /// <param name="qtName" type="String">The name of a query task from config.js.</param>
-            var queryTaskSetting = wsdot.config.queryTasks[qtName],
-            qt = new esri.tasks.QueryTask(queryTaskSetting.url),
-            query = new esri.tasks.Query(),
-            n;
-            for (n in queryTaskSetting.query) {
-                if (queryTaskSetting.query.hasOwnProperty(n)) {
-                    query[n] = queryTaskSetting.query[n];
-                }
-            }
-            return { "task": qt, "query": query };
-        }
-        function runQueryTasks() {
-            var cityQueryTask, urbanAreaQueryTask;
-            // Setup extents for cities and urbanized area zoom tools.
-            cityQueryTask = createQueryTask("city");
-            cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
-
-            urbanAreaQueryTask = createQueryTask("urbanArea");
-            urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
-        }
-
-        runQueryTasks();
-
-        // Associate labels with select controls, so that clicking on a label activates the corresponding control.
-        dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
-        dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
-        dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
-
         // Create the button dijits.
         dijit.form.Button({
             iconClass: "zoomfullextIcon",
@@ -824,51 +871,7 @@
             }
         }, "nextExtentButton");
 
-        if (navigator.geolocation) {
-            dijit.form.Button({
-                onClick: function () {
-                    navigator.geolocation.getCurrentPosition(
-                        function (position) {
-                            var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude)),
-                                attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-                            map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
-                            map.centerAndZoom(pt, 8);
-                        },
-                        function (error) {
-                            var message = "", strErrorCode;
-                            // Check for known errors
-                            switch (error.code) {
-                                case error.PERMISSION_DENIED:
-                                    message = "This website does not have permission to use the Geolocation API";
-                                    break;
-                                case error.POSITION_UNAVAILABLE:
-                                    message = "The current position could not be determined.";
-                                    break;
-                                case error.PERMISSION_DENIED_TIMEOUT:
-                                    message = "The current position could not be determined within the specified timeout period.";
-                                    break;
-                            }
 
-                            // If it's an unknown error, build a message that includes 
-                            // information that helps identify the situation so that 
-                            // the error handler can be updated.
-                            if (message === "") {
-                                strErrorCode = error.code.toString();
-                                message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
-                            }
-                            alert(message);
-                        },
-                        {
-                            maximumAge: 0,
-                            timeout: 30000,
-                            enableHighAccuracy: true
-                        }
-                    );
-                }
-            }, "zoomToMyCurrentLocation");
-        } else {
-            dojo.destroy("zoomToMyCurrentLocation");
-        }
 
     }
 
