@@ -473,7 +473,7 @@
                 if (!dijit.byId("legend")) {
                     new esri.dijit.Legend({ map: map }, "legend").startup();
                 }
-            } 
+            }
             }, "legendTab"));
             toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
@@ -494,7 +494,9 @@
             }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
             // Location Information tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information", onShow: function () {
+                $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
+            } }, "locationInfo"));
             dijit.form.Button({
                 label: "Location Info. Help",
                 iconClass: "helpIcon",
@@ -557,7 +559,7 @@
             initBasemap = new esri.layers.ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
         }
 
-        $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
+
 
         map.addLayer(initBasemap);
 
