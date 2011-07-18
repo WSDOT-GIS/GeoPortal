@@ -507,7 +507,50 @@
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
             tabs.addChild(toolsTab);
-            tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap" }, "basemapTab"));
+            tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", onShow: function() {
+                var basemaps = wsdot.config.basemaps,
+                i, l, layeri,
+                basemapGallery;
+
+                for (i = 0, l = basemaps.length; i < l; i++) {
+                    for (layeri in basemaps.layers) {
+                        if (basemaps.layers.hasOwnProperty(layeri)) {
+                            basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
+                        }
+                    }
+                }
+
+                basemapGallery = new esri.dijit.BasemapGallery({
+                    showArcGISBasemaps: true,
+                    map: map,
+                    basemaps: basemaps
+                }, "basemapGallery");
+
+                basemapGallery.startup();
+
+                // Remove the unwanted default basemaps as defined in config.js (if any are defined).
+                if (wsdot.config.basemapsToRemove) {
+                    dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
+                        var i, removed;
+                        for (i = 0; i < this.length; i++) {
+                            removed = basemapGallery.remove(this[i]);
+                            if (console && console.warn) {
+                                if (removed === null) {
+                                    console.warn("Basemap removal failed: basemap not found: " + this[i]);
+                                }
+                            }
+                        }
+                    });
+                }
+
+
+
+                dojo.connect(basemapGallery, "onError", function (msg) {
+                    // TODO: Show error message instead of just closing notification.
+                    alert(msg);
+                });
+            } 
+            }, "basemapTab"));
             mapControlsPane.addChild(tabs);
             mainContainer.addChild(mapControlsPane);
 
@@ -586,52 +629,7 @@
             setupToolbar();
             esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
-            function createBasemapGallery() {
-                var basemaps = wsdot.config.basemaps,
-                i, l, layeri,
-                basemapGallery;
-
-                for (i = 0, l = basemaps.length; i < l; i++) {
-                    for (layeri in basemaps.layers) {
-                        if (basemaps.layers.hasOwnProperty(layeri)) {
-                            basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
-                        }
-                    }
-                }
-
-                basemapGallery = new esri.dijit.BasemapGallery({
-                    showArcGISBasemaps: true,
-                    map: map,
-                    basemaps: basemaps
-                }, "basemapGallery");
-
-                basemapGallery.startup();
-
-                // Remove the unwanted default basemaps as defined in config.js (if any are defined).
-                if (wsdot.config.basemapsToRemove) {
-                    dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
-                        var i, removed;
-                        for (i = 0; i < this.length; i++) {
-                            removed = basemapGallery.remove(this[i]);
-                            if (console && console.warn) {
-                                if (removed === null) {
-                                    console.warn("Basemap removal failed: basemap not found: " + this[i]);
-                                }
-                            }
-                        }
-                    });
-                }
-
-
-
-                dojo.connect(basemapGallery, "onError", function (msg) {
-                    // TODO: Show error message instead of just closing notification.
-                    alert(msg);
-                });
-            }
-
-
-            createBasemapGallery();
+            
 
             function resizeMap() {
                 //resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
