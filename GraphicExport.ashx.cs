@@ -70,10 +70,10 @@ namespace Wsdot.Grdo.Web.Mapping
                         folder.Features.Add(placemark);
                         placemark.Geometry = JsonToKmlGeometry(graphic["geometry"] as Dictionary<string, object>);
                         var attributesJson = (Dictionary<string, object>)graphic["attributes"];
-                        if (attributesJson.Keys.Contains("BufferedGeometry") && (decimal)attributesJson["BufferSize"] > 0)
-                        {
-                            // TODO: Set the placemark geometry to a multi-geometry containing both the main and buffered geometries.
-                        }
+                        ////if (attributesJson.Keys.Contains("BufferedGeometry") && (decimal)attributesJson["BufferSize"] > 0)
+                        ////{
+                        ////    // TODO: Set the placemark geometry to a multi-geometry containing both the main and buffered geometries.
+                        ////}
 
                     }
                 }

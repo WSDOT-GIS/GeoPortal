@@ -342,68 +342,73 @@
                 }
             }, "linkButton");
 
-            if (!dojo.isIE || dojo.isIE >= 9) {
-                // TODO: Make drop-down button instead of popping up a dialog.
-                dijit.form.Button({
-                    label: "Export Graphics",
-                    showLabel: false,
-                    iconClass: "dijitEditorIcon dijitEditorIconSave",
-                    onClick: function () {
-                        var form, formatSelect, exportDialog = $("#exportDialog");
+            // TODO: Make drop-down button instead of popping up a dialog.
+            dijit.form.Button({
+                label: "Export Graphics",
+                showLabel: false,
+                iconClass: "dijitEditorIcon dijitEditorIconSave",
+                onClick: function () {
+                    var form, formatSelect, exportDialog = $("#exportDialog");
 
-                        // Create the export dialog if it does not already exist.
-                        if (exportDialog.length < 1) {
-                            exportDialog = $("<div>").attr("id", "exportDialog").dialog({
-                                autoOpen: false,
-                                title: "Save Graphics",
-                                modal: true,
-                                close: function () {
-                                    // Remove the value from the hidden input element named "graphics".
-                                    $("input[name=graphics]", this).attr("value", null);
-                                },
-                                open: function () {
-                                    var graphics;
-                                    // Show / hide the form and "no graphics" message based on the number of graphics in the map.
-                                    if (map.getGraphicsCount() < 1) {
-                                        $(".no-graphics-message", exportDialog).show();
-                                        $("form", exportDialog).hide();
-                                    } else {
-                                        graphics = map.getGraphicsAsJson();
+                    // Create the export dialog if it does not already exist.
+                    if (exportDialog.length < 1) {
+                        exportDialog = $("<div>").attr("id", "exportDialog").dialog({
+                            autoOpen: false,
+                            title: "Save Graphics",
+                            modal: true,
+                            close: function () {
+                                // Remove the value from the hidden input element named "graphics".
+                                $("input[name=graphics]", this).attr("value", null);
+                            },
+                            open: function () {
+                                var graphics;
+                                // Show / hide the form and "no graphics" message based on the number of graphics in the map.
+                                if (map.getGraphicsCount() < 1) {
+                                    $(".no-graphics-message", exportDialog).show();
+                                    $("form", exportDialog).hide();
+                                } else {
+                                    graphics = map.getGraphicsAsJson();
 
-                                        // Set the hidden graphics element's value.
-                                        $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(graphics));
+                                    // Set the hidden graphics element's value.
+                                    $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(graphics));
 
-                                        $(".no-graphics-message", exportDialog).hide();
-                                        $("form", exportDialog).show();
-                                    }
-
+                                    $(".no-graphics-message", exportDialog).hide();
+                                    $("form", exportDialog).show();
                                 }
+
+                            }
+                        });
+                        // Create the message that will appear when this form is opened but the user has no graphics in their map.  This message will be hidden initially.
+                        $("<p>").addClass("no-graphics-message").text("You do not currently have any graphics in your map to export.").appendTo(exportDialog).hide();
+                        // Create a form that will open its submit action in a new window.
+                        form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").attr("target", "_blank").appendTo(exportDialog);
+
+                        $("<label>").attr("for", "graphic-export-format").text("Select an export format:").appendTo(form);
+                        formatSelect = $("<select>").attr("name", 'f').attr("id", 'graphic-export-format').appendTo(form);
+
+                        // Populate the output format select element with options.
+                        $([["kml", "KML"], ["kmz", "KMZ"], ["json", "JSON"]]).each(function (index, element) {
+                            $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
+                        });
+
+                        // This hidden element will hold the graphics information while the dialog is opened.
+                        $("<input>").attr("type", "hidden").attr("name", "graphics").appendTo(form);
+
+                        // Create the submit button and convert it to a jQueryUI button.
+                        $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
+                        
+                        // The submit button doesn't work in IE without doing the following for some reason.
+                        if (dojo.isIE) {
+                            $("button", form).click(function () {
+                                form.submit();
                             });
-                            // Create the message that will appear when this form is opened but the user has no graphics in their map.  This message will be hidden initially.
-                            $("<p>").addClass("no-graphics-message").text("You do not currently have any graphics in your map to export.").appendTo(exportDialog).hide();
-                            // Create a form that will open its submit action in a new window.
-                            form = $("<form>").attr("action", "GraphicExport.ashx").attr("method", "post").attr("target", "_blank").appendTo(exportDialog);
-
-                            $("<label>").attr("for", "graphic-export-format").text("Select an export format:").appendTo(form);
-                            formatSelect = $("<select>").attr("name", 'f').attr("id", 'graphic-export-format').appendTo(form);
-
-                            // Populate the output format select element with options.
-                            $([["kml", "KML"], ["kmz", "KMZ"], ["json", "JSON"]]).each(function (index, element) {
-                                $("<option>").attr("value", element[0]).text(element[1]).appendTo(formatSelect);
-                            });
-
-                            // This hidden element will hold the graphics information while the dialog is opened.
-                            $("<input>").attr("type", "hidden").attr("name", "graphics").appendTo(form);
-
-                            // Create the submit button and convert it to a jQueryUI button.
-                            $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
                         }
-
-                        // Show the export dialog
-                        exportDialog.dialog("open");
                     }
-                }, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
-            }
+
+                    // Show the export dialog
+                    exportDialog.dialog("open");
+                }
+            }, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
 
             dijit.form.Button({
                 label: "Measure",
