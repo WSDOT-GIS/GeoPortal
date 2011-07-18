@@ -70,10 +70,12 @@ namespace Wsdot.Grdo.Web.Mapping
                         folder.Features.Add(placemark);
                         placemark.Geometry = JsonToKmlGeometry(graphic["geometry"] as Dictionary<string, object>);
                         var attributesJson = (Dictionary<string, object>)graphic["attributes"];
-                        ////if (attributesJson.Keys.Contains("BufferedGeometry") && (decimal)attributesJson["BufferSize"] > 0)
+                        ////if (attributesJson.Keys.Contains("BufferedGeometry") && attributesJson.Keys.Contains("BufferSize") && Convert.ToDouble(attributesJson["BufferSize"]) > 0)
                         ////{
                         ////    // TODO: Set the placemark geometry to a multi-geometry containing both the main and buffered geometries.
                         ////}
+                        string desc = ToHtmlDL(attributesJson);
+                        placemark.Description = desc;
 
                     }
                 }
@@ -187,13 +189,22 @@ namespace Wsdot.Grdo.Web.Mapping
                     {
                         var layerInfo = qr["LayerInfo"] as Dictionary<string, object>;
                         var resultTable = ((ArrayList)qr["ResultTable"]).Cast<Dictionary<string, object>>();
+                        if (resultTable != null && resultTable.Count() > 0)
+                        {
+                            descriptionBuilder.Append(ToHtmlTable(resultTable));
+                        }
                     }
                     descriptionBuilder.Append("</dd>");
                 }
+                else
+                {
+                    descriptionBuilder.AppendFormat("<dt>{0}</dt><dd>{1}</dd>", attribute.Key, attribute.Value);
+                }
             }
+            descriptionBuilder.Append("</dl>");
 
 
-            throw new NotImplementedException();
+            return descriptionBuilder.ToString();
         }
 
         /// <summary>
@@ -219,7 +230,7 @@ namespace Wsdot.Grdo.Web.Mapping
                 builder.Append("<tr>");
                 foreach (var key in keys)
                 {
-                    builder.AppendFormat("<td>{0}</td>", key);
+                    builder.AppendFormat("<td>{0}</td>", attr[key]);
                 }
                 builder.Append("</tr>");
             }
