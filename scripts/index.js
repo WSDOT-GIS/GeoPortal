@@ -19,7 +19,9 @@
         extents = null,
         navToolbar,
         lods,
-        helpDialog;
+        helpDialog,
+        createLinks = {};
+
 
     // Add a method to the Date object that will return a short date string.
     if (typeof (Date.toShortDateString) === "undefined") {
@@ -482,7 +484,8 @@
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
 
             // Zoom tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls", onShow: function () {
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
+            createLinks.zoomControls = dojo.connect(dijit.byId("zoomControls"), "onShow", function () {
                 // Set up the zoom select boxes.
                 // Setup the zoom controls.
                 $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
@@ -495,9 +498,9 @@
                     /// <summary>Creates a query task and query using settings from config.js.</summary>
                     /// <param name="qtName" type="String">The name of a query task from config.js.</param>
                     var queryTaskSetting = wsdot.config.queryTasks[qtName],
-            qt = new esri.tasks.QueryTask(queryTaskSetting.url),
-            query = new esri.tasks.Query(),
-            n;
+                        qt = new esri.tasks.QueryTask(queryTaskSetting.url),
+                        query = new esri.tasks.Query(),
+                        n;
                     for (n in queryTaskSetting.query) {
                         if (queryTaskSetting.query.hasOwnProperty(n)) {
                             query[n] = queryTaskSetting.query[n];
@@ -569,7 +572,10 @@
                 } else {
                     dojo.destroy("zoomToMyCurrentLocation");
                 }
-            } }, "zoomControls"));
+
+                dojo.disconnect(createLinks.zoomControls);
+                delete createLinks.zoomControls;
+            });
             // Add the help button for the zoom controls.
             dijit.form.Button({
                 label: "Zoom Help",
@@ -581,10 +587,12 @@
             }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
             // Location Information tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information", onShow: function () {
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
+            createLinks.locationInfo = dojo.connect(dijit.byId("locationInfo"), "onShow", function () {
                 $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
-            } 
-            }, "locationInfo"));
+                dojo.disconnect(createLinks.locationInfo);
+                delete createLinks.locationInfo;
+            });
             dijit.form.Button({
                 label: "Location Info. Help",
                 iconClass: "helpIcon",
@@ -595,10 +603,10 @@
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
             tabs.addChild(toolsTab);
-            tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", onShow: function () {
-                var basemaps = wsdot.config.basemaps,
-                i, l, layeri,
-                basemapGallery;
+            tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
+
+            createLinks.basemapTab = dojo.connect(dijit.byId("basemapTab"), "onShow", function () {
+                var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery;
 
                 for (i = 0, l = basemaps.length; i < l; i++) {
                     for (layeri in basemaps.layers) {
@@ -637,8 +645,12 @@
                     // TODO: Show error message instead of just closing notification.
                     alert(msg);
                 });
-            }
-            }, "basemapTab"));
+
+                dojo.disconnect(createLinks.basemapTab);
+                delete createLinks.basemapTab;
+            });
+
+
             mapControlsPane.addChild(tabs);
             mainContainer.addChild(mapControlsPane);
 
