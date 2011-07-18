@@ -468,7 +468,13 @@
             mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
             tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
-            tabs.addChild(new dijit.layout.ContentPane({ title: "Legend" }, "legendTab"));
+            tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: function () {
+                // Create the legend dijit if it does not already exist.
+                if (!dijit.byId("legend")) {
+                    new esri.dijit.Legend({ map: map }, "legend").startup();
+                }
+            } 
+            }, "legendTab"));
             toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
             toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
@@ -728,7 +734,7 @@
 
         });
 
-        new esri.dijit.Legend({ map: map }, "legend").startup();
+
 
         // Setup update notifications.
         dojo.connect(map, "onUpdateStart", map, function () {
