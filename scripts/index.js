@@ -410,7 +410,8 @@
                 showLabel: false,
                 iconClass: "distanceIcon",
                 onClick: function () {
-                    var measureDialog = $("#measureWidgetContainer");
+                    var measureDialog = $("#measureWidgetContainer"),
+                    titleBar;
 
                     function hideMeasureWidget() {
                         // Hide the dialog and disable all of the tools.
@@ -420,31 +421,20 @@
                             measureWidget.setTool(toolName, false);
                         });
                         measureDialog.hide();
-
                         $("#measureWidgetContainer").hide();
                     }
 
                     // Create the measure dialog if it does not already exist.
                     if (!measureDialog || measureDialog.length < 1) {
                         // Create the dialog.
-                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-widget-content");
+                        measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
+                        titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
+                        $('<span id="ui-dialog-title-dialog" class="ui-dialog-title">Measure</span>').appendTo(titleBar);
+                        $('<a class="ui-corner-all" href="#">?</a>').appendTo(titleBar).click(function () { showHelpDialog("help/measure.html"); }).css("position", "absolute").css("right", "2.5em").css("text-decoration", "none");
+                        $('<a class="ui-dialog-titlebar-close ui-corner-all" href="#"><span class="ui-icon ui-icon-closethick">close</span></a>').appendTo(titleBar).click(hideMeasureWidget);
                         $("<div>").attr("id", "measureWidget").appendTo(measureDialog);
                         // Create the widget.
                         esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
-                        // Create the help button for the measure tools.
-                        dijit.form.Button({
-                            iconClass: "helpIcon",
-                            label: "Measure tool help",
-                            showLabel: false,
-                            onClick: function () {
-                                showHelpDialog("help/measure.html");
-                            }
-                        }, dojo.create("button", { id: "measureHelp", type: "button" }, "measureWidgetContainer"));
-                        dijit.form.Button({
-                            label: "Close",
-                            showLabel: true,
-                            onClick: hideMeasureWidget
-                        }, dojo.create("button", { id: "measureClose", type: "button" }, "measureWidgetContainer"));
                     } else {
                         // If the dialog already exists, toggle its visibility.
                         measureDialog = $("#measureWidgetContainer:visible");
