@@ -145,7 +145,7 @@
                 });
             }
 
-            dojo.connect(map, "onLoad", locationInfoLayers, function () {
+            function setupLayers() {
                 var layer;
 
                 locationInfoLayers.points = new esri.layers.GraphicsLayer({ id: "locationInfoPoints" });
@@ -164,7 +164,7 @@
                     map.addLayer(layer);
                     dojo.connect(layer, "onClick", showInfoTable);
                 }
-            });
+            };
 
 
 
@@ -328,9 +328,10 @@
                 drawToolbar = new esri.toolbars.Draw(map, { showTooltips: true });
                 dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
                     drawToolbar.deactivate();
-                    var points;
-                    var symbol;
-                    var layer
+                    var points, symbol, layer;
+                    if (!locationInfoLayers.points || !locationInfoLayers.polylines || !locationInfoLayers.polygons) {
+                        setupLayers();
+                    }
                     switch (geometry.type) {
                         case "point":
                             points = [geometry.x, geometry.y];

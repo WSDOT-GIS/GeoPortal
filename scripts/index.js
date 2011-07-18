@@ -481,7 +481,23 @@
             toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
             // LRS Tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost" }, "lrsTools"));
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, "lrsTools"));
+            createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
+
+                $("#lrsTools").lrsTools(map);
+                // Add help button to the LrsTools control.
+                dijit.form.Button({
+                    label: "Milepost Help",
+                    iconClass: "helpIcon",
+                    showLabel: false,
+                    onClick: function () {
+                        showHelpDialog("help/milepost.html");
+                    }
+                }, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+
+                dojo.disconnect(createLinks.milepostTab);
+                delete createLinks.milepostTab;
+            });
 
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
@@ -714,16 +730,7 @@
             // Set the scale.
             setScaleLabel();
 
-            $("#lrsTools").lrsTools(map);
-            // Add help button to the LrsTools control.
-            dijit.form.Button({
-                label: "Milepost Help",
-                iconClass: "helpIcon",
-                showLabel: false,
-                onClick: function () {
-                    showHelpDialog("help/milepost.html");
-                }
-            }, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+
 
             setupNorthArrow();
             setupToolbar();
