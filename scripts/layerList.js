@@ -98,7 +98,7 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
-                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList, controlsToolbar;
+                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList, controlsToolbar, label;
                 var parentLayers, sublayerList, sublayerListItems;
 
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
@@ -109,11 +109,8 @@
 
                 // Create a checkbox and label and place inside of a div.
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
-                if (layer.layerInfos && layer.layerInfos.length > 0) {
-                    $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv).click(function () { sublayerList.toggle() });
-                } else {
-                    $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
-                }
+                label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
+
                 var controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
                 $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () { $(opacitySlider.domNode).toggle(); });
 
@@ -175,19 +172,26 @@
                     return sublayerListItem;
                 }
 
-                if (layer.layerInfos && layer.layerInfos.length > 0) {
-                    // Add sublayer information
-                    parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
-                    sublayerList = $("<ul>").appendTo(layerDiv).hide();
-                    sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
-                        createSublayerControls(layerInfo).appendTo(sublayerList);
-                    });
+                function createSublayerLink(layer) {
+                    if (layer.layerInfos && layer.layerInfos.length > 0) {
+                        $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).insertBefore(label).click(function () { sublayerList.toggle() });
+                        label.remove();
+                        // Add sublayer information
+                        parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
+                        sublayerList = $("<ul>").appendTo(layerDiv).hide();
+                        sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
+                            createSublayerControls(layerInfo).appendTo(sublayerList);
+                        });
 
+                    }
                 }
 
-                if ($("*", controlsToolbar).length < 1) {
-                    controlsToolbar.remove();
+                if (layer.loaded) {
+                    createSublayerLink(layer);
+                } else {
+                    dojo.connect(layer, "onLoad", createSublayerLink);
                 }
+
 
 
                 // Create a unique ID for the slider for this layer.
@@ -216,19 +220,10 @@
                 }, dojo.byId(sliderId));
                 $(opacitySlider.domNode).hide();
 
-                // Create the checkbox dijit.
-                checkBox = new dijit.form.CheckBox({
-                    checked: layer.visible,
-                    onChange: function (value) {
-                        layer.setVisibility(value);
-                        opacitySlider.set("disabled", !value);
-                    }
-                }, dojo.byId(checkboxId));
-
-                ////$("#" + checkboxId).change(function (eventHandler) {
-                ////    layer.setVisibility(this.checked);
-                ////    opacitySlider.set("disabled", !this.checked);
-                ////});
+                $("#" + checkboxId).attr("checked", layer.visible).change(function (eventHandler) {
+                    layer.setVisibility(this.checked);
+                    opacitySlider.set("disabled", !this.checked);
+                });
 
                 // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
                 layerDiv.data("dijits", [opacitySlider]);

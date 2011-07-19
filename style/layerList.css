@@ -1,4 +1,12 @@
-﻿.layer-toolbar div, .layer-toolbar a 
+﻿.ui-esri-layer-list ul
+{
+    margin-top: 0.2em;
+    margin-bottom: 0.5em;
+    list-style-type: none;
+    list-style-position: outside;
+}
+
+.layer-toolbar div, .layer-toolbar a 
 {
     margin-left: 5px;
     margin-right: 5px;
