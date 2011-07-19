@@ -95,7 +95,7 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
-                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList, controlsToolbar, label,
+                var checkboxId, sliderId, opacitySlider, layerDiv, metadataList, sublayerList, controlsToolbar, label,
                     parentLayers, sublayerListItems;
 
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
@@ -186,7 +186,7 @@
                 }
 
                 function createSublayerLink(layer) {
-                    if (layer.layerInfos && layer.layerInfos.length > 0) {
+                    if (layer.layerInfos && layer.layerInfos.length > 1) {
                         $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).insertBefore(label).click(function () { sublayerList.toggle(); });
                         label.remove();
                         // Add sublayer information
@@ -199,10 +199,12 @@
                     }
                 }
 
-                if (layer.loaded) {
-                    createSublayerLink(layer);
-                } else {
-                    dojo.connect(layer, "onLoad", createSublayerLink);
+                if (layer.setVisibleLayers) {
+                    if (layer.loaded) {
+                        createSublayerLink(layer);
+                    } else {
+                        dojo.connect(layer, "onLoad", createSublayerLink);
+                    }
                 }
 
 
@@ -354,6 +356,15 @@
                     });
                     layerDiv.remove();
                 });
+
+                ////if (typeof (map.getScale) !== "undefined") {
+                ////    dojo.connect(settings.map, "onZoomEnd", layerListNode, function (extent, zoomFactor, anchor, level) {
+                ////        var layerDivs, scale;
+                ////        // Get all of the elements that have a data-layerId attribute.
+                ////        layerDivs = $("div[data-layerId]");
+                ////        scale = map.getScale(level);
+                ////    });
+                ////}
             }
 
             return this;
@@ -396,4 +407,4 @@
             $.error('Method ' + method + ' does not exist on jQuery.layerList');
         }
     };
-}(jQuery));
+} (jQuery));

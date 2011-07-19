@@ -18,7 +18,6 @@
     var map = null,
         extents = null,
         navToolbar,
-        lods,
         helpDialog,
         createLinks = {};
 
@@ -132,6 +131,28 @@
     });
 
     dojo.extend(esri.Map, {
+        "lods": null,
+         "getLOD": function (level) {
+            /// <summary>Gets the current level of detail (LOD) for the map.</summary>
+            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+            /// <returns type="esri.layers.LOD" />
+            if (typeof (level) === "undefined") {
+                level = map.getLevel();
+            }
+            return map.lods[level];
+        },
+        "getScale": function(level) {
+            /// <summary>Returns the current scale of the map.</summary>
+            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+            /// <returns type="Number" />
+            var lod = this.getLOD(level);
+            if (lod) {
+                return lod.scale;
+            }
+            else {
+                return null;
+            }
+        },
         "getVisibleLayers": function () {
             /// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
             /// <returns type="Array" />
@@ -148,7 +169,6 @@
         },
         "getGraphicsLayers": function () {
             /// <summary>Returns all graphics layers in the map.</summary>
-            /// <param name="excludeInternalGraphicsLayer" type="Boolean">Set to true to exclude the map object's internal graphics layer, false to include it.</param>
             var gfxLayers = [],
                 layer, id,
                 i;
@@ -265,28 +285,6 @@
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
         esri.config.defaults.geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
 
-        function getLOD(level) {
-            /// <summary>Gets the current level of detail (LOD) for the map.</summary>
-            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-            /// <returns type="esri.layers.LOD" />
-            if (typeof (level) === "undefined") {
-                level = map.getLevel();
-            }
-            return lods[level];
-        }
-        function getScale(level) {
-            /// <summary>Returns the current scale of the map.</summary>
-            /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-            /// <returns type="Number" />
-            var lod = getLOD(level);
-            if (lod) {
-                return lod.scale;
-            }
-            else {
-                return null;
-            }
-        }
-
         // Opera doesn't display the zoom slider correctly.  This will make it look better.
         // For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
         if (dojo.isOpera) {
@@ -396,7 +394,7 @@
 
                         // Create the submit button and convert it to a jQueryUI button.
                         $("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
-                        
+
                         // The submit button doesn't work in IE without doing the following for some reason.
                         if (dojo.isIE) {
                             $("button", form).click(function () {
@@ -670,7 +668,7 @@
 
         function setScaleLabel(level) {
             // Set the scale.
-            var scale = getScale(level);
+            var scale = map.getScale(level);
             if (typeof (scale) === "undefined" || scale === null) {
                 $("#scaleText").text("");
             }
@@ -718,9 +716,7 @@
         map.addLayer(initBasemap);
 
         dojo.connect(map, "onLoad", map, function () {
-
-            lods = map.getLayer(map.layerIds[0]).tileInfo.lods;
-            lods = dojo.clone(lods);
+            map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
 
             // Set the scale.
             setScaleLabel();
