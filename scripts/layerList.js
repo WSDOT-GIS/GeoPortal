@@ -98,7 +98,8 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
-                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList;
+                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList, controlsToolbar;
+                var parentLayers, sublayerList, sublayerListItems;
 
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
                 checkboxId = formatForHtmlId(layer.id, "checkbox");
@@ -109,9 +110,12 @@
                 // Create a checkbox and label and place inside of a div.
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
                 $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
+                var controlsToolbar = $("<div>").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
+                $("<a>").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () { $(opacitySlider.domNode).toggle(); });
 
                 // Add metadata information if available
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
+                    $("<a>").addClass("layer-metadata-link").attr("href", "#").text("m").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
                     if (dojo.isIE && dojo.isIE < 9) {
                         // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
                         metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
@@ -128,14 +132,23 @@
                             $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
                         });
                     }
+                    metadataList.hide();
                 }
 
                 function createSublayerControls(layerInfo) {
                     var sublayerListItem = $("<li>");
                     var cbId = checkboxId + String(layerInfo.id);
                     var checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").attr("data-sublayerId", layerInfo.id).appendTo(sublayerListItem);
-                    $("<label>").attr("for", cbId).text(layerInfo.name).appendTo(sublayerListItem);
+
+
+
+
+
                     if (layerInfo.subLayerIds) {
+                        $("<a>").attr("href", "#").text(layerInfo.name).appendTo(sublayerListItem).click(function () {
+
+                            $("ul", sublayerListItem).toggle();
+                        });
                         var sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
                             var sublayerInfos = [], i, l, layerInfo = null;
                             for (i = 0, l = layer.layerInfos.length; i < l; i++) {
@@ -147,22 +160,30 @@
                             return null;
                         });
 
-                        var list = $("<ul>").appendTo(sublayerListItem);
+                        var list = $("<ul>").appendTo(sublayerListItem).hide();
                         $.each(sublayerInfos, function (index, layerInfo) {
                             createSublayerControls(layerInfo).appendTo(list);
                         })
+                    }
+                    else {
+                        $("<label>").attr("for", cbId).text(layerInfo.name).appendTo(sublayerListItem);
                     }
                     return sublayerListItem;
                 }
 
                 if (layer.layerInfos && layer.layerInfos.length > 0) {
                     // Add sublayer information
-                    var parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
-                    var sublayerList = $("<ul>").appendTo(layerDiv);
-                    var sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
+                    parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
+                    sublayerList = $("<ul>").appendTo(layerDiv).hide();
+                    sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
                         createSublayerControls(layerInfo).appendTo(sublayerList);
                     });
+                    $("<a>").addClass("sublayer-link").attr("href", "#").text("l").appendTo(controlsToolbar).click(function () { sublayerList.toggle() });
 
+                }
+
+                if ($("*", controlsToolbar).length < 1) {
+                    controlsToolbar.remove();
                 }
 
 
@@ -190,6 +211,7 @@
                     },
                     disabled: layer.visible !== true
                 }, dojo.byId(sliderId));
+                $(opacitySlider.domNode).hide();
 
                 // Create the checkbox dijit.
                 checkBox = new dijit.form.CheckBox({
@@ -200,8 +222,13 @@
                     }
                 }, dojo.byId(checkboxId));
 
+                ////$("#" + checkboxId).change(function (eventHandler) {
+                ////    layer.setVisibility(this.checked);
+                ////    opacitySlider.set("disabled", !this.checked);
+                ////});
+
                 // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
-                layerDiv.data("dijits", [opacitySlider, checkBox]);
+                layerDiv.data("dijits", [opacitySlider]);
 
                 return layerDiv;
             }
