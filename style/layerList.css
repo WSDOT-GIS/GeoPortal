@@ -1,0 +1,10 @@
+﻿.layer-toolbar div, .layer-toolbar a 
+{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.layer-toolbar div:hover, .layer-toolbar a:hover
+{
+    background-color: #ccc;
+}

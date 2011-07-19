@@ -109,13 +109,17 @@
 
                 // Create a checkbox and label and place inside of a div.
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
-                $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
-                var controlsToolbar = $("<div>").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
-                $("<a>").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () { $(opacitySlider.domNode).toggle(); });
+                if (layer.layerInfos && layer.layerInfos.length > 0) {
+                    $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv).click(function () { sublayerList.toggle() });
+                } else {
+                    $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
+                }
+                var controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
+                $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () { $(opacitySlider.domNode).toggle(); });
 
                 // Add metadata information if available
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
-                    $("<a>").addClass("layer-metadata-link").attr("href", "#").text("m").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
+                    $("<a>").attr("title", "Toggle metadata links").addClass("layer-metadata-link").attr("href", "#").text("m").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
                     if (dojo.isIE && dojo.isIE < 9) {
                         // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
                         metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
@@ -178,7 +182,6 @@
                     sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
                         createSublayerControls(layerInfo).appendTo(sublayerList);
                     });
-                    $("<a>").addClass("sublayer-link").attr("href", "#").text("l").appendTo(controlsToolbar).click(function () { sublayerList.toggle() });
 
                 }
 
