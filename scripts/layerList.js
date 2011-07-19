@@ -4,7 +4,7 @@
 /*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
 (function ($) {
-    "use strict"
+    "use strict";
 
     dojo.require("dijit.layout.TabContainer");
     dojo.require("dijit.layout.ContentPane");
@@ -19,87 +19,84 @@
         layerSource: null,
         map: null,
         tabs: true
-    };
-
-    function formatForHtmlId(s, prefix) {
-        /// <summary>Removes invalid characters from a string so that it can be used an the ID for an HTML element.</summary>
-        var invalidCharRe = /[\s\/\()]+/
-        while (invalidCharRe.test(s)) {
-            s = s.replace(invalidCharRe, "-");
-        }
-        s = s.replace(/-$/, "");
-        // Add the prefix if one was provided.
-        if (prefix) {
-            s = prefix + "-" + s;
-        }
-        return s;
-    }
-
-    function createSortedPropertyNameList(obj, propNamesAtEnd) {
-        /// <summary>Returns a sorted array of property names for an object.</summary>
-        /// <param name="obj" type="Object">An object that has properties.</param>
-        /// <param name="propNamesAtEnd" type="Array">An array of property names that will be placed at the end of the list (instead of being sorted).</param>
-        var propNames = [], skippedPropNames = [], re;
-
-        if (propNamesAtEnd && propNamesAtEnd.length > 0) {
-            re = "";
-            $.each(propNamesAtEnd, function (index, propName) {
-                if (index > 0) {
-                    re += "|"
-                }
-                re += "(" + propName + ")";
-            });
-            re = new RegExp(re, "gi");
-        }
-
-        for (var propName in obj) {
-            if (re && propName.match(re)) {
-                skippedPropNames.push(propName);
-            }
-            else {
-                propNames.push(propName);
-            }
-        }
-        propNames.sort();
-        skippedPropNames.sort();
-        // propNames = propNames.concat(skippedPropNames);
-        dojo.forEach(skippedPropNames, function (propName) {
-            propNames.push(propName);
-        });
-
-        return propNames;
-    }
-
-    var methods = {
+    }, methods = {
         init: function (options) {
             /// <summary>
             /// Creates a list of layers for a layerSource.  The "this" keyword is the jQuery object containing the DOM element(s) that will be turned into a layer list.
             /// </summary>
             /// <param name="layerSource" type="Object">This can be either an esri.Map or an array of esri.layer.Layer</param>
             /// <param name="options" type="Object">Options for this control.</param>
-            var layerListNode = this;
-            var basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm))/i;
+            var layerListNode = this,
+                basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm))/i, tabContainer;
+
+            function formatForHtmlId(s, prefix) {
+                /// <summary>Removes invalid characters from a string so that it can be used an the ID for an HTML element.</summary>
+                var invalidCharRe = /[\s\/\()]+/;
+                while (invalidCharRe.test(s)) {
+                    s = s.replace(invalidCharRe, "-");
+                }
+                s = s.replace(/-$/, "");
+                // Add the prefix if one was provided.
+                if (prefix) {
+                    s = prefix + "-" + s;
+                }
+                return s;
+            }
+
+            function createSortedPropertyNameList(obj, propNamesAtEnd) {
+                /// <summary>Returns a sorted array of property names for an object.</summary>
+                /// <param name="obj" type="Object">An object that has properties.</param>
+                /// <param name="propNamesAtEnd" type="Array">An array of property names that will be placed at the end of the list (instead of being sorted).</param>
+                var propNames = [], skippedPropNames = [], re, propName = null;
+
+                if (propNamesAtEnd && propNamesAtEnd.length > 0) {
+                    re = "";
+                    $.each(propNamesAtEnd, function (index, propName) {
+                        if (index > 0) {
+                            re += "|";
+                        }
+                        re += "(" + propName + ")";
+                    });
+                    re = new RegExp(re, "gi");
+                }
+
+                for (propName in obj) {
+                    if (obj.hasOwnProperty(propName)) {
+                        if (re && propName.match(re)) {
+                            skippedPropNames.push(propName);
+                        } else {
+                            propNames.push(propName);
+                        }
+                    }
+                }
+                propNames.sort();
+                skippedPropNames.sort();
+                // propNames = propNames.concat(skippedPropNames);
+                dojo.forEach(skippedPropNames, function (propName) {
+                    propNames.push(propName);
+                });
+
+                return propNames;
+            }
 
             if (options) {
                 $.extend(settings, options);
             }
 
-            var layerSource = settings.layerSource;
-
             // Set the map setting to equal layerSource if layerSource is an esri.Map object.
-            if (layerSource.isInstanceOf && layerSource.isInstanceOf(esri.Map) && settings.map === null) {
-                settings.map = layerSource;
+            if (settings.layerSource.isInstanceOf && settings.layerSource.isInstanceOf(esri.Map) && settings.map === null) {
+                settings.map = settings.layerSource;
             }
 
             this.addClass("ui-esri-layer-list");
 
             // Add tab container
-            var tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
+            tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
-                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList, controlsToolbar, label;
-                var parentLayers, sublayerList, sublayerListItems;
+                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList, controlsToolbar, label,
+                    parentLayers, sublayerListItems;
 
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
                 checkboxId = formatForHtmlId(layer.id, "checkbox");
@@ -111,7 +108,7 @@
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
                 label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
 
-                var controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
+                controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
                 $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () { $(opacitySlider.domNode).toggle(); });
 
                 // Add metadata information if available
@@ -137,26 +134,25 @@
                 }
 
                 function createSublayerControls(layerInfo) {
-                    var sublayerListItem = $("<li>");
-                    var cbId = checkboxId + String(layerInfo.id);
-                    var checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").data("sublayerId", layerInfo.id).attr("checked", layerInfo.defaultVisibility).appendTo(sublayerListItem).change(function () {
-                        var sublayerId = $(this).data("sublayerId"),
+                    var sublayerInfos, list, sublayerListItem = $("<li>"),
+                        cbId = checkboxId + String(layerInfo.id),
+                        checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").data("sublayerId", layerInfo.id).attr("checked", layerInfo.defaultVisibility).appendTo(sublayerListItem).change(function () {
+                            var sublayerId = $(this).data("sublayerId"),
                             visibleLayers = [],
                             checked = this.checked;
-                        $.each(layer.visibleLayers, function (index, layerId) {
-                            if (layerId != -1 && (checked || sublayerId !== layerId)) {
-                                visibleLayers.push(layerId);
+                            $.each(layer.visibleLayers, function (index, layerId) {
+                                if (layerId !== -1 && (checked || sublayerId !== layerId)) {
+                                    visibleLayers.push(layerId);
+                                }
+                            });
+                            if (checked) {
+                                visibleLayers.push(sublayerId);
                             }
+                            if (visibleLayers.length < 1) {
+                                visibleLayers.push(-1);
+                            }
+                            layer.setVisibleLayers(visibleLayers);
                         });
-                        if (checked) {
-                            visibleLayers.push(sublayerId);
-                        }
-                        if (visibleLayers.length < 1) {
-                            visibleLayers.push(-1);
-                        }
-                        console.debug(visibleLayers);
-                        layer.setVisibleLayers(visibleLayers);
-                    });
 
 
 
@@ -167,7 +163,7 @@
 
                             $("ul", sublayerListItem).toggle();
                         });
-                        var sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
+                        sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
                             var sublayerInfos = [], i, l, layerInfo = null;
                             for (i = 0, l = layer.layerInfos.length; i < l; i++) {
                                 layerInfo = layer.layerInfos[i];
@@ -178,10 +174,10 @@
                             return null;
                         });
 
-                        var list = $("<ul>").appendTo(sublayerListItem).hide();
+                        list = $("<ul>").appendTo(sublayerListItem).hide();
                         $.each(sublayerInfos, function (index, layerInfo) {
                             createSublayerControls(layerInfo).appendTo(list);
-                        })
+                        });
                     }
                     else {
                         $("<label>").attr("for", cbId).text(layerInfo.name).appendTo(sublayerListItem);
@@ -191,7 +187,7 @@
 
                 function createSublayerLink(layer) {
                     if (layer.layerInfos && layer.layerInfos.length > 0) {
-                        $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).insertBefore(label).click(function () { sublayerList.toggle() });
+                        $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).insertBefore(label).click(function () { sublayerList.toggle(); });
                         label.remove();
                         // Add sublayer information
                         parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
@@ -250,16 +246,16 @@
 
 
             // If layerSource is an esri.Map, set the layerSource property to an array of the layers in the map.
-            if (layerSource.isInstanceOf && layerSource.isInstanceOf(esri.Map)) {
-                layerSource = $(settings.map.layerIds).map(function (index, element) {
+            if (settings.layerSource.isInstanceOf && settings.layerSource.isInstanceOf(esri.Map)) {
+                settings.layerSource = $(settings.map.layerIds).map(function (index, element) {
                     return settings.map.getLayer(element);
                 });
             }
 
             // Create a sorted list of tab names.
-            var tabNames = createSortedPropertyNameList(layerSource);
+            var tabNames = createSortedPropertyNameList(settings.layerSource);
 
-            var sortById = function (a, b) {
+            function sortById(a, b) {
                 /// <summary>Used by the Array.sort method to sort elements by their ID property.</summary>
                 if (a.id > b.id) { return 1; }
                 else if (a.id < b.id) { return -1; }
@@ -271,7 +267,7 @@
             dojo.forEach(tabNames, function (tabName) {
                 // Create an array of group names.
                 // If one of the groups is called "Other", do not add this item until after the array has been sorted so that "Other" appears at the end of the list.
-                var groupNames = createSortedPropertyNameList(layerSource[tabName], ["Other"]);
+                var groupNames = createSortedPropertyNameList(settings.layerSource[tabName], ["Other"]);
 
                 var tabId = formatForHtmlId(tabName, "tab");
                 tabIds.push(tabId);
@@ -279,7 +275,7 @@
                 var tabPane = $("<div>").attr("id", tabId).appendTo(tabContainer).attr("data-tab-name", tabName);
 
                 dojo.forEach(groupNames, function (groupName) {
-                    var layers = layerSource[tabName][groupName];
+                    var layers = settings.layerSource[tabName][groupName];
                     // Sort the layers in each group by the value of their id properties
                     layers.sort(sortById);
 
@@ -307,7 +303,7 @@
             if (tabIds.length > 1) {
                 var anchorList = $("<ul>").prependTo(tabContainer);
                 $(tabIds).each(function (index, tabId) {
-                    var tabName = $("#" + tabId).attr("data-tab-name")
+                    var tabName = $("#" + tabId).attr("data-tab-name");
                     $("<a>").attr("href", "#" + tabId).text(tabName).appendTo($("<li>").appendTo(anchorList));
                 });
                 tabContainer.tabs();
@@ -320,7 +316,7 @@
                 // Add layer item to the layer list when it is added to the layerSource.
                 dojo.connect(settings.map, "onLayerAddResult", layerListNode, function (layer, error) {
                     var existingControlsForThisLayer = $("div[data-layerId='" + layer.id + "']");
-                    if (!existingControlsForThisLayer || existingControlsForThisLayer.length < 1 && !error) {
+                    if (!existingControlsForThisLayer || (existingControlsForThisLayer.length < 1 && !error)) {
                         var category;
                         if (layer.id.match(basemapLayerIdRe)) {
                             category = "Basemap";
@@ -378,10 +374,10 @@
                 groups = $("div[data-group]");
             }
 
-            // TODO: Loop through all of the groups and put the controls in order based on the layer ID.
-            for (var i = 0, l = groups.length; i < l; i += 1) {
+            ////// TODO: Loop through all of the groups and put the controls in order based on the layer ID.
+            ////for (var i = 0, l = groups.length; i < l; i += 1) {
 
-            }
+            ////}
             throw new Error("Not implemented");
         }
     };
@@ -399,5 +395,5 @@
         } else {
             $.error('Method ' + method + ' does not exist on jQuery.layerList');
         }
-    }
-})(jQuery);
+    };
+}(jQuery));
