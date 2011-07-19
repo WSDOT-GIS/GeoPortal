@@ -98,7 +98,7 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
-                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text;
+                var checkboxId, sliderId, checkBox, opacitySlider, layerDiv, metadataList, text, sublayerList;
 
                 // TODO: Create new ContentPane for "tab" if one does not already exist.
                 checkboxId = formatForHtmlId(layer.id, "checkbox");
@@ -110,6 +110,7 @@
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
                 $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
 
+                // Add metadata information if available
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
                     if (dojo.isIE && dojo.isIE < 9) {
                         // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
@@ -128,6 +129,42 @@
                         });
                     }
                 }
+
+                function createSublayerControls(layerInfo) {
+                    var sublayerListItem = $("<li>");
+                    var cbId = checkboxId + String(layerInfo.id);
+                    var checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").attr("data-sublayerId", layerInfo.id).appendTo(sublayerListItem);
+                    $("<label>").attr("for", cbId).text(layerInfo.name).appendTo(sublayerListItem);
+                    if (layerInfo.subLayerIds) {
+                        var sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
+                            var sublayerInfos = [], i, l, layerInfo = null;
+                            for (i = 0, l = layer.layerInfos.length; i < l; i++) {
+                                layerInfo = layer.layerInfos[i];
+                                if (layerInfo.id === subLayerId) {
+                                    return layerInfo;
+                                }
+                            }
+                            return null;
+                        });
+
+                        var list = $("<ul>").appendTo(sublayerListItem);
+                        $.each(sublayerInfos, function (index, layerInfo) {
+                            createSublayerControls(layerInfo).appendTo(list);
+                        })
+                    }
+                    return sublayerListItem;
+                }
+
+                if (layer.layerInfos && layer.layerInfos.length > 0) {
+                    // Add sublayer information
+                    var parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
+                    var sublayerList = $("<ul>").appendTo(layerDiv);
+                    var sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
+                        createSublayerControls(layerInfo).appendTo(sublayerList);
+                    });
+
+                }
+
 
                 // Create a unique ID for the slider for this layer.
                 $("<div>").attr("id", sliderId).css("width", "300px").appendTo(layerDiv);
