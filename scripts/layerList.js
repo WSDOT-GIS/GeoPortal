@@ -139,7 +139,24 @@
                 function createSublayerControls(layerInfo) {
                     var sublayerListItem = $("<li>");
                     var cbId = checkboxId + String(layerInfo.id);
-                    var checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").attr("data-sublayerId", layerInfo.id).appendTo(sublayerListItem);
+                    var checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").data("sublayerId", layerInfo.id).attr("checked", layerInfo.defaultVisibility).appendTo(sublayerListItem).change(function () {
+                        var sublayerId = $(this).data("sublayerId"),
+                            visibleLayers = [],
+                            checked = this.checked;
+                        $.each(layer.visibleLayers, function (index, layerId) {
+                            if (layerId != -1 && (checked || sublayerId !== layerId)) {
+                                visibleLayers.push(layerId);
+                            }
+                        });
+                        if (checked) {
+                            visibleLayers.push(sublayerId);
+                        }
+                        if (visibleLayers.length < 1) {
+                            visibleLayers.push(-1);
+                        }
+                        console.debug(visibleLayers);
+                        layer.setVisibleLayers(visibleLayers);
+                    });
 
 
 
