@@ -287,7 +287,7 @@
 
                 // Create the opacity slider
                 if (dojo.isChrome) {
-                    opacitySlider = $("<input>").attr("id", sliderId).attr("type", "range").attr("min", 0).attr("max", 1).attr("step", 0.1).css("display", "block").css("width", "100%").appendTo(layerDiv).attr("disabled", true).hide().change(function (value) {
+                    opacitySlider = $("<input>").attr({ "id": sliderId, "type": "range", "min": 0, "max": 1, "step": 0.1 }).css("display", "block").css("width", "100%").appendTo(layerDiv).attr("disabled", true).hide().change(function (value) {
                         layer.setOpacity(this.value);
                     });
                 } else {
