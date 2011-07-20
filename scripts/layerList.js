@@ -107,7 +107,7 @@
             }
 
             function setClassForOutOfScaleLayerControls(level) {
-                /// <summary>Adds the "outOfScale" class to layers that cannot be seen in the map's current scale.</summary>
+                /// <summary>Adds the "outOfScale" class to the controls that represent layers that cannot be seen in the map's current scale.</summary>
                 /// <param name="level" type="Number">Optional.  The level that the map is at.  If omitted, the map's getLevel function will be called to get this info.</param>
                 if (typeof (level) === "undefined") {
                     level = settings.map.getLevel();
@@ -161,6 +161,7 @@
 
 
             function createControlsForLayer(layer, elementToAppendTo) {
+                /// <summary>Creates the HTML controls associated with a layer</summary>
                 var checkboxId, sliderId, opacitySlider, layerDiv, metadataList, sublayerList, controlsToolbar, label,
                     parentLayers, sublayerListItems;
 
@@ -175,7 +176,10 @@
                 label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
 
                 controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
-                $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () { $(opacitySlider.domNode).toggle(); });
+                $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
+                    var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
+                    $(node).toggle();
+                });
 
                 // Add metadata information if available
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
@@ -276,41 +280,46 @@
                     }
                 }
 
-
-
-                // Create a unique ID for the slider for this layer.
-                $("<div>").attr("id", sliderId).css("width", "300px").appendTo(layerDiv);
-
-
-
-
-
                 // Add the div to the document.
                 if (elementToAppendTo) {
                     layerDiv.appendTo(elementToAppendTo);
                 }
 
-                // Create an opacity slider for the layer.
-                opacitySlider = new dijit.form.HorizontalSlider({
-                    minimum: 0.0,
-                    maximum: 1.0,
-                    value: 1.0,
-                    discreteValues: 100,
-                    showButtons: true,
-                    onChange: function (value) {
-                        layer.setOpacity(value);
-                    },
-                    disabled: layer.visible !== true
-                }, dojo.byId(sliderId));
-                $(opacitySlider.domNode).hide();
+                // Create the opacity slider
+                if (dojo.isChrome) {
+                    opacitySlider = $("<input>").attr("id", sliderId).attr("type", "range").attr("min", 0).attr("max", 1).attr("step", 0.1).css("display", "block").css("width", "100%").appendTo(layerDiv).attr("disabled", true).hide().change(function (value) {
+                        layer.setOpacity(this.value);
+                    });
+                } else {
+                    opacitySlider = $("<div>").attr("id", sliderId).css("width", "300px").appendTo(layerDiv);
+                    // Create an opacity slider for the layer.
+                    opacitySlider = new dijit.form.HorizontalSlider({
+                        minimum: 0.0,
+                        maximum: 1.0,
+                        value: 1.0,
+                        discreteValues: 100,
+                        showButtons: true,
+                        onChange: function (value) {
+                            layer.setOpacity(value);
+                        },
+                        disabled: layer.visible !== true
+                    }, dojo.byId(sliderId));
+                    $(opacitySlider.domNode).hide();
+
+                    // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
+                    layerDiv.data("dijits", [opacitySlider]);
+                }
 
                 $("#" + checkboxId).attr("checked", layer.visible).change(function (eventHandler) {
                     layer.setVisibility(this.checked);
-                    opacitySlider.set("disabled", !this.checked);
+                    if (opacitySlider.set) {
+                        opacitySlider.set("disabled", !this.checked);
+                    } else {
+                        $(opacitySlider).attr("disabled", !this.checked);
+                    }
                 });
 
-                // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
-                layerDiv.data("dijits", [opacitySlider]);
+
 
                 return layerDiv;
             }
@@ -425,11 +434,13 @@
                     var layerDiv = $("div[data-layerId='" + layer.id + "']");
                     // Destroy dijits in the layerDiv.
                     var dijits = layerDiv.data("dijits");
-                    dojo.forEach(dijits, function (item) {
-                        if (item.destroyRecursive) {
-                            item.destroyRecursive(false);
-                        }
-                    });
+                    if (dijits) {
+                        dojo.forEach(dijits, function (item) {
+                            if (item.destroyRecursive) {
+                                item.destroyRecursive(false);
+                            }
+                        });
+                    }
                     layerDiv.remove();
                 });
 
