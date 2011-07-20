@@ -15,32 +15,32 @@
     //// Code snippet: List IDS of all data layers controlled by the layer list.
     // $("*[data-layerId]").map(function(index, value) { return $(value).attr("data-layerId");});
 
-    if (esri.layers.Layer) {
-        dojo.extend(esri.layers.Layer, {
-            getMinAndMaxScales: function () {
-                /// <summary>Gets the minimum and maximum scale for the layer by searching all of the layer's layerInfos.  Returns an array of Number with two elements.</summary>
-                /// <returns type="Array" />
-                if (typeof (this.layerInfos) === "undefined" || this.layerInfos.length < 1) {
-                    return null;
-                } else if (typeof (this.version) === "undefined" || this.version < 10.01) {
-                    return null;
-                }
+    ////if (esri.layers.Layer) {
+    ////    dojo.extend(esri.layers.Layer, {
+    ////        getMinAndMaxScales: function () {
+    ////            /// <summary>Gets the minimum and maximum scale for the layer by searching all of the layer's layerInfos.  Returns an array of Number with two elements.</summary>
+    ////            /// <returns type="Array" />
+    ////            if (typeof (this.layerInfos) === "undefined" || this.layerInfos.length < 1) {
+    ////                return null;
+    ////            } else if (typeof (this.version) === "undefined" || this.version < 10.01) {
+    ////                return null;
+    ////            }
 
 
-                var min = 0, max = 0, layerInfos = this.layerInfos;
-                $.each(layerInfos, function (index, layerInfo) {
+    ////            var min = 0, max = 0, layerInfos = this.layerInfos;
+    ////            $.each(layerInfos, function (index, layerInfo) {
 
-                    if (layerInfo.minScale > 0 && layerInfo.minScale > min) {
-                        min = layerInfo.minScale;
-                    }
-                    if (layerInfo.maxScale > 0 && layerInfo.maxScale < max) {
-                        max = layerInfo.maxScale;
-                    }
-                });
-                return { min: min, max: max };
-            }
-        });
-    }
+    ////                if (layerInfo.minScale > 0 && layerInfo.minScale > min) {
+    ////                    min = layerInfo.minScale;
+    ////                }
+    ////                if (layerInfo.maxScale > 0 && layerInfo.maxScale < max) {
+    ////                    max = layerInfo.maxScale;
+    ////                }
+    ////            });
+    ////            return { min: min, max: max };
+    ////        }
+    ////    });
+    ////}
 
     var settings = {
         layerSource: null,
@@ -478,10 +478,13 @@
 
         // Method calling logic
         if (methods[method]) {
+            // If the name of a method is specified, call that method.  Pass all arguments to that method except for the first (the method's name).
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || !method) {
+            // If no method name is specified, call the init method with the specified arguments.
             return methods.init.apply(this, arguments);
         } else {
+            // If the name of a non-existant method has been specified, add an error message.
             $.error('Method ' + method + ' does not exist on jQuery.layerList');
         }
     };
