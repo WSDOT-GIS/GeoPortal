@@ -123,7 +123,7 @@
 
                 // Filter out the layers that do not have a layerInfos
                 scale = settings.map.getScale(level);
-                layers = $.grep(layers, function(layer) {
+                layers = $.grep(layers, function (layer) {
                     return typeof (layer.layerInfos) !== "undefined" && layer.layerInfos.length > 0;
 
                     ////var scales = layer.getMinAndMaxScales();
@@ -268,7 +268,7 @@
                     }
                 }
 
-                if (layer.setVisibleLayers) {
+                if ((!dojo.isIE || dojo.isIE >= 9) && typeof (layer.setVisibleLayers) !== "undefined") {
                     if (layer.loaded) {
                         createSublayerLink(layer);
                     } else {
@@ -387,7 +387,10 @@
                 // Add layer item to the layer list when it is added to the layerSource.
                 dojo.connect(settings.map, "onLayerAddResult", layerListNode, function (layer, error) {
                     var existingControlsForThisLayer = $("div[data-layerId='" + layer.id + "']");
-                    setClassForOutOfScaleLayerControls();
+
+                    if (!dojo.isIE || dojo.isIE >= 9) {
+                        setClassForOutOfScaleLayerControls();
+                    }
 
                     if (!existingControlsForThisLayer || (existingControlsForThisLayer.length < 1 && !error)) {
                         var category;
@@ -433,8 +436,10 @@
 
 
                 if (typeof (settings.map.getScale) !== "undefined") {
-                    dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level); });
-                    ////dojo.connect(settings.map, "onUpdateEnd", setClassForOutOfScaleLayerControls);
+                    if (!dojo.isIE || dojo.isIE >= 9) {
+                        dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level); });
+                        dojo.connect(settings.map, "onUpdateEnd", setClassForOutOfScaleLayerControls);
+                    }
                 }
 
 
