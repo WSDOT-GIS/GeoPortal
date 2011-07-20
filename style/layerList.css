@@ -16,3 +16,9 @@
 {
     background-color: #ccc;
 }
+
+.outOfScale, .outOfScale a
+{
+    color: Gray;
+    text-decoration: line-through;
+}

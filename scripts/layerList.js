@@ -15,6 +15,33 @@
     //// Code snippet: List IDS of all data layers controlled by the layer list.
     // $("*[data-layerId]").map(function(index, value) { return $(value).attr("data-layerId");});
 
+    if (esri.layers.Layer) {
+        dojo.extend(esri.layers.Layer, {
+            getMinAndMaxScales: function () {
+                /// <summary>Gets the minimum and maximum scale for the layer by searching all of the layer's layerInfos.  Returns an array of Number with two elements.</summary>
+                /// <returns type="Array" />
+                if (typeof (this.layerInfos) === "undefined" || this.layerInfos.length < 1) {
+                    return null;
+                } else if (typeof (this.version) === "undefined" || this.version < 10.01) {
+                    return null;
+                }
+
+
+                var min = 0, max = 0, layerInfos = this.layerInfos;
+                $.each(layerInfos, function (index, layerInfo) {
+
+                    if (layerInfo.minScale > 0 && layerInfo.minScale > min) {
+                        min = layerInfo.minScale;
+                    }
+                    if (layerInfo.maxScale > 0 && layerInfo.maxScale < max) {
+                        max = layerInfo.maxScale;
+                    }
+                });
+                return { min: min, max: max };
+            }
+        });
+    }
+
     var settings = {
         layerSource: null,
         map: null,
@@ -77,6 +104,36 @@
                 });
 
                 return propNames;
+            }
+
+            function setClassForOutOfScaleLayerControls(level) {
+                if (!level) {
+                    level = settings.map.getLevel();
+                }
+                var layerDivs, scale, layers;
+                // Get all of the elements that have a data-layerId attribute and remove the "outOfScale" class from them all.
+                layerDivs = $("div[data-layerId]").removeClass("outOfScale");
+                // Get the corresponding layers from the map.
+                layers = $.map(layerDivs, function (layerDiv) {
+                    var layerId = $(layerDiv).attr("data-layerId");
+                    return settings.map.getLayer(layerId);
+                });
+
+                // Filter out the layers that do not have a layerInfos
+                scale = settings.map.getScale(level);
+                layers = layers.filter(function (layer) {
+                    var scales = layer.getMinAndMaxScales();
+                    if (scales === null || (scales.min === 0 && scales.max === 0)) {
+                        return false;
+                    } else {
+                        ////console.debug(layer.id, scales.min, scales.max);
+                        return (scales.min !== 0 && scale > scales.min) || (scales.max !== 0 && scale < scales.max);
+                    }
+                });
+
+                $.each(layers, function (index, layer) {
+                    $("[data-layerId='" + layer.id + "']").addClass("outOfScale");
+                });
             }
 
             if (options) {
@@ -342,6 +399,8 @@
 
                         groupDiv.append(layerDiv);
                     }
+
+                    setClassForOutOfScaleLayerControls();
                 });
 
                 // When a layerSource layer is removed, also remove it from the layer list.
@@ -357,14 +416,13 @@
                     layerDiv.remove();
                 });
 
-                ////if (typeof (map.getScale) !== "undefined") {
-                ////    dojo.connect(settings.map, "onZoomEnd", layerListNode, function (extent, zoomFactor, anchor, level) {
-                ////        var layerDivs, scale;
-                ////        // Get all of the elements that have a data-layerId attribute.
-                ////        layerDivs = $("div[data-layerId]");
-                ////        scale = map.getScale(level);
-                ////    });
-                ////}
+
+
+                if (typeof (settings.map.getScale) !== "undefined") {
+                    dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level) });
+                }
+
+                
             }
 
             return this;
