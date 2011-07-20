@@ -19,6 +19,5 @@
 
 .outOfScale, .outOfScale a
 {
-    color: Gray;
-    text-decoration: line-through;
+    color: #ccc;
 }

@@ -107,12 +107,14 @@
             }
 
             function setClassForOutOfScaleLayerControls(level) {
-                if (!level) {
+                /// <summary>Adds the "outOfScale" class to layers that cannot be seen in the map's current scale.</summary>
+                /// <param name="level" type="Number">Optional.  The level that the map is at.  If omitted, the map's getLevel function will be called to get this info.</param>
+                if (typeof (level) === "undefined") {
                     level = settings.map.getLevel();
                 }
                 var layerDivs, scale, layers;
                 // Get all of the elements that have a data-layerId attribute and remove the "outOfScale" class from them all.
-                layerDivs = $("div[data-layerId]").removeClass("outOfScale");
+                layerDivs = $("*", layerListNode).removeClass("outOfScale");
                 // Get the corresponding layers from the map.
                 layers = $.map(layerDivs, function (layerDiv) {
                     var layerId = $(layerDiv).attr("data-layerId");
@@ -121,18 +123,25 @@
 
                 // Filter out the layers that do not have a layerInfos
                 scale = settings.map.getScale(level);
-                layers = layers.filter(function (layer) {
-                    var scales = layer.getMinAndMaxScales();
-                    if (scales === null || (scales.min === 0 && scales.max === 0)) {
-                        return false;
-                    } else {
-                        ////console.debug(layer.id, scales.min, scales.max);
-                        return (scales.min !== 0 && scale > scales.min) || (scales.max !== 0 && scale < scales.max);
-                    }
+                layers = $.grep(layers, function(layer) {
+                    return typeof (layer.layerInfos) !== "undefined" && layer.layerInfos.length > 0;
+
+                    ////var scales = layer.getMinAndMaxScales();
+                    ////if (scales === null || (scales.min === 0 && scales.max === 0)) {
+                    ////    return false;
+                    ////} else {
+                    ////    ////console.debug(layer.id, scales.min, scales.max);
+                    ////    return (scales.min !== 0 && scale > scales.min) || (scales.max !== 0 && scale < scales.max);
+                    ////}
                 });
 
                 $.each(layers, function (index, layer) {
-                    $("[data-layerId='" + layer.id + "']").addClass("outOfScale");
+                    var currentLayerDiv = $("[data-layerId='" + layer.id + "']");
+                    $.each(layer.layerInfos, function (index, layerInfo) {
+                        if ((layerInfo.minScale !== 0 && layerInfo.minScale < scale) || (layerInfo.maxScale !== 0 && layerInfo.maxScale > scale)) {
+                            $("[data-sublayer-id=" + layerInfo.id + "]", currentLayerDiv).addClass("outOfScale");
+                        }
+                    });
                 });
             }
 
@@ -191,9 +200,11 @@
                 }
 
                 function createSublayerControls(layerInfo) {
-                    var sublayerInfos, list, sublayerListItem = $("<li>"),
-                        cbId = checkboxId + String(layerInfo.id),
-                        checkbox = $("<input>").attr("id", cbId).attr("type", "checkbox").data("sublayerId", layerInfo.id).attr("checked", layerInfo.defaultVisibility).appendTo(sublayerListItem).change(function () {
+                    var sublayerInfos, list, sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),
+                        cbId = checkboxId + String(layerInfo.id);
+                    // Add a checkbox for the sublayer if the layer has the ability to set visibility of sublayers.
+                    if (layer.setVisibleLayers) {
+                        $("<input>").attr("id", cbId).attr("type", "checkbox").data("sublayerId", layerInfo.id).attr("checked", layerInfo.defaultVisibility).appendTo(sublayerListItem).change(function () {
                             var sublayerId = $(this).data("sublayerId"),
                             visibleLayers = [],
                             checked = this.checked;
@@ -210,6 +221,7 @@
                             }
                             layer.setVisibleLayers(visibleLayers);
                         });
+                    }
 
 
 
@@ -243,7 +255,7 @@
                 }
 
                 function createSublayerLink(layer) {
-                    if (layer.layerInfos && layer.layerInfos.length > 1) {
+                    if (layer.layerInfos && layer.layerInfos.length > 0) {
                         $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).insertBefore(label).click(function () { sublayerList.toggle(); });
                         label.remove();
                         // Add sublayer information
@@ -375,6 +387,8 @@
                 // Add layer item to the layer list when it is added to the layerSource.
                 dojo.connect(settings.map, "onLayerAddResult", layerListNode, function (layer, error) {
                     var existingControlsForThisLayer = $("div[data-layerId='" + layer.id + "']");
+                    setClassForOutOfScaleLayerControls();
+
                     if (!existingControlsForThisLayer || (existingControlsForThisLayer.length < 1 && !error)) {
                         var category;
                         if (layer.id.match(basemapLayerIdRe)) {
@@ -400,7 +414,7 @@
                         groupDiv.append(layerDiv);
                     }
 
-                    setClassForOutOfScaleLayerControls();
+
                 });
 
                 // When a layerSource layer is removed, also remove it from the layer list.
@@ -419,10 +433,11 @@
 
 
                 if (typeof (settings.map.getScale) !== "undefined") {
-                    dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level) });
+                    dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level); });
+                    ////dojo.connect(settings.map, "onUpdateEnd", setClassForOutOfScaleLayerControls);
                 }
 
-                
+
             }
 
             return this;
