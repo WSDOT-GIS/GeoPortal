@@ -73,15 +73,16 @@ namespace Wsdot.Grdo.Web.Mapping
 				}
 			}
 
-			context.Response.ContentType = "text/plain";
+			context.Response.ContentType = "application/json";
 			context.Response.Write(jsSerializer.Serialize(routeInfos));
+			context.Response.Cache.SetExpires(DateTime.Now.AddMonths(1));
 		}
 
 		public bool IsReusable
 		{
 			get
 			{
-				return false;
+				return true;
 			}
 		}
 	}
