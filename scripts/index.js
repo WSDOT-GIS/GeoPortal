@@ -132,7 +132,7 @@
 
     dojo.extend(esri.Map, {
         "lods": null,
-         "getLOD": function (level) {
+        "getLOD": function (level) {
             /// <summary>Gets the current level of detail (LOD) for the map.</summary>
             /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
             /// <returns type="esri.layers.LOD" />
@@ -141,7 +141,7 @@
             }
             return map.lods[level];
         },
-        "getScale": function(level) {
+        "getScale": function (level) {
             /// <summary>Returns the current scale of the map.</summary>
             /// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
             /// <returns type="Number" />
@@ -298,6 +298,20 @@
 
         function setupToolbar() {
             // Set the background color for the extent link.
+            $("#termsOfUseLink").click(function () {
+                var dialog = $("<div>").text("This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.").dialog({
+                    title: "Terms of use",
+                    modal: true,
+                    close: function () {
+                        $(this).dialog("destroy").remove();
+                    },
+                    buttons: {
+                        "OK": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            });
             if (dojo.isIE && dojo.isIE < 9) {
                 $("a", "#toolbar").css("background-color", "white");
             } else {
