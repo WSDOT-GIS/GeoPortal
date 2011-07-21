@@ -69,6 +69,7 @@
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\locationInfo.js" />
     <Content Include="scripts\lrsTools.js" />
+    <Content Include="GetRoutes.ashx" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="style\index.css" />
     <Content Include="style\jquery.pnotify.default.css" />
@@ -125,6 +126,9 @@
       <DependentUpon>config.ashx</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
+    <Compile Include="GetRoutes.ashx.cs">
+      <DependentUpon>GetRoutes.ashx</DependentUpon>
+    </Compile>
     <Compile Include="GraphicExport.ashx.cs">
       <DependentUpon>GraphicExport.ashx</DependentUpon>
     </Compile>
