@@ -75,7 +75,9 @@ namespace Wsdot.Grdo.Web.Mapping
 
 			context.Response.ContentType = "application/json";
 			context.Response.Write(jsSerializer.Serialize(routeInfos));
+			context.Response.Cache.SetCacheability(HttpCacheability.Public);
 			context.Response.Cache.SetExpires(DateTime.Now.AddMonths(1));
+			context.Response.Cache.SetValidUntilExpires(true);
 		}
 
 		public bool IsReusable
