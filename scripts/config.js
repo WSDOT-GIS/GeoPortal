@@ -141,8 +141,8 @@ wsdot.config = {
                     "metadataIds":[5]
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TribalLands/MapServer",
                     "options": {
                         "id": "Tribal Lands",
                         "visible": false

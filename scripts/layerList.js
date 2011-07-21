@@ -6,41 +6,60 @@
 (function ($) {
     "use strict";
 
-    dojo.require("dijit.layout.TabContainer");
-    dojo.require("dijit.layout.ContentPane");
-    dojo.require("dijit.form.Slider");
-    dojo.require("dijit.form.CheckBox");
-
+    // Chrome supports the built-in slider control for HTML5's <input type="range" /> tag, so it does not need to use the dojo slider.
+    if (!dojo.isChrome) {
+        dojo.require("dijit.form.Slider");
+    }
 
     //// Code snippet: List IDS of all data layers controlled by the layer list.
     // $("*[data-layerId]").map(function(index, value) { return $(value).attr("data-layerId");});
 
-    ////if (esri.layers.Layer) {
-    ////    dojo.extend(esri.layers.Layer, {
-    ////        getMinAndMaxScales: function () {
-    ////            /// <summary>Gets the minimum and maximum scale for the layer by searching all of the layer's layerInfos.  Returns an array of Number with two elements.</summary>
-    ////            /// <returns type="Array" />
-    ////            if (typeof (this.layerInfos) === "undefined" || this.layerInfos.length < 1) {
-    ////                return null;
-    ////            } else if (typeof (this.version) === "undefined" || this.version < 10.01) {
-    ////                return null;
-    ////            }
+    if (esri.layers.LayerInfo) {
+        dojo.extend(esri.layers.LayerInfo, {
+            isGroupLayer: function () {
+                return !sublayerIds;
+            },
+            isVisibleAt: function (scale) {
+                /// <summary>Determines if the current sublayer can be seen at the current scale.</summary>
+                // The minScale and maxScale properties of the LayerInfo object are not available from layers based on pre-version 10 SP1 map services.
+                // Return true if there is no scale information;
+                /// <returns type="Boolean" />
+                if (typeof (this.minScale) === "undefined" || typeof (this.maxScale) === "undefined") {
+                    return true;
+                } else {
+                    return (this.minScale === 0 || this.minScale >= scale) && (this.maxScale === 0 || this.maxScale <= scale);
+                }
+            }
+        });
+    }
 
+    if (esri.layers.Layer) {
+        dojo.extend(esri.layers.Layer, {
+            getVisibleLayerInfos: function (scale) {
+                /// <summary>Returns only the layerInfos that are visible at the given scale.</summary>
+                /// <returns type="esri.layers.LayerInfo[]" />
+                if (typeof (this.layerInfos) === "undefined") {
+                    return null;
+                }
 
-    ////            var min = 0, max = 0, layerInfos = this.layerInfos;
-    ////            $.each(layerInfos, function (index, layerInfo) {
-
-    ////                if (layerInfo.minScale > 0 && layerInfo.minScale > min) {
-    ////                    min = layerInfo.minScale;
-    ////                }
-    ////                if (layerInfo.maxScale > 0 && layerInfo.maxScale < max) {
-    ////                    max = layerInfo.maxScale;
-    ////                }
-    ////            });
-    ////            return { min: min, max: max };
-    ////        }
-    ////    });
-    ////}
+                var visibleLayerInfos = [];
+                dojo.forEach(this.layerInfos, function (layerInfo) {
+                    if (layerInfo.isVisibleAt(scale)) {
+                        visibleLayerInfos.push(layerInfo);
+                    }
+                });
+                return visibleLayerInfos;
+            },
+            areAnySublayersVisible: function (scale) {
+                if (this.version < 10.01) {
+                    return true;
+                } else {
+                    var visibleLayerInfos = this.getVisibleLayerInfos();
+                    return visibleLayerInfos.length > 0;
+                }
+            }
+        });
+    }
 
     var settings = {
         layerSource: null,
@@ -125,23 +144,26 @@
                 scale = settings.map.getScale(level);
                 layers = $.grep(layers, function (layer) {
                     return typeof (layer.layerInfos) !== "undefined" && layer.layerInfos.length > 0;
-
-                    ////var scales = layer.getMinAndMaxScales();
-                    ////if (scales === null || (scales.min === 0 && scales.max === 0)) {
-                    ////    return false;
-                    ////} else {
-                    ////    ////console.debug(layer.id, scales.min, scales.max);
-                    ////    return (scales.min !== 0 && scale > scales.min) || (scales.max !== 0 && scale < scales.max);
-                    ////}
                 });
 
                 $.each(layers, function (index, layer) {
-                    var currentLayerDiv = $("[data-layerId='" + layer.id + "']");
+                    var visibleLayerCount = 0,
+                        currentLayerDiv = $("[data-layerId='" + layer.id + "']");
+
+                    // Add the outOfScale class to sublayer controls that we know aren't visible at the current scale.
+                    // Count the layers that ARE visible.
                     $.each(layer.layerInfos, function (index, layerInfo) {
-                        if ((layerInfo.minScale !== 0 && layerInfo.minScale < scale) || (layerInfo.maxScale !== 0 && layerInfo.maxScale > scale)) {
+                        if (!layerInfo.isVisibleAt(scale)) {
                             $("[data-sublayer-id=" + layerInfo.id + "]", currentLayerDiv).addClass("outOfScale");
+                        } else {
+                            visibleLayerCount += 1;
                         }
                     });
+
+                    // If there are no visible sublayers at the current scale, add the outOfScale class to the layer's div tag.
+                    if (visibleLayerCount < 1) {
+                        currentLayerDiv.addClass("outOfScale");
+                    }
                 });
             }
 
@@ -164,44 +186,6 @@
                 /// <summary>Creates the HTML controls associated with a layer</summary>
                 var checkboxId, sliderId, opacitySlider, layerDiv, metadataList, sublayerList, controlsToolbar, label,
                     parentLayers, sublayerListItems;
-
-                // TODO: Create new ContentPane for "tab" if one does not already exist.
-                checkboxId = formatForHtmlId(layer.id, "checkbox");
-                sliderId = formatForHtmlId(layer.id, "slider");
-
-                layerDiv = $("<div>").attr("data-layerId", layer.id);
-
-                // Create a checkbox and label and place inside of a div.
-                $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
-                label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
-
-                controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
-                $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
-                    var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
-                    $(node).toggle();
-                });
-
-                // Add metadata information if available
-                if (layer.metadataUrls && layer.metadataUrls.length > 0) {
-                    $("<a>").attr("title", "Toggle metadata links").addClass("layer-metadata-link").attr("href", "#").text("m").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
-                    if (dojo.isIE && dojo.isIE < 9) {
-                        // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
-                        metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
-                        $.each(layer.metadataUrls, function (index, metadataUrl) {
-                            if (index > 0) {
-                                $("<span>").text(",").appendTo(metadataList);
-                            }
-                            $("<a>").attr("href", "#").text(index + 1).appendTo(metadataList).click(function () { window.open(metadataUrl); });
-                        });
-                    } else {
-                        // Create an unordered list, which will be styled via CSS.
-                        metadataList = $("<ul>").addClass("metadata-list").appendTo(layerDiv);
-                        $.each(layer.metadataUrls, function (index, metadataUrl) {
-                            $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
-                        });
-                    }
-                    metadataList.hide();
-                }
 
                 function createSublayerControls(layerInfo) {
                     var sublayerInfos, list, sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),
@@ -247,7 +231,8 @@
                             return null;
                         });
 
-                        list = $("<ul>").appendTo(sublayerListItem).hide();
+                        list = $("<ul>").appendTo(sublayerListItem);
+                        if (dojo.isIE && dojo.isIE < 9) { list.hide(); }
                         $.each(sublayerInfos, function (index, layerInfo) {
                             createSublayerControls(layerInfo).appendTo(list);
                         });
@@ -272,6 +257,84 @@
                     }
                 }
 
+                function showSublayerControls(layer) {
+                    var dialog = $("<div>").dialog({
+                        title: "Sublayers",
+                        modal: true,
+                        open: function () {
+                            var sublayerListItems, parentLayers, list;
+                            if (layer.layerInfos) {
+                                list = $("<ul>").appendTo(this);
+                                parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
+                                sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
+                                    createSublayerControls(layerInfo).appendTo(list);
+                                });
+                            }
+                        },
+                        close: function () {
+                            $(this).dialog("destroy").remove();
+                        }
+                        /*
+                        ,
+                        buttons: {
+                        "Submit": function () {
+                        $(this).dialog("close");
+                        },
+                        "Cancel": function () {
+                        $(this).dialog("close");
+                        }
+                        }
+                        */
+                    });
+                }
+
+                // TODO: Create new ContentPane for "tab" if one does not already exist.
+                checkboxId = formatForHtmlId(layer.id, "checkbox");
+                sliderId = formatForHtmlId(layer.id, "slider");
+
+                layerDiv = $("<div>").attr("data-layerId", layer.id);
+
+                // Create a checkbox and label and place inside of a div.
+                $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
+                label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
+
+                controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
+                if (layer.setVisibleLayers && dojo.isIE && dojo.isIE < 9) {
+                    $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () { showSublayerControls(layer); });
+                }
+
+                $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
+                    var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
+                    $(node).toggle();
+                });
+
+
+
+                // Add metadata information if available
+                if (layer.metadataUrls && layer.metadataUrls.length > 0) {
+
+                    $("<a>").attr("title", "Toggle metadata links").addClass("layer-metadata-link").attr("href", "#").text("m").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
+                    if (dojo.isIE && dojo.isIE < 9) {
+                        // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
+                        metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
+                        $.each(layer.metadataUrls, function (index, metadataUrl) {
+                            if (index > 0) {
+                                $("<span>").text(",").appendTo(metadataList);
+                            }
+                            $("<a>").attr("href", "#").text(index + 1).appendTo(metadataList).click(function () { window.open(metadataUrl); });
+                        });
+                    } else {
+                        // Create an unordered list, which will be styled via CSS.
+                        metadataList = $("<ul>").addClass("metadata-list").appendTo(layerDiv);
+                        $.each(layer.metadataUrls, function (index, metadataUrl) {
+                            $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
+                        });
+                    }
+                    metadataList.hide();
+                }
+
+
+
                 if ((!dojo.isIE || dojo.isIE >= 9) && typeof (layer.setVisibleLayers) !== "undefined") {
                     if (layer.loaded) {
                         createSublayerLink(layer);
@@ -287,7 +350,7 @@
 
                 // Create the opacity slider
                 if (dojo.isChrome) {
-                    opacitySlider = $("<input>").attr({ "id": sliderId, "type": "range", "min": 0, "max": 1, "step": 0.1 }).css("display", "block").css("width", "100%").appendTo(layerDiv).attr("disabled", true).hide().change(function (value) {
+                    opacitySlider = $("<input>").attr({ "id": sliderId, "type": "range", "min": 0, "max": 1, "step": 0.1 }).css({ "display": "block", "width": "100%" }).appendTo(layerDiv).attr("disabled", true).hide().change(function (value) {
                         layer.setOpacity(this.value);
                     });
                 } else {

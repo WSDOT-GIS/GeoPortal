@@ -17,7 +17,7 @@
     background-color: #ccc;
 }
 
-.outOfScale, .outOfScale a
+li.outOfScale, *.outOfScale > a
 {
     color: #ccc;
 }
