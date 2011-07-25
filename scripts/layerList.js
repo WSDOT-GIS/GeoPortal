@@ -42,7 +42,7 @@ Prerequisites:
     if (esri.layers.LayerInfo) {
         dojo.extend(esri.layers.LayerInfo, {
             isGroupLayer: function () {
-                return !this.sublayerIds;
+                return this.sublayerIds !== null;
             },
             isVisibleAt: function (scale) {
                 /// <summary>Determines if the current sublayer can be seen at the current scale.</summary>
@@ -76,6 +76,7 @@ Prerequisites:
                 return visibleLayerInfos;
             },
             areAnySublayersVisible: function (scale) {
+                /// <summary>Determines if any of the sublayers in the layer are visible at the current scale.  Only supported for ArcGIS 10.01 and higher map services.</summary>
                 if (this.version < 10.01) {
                     return true;
                 } else {
@@ -83,6 +84,24 @@ Prerequisites:
                     return visibleLayerInfos.length > 0;
                 }
             }
+            ////,
+            ////getSublayerIds: function (sublayerId, recursive) {
+            ////    /// <summary>Returns an array of layer IDs that are decendants of the layer info associated with the given sublayer ID.</summary>
+            ////    /// <param name="sublayerId" type="Number">The index of the layerInfo in the esri.layers.Layers.layerInfos array.</param>
+            ////    var layerInfo = this.layerInfos[sublayerId],
+            ////        sublayerIds = [];
+            ////    if (typeof (recursive) === "undefined") {
+            ////        recursive = true;
+            ////    }
+            ////    if (layerInfo.subLayerIds.length > 0) {
+            ////        $.each(layerInfo.subLayerIds, function (index, sublayerId) {
+            ////            sublayerIds.push(sublayerId);
+            ////            if (recursive) {
+            ////                sublayerIds.join(this.getSublayerIds(sublayerId));
+            ////            }
+            ////        });
+            ////    }
+            ////}
         });
     }
 
@@ -210,12 +229,53 @@ Prerequisites:
             function createControlsForLayer(layer, elementToAppendTo) {
                 /// <summary>Creates the HTML controls associated with a layer</summary>
                 var checkboxId, sliderId, opacitySlider, layerDiv, metadataList, sublayerList, controlsToolbar, label,
-                    parentLayers, sublayerListItems;
+                    parentLayers, sublayerListItems, checkbox;
 
                 function createSublayerControls(layerInfo) {
                     var list,
-                        sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),  // The list item that represents the current sub layer.
+                        sublayerListItem = $("<li>"), ////.attr("data-sublayer-id", layerInfo.id),  // The list item that represents the current sub layer.
                         cbId = checkboxId + String(layerInfo.id);                             // The ID that will be given to the current sublayer's checkbox.
+
+                    function setSublayerVisibility(event) {
+                        /// <summary>Sets the visibility</summary>
+                        /// <param name="event" type="Object">This event object should have the following properties: data.layer, data.sublayerId.</param>
+                        var layer = event.data.layer,
+                            sublayerId = event.data.sublayerId,
+                            visibleLayers = [],
+                        // Select all checked child sublayer checkboxes.
+                            sublayerCheckboxes = $("ul input[type=checkbox]", layerDiv),
+                            visibleLayerInfos = sublayerCheckboxes.filter(":checked").map(function (index, item) { return layer.layerInfos[$(item).data("sublayerId")]; }),
+                            checked = this.checked;
+
+                        if (visibleLayerInfos.length < 1) {
+                            visibleLayers = [-1];
+                        } else {
+                            sublayerCheckboxes.each(function (index, checkbox) {
+                                // Get the layer info associated with the current checkbox.
+                                var layerInfo = layer.layerInfos[$(checkbox).data("sublayerId")];
+                                if (checkbox.checked) {
+                                    // If there are no child layers, add this layer to the visible layer list.
+                                    if (layerInfo.subLayerIds === null || layerInfo.subLayerIds.length < 1) {
+                                        visibleLayers.push(layerInfo.id);
+                                    }
+                                }
+                            });
+                        }
+
+                        console.debug(visibleLayers);
+
+
+                        ////// If the checkbox is checked, add the current layer to the list of visible layers.
+                        ////if (checked) {
+                        ////    visibleLayers.push(sublayerId);
+                        ////}
+                        ////// If the list of visible layers is empty, add -1 to the list.
+                        ////if (visibleLayers.length < 1) {
+                        ////    visibleLayers.push(-1);
+                        ////}
+                        // Apply the list of visible layers.
+                        layer.setVisibleLayers(visibleLayers);
+                    }
 
                     function createSublayerList() {
                         // Get the sublayerInfo objects that correspond to the current layerInfo's subLayerIds.
@@ -239,40 +299,28 @@ Prerequisites:
 
                     // Add a checkbox for the sublayer if the layer has the ability to set visibility of sublayers.
                     if (layer.setVisibleLayers) {
-                        $("<input>").attr("id", cbId).attr({
+                        checkbox = $("<input>").attr("id", cbId).attr({
                             type: "checkbox",
                             checked: layerInfo.defaultVisibility
-                        }).data("sublayerId", layerInfo.id).appendTo(sublayerListItem).change(function () {
-                            var sublayerId = $(this).data("sublayerId"),
-                            visibleLayers = [],
-                            sublayerCheckboxes = $("+a+ul>li>input[type=checkbox]", this), // Select all child sublayer checkboxes.
-                            checked = this.checked;
+                        }).data({
+                            "sublayerId": layerInfo.id
+                        }).appendTo(sublayerListItem);
 
-
-                            // If there are sublayer checkboxes set their checked property to match the current check box, then trigger the change event for each child checkbox.
-                            if (sublayerCheckboxes.length > 0) {
-                                sublayerCheckboxes.attr("checked", checked);
-                                sublayerCheckboxes.change();
-                            }
-
-                            // Populate the visibleLayers array with the currently visible sublayers.
-                            $.each(layer.visibleLayers, function (index, layerId) {
-                                // -1 indicates that no child layers are visible.  Do not add this value to the array.
-                                if (layerId !== -1 && (checked || sublayerId !== layerId)) {
-                                    visibleLayers.push(layerId);
-                                }
+                        if (layerInfo.subLayerIds === null) {
+                            checkbox.change({
+                                layer: layer,
+                                sublayerId: layerInfo.id
+                            }, setSublayerVisibility);
+                        } else {
+                            checkbox.change(function (event) {
+                                var checked = this.checked;
+                                // Set the checked value of chil
+                                $("ul input[type=checkbox]", $(this).parent()).each(function (index, cb) {
+                                    cb.checked = !checked;
+                                    cb.click();
+                                });
                             });
-                            // If the checkbox is checked, add the current layer to the list of visible layers.
-                            if (checked) {
-                                visibleLayers.push(sublayerId);
-                            }
-                            // If the list of visible layers is empty, add -1 to the list.
-                            if (visibleLayers.length < 1) {
-                                visibleLayers.push(-1);
-                            }
-                            // Apply the list of visible layers.
-                            layer.setVisibleLayers(visibleLayers);
-                        });
+                        }
                     }
 
 
