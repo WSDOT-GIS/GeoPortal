@@ -274,7 +274,7 @@ Prerequisites:
                         });
 
                         list = $("<ul>").appendTo(sublayerListItem);
-                        if (dojo.isIE && dojo.isIE < 9) { list.hide(); }
+                        
                         $.each(sublayerInfos, function (index, layerInfo) {
                             createSublayerControls(layerInfo).appendTo(list);
                         });
