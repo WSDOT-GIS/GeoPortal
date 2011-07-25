@@ -42,7 +42,7 @@ Prerequisites:
     if (esri.layers.LayerInfo) {
         dojo.extend(esri.layers.LayerInfo, {
             isGroupLayer: function () {
-                return !sublayerIds;
+                return !this.sublayerIds;
             },
             isVisibleAt: function (scale) {
                 /// <summary>Determines if the current sublayer can be seen at the current scale.</summary>
@@ -217,21 +217,38 @@ Prerequisites:
                         cbId = checkboxId + String(layerInfo.id);
                     // Add a checkbox for the sublayer if the layer has the ability to set visibility of sublayers.
                     if (layer.setVisibleLayers) {
-                        $("<input>").attr("id", cbId).attr("type", "checkbox").data("sublayerId", layerInfo.id).attr("checked", layerInfo.defaultVisibility).appendTo(sublayerListItem).change(function () {
+                        $("<input>").attr("id", cbId).attr({
+                            type: "checkbox",
+                            checked: layerInfo.defaultVisibility
+                        }).data("sublayerId", layerInfo.id).appendTo(sublayerListItem).change(function () {
                             var sublayerId = $(this).data("sublayerId"),
                             visibleLayers = [],
+                            sublayerCheckboxes = $("+a+ul>li>input[type=checkbox]", this), // Select all sublayer checkboxes.
                             checked = this.checked;
+
+                            
+                            // If there are sublayer checkboxes set their checked property to match the current check box, then trigger the change event for each child checkbox.
+                            if (sublayerCheckboxes.length > 0) {
+                                sublayerCheckboxes.attr("checked", checked);
+                                sublayerCheckboxes.change();
+                            }
+
+                            // Populate the visibleLayers array with the currently visible sublayers.
                             $.each(layer.visibleLayers, function (index, layerId) {
+                                // -1 indicates that no child layers are visible.  Do not add this value to the array.
                                 if (layerId !== -1 && (checked || sublayerId !== layerId)) {
                                     visibleLayers.push(layerId);
                                 }
                             });
+                            // If the checkbox is checked, add the current layer to the list of visible layers.
                             if (checked) {
                                 visibleLayers.push(sublayerId);
                             }
+                            // If the list of visible layers is empty, add -1 to the list.
                             if (visibleLayers.length < 1) {
                                 visibleLayers.push(-1);
                             }
+                            // Apply the list of visible layers.
                             layer.setVisibleLayers(visibleLayers);
                         });
                     }
@@ -325,7 +342,9 @@ Prerequisites:
 
                 controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
                 if (layer.setVisibleLayers && dojo.isIE && dojo.isIE < 9) {
-                    $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () { showSublayerControls(layer); });
+                    $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () {
+                        showSublayerControls(layer); 
+                    });
                 }
 
                 $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
