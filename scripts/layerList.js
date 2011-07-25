@@ -213,8 +213,30 @@ Prerequisites:
                     parentLayers, sublayerListItems;
 
                 function createSublayerControls(layerInfo) {
-                    var sublayerInfos, list, sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),
-                        cbId = checkboxId + String(layerInfo.id);
+                    var list,
+                        sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),  // The list item that represents the current sub layer.
+                        cbId = checkboxId + String(layerInfo.id);                             // The ID that will be given to the current sublayer's checkbox.
+
+                    function createSublayerList() {
+                        // Get the sublayerInfo objects that correspond to the current layerInfo's subLayerIds.
+                        var sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
+                            var sublayerInfos = [], i, l, layerInfo = null;
+                            for (i = 0, l = layer.layerInfos.length; i < l; i++) {
+                                layerInfo = layer.layerInfos[i];
+                                if (layerInfo.id === subLayerId) {
+                                    return layerInfo;
+                                }
+                            }
+                            return null;
+                        });
+
+                        list = $("<ul>").appendTo(sublayerListItem);
+
+                        $.each(sublayerInfos, function (index, layerInfo) {
+                            createSublayerControls(layerInfo).appendTo(list);
+                        });
+                    }
+
                     // Add a checkbox for the sublayer if the layer has the ability to set visibility of sublayers.
                     if (layer.setVisibleLayers) {
                         $("<input>").attr("id", cbId).attr({
@@ -223,10 +245,10 @@ Prerequisites:
                         }).data("sublayerId", layerInfo.id).appendTo(sublayerListItem).change(function () {
                             var sublayerId = $(this).data("sublayerId"),
                             visibleLayers = [],
-                            sublayerCheckboxes = $("+a+ul>li>input[type=checkbox]", this), // Select all sublayer checkboxes.
+                            sublayerCheckboxes = $("+a+ul>li>input[type=checkbox]", this), // Select all child sublayer checkboxes.
                             checked = this.checked;
 
-                            
+
                             // If there are sublayer checkboxes set their checked property to match the current check box, then trigger the change event for each child checkbox.
                             if (sublayerCheckboxes.length > 0) {
                                 sublayerCheckboxes.attr("checked", checked);
@@ -257,27 +279,16 @@ Prerequisites:
 
 
 
+
                     if (layerInfo.subLayerIds) {
+                        // Create the link that shows or hides the list of sublayers for the current layer.
                         $("<a>").attr("href", "#").text(layerInfo.name).appendTo(sublayerListItem).click(function () {
 
                             $("ul", sublayerListItem).toggle();
                         });
-                        sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
-                            var sublayerInfos = [], i, l, layerInfo = null;
-                            for (i = 0, l = layer.layerInfos.length; i < l; i++) {
-                                layerInfo = layer.layerInfos[i];
-                                if (layerInfo.id === subLayerId) {
-                                    return layerInfo;
-                                }
-                            }
-                            return null;
-                        });
 
-                        list = $("<ul>").appendTo(sublayerListItem);
-                        
-                        $.each(sublayerInfos, function (index, layerInfo) {
-                            createSublayerControls(layerInfo).appendTo(list);
-                        });
+                        createSublayerList();
+
                     }
                     else {
                         $("<label>").attr("for", cbId).text(layerInfo.name).appendTo(sublayerListItem);
@@ -343,7 +354,7 @@ Prerequisites:
                 controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
                 if (layer.setVisibleLayers && dojo.isIE && dojo.isIE < 9) {
                     $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () {
-                        showSublayerControls(layer); 
+                        showSublayerControls(layer);
                     });
                 }
 

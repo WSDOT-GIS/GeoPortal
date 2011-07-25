@@ -99,7 +99,7 @@ wsdot.config = {
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
                     "options": {
                         "id": "County Boundaries",
@@ -116,7 +116,7 @@ wsdot.config = {
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
                     "options": {
                         "id": "MPO",
@@ -170,7 +170,7 @@ wsdot.config = {
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
                     "options": {
                         "id": "Region Boundaries",
