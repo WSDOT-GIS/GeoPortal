@@ -36,9 +36,6 @@ Prerequisites:
         dojo.require("dijit.form.Slider");
     }
 
-    //// Code snippet: List IDS of all data layers controlled by the layer list.
-    // $("*[data-layerId]").map(function(index, value) { return $(value).attr("data-layerId");});
-
     if (esri.layers.LayerInfo) {
         dojo.extend(esri.layers.LayerInfo, {
             isGroupLayer: function () {
@@ -318,38 +315,6 @@ Prerequisites:
                     }
                 }
 
-                function showSublayerControls(layer) {
-                    var dialog = $("<div>").dialog({
-                        title: "Sublayers",
-                        modal: true,
-                        open: function () {
-                            var sublayerListItems, parentLayers, list;
-                            if (layer.layerInfos) {
-                                list = $("<ul>").appendTo(this);
-                                parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
-                                sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
-                                    createSublayerControls(layerInfo).appendTo(list);
-                                });
-                            }
-                        },
-                        close: function () {
-                            $(this).dialog("destroy").remove();
-                        }
-                        /*
-                        ,
-                        buttons: {
-                        "Submit": function () {
-                        $(this).dialog("close");
-                        },
-                        "Cancel": function () {
-                        $(this).dialog("close");
-                        }
-                        }
-                        */
-                    });
-                }
-
-                // TODO: Create new ContentPane for "tab" if one does not already exist.
                 checkboxId = formatForHtmlId(layer.id, "checkbox");
                 sliderId = formatForHtmlId(layer.id, "slider");
 
@@ -360,11 +325,6 @@ Prerequisites:
                 label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
 
                 controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
-                ////if (layer.setVisibleLayers && dojo.isIE && dojo.isIE < 9) {
-                ////    $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () {
-                ////        showSublayerControls(layer);
-                ////    });
-                ////}
 
                 $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
                     var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
