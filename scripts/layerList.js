@@ -84,24 +84,6 @@ Prerequisites:
                     return visibleLayerInfos.length > 0;
                 }
             }
-            ////,
-            ////getSublayerIds: function (sublayerId, recursive) {
-            ////    /// <summary>Returns an array of layer IDs that are decendants of the layer info associated with the given sublayer ID.</summary>
-            ////    /// <param name="sublayerId" type="Number">The index of the layerInfo in the esri.layers.Layers.layerInfos array.</param>
-            ////    var layerInfo = this.layerInfos[sublayerId],
-            ////        sublayerIds = [];
-            ////    if (typeof (recursive) === "undefined") {
-            ////        recursive = true;
-            ////    }
-            ////    if (layerInfo.subLayerIds.length > 0) {
-            ////        $.each(layerInfo.subLayerIds, function (index, sublayerId) {
-            ////            sublayerIds.push(sublayerId);
-            ////            if (recursive) {
-            ////                sublayerIds.join(this.getSublayerIds(sublayerId));
-            ////            }
-            ////        });
-            ////    }
-            ////}
         });
     }
 
@@ -398,11 +380,11 @@ Prerequisites:
                 label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
 
                 controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
-                if (layer.setVisibleLayers && dojo.isIE && dojo.isIE < 9) {
-                    $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () {
-                        showSublayerControls(layer);
-                    });
-                }
+                ////if (layer.setVisibleLayers && dojo.isIE && dojo.isIE < 9) {
+                ////    $("<a>").attr({ title: "Sublayers", attr: "#" }).addClass("layer-sublayer-link").text("+").appendTo(controlsToolbar).click(function () {
+                ////        showSublayerControls(layer);
+                ////    });
+                ////}
 
                 $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
                     var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
@@ -436,7 +418,7 @@ Prerequisites:
 
 
 
-                if ((!dojo.isIE || dojo.isIE >= 9) && typeof (layer.setVisibleLayers) !== "undefined") {
+                if (typeof (layer.setVisibleLayers) !== "undefined") {
                     if (layer.loaded) {
                         createSublayerLink(layer);
                     } else {
