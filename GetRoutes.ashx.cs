@@ -7,6 +7,7 @@ using System.Web.Script.Serialization;
 using System.IO;
 using System.Collections;
 using System.Configuration;
+using System.Text;
 
 namespace Wsdot.Grdo.Web.Mapping
 {
@@ -22,9 +23,20 @@ namespace Wsdot.Grdo.Web.Mapping
 			Ramp = 4
 		}
 
+		enum OutputFormat
+		{
+			None = 0,
+			JQuery = 1
+		}
+
 		public void ProcessRequest(HttpContext context)
 		{
 			var jsSerializer = new JavaScriptSerializer();
+
+			// A search term (if provided).
+			string term = context.Request.Params["term"];
+			OutputFormat outputFormat;
+			bool formatSpecified = Enum.TryParse<OutputFormat>(context.Request.Params["f"], true, out outputFormat);
 			
 			// From the config file, get a dictionary that indicates which layer corresponds to which direction.  E.g., {"increase":1}
 			Dictionary<string, int> layerSettings =
@@ -35,13 +47,35 @@ namespace Wsdot.Grdo.Web.Mapping
 			var routeInfos = new Dictionary<string, RouteTypes>();
 			
 			// Get the URL format string from the config file.
-			string queryUrlFormat = ConfigurationManager.AppSettings["stateRouteMapServiceQueryFormat"];
+			string queryUrlFormat = ConfigurationManager.AppSettings["stateRouteMapService"];
+
+			// Create the query string.
+			var qsDict = new Dictionary<string, string>();
+			qsDict.Add("where", !string.IsNullOrWhiteSpace(term) ? string.Format("SR LIKE '%{0}%'", term) : "1=1");
+			qsDict.Add("fields", "SR");
+			qsDict.Add("returnGeometry", "false");
+			qsDict.Add("f", "json");
+
+			var queryBuilder = new StringBuilder();
+			foreach (var kvp in qsDict)
+			{
+				if (queryBuilder.Length > 0)
+				{
+					queryBuilder.Append('&');
+				}
+				queryBuilder.AppendFormat("{0}={1}", kvp.Key, Uri.EscapeDataString(kvp.Value));
+			}
+
+			UriBuilder uriBuilder;
 
 			// Query each layer for route features and store the results in routeInfos.
 			foreach (var layerId in layerSettings)
 			{
+				uriBuilder = new UriBuilder(string.Format("{0}/{1}/query", ConfigurationManager.AppSettings["stateRouteMapService"], layerId.Value));
+				uriBuilder.Query = queryBuilder.ToString();
+
 				// Query the map service layer and store the JSON results in a variable
-				var queryRequest = WebRequest.Create(string.Format(queryUrlFormat, layerId.Value));
+				var queryRequest = WebRequest.Create(uriBuilder.Uri);
 				var queryResponse = queryRequest.GetResponse();
 				var queryResponseStream = queryResponse.GetResponseStream();
 				Dictionary<string, object> dict;
@@ -74,7 +108,17 @@ namespace Wsdot.Grdo.Web.Mapping
 			}
 
 			context.Response.ContentType = "application/json";
-			context.Response.Write(jsSerializer.Serialize(routeInfos));
+			if (!formatSpecified)
+			{
+				context.Response.Write(jsSerializer.Serialize(routeInfos));
+			}
+			else if (outputFormat == OutputFormat.JQuery)
+			{
+				var output = from routeInfo in routeInfos
+							 orderby routeInfo.Key
+							 select new { label = routeInfo.Key, value = routeInfo.Key, routeLayers = routeInfo.Value };
+				context.Response.Write(jsSerializer.Serialize(output));
+			}
 			context.Response.Cache.SetCacheability(HttpCacheability.Public);
 			context.Response.Cache.SetExpires(DateTime.Now.AddMonths(1));
 			context.Response.Cache.SetValidUntilExpires(true);

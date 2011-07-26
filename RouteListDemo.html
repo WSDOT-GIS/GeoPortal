@@ -19,6 +19,8 @@
         height: 300px;
     }
     
+    .ui-autocomplete-loading { background: white url('images/ajax-loader.gif') right center no-repeat; }
+    
     #routeAutoComplete 
     {
         width: 300px;
@@ -38,6 +40,7 @@
     <script type="text/javascript">
         (function ($) {
             function getLayersRouteIsIn(selectItem) {
+                /// <summary>Converts an enumeration value into an array of the layer descriptions.</summary>
                 var layers;
                 switch (selectItem.routeLayers) {
                     case 1:
@@ -57,6 +60,7 @@
             }
 
             function getLabel(int) {
+                /// <summary>Converts an enumeration value into an array of the layer descriptions.</summary>
                 switch (int) {
                     case 1:
                         return "Increase";
@@ -79,40 +83,58 @@
             }
 
             $(document).ready(function () {
-                var routes = [];
-
-                $.getJSON("GetRoutes.ashx", function (data, textStatus, jqXHR) {
-                    var routeTypeLabels;
-                    $("img[alt^=loading]").replaceWith('<input type="text" id="routeAutoComplete" placeholder="Enter a state route ID (min. 3 characters)" />');
-                    for (var i in data) {
-                        routes.push({ label: i + " (" + getLabel(data[i]) + ")", value: i, routeLayers: data[i] });
+                
+                // Ajax queries are performed as the user types.
+                $("img[alt^=loading]").replaceWith('<input type="text" id="routeAutoComplete" placeholder="Enter a state route ID (min. 3 characters)" />');
+                $("#routeAutoComplete").autocomplete({
+                    source: "GetRoutes.ashx?f=jquery",
+                    minLength: 1,
+                    select: function (event, ui) {
+                        var resultDiv = $("#results");
+                        if (resultDiv.length > 0) {
+                            resultDiv.remove();
+                        }
+                        resultDiv = $("<div id='results'>").appendTo("body");
+                        $("<h2>").text(ui.item.value).appendTo(resultDiv);
+                        getListOfLayersRouteIsIn(ui.item).appendTo(resultDiv);
                     }
-
-                    routes.sort(function (a, b) {
-                        if (a.label === b.label) {
-                            return 0;
-                        } else if (a.label < b.label) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-
-                    });
-
-                    $("#routeAutoComplete").autocomplete({
-                        source: routes,
-                        minLength: 1,
-                        select: function (event, ui) {
-                            var resultDiv = $("#results");
-                            if (resultDiv.length > 0) {
-                                resultDiv.remove();
-                            }
-                            resultDiv = $("<div id='results'>").appendTo("body");
-                            $("<h2>").text(ui.item.value).appendTo(resultDiv);
-                            getListOfLayersRouteIsIn(ui.item).appendTo(resultDiv);
-                        }
-                    });
                 });
+
+                ////// A single query is performed when the page loads to get all route data.
+                ////var routes = [];
+                ////$.getJSON("GetRoutes.ashx", function (data, textStatus, jqXHR) {
+                ////    var routeTypeLabels;
+                ////    $("img[alt^=loading]").replaceWith('<input type="text" id="routeAutoComplete" placeholder="Enter a state route ID (min. 3 characters)" />');
+                ////    for (var i in data) {
+                ////        routes.push({ label: i + " (" + getLabel(data[i]) + ")", value: i, routeLayers: data[i] });
+                ////    }
+
+                ////    // Sort the routes by label.
+                ////    routes.sort(function (a, b) {
+                ////        if (a.label === b.label) {
+                ////            return 0;
+                ////        } else if (a.label < b.label) {
+                ////            return -1;
+                ////        } else {
+                ////            return 1;
+                ////        }
+
+                ////    });
+
+                ////    $("#routeAutoComplete").autocomplete({
+                ////        source: routes,
+                ////        minLength: 1,
+                ////        select: function (event, ui) {
+                ////            var resultDiv = $("#results");
+                ////            if (resultDiv.length > 0) {
+                ////                resultDiv.remove();
+                ////            }
+                ////            resultDiv = $("<div id='results'>").appendTo("body");
+                ////            $("<h2>").text(ui.item.value).appendTo(resultDiv);
+                ////            getListOfLayersRouteIsIn(ui.item).appendTo(resultDiv);
+                ////        }
+                ////    });
+                ////});
             });
 
         } (jQuery));
