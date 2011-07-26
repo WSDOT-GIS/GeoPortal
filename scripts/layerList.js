@@ -229,15 +229,6 @@ Prerequisites:
                             visibleLayerInfos = sublayerCheckboxes.filter(":checked").map(function (index, item) { return layer.layerInfos[$(item).data("sublayerId")]; }),
                             checked = this.checked;
 
-                        // Get Decendant checkboxes
-                        //// $("#checkbox-Functional-Class0").parent().find("[type=checkbox]").not("#checkbox-Functional-Class0")
-                        // Get unchecked decendent checkboxes
-                        // $("#checkbox-Functional-Class0").parent().find("[type=checkbox]").not("#checkbox-Functional-Class0").not(":checked")
-
-
-
-
-
                         if (visibleLayerInfos.length < 1) {
                             visibleLayers = [-1];
                         } else {
@@ -258,17 +249,6 @@ Prerequisites:
                             }
                         }
 
-                        console.debug(visibleLayers);
-
-
-                        ////// If the checkbox is checked, add the current layer to the list of visible layers.
-                        ////if (checked) {
-                        ////    visibleLayers.push(sublayerId);
-                        ////}
-                        ////// If the list of visible layers is empty, add -1 to the list.
-                        ////if (visibleLayers.length < 1) {
-                        ////    visibleLayers.push(-1);
-                        ////}
                         // Apply the list of visible layers.
                         layer.setVisibleLayers(visibleLayers);
                     }
