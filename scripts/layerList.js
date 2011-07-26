@@ -247,19 +247,33 @@ Prerequisites:
                             visibleLayerInfos = sublayerCheckboxes.filter(":checked").map(function (index, item) { return layer.layerInfos[$(item).data("sublayerId")]; }),
                             checked = this.checked;
 
+                        // Get Decendant checkboxes
+                        //// $("#checkbox-Functional-Class0").parent().find("[type=checkbox]").not("#checkbox-Functional-Class0")
+                        // Get unchecked decendent checkboxes
+                        // $("#checkbox-Functional-Class0").parent().find("[type=checkbox]").not("#checkbox-Functional-Class0").not(":checked")
+
+
+
+
+
                         if (visibleLayerInfos.length < 1) {
                             visibleLayers = [-1];
                         } else {
                             sublayerCheckboxes.each(function (index, checkbox) {
                                 // Get the layer info associated with the current checkbox.
-                                var layerInfo = layer.layerInfos[$(checkbox).data("sublayerId")];
-                                if (checkbox.checked) {
+                                var layerInfo,
+                                    uncheckedParents = $("> [type=checkbox]", $(checkbox).parentsUntil("div").filter("li")).not(":checked").not(checkbox)
+                                if (checkbox.checked && uncheckedParents.length < 1) {
+                                    layerInfo = layer.layerInfos[$(checkbox).data("sublayerId")];
                                     // If there are no child layers, add this layer to the visible layer list.
                                     if (layerInfo.subLayerIds === null || layerInfo.subLayerIds.length < 1) {
                                         visibleLayers.push(layerInfo.id);
                                     }
                                 }
                             });
+                            if (visibleLayers.length < 1) {
+                                visibleLayers.push(-1);
+                            }
                         }
 
                         console.debug(visibleLayers);
@@ -306,27 +320,11 @@ Prerequisites:
                             "sublayerId": layerInfo.id
                         }).appendTo(sublayerListItem);
 
-                        if (layerInfo.subLayerIds === null) {
-                            checkbox.change({
-                                layer: layer,
-                                sublayerId: layerInfo.id
-                            }, setSublayerVisibility);
-                        } else {
-                            checkbox.change(function (event) {
-                                var checked = this.checked;
-                                // Set the checked value of chil
-                                $("ul input[type=checkbox]", $(this).parent()).each(function (index, cb) {
-                                    cb.checked = !checked;
-                                    cb.click();
-                                });
-                            });
-                        }
+                        checkbox.change({
+                            layer: layer,
+                            sublayerId: layerInfo.id
+                        }, setSublayerVisibility);
                     }
-
-
-
-
-
 
                     if (layerInfo.subLayerIds) {
                         // Create the link that shows or hides the list of sublayers for the current layer.
