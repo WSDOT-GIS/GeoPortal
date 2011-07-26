@@ -401,8 +401,9 @@ Prerequisites:
                 if (typeof (layer.setVisibleLayers) !== "undefined") {
                     if (layer.loaded) {
                         createSublayerLink(layer);
+                        setClassForOutOfScaleLayerControls();
                     } else {
-                        dojo.connect(layer, "onLoad", createSublayerLink);
+                        dojo.connect(layer, "onLoad", function (layer) { createSublayerLink(layer); setClassForOutOfScaleLayerControls() });
                     }
                 }
 
@@ -573,8 +574,8 @@ Prerequisites:
 
 
                 if (typeof (settings.map.getScale) !== "undefined") {
+                    dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level); });
                     if (!dojo.isIE || dojo.isIE >= 9) {
-                        dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level); });
                         dojo.connect(settings.map, "onUpdateEnd", setClassForOutOfScaleLayerControls);
                     }
                 }
