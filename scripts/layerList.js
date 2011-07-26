@@ -215,7 +215,7 @@ Prerequisites:
 
                 function createSublayerControls(layerInfo) {
                     var list,
-                        sublayerListItem = $("<li>"), ////.attr("data-sublayer-id", layerInfo.id),  // The list item that represents the current sub layer.
+                        sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),  // The list item that represents the current sub layer.
                         cbId = checkboxId + String(layerInfo.id);                             // The ID that will be given to the current sublayer's checkbox.
 
                     function setSublayerVisibility(event) {
