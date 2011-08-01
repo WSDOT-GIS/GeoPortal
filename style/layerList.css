@@ -17,7 +17,7 @@
     background-color: #ccc;
 }
 
-li.outOfScale, *.outOfScale > a
+li.outOfScale, *.outOfScale > a, div.outOfScale > label
 {
     color: #ccc;
 }

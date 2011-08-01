@@ -103,6 +103,8 @@
     dojo.require("esri.dijit.Measurement");
     dojo.require("esri.tasks.gp");
 
+    dojo.require("esri.layers.FeatureLayer");
+
     dojo.extend(esri.geometry.Extent, { "toCsv": function () {
         var propNames = ["xmin", "ymin", "xmax", "ymax"],
             output = "",
@@ -835,7 +837,6 @@
 
                 return layers;
             }
-
 
             $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
 

@@ -221,6 +221,40 @@ wsdot.config = {
             ]
         },
         "RFIP": {
+            "Drainage": [
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/0",
+                    "options": {
+                        "id": "Drainage Inlet",
+                        "visible" : false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/1",
+                    "options": {
+                        "id": "Culvert",
+                        "visible" : false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/2",
+                    "options": {
+                        "id": "Pipe End",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/3",
+                    "options": {
+                        "id": "Culvert End",
+                        "visible": false
+                    }
+                }
+            ],
             "RFIP": [
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
