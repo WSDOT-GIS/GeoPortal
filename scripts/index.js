@@ -625,6 +625,14 @@
                 }
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
+            // Identify
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, "identifyTools"));
+            createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
+                $("#identifyControl").identify({ map: map });
+                dojo.disconnect(createLinks.identify);
+                delete createLinks.identify;
+            });
+
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 
@@ -665,7 +673,7 @@
 
 
                 dojo.connect(basemapGallery, "onError", function (msg) {
-                    // TODO: Show error message instead of just closing notification.
+                    // Show error message
                     alert(msg);
                 });
 
