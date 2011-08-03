@@ -635,6 +635,14 @@
                 delete createLinks.identify;
             });
 
+            // Search
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, "searchTools"));
+            createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
+                $("#searchControl").addressLocator({ map: map, addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer" });
+                dojo.disconnect(createLinks.search);
+                delete createLinks.search;
+            });
+
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 

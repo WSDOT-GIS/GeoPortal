@@ -52,6 +52,7 @@
     <Content Include="index.html" />
     <Content Include="MapIconGenerator.htm" />
     <Content Include="RouteListDemo.html" />
+    <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\config.js" />
     <Content Include="scripts\config.Release.js" />
     <Content Include="scripts\extentSelect.js" />
@@ -73,6 +74,7 @@
     <Content Include="scripts\lrsTools.js" />
     <Content Include="GetRoutes.ashx" />
     <None Include="style\FGDC Plus.xsl" />
+    <Content Include="style\addressLocator.css" />
     <Content Include="style\identify.css" />
     <Content Include="style\index.css" />
     <Content Include="style\jquery.pnotify.default.css" />
