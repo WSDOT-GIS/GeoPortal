@@ -21,7 +21,13 @@
     dojo.require("dijit.layout.TabContainer");
     dojo.require("dijit.layout.ContentPane");
 
+
+
     $.fn.lrsTools = function (map) {
+        if (!$.pnotify) {
+            $.getScript("scripts/jquery.pnotify.min.js");
+        }
+
         // LRS Tools
         var locatedMilepostsLayer = null;
 
@@ -33,7 +39,7 @@
             onBlur: function () {
                 // If a one or two digit number is entered, pad with zeros until there are three digits.
                 if (this.displayedValue.match(/^\d{1,2}$/)) {
-                    this.set("displayedValue",dojo.number.format(Number(this.displayedValue), { pattern: "000" }));
+                    this.set("displayedValue", dojo.number.format(Number(this.displayedValue), { pattern: "000" }));
                 }
             }
         }, "routeTextBox");
