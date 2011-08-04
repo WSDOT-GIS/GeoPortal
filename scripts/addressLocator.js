@@ -117,12 +117,12 @@
                 if (addressCandidates.length < 1) {
                     resultsDiv.text("No matches found");
                 } else {
-                    var list = $("<ul>").appendTo(resultsDiv);
+                    var list = $("<ul>").addClass("ui-address-locator-results").appendTo(resultsDiv);
                     $.each(addressCandidates, function (index, candidate) {
                         var inputId = "ui-address-locator-result-" + index;
                         graphic = new esri.Graphic(candidate.location).setAttributes({ address: candidate.address, score: candidate.score });
                         widget._graphicsLayer.add(graphic);
-                        row = $("<li>").addClass("ui-address-locator-result").appendTo(resultsDiv).attr({ title: "Score: " + String(candidate.score) });
+                        row = $("<li>").addClass("ui-address-locator-result").appendTo(list).attr({ title: "Score: " + String(candidate.score) });
                         if (candidate.score === 100) {
                             row.addClass("score-100");
                         } else if (candidate.score >= 90) {

@@ -1,4 +1,9 @@
-﻿.score-100
+﻿#ui-address-locator textarea[name=address]
+{
+    width: 100%;
+}
+
+.score-100
 {
     background-color: #00ff00;
 }
