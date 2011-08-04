@@ -514,14 +514,26 @@
                 delete createLinks.milepostTab;
             });
 
-            function createZoomControls() {
-                /// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
-                var zoomControlsDiv, table, body;
-                zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#toolsAccordion");
-                $("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
-                table = $("<table>").appendTo(zoomControlsDiv);
-                body = $("<tbody>").appendTo(table);
-                $.each([
+
+
+
+            // Zoom tools
+            $("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
+            $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
+
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControlsPane"));
+            createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
+
+                function createZoomControls() {
+                    /// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+                    var zoomControlsDiv, table, body;
+
+                    zoomControlsDiv = $("#zoomControls");
+
+                    $("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+                    table = $("<table>").appendTo(zoomControlsDiv);
+                    body = $("<tbody>").appendTo(table);
+                    $.each([
                     { id: "countyZoom", text: "County" },
                     { id: "cityZoom", text: "City" },
                     { id: "urbanAreaZoom", text: "Urban Area" }
@@ -533,14 +545,9 @@
                         cell = $("<td>").appendTo(row);
                         $("<img>").attr({ id: data.id + "Select", src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
                     });
-            }
+                }
 
-            createZoomControls();
-
-
-            // Zoom tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
-            createLinks.zoomControls = dojo.connect(dijit.byId("zoomControls"), "onShow", function () {
+                createZoomControls();
                 $.getScript("scripts/extentSelect.js", function (data, textScatus) {
                     // Set up the zoom select boxes.
                     // Setup the zoom controls.
