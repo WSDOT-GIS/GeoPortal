@@ -490,7 +490,7 @@
             toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
             // LRS Tools
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, "lrsTools"));
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
             createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
 
                 $("#lrsTools").lrsTools(map);
@@ -508,54 +508,79 @@
                 delete createLinks.milepostTab;
             });
 
+            function createZoomControls() {
+                /// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+                var zoomControlsDiv, table, body;
+                zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#toolsAccordion");
+                $("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+                table = $("<table>").appendTo(zoomControlsDiv);
+                body = $("<tbody>").appendTo(table);
+                $.each([
+                    { id: "countyZoom", text: "County" },
+                    { id: "cityZoom", text: "City" },
+                    { id: "urbanAreaZoom", text: "Urban Area" }
+                    ], function (index, data) {
+                        var row, cell;
+                        row = $("<tr>").appendTo(body);
+                        cell = $("<td>").appendTo(row);
+                        $("<label>").attr({ id: data.id + "Label" }).text(data.text).appendTo(cell);
+                        cell = $("<td>").appendTo(row);
+                        $("<img>").attr({ id: data.id + "Select", src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+                    });
+            }
+
+            createZoomControls();
+
+
             // Zoom tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControls"));
             createLinks.zoomControls = dojo.connect(dijit.byId("zoomControls"), "onShow", function () {
-                // Set up the zoom select boxes.
-                // Setup the zoom controls.
-                $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
-                delete extents.countyExtents;
+                $.getScript("scripts/extentSelect.js", function (data, textScatus) {
+                    // Set up the zoom select boxes.
+                    // Setup the zoom controls.
+                    $("#countyZoomSelect").extentSelect(extents.countyExtents, map);
+                    delete extents.countyExtents;
 
 
 
 
-                function createQueryTask(qtName) {
-                    /// <summary>Creates a query task and query using settings from config.js.</summary>
-                    /// <param name="qtName" type="String">The name of a query task from config.js.</param>
-                    var queryTaskSetting = wsdot.config.queryTasks[qtName],
+                    function createQueryTask(qtName) {
+                        /// <summary>Creates a query task and query using settings from config.js.</summary>
+                        /// <param name="qtName" type="String">The name of a query task from config.js.</param>
+                        var queryTaskSetting = wsdot.config.queryTasks[qtName],
                         qt = new esri.tasks.QueryTask(queryTaskSetting.url),
                         query = new esri.tasks.Query(),
                         n;
-                    for (n in queryTaskSetting.query) {
-                        if (queryTaskSetting.query.hasOwnProperty(n)) {
-                            query[n] = queryTaskSetting.query[n];
+                        for (n in queryTaskSetting.query) {
+                            if (queryTaskSetting.query.hasOwnProperty(n)) {
+                                query[n] = queryTaskSetting.query[n];
+                            }
                         }
+                        return { "task": qt, "query": query };
                     }
-                    return { "task": qt, "query": query };
-                }
-                function runQueryTasks() {
-                    var cityQueryTask, urbanAreaQueryTask;
-                    // Setup extents for cities and urbanized area zoom tools.
-                    cityQueryTask = createQueryTask("city");
-                    cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
+                    function runQueryTasks() {
+                        var cityQueryTask, urbanAreaQueryTask;
+                        // Setup extents for cities and urbanized area zoom tools.
+                        cityQueryTask = createQueryTask("city");
+                        cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
 
-                    urbanAreaQueryTask = createQueryTask("urbanArea");
-                    urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
-                }
+                        urbanAreaQueryTask = createQueryTask("urbanArea");
+                        urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
+                    }
 
-                runQueryTasks();
+                    runQueryTasks();
 
-                // Associate labels with select controls, so that clicking on a label activates the corresponding control.
-                dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
-                dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
-                dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
+                    // Associate labels with select controls, so that clicking on a label activates the corresponding control.
+                    dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
+                    dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
+                    dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
 
 
 
-                if (navigator.geolocation) {
-                    dijit.form.Button({
-                        onClick: function () {
-                            navigator.geolocation.getCurrentPosition(
+                    if (navigator.geolocation) {
+                        dijit.form.Button({
+                            onClick: function () {
+                                navigator.geolocation.getCurrentPosition(
                         function (position) {
                             var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude)),
                                 attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
@@ -592,14 +617,15 @@
                             enableHighAccuracy: true
                         }
                     );
-                        }
-                    }, "zoomToMyCurrentLocation");
-                } else {
-                    dojo.destroy("zoomToMyCurrentLocation");
-                }
+                            }
+                        }, "zoomToMyCurrentLocation");
+                    } else {
+                        dojo.destroy("zoomToMyCurrentLocation");
+                    }
 
-                dojo.disconnect(createLinks.zoomControls);
-                delete createLinks.zoomControls;
+                    dojo.disconnect(createLinks.zoomControls);
+                    delete createLinks.zoomControls;
+                });
             });
             // Add the help button for the zoom controls.
             dijit.form.Button({
@@ -612,6 +638,8 @@
             }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
             // Location Information tools
+            dojo.create("div", { id: "locationInfo" }, "toolsAccordion");
+            dojo.create("img", { id: "locationInfoControl", src: "images/ajax-loader.gif", alt: "Loading..." }, "locationInfo");
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
             createLinks.locationInfo = dojo.connect(dijit.byId("locationInfo"), "onShow", function () {
                 $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
@@ -627,21 +655,30 @@
                 }
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
-            // Identify
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, "identifyTools"));
-            createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
-                $("#identifyControl").identify({ map: map });
-                dojo.disconnect(createLinks.identify);
-                delete createLinks.identify;
-            });
+            if (true) { ////!dojo.isIE || dojo.isIE >= 9) {
+                // Identify
+                toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, dojo.create("div", { id: "identifyTools" }, "toolsAccordion")));
+                createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
+                    $.getScript("scripts/identify.js", function (data, textStatus) {
+                        $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({ map: map });
+                        dojo.disconnect(createLinks.identify);
+                        delete createLinks.identify;
+                    });
+                });
 
-            // Search
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, "searchTools"));
-            createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
-                $("#searchControl").addressLocator({ map: map, addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer" });
-                dojo.disconnect(createLinks.search);
-                delete createLinks.search;
-            });
+                // Search
+                toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
+                createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
+                    $.getScript("scripts/addressLocator.js", function (data, textStatus) {
+                        $("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
+                            map: map,
+                            addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
+                        });
+                        dojo.disconnect(createLinks.search);
+                        delete createLinks.search;
+                    });
+                });
+            }
 
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
