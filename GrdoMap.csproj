@@ -50,6 +50,7 @@
     <Content Include="images\NorthArrow.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
+    <Content Include="lrsToolsTemplate.html" />
     <Content Include="MapIconGenerator.htm" />
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />

@@ -492,17 +492,23 @@
             // LRS Tools
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
             createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
+                $.getScript("scripts/lrsTools.js", function () {
+                    $("#lrsTools").lrsTools({
+                        map: map,
+                        controlsCreated: function () {
+                            // Add help button to the LrsTools control.
+                            dijit.form.Button({
+                                label: "Milepost Help",
+                                iconClass: "helpIcon",
+                                showLabel: false,
+                                onClick: function () {
+                                    showHelpDialog("help/milepost.html");
+                                }
+                            }, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+                        }
+                    });
 
-                $("#lrsTools").lrsTools(map);
-                // Add help button to the LrsTools control.
-                dijit.form.Button({
-                    label: "Milepost Help",
-                    iconClass: "helpIcon",
-                    showLabel: false,
-                    onClick: function () {
-                        showHelpDialog("help/milepost.html");
-                    }
-                }, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+                });
 
                 dojo.disconnect(createLinks.milepostTab);
                 delete createLinks.milepostTab;
@@ -623,19 +629,21 @@
                         dojo.destroy("zoomToMyCurrentLocation");
                     }
 
+                    // Add the help button for the zoom controls.
+                    dijit.form.Button({
+                        label: "Zoom Help",
+                        showLabel: false,
+                        iconClass: "helpIcon",
+                        onClick: function () {
+                            showHelpDialog("help/zoom_controls.html");
+                        }
+                    }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
+
                     dojo.disconnect(createLinks.zoomControls);
                     delete createLinks.zoomControls;
                 });
             });
-            // Add the help button for the zoom controls.
-            dijit.form.Button({
-                label: "Zoom Help",
-                showLabel: false,
-                iconClass: "helpIcon",
-                onClick: function () {
-                    showHelpDialog("help/zoom_controls.html");
-                }
-            }, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
+
 
             // Location Information tools
             dojo.create("div", { id: "locationInfo" }, "toolsAccordion");
@@ -643,17 +651,21 @@
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Location Information" }, "locationInfo"));
             createLinks.locationInfo = dojo.connect(dijit.byId("locationInfo"), "onShow", function () {
                 $("#locationInfoControl").locationInfo(map, wsdot.config.locationInfoUrl);
+
+                // Add the help button
+                dijit.form.Button({
+                    label: "Location Info. Help",
+                    iconClass: "helpIcon",
+                    showLabel: false,
+                    onClick: function () {
+                        showHelpDialog("help/location_info.html");
+                    }
+                }, dojo.create("button", { type: "button" }, "locationInfo"));
+
                 dojo.disconnect(createLinks.locationInfo);
                 delete createLinks.locationInfo;
             });
-            dijit.form.Button({
-                label: "Location Info. Help",
-                iconClass: "helpIcon",
-                showLabel: false,
-                onClick: function () {
-                    showHelpDialog("help/location_info.html");
-                }
-            }, dojo.create("button", { type: "button" }, "locationInfo"));
+
 
 
             // Identify
