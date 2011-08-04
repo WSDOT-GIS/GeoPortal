@@ -88,7 +88,7 @@ wsdot.config = {
                         "id": "City Limits",
                         "visible": false
                     },
-                    "metadataIds":[23]
+                    "metadataIds": [23]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -105,7 +105,7 @@ wsdot.config = {
                         "id": "County Boundaries",
                         "visible": false
                     },
-                    "metadataIds":[25]
+                    "metadataIds": [25]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -138,7 +138,7 @@ wsdot.config = {
                         "id": "Township / Section",
                         "visible": false
                     },
-                    "metadataIds":[5]
+                    "metadataIds": [5]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -176,7 +176,7 @@ wsdot.config = {
                         "id": "Region Boundaries",
                         "visible": false
                     },
-                    "metadataIds":[19]
+                    "metadataIds": [19]
                 },
                 {
                     "layerType": "esri.layers.FeatureLayer",
@@ -197,7 +197,7 @@ wsdot.config = {
                         "id": "State Routes",
                         "visible": false
                     },
-                    "metadataIds":[16,15,17]
+                    "metadataIds": [16, 15, 17]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -206,7 +206,7 @@ wsdot.config = {
                         "id": "Functional Class",
                         "visible": false
                     },
-                    "metadataIds":[8,14]
+                    "metadataIds": [8, 14]
                 }
             ],
             "Other": [
@@ -220,6 +220,18 @@ wsdot.config = {
                 }
             ]
         },
+        "Freight": {
+            "Truck Performance Measures": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/TruckPerformanceMeasures/MapServer",
+                    "options": {
+                        "id": "Truck Performance Measures",
+                        "visible": false
+                    }
+                }
+            ]
+        },
         "RFIP": {
             "Drainage": [
                 {
@@ -227,7 +239,7 @@ wsdot.config = {
                     "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/0",
                     "options": {
                         "id": "Drainage Inlet",
-                        "visible" : false
+                        "visible": false
                     }
                 },
                 {
@@ -235,7 +247,7 @@ wsdot.config = {
                     "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/1",
                     "options": {
                         "id": "Culvert",
-                        "visible" : false
+                        "visible": false
                     }
                 },
                 {
@@ -261,7 +273,7 @@ wsdot.config = {
                     "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
                     "options": {
                         "id": "Drainage",
-                        "visible":false
+                        "visible": false
                     }
                 },
                 {

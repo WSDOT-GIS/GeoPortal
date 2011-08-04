@@ -478,7 +478,7 @@
 
             mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
             tabs = new dijit.layout.TabContainer(null, "tabs");
-            tabs.addChild(new dijit.layout.ContentPane({ title: "Layers" }, "layersTab"));
+            tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: function () {
                 // Create the legend dijit if it does not already exist.
                 if (!dijit.byId("legend")) {

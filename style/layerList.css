@@ -6,10 +6,14 @@
     list-style-position: outside;
 }
 
-.layer-toolbar div, .layer-toolbar a 
-{
-    margin-left: 5px;
-    margin-right: 5px;
+.layer-toolbar {
+    padding-left: 1em;
+}
+
+.layer-toolbar button {
+    padding: 0;
+    margin: 0;
+    font-size: 0.6em
 }
 
 .layer-toolbar div:hover, .layer-toolbar a:hover
@@ -20,4 +24,19 @@
 li.outOfScale, *.outOfScale > a, div.outOfScale > label
 {
     color: #ccc;
+}
+
+.ui-esri-layer-list .map-service-table 
+{
+    display: table;
+}
+
+.ui-esri-layer-list .map-service-row
+{
+    display: table-row;
+}
+
+.ui-esri-layer-list .map-service-row > * 
+{
+    display: table-cell;
 }

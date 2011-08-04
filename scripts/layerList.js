@@ -239,10 +239,18 @@ Prerequisites:
             // Add tab container
             tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
 
+            function hideToolbar() {
+                $(".layer-toolbar", this).hide();
+            }
+
+            function showToolbar() {
+                $(".layer-toolbar", this).show();
+            }
+
 
             function createControlsForLayer(layer, elementToAppendTo) {
                 /// <summary>Creates the HTML controls associated with a layer</summary>
-                var checkboxId, sliderId, opacitySlider, layerDiv, metadataList, sublayerList, controlsToolbar, label,
+                var checkboxId, sliderId, opacitySlider, layerDiv, layerTable, layerRow, layerCell, metadataList, sublayerList, controlsToolbar, label,
                     parentLayers, sublayerListItems, checkbox;
 
                 function createSublayerControls(layerInfo) {
@@ -353,15 +361,17 @@ Prerequisites:
                 checkboxId = formatForHtmlId(layer.id, "checkbox");
                 sliderId = formatForHtmlId(layer.id, "slider");
 
-                layerDiv = $("<div>").attr("data-layerId", layer.id);
+                layerDiv = $("<div>").addClass("map-service").attr("data-layerId", layer.id).mouseenter(showToolbar).mouseleave(hideToolbar);
+                layerTable = $("<div>").addClass("map-service-table").appendTo(layerDiv);
+                layerRow = $("<div>").addClass("map-service-row").appendTo(layerTable);
 
                 // Create a checkbox and label and place inside of a div.
-                $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerDiv);
-                label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerDiv);
+                layerCell = $("<div>").addClass("map-service-cell").appendTo(layerRow);
+                $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerCell);
+                label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerCell);
+                controlsToolbar = $("<div>").addClass("map-service-cell layer-toolbar").appendTo(layerRow).hide();
 
-                controlsToolbar = $("<div>").addClass("layer-toolbar").css("display", "inline").css("position", "absolute").css("right", "2em").appendTo(layerDiv);
-
-                $("<a>").attr("title", "Toggle opacity slider").attr("href", "#").appendTo(controlsToolbar).text("o").click(function () {
+                $("<button>").attr("title", "Toggle opacity slider").appendTo(controlsToolbar).text("opacity").click(function () {
                     var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
                     $(node).toggle();
                 });
@@ -370,8 +380,7 @@ Prerequisites:
 
                 // Add metadata information if available
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
-
-                    $("<a>").attr("title", "Toggle metadata links").addClass("layer-metadata-link").attr("href", "#").text("m").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
+                    $("<button>").attr("title", "Toggle metadata links").text("metadata").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
                     if (dojo.isIE && dojo.isIE < 9) {
                         // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
                         metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
