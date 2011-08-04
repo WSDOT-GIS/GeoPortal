@@ -40,6 +40,12 @@
             // If the supplied address locator is a string, assume it is a URL and create a locator object.
             var widget = this, element = this.element, inputDiv, resultsDiv, toolbar, stateOrZipRe = /(?:WA(?:shington)?)|(?:\d{5}(?:-\d{4)?)/gi;
 
+            function zoomToSelectedCandidate() {
+                // Get the currently selected address candidate, then zoom the map to it.
+                var addressCandidate = $(this).data("addressCandidate"); //$("#ui-address-locator-results :checked").data("addressCandidate");
+                widget.options.map.centerAndZoom(addressCandidate.location, 10);
+            }
+
             function handleAddressToLocationsComplete(addressCandidates) {
                 widget.enable();
 
@@ -96,7 +102,7 @@
                 }
 
                 //console.debug(addressCandidates);
-                var resultsDiv, row, radio, graphic;
+                var resultsDiv, list, row, link, graphic;
                 // Create the list of address candidates.
                 resultsDiv = $("#ui-address-locator-results");
                 resultsDiv.empty();
@@ -111,11 +117,12 @@
                 if (addressCandidates.length < 1) {
                     resultsDiv.text("No matches found");
                 } else {
+                    var list = $("<ul>").appendTo(resultsDiv);
                     $.each(addressCandidates, function (index, candidate) {
                         var inputId = "ui-address-locator-result-" + index;
                         graphic = new esri.Graphic(candidate.location).setAttributes({ address: candidate.address, score: candidate.score });
                         widget._graphicsLayer.add(graphic);
-                        row = $("<div>").appendTo(resultsDiv).attr({ title: "Score: " + String(candidate.score) });
+                        row = $("<li>").addClass("ui-address-locator-result").appendTo(resultsDiv).attr({ title: "Score: " + String(candidate.score) });
                         if (candidate.score === 100) {
                             row.addClass("score-100");
                         } else if (candidate.score >= 90) {
@@ -127,21 +134,14 @@
                         } else {
                             row.addClass("score-low");
                         }
-                        radio = $("<input>").attr({ id: inputId, type: "radio", name: "address", checked: index === 0 }).data({
-                            addressCandidate: candidate
-                        }).appendTo(row);
-                        $("<label>").attr({ "for": inputId }).text(candidate.address).appendTo(row);
+
+                        link = $("<a>").attr("href", "#").text(candidate.address).appendTo(row).data({ addressCandidate: candidate }).click(zoomToSelectedCandidate);
+
                     });
                     $("#ui-address-locator-results-toolbar").show();
                 }
 
                 resultsDiv.slideDown();
-            }
-
-            function zoomToSelectedCandidate() {
-                // Get the currently selected address candidate, then zoom the map to it.
-                var addressCandidate = $("#ui-address-locator-results :checked").data("addressCandidate");
-                widget.options.map.centerAndZoom(addressCandidate.location, 10);
             }
 
             ////function handleLocationToAddressComplete(addressCandidate) {
@@ -168,7 +168,7 @@
             inputDiv = $("<div>").attr({ id: "ui-address-locator" }).addClass("ui-widget").appendTo(element);
 
             // Create the search box.
-            $("<input>").attr({ name: "address", type: "search", placeholder: "Input an address here" }).css({ width: "100%" }).appendTo(inputDiv).blur(function (eventObject) {
+            $("<textarea>").attr({ name: "address", type: "search", placeholder: "Input an address here" }).appendTo(inputDiv).blur(function (eventObject) {
                 var address = $(this).val();
                 if (address.length > 0 && !address.match(stateOrZipRe)) {
                     address += ", WA";
@@ -177,7 +177,7 @@
 
             });
             $("<button>").attr({ type: "button" }).button({ label: "Find", icons: { primary: "ui-icon-search" }, text: false }).appendTo(inputDiv).click(function () {
-                var address = $("#ui-address-locator input[name=address]").val();
+                var address = $("#ui-address-locator *[name=address]").val();
                 if (address) {
                     address = { "Single Line Input": address };
                     widget.options.addressLocator.addressToLocations(address);
@@ -191,8 +191,7 @@
             });
             resultsDiv = $("<div>").attr({ id: "ui-address-locator-results" }).addClass("ui-corner-all  ui-widget-content").appendTo(element).hide();
             toolbar = $("<div>").attr("id", "ui-address-locator-results-toolbar").appendTo(element).hide();
-            $("<button>").button({ label: "Zoom To Selected", text: false, icons: { primary: "ui-icon-zoomin"} }).appendTo(toolbar).click(zoomToSelectedCandidate);
-            $("<button>").button({ label: "Clear Results", text: false, icons: { primary: "ui-icon-closethick"} }).appendTo(toolbar).click(function () { widget.clearResults() });
+            $("<button>").button({ label: "Clear Results", text: true, icons: { primary: "ui-icon-closethick"} }).appendTo(toolbar).click(function () { widget.clearResults() });
         },
         enable: function () {
             $.Widget.prototype.enable.apply(this, arguments);

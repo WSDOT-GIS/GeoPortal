@@ -655,30 +655,29 @@
                 }
             }, dojo.create("button", { type: "button" }, "locationInfo"));
 
-            if (true) { ////!dojo.isIE || dojo.isIE >= 9) {
-                // Identify
-                toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, dojo.create("div", { id: "identifyTools" }, "toolsAccordion")));
-                createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
-                    $.getScript("scripts/identify.js", function (data, textStatus) {
-                        $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({ map: map });
-                        dojo.disconnect(createLinks.identify);
-                        delete createLinks.identify;
-                    });
-                });
 
-                // Search
-                toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
-                createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
-                    $.getScript("scripts/addressLocator.js", function (data, textStatus) {
-                        $("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
-                            map: map,
-                            addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
-                        });
-                        dojo.disconnect(createLinks.search);
-                        delete createLinks.search;
-                    });
+            // Identify
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, dojo.create("div", { id: "identifyTools" }, "toolsAccordion")));
+            createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
+                $.getScript("scripts/identify.js", function (data, textStatus) {
+                    $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({ map: map });
+                    dojo.disconnect(createLinks.identify);
+                    delete createLinks.identify;
                 });
-            }
+            });
+
+            // Address Search
+            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
+            createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
+                $.getScript("scripts/addressLocator.js", function (data, textStatus) {
+                    $("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
+                        map: map,
+                        addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
+                    });
+                    dojo.disconnect(createLinks.search);
+                    delete createLinks.search;
+                });
+            });
 
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));

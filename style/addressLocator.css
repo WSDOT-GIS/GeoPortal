@@ -18,3 +18,14 @@
 {
     background-color: #ff0000;
 }
+
+.ui-address-locator-result:hover
+{
+    border: 1px solid red;
+}
+
+#ui-address-locator-results-toolbar 
+{
+    width: 100%;
+    text-align: center;
+}
