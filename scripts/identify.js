@@ -18,7 +18,7 @@
         this.layerName = json.layerName || null;
 
         this.toHtmlTable = function () {
-            var table, attrNames = [], row, headOrBody;
+            var table, attrNames = [], row, headOrBody, ignoredFieldsRe = /(Shape(?:\.ST(?:(?:Area)|(?:Length))\(\s*\))?)|(O(?:BJECT)?ID(?:_\d+)?)/i;
             table = $("<table>").addClass("ui-identify-result");
 
             // Create the table head and body.
@@ -29,8 +29,10 @@
 
                 // Create a collection of attribute names and add a column header for each name.
                 $.each(this.features[0].attributes, function (attrName /*, attrValue */) {
-                    attrNames.push(attrName);
-                    $("<th>").text(attrName).appendTo(row);
+                    if (!attrName.match(ignoredFieldsRe)) {
+                        attrNames.push(attrName);
+                        $("<th>").text(attrName).appendTo(row);
+                    }
                 });
 
                 headOrBody = $("<tbody>").appendTo(table);
@@ -53,10 +55,12 @@
         /// <summary>Converts an array of result collections into a jQuery tabs control.</summary>
         /// <param name="resultCollections" type="ResultCollection[]">An array of ResultCollection objects.</param>
         /// <returns type="jQuery UI tabs" />
-        var output, select;
-        output = $("<div>");
-        $("<label>").text("Select a result table").attr("for", "resultTableSelect").appendTo(output);
-        select = $("<select>").attr("id", "resultTableSelect").appendTo(output).change(function (eventObject) {
+        var output, select, header, body;
+        output = $("<div>").addClass("ui-identify-result");
+        header = $("<div>").addClass("ui-identify-result-header").appendTo(output);
+        body = $("<div>").addClass("ui-identify-result-body").appendTo(output);
+        $("<label>").text("Select a result table").attr("for", "resultTableSelect").appendTo(header);
+        select = $("<select>").attr("id", "resultTableSelect").appendTo(header).change(function (eventObject) {
             // Show the currently selected table.
             var value = $(this).val();
             $("table", output).hide();
@@ -66,7 +70,7 @@
         $.each(resultCollections, function (index, resultCollection) {
             var table;
             $("<option>").text(resultCollection.layerName).attr("value", index).appendTo(select);
-            table = resultCollection.toHtmlTable().appendTo(output).attr("data-layer-id", index);
+            table = resultCollection.toHtmlTable().appendTo(body).attr("data-layer-id", index);
             if (index > 0) {
                 table.hide();
             }
