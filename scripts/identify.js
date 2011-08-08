@@ -79,6 +79,24 @@
         return output;
     }
 
+    function showDialog(event) {
+        // The event object contains screenPoint, mapPoint, and graphic attributes.
+        var tabs, dialog;
+        tabs = event.graphic.attributes.results.length < 1 ? $("<p>").text("No results.") : resultCollectionToTabs(event.graphic.attributes.results);
+        dialog = $("<div>").append(tabs).dialog({
+            title: "Results",
+            close: function () {
+                $(this).dialog("destroy").remove();
+            },
+            buttons: {
+                "Close": function () { $(this).dialog("close"); }
+            }
+        });
+
+        dialog.dialog("option", { width: 640, height: 480 });
+    }
+
+
     $.widget("ui.identify", {
         // default options
         options: {
@@ -238,6 +256,9 @@
                     symbol = geometry.type === "point" ? options.pointSymbol : geometry.type === "polyline" ? options.lineSymbol : options.polygonSymbol;
                     graphic = new esri.Graphic(geometry, symbol, { results: resultAttributes });
                     options.graphicsLayer.add(graphic);
+
+                    // Pop up the dialog for this graphic.
+                    showDialog({ graphic: graphic });
                 }
 
                 function handleIdentifyError(error) {
@@ -326,22 +347,7 @@
                 });
                 widget.options.map.addLayer(widget.options.graphicsLayer);
 
-                widget._clickHandler = dojo.connect(widget.options.graphicsLayer, "onClick", function (event) {
-                    // The event object contains screenPoint, mapPoint, and graphic attributes.
-                    var tabs, dialog;
-                    tabs = event.graphic.attributes.results.length < 1 ? $("<p>").text("No results.") : resultCollectionToTabs(event.graphic.attributes.results);
-                    dialog = $("<div>").append(tabs).dialog({
-                        title: "Results",
-                        close: function () {
-                            $(this).dialog("destroy").remove();
-                        },
-                        buttons: {
-                            "Close": function () { $(this).dialog("close"); }
-                        }
-                    });
-
-                    dialog.dialog("option", { width: 640, height: 480 });
-                });
+                widget._clickHandler = dojo.connect(widget.options.graphicsLayer, "onClick", showDialog);
             }
 
             this.element.addClass("ui-widget ui-widget-content ui-corner-all ui-identify");
