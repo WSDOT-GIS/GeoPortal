@@ -79,7 +79,7 @@
         // default options
         options: {
             map: null,
-            layers: [],
+            layers: [],  // Specify a list of layers.  If this parameter is provided, then map layers will not be automatically added
             drawToolbar: null,
             mapDpi: 96,
             pointSymbol: null,
@@ -89,15 +89,59 @@
         },
         isDrawing: false,
         _addLayer: function (layer /*, error*/) {
-            // Add feature layer to the list of identify layers if it supports "Query".
-            if (layer && layer.capabilities && layer.capabilities.search(/Query/gi) && !layer.id.match(/layer\d+/)) {
-                $("<option>").data("layer", layer).text(layer.id).attr("value", layer.id).appendTo("#ui-identify-layer-select");
+            var option;
+            if (!layer) {
+                if (console) {
+                    console.error({ layer: layer, message: "No layer provided to _addLayer function" });
+                }
+                return this;
+            }
+
+            if (!layer.id || !layer.url) {
+                if (console) {
+                    console.error({ layer: layer, message: "Missing / Invalid id or url parameter." });
+                }
+                return this;
+            }
+
+            if (layer.id.match(/layer\d+/)) {
+                if (console) {
+                    console.warn({ layer: layer, message: "This appears to be a base map layer. Skipping." });
+                }
+                return this;
+            }
+
+            // If it is not an actual layer object, create one.
+            if (!layer.isInstanceOf || !layer.isInstanceOf(esri.layers.Layer)) {
+                // layer = new esri.layers.ArcGISDynamicServiceLayer(layer.url, layer);
+                throw new TypeError("The 'layer' parameter must be derived from esri.layers.Layer.");
+            }
+
+            if (layer.capabilities && !layer.capabilities.search(/Query/gi)) {
+                // Add feature layer to the list of identify layers if it supports "Query".
+                if (console) {
+                    console.warn({ layer: layer, message: "Layer does not support querying." });
+                }
+            } else {
+                option = $("<option>").data("layer", layer).text(layer.id).attr("value", layer.id).appendTo("#ui-identify-layer-select");
+                // Disable the option until the layer has been loaded.
+                if (!layer.loaded) {
+                    option.attr("disabled", true);
+                    dojo.connect(layer, "onLoad", function (layer) {
+                        option.attr("disabled", false);
+                        // If this option is currently selected, you'll need to refresh the sublayers list.
+                        $("#ui-identify-layer-select").change();
+                    });
+                }
             }
             $("#ui-identify-layer-select").change();
+
+            return this;
         },
         _removeLayer: function (layer) {
             // Remove any option elements associated with this layer.
             $("option", "#ui-identify-layer-select").filter(function () { return $(this).data("layer") === layer; }).remove();
+            return this;
         },
         _create: function () {
             var widget = this,
@@ -122,7 +166,7 @@
                 sublayerSelect = $("#ui-identify-sublayer-select");
                 $("option", sublayerSelect).remove();
                 // Get only the layer infos that are not group layers.
-                childLayerInfos = $(selectedMapService.layerInfos).filter(function () { return this.subLayerIds === null; });
+                childLayerInfos = $(selectedMapService.layerInfos).filter(function () { return !this.subLayerIds; });
 
                 childLayerInfos.map(function (index, layerInfo) {
                     return $("<option>").attr({
@@ -197,6 +241,18 @@
                     if (console && console.error) {
                         console.error(error);
                     }
+                    $("<div>").text(error.message).dialog({
+                        title: "Identify Error",
+                        close: function () {
+                            $(this).dialog("destroy");
+                        },
+                        buttons: {
+                            "OK": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+
                 }
 
                 // Turn off the drawing toolbar so user can once again interact with the map.
@@ -352,26 +408,30 @@
             toolbar = $("<div>").addClass("ui-identify-toolbar").appendTo(widget.element);
             $("<button>").attr({ id: "ui-identify-identify-button", type: "button" }).button({ label: "Identify" }).appendTo(toolbar).click(performDraw);
             $("<button>").attr({ type: "button" }).button({ label: "Clear" }).appendTo(toolbar).click(function () { widget.options.graphicsLayer.clear(); });
+            layers = this.options.layers;
             if (map) {
-                this._layerAddHandler = dojo.connect(map, "onLayerAddResult", widget._addLayer);
-                this._layerRemoveHandler = dojo.connect(map, "onLayerRemove", widget._removeLayer);
+                if (!layers || !layers.length || layers.length < 1) {
+                    this._layerAddHandler = dojo.connect(map, "onLayerAddResult", widget._addLayer);
+                    this._layerRemoveHandler = dojo.connect(map, "onLayerRemove", widget._removeLayer);
 
-                // Get a sorted list of layer ids.
-                layerIds = $.map(map.layerIds, function (layerId) { return layerId; }).sort();
+                    // Get a sorted list of layer ids.
+                    layerIds = $.map(map.layerIds, function (layerId) { return layerId; }).sort();
 
-                // Add the layer to the list of layers.
-                $.each(layerIds, function (index, layerId) {
-                    var layer = map.getLayer(layerId);
-                    widget._addLayer(layer);
-                });
+                    // Add the layer to the list of layers.
+                    $.each(layerIds, function (index, layerId) {
+                        var layer = map.getLayer(layerId);
+                        widget._addLayer(layer);
+                    });
+                }
 
             } else {
                 throw new Error("No valid map was provided");
             }
 
-            layers = this.options.layers;
             if (layers && layers.length) {
-                $.each(layers, widget._addLayer);
+                $.each(layers, function (index, layer) {
+                    widget._addLayer(layer);
+                });
             }
         },
         enable: function () {

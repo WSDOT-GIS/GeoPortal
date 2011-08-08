@@ -30,6 +30,53 @@
         };
     }
 
+    function getMetadataUrl(id) {
+        return "Metadata.ashx?oid=" + String(id);
+    }
+
+    function layerInfoToLayer(layerInfo) {
+        /// <summary>Converts a layer information object from the config.js file into an ESRI JavaScript API Layer object.</summary>
+        /// <param name="layerInfo" type="Object">An object containing information that will be used to create a esri.layers.Layer object.</param>
+        /// <returns type="esri.layers.Layer" />
+        var constructor, layer = null;
+
+        if (!layerInfo) {
+            throw new Error("layerInfoToLayer: The 'layerInfo' parameter cannot be null or undefined.");
+        }
+        switch (layerInfo.layerType) {
+            case "esri.layers.ArcGISTiledMapServiceLayer":
+                constructor = esri.layers.ArcGISTiledMapServiceLayer;
+                break;
+            case "esri.layers.ArcGISDynamicMapServiceLayer":
+                constructor = esri.layers.ArcGISDynamicMapServiceLayer;
+                break;
+            case "esri.layers.FeatureLayer":
+                constructor = esri.layers.FeatureLayer;
+                break;
+            default:
+                // Unsupported type.
+                constructor = null;
+                break;
+        }
+        if (constructor) {
+            // Create an info template object if paramters are defined.
+            if (layerInfo.options && layerInfo.options.infoTemplate) {
+                layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
+            }
+            layer = constructor(layerInfo.url, layerInfo.options);
+            //// map.addLayer(layer);
+            if (layerInfo.visibleLayers) {
+                layer.setVisibleLayers(layerInfo.visibleLayers);
+            }
+            // Add a property containing metadata IDs.
+            if (layerInfo.metadataIds) {
+                layer.metadataUrls = dojo.map(layerInfo.metadataIds, getMetadataUrl);
+            }
+        }
+
+        return layer;
+    }
+
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
 
@@ -675,11 +722,35 @@
 
 
 
+
+
             // Identify
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, dojo.create("div", { id: "identifyTools" }, "toolsAccordion")));
             createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
                 $.getScript("scripts/identify.js", function (data, textStatus) {
-                    $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({ map: map });
+                    function getOrCreateLayer(layerInfo) {
+                        /// <summary>Gets an existing layer from the map with a matching ID.  If no such layer exists, a new layer object is created.</summary>
+                        /// <param name="layerInfo" type="Object">An object with properties that define how a layer object can be created.</param>
+                        /// <returns type="esri.layers.Layer" />
+                        var layer = null;
+                        for (var i = 0, l = map.layerIds.length; i < l; i++) {
+                            if (layerInfo.id === map.layerIds[i]) {
+                                layer = map.getLayer(map.layerIds[i]);
+                                break;
+                            }
+                        }
+
+                        if (layer !== null) {
+                            return layer;
+                        } else {
+                            return layerInfoToLayer(layerInfo);
+                        }
+                    }
+
+                    $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({
+                        layers: dojo.map(wsdot.config.identifyLayers, layerInfoToLayer),
+                        map: map
+                    });
                     dojo.disconnect(createLinks.identify);
                     delete createLinks.identify;
                 });
@@ -848,9 +919,7 @@
                 var layers = {},
                 tabName, groupName, i, l, layerInfo, constructor, layer;
 
-                function getMetadataUrl(id) {
-                    return "Metadata.ashx?oid=" + String(id);
-                }
+
 
                 // Load the layers that are defined in the config file.
                 for (tabName in wsdot.config.layers) {
@@ -861,35 +930,10 @@
                                 layers[tabName][groupName] = [];
                                 for (i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i += 1) {
                                     layerInfo = wsdot.config.layers[tabName][groupName][i];
-                                    switch (layerInfo.layerType) {
-                                        case "esri.layers.ArcGISTiledMapServiceLayer":
-                                            constructor = esri.layers.ArcGISTiledMapServiceLayer;
-                                            break;
-                                        case "esri.layers.ArcGISDynamicMapServiceLayer":
-                                            constructor = esri.layers.ArcGISDynamicMapServiceLayer;
-                                            break;
-                                        case "esri.layers.FeatureLayer":
-                                            constructor = esri.layers.FeatureLayer;
-                                            break;
-                                        default:
-                                            // Unsupported type.
-                                            constructor = null;
-                                            break;
-                                    }
-                                    if (constructor) {
-                                        // Create an info template object if paramters are defined.
-                                        if (layerInfo.options && layerInfo.options.infoTemplate) {
-                                            layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
-                                        }
-                                        layer = constructor(layerInfo.url, layerInfo.options);
+                                    layer = layerInfoToLayer(layerInfo);
+                                    if (layer) {
                                         map.addLayer(layer);
-                                        if (layerInfo.visibleLayers) {
-                                            layer.setVisibleLayers(layerInfo.visibleLayers);
-                                        }
-                                        // Add a property containing metadata IDs.
-                                        if (layerInfo.metadataIds) {
-                                            layer.metadataUrls = dojo.map(layerInfo.metadataIds, getMetadataUrl);
-                                        }
+                                        ////if (layerInfo.visibleLayers) { layer.setVisibleLayers(layerInfo.visibleLayers); }
                                         layers[tabName][groupName].push(layer);
                                     }
                                 }

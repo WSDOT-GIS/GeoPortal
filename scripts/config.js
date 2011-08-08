@@ -78,6 +78,46 @@ wsdot.config = {
         "url": "http://hqolymgis21t/ElcProxy/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
+    "identifyLayers": [
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/QueryMapService/MapServer",
+            "options": {
+                "id": "Location Information"
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/TruckPerformanceMeasures/MapServer",
+            "options": {
+                "id": "Truck Performance Measures"
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
+            "options": {
+                "id": "Drainage",
+                "visible": false
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/FixedObjects/MapServer",
+            "options": {
+                "id": "Fixed Objects",
+                "visible": false
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Trees/MapServer",
+            "options": {
+                "id": "Trees",
+                "visible": false
+            }
+        }
+    ],
     "layers": {
         "Main": {
             "Political Boundaries": [

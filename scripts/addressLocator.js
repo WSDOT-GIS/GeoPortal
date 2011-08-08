@@ -101,7 +101,6 @@
                     return layer;
                 }
 
-                //console.debug(addressCandidates);
                 var resultsDiv, list, row, link, graphic;
                 // Create the list of address candidates.
                 resultsDiv = $("#ui-address-locator-results");
