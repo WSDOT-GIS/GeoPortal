@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Net;
-using System.Web.Script.Serialization;
-using System.IO;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text;
+using System.Web;
+using System.Web.Script.Serialization;
 
 namespace Wsdot.Grdo.Web.Mapping
 {
 	/// <summary>
-	/// Queries a map service to get 
+	/// Queries a map service to get a list of the state routes.
 	/// </summary>
 	public class GetRoutes : IHttpHandler
 	{
