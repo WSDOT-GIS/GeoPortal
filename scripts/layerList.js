@@ -368,7 +368,7 @@ Prerequisites:
                 // Create a checkbox and label and place inside of a div.
                 layerCell = $("<div>").addClass("map-service-cell").appendTo(layerRow);
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerCell);
-                label = $("<label>").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerCell);
+                label = $("<label>").text(layer.id.match(basemapLayerIdRe) ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerCell);
                 controlsToolbar = $("<div>").addClass("map-service-cell layer-toolbar").appendTo(layerRow).hide();
 
                 $("<button>").attr("title", "Toggle opacity slider").appendTo(controlsToolbar).text("opacity").click(function () {

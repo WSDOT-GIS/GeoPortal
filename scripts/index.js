@@ -353,25 +353,7 @@
 
         function setupToolbar() {
             // Set the background color for the extent link.
-            $("#termsOfUseLink").click(function () {
-                var dialog = $("<div>").text("This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.").dialog({
-                    title: "Terms of use",
-                    modal: true,
-                    close: function () {
-                        $(this).dialog("destroy").remove();
-                    },
-                    buttons: {
-                        "OK": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            });
-            if (dojo.isIE && dojo.isIE < 9) {
-                $("a", "#toolbar").css("background-color", "white");
-            } else {
-                $("a", "#toolbar").css("background-color", "rgba(255, 255, 255, 0.5)");
-            }
+
             dijit.form.Button({
                 iconClass: "helpIcon",
                 showLabel: false,
