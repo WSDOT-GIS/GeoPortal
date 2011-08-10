@@ -80,6 +80,12 @@
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
 
+        // If a title is specified in the config file, replace the page title.
+        if (wsdot.config.pageTitle) {
+            $("h1").empty().text(wsdot.config.pageTitle);
+            $("title").text(wsdot.config.pageTitle);
+        }
+
         // Set the links to other websites to open in a new window.  
         // Specifically selecting any element that has an href attribute and the value of that attribute does not start with # or mailto.
         $("a.newTab").each(function (index, element) {

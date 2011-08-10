@@ -167,7 +167,7 @@
             inputDiv = $("<div>").attr({ id: "ui-address-locator" }).addClass("ui-widget").appendTo(element);
 
             // Create the search box.
-            $("<textarea>").attr({ name: "address", type: "search", placeholder: "Input an address here" }).appendTo(inputDiv).blur(function (eventObject) {
+            $("<textarea>").attr({ name: "address", rows: 5, placeholder: "Input an address here" }).appendTo(inputDiv).blur(function (eventObject) {
                 var address = $(this).val();
                 if (address.length > 0 && !address.match(stateOrZipRe)) {
                     address += ", WA";

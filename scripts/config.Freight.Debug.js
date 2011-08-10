@@ -2,6 +2,7 @@
     wsdot = {};
 }
 wsdot.config = {
+    "pageTitle": "Freight",
     "mapOptions": {
         "logo": false,
         "extent": {
@@ -84,6 +85,13 @@ wsdot.config = {
             "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/QueryMapService/MapServer",
             "options": {
                 "id": "Location Information"
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/TruckPerformanceMeasures/MapServer",
+            "options": {
+                "id": "Truck Performance Measures"
             }
         }
     ],
@@ -224,6 +232,74 @@ wsdot.config = {
                     "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
                     "options": {
                         "id": "Traffic Flow",
+                        "visible": false
+                    }
+                }
+            ]
+        },
+        "Freight": {
+            "Truck Performance Measures": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/AADTTruckPercentage/MapServer",
+                    "options": {
+                        "id": "AADT Truck Percentage",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/AverageSpeed/MapServer",
+                    "options": {
+                        "id": "Average Speed",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckPugetSound/MapServer",
+                    "options": {
+                        "id": "Bottleneck Puget Sound",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckStatewide/MapServer",
+                    "options": {
+                        "id": "Bottleneck Statewide",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityPugetSound/MapServer",
+                    "options": {
+                        "id": "Reliability Puget Sound",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityStatewide/MapServer",
+                    "options": {
+                        "id": "Reliability Statewide",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/SpeedRatio/MapServer",
+                    "options": {
+                        "id": "Speed Ratio",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/FreightGoods/MapServer",
+                    "options": {
+                        "id": "Freight Goods",
                         "visible": false
                     }
                 }

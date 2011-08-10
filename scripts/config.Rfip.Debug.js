@@ -2,6 +2,7 @@
     wsdot = {};
 }
 wsdot.config = {
+    "pageTitle": "RFIP",
     "mapOptions": {
         "logo": false,
         "extent": {
@@ -84,6 +85,30 @@ wsdot.config = {
             "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/QueryMapService/MapServer",
             "options": {
                 "id": "Location Information"
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
+            "options": {
+                "id": "Drainage",
+                "visible": false
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/FixedObjects/MapServer",
+            "options": {
+                "id": "Fixed Objects",
+                "visible": false
+            }
+        },
+        {
+            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Trees/MapServer",
+            "options": {
+                "id": "Trees",
+                "visible": false
             }
         }
     ],
@@ -224,6 +249,68 @@ wsdot.config = {
                     "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
                     "options": {
                         "id": "Traffic Flow",
+                        "visible": false
+                    }
+                }
+            ]
+        },
+        "RFIP": {
+            "Drainage": [
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/0",
+                    "options": {
+                        "id": "Drainage Inlet",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/1",
+                    "options": {
+                        "id": "Culvert",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/2",
+                    "options": {
+                        "id": "Pipe End",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/3",
+                    "options": {
+                        "id": "Culvert End",
+                        "visible": false
+                    }
+                }
+            ],
+            "RFIP": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
+                    "options": {
+                        "id": "Drainage",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/FixedObjects/MapServer",
+                    "options": {
+                        "id": "Fixed Objects",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Trees/MapServer",
+                    "options": {
+                        "id": "Trees",
                         "visible": false
                     }
                 }
