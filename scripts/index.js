@@ -352,8 +352,6 @@
         }
 
         function setupToolbar() {
-            // Set the background color for the extent link.
-
             dijit.form.Button({
                 iconClass: "helpIcon",
                 showLabel: false,
