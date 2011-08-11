@@ -21,23 +21,36 @@ namespace Wsdot.Grdo.Web.Mapping
     public class Metadata : IHttpHandler
     {
 
+		readonly static Regex
+			_oidRegex = new Regex("(?in)^(o(bject)?)?id$"),
+			_nameRegex = new Regex("^(?in)name$"),
+			// Regexes for XSLT parameters passed via query string (or POST).
+			_dublinCoreRegex = new Regex("(?in)^d(ublin)?c(ore)?$"),
+			_jsRegex = new Regex("(?in)^j(ava)?s(cript)?$"),
+			_cssRegex = new Regex("(?in)^css?");
+
+
+
+
         public void ProcessRequest(HttpContext context)
         {
             // Get the parameters (query string or POST).
             var parameters = context.Request.Params;
 
-            Regex oidRegex = new Regex("(?in)^(o(bject)?)?id$");
-            Regex nameRegex = new Regex("^(?in)name$");
 
+
+			var keysEnum = from string key in parameters.Keys select key;
 
             // Check for an OID in the parameters.
-            string oidKey = (from string key in parameters.Keys select key).FirstOrDefault(k => oidRegex.IsMatch(k));
             // Assign a value to the "oid" variable if an OID parameter was provided.
-            int? oid = oidKey == null ? default(int?) : int.Parse(parameters[oidKey]);
+			int? oid = parameters.GetNullableInt(_oidRegex);
 
             // If there was no OID provided, check for a feature class name and assign a variable.
-            string nameKey = oid.HasValue ? null : (from string key in parameters.Keys select key).FirstOrDefault(k => nameRegex.IsMatch(k));
-            string name = nameKey == null ? null : parameters[nameKey];
+            string name = parameters.GetStringParameter(_nameRegex);
+
+			bool includeDublinCore = parameters.GetBooleanParameter(_dublinCoreRegex);
+			bool includeJS = parameters.GetBooleanParameter(_jsRegex);
+			bool includeCss = parameters.GetBooleanParameter(_cssRegex);
 
             if (!oid.HasValue && string.IsNullOrWhiteSpace(name))
             {
@@ -68,7 +81,8 @@ namespace Wsdot.Grdo.Web.Mapping
                 throw new NotSupportedException();
             }
 
-            var qsBuilder = new StringBuilder();
+            // Create the query string.
+			var qsBuilder = new StringBuilder();
             int i = 0;
             foreach (var kvp in qsDict)
             {
@@ -84,16 +98,20 @@ namespace Wsdot.Grdo.Web.Mapping
             WebRequest request = WebRequest.Create(builder.Uri);
             WebResponse response = request.GetResponse();
 
-            string json;
+            // Read the response as JSON and then serialize it to an object.
+			string json;
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
                 json = reader.ReadToEnd();
             }
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             var data = serializer.Deserialize<Dictionary<string, object>>(json);
+
+			// Get the array of features from the JSON.
             var features = (ArrayList)data["features"];
             if (features.Count < 1)
             {
+				// If there are no features, return an error message.
                 var errorDict = new Dictionary<string, string>();
                 errorDict.Add("error", "No features were returned from this query.");
                 context.Response.ContentType = "application/json";
@@ -111,11 +129,17 @@ namespace Wsdot.Grdo.Web.Mapping
                 XslCompiledTransform xsl = new XslCompiledTransform();
 
                 var xslDoc = new XmlDocument();
-                xslDoc.LoadXml(Resources.FGDC_Plus);
+                xslDoc.LoadXml(Resources.FgdcPlusHtml5);
                 xsl.Load(xslDoc);
 
                 context.Response.ContentType = "text/html";
-                xsl.Transform(xmlDoc, new XsltArgumentList(), context.Response.OutputStream);
+				var args = new XsltArgumentList();
+				args.AddParam("includeDublinCore", string.Empty, includeDublinCore);
+				args.AddParam("includeCss", string.Empty, includeCss);
+				args.AddParam("includeJavaScript", string.Empty, includeJS);
+
+
+                xsl.Transform(xmlDoc, args, context.Response.OutputStream);
             }
         }
 

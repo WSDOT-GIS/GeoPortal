@@ -31,7 +31,7 @@
     }
 
     function getMetadataUrl(id) {
-        return "Metadata.ashx?oid=" + String(id);
+        return "Metadata.ashx?oid=" + String(id) + "&css=true&js=true";
     }
 
     function layerInfoToLayer(layerInfo) {

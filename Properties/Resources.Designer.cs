@@ -78,5 +78,24 @@ namespace Wsdot.Grdo.Web.Mapping.Properties {
                 return ResourceManager.GetString("FGDC_Plus", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;
+        ///&lt;xsl:output method=&quot;html&quot; version=&quot;4.01&quot;/&gt;
+        ///&lt;xsl:output doctype-public=&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;/&gt;
+        ///&lt;!--
+        ///FGDC Plus.xsl (version 2.3)
+        ///
+        ///FGDC Plus.xsl is an XSL template that can be use with ArcGIS software
+        ///to display metadata. It shows metadata elements defined in the Content 
+        ///Standard for Digital Geospatial Metadata (CSDGM), aka FGDC Standard;
+        ///the ESRI Profile of the Content Standard f [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FgdcPlusHtml5 {
+            get {
+                return ResourceManager.GetString("FgdcPlusHtml5", resourceCulture);
+            }
+        }
     }
 }
