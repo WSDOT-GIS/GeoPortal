@@ -26,6 +26,11 @@ li.outOfScale, *.outOfScale a, div.outOfScale label
     color: #ccc;
 }
 
+.map-service:hover 
+{
+    background-color: #eeeeff
+}
+
 .ui-esri-layer-list .map-service-table 
 {
     display: table;

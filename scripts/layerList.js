@@ -371,7 +371,7 @@ Prerequisites:
                 label = $("<label>").text(layer.id.match(basemapLayerIdRe) ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerCell);
                 controlsToolbar = $("<div>").addClass("map-service-cell layer-toolbar").appendTo(layerRow).hide();
 
-                $("<button>").attr("title", "Toggle opacity slider").appendTo(controlsToolbar).text("opacity").click(function () {
+                $("<button>").attr("title", "Toggle transparency slider").appendTo(controlsToolbar).text("transparency").click(function () {
                     var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
                     $(node).toggle();
                 });
