@@ -367,7 +367,7 @@
 
 
             dijit.form.Button({
-                iconClass: "linkIcon",
+                iconClass: "starIcon",
                 showLabel: false,
                 onClick: function () {
                     /// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
@@ -377,7 +377,7 @@
                         linkDialog = $("<div>").attr("id", "linkDialog").dialog({
                             "autoOpen": true,
                             "modal": true,
-                            "title": "Bookmark",
+                            "title": "Share",
                             "open": function () {
                                 var url = getExtentLink();
                                 $("<p>").text("This link can be used to open this application, zoomed to the current extent.").appendTo(this);

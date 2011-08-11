@@ -130,7 +130,7 @@ h3,h4
     font-family: 'Arial Narrow', Sans-Serif
 }
 
-.zoomfullextIcon, .zoomprevIcon, .zoomnextIcon, .helpIcon, .linkIcon, .exportIcon { background:url(../images/navigation/sprites.png) no-repeat top left; }
+.zoomfullextIcon, .zoomprevIcon, .zoomnextIcon, .helpIcon, .linkIcon, .exportIcon, .starIcon { background:url(../images/navigation/sprites.png) no-repeat top left; }
 
 .helpIcon{ background-position: 0 0; width: 16px; height: 16px; } 
 .linkIcon{ background-position: -21px 0; width: 18px; height: 7px; } 
@@ -138,6 +138,7 @@ h3,h4
 .zoomnextIcon{ background-position: -65px 0; width: 16px; height: 16px; } 
 .zoomprevIcon{ background-position: -86px 0; width: 16px; height: 16px; } 
 .exportIcon{ background-position: -107px 0; width: 16px; height: 16px; }
+.starIcon{ background-position: -128px 0; width: 16px; height: 16px; }
 
 #scaleText 
 {
