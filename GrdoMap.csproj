@@ -90,6 +90,7 @@
     <Content Include="scripts\config.js" />
     <Content Include="scripts\config.Release.js" />
     <Content Include="scripts\config.Rfip.Debug.js" />
+    <Content Include="scripts\esriApiExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\identify.js" />
     <Content Include="scripts\index.js" />
