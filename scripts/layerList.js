@@ -288,10 +288,10 @@ Prerequisites:
                 layerRow = $("<div>").addClass("map-service-row").appendTo(layerTable);
 
                 // Create a checkbox and label and place inside of a div.
-                layerCell = $("<div>").addClass("map-service-cell").appendTo(layerRow);
+                layerCell = $("<span>").addClass("map-service-cell").appendTo(layerRow);
                 $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerCell);
                 label = $("<label>").text(layer.id.match(basemapLayerIdRe) ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerCell);
-                controlsToolbar = $("<div>").addClass("map-service-cell layer-toolbar").appendTo(layerRow).hide();
+                controlsToolbar = $("<span>").addClass("map-service-cell layer-toolbar").appendTo(layerRow).hide();
 
                 $("<button>").attr("title", "Toggle transparency slider").appendTo(controlsToolbar).text("transparency").click(function () {
                     var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
