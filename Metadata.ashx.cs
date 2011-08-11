@@ -15,11 +15,11 @@ using Wsdot.Grdo.Web.Mapping.Properties;
 
 namespace Wsdot.Grdo.Web.Mapping
 {
-    /// <summary>
-    /// Summary description for Metadata
-    /// </summary>
-    public class Metadata : IHttpHandler
-    {
+	/// <summary>
+	/// Summary description for Metadata
+	/// </summary>
+	public class Metadata : IHttpHandler
+	{
 
 		readonly static Regex
 			_oidRegex = new Regex("(?in)^(o(bject)?)?id$"),
@@ -32,123 +32,123 @@ namespace Wsdot.Grdo.Web.Mapping
 
 
 
-        public void ProcessRequest(HttpContext context)
-        {
-            // Get the parameters (query string or POST).
-            var parameters = context.Request.Params;
+		public void ProcessRequest(HttpContext context)
+		{
+			// Get the parameters (query string or POST).
+			var parameters = context.Request.Params;
 
 
 
 			var keysEnum = from string key in parameters.Keys select key;
 
-            // Check for an OID in the parameters.
-            // Assign a value to the "oid" variable if an OID parameter was provided.
+			// Check for an OID in the parameters.
+			// Assign a value to the "oid" variable if an OID parameter was provided.
 			int? oid = parameters.GetNullableInt(_oidRegex);
 
-            // If there was no OID provided, check for a feature class name and assign a variable.
-            string name = parameters.GetStringParameter(_nameRegex);
+			// If there was no OID provided, check for a feature class name and assign a variable.
+			string name = parameters.GetStringParameter(_nameRegex);
 
 			bool includeDublinCore = parameters.GetBooleanParameter(_dublinCoreRegex);
 			bool includeJS = parameters.GetBooleanParameter(_jsRegex);
 			bool includeCss = parameters.GetBooleanParameter(_cssRegex);
 
-            if (!oid.HasValue && string.IsNullOrWhiteSpace(name))
-            {
-                context.Response.Write("{\"error\":\"Either an OID or a feature class name must be provided\"}");
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return;
-            }
+			if (!oid.HasValue && string.IsNullOrWhiteSpace(name))
+			{
+				context.Response.Write("{\"error\":\"Either an OID or a feature class name must be provided\"}");
+				context.Response.ContentType = "application/json";
+				context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+				return;
+			}
 
-            // Build the ArcGIS REST URL that will query the map service.
-            UriBuilder builder = new UriBuilder(string.Format("{0}/query", ConfigurationManager.AppSettings["metadataRestUrl"]));
+			// Build the ArcGIS REST URL that will query the map service.
+			UriBuilder builder = new UriBuilder(string.Format("{0}/query", ConfigurationManager.AppSettings["metadataRestUrl"]));
 
-            var qsDict = new Dictionary<string, string>();
-            qsDict.Add("f", "json");
-            qsDict.Add("outFields", "Documentation");
-            qsDict.Add("returnGeometry", "false");
+			var qsDict = new Dictionary<string, string>();
+			qsDict.Add("f", "json");
+			qsDict.Add("outFields", "Documentation");
+			qsDict.Add("returnGeometry", "false");
 
-            if (oid.HasValue)
-            {
-                qsDict.Add("where", string.Format("ObjectID+%3D+{0}", oid.Value));
-            }
-            else if (!string.IsNullOrWhiteSpace(name))
-            {
-                qsDict.Add("where", string.Format("Name+%3D+'{0}'", name));
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+			if (oid.HasValue)
+			{
+				qsDict.Add("where", string.Format("ObjectID+%3D+{0}", oid.Value));
+			}
+			else if (!string.IsNullOrWhiteSpace(name))
+			{
+				qsDict.Add("where", string.Format("Name+%3D+'{0}'", name));
+			}
+			else
+			{
+				throw new NotSupportedException();
+			}
 
-            // Create the query string.
+			// Create the query string.
 			var qsBuilder = new StringBuilder();
-            int i = 0;
-            foreach (var kvp in qsDict)
-            {
-                if (i > 0)
-                {
-                    qsBuilder.Append("&");
-                }
-                qsBuilder.AppendFormat("{0}={1}", kvp.Key, kvp.Value);
-                i++;
-            }
-            builder.Query = qsBuilder.ToString();
+			int i = 0;
+			foreach (var kvp in qsDict)
+			{
+				if (i > 0)
+				{
+					qsBuilder.Append("&");
+				}
+				qsBuilder.AppendFormat("{0}={1}", kvp.Key, kvp.Value);
+				i++;
+			}
+			builder.Query = qsBuilder.ToString();
 
-            WebRequest request = WebRequest.Create(builder.Uri);
-            WebResponse response = request.GetResponse();
+			WebRequest request = WebRequest.Create(builder.Uri);
+			WebResponse response = request.GetResponse();
 
-            // Read the response as JSON and then serialize it to an object.
+			// Read the response as JSON and then serialize it to an object.
 			string json;
-            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-            {
-                json = reader.ReadToEnd();
-            }
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            var data = serializer.Deserialize<Dictionary<string, object>>(json);
+			using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+			{
+				json = reader.ReadToEnd();
+			}
+			JavaScriptSerializer serializer = new JavaScriptSerializer();
+			var data = serializer.Deserialize<Dictionary<string, object>>(json);
 
 			// Get the array of features from the JSON.
-            var features = (ArrayList)data["features"];
-            if (features.Count < 1)
-            {
+			var features = (ArrayList)data["features"];
+			if (features.Count < 1)
+			{
 				// If there are no features, return an error message.
-                var errorDict = new Dictionary<string, string>();
-                errorDict.Add("error", "No features were returned from this query.");
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            }
-            else
-            {
-                var feature = (Dictionary<string, object>)features[0];
-                var attributes = (Dictionary<string, object>)feature["attributes"];
-                var xml = (string)attributes["Documentation"];
+				var errorDict = new Dictionary<string, string>();
+				errorDict.Add("error", "No features were returned from this query.");
+				context.Response.ContentType = "application/json";
+				context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+			}
+			else
+			{
+				var feature = (Dictionary<string, object>)features[0];
+				var attributes = (Dictionary<string, object>)feature["attributes"];
+				var xml = (string)attributes["Documentation"];
 
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(xml);
 
-                XslCompiledTransform xsl = new XslCompiledTransform();
+				XslCompiledTransform xsl = new XslCompiledTransform();
 
-                var xslDoc = new XmlDocument();
-                xslDoc.LoadXml(Resources.FgdcPlusHtml5);
-                xsl.Load(xslDoc);
+				var xslDoc = new XmlDocument();
+				xslDoc.LoadXml(Resources.FgdcPlusHtml5);
+				xsl.Load(xslDoc);
 
-                context.Response.ContentType = "text/html";
+				context.Response.ContentType = "text/html";
 				var args = new XsltArgumentList();
 				args.AddParam("includeDublinCore", string.Empty, includeDublinCore);
 				args.AddParam("includeCss", string.Empty, includeCss);
 				args.AddParam("includeJavaScript", string.Empty, includeJS);
 
 
-                xsl.Transform(xmlDoc, args, context.Response.OutputStream);
-            }
-        }
+				xsl.Transform(xmlDoc, args, context.Response.OutputStream);
+			}
+		}
 
-        public bool IsReusable
-        {
-            get
-            {
-                return false;
-            }
-        }
-    }
+		public bool IsReusable
+		{
+			get
+			{
+				return false;
+			}
+		}
+	}
 }
