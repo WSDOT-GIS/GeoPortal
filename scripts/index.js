@@ -393,7 +393,7 @@
             dijit.form.Button({
                 label: "Export Graphics",
                 showLabel: false,
-                iconClass: "dijitEditorIcon dijitEditorIconSave",
+                iconClass: "exportIcon",
                 onClick: function () {
                     var form, formatSelect, exportDialog = $("#exportDialog");
 
