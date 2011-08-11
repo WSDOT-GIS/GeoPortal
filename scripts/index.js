@@ -52,6 +52,10 @@
                 break;
             case "esri.layers.FeatureLayer":
                 constructor = esri.layers.FeatureLayer;
+                // If a mode has been specified by name, convert to the numeric value the constructor is expecting.
+                if (layerInfo.options.mode && typeof(layerInfo.options.mode) !== "number") {
+                    layerInfo.options.mode = esri.layers.FeatureLayer[layerInfo.options.mode];
+                }
                 break;
             default:
                 // Unsupported type.
@@ -513,10 +517,10 @@
             tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: function () {
-////                // Create layer infos.
-////                var layers = wsdot.config.layers, layerInfos = [];
-////                
-////                // layers { tabs { group [ layers ] } }
+                ////                // Create layer infos.
+                ////                var layers = wsdot.config.layers, layerInfos = [];
+                ////                
+                ////                // layers { tabs { group [ layers ] } }
 
                 // Create the legend dijit if it does not already exist.
                 if (!dijit.byId("legend")) {
