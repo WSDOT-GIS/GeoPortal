@@ -513,6 +513,11 @@
             tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: function () {
+////                // Create layer infos.
+////                var layers = wsdot.config.layers, layerInfos = [];
+////                
+////                // layers { tabs { group [ layers ] } }
+
                 // Create the legend dijit if it does not already exist.
                 if (!dijit.byId("legend")) {
                     new esri.dijit.Legend({ map: map }, "legend").startup();
@@ -710,37 +715,37 @@
 
 
 
-            // Identify
-            toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, dojo.create("div", { id: "identifyTools" }, "toolsAccordion")));
-            createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
-                $.getScript("scripts/identify.js", function (data, textStatus) {
-                    function getOrCreateLayer(layerInfo) {
-                        /// <summary>Gets an existing layer from the map with a matching ID.  If no such layer exists, a new layer object is created.</summary>
-                        /// <param name="layerInfo" type="Object">An object with properties that define how a layer object can be created.</param>
-                        /// <returns type="esri.layers.Layer" />
-                        var layer = null;
-                        for (var i = 0, l = map.layerIds.length; i < l; i++) {
-                            if (layerInfo.id === map.layerIds[i]) {
-                                layer = map.getLayer(map.layerIds[i]);
-                                break;
-                            }
-                        }
+            ////// Identify
+            ////toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Identify" }, dojo.create("div", { id: "identifyTools" }, "toolsAccordion")));
+            ////createLinks.identify = dojo.connect(dijit.byId("identifyTools"), "onShow", function () {
+            ////    $.getScript("scripts/identify.js", function (data, textStatus) {
+            ////        function getOrCreateLayer(layerInfo) {
+            ////            /// <summary>Gets an existing layer from the map with a matching ID.  If no such layer exists, a new layer object is created.</summary>
+            ////            /// <param name="layerInfo" type="Object">An object with properties that define how a layer object can be created.</param>
+            ////            /// <returns type="esri.layers.Layer" />
+            ////            var layer = null;
+            ////            for (var i = 0, l = map.layerIds.length; i < l; i++) {
+            ////                if (layerInfo.id === map.layerIds[i]) {
+            ////                    layer = map.getLayer(map.layerIds[i]);
+            ////                    break;
+            ////                }
+            ////            }
 
-                        if (layer !== null) {
-                            return layer;
-                        } else {
-                            return layerInfoToLayer(layerInfo);
-                        }
-                    }
+            ////            if (layer !== null) {
+            ////                return layer;
+            ////            } else {
+            ////                return layerInfoToLayer(layerInfo);
+            ////            }
+            ////        }
 
-                    $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({
-                        layers: dojo.map(wsdot.config.identifyLayers, layerInfoToLayer),
-                        map: map
-                    });
-                    dojo.disconnect(createLinks.identify);
-                    delete createLinks.identify;
-                });
-            });
+            ////        $("<div>").attr("id", "identifyControl").appendTo("#identifyTools").identify({
+            ////            layers: dojo.map(wsdot.config.identifyLayers, layerInfoToLayer),
+            ////            map: map
+            ////        });
+            ////        dojo.disconnect(createLinks.identify);
+            ////        delete createLinks.identify;
+            ////    });
+            ////});
 
             // Address Search
             toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));

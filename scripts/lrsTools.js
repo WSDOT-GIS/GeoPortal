@@ -70,17 +70,60 @@
                 borderContainer.resize();
                 esri.hide(dojo.byId("backContainer"));
 
+                function createElcResultTable(graphic) {
+                    /// <summary>Used by the GraphicsLayer's InfoTemplate to generate content for the InfoWindow.</summary>
+                    /// <param name="graphic" type="esri.Graphic">A graphic object with attributes for a state route location.</param>
+                    var arm, srmp, armDef, list;
+
+                    if (graphic.attributes.LocatingError === "LOCATING_OK") {
+                        list = $("<dl>");
+                        // Add the route information
+                        $("<dt>").text("Route").appendTo(list);
+                        $("<dd>").appendTo(list).text(graphic.attributes.RouteId || "");
+
+                        // ARM
+                        if (typeof (graphic.attributes.Arm) !== "undefined" || typeof (graphic.attributes.Measure) !== "undefined") {
+                            // Add the ARM information
+                            $("<dt>").append($("<abbr>").attr("title", "Accumulated Route Mileage").text("ARM")).appendTo(list);
+                            // Get the ARM value from either the Arm or Measure property.
+                            arm = typeof (graphic.attributes.Arm) !== "undefined" ? graphic.attributes.Arm
+                        : typeof (graphic.attributes.Measure !== "undefined") ? graphic.attributes.Measure
+                        : null;
+                            armDef = $("<dd>").appendTo(list);
+
+                            if (arm !== null) {
+                                arm = Math.abs(Math.round(arm * 100) / 100); // Round the ARM value to the nearest 100.
+                                armDef.text(String(arm));
+                            }
+                        }
+
+                        // SRMP
+                        if (typeof (graphic.attributes.Srmp) !== "undefined") {
+                            $("<dt>").append($("<abbr>").attr("title", "State Route Milepost").text("SRMP")).appendTo(list);
+                            srmp = String(graphic.attributes.Srmp);
+                            if (Boolean(graphic.attributes.Back) === true) {
+                                srmp += "B";
+                            }
+                            $("<dd>").append(srmp).appendTo(list);
+                        }
+
+                        return list[0];
+                    } else {
+                        return graphic.attributes.LocatingError;
+                    }
+                }
+
                 function createLocatedMilepostsLayer() {
                     /// <summary>
                     /// Creates the "Located Mileposts" layer if it does not already exist.  If the layer exists, visibility is turned on if it is not already visible.
                     /// </summary>
+                    var symbol, renderer;
                     if (!locatedMilepostsLayer) {
                         locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
-                        var 
-                    symbol = new esri.symbol.SimpleMarkerSymbol().setColor(new dojo.Color([48, 186, 0])).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE),
-                    renderer = new esri.renderer.SimpleRenderer(symbol);
+                        symbol = new esri.symbol.SimpleMarkerSymbol().setColor(new dojo.Color([48, 186, 0])).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE);
+                        renderer = new esri.renderer.SimpleRenderer(symbol);
                         locatedMilepostsLayer.setRenderer(renderer);
-                        locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", "${*}"));
+                        locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", createElcResultTable));
                         map.addLayer(locatedMilepostsLayer);
                     }
                     // 
@@ -88,60 +131,6 @@
                         locatedMilepostsLayer.show();
                     }
                 }
-
-                function createAttributeTableForElcResult(result) {
-                    var table = "<table>",
-                value,
-                includeRe = /(?:Arm)|(?:Srmp)|(?:RouteId)/i,  // Define which attributes will be shown in the output window.
-                aliases = {
-                    "Arm": "ARM",
-                    "Measure": "ARM",
-                    "Srmp": "SRMP",
-                    "ReferenceDate": "Reference Date",
-                    "ResponseDate": "Response Date",
-                    "RealignmentDate": "Realignment Date",
-                    "ArmCalcReturnCode": "ARM Calc Return Code",
-                    "LrsType": "LRS Type",
-                    "LOC_ANGLE": "Angle",
-                    "RouteId": "Route",
-                    "OffsetDistance": "Offset Distance",
-                    "RightSide": "Right Side"
-                },
-                attr;
-                    for (attr in result) {
-                        if (result.hasOwnProperty(attr)) {
-                            if (attr.match(includeRe)) {
-                                value = result[attr];
-                                if (!((attr === "LocatingError" && value === "LOCATING_OK") || (attr === "Message" && value === "") || (attr === "OffsetDistance" && value === 0))) {
-                                    // Convert date values from long 
-                                    if (attr === "OffsetDistance") {
-                                        if (value < 0) {
-                                            value = Math.abs(Math.round(value * 100) / 100);
-                                        }
-                                        value = value + "'";
-                                    }
-                                    else if (attr === "Srmp" && Boolean(result.Back) === true) {
-                                        value += "B";
-                                    }
-                                    else if (attr.match(/(?:\w*Distance)|(?:Measure)|(?:Arm)|(?:LOC_ANGLE)/i)) {
-                                        value = Math.round(value * 1000) / 1000;
-                                    }
-                                    table += "<tr>";
-                                    if (aliases[attr]) {
-                                        table += "<th>" + aliases[attr] + "</th>";
-                                    } else {
-                                        table += "<th>" + attr + "</th>";
-                                    }
-                                    table += "<td>" + value + "</td>";
-                                    table += "</tr>";
-                                }
-                            }
-                        }
-                    }
-                    table += "</table>";
-                    return table;
-                }
-
 
                 dijit.form.Button({ onClick: function () {
                     // Make sure the route text box contains a valid value.  If it does not, do not submit query to the server (i.e., exit the method).
@@ -187,24 +176,25 @@
                             // Process the results.
                             if (results.length >= 1) {
                                 for (i = 0, l = results.length; i < l; i += 1) {
+                                    console.debug(result);
                                     result = results[i];
                                     if (result.RoutePoint) {
                                         geometry = new esri.geometry.Point(result.RoutePoint);
-                                        content = createAttributeTableForElcResult(result);
-                                        graphic = new esri.Graphic(geometry, null, result, new esri.InfoTemplate("Route Location", content));
+                                        // content = createAttributeTableForElcResult(result);
+                                        graphic = new esri.Graphic(geometry, null, result);
                                         locatedMilepostsLayer.add(graphic);
-                                        map.infoWindow.setContent(content).setTitle("Route Location").show(map.toScreen(geometry));
+                                        map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
                                     }
                                     else {
                                         if ($.pnotify) {
                                             $.pnotify({
                                                 pnotify_title: 'Unable to find route location',
-                                                pnotify_text: createAttributeTableForElcResult(result),
+                                                pnotify_text: createElcResultTable({ attributes: result }),
                                                 pnotify_hide: true
                                             }).effect("bounce");
                                         }
                                         else {
-                                            $("<div>").html(createAttributeTableForElcResult(result)).dialog({
+                                            $("<div>").html(createElcResultTable({ attributes: result })).dialog({
                                                 title: "Unable to find route location",
                                                 dialogClass: "alert",
                                                 modal: true,
@@ -273,15 +263,13 @@
                                 if (results && results.length > 0) {
                                     var currentResult, table, graphic, geometry, i, l;
                                     for (i = 0, l = results.length; i < l; i += 1) {
-
                                         currentResult = results[i];
-                                        table = createAttributeTableForElcResult(currentResult);
                                         if (currentResult.RoutePoint) {
                                             geometry = new esri.geometry.Point(currentResult.RoutePoint);
                                             geometry.setSpatialReference(map.spatialReference);
-                                            graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult, "infoTemplate": new esri.InfoTemplate("Route Location", table) });
+                                            graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult });
                                             locatedMilepostsLayer.add(graphic);
-                                            map.infoWindow.setContent(table).setTitle("Route Location").show(map.toScreen(geometry));
+                                            map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
                                         }
                                         else {
                                             $.pnotify({
