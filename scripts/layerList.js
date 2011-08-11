@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 This jQuery plugin is used to create a layer list control for an ArcGIS JavaScript API web application.
 Prerequisites:
     ArcGIS JavaScript API
+    esriApiExtensions.js
     jQuery
     jQuery UI
 */
@@ -31,26 +32,18 @@ Prerequisites:
 (function ($) {
     "use strict";
 
-
-
-    // Chrome supports the built-in slider control for HTML5's <input type="range" /> tag, so it does not need to use the dojo slider.
-    if (!dojo.isChrome) {
-        dojo.require("dijit.form.Slider");
-    }
-
-
-    var settings = {
-        layerSource: null,
-        map: null,
-        tabs: true
-    }, methods = {
-        init: function (options) {
+    $.widget("ui.layerList", {
+        options: {
+            layerSource: null,
+            map: null,
+            tabs: true
+        },
+        _create: function () {
             /// <summary>
             /// Creates a list of layers for a layerSource.  The "this" keyword is the jQuery object containing the DOM element(s) that will be turned into a layer list.
             /// </summary>
-            /// <param name="layerSource" type="Object">This can be either an esri.Map or an array of esri.layer.Layer</param>
-            /// <param name="options" type="Object">Options for this control.</param>
-            var layerListNode = this,
+            var layerListNode = this.element,
+                settings = this.options,
                 basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm))/i, tabContainer;
 
             function formatForHtmlId(s, prefix) {
@@ -153,8 +146,9 @@ Prerequisites:
                 });
             }
 
-            if (options) {
-                $.extend(settings, options);
+            // Chrome supports the built-in slider control for HTML5's <input type="range" /> tag, so it does not need to use the dojo slider.
+            if (!dojo.isChrome) {
+                dojo.require("dijit.form.Slider");
             }
 
             // Set the map setting to equal layerSource if layerSource is an esri.Map object.
@@ -162,7 +156,7 @@ Prerequisites:
                 settings.map = settings.layerSource;
             }
 
-            this.addClass("ui-esri-layer-list");
+            layerListNode.addClass("ui-esri-layer-list");
 
             // Add tab container
             tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
@@ -338,7 +332,7 @@ Prerequisites:
                     } else {
                         dojo.connect(layer, "onLoad", function (layer) {
                             createSublayerLink(layer);
-                            setClassForOutOfScaleLayerControls() 
+                            setClassForOutOfScaleLayerControls()
                         });
                     }
                 }
@@ -545,25 +539,11 @@ Prerequisites:
             ////}
             throw new Error("Not implemented");
         }
-    };
+    });
 
 
 
 
-    $.fn.layerList = function (method) {
-
-        // Method calling logic
-        if (methods[method]) {
-            // If the name of a method is specified, call that method.  Pass all arguments to that method except for the first (the method's name).
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (typeof method === 'object' || !method) {
-            // If no method name is specified, call the init method with the specified arguments.
-            return methods.init.apply(this, arguments);
-        } else {
-            // If the name of a non-existant method has been specified, add an error message.
-            $.error('Method ' + method + ' does not exist on jQuery.layerList');
-        }
-    };
 
 
 } (jQuery));
