@@ -184,7 +184,7 @@ Revision History:
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
   <script type="text/javascript">
     <![CDATA[
-(function () {
+(function ($) {
     "use strict";
 
     /* "md-title" onclick function. Always opens md-detailshow and either opens or closes md-detailhide,
@@ -383,11 +383,8 @@ Revision History:
                     styleDisplay = "block";
                 }
                 // hide or show metadata definition elements
-                aElem = document.getElementsByName("md-def");
-                for (i = 0; i < aElem.length; i += 1) {
-                    e = aElem[i];
-                    e.style.display = styleDisplay;
-                }
+                aElem = $(".md-def"); //document.getElementsByName("md-def");
+                aElem.each(function (i, e) { e.style.display = styleDisplay; });
                 elem.innerHTML = text;
             }
         }
@@ -1207,23 +1204,7 @@ Revision History:
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Onload function assigns event handler functions to DIV elements according to className
-
     function onLoadHandler() {
         var elem = document.getElementById("md-body");
         // Remove white space text nodes in Netscape 7 and Mozilla Firefox in order to 
@@ -1257,22 +1238,20 @@ Revision History:
         setupmaster(elem);
         elem = document.getElementById("tax");
         setuptaxonomy(elem);
-        /* Parse Text - Find each <pre> element with an Id="fixvalue" and
+        /* Parse Text - Find each <pre> element with an class="fixvalue" and
         call fixvalue() function to parse text to respect line breaks,
         replace <pre> element with <div> elememt, and convert URL address
         strings in text to <a href> element. */
-        elem = document.getElementById("fixvalue");
-        while (Boolean(elem != null)) {
+        $(".fixvalue").each(function (index, elem) {
             fixvalue(elem);
-            elem = document.getElementById("fixvalue");
-        }
+        });
         window.focus();
     }
 
     window.onload = onLoadHandler;
 
 
-}());
+}(jQuery));
 ]]>
   </script>
 </xsl:template>
@@ -1763,7 +1742,7 @@ Revision History:
 			<div class="md-detailtitle">Citation</div>
 		</div>
 		<div class="md-detailshow">
-			<div id="md-def" name="md-def" class="md-def">Information used to reference the data.</div>
+			<div   class="md-def">Information used to reference the data.</div>
 			<!-- Show Thumbnail image created in ArcCatalog -->
 			<xsl:apply-templates select="/metadata//img[(@src != '')]" />
 			<!-- Citation information -->
@@ -1780,18 +1759,18 @@ Revision History:
 			<div class="md-detailtitle">Description</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">A characterization of the data, including its intended use and limitations.</div>
+			<div   class="md-def">A characterization of the data, including its intended use and limitations.</div>
 			<xsl:for-each select="descript/abstract[normalize-space(.) != '']">
-				<div class="md"><b>Abstract: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Abstract: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="descript/purpose[normalize-space(.) != '']">
-				<div class="md"><b>Purpose: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Purpose: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="descript/supplinf[normalize-space(.) != '']">
-				<div class="md"><b>Supplemental information: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Supplemental information: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="datacred[normalize-space(.) != '']">
-				<div class="md"><b>Dataset credit: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Dataset credit: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>				
 			<!-- ESRI Profile element -->
 			<xsl:for-each select="descript/langdata[normalize-space(.) != '']">
@@ -1809,7 +1788,7 @@ Revision History:
 			<div class="md-detailtitle">Point Of Contact</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Contact information for the individual or organization that is knowledgeable about the data.</div>
+			<div   class="md-def">Contact information for the individual or organization that is knowledgeable about the data.</div>
 			<xsl:call-template name="contact_info"/>
 		</div>
 	</xsl:for-each>
@@ -1823,7 +1802,7 @@ Revision History:
 				<div class="md-detailtitle">Data Type</div>
 			</div>
 			<div class="md-detailhide">
-				<div id="md-def" name="md-def" class="md-def">How the data are represented, formatted and maintained by the data producing organization.</div>
+				<div   class="md-def">How the data are represented, formatted and maintained by the data producing organization.</div>
 				<xsl:for-each select="citation/citeinfo[normalize-space(.) != '']">
 					<!-- ESRI Profile element -->
 					<xsl:for-each select="ftname[normalize-space(.) != '']">
@@ -1852,12 +1831,12 @@ Revision History:
 			<div class="md-detailtitle">Data Access Constraints</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Restrictions and legal prerequisites for accessing or using the data after access is granted.</div>
+			<div   class="md-def">Restrictions and legal prerequisites for accessing or using the data after access is granted.</div>
 			<xsl:for-each select="accconst[normalize-space(.) != '']">
-				<div class="md"><b>Access constraints: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Access constraints: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="useconst[normalize-space(.) != '']">
-				<div class="md"><b>Use constraints: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Use constraints: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 		</div>
 	</xsl:for-each>
@@ -1870,7 +1849,7 @@ Revision History:
 			<div class="md-detailtitle">Time Period of Data</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Time period(s) for which the data corresponds to the currentness reference.</div>
+			<div   class="md-def">Time period(s) for which the data corresponds to the currentness reference.</div>
 			<xsl:call-template name="time_info"/>
 		</div>
 	</xsl:for-each>
@@ -1883,7 +1862,7 @@ Revision History:
 			<div class="md-detailtitle">Status</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">The state of and maintenance information for the data.</div>
+			<div   class="md-def">The state of and maintenance information for the data.</div>
 			<xsl:for-each select="progress[normalize-space(.) != '']">
 				<div class="md"><b>Data status: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
@@ -1901,7 +1880,7 @@ Revision History:
 			<div class="md-detailtitle">Key Words</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Words or phrases that summarize certain aspects of the data.</div>
+			<div   class="md-def">Words or phrases that summarize certain aspects of the data.</div>
 			<xsl:for-each select="theme[normalize-space(.) != '']">
 				<div class="md"><b>Theme:</b></div>
 				<div class="md-indent">
@@ -1977,7 +1956,7 @@ Revision History:
 			<div class="md-detailtitle">Spatial Domain</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">The geographic areal domain of the data that describes the western, eastern, northern, and southern geographic limits of data coverage.</div>
+			<div   class="md-def">The geographic areal domain of the data that describes the western, eastern, northern, and southern geographic limits of data coverage.</div>
 			<div class="md-itemlist">Bounding Coordinates</div>
 			<div class="md-itemshow">
 				<!-- Biological Data Profile and Shoreline Data element -->
@@ -2130,7 +2109,7 @@ Revision History:
 			<div class="md-detailtitle">Data Security Information</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Handling restrictions imposed on the data because of national security, privacy or other concerns.</div>
+			<div   class="md-def">Handling restrictions imposed on the data because of national security, privacy or other concerns.</div>
 			<xsl:for-each select="secsys[normalize-space(.) != '']">
 				<div class="md"><b>Security classifiction system: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
@@ -2151,7 +2130,7 @@ Revision History:
 			<div class="md-detailtitle">Cross Reference</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Information about other, related data sets that are likely to be of interest.</div>
+			<div   class="md-def">Information about other, related data sets that are likely to be of interest.</div>
 			<!-- ESRI Profile element -->
 			<xsl:for-each select="assndesc[normalize-space(.) != '']">
 				<div class="md"><b>Association description: </b><xsl:value-of select="."/></div>
@@ -2160,7 +2139,7 @@ Revision History:
 				<xsl:call-template name="citation_info"/>
 			</xsl:for-each>
 		</div>
-	</xsl:for-each>	
+	</xsl:for-each>
 </xsl:template>
 
 <!-- BROWSE GRAPHIC Metadata elements -->
@@ -2170,7 +2149,7 @@ Revision History:
 		<div class="md-detailtitle">Browse Graphic</div>
 	</div>
 	<div class="md-detailhide">
-		<div id="md-def" name="md-def" class="md-def">Graphic illustration of the data.</div>				
+		<div   class="md-def">Graphic illustration of the data.</div>				
 		<xsl:for-each select="/metadata/idinfo/browse[browsen[normalize-space(.) != ''] or browsed[normalize-space(.) != ''] or browset[normalize-space(.) != '']]">
 			<xsl:variable name="typeBG">			
 				<xsl:value-of select="translate(browset,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
@@ -2219,12 +2198,12 @@ Revision History:
 			<div class="md-detailtitle">General</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Information about the fidelity of relationships, data quality and accuracy tests, omissions, selection criteria, generalization, and definitions used to derive the data.</div>
+			<div   class="md-def">Information about the fidelity of relationships, data quality and accuracy tests, omissions, selection criteria, generalization, and definitions used to derive the data.</div>
 			<xsl:for-each select="logic[normalize-space(.) != '']">
-				<div class="md"><b>Logical consistency report: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Logical consistency report: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="complete[normalize-space(.) != '']">
-				<div class="md"><b>Completeness report: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Completeness report: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="cloud[normalize-space(.) != '']">
 				<div class="md"><b>Cloud cover: </b><xsl:value-of select="."/></div>
@@ -2240,9 +2219,9 @@ Revision History:
 			<div class="md-detailtitle">Attribute Accuracy</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Accuracy of the identification of data entities, features and assignment of attribute values.</div>
+			<div   class="md-def">Accuracy of the identification of data entities, features and assignment of attribute values.</div>
 			<xsl:for-each select="attraccr[normalize-space(.) != '']">
-				<div class="md"><b>Attribute accuracy report: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Attribute accuracy report: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:if test="qattracc[normalize-space(.) != '']">
 				<div class="md"><b>Attribute accuracy assessment:</b></div>
@@ -2259,7 +2238,7 @@ Revision History:
 						</xsl:choose>
 						<div class="md-itemhide">
 							<xsl:for-each select="attracce[normalize-space(.) != '']">
-								<div class="md-indent"><b>Explanation: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+								<div class="md-indent"><b>Explanation: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 							</xsl:for-each>
 						</div>
 					</xsl:for-each>
@@ -2276,10 +2255,10 @@ Revision History:
 			<div class="md-detailtitle">Positional Accuracy</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Accuracy of the positional aspects of the data.</div>
+			<div   class="md-def">Accuracy of the positional aspects of the data.</div>
 			<xsl:for-each select="horizpa[horizpar[normalize-space(.) != ''] or qhorizpa[horizpae[normalize-space(.) != '']]]">
 				<xsl:for-each select="horizpar[normalize-space(.) != '']">
-					<div class="md"><b>Horizontal accuracy report: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+					<div class="md"><b>Horizontal accuracy report: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 				</xsl:for-each>
 				<xsl:if test="qhorizpa[horizpae[normalize-space(.) != '']]">
 					<div class="md"><b>Horizontal positional accuracy assessment:</b></div>
@@ -2296,7 +2275,7 @@ Revision History:
 							</xsl:choose>
 							<div class="md-itemhide">
 								<xsl:for-each select="horizpae[normalize-space(.) != '']">
-									<div class="md-indent"><b>Explanation: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+									<div class="md-indent"><b>Explanation: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 								</xsl:for-each>
 							</div>
 						</xsl:for-each>
@@ -2305,7 +2284,7 @@ Revision History:
 			</xsl:for-each>
 			<xsl:for-each select="vertacc[vertaccr[normalize-space(.) != ''] or qvertpa[vertacce[normalize-space(.) != '']]]">
 				<xsl:for-each select="vertaccr[normalize-space(.) != '']">
-					<div class="md"><b>Vertical accuracy report: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+					<div class="md"><b>Vertical accuracy report: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 				</xsl:for-each>
 				<xsl:if test="qvertpa[vertacce[normalize-space(.) != '']]">
 					<div class="md"><b>Vertical positional accuracy assessment:</b></div>
@@ -2322,7 +2301,7 @@ Revision History:
 							</xsl:choose>
 							<div class="md-itemhide">
 								<xsl:for-each select="vertacce[normalize-space(.) != '']">
-									<div class="md-indent"><b>Explanation: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+									<div class="md-indent"><b>Explanation: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 								</xsl:for-each>
 							</div>
 						</xsl:for-each>
@@ -2340,7 +2319,7 @@ Revision History:
 			<div class="md-detailtitle">Data Sources</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Information about the source data used to construct or derive the data.</div>
+			<div   class="md-def">Information about the source data used to construct or derive the data.</div>
 			<div class="md-itemlist">Data source information</div>
 			<div class="md-itemshow">				
 				<xsl:for-each select="/metadata/dataqual/lineage/srcinfo[normalize-space(.) != '']">
@@ -2358,7 +2337,7 @@ Revision History:
 			<div class="md-detailtitle">Process Steps</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Information about events, parameters, tolerances and techniques applied to construct or derive the data.</div>
+			<div   class="md-def">Information about events, parameters, tolerances and techniques applied to construct or derive the data.</div>
 			<div class="md-itemlist">Process step information</div>
 			<div class="md-itemshow">				
 				<xsl:for-each select="/metadata/dataqual/lineage/procstep[normalize-space(.) != '']">
@@ -2368,7 +2347,7 @@ Revision History:
 						<xsl:call-template name="shoreline_procite"/>
 						<!-- End Biological Data Profile element -->
 						<xsl:for-each select="procdesc[normalize-space(.) != '']">
-							<div class="md"><b>Process description: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+							<div class="md"><b>Process description: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 						</xsl:for-each>
 						<xsl:for-each select="proccont/cntinfo[(cntperp/*[normalize-space(.) != '']) or (cntorgp/*[normalize-space(.) != '']) or (cntaddr/address[normalize-space(.) != '']) or (cntaddr/city[normalize-space(.) != '']) or (cntaddr/state[normalize-space(.) != '']) or (cntaddr/postal[normalize-space(.) != '']) or (cntaddr/country[normalize-space(.) != '']) or (cntvoice[normalize-space(.) != '']) or (cntfax[normalize-space(.) != '']) or (cntemail[normalize-space(.) != '']) or (hours[normalize-space(.) != '']) or (cntinst[normalize-space(.) != ''])]"> 		
 							<xsl:call-template name="contact_info"/>
@@ -2451,7 +2430,7 @@ Revision History:
 			<div class="md-detailtitle">ESRI geoprocessing history</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of ESRI geoprocessing commands, settings, and tolerances applied to the data.</div>
+			<div   class="md-def">Description of ESRI geoprocessing commands, settings, and tolerances applied to the data.</div>
 			<div class="md-itemlist">ESRI geoprocessing command information</div>
 			<div class="md-itemshow">
 				<!-- ESRI Profile element -->	
@@ -2490,7 +2469,7 @@ Revision History:
 			<div class="md-detailtitle">SDTS Feature Description</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of point and vector spatial objects in the data using the Spatial Data Transfer Standards (SDTS) terminology.</div>
+			<div   class="md-def">Description of point and vector spatial objects in the data using the Spatial Data Transfer Standards (SDTS) terminology.</div>
 			<div class="md-itemlist">Spatial data transfer standard (SDTS) terms</div>
 			<div class="md-itemshow">
 				<xsl:for-each select="/metadata/spdoinfo/ptvctinf/sdtsterm[sdtstype[normalize-space(.) != ''] or ptvctcnt[normalize-space(.) != '']]">
@@ -2524,7 +2503,7 @@ Revision History:
 			<div class="md-detailtitle">VPF Feature Description</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of point and vector spatial objects in the data using the Vector Product Format (VPF) terminology.</div>
+			<div   class="md-def">Description of point and vector spatial objects in the data using the Vector Product Format (VPF) terminology.</div>
 			<div class="md-itemlist">Vector Product Format (VPF) terms</div>
 			<div class="md-itemshow">
 				<xsl:for-each select="/metadata/spdoinfo/ptvctinf/vpfterm[vpflevel[normalize-space(.) != ''] or vpfinfo[vpftype[normalize-space(.) != ''] or ptvctcnt[normalize-space(.) != '']]]">
@@ -2566,7 +2545,7 @@ Revision History:
 			<div class="md-detailtitle">ESRI Feature Description</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of spatial objects in the data using the Environmental Systems Research Institute (ESRI) terminology.</div>
+			<div   class="md-def">Description of spatial objects in the data using the Environmental Systems Research Institute (ESRI) terminology.</div>
 			<div class="md-itemlist">Environmental Systems Research Institute (ESRI) terms</div>
 			<div class="md-itemshow">
 			<!-- ESRI Profile element -->
@@ -2683,7 +2662,7 @@ Revision History:
 			<div class="md-detailtitle">ESRI Geometric Network Information</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of ESRI geometric network, which maintains topological relationships between the
+			<div   class="md-def">Description of ESRI geometric network, which maintains topological relationships between the
 features in many feature classes in a geodatabase.</div>
 			<xsl:for-each select="nettype[normalize-space(.) != '']">
 				<div class="md"><b>Network type: </b><xsl:value-of select="."/></div>
@@ -2848,7 +2827,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">ESRI Feature Topology Description</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Name, Id, description, origin, and destination of ESRI feature topology rules.</div>
+			<div   class="md-def">Name, Id, description, origin, and destination of ESRI feature topology rules.</div>
 			<!-- ESRI Profile element -->
 			<xsl:for-each select="/metadata/Esri/DataProperties/topoinfo[normalize-space(.) != '']">
 				<xsl:for-each select="topoProps[normalize-space(.) != '']">
@@ -2888,7 +2867,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Raster Information</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Type and number of raster spatial objects in the data.</div>
+			<div   class="md-def">Type and number of raster spatial objects in the data.</div>
 			<xsl:for-each select="/metadata/spdoinfo/rastinfo[normalize-space(.) != '']">
 				<!-- ESRI Profile element -->
 				<xsl:for-each select="rastifor[normalize-space(.) != '']">
@@ -2985,7 +2964,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Terrain Information</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of ESRI terrain class.</div>
+			<div   class="md-def">Description of ESRI terrain class.</div>
 			<xsl:for-each select="/metadata/Esri/DataProperties/Terrain[normalize-space(.) != '']">
 				<!-- ESRI Profile element -->
 				<xsl:for-each select="totalPts[normalize-space(.) != '']">
@@ -3003,7 +2982,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Address Locator Information</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Geocoding information for ESRI address locators</div>
+			<div   class="md-def">Geocoding information for ESRI address locators</div>
 			<xsl:for-each select="/metadata/Esri/Locator[normalize-space(.) != '']">
 				<!-- ESRI Profile element -->
 				<xsl:for-each select="Style[normalize-space(.) != '']">
@@ -3057,17 +3036,17 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Overview</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Summary of the information content of the data, including other references to complete descriptions of entity types, attributes, and attribute values for the data.</div>
+			<div   class="md-def">Summary of the information content of the data, including other references to complete descriptions of entity types, attributes, and attribute values for the data.</div>
 			<xsl:for-each select="/metadata/eainfo/overview[dsoverv[normalize-space(.) != ''] or eaover[normalize-space(.) != ''] or eadetcit[normalize-space(.) != '']]">
 				<xsl:for-each select="dsoverv[normalize-space(.) != '']">
-					<div class="md"><b>Dataset overview: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+					<div class="md"><b>Dataset overview: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 				</xsl:for-each>
 				<xsl:for-each select="eaover[normalize-space(.) != '']">
-					<div class="md"><b>Entity and attribute overview: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+					<div class="md"><b>Entity and attribute overview: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 				</xsl:for-each>
 				<xsl:for-each select="eadetcit[normalize-space(.) != '']">
 					<div class="md-indent">
-						<div class="md"><b>Entity and attribute detailed citation: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+						<div class="md"><b>Entity and attribute detailed citation: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 					</div>
 				</xsl:for-each>
 			</xsl:for-each>
@@ -3098,7 +3077,7 @@ features in many feature classes in a geodatabase.</div>
 						</div>
 					</div>
 					<div class="md-detailhide">
-						<div id="md-def" name="md-def" class="md-def">Detailed descriptions of entity type, attributes, and attribute values for the data.</div>
+						<div   class="md-def">Detailed descriptions of entity type, attributes, and attribute values for the data.</div>
 						<xsl:call-template name="attributes_entity_defintion"/>
 					</div>
 				</xsl:if>
@@ -3112,7 +3091,7 @@ features in many feature classes in a geodatabase.</div>
 					</div>
 				</div>
 				<div class="md-detailhide">
-					<div id="md-def" name="md-def" class="md-def">Detailed descriptions of entity type, attributes, and attribute values for the data.</div>
+					<div   class="md-def">Detailed descriptions of entity type, attributes, and attribute values for the data.</div>
 					<xsl:call-template name="attributes_entity_defintion"/>
 				</div>		
 			</xsl:otherwise>
@@ -3151,10 +3130,10 @@ features in many feature classes in a geodatabase.</div>
 		<div class="md"><b>Number of records: </b><xsl:value-of select="."/></div>
 	</xsl:for-each>
 	<xsl:for-each select="enttyp/enttypd[normalize-space(.) != '']">
-		<div class="md"><b>Description: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+		<div class="md"><b>Description: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 	</xsl:for-each>
 	<xsl:for-each select="enttyp/enttypds[normalize-space(.) != '']">
-		<div class="md"><b>Source: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+		<div class="md"><b>Source: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 	</xsl:for-each>
 	<xsl:if test="attr//*">
 		<div class="md-itemlist">Attributes</div>
@@ -3166,7 +3145,7 @@ features in many feature classes in a geodatabase.</div>
 					</xsl:for-each>
 					<div class="md-itemhide">
 						<xsl:for-each select="attrdef[normalize-space(.) != '']">
-							<div class="md"><b>Definition: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+							<div class="md"><b>Definition: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 						</xsl:for-each>
 						<div class="md">
 							<!-- ESRI Profile element -->
@@ -3242,7 +3221,7 @@ features in many feature classes in a geodatabase.</div>
 													</xsl:choose>
 													<xsl:choose>
 														<xsl:when test="edomvd[normalize-space(.) != '']">
-															<td><pre id="fixvalue"><xsl:value-of select="edomvd"/></pre></td>
+															<td><pre class="fixvalue"><xsl:value-of select="edomvd"/></pre></td>
 														</xsl:when>
 														<xsl:otherwise>
 															<td>(definition not provided)</td>
@@ -3251,7 +3230,7 @@ features in many feature classes in a geodatabase.</div>
 												</tr><tr>
 													<xsl:choose>
 														<xsl:when test="edomvds[normalize-space(.) != '']">
-															<td class="md-italic"><xsl:text>Definition Source: </xsl:text><pre id="fixvalue"><xsl:value-of select="edomvds"/></pre></td>
+															<td class="md-italic"><xsl:text>Definition Source: </xsl:text><pre class="fixvalue"><xsl:value-of select="edomvds"/></pre></td>
 														</xsl:when>
 													</xsl:choose>
 												</tr>
@@ -3268,7 +3247,7 @@ features in many feature classes in a geodatabase.</div>
 													</xsl:choose>
 													<xsl:choose>
 														<xsl:when test="edomvd[normalize-space(.) != '']">
-															<td><pre id="fixvalue"><xsl:value-of select="edomvd"/></pre></td>
+															<td><pre class="fixvalue"><xsl:value-of select="edomvd"/></pre></td>
 														</xsl:when>
 														<xsl:otherwise>
 															<td>(definition not provided)</td>
@@ -3318,14 +3297,14 @@ features in many feature classes in a geodatabase.</div>
 											<tr><td>Name</td><td><xsl:value-of select="."/></td></tr>	
 										</xsl:for-each>
 										<xsl:for-each select="codesets[normalize-space(.) != '']">
-											<tr><td>Source</td><td><pre id="fixvalue"><xsl:value-of select="."/></pre></td></tr>	
+											<tr><td>Source</td><td><pre class="fixvalue"><xsl:value-of select="."/></pre></td></tr>	
 										</xsl:for-each>
 									</table>
 								</div>
 							</xsl:for-each>
 						</xsl:for-each>
 						<xsl:for-each select="attrdefs[normalize-space(.) != '']">
-							<div class="md"><b>Attribute definition source: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+							<div class="md"><b>Attribute definition source: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 						</xsl:for-each>
 					</div>
 				</xsl:if>		
@@ -3347,7 +3326,7 @@ features in many feature classes in a geodatabase.</div>
 				</div>
 			</div>
 			<div class="md-detailhide">
-				<div id="md-def" name="md-def" class="md-def">Describes the subtypes that have been defined for a feature class in a geodatabase</div>
+				<div   class="md-def">Describes the subtypes that have been defined for a feature class in a geodatabase</div>
 				<xsl:call-template name="attributes_esri_subtype_defintion"/>
 			</div>
 		</xsl:if>	
@@ -3454,7 +3433,7 @@ features in many feature classes in a geodatabase.</div>
 			</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Describes the relationships defined for feature classes and data tables in a geodatabase</div>
+			<div   class="md-def">Describes the relationships defined for feature classes and data tables in a geodatabase</div>
 			<xsl:call-template name="attributes_esri_relationship_definition"/>
 		</div>
 	</xsl:for-each>	
@@ -3525,15 +3504,15 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">General</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of the data known by the party from whom the data may be obtained, liability of party distributing data, and technical capabilities required to use the data. </div>
+			<div   class="md-def">Description of the data known by the party from whom the data may be obtained, liability of party distributing data, and technical capabilities required to use the data. </div>
 			<xsl:for-each select="resdesc[normalize-space(.) != '']">
-				<div class="md"><b>Resource description: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Resource description: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="distliab[normalize-space(.) != '']">
-				<div class="md"><b>Distribution liability: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Distribution liability: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="techpreq[normalize-space(.) != '']">
-				<div class="md"><b>Technical prerequisites: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Technical prerequisites: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 		</div>
 	</xsl:if>
@@ -3546,7 +3525,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Distribution Point of Contact</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Contact information for the individual or organization distributing the data.</div>
+			<div   class="md-def">Contact information for the individual or organization distributing the data.</div>
 			<xsl:call-template name="contact_info"/>
 		</div>
 	</xsl:for-each>
@@ -3559,9 +3538,9 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Standard Order Process</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Common ways in which data may be obtained.</div>
+			<div   class="md-def">Common ways in which data may be obtained.</div>
 			<xsl:for-each select="nondig[normalize-space(.) != '']">
-				<div class="md"><b>Non-digital form: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Non-digital form: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="digform[//*[normalize-space(.) != '']]">	
 				<div class="md"><b>Digital form:</b></div>
@@ -3577,13 +3556,13 @@ features in many feature classes in a geodatabase.</div>
 							<div class="md"><b>Format version date: </b><xsl:value-of select="."/></div>
 						</xsl:for-each>
 						<xsl:for-each select="formspec[normalize-space(.) != '']">
-							<div class="md"><b>Format specification: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+							<div class="md"><b>Format specification: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 						</xsl:for-each>
 						<!-- Start Biological Data Profile element -->
 						<xsl:call-template name="biological_asciistr"/>
 						<!-- End Biological Data Profile element -->	
 						<xsl:for-each select="formcont[normalize-space(.) != '']">
-							<div class="md"><b>Format information content: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+							<div class="md"><b>Format information content: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 						</xsl:for-each>
 						<!-- ESRI Profile element -->
 						<xsl:for-each select="dssize[normalize-space(.) != '']">
@@ -3706,7 +3685,7 @@ features in many feature classes in a geodatabase.</div>
 				<div class="md"><b>Fees: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
 			<xsl:for-each select="ordering[normalize-space(.) != '']">
-				<div class="md"><b>Ordering instructions: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Ordering instructions: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="turnarnd[normalize-space(.) != '']">
 				<div class="md"><b>Turnaround: </b><xsl:value-of select="."/></div>
@@ -3722,8 +3701,8 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Custom Order Process</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of custom distribution services available.</div>
-			<div class="md"><b>Custom order process: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+			<div   class="md-def">Description of custom distribution services available.</div>
+			<div class="md"><b>Custom order process: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 		</div>
 	</xsl:for-each>					
 </xsl:template>	
@@ -3735,7 +3714,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Available Time Period</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Time when data is available from the distributer.</div>
+			<div   class="md-def">Time when data is available from the distributer.</div>
 			<xsl:call-template name="time_info"/>
 		</div>
 	</xsl:for-each>
@@ -3750,7 +3729,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Metadata Point of Contact</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Contact information for the individual or organization responsible for the metadata information.</div>
+			<div   class="md-def">Contact information for the individual or organization responsible for the metadata information.</div>
 			<xsl:call-template name="contact_info"/>
 		</div>
 	</xsl:for-each>
@@ -3763,7 +3742,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Metadata Date</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Dates associated with creating, updating and reviewing the metadata.</div>
+			<div   class="md-def">Dates associated with creating, updating and reviewing the metadata.</div>
 			<xsl:for-each select="metd[normalize-space(.) != '']">
 				<div class="md"><b>Last updated: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
@@ -3788,12 +3767,12 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Metadata Access Constraints</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Restrictions and legal prerequisites for accessing or using the data after access is granted.</div>
+			<div   class="md-def">Restrictions and legal prerequisites for accessing or using the data after access is granted.</div>
 			<xsl:for-each select="metac[normalize-space(.) != '']">
-				<div class="md"><b>Access constraints: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Access constraints: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="metuc[normalize-space(.) != '']">
-				<div class="md"><b>Use constraints: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Use constraints: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 		</div>
 	</xsl:for-each>
@@ -3806,7 +3785,7 @@ features in many feature classes in a geodatabase.</div>
 			<div class="md-detailtitle">Metadata Security Information</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Handling restrictions imposed on the metadata because of national security, privacy or other concerns.</div>
+			<div   class="md-def">Handling restrictions imposed on the metadata because of national security, privacy or other concerns.</div>
 			<xsl:for-each select="metscs[normalize-space(.) != '']">
 				<div class="md"><b>Security classifiction system: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
@@ -3827,7 +3806,7 @@ features in many feature classes in a geodatabase.</div>
 				<div class="md-detailtitle">Metadata Standards</div>
 			</div>
 			<div class="md-detailhide">
-				<div id="md-def" name="md-def" class="md-def">Description of the metadata standard used to document the data and reference to any additional extended profiles to the standard used by the metadata producer.</div>
+				<div   class="md-def">Description of the metadata standard used to document the data and reference to any additional extended profiles to the standard used by the metadata producer.</div>
 				<xsl:for-each select="metstdn[normalize-space(.) != '']">
 					<div class="md"><b>Standard name: </b><xsl:value-of select="."/></div>
 				</xsl:for-each>
@@ -3884,7 +3863,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 				<div class="md-detailtitle">Horizontal Coordinate System</div>
 			</div>
 			<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Reference system from which linear or angular quantities are measured and assigned to the position that a point occupies.</div>
+			<div   class="md-def">Reference system from which linear or angular quantities are measured and assigned to the position that a point occupies.</div>
 				<!-- ESRI Profile element -->
 				<xsl:if test="cordsysn/projcsn[normalize-space(.) != '']">
 					<div class="md"><b>Projected coordinate system:</b></div>
@@ -4126,7 +4105,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			<div class="md-detailtitle">Vertical Coordinate System</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Reference system from which vertical distances (altitudes or depths) are measured.</div>
+			<div   class="md-def">Reference system from which vertical distances (altitudes or depths) are measured.</div>
 			<xsl:for-each select="altsys[normalize-space(.) != '']">
 				<div class="md"><b>Altitude system definition:</b></div>
 				<div class="md-indent">
@@ -4350,7 +4329,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			</xsl:for-each>
 		</xsl:for-each>
 		<xsl:for-each select="current[normalize-space(.) != '']">
-			<div class="md"><b>Currentness reference: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>		
+			<div class="md"><b>Currentness reference: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>		
 		</xsl:for-each>
 </xsl:template>
 
@@ -4416,7 +4395,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 		</xsl:for-each>
 	</div>
 	<xsl:for-each select="othercit[normalize-space(.) != '']">
-		<div class="md"><b>Other citation details: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+		<div class="md"><b>Other citation details: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 	</xsl:for-each>
 	<!-- Larger Work Citation -->
 	<xsl:for-each select="lworkcit/citeinfo[normalize-space(.) != '']">
@@ -4464,7 +4443,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 		<div class="md"><b>Hours of service: </b><xsl:value-of select="."/></div>
 	</xsl:for-each>
 	<xsl:for-each select="cntinst[normalize-space(.) != '']">
-		<div class="md"><b>Instructions: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+		<div class="md"><b>Instructions: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 	</xsl:for-each>
 	<xsl:for-each select="cntaddr">	
 		<xsl:for-each select="addrtype[normalize-space(.) != '']">
@@ -4473,7 +4452,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 		<xsl:if test="address[normalize-space(.) != ''] or city[normalize-space(.) != ''] or state[normalize-space(.) != ''] or postal[normalize-space(.) != ''] or country[normalize-space(.) != '']">
 			<div class="md-indent">
 				<xsl:for-each select="address[normalize-space(.) != '']">
-					<div class="md"><b>Address: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+					<div class="md"><b>Address: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 				</xsl:for-each>
 				<xsl:for-each select="city[normalize-space(.) != '']">
 					<div class="md"><b>City: </b><xsl:value-of select="."/></div>
@@ -4545,12 +4524,12 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			<div class="md"><b>Media: </b><xsl:value-of select="."/></div>
 		</xsl:for-each>
 		<xsl:for-each select="srccontr[normalize-space(.) != '']">
-			<div class="md"><b>Source contribution: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+			<div class="md"><b>Source contribution: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 		</xsl:for-each>
 		<xsl:for-each select="srctime[normalize-space(.) != '']">
 			<xsl:call-template name="time_info"/>
 			<xsl:for-each select="srccurr[normalize-space(.) != '']">
-				<div class="md"><b>Currentness reference: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>		
+				<div class="md"><b>Currentness reference: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>		
 			</xsl:for-each>
 		</xsl:for-each>
 	</div>
@@ -4702,7 +4681,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 <!-- Biological Data Profile and Shoreline Data Profile element - Geographic Extent -->
 <xsl:template name="descgeog">
 	<xsl:for-each select="descgeog[normalize-space(.) != '']">
-		<div class="md"><b>Description of geographic extent: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+		<div class="md"><b>Description of geographic extent: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 	</xsl:for-each>
 </xsl:template>
 
@@ -4733,7 +4712,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 				<div class="md"><b>Number header lines: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
 			<xsl:for-each select="deschead[normalize-space(.) != '']">
-				<div class="md"><b>Description of header content: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Description of header content: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 			<xsl:for-each select="orienta[normalize-space(.) != '']">
 				<div class="md"><b>Orientation: </b><xsl:value-of select="."/></div>
@@ -4781,7 +4760,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			<div class="md-detailtitle">Taxonomy</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Information on the one or more taxa included in the data set, including keywords, taxonomic system and coverage information, and taxonomic classification system.</div>
+			<div   class="md-def">Information on the one or more taxa included in the data set, including keywords, taxonomic system and coverage information, and taxonomic classification system.</div>
 			<xsl:if test="keywtax[normalize-space(.) != '']">
 				<div class="md"><b>Key Words:</b></div>
 				<div class="md-indent">
@@ -4916,7 +4895,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			<div class="md-detailtitle">Analytical Tools</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Tools, models or statistical procedures that the data set is intrinsically bound to and are available for use in analyzing the data set.</div>
+			<div   class="md-def">Tools, models or statistical procedures that the data set is intrinsically bound to and are available for use in analyzing the data set.</div>
 			<xsl:for-each select="tooldesc[normalize-space(.) != '']">
 				<div class="md"><b>Tool Description: </b><xsl:value-of select="."/></div>
 			</xsl:for-each>
@@ -4965,7 +4944,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			<div class="md-detailtitle">Methodology</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Information about individual steps of field and/or biological laboratory work.</div>				
+			<div   class="md-def">Information about individual steps of field and/or biological laboratory work.</div>				
 			<div class="md-itemlist">Methodology information</div>
 			<div class="md-itemshow">
 				<xsl:for-each select="/metadata/dataqual/lineage/method[normalize-space(.) != '']">
@@ -5000,7 +4979,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			</div>			
 		</xsl:for-each>
 		<xsl:for-each select="methdesc[normalize-space(.) != '']">
-			<div class="md"><b>Methodology Description: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+			<div class="md"><b>Methodology Description: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 		</xsl:for-each>
 		<xsl:for-each select="methcite/citeinfo[normalize-space(.) != '']">
 			<div class="md"><b>Citation:</b></div>
@@ -5009,12 +4988,12 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			</div>
 		</xsl:for-each>
 		<xsl:for-each select="srccontr[normalize-space(.) != '']">
-			<div class="md"><b>Source contribution: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+			<div class="md"><b>Source contribution: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 		</xsl:for-each>
 		<xsl:for-each select="srctime[normalize-space(.) != '']">
 			<xsl:call-template name="time_info"/>
 			<xsl:for-each select="srccurr[normalize-space(.) != '']">
-				<div class="md"><b>Currentness reference: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>		
+				<div class="md"><b>Currentness reference: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>		
 			</xsl:for-each>
 		</xsl:for-each>
 	</div>
@@ -5089,7 +5068,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 <!-- Shoreline Data Profile element - Process Step Citiation -->
 <xsl:template name="shoreline_procite">
 	<xsl:for-each select="procite[normalize-space(.) != '']">
-		<div class="md"><b>Process step citation: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+		<div class="md"><b>Process step citation: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 	</xsl:for-each>
 </xsl:template>
 
@@ -5100,7 +5079,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 			<div class="md-detailtitle">Shoreline Data</div>
 		</div>
 		<div class="md-detailhide">
-			<div id="md-def" name="md-def" class="md-def">Description of critical processes and conditions that revolve around creating and collecting shoreline data and data that intersects shoreline data.</div>
+			<div   class="md-def">Description of critical processes and conditions that revolve around creating and collecting shoreline data and data that intersects shoreline data.</div>
 			<xsl:for-each select="tidinfo[normalize-space(.) != '']">
 			<div class="md"><b>Tidal information:</b></div>
 				<div class="md-indent">
@@ -5114,7 +5093,7 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 						<div class="md"><b>Tide table reference: </b><xsl:value-of select="."/></div>
 					</xsl:for-each>
 					<xsl:for-each select="tidsup[normalize-space(.) != '']">
-						<div class="md"><b>Supplemental tidal information: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+						<div class="md"><b>Supplemental tidal information: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 					</xsl:for-each>
 				</div>
 			</xsl:for-each>
@@ -5131,12 +5110,12 @@ The Biological Data Profile broadens the application of the CSDGM so that it is 
 						<div class="md"><b>Wave height: </b><xsl:value-of select="."/></div>
 					</xsl:for-each>
 					<xsl:for-each select="barpres[normalize-space(.) != '']">
-						<div class="md"><b>Barometric pressure: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+						<div class="md"><b>Barometric pressure: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 					</xsl:for-each>
 				</div>
 			</xsl:for-each>	
 			<xsl:for-each select="event[normalize-space(.) != '']">
-				<div class="md"><b>Environmental event: </b><pre id="fixvalue"><xsl:value-of select="."/></pre></div>
+				<div class="md"><b>Environmental event: </b><pre class="fixvalue"><xsl:value-of select="."/></pre></div>
 			</xsl:for-each>
 		</div>
 	</xsl:for-each>

@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function ($) {
     "use strict";
 
     /* "md-title" onclick function. Always opens md-detailshow and either opens or closes md-detailhide,
@@ -197,11 +197,8 @@
                     styleDisplay = "block";
                 }
                 // hide or show metadata definition elements
-                aElem = document.getElementsByName("md-def");
-                for (i = 0; i < aElem.length; i += 1) {
-                    e = aElem[i];
-                    e.style.display = styleDisplay;
-                }
+                aElem = $(".md-def");
+                aElem.each(function (i, e) { e.style.display = styleDisplay; });
                 elem.innerHTML = text;
             }
         }
@@ -1059,15 +1056,13 @@
         call fixvalue() function to parse text to respect line breaks,
         replace <pre> element with <div> elememt, and convert URL address
         strings in text to <a href> element. */
-        elem = document.getElementById("fixvalue");
-        while (Boolean(elem != null)) {
+        $(".fixvalue").each(function (index, elem) {
             fixvalue(elem);
-            elem = document.getElementById("fixvalue");
-        }
+        });
         window.focus();
     }
 
     window.onload = onLoadHandler;
 
 
-} ());
+} (jQuery));
