@@ -172,7 +172,7 @@ Prerequisites:
 
             function createControlsForLayer(layer, elementToAppendTo) {
                 /// <summary>Creates the HTML controls associated with a layer</summary>
-                var checkboxId, sliderId, opacitySlider, layerDiv, layerTable, layerRow, layerCell, metadataList, sublayerList, controlsToolbar, label,
+                var checkboxId, sliderId, opacitySlider, layerDiv, layerTable, layerRow, layerCell, sublayerList, controlsToolbar, label,
                     parentLayers, sublayerListItems, checkbox;
 
                 function createSublayerControls(layerInfo) {
@@ -302,24 +302,13 @@ Prerequisites:
 
                 // Add metadata information if available
                 if (layer.metadataUrls && layer.metadataUrls.length > 0) {
-                    $("<button>").attr("title", "Toggle metadata links").text("metadata").appendTo(controlsToolbar).click(function () { metadataList.toggle(); });
-                    if (dojo.isIE && dojo.isIE < 9) {
-                        // older versions of IE don't support CSS :before and :after, limiting how we can format a list.  So in IE we won't actually use an UL.
-                        metadataList = $("<div>").text("Metadata: ").appendTo(layerDiv);
-                        $.each(layer.metadataUrls, function (index, metadataUrl) {
-                            if (index > 0) {
-                                $("<span>").text(",").appendTo(metadataList);
-                            }
-                            $("<a>").attr("href", "#").text(index + 1).appendTo(metadataList).click(function () { window.open(metadataUrl); });
+                    $("<button>").attr("title", "Open metadata documents").text("metadata").appendTo(controlsToolbar).click({
+                        "metadataUrls": layer.metadataUrls
+                    }, function (e) {
+                        $.each(e.data.metadataUrls, function (index, url) {
+                            window.open(url);
                         });
-                    } else {
-                        // Create an unordered list, which will be styled via CSS.
-                        metadataList = $("<ul>").addClass("metadata-list").appendTo(layerDiv);
-                        $.each(layer.metadataUrls, function (index, metadataUrl) {
-                            $("<li>").append($("<a>").attr("href", "#").text(index + 1)).appendTo(metadataList).click(function () { window.open(metadataUrl); });
-                        });
-                    }
-                    metadataList.hide();
+                    });
                 }
 
 
