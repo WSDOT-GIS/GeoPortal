@@ -16,7 +16,47 @@ using Wsdot.Grdo.Web.Mapping.Properties;
 namespace Wsdot.Grdo.Web.Mapping
 {
 	/// <summary>
-	/// Summary description for Metadata
+	/// Retrieves metadata from an ArcGIS map service.
+	/// <para>The query string parameters for this handler are described below.</para>
+	/// <list type="bullet">
+	///		<listheader>
+	///			<term>Parameter</term>
+	///			<description>Value</description>
+	///		</listheader>
+	///		<item>
+	///			<term>id</term>
+	///			<description>Required.  Set this value to the ID corresponding to the metadata document you want to retrieve.  See the map services REST endpoint page for a list of documents.</description>
+	///		</item>
+	///		<item>
+	///			<term>f</term>
+	///			<description>The output format.  Set to "xml" to output unconverted metadata XML.  Otherwise the output will be HTML.</description>
+	///		</item>
+	///		<item>
+	///			<term>dc</term>
+	///			<description>
+	///			Set to true to include the <see href="http://dublincore.org/">Dublin Core</see> meta tags in the output HTML's header.  Defaults to false.
+	///			</description>
+	///		</item>
+	///		<item>
+	///			<term>jsurl</term>
+	///			<description>
+	///			Use this parameter to specify an external JavaScript URL to be used by the output HTML 
+	///			(instead of using inline JavaScript, which is the default behavior).
+	///			</description>
+	///		</item>
+	///		<item>
+	///			<term>cssurl</term>
+	///			<description>Use this parameter to specify an external CSS file for the output HTML.</description>
+	///		</item>
+	///		<item>
+	///			<term>js</term>
+	///			<description>Set to true to include inline JavaScript, false to omit it.  Defaults to false.  Ignored if jsurl is specified.</description>
+	///		</item>
+	///		<item>
+	///			<term>css</term>
+	///			<description>Set to true to include inline CSS, false to omit it.  Defaults to false.  Ignored if cssurl is specified.</description>
+	///		</item>
+	/// </list>
 	/// </summary>
 	public class Metadata : IHttpHandler
 	{
@@ -25,7 +65,7 @@ namespace Wsdot.Grdo.Web.Mapping
 			_outputFormatRegex = new Regex("(?in)^(output)?f(ormat)?$"),
 			_oidRegex = new Regex("(?in)^(o(bject)?)?id$"),
 			_nameRegex = new Regex("^(?in)name$"),
-			// Regexes for XSLT parameters passed via query string (or POST).
+			// Regexes for XSLT parameters passed via query string (or POST).  See FGDC Plus HTML5.xsl for the details of these parameters.
 			_dublinCoreRegex = new Regex("(?in)^d(ublin)?c(ore)?$"),
 
 			_jsUrlRegex = new Regex("(?in)^j(ava)?s(cript)?url$"),

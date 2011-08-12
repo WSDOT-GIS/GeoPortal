@@ -21,7 +21,7 @@
             if (elem) {
                 // Work with element.
                 p = elem.parentNode; // parent
-                ////var c	    // parent's child
+                ////var c       // parent's child
                 ////var gc      // parent's grandchild
                 ////var ggc     // parent's great grandchild
                 ////var gggc    // parent's great great grandchild
