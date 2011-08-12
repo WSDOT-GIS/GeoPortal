@@ -25,7 +25,11 @@ namespace Wsdot.Grdo.Web.Mapping
 	///		</listheader>
 	///		<item>
 	///			<term>id</term>
-	///			<description>Required.  Set this value to the ID corresponding to the metadata document you want to retrieve.  See the map services REST endpoint page for a list of documents.</description>
+	///			<description>
+	///			Required.
+	///			Set this value to the ID corresponding to the metadata document you want to retrieve.  
+	///			See the map services REST endpoint page for a list of documents.
+	///			</description>
 	///		</item>
 	///		<item>
 	///			<term>f</term>
