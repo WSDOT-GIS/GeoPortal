@@ -53,7 +53,7 @@
             case "esri.layers.FeatureLayer":
                 constructor = esri.layers.FeatureLayer;
                 // If a mode has been specified by name, convert to the numeric value the constructor is expecting.
-                if (layerInfo.options.mode && typeof(layerInfo.options.mode) !== "number") {
+                if (layerInfo.options.mode && typeof (layerInfo.options.mode) !== "number") {
                     layerInfo.options.mode = esri.layers.FeatureLayer[layerInfo.options.mode];
                 }
                 break;
@@ -517,14 +517,31 @@
             tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: function () {
-                ////                // Create layer infos.
-                ////                var layers = wsdot.config.layers, layerInfos = [];
-                ////                
-                ////                // layers { tabs { group [ layers ] } }
+                var layerIds, layerInfos;
+
+                function isBasemap(layerId) {
+                    /// <summary>Examines a layer ID and determines if it is a basemap.</summary>
+                    var basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm))/i;
+                    if (layerId.match(basemapLayerIdRe)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                // Filter out basemap layers
+                layerIds = $.grep(map.layerIds, isBasemap, true);
+
+                $.merge(layerIds, map.graphicsLayerIds);
+
+                layerInfos = $.map(layerIds, function (layerId) {
+                    var layer = map.getLayer(layerId);
+                    return { layer: layer, title: layerId };
+                });
 
                 // Create the legend dijit if it does not already exist.
                 if (!dijit.byId("legend")) {
-                    new esri.dijit.Legend({ map: map }, "legend").startup();
+                    new esri.dijit.Legend({ map: map, layerInfos: layerInfos }, "legend").startup();
                 }
             }
             }, "legendTab"));
