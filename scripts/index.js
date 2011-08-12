@@ -517,6 +517,7 @@
             tabs = new dijit.layout.TabContainer(null, "tabs");
             tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
             tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: function () {
+                /// <summary>Creates the legend control</summary>
                 var layerIds, layerInfos;
 
                 function isBasemap(layerId) {
@@ -532,8 +533,10 @@
                 // Filter out basemap layers
                 layerIds = $.grep(map.layerIds, isBasemap, true);
 
+                // Add the graphics layers to the array of layer IDs.
                 $.merge(layerIds, map.graphicsLayerIds);
 
+                // Create layer info objects from the layer IDs, to be used with the Legend constructor.
                 layerInfos = $.map(layerIds, function (layerId) {
                     var layer = map.getLayer(layerId);
                     return { layer: layer, title: layerId };
