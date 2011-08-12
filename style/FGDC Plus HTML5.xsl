@@ -198,7 +198,7 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
@@ -227,57 +227,57 @@ Revision History:
                         gc = c.childNodes[j];
                         for (k = 0; k < gc.childNodes.length; k += 1) {
                             ggc = gc.childNodes[k];
-                            if (ggc.className == "md-mastertitle") {
+                            if (ggc.className === "md-mastertitle") {
                                 // add + or - to master title text
-                                if (elem.getAttributeNode("toggledisplay").value == "block") {
+                                if (elem.getAttributeNode("toggledisplay").value === "block") {
                                     ggc.innerHTML = "-" + ggc.innerHTML.substring(1, ggc.innerHTML.length);
                                 } else {
                                     ggc.innerHTML = "+" + ggc.innerHTML.substring(1, ggc.innerHTML.length);
                                 }
                             }
-                            if (ggc.className == "md-detailhide") {
+                            if (ggc.className === "md-detailhide") {
                                 // hide or show md-detailhide element
                                 ggc.style.display = elem.getAttributeNode("toggledisplay").value;
-                            } else if (ggc.className == "md-detailshow") {
+                            } else if (ggc.className === "md-detailshow") {
                                 // make sure md-detailshow is always shown because user could have previously closed it
                                 ggc.style.display = "block";
-                            } else if (ggc.className == "md-detailhelp") {
+                            } else if (ggc.className === "md-detailhelp") {
                                 // make sure md-detailhelp is always not shown
                                 ggc.style.display = "none";
                             }
                             for (l = 0; l < ggc.childNodes.length; l += 1) {
                                 gggc = ggc.childNodes[l];
-                                if (gggc.className == "md-itemhide") {
+                                if (gggc.className === "md-itemhide") {
                                     // hide or show md-itemhide element
                                     gggc.style.display = elem.getAttributeNode("toggledisplay").value;
-                                } else if (gggc.className == "md-itemshow") {
+                                } else if (gggc.className === "md-itemshow") {
                                     // show md-itemshow element
                                     gggc.style.display = "block";
                                 }
                                 for (m = 0; m < gggc.childNodes.length; m += 1) {
                                     ggggc = gggc.childNodes[m];
-                                    if (ggggc.className == "md-itemhide") {
+                                    if (ggggc.className === "md-itemhide") {
                                         // hide or show md-itemhide element
                                         ggggc.style.display = elem.getAttributeNode("toggledisplay").value;
-                                    } else if (ggggc.className == "md-itemshow") {
+                                    } else if (ggggc.className === "md-itemshow") {
                                         // show md-itemshow element
                                         ggggc.style.display = "block";
                                     }
                                     for (n = 0; n < ggggc.childNodes.length; n += 1) {
                                         gggggc = ggggc.childNodes[n];
-                                        if (gggggc.className == "md-itemhide") {
+                                        if (gggggc.className === "md-itemhide") {
                                             // hide or show md-itemhide element
                                             gggggc.style.display = elem.getAttributeNode("toggledisplay").value;
-                                        } else if (gggggc.className == "md-itemshow") {
+                                        } else if (gggggc.className === "md-itemshow") {
                                             // show md-itemshow element
                                             gggggc.style.display = "block";
                                         }
                                         for (o = 0; o < gggggc.childNodes.length; o += 1) {
                                             ggggggc = gggggc.childNodes[o];
-                                            if (ggggggc.className == "md-itemhide") {
+                                            if (ggggggc.className === "md-itemhide") {
                                                 // hide or show md-itemhide element
                                                 ggggggc.style.display = elem.getAttributeNode("toggledisplay").value;
-                                            } else if (ggggggc.className == "md-itemshow") {
+                                            } else if (ggggggc.className === "md-itemshow") {
                                                 // show md-itemshow element
                                                 ggggggc.style.display = "block";
                                             }
@@ -288,7 +288,7 @@ Revision History:
                         }
                     }
                 }
-                if (elem.getAttributeNode("toggledisplay").value == "block") {
+                if (elem.getAttributeNode("toggledisplay").value === "block") {
                     elem.setAttribute("toggledisplay", "none");
                 } else {
                     elem.setAttribute("toggledisplay", "block");
@@ -298,10 +298,10 @@ Revision History:
             evt.cancelBubble = true;
             // Show all menus tabs active, indicating to user that all metadata sections are open.		
             elemMenu = document.getElementById("md-menu");
-            if (Boolean(elemMenu != null)) {
+            if (Boolean(elemMenu !== null)) {
                 for (i = 0; i < elemMenu.childNodes.length; i += 1) {
                     elemMenuItem = elemMenu.childNodes[i];
-                    if (elemMenuItem.className == "md-menuitem") {
+                    if (elemMenuItem.className === "md-menuitem") {
                         elemMenuItem.className = "md-menuitemactive";
                     }
                 }
@@ -316,15 +316,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-title") {
+                if (elem.className === "md-title") {
                     elem.className = "md-titleover";
-                } else if (elem.className == "md-titleover") {
+                } else if (elem.className === "md-titleover") {
                     elem.className = "md-title";
                 }
             }
@@ -337,14 +337,14 @@ Revision History:
     // use same set of javascript functions that work in IE to navigate through HTML. 
     // Although not necessary, this function is called by onload function even for IE.
     function removewhitespace(elem) {
-        var i;
+        var i, c;
         for (i = 0; i < elem.childNodes.length; i += 1) {
-            var c = elem.childNodes[i];
-            if (c.nodeType == 1) {
+            c = elem.childNodes[i];
+            if (c.nodeType === 1) {
                 removewhitespace(c);
             }
             // Use regular expression to test for white space text nodes and remove
-            if (((/^\s+$/.test(c.nodeValue))) && (c.nodeType == 3)) {
+            if (((/^\s+$/.test(c.nodeValue))) && (c.nodeType === 3)) {
                 elem.removeChild(elem.childNodes[i]);
                 i -= 1;
             }
@@ -353,8 +353,8 @@ Revision History:
 
     // Assign event handler functions to md-title element
     function setuptitle(elem) {
-        if (Boolean(elem != null)) {
-            if (elem.className == "md-title") {
+        if (elem) {
+            if (elem.className === "md-title") {
                 elem.onclick = clicktitle;
                 elem.onmouseover = overtitle;
                 elem.onmouseout = overtitle;
@@ -364,12 +364,12 @@ Revision History:
 
     // "md-clickdef" onclick function. Opens and closes metadata definitions, which "md-def" class div elements
     function clickdef(evt) {
-        var e, aElem, text, elemDefinition, styleDisplay, i;
+        var aElem, text, elemDefinition, styleDisplay, elem;
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
-            var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            elem = evt.target || evt.srcElement;
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
@@ -378,12 +378,12 @@ Revision History:
                 elemDefinition = document.getElementById("md-clickdef");
                 text = "Show Definitions";
                 styleDisplay = "none";
-                if (elemDefinition.innerHTML == "Show Definitions") {
+                if (elemDefinition.innerHTML === "Show Definitions") {
                     text = "Hide Definitions";
                     styleDisplay = "block";
                 }
                 // hide or show metadata definition elements
-                aElem = $(".md-def"); //document.getElementsByName("md-def");
+                aElem = $(".md-def");
                 aElem.each(function (i, e) { e.style.display = styleDisplay; });
                 elem.innerHTML = text;
             }
@@ -397,15 +397,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-link") {
+                if (elem.className === "md-link") {
                     elem.className = "md-over";
-                } else if (elem.className == "md-over") {
+                } else if (elem.className === "md-over") {
                     elem.className = "md-link";
                 }
             }
@@ -417,8 +417,8 @@ Revision History:
 
     // Assign event handler functions to md-clickdef element
     function setupclickdef(elem) {
-        if (Boolean(elem != null)) {
-            if (elem.className == "md-link") {
+        if (elem) {
+            if (elem.className === "md-link") {
                 elem.onclick = clickdef;
                 elem.onmouseover = overlink;
                 elem.onmouseout = overlink;
@@ -428,13 +428,13 @@ Revision History:
 
     // "md-menuitem" onclick function. Tabs to different metadata sections.
     function clickmenuitem(evt) {
-        var otherNode, elem, elemMaster, i, siblingNodes;
+        var otherNode, elem, elemMaster, i, siblingNodes, listMasterNodeIds;
         // Get reference to W3C or IE event object
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
@@ -443,7 +443,7 @@ Revision History:
                 // Show other menu tabs
                 siblingNodes = elem.parentNode.childNodes;
                 for (i = 0; i < siblingNodes.length; i += 1) {
-                    if (siblingNodes[i] != elem) {
+                    if (siblingNodes[i] !== elem) {
                         siblingNodes[i].className = "md-menuitem";
                     }
                 }
@@ -453,11 +453,11 @@ Revision History:
                 elemMaster = document.getElementById("md-" + elem.id);
                 elemMaster.style.display = "block";
                 // Hide all other metadata sections
-                var listMasterNodeIds = ["md-description", "md-graphic", "md-spatial", "md-structure", "md-quality", "md-source", "md-distribution", "md-metadata"];
+                listMasterNodeIds = ["md-description", "md-graphic", "md-spatial", "md-structure", "md-quality", "md-source", "md-distribution", "md-metadata"];
                 for (i = 0; i < listMasterNodeIds.length; i += 1) {
-                    if (listMasterNodeIds[i] != elemMaster.id) {
+                    if (listMasterNodeIds[i] !== elemMaster.id) {
                         otherNode = document.getElementById(listMasterNodeIds[i]);
-                        if (Boolean(otherNode != null)) {
+                        if (Boolean(otherNode !== null)) {
                             otherNode.style.display = "none";
                         }
                     }
@@ -475,15 +475,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-menuitem") {
+                if (elem.className === "md-menuitem") {
                     elem.className = "md-menuitemover";
-                } else if (elem.className == "md-menuitemover") {
+                } else if (elem.className === "md-menuitemover") {
                     elem.className = "md-menuitem";
                 }
             }
@@ -496,15 +496,15 @@ Revision History:
     // Assign event handler functions to md-menuitem elements
     function setupmenu(elem) {
         var i, c;
-        if (Boolean(elem != null)) {
+        if (elem) {
             for (i = 0; i < elem.childNodes.length; i += 1) {
                 c = elem.childNodes[i];
-                if (c.className == "md-menuitem") {
+                if (c.className === "md-menuitem") {
                     c.onclick = clickmenuitem;
                     c.onmouseover = overmenuitem;
                     c.onmouseout = overmenuitem;
                 }
-                if (c.className == "md-menuitemactive") {
+                if (c.className === "md-menuitemactive") {
                     c.onclick = clickmenuitem;
                     c.onmouseover = overmenuitem;
                     c.onmouseout = overmenuitem;
@@ -531,8 +531,8 @@ Revision History:
         var c, i, opened = true;
         for (i = 0; i < elem.childNodes.length; i += 1) {
             c = elem.childNodes[i];
-            if (c.className != cname) {
-                if (getcomputeddisplay(c) == "none") {
+            if (c.className !== cname) {
+                if (getcomputeddisplay(c) === "none") {
                     opened = false;
                     break;
                 }
@@ -546,8 +546,8 @@ Revision History:
         var c, i, closed = true;
         for (i = 0; i < elem.childNodes.length; i += 1) {
             c = elem.childNodes[i];
-            if (c.className != cname) {
-                if (getcomputeddisplay(c) == "block") {
+            if (c.className !== cname) {
+                if (getcomputeddisplay(c) === "block") {
                     closed = false;
                     break;
                 }
@@ -564,17 +564,17 @@ Revision History:
             c = elem.childNodes[i];
             for (j = 0; j < c.childNodes.length; j += 1) {
                 gc = c.childNodes[j];
-                if (gc.className == "md-itemhide") {
-                    if (getcomputeddisplay(gc) == "none") {
+                if (gc.className === "md-itemhide") {
+                    if (getcomputeddisplay(gc) === "none") {
                         opened = false;
                         break;
                     }
-                } else if (gc.className == "md-itemlist") {
+                } else if (gc.className === "md-itemlist") {
                     gcns = gc.nextSibling;
                     for (k = 0; k < gcns.childNodes.length; k += 1) {
                         gcnsc = gcns.childNodes[k];
-                        if (gcnsc.className == "md-itemhide") {
-                            if (getcomputeddisplay(gcnsc) == "none") {
+                        if (gcnsc.className === "md-itemhide") {
+                            if (getcomputeddisplay(gcnsc) === "none") {
                                 opened = false;
                                 break;
                             }
@@ -592,13 +592,13 @@ Revision History:
     /* "md-mastertitle" onclick function. Always opens md-detailshow and either opens or closes md-detailhide,
     and md-itemhide elements, depending on whether they are currently all opened or closed. */
     function clickmaster(evt) {
-        var p, c, gc, ggc, gggc, ggggc, allClosed, allOpened, i, j, k, l, m;
+        var p, c, gc, ggc, gggc, ggggc, allClosed, allOpened, i, j, k, l, m, elem, newdisplay;
         // Get reference to W3C or IE event object
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
-            var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            elem = evt.target || evt.srcElement;
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
@@ -622,8 +622,8 @@ Revision History:
                 // not all are open, open all elements. Otherwise, close
                 // all elements if all of them are open. Also add + or -
                 // to master title text.
-                var newdisplay = "block";
-                if ((allOpened) & (!allClosed)) {
+                newdisplay = "block";
+                if ((allOpened) && (!allClosed)) {
                     newdisplay = "none";
                     elem.innerHTML = "+" + elem.innerHTML.substring(1, elem.innerHTML.length);
                 } else {
@@ -640,49 +640,49 @@ Revision History:
                 // close them, they will close when the user natually clicks element again.			
                 for (i = 0; i < p.childNodes.length; i += 1) {
                     c = p.childNodes[i];
-                    if (c.className == "md-detailhide") {
+                    if (c.className === "md-detailhide") {
                         // hide or show md-detailhide element
                         c.style.display = newdisplay;
-                    } else if (c.className == "md-detailshow") {
+                    } else if (c.className === "md-detailshow") {
                         // make sure md-detailshow is always shown because user could have previously closed it
                         c.style.display = "block";
-                    } else if (c.className == "md-detailhelp") {
+                    } else if (c.className === "md-detailhelp") {
                         // make sure md-detailhelp is always not shown
                         c.style.display = "none";
                     }
                     for (j = 0; j < c.childNodes.length; j += 1) {
                         gc = c.childNodes[j];
-                        if (gc.className == "md-itemhide") {
+                        if (gc.className === "md-itemhide") {
                             // hide or show md-itemhide element
                             gc.style.display = newdisplay;
-                        } else if (gc.className == "md-itemshow") {
+                        } else if (gc.className === "md-itemshow") {
                             // show md-itemshow element
                             gc.style.display = "block";
                         }
                         for (k = 0; k < gc.childNodes.length; k += 1) {
                             ggc = gc.childNodes[k];
-                            if (ggc.className == "md-itemhide") {
+                            if (ggc.className === "md-itemhide") {
                                 // hide or show md-itemhide element
                                 ggc.style.display = newdisplay;
-                            } else if (ggc.className == "md-itemshow") {
+                            } else if (ggc.className === "md-itemshow") {
                                 // show md-itemshow element
                                 ggc.style.display = "block";
                             }
                             for (l = 0; l < ggc.childNodes.length; l += 1) {
                                 gggc = ggc.childNodes[l];
-                                if (gggc.className == "md-itemhide") {
+                                if (gggc.className === "md-itemhide") {
                                     // hide or show md-itemhide element
                                     gggc.style.display = newdisplay;
-                                } else if (gggc.className == "md-itemshow") {
+                                } else if (gggc.className === "md-itemshow") {
                                     // show md-itemshow element
                                     gggc.style.display = "block";
                                 }
                                 for (m = 0; m < gggc.childNodes.length; m += 1) {
                                     ggggc = gggc.childNodes[m];
-                                    if (ggggc.className == "md-itemhide") {
+                                    if (ggggc.className === "md-itemhide") {
                                         // hide or show md-itemhide element
                                         ggggc.style.display = newdisplay;
-                                    } else if (ggggc.className == "md-itemshow") {
+                                    } else if (ggggc.className === "md-itemshow") {
                                         // show md-itemshow element
                                         ggggc.style.display = "block";
                                     }
@@ -704,15 +704,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-mastertitle") {
+                if (elem.className === "md-mastertitle") {
                     elem.className = "md-mastertitleover";
-                } else if (elem.className == "md-mastertitleover") {
+                } else if (elem.className === "md-mastertitleover") {
                     elem.className = "md-mastertitle";
                 }
             }
@@ -723,19 +723,20 @@ Revision History:
 
     // "md-detailtitle" onclick function. Opens and closes md-detailhide and md-detailshow elements.
     function clickdetail(evt) {
+        var elem, p;
         // Get reference to W3C or IE event object
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
-            var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            elem = evt.target || evt.srcElement;
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                var p = elem.parentNode.nextSibling; // parent's next sibling element
-                if (getcomputeddisplay(p) == "none") {
+                p = elem.parentNode.nextSibling; // parent's next sibling element
+                if (getcomputeddisplay(p) === "none") {
                     p.style.display = "block";
                 } else {
                     p.style.display = "none";
@@ -753,15 +754,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-detailtitle") {
+                if (elem.className === "md-detailtitle") {
                     elem.className = "md-detailtitleover";
-                } else if (elem.className == "md-detailtitleover") {
+                } else if (elem.className === "md-detailtitleover") {
                     elem.className = "md-detailtitle";
                 }
             }
@@ -777,15 +778,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-itemlist") {
+                if (elem.className === "md-itemlist") {
                     elem.className = "md-itemlistover";
-                } else if (elem.className == "md-itemlistover") {
+                } else if (elem.className === "md-itemlistover") {
                     elem.className = "md-itemlist";
                 }
             }
@@ -801,15 +802,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-item") {
+                if (elem.className === "md-item") {
                     elem.className = "md-itemover";
-                } else if (elem.className == "md-itemover") {
+                } else if (elem.className === "md-itemover") {
                     elem.className = "md-item";
                 }
             }
@@ -825,15 +826,15 @@ Revision History:
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
             var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                if (elem.className == "md-bgraphic") {
+                if (elem.className === "md-bgraphic") {
                     elem.className = "md-bgraphicover";
-                } else if (elem.className == "md-bgraphicover") {
+                } else if (elem.className === "md-bgraphicover") {
                     elem.className = "md-bgraphic";
                 }
             }
@@ -844,20 +845,21 @@ Revision History:
 
     // "md-detailitem" onclick function. Opens and closes nextsibling md-itemhide or md-itemshow element.
     function clickitem(evt) {
+        var elem, elemNext;
         // Get reference to W3C or IE event object
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
-            var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            elem = evt.target || evt.srcElement;
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                var elemNext = elem.nextSibling; // next sibling element
-                if ((elemNext.className == "md-itemhide") || (elemNext.className == "md-itemshow")) {
-                    if (getcomputeddisplay(elemNext) == "none") {
+                elemNext = elem.nextSibling; // next sibling element
+                if ((elemNext.className === "md-itemhide") || (elemNext.className === "md-itemshow")) {
+                    if (getcomputeddisplay(elemNext) === "none") {
                         elemNext.style.display = "block";
                     } else {
                         elemNext.style.display = "none";
@@ -871,44 +873,41 @@ Revision History:
 
     // "md-detailitemlist" onclick function. Opens and closes all children and all grand children md-itemhide and md-itemshow elements.
     function clickitemlist(evt) {
-        var i, c;
+        var elem, elemNext, i, c, allOpened = true, allClosed = true, newdisplay = "block";
         // Get reference to W3C or IE event object
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
-            var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            elem = evt.target || evt.srcElement;
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                var elemNext = elem.nextSibling; // next sibling element
+                elemNext = elem.nextSibling; // next sibling element
                 // Next sibling is normally md-itemshow class, but if md-itemhide
                 // class then hide or show it.
-                if (elemNext.className == "md-itemhide") {
-                    if (getcomputeddisplay(elemNext) == "none") {
+                if (elemNext.className === "md-itemhide") {
+                    if (getcomputeddisplay(elemNext) === "none") {
                         elemNext.style.display = "block";
                     } else {
                         elemNext.style.display = "none";
                     }
                 }
                 // Are all grand children open or are all children closed?
-                var allClosed = Boolean("true");
-                var allOpened = Boolean("true");
                 allOpened = allchildrenopenedexcept(elemNext, "md-item");
                 allClosed = allchildrenclosedexcept(elemNext, "md-item");
-                var newdisplay = "block";
-                if ((allOpened) & (!allClosed)) {
+                if ((allOpened) && (!allClosed)) {
                     newdisplay = "none";
                 }
                 // if they're all opened, close them. Otherwise, open all of them.
                 for (i = 0; i < elemNext.childNodes.length; i += 1) {
                     c = elemNext.childNodes[i];
-                    if (c.className == "md-itemhide") {
+                    if (c.className === "md-itemhide") {
                         // hide or show md-itemhide
                         c.style.display = newdisplay;
-                    } else if (c.className == "md-itemshow") {
+                    } else if (c.className === "md-itemshow") {
                         // make sure md-itemshow is always shown
                         c.style.display = "block";
                     }
@@ -921,21 +920,22 @@ Revision History:
 
     // "md-bgraphic" onclick function. Opens and closes browsegraphic images (jpg, jpeg, gif, png, bmp).
     function clickbgraphic(evt) {
+        var elem, p, elemImage, srcImage;
         // Get reference to W3C or IE event object
         evt = evt || ((window.event) ? event : null);
         if (evt) {
             // Get reference to element from which event object was created. W3C calls this element target. IE calls it srcElement.
-            var elem = evt.target || evt.srcElement;
-            if (elem.nodeType == 3) {
+            elem = evt.target || evt.srcElement;
+            if (elem.nodeType === 3) {
                 // If W3C and element is text node (nodeType = 3), then get reference to container (parent) to equalize with IE event model.
                 elem = elem.parentNode;
             }
             if (elem) {
                 // Work with element.
-                var p = elem.parentNode.nextSibling;  // parent's next sibling element
-                if (getcomputeddisplay(p) == "none") {
-                    var elemImage = p.childNodes[0];
-                    var srcImage = elem.getAttributeNode("browsen").value;
+                p = elem.parentNode.nextSibling;  // parent's next sibling element
+                if (getcomputeddisplay(p) === "none") {
+                    elemImage = p.childNodes[0];
+                    srcImage = elem.getAttributeNode("browsen").value;
                     p.style.display = "block";
                     elemImage.setAttribute("src", srcImage);
                     elemImage.setAttribute("alt", "Image - " + srcImage);
@@ -949,14 +949,14 @@ Revision History:
 
     // Assign event handler functions to md-mastertitle, md-detailtitle, md-item, md-itemlist, and md-bgraphic elements
     function setupmaster(elem) {
-        if (Boolean(elem != null)) {
+        if (elem) {
             var c, gc, ggc, gggc, ggggc, gggggc, i, j, k, l, m, n, o;
 
             for (i = 0; i < elem.childNodes.length; i += 1) {
                 c = elem.childNodes[i];
                 for (j = 0; j < c.childNodes.length; j += 1) {
                     gc = c.childNodes[j];
-                    if (gc.className == "md-mastertitle") {
+                    if (gc.className === "md-mastertitle") {
                         gc.onclick = clickmaster;
                         gc.onmouseover = overmaster;
                         gc.onmouseout = overmaster;
@@ -965,63 +965,63 @@ Revision History:
                     }
                     for (k = 0; k < gc.childNodes.length; k += 1) {
                         ggc = gc.childNodes[k];
-                        if (ggc.className == "md-detailtitle") {
+                        if (ggc.className === "md-detailtitle") {
                             ggc.onclick = clickdetail;
                             ggc.onmouseover = overdetail;
                             ggc.onmouseout = overdetail;
                         }
-                        if (ggc.className == "md-item") {
+                        if (ggc.className === "md-item") {
                             ggc.onclick = clickitem;
                             ggc.onmouseover = overitem;
                             ggc.onmouseout = overitem;
                         }
-                        if (ggc.className == "md-itemlist") {
+                        if (ggc.className === "md-itemlist") {
                             ggc.onclick = clickitemlist;
                             ggc.onmouseover = overitemlist;
                             ggc.onmouseout = overitemlist;
                         }
                         for (l = 0; l < ggc.childNodes.length; l += 1) {
                             gggc = ggc.childNodes[l];
-                            if (gggc.className == "md") {
+                            if (gggc.className === "md") {
                                 for (m = 0; m < gggc.childNodes.length; m += 1) {
                                     ggggc = gggc.childNodes[m];
-                                    if (ggggc.className == "md-bgraphic") {
+                                    if (ggggc.className === "md-bgraphic") {
                                         ggggc.onclick = clickbgraphic;
                                         ggggc.onmouseover = overbgraphic;
                                         ggggc.onmouseout = overbgraphic;
                                     }
                                 }
                             }
-                            if (gggc.className == "md-item") {
+                            if (gggc.className === "md-item") {
                                 gggc.onclick = clickitem;
                                 gggc.onmouseover = overitem;
                                 gggc.onmouseout = overitem;
                             }
-                            if (gggc.className == "md-itemlist") {
+                            if (gggc.className === "md-itemlist") {
                                 gggc.onclick = clickitemlist;
                                 gggc.onmouseover = overitemlist;
                                 gggc.onmouseout = overitemlist;
                             }
                             for (n = 0; n < gggc.childNodes.length; n += 1) {
                                 ggggc = gggc.childNodes[n];
-                                if (ggggc.className == "md-item") {
+                                if (ggggc.className === "md-item") {
                                     ggggc.onclick = clickitem;
                                     ggggc.onmouseover = overitem;
                                     ggggc.onmouseout = overitem;
                                 }
-                                if (ggggc.className == "md-itemlist") {
+                                if (ggggc.className === "md-itemlist") {
                                     ggggc.onclick = clickitemlist;
                                     ggggc.onmouseover = overitemlist;
                                     ggggc.onmouseout = overitemlist;
                                 }
                                 for (o = 0; o < ggggc.childNodes.length; o += 1) {
                                     gggggc = ggggc.childNodes[o];
-                                    if (gggggc.className == "md-item") {
+                                    if (gggggc.className === "md-item") {
                                         gggggc.onclick = clickitem;
                                         gggggc.onmouseover = overitem;
                                         gggggc.onmouseout = overitem;
                                     }
-                                    if (gggggc.className == "md-itemlist") {
+                                    if (gggggc.className === "md-itemlist") {
                                         gggggc.onclick = clickitemlist;
                                         gggggc.onmouseover = overitemlist;
                                         gggggc.onmouseout = overitemlist;
@@ -1037,7 +1037,7 @@ Revision History:
 
     // Assign event handler functions to taxonomy classification elements
     function setuptaxonomy(elem) {
-        while (Boolean(elem != null)) {
+        while (elem) {
             elem.onclick = clickitem;
             elem.onmouseover = overitem;
             elem.onmouseout = overitem;
@@ -1056,16 +1056,12 @@ Revision History:
         // convert URL strings to Hypertext Elements, convert text strings
         // between URL strings to Text Nodes and append all Hypertext
         // Elements and Text Nodes to DIV element.
-        var start = 0;
-        var end = 0;
-        var url = "";
-        var urlpattern = /(\w+):\/\/([\w.]+)((\S)*)|www\.([\w.]+)((\S)*)/g;
-        var punctuation = /[\.\,\;\:\?\!\[\]\(\)\{\}\'\"]/;
-        var result;
-        var elemText;
-        while ((result = urlpattern.exec(txt)) != null) {
-            var fullurl = result[0];
-            var protocol = result[1];
+        var start = 0, end = 0, url = "", urlpattern, punctuation, result, elemText, fullurl, protocol, lastchar, nexttolastchar, elemAnchor;
+        urlpattern = /(\w+):\/\/([\w.]+)((\S)*)|www\.([\w.]+)((\S)*)/g;
+        punctuation = /[\.\,\;\:\?\!\[\]\(\)\{\}\'\"]/;
+        while ((result = urlpattern.exec(txt)) !== null) {
+            fullurl = result[0];
+            protocol = result[1];
             url = fullurl;
             end = result.index;
             if (start < end) {
@@ -1073,12 +1069,12 @@ Revision History:
                 elemText = document.createTextNode(txt.substring(start, end));
                 elem.appendChild(elemText);
             }
-            var lastchar = fullurl.charAt(fullurl.length - 1);
+            lastchar = fullurl.charAt(fullurl.length - 1);
             // Remove last character from url if character is punctuation mark, bracket or parenthesis;
-            if (lastchar.match(punctuation) != null) {
+            if (lastchar.match(punctuation) !== null) {
                 // Remove next-to-last character from url if character is punctuation mark, bracket or parenthesis. For example the ")" in "),"
-                var nexttolastchar = fullurl.charAt(fullurl.length - 2);
-                if (nexttolastchar.match(punctuation) != null) {
+                nexttolastchar = fullurl.charAt(fullurl.length - 2);
+                if (nexttolastchar.match(punctuation) !== null) {
                     url = fullurl.substring(0, fullurl.length - 2);
                 } else {
                     url = fullurl.substring(0, fullurl.length - 1);
@@ -1086,12 +1082,12 @@ Revision History:
             }
             start = (result.index + url.length);
             // Test to concatinate 'http://' to url if not already begininng with 'http://', 'https://' or 'ftp://'"
-            if (protocol == "") {
+            if (protocol === "") {
                 url = "http://" + url;
             }
             // Append Hypertext (anchor) Element to parent
             elemText = document.createTextNode(url);
-            var elemAnchor = document.createElement("A");
+            elemAnchor = document.createElement("A");
             elemAnchor.setAttribute("href", url);
             elemAnchor.setAttribute("target", "viewer");
             elemAnchor.appendChild(elemText);
@@ -1112,7 +1108,7 @@ Revision History:
     sequentially added to a parent DIV element to form separate lines and paragraphs of text. */
 
     function fixvalue(elem) {
-        var n, val, pos, newline, par, prev, i, j, k;
+        var n, val, pos, newline, par, prev, i, j, k, sValue, aValues, padBottom, add, div, label, nextValue;
         elem.id = "";
         val = String("");
         pos = Number(0);
@@ -1134,16 +1130,16 @@ Revision History:
         }
         if (pos > 0) {
             // Text string contains at least one white space character
-            var sValue = "";
+            sValue = "";
             // Split entire text string value on newline character
             // in order to create an array of string values to process	
-            var aValues = val.split(newline);
-            var padBottom = Number(0);
-            var add = Boolean("false");
+            aValues = val.split(newline);
+            padBottom = Number(0);
+            add = Boolean("false");
             // Loop thru each potential new line or paragraph and append <DIV>
             // element and set its className accordingly.
             for (i = 0; i <= aValues.length - 1; i += 1) {
-                var div = document.createElement("DIV");
+                div = document.createElement("div");
                 sValue = aValues[i];
                 add = false;
                 for (j = 0; j < sValue.length; j += 1) {
@@ -1154,12 +1150,12 @@ Revision History:
                     }
                 }
                 if (add) {
-                    if (i == 0) {
+                    if (i === 0) {
                         // Must clone and append label property (e.g. <b>Abstract</b>) to first <DIV>
                         // element, and then remove it from parent if at first element in aValues array.
                         prev = elem.previousSibling;
-                        if (Boolean(prev != null)) {
-                            var label = prev.cloneNode(true);
+                        if (prev !== null) {
+                            label = prev.cloneNode(true);
                             div.appendChild(label);
                             par.removeChild(prev);
                         }
@@ -1174,7 +1170,7 @@ Revision History:
                         // Assume paragraph-like separation between DIV elements
                         padBottom = Number(4);
                         // Look for non-white space characters in content for next DIV
-                        var nextValue = aValues[i + 1];
+                        nextValue = aValues[i + 1];
                         for (k = 0; k < nextValue.length; k += 1) {
                             if (nextValue.charCodeAt(k) > 32) {
                                 // Found a non-white space character
@@ -1238,7 +1234,7 @@ Revision History:
         setupmaster(elem);
         elem = document.getElementById("tax");
         setuptaxonomy(elem);
-        /* Parse Text - Find each <pre> element with an class="fixvalue" and
+        /* Parse Text - Find each <pre> element with an Id="fixvalue" and
         call fixvalue() function to parse text to respect line breaks,
         replace <pre> element with <div> elememt, and convert URL address
         strings in text to <a href> element. */
@@ -1251,96 +1247,113 @@ Revision History:
     window.onload = onLoadHandler;
 
 
-}(jQuery));
+} (jQuery));
 ]]>
   </script>
 </xsl:template>
 
 <xsl:template name="css">
   <style>
-    body								{font-family: Verdana,sans-serif; font-size: 9pt; color: #000000; background-color: #FBFBFB; cursor: default;}
+body                                {font-family: Verdana,sans-serif; font-size: 9pt; color: #000000; background-color: #FBFBFB; cursor: default;}
 
-    #md-clickdef						{font-family: Arial,sans-serif; font-size: 9pt; color: #0000FF; cursor: pointer; text-align: center; padding: 0px; margin-left: 0px; margin-left: 0px; margin-top: 5px; margin-bottom: 10px;}
-    .md-link							{text-decoration: none;}
-    .md-over							{text-decoration: underline;}
+#md-clickdef                        {font-family: Arial,sans-serif; font-size: 9pt; color: #0000FF; cursor: pointer; text-align: center; padding: 0px; margin-left: 0px; margin-left: 0px; margin-top: 5px; margin-bottom: 10px;}
+.md-link                            {text-decoration: none;}
+.md-over                            {text-decoration: underline;}
 
-    #md-menu							{font-family: Arial,sans-serif; font-size: 9pt; text-align: center; text-align: center; padding: 0px; margin-left: 0px; margin-left: 0px; margin-top: 5px; margin-bottom: 0px;}
-    .md-menuitem						{color: #0000FF; padding-left: 6px; padding-right: 6px; padding-top: 2px; text-decoration: none; border-right: solid 1px #FBFBFB; border-top: solid 2px #FBFBFB; cursor: pointer; }
-    .md-menuitemover					{color: #0000FF; padding-left: 6px; padding-right: 6px; padding-top: 2px; text-decoration: underline; border-right: solid 1px #FBFBFB; border-top: solid 2px #FBFBFB; cursor: pointer; }
-    .md-menuitemactive					{background-color: #6495ED; color: #FFFFFF; padding-left: 6px; padding-right: 6px; padding-top: 2px; text-decoration: none; border-right: solid 1px #FBFBFB; border-top: solid 2px #DCDCDC; cursor: pointer; }
+#md-menu                            {font-family: Arial,sans-serif; font-size: 9pt; text-align: center; text-align: center; padding: 0px; margin-left: 0px; margin-left: 0px; margin-top: 5px; margin-bottom: 0px;}
+.md-menuitem, .md-menuitemover, .md-menuitemactive
+{
+    color: #0000FF;
+    padding-left: 6px; padding-right: 6px; padding-top: 2px;
+    border: solid 1px #aaa;
+    border-bottom: none;
+    cursor: pointer;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-bottomright: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
+}
+.md-menuitem                        {text-decoration: none; }
+.md-menuitemover                    {text-decoration: underline; }
+.md-menuitemactive                  {background-color: #6495ED; color: #FFFFFF; text-decoration: none; border-right: solid 1px #FBFBFB; border-top: solid 2px #DCDCDC; border-left: none;}
 
-    #md-description						{display: block;}
-    #md-graphic							{display: block;}
-    #md-spatial							{display: block;}
-    #md-structure						{display: block;}
-    #md-quality							{display: block;}
-    #md-source							{display: block;}
-    #md-distribution					{display: block;}
-    #md-metadata						{display: block;}
-    #md-thumbnail						{height: 144px; border: solid 1px #B0C4DE; float: left; margin-top: 5px; margin-left: 3px; margin-right: 10px;}
+#md-description, #md-graphic, #md-spatial, #md-structure, #md-quality, #md-source, #md-distribution, #md-metadata
+{
+    display: block;
+}
+#md-thumbnail                       {height: 144px; border: solid 1px #B0C4DE; float: left; margin-top: 5px; margin-left: 3px; margin-right: 10px;}
 
-    .md-title							{font-family: Arial,sans-serif; font-weight: bold; font-size: 15pt; color: #0000FF; text-align: center; padding: 0px; margin: 3px; cursor: pointer; text-decoration: none;}
-    .md-titleover						{font-family: Arial,sans-serif; font-weight: bold; font-size: 15pt; color: #0000FF; text-align: center; padding: 0px; margin: 3px; cursor: pointer; text-decoration: underline;}
+.md-title, .md-titleover            {font-family: Arial,sans-serif; font-weight: bold; font-size: 15pt; color: #0000FF; text-align: center; padding: 0px; margin: 3px; cursor: pointer;}
+.md-title                           {text-decoration: none;}
+.md-titleover                       {text-decoration: underline;}
 
-    .md-subtitle						{font-family: Arial,sans-serif; font-size: 10pt; text-align: center; padding: 0px; margin: 3px;}
+.md-subtitle                        {font-family: Arial,sans-serif; font-size: 10pt; text-align: center; padding: 0px; margin: 3px;}
 
-    .md-mastertitle 					{font-weight: bold; color: #FFFFFF; font-size: 11pt; text-align: center; padding: 0px; cursor: pointer; text-decoration: none;}
-    .md-mastertitleover 				{font-weight: bold; color: #FFFFFF; font-size: 11pt; text-align: center; padding: 0px; cursor: pointer; text-decoration: underline;}
+.md-mastertitle, .md-mastertitleover {font-weight: bold; color: #FFFFFF; font-size: 11pt; text-align: center; padding: 0px; cursor: pointer;}
+.md-mastertitle                     {text-decoration: none;}
+.md-mastertitleover                 {text-decoration: underline;}
 
-    .md-masterhide						{padding: 0px; margin: 0px; display:block;}
+.md-masterhide                      {padding: 0px; margin: 0px; display:block;}
 
-    .md-detailtitle  					{font-weight: bold; color: #0000FF; padding: 0px; cursor: pointer; text-decoration: none;}
-    .md-detailtitleover 				{font-weight: bold; color: #0000FF; padding: 0px; cursor: pointer; text-decoration: underline;}
+.md-detailtitle                     {font-weight: bold; color: #0000FF; padding: 0px; cursor: pointer; text-decoration: none;}
+.md-detailtitleover                 {font-weight: bold; color: #0000FF; padding: 0px; cursor: pointer; text-decoration: underline;}
 
-    .md-detailhide						{background-color: #FFFFFF; padding: 10px; display:none;}
-    .md-detailshow						{background-color: #FFFFFF; padding: 10px; display:block;}
-    .md-detailhelp						{background-color: #FFFFFF; padding: 10px; display:none;}
+.md-detailhide                      {background-color: #FFFFFF; padding: 10px; display:none;}
+.md-detailshow                      {background-color: #FFFFFF; padding: 10px; display:block;}
+.md-detailhelp                      {background-color: #FFFFFF; padding: 10px; display:none;}
 
-    .md-item  							{color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: none;}
-    .md-itemover 						{color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: underline;}
+.md-item                            {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: none;}
+.md-itemover                        {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: underline;}
 
-    .md-itemlist  						{color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: none;}
-    .md-itemlistover 					{color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: underline;}
+.md-itemlist                        {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: none;}
+.md-itemlistover                    {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: underline;}
 
-    .md-itemhide						{padding: 5px; margin-left: 20px; display:none;}
-    .md-itemshow						{padding: 5px; margin-left: 20px; display:block;}
+.md-itemhide                        {padding: 5px; margin-left: 20px; display:none;}
+.md-itemshow                        {padding: 5px; margin-left: 20px; display:block;}
 
-    .md-color 							    {border: solid 2px #6495ED; padding: 0px; margin-left: 0px; margin-right: 0px; margin-top: 0px; margin-bottom: 10px;}
-    .md-color .md-master 				    {background-color: #6495ED; padding: 1px;}
-    .md-color .md-masterhide .md-separator	{background-color: #6495ED; padding: 4px;}
-    .md-color .md-masterhide .md-detail	    {background-color: #FFFFCC; border-top: solid 1px #6495ED; padding-left: 6px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;}
+.md-color                           {border: solid 2px #6495ED; padding: 0px; margin-left: 0px; margin-right: 0px; margin-top: 0px; margin-bottom: 10px;
+                                    -webkit-border-radius: 5px;
+                                    -moz-border-radius: 5px;
+                                    border-radius: 5px;
+                                    }
+.md-color .md-master                {background-color: #6495ED; padding: 1px;}
+.md-color .md-masterhide .md-separator  {background-color: #6495ED; padding: 4px;}
+.md-color .md-masterhide .md-detail     {background-color: #FFFFCC; border-top: solid 1px #6495ED; padding-left: 6px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;}
 
-    .md-def								{color: #DC143C; font-style: italic; padding-left: 2px; padding-right: 0px; padding-top: 0px; padding-bottom: 5px; display: none;}
+.md-def                             {color: #DC143C; font-style: italic; padding-left: 2px; padding-right: 0px; padding-top: 0px; padding-bottom: 5px; display: none;}
 
-    .md-grid							{border-collapse: collapse; padding: 2px; margin: 1px;}
+.md-grid                            {border-collapse: collapse; padding: 2px; margin: 1px;}
 
-    .md-grid th							{font-size: 9pt; border: solid 1px #6495ED; padding: 2px; vertical-align: top; font-style: italic; background-color: #F0F8FF;}
+.md-grid th                         {font-size: 9pt; border: solid 1px #6495ED; padding: 2px; vertical-align: top; font-style: italic; background-color: #F0F8FF;}
 
-    .md-grid td							{font-size: 9pt; border: solid 1px #6495ED; padding: 2px; vertical-align: top;}
+.md-grid td                         {font-size: 9pt; border: solid 1px #6495ED; padding: 2px; vertical-align: top;}
 
-    .md-grid td.md-italic				{font-family: Arial,sans-serif; font-size: 8pt; font-style: italic; border: solid 1px #6495ED; padding: 2px; vertical-align: top;}
+.md-grid td.md-italic               {font-family: Arial,sans-serif; font-size: 8pt; font-style: italic; border: solid 1px #6495ED; padding: 2px; vertical-align: top;}
 
-    .md-bgraphicimg						{background-color: #DCDCDC;}
+.md-bgraphicimg                     {background-color: #DCDCDC;}
 
-    .md-bgraphic						{color: #0000FF; cursor: pointer; text-decoration: none;}
-    .md-bgraphicover   					{color: #0000FF; cursor: pointer; text-decoration: underline;}
+.md-bgraphic                        {color: #0000FF; cursor: pointer; text-decoration: none;}
+.md-bgraphicover                    {color: #0000FF; cursor: pointer; text-decoration: underline;}
 
-    div b  								{font-weight:bold; font-style: italic;}
+div b                               {font-weight:bold; font-style: italic;}
 
-    .md									{padding: 2px;}
+.md                                 {padding: 2px;}
 
-    .md-indent							{padding: 1px; margin-left: 20px;}
+.md-indent                          {padding: 1px; margin-left: 20px;}
 
-    .md-block							{padding-left: 0px; padding-right: 0px; padding-top: 3px; padding-bottom: 3px;}
-    .md-indentblock						{padding-left: 0px; padding-right: 0px; padding-top: 3px; padding-bottom: 3px; margin-left: 20px;}
-    .md-indentblockstep					{padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 3px; margin-left: 20px;}
+.md-block                           {padding-left: 0px; padding-right: 0px; padding-top: 3px; padding-bottom: 3px;}
+.md-indentblock                     {padding-left: 0px; padding-right: 0px; padding-top: 3px; padding-bottom: 3px; margin-left: 20px;}
+.md-indentblockstep                 {padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 3px; margin-left: 20px;}
 
-    .md-footer							{font-family: Arial,sans-serif; font-size: 10pt; text-align: center;}
+.md-footer                          {font-family: Arial,sans-serif; font-size: 10pt; text-align: center;}
 
-    a:link								{color: #0000FF; text-decoration: none;}
-    a:active							{color: #0000FF; text-decoration: none;}
-    a:visited							{color: #0000FF; text-decoration: none;}
-    a:hover								{color: #0000FF; text-decoration: underline;}
+a:link                              {color: #0000FF; text-decoration: none;}
+a:active                            {color: #0000FF; text-decoration: none;}
+a:visited                           {color: #0000FF; text-decoration: none;}
+a:hover                             {color: #0000FF; text-decoration: underline;}
   </style>
 </xsl:template>
   
