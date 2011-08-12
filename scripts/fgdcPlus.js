@@ -1,4 +1,6 @@
-﻿(function ($) {
+﻿/*jslint browser: true, unparam: true, maxerr: 50, indent: 4 */
+/*globals jQuery */
+(function ($) {
     "use strict";
 
     /* "md-title" onclick function. Always opens md-detailshow and either opens or closes md-detailhide,
@@ -1061,4 +1063,4 @@
     window.onload = onLoadHandler;
 
 
-} (jQuery));
+}(jQuery));

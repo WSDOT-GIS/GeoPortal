@@ -22,12 +22,18 @@ namespace Wsdot.Grdo.Web.Mapping
 	{
 
 		readonly static Regex
+			_outputFormatRegex = new Regex("(?in)^(output)?f(ormat)?$"),
 			_oidRegex = new Regex("(?in)^(o(bject)?)?id$"),
 			_nameRegex = new Regex("^(?in)name$"),
 			// Regexes for XSLT parameters passed via query string (or POST).
 			_dublinCoreRegex = new Regex("(?in)^d(ublin)?c(ore)?$"),
+
+			_jsUrlRegex = new Regex("(?in)^j(ava)?s(cript)?url$"),
+			_cssUrlRegex = new Regex("(?in)^cssurl$"),
+
 			_jsRegex = new Regex("(?in)^j(ava)?s(cript)?$"),
 			_cssRegex = new Regex("(?in)^css?");
+
 
 
 
@@ -47,10 +53,6 @@ namespace Wsdot.Grdo.Web.Mapping
 
 			// If there was no OID provided, check for a feature class name and assign a variable.
 			string name = parameters.GetStringParameter(_nameRegex);
-
-			bool includeDublinCore = parameters.GetBooleanParameter(_dublinCoreRegex);
-			bool includeJS = parameters.GetBooleanParameter(_jsRegex);
-			bool includeCss = parameters.GetBooleanParameter(_cssRegex);
 
 			if (!oid.HasValue && string.IsNullOrWhiteSpace(name))
 			{
@@ -123,23 +125,58 @@ namespace Wsdot.Grdo.Web.Mapping
 				var attributes = (Dictionary<string, object>)feature["attributes"];
 				var xml = (string)attributes["Documentation"];
 
-				XmlDocument xmlDoc = new XmlDocument();
-				xmlDoc.LoadXml(xml);
+				// Get the specified output format.
+				var outputFormat = parameters.GetStringParameter(_outputFormatRegex);
+				// If an output format was specified and it is "xml", just return the XML;
+				// otherwise convert the XML to HTML using the stylesheet.
+				if (outputFormat != null && string.Compare(outputFormat, "xml", StringComparison.OrdinalIgnoreCase) == 0)
+				{
+					context.Response.ContentType = "text/xml";
+					context.Response.Write(xml);
+				}
+				else
+				{
+					XmlDocument xmlDoc = new XmlDocument();
+					xmlDoc.LoadXml(xml);
 
-				XslCompiledTransform xsl = new XslCompiledTransform();
+					XslCompiledTransform xsl = new XslCompiledTransform();
 
-				var xslDoc = new XmlDocument();
-				xslDoc.LoadXml(Resources.FgdcPlusHtml5);
-				xsl.Load(xslDoc);
+					var xslDoc = new XmlDocument();
+					xslDoc.LoadXml(Resources.FgdcPlusHtml5);
+					xsl.Load(xslDoc);
 
-				context.Response.ContentType = "text/html";
-				var args = new XsltArgumentList();
-				args.AddParam("includeDublinCore", string.Empty, includeDublinCore);
-				args.AddParam("includeCss", string.Empty, includeCss);
-				args.AddParam("includeJavaScript", string.Empty, includeJS);
+					context.Response.ContentType = "text/html";
+					var args = new XsltArgumentList();
+
+					string jsUrl = parameters.GetStringParameter(_jsUrlRegex);
+					string cssUrl = parameters.GetStringParameter(_cssUrlRegex);
+
+					bool includeDublinCore = parameters.GetBooleanParameter(_dublinCoreRegex);
+					bool includeJS = parameters.GetBooleanParameter(_jsRegex);
+					bool includeCss = parameters.GetBooleanParameter(_cssRegex);
+
+					if (!string.IsNullOrWhiteSpace(jsUrl))
+					{
+						args.AddParam("externalJS", string.Empty, jsUrl);
+					}
+					else
+					{
+						args.AddParam("includeJavaScript", string.Empty, includeJS);
+					}
+
+					if (!string.IsNullOrWhiteSpace(cssUrl))
+					{
+						args.AddParam("externalCss", string.Empty, cssUrl);
+					}
+					else
+					{
+						args.AddParam("includeCss", string.Empty, includeCss);
+					}
+					args.AddParam("includeDublinCore", string.Empty, includeDublinCore);
 
 
-				xsl.Transform(xmlDoc, args, context.Response.OutputStream);
+					xsl.Transform(xmlDoc, args, context.Response.OutputStream);
+				}
 			}
 		}
 

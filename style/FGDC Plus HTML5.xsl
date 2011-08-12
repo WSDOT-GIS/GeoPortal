@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html"/>
-<xsl:param name="includeDublinCore" select="true" />
-<xsl:param name="includeJavaScript" select="true" />
-<xsl:param name="includeCss" select="true" />
+<xsl:param name="includeDublinCore" select="true()" />
+<xsl:param name="includeJavaScript" select="true()" />
+<xsl:param name="includeCss" select="true()" />
+<xsl:param name="jQueryUrl" select="'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'" />
+<xsl:param name="externalJS" />
+<xsl:param name="externalCss" />
 <!--
 FGDC Plus.xsl (version 2.3)
 
@@ -142,18 +145,34 @@ Revision History:
 		- Corrected the longitude and latitude labels for westbc, eastbc, northbc and southbc elements.
 13. Modified Sept 15, 2009 (ver 2.3) by Howie Sternberg
 		- Corrected the Country label spelling error in Contact Info
+14. Modified August 12, 2011 (ver 2.4) by Jeff Jacobson
+    - Modified output of stylesheet to HTML 5 standards compliant.
+    - JavaScript code now uses "use strict" directive.
+    - JavaScript modified to pass JSLint.
+    - Added stylesheet parameters that allow the user to omit Dublin Core meta tags, inline CSS, and inline JS.
 -->
 <xsl:template match="/">
+<!-- Add the HTML5 doctype. -->
 <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
 <html>
 <head>
 <xsl:call-template name="head_title"/>
-  <xsl:if test="$includeDublinCore">
+  <!-- Add the Dublin Core meta tags and style if those parameters are set to true.-->
+  <xsl:if test="boolean($includeDublinCore)">
     <xsl:call-template name="head_dublin_core"/>
   </xsl:if>
-  <xsl:if test="$includeCss">
-    <xsl:call-template name="css" />
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="normalize-space($externalCss) != ''">
+      <xsl:element name="link">
+        <xsl:attribute name="rel">stylesheet</xsl:attribute>
+        <xsl:attribute name="type">text/css</xsl:attribute>
+        <xsl:attribute name="href"><xsl:value-of select="$externalCss"/></xsl:attribute>
+      </xsl:element>
+    </xsl:when>
+    <xsl:when test="boolean($includeCss)">
+      <xsl:call-template name="css" />
+    </xsl:when>
+  </xsl:choose>
 
 </head>
 
@@ -170,9 +189,19 @@ Revision History:
 <xsl:call-template name="distribution"/>
 <xsl:call-template name="metadata"/>
 <xsl:call-template name="footer"/>
-<xsl:if test="$includeJavaScript">
-  <xsl:call-template name="javascript"/>
-</xsl:if>
+  <xsl:choose>
+    <xsl:when test="normalize-space($externalJS) != ''">
+      <xsl:element name="script">
+        <xsl:attribute name="src"><xsl:value-of select="$jQueryUrl"/></xsl:attribute>
+      </xsl:element>
+      <xsl:element name="script">
+        <xsl:attribute name="src"><xsl:value-of select="$externalJS"/></xsl:attribute>
+      </xsl:element>
+    </xsl:when>
+    <xsl:when test="boolean($includeJavaScript)">
+      <xsl:call-template name="javascript"/>
+    </xsl:when>
+  </xsl:choose>
 </body>
 </html>
 
@@ -184,6 +213,8 @@ Revision History:
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
   <script type="text/javascript">
     <![CDATA[
+/*jslint browser: true, unparam: true, maxerr: 50, indent: 4 */
+/*globals jQuery */
 (function ($) {
     "use strict";
 
@@ -1247,114 +1278,12 @@ Revision History:
     window.onload = onLoadHandler;
 
 
-} (jQuery));
-]]>
-  </script>
+}(jQuery));
+  ]]></script>
 </xsl:template>
 
 <xsl:template name="css">
-  <style>
-body                                {font-family: Verdana,sans-serif; font-size: 9pt; color: #000000; background-color: #FBFBFB; cursor: default;}
-
-#md-clickdef                        {font-family: Arial,sans-serif; font-size: 9pt; color: #0000FF; cursor: pointer; text-align: center; padding: 0px; margin-left: 0px; margin-left: 0px; margin-top: 5px; margin-bottom: 10px;}
-.md-link                            {text-decoration: none;}
-.md-over                            {text-decoration: underline;}
-
-#md-menu                            {font-family: Arial,sans-serif; font-size: 9pt; text-align: center; text-align: center; padding: 0px; margin-left: 0px; margin-left: 0px; margin-top: 5px; margin-bottom: 0px;}
-.md-menuitem, .md-menuitemover, .md-menuitemactive
-{
-    color: #0000FF;
-    padding-left: 6px; padding-right: 6px; padding-top: 2px;
-    border: solid 1px #aaa;
-    border-bottom: none;
-    cursor: pointer;
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-topleft: 10px;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-bottomright: 0px;
-    -moz-border-radius-bottomleft: 0px;
-    -webkit-border-radius: 10px 10px 0px 0px;
-    border-radius: 10px 10px 0px 0px;
-}
-.md-menuitem                        {text-decoration: none; }
-.md-menuitemover                    {text-decoration: underline; }
-.md-menuitemactive                  {background-color: #6495ED; color: #FFFFFF; text-decoration: none; border-right: solid 1px #FBFBFB; border-top: solid 2px #DCDCDC; border-left: none;}
-
-#md-description, #md-graphic, #md-spatial, #md-structure, #md-quality, #md-source, #md-distribution, #md-metadata
-{
-    display: block;
-}
-#md-thumbnail                       {height: 144px; border: solid 1px #B0C4DE; float: left; margin-top: 5px; margin-left: 3px; margin-right: 10px;}
-
-.md-title, .md-titleover            {font-family: Arial,sans-serif; font-weight: bold; font-size: 15pt; color: #0000FF; text-align: center; padding: 0px; margin: 3px; cursor: pointer;}
-.md-title                           {text-decoration: none;}
-.md-titleover                       {text-decoration: underline;}
-
-.md-subtitle                        {font-family: Arial,sans-serif; font-size: 10pt; text-align: center; padding: 0px; margin: 3px;}
-
-.md-mastertitle, .md-mastertitleover {font-weight: bold; color: #FFFFFF; font-size: 11pt; text-align: center; padding: 0px; cursor: pointer;}
-.md-mastertitle                     {text-decoration: none;}
-.md-mastertitleover                 {text-decoration: underline;}
-
-.md-masterhide                      {padding: 0px; margin: 0px; display:block;}
-
-.md-detailtitle                     {font-weight: bold; color: #0000FF; padding: 0px; cursor: pointer; text-decoration: none;}
-.md-detailtitleover                 {font-weight: bold; color: #0000FF; padding: 0px; cursor: pointer; text-decoration: underline;}
-
-.md-detailhide                      {background-color: #FFFFFF; padding: 10px; display:none;}
-.md-detailshow                      {background-color: #FFFFFF; padding: 10px; display:block;}
-.md-detailhelp                      {background-color: #FFFFFF; padding: 10px; display:none;}
-
-.md-item                            {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: none;}
-.md-itemover                        {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: underline;}
-
-.md-itemlist                        {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: none;}
-.md-itemlistover                    {color: #0000FF; font-style: italic; font-weight: bold; padding: 1px; margin-left: 0px; margin-top: 5px; cursor: pointer; text-decoration: underline;}
-
-.md-itemhide                        {padding: 5px; margin-left: 20px; display:none;}
-.md-itemshow                        {padding: 5px; margin-left: 20px; display:block;}
-
-.md-color                           {border: solid 2px #6495ED; padding: 0px; margin-left: 0px; margin-right: 0px; margin-top: 0px; margin-bottom: 10px;
-                                    -webkit-border-radius: 5px;
-                                    -moz-border-radius: 5px;
-                                    border-radius: 5px;
-                                    }
-.md-color .md-master                {background-color: #6495ED; padding: 1px;}
-.md-color .md-masterhide .md-separator  {background-color: #6495ED; padding: 4px;}
-.md-color .md-masterhide .md-detail     {background-color: #FFFFCC; border-top: solid 1px #6495ED; padding-left: 6px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;}
-
-.md-def                             {color: #DC143C; font-style: italic; padding-left: 2px; padding-right: 0px; padding-top: 0px; padding-bottom: 5px; display: none;}
-
-.md-grid                            {border-collapse: collapse; padding: 2px; margin: 1px;}
-
-.md-grid th                         {font-size: 9pt; border: solid 1px #6495ED; padding: 2px; vertical-align: top; font-style: italic; background-color: #F0F8FF;}
-
-.md-grid td                         {font-size: 9pt; border: solid 1px #6495ED; padding: 2px; vertical-align: top;}
-
-.md-grid td.md-italic               {font-family: Arial,sans-serif; font-size: 8pt; font-style: italic; border: solid 1px #6495ED; padding: 2px; vertical-align: top;}
-
-.md-bgraphicimg                     {background-color: #DCDCDC;}
-
-.md-bgraphic                        {color: #0000FF; cursor: pointer; text-decoration: none;}
-.md-bgraphicover                    {color: #0000FF; cursor: pointer; text-decoration: underline;}
-
-div b                               {font-weight:bold; font-style: italic;}
-
-.md                                 {padding: 2px;}
-
-.md-indent                          {padding: 1px; margin-left: 20px;}
-
-.md-block                           {padding-left: 0px; padding-right: 0px; padding-top: 3px; padding-bottom: 3px;}
-.md-indentblock                     {padding-left: 0px; padding-right: 0px; padding-top: 3px; padding-bottom: 3px; margin-left: 20px;}
-.md-indentblockstep                 {padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 3px; margin-left: 20px;}
-
-.md-footer                          {font-family: Arial,sans-serif; font-size: 10pt; text-align: center;}
-
-a:link                              {color: #0000FF; text-decoration: none;}
-a:active                            {color: #0000FF; text-decoration: none;}
-a:visited                           {color: #0000FF; text-decoration: none;}
-a:hover                             {color: #0000FF; text-decoration: underline;}
-  </style>
+  <style>body{font-family:Verdana,sans-serif;font-size:9pt;color:#000000;background:#FBFBFB;cursor:default}#md-clickdef{font-family:Arial,sans-serif;font-size:9pt;color:#0000FF;cursor:pointer;text-align:center;margin-left:0;margin-top:5px;margin-bottom:10px;padding:0}.md-link{text-decoration:none}.md-over{text-decoration:underline}#md-menu{font-family:Arial,sans-serif;font-size:9pt;text-align:center;margin-left:0;margin-top:5px;margin-bottom:0;padding:0}.md-menuitem{color:#0000FF;padding-left:6px;padding-right:6px;padding-top:2px;border:solid 1px #aaa;border-bottom:none;cursor:pointer;text-decoration:none;border-radius:10px 10px 0 0;-moz-border-radius:10px 10px 0 0;-webkit-border-radius:10px 10px 0 0}.md-menuitemover{color:#0000FF;padding-left:6px;padding-right:6px;padding-top:2px;border:solid 1px #aaa;border-bottom:none;cursor:pointer;text-decoration:underline;border-radius:10px 10px 0 0;-moz-border-radius:10px 10px 0 0;-webkit-border-radius:10px 10px 0 0}.md-menuitemactive{padding-left:6px;padding-right:6px;padding-top:2px;border:solid 1px #aaa;border-bottom:none;cursor:pointer;background:#6495ED;color:#FFFFFF;text-decoration:none;border-right:solid 1px #FBFBFB;border-top:solid 2px #DCDCDC;border-left:none;border-radius:10px 10px 0 0;-moz-border-radius:10px 10px 0 0;-webkit-border-radius:10px 10px 0 0}#md-description{display:block}#md-graphic{display:block}#md-spatial{display:block}#md-structure{display:block}#md-quality{display:block}#md-source{display:block}#md-distribution{display:block}#md-metadata{display:block}#md-thumbnail{height:144px;border:solid 1px #B0C4DE;float:left;margin-top:5px;margin-left:3px;margin-right:10px}.md-title{font-family:Arial,sans-serif;font-weight:bold;font-size:15pt;color:#0000FF;text-align:center;cursor:pointer;text-decoration:none;margin:3px;padding:0}.md-titleover{font-family:Arial,sans-serif;font-weight:bold;font-size:15pt;color:#0000FF;text-align:center;cursor:pointer;text-decoration:underline;margin:3px;padding:0}.md-subtitle{font-family:Arial,sans-serif;font-size:10pt;text-align:center;margin:3px;padding:0}.md-mastertitle{font-weight:bold;color:#FFFFFF;font-size:11pt;text-align:center;cursor:pointer;text-decoration:none;padding:0}.md-mastertitleover{font-weight:bold;color:#FFFFFF;font-size:11pt;text-align:center;cursor:pointer;text-decoration:underline;padding:0}.md-masterhide{display:block;margin:0;padding:0}.md-detailtitle{font-weight:bold;color:#0000FF;cursor:pointer;text-decoration:none;padding:0}.md-detailtitleover{font-weight:bold;color:#0000FF;cursor:pointer;text-decoration:underline;padding:0}.md-detailhide{background:#FFFFFF;display:none;padding:10px}.md-detailshow{background:#FFFFFF;display:block;padding:10px}.md-detailhelp{background:#FFFFFF;display:none;padding:10px}.md-item{color:#0000FF;font-style:italic;font-weight:bold;margin-left:0;margin-top:5px;cursor:pointer;text-decoration:none;padding:1px}.md-itemover{color:#0000FF;font-style:italic;font-weight:bold;margin-left:0;margin-top:5px;cursor:pointer;text-decoration:underline;padding:1px}.md-itemlist{color:#0000FF;font-style:italic;font-weight:bold;margin-left:0;margin-top:5px;cursor:pointer;text-decoration:none;padding:1px}.md-itemlistover{color:#0000FF;font-style:italic;font-weight:bold;margin-left:0;margin-top:5px;cursor:pointer;text-decoration:underline;padding:1px}.md-itemhide{margin-left:20px;display:none;padding:5px}.md-itemshow{margin-left:20px;display:block;padding:5px}.md-color{border:solid 2px #6495ED;margin:0 0 10px;padding:0;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px}.md-color .md-master{background:#6495ED;padding:1px}.md-color .md-masterhide .md-separator{background:#6495ED;padding:4px}.md-color .md-masterhide .md-detail{background:#FFFFCC;border-top:solid 1px #6495ED;padding:4px 4px 4px 6px}.md-def{color:#DC143C;font-style:italic;display:none;padding:0 0 5px 2px}.md-grid{border-collapse:collapse;margin:1px;padding:2px}.md-grid th{font-size:9pt;border:solid 1px #6495ED;vertical-align:top;font-style:italic;background:#F0F8FF;padding:2px}.md-grid td{font-size:9pt;border:solid 1px #6495ED;vertical-align:top;padding:2px}.md-grid td.md-italic{font-family:Arial,sans-serif;font-size:8pt;font-style:italic;border:solid 1px #6495ED;vertical-align:top;padding:2px}.md-bgraphicimg{background:#DCDCDC}.md-bgraphic{color:#0000FF;cursor:pointer;text-decoration:none}.md-bgraphicover{color:#0000FF;cursor:pointer;text-decoration:underline}div b{font-weight:bold;font-style:italic}.md{padding:2px}.md-indent{margin-left:20px;padding:1px}.md-block{padding:3px 0}.md-indentblock{margin-left:20px;padding:3px 0}.md-indentblockstep{margin-left:20px;padding:0 0 3px}.md-footer{font-family:Arial,sans-serif;font-size:10pt;text-align:center}a:link{color:#0000FF;text-decoration:none}a:active{color:#0000FF;text-decoration:none}a:visited{color:#0000FF;text-decoration:none}a:hover{color:#0000FF;text-decoration:underline}</style>
 </xsl:template>
   
 <!-- Head title -->

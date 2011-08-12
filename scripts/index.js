@@ -31,7 +31,7 @@
     }
 
     function getMetadataUrl(id) {
-        return "Metadata.ashx?oid=" + String(id) + "&css=true&js=true";
+        return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
     }
 
     function layerInfoToLayer(layerInfo) {
