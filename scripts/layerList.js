@@ -1,6 +1,6 @@
 ﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js  "/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.11/jquery-ui.js"/>
-/*global jQuery, dojo */
+/*global jQuery, dojo, esri, dijit */
 /*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
 /*
@@ -197,7 +197,7 @@ Prerequisites:
                             sublayerCheckboxes.each(function (index, checkbox) {
                                 // Get the layer info associated with the current checkbox.
                                 var layerInfo,
-                                    uncheckedParents = $("> [type=checkbox]", $(checkbox).parentsUntil("div").filter("li")).not(":checked").not(checkbox)
+                                    uncheckedParents = $("> [type=checkbox]", $(checkbox).parentsUntil("div").filter("li")).not(":checked").not(checkbox);
                                 if (checkbox.checked && uncheckedParents.length < 1) {
                                     layerInfo = layer.layerInfos[$(checkbox).data("sublayerId")];
                                     // If there are no child layers, add this layer to the visible layer list.
@@ -321,7 +321,7 @@ Prerequisites:
                     } else {
                         dojo.connect(layer, "onLoad", function (layer) {
                             createSublayerLink(layer);
-                            setClassForOutOfScaleLayerControls()
+                            setClassForOutOfScaleLayerControls();
                         });
                     }
                 }
