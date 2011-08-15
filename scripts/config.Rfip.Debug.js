@@ -87,30 +87,102 @@ wsdot.config = {
                 "id": "Location Information"
             }
         },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
-            "options": {
-                "id": "Drainage",
-                "visible": false
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Barrier/MapServer",
+                "options": {
+                    "id": "Barrier",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Bridge/MapServer",
+                "options": {
+                    "id": "Bridge",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Curb/MapServer",
+                "options": {
+                    "id": "Curb",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
+                "options": {
+                    "id": "Drainage",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Fence/MapServer",
+                "options": {
+                    "id": "Fence",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Mailbox/MapServer",
+                "options": {
+                    "id": "Mailbox",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/MiscFixedObject/MapServer",
+                "options": {
+                    "id": "MiscFixedObject",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Other/MapServer",
+                "options": {
+                    "id": "Other",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RockOutcropping/MapServer",
+                "options": {
+                    "id": "RockOutcropping",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Slope/MapServer",
+                "options": {
+                    "id": "Slope",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Tree/MapServer",
+                "options": {
+                    "id": "Tree",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Wall/MapServer",
+                "options": {
+                    "id": "Wall",
+                    "visible": false
+                }
             }
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/FixedObjects/MapServer",
-            "options": {
-                "id": "Fixed Objects",
-                "visible": false
-            }
-        },
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Trees/MapServer",
-            "options": {
-                "id": "Trees",
-                "visible": false
-            }
-        }
     ],
     "layers": {
         "Main": {
@@ -255,41 +327,31 @@ wsdot.config = {
             ]
         },
         "RFIP": {
-            "Drainage": [
-                {
-                    "layerType": "esri.layers.FeatureLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/0",
-                    "options": {
-                        "id": "Drainage Inlet",
-                        "visible": false
-                    }
-                },
-                {
-                    "layerType": "esri.layers.FeatureLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/1",
-                    "options": {
-                        "id": "Culvert",
-                        "visible": false
-                    }
-                },
-                {
-                    "layerType": "esri.layers.FeatureLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/2",
-                    "options": {
-                        "id": "Pipe End",
-                        "visible": false
-                    }
-                },
-                {
-                    "layerType": "esri.layers.FeatureLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer/3",
-                    "options": {
-                        "id": "Culvert End",
-                        "visible": false
-                    }
-                }
-            ],
             "RFIP": [
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Barrier/MapServer",
+                    "options": {
+                        "id": "Barrier",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Bridge/MapServer",
+                    "options": {
+                        "id": "Bridge",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Curb/MapServer",
+                    "options": {
+                        "id": "Curb",
+                        "visible": false
+                    }
+                },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
                     "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
@@ -300,17 +362,65 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/FixedObjects/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Fence/MapServer",
                     "options": {
-                        "id": "Fixed Objects",
+                        "id": "Fence",
                         "visible": false
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Trees/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Mailbox/MapServer",
                     "options": {
-                        "id": "Trees",
+                        "id": "Mailbox",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/MiscFixedObject/MapServer",
+                    "options": {
+                        "id": "MiscFixedObject",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Other/MapServer",
+                    "options": {
+                        "id": "Other",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RockOutcropping/MapServer",
+                    "options": {
+                        "id": "RockOutcropping",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Slope/MapServer",
+                    "options": {
+                        "id": "Slope",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Tree/MapServer",
+                    "options": {
+                        "id": "Tree",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Wall/MapServer",
+                    "options": {
+                        "id": "Wall",
                         "visible": false
                     }
                 }

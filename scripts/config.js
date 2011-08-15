@@ -105,7 +105,8 @@ wsdot.config = {
                     "options": {
                         "id": "Congressional Districts",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [30]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -122,7 +123,8 @@ wsdot.config = {
                     "options": {
                         "id": "Legislative Districts",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [31]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -138,7 +140,8 @@ wsdot.config = {
                     "options": {
                         "id": "RTPO",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [32]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -151,7 +154,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
                     "options": {
                         "id": "Tribal Lands",
                         "visible": false
@@ -167,7 +170,8 @@ wsdot.config = {
                        "outFields": ["PDFURL", "SRID", "Label"],
                        "visible": false,
                        "mode": "MODE_SNAPSHOT"
-                   }
+                   },
+                   "metadataIds": [37]
                }
            ],
             "WSDOT Boundaries": [
@@ -177,7 +181,8 @@ wsdot.config = {
                     "options": {
                         "id": "Maintenance Areas",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [33,34]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
