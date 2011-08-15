@@ -21,11 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
 /*
-This jQuery plugin is used to create a layer list control for an ArcGIS JavaScript API web application.
+This script gives existing ArcGIS JavaScript API types additional methods and properties.
 Prerequisites:
     ArcGIS JavaScript API
-    jQuery
-    jQuery UI
 */
 
 (function (dojo) {
