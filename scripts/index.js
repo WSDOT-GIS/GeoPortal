@@ -112,7 +112,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         // If a title is specified in the config file, replace the page title.
         if (wsdot.config.pageTitle) {
             $("h1").empty().text(wsdot.config.pageTitle);
-            $("title").text(wsdot.config.pageTitle);
+            document.title = wsdot.config.pageTitle;
         }
 
         // Set the links to other websites to open in a new window.  
