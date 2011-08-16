@@ -86,6 +86,7 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
+    <Content Include="scripts\config.Debug.js" />
     <Content Include="scripts\config.Freight.Debug.js" />
     <Content Include="scripts\config.js" />
     <Content Include="scripts\config.Release.js" />

@@ -314,7 +314,7 @@ Prerequisites:
 
 
                 // If the layer has sublayers, add the controls for the sublayers.
-                if (typeof (layer.setVisibleLayers) !== "undefined" && (!dojo.isIE || dojo.isIE >= 9)) {
+                if (typeof (layer.setVisibleLayers) !== "undefined") { // && (!dojo.isIE || dojo.isIE >= 9)) {
                     if (layer.loaded) {
                         createSublayerLink(layer);
                         setClassForOutOfScaleLayerControls();

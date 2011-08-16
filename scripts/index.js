@@ -77,10 +77,11 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                 break;
             case "esri.layers.FeatureLayer":
                 constructor = esri.layers.FeatureLayer;
-                // If a mode has been specified by name, convert to the numeric value the constructor is expecting.
-                if (layerInfo.options.mode && typeof (layerInfo.options.mode) !== "number") {
-                    layerInfo.options.mode = esri.layers.FeatureLayer[layerInfo.options.mode];
-                }
+                // The commented out code below causes a the browser to hang in IE 7 when browser is maximized and display resolution is set at 1280 x 1024.
+                ////// If a mode has been specified by name, convert to the numeric value the constructor is expecting.
+                ////if (layerInfo.options.mode && typeof (layerInfo.options.mode) !== "number") {
+                ////    layerInfo.options.mode = esri.layers.FeatureLayer[layerInfo.options.mode];
+                ////}
                 break;
             default:
                 // Unsupported type.
