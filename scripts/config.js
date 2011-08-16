@@ -168,8 +168,7 @@ wsdot.config = {
                    "options": {
                        "id": "Interchange Drawings",
                        "outFields": ["PDFURL", "SRID", "Label"],
-                       "visible": false,
-                       "mode": "MODE_SNAPSHOT"
+                       "visible": false
                    },
                    "metadataIds": [37]
                }
