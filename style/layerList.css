@@ -45,3 +45,14 @@ li.outOfScale, *.outOfScale a, div.outOfScale label
 {
     display: table-cell;
 }
+
+.failed *
+{
+    color: Red;
+    text-decoration: line-through;
+}
+
+.succeeded *
+{
+    color: Green;
+}

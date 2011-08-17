@@ -319,9 +319,16 @@ Prerequisites:
                         createSublayerLink(layer);
                         setClassForOutOfScaleLayerControls();
                     } else {
+                        $("input[type=checkbox]", layerDiv).attr("disabled", true);
                         dojo.connect(layer, "onLoad", function (layer) {
                             createSublayerLink(layer);
                             setClassForOutOfScaleLayerControls();
+                            $("input[type=checkbox]", layerDiv).attr("disabled", false);
+                        });
+                        dojo.connect(layer, "onError", function (error) {
+                            // console.log("Error loading layer", layer.id, layerDiv);
+                            layerDiv.addClass("failed");
+                            layerDiv.attr("title", "This layer is currently not available.");
                         });
                     }
                 }
