@@ -995,19 +995,17 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             interchangeLayer = map.getLayer("Interchange Drawings");
 
             function interchangeLayerLoadedHandler(layer) {
-                var groupedLinks, dialog;
-
-
+                var dialog;
 
                 interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
 
+                // but only while this layer is visible.
                 // Connect the visibility change handler for the layer, 
                 // which will run the query task when the map is clicked,
-                // but only while this layer is visible.
                 dojo.connect(layer, "onVisibilityChange", function (visibility) {
                     if (visibility) {
                         interchangeMapClickHandler = dojo.connect(map, "onClick", function (event) {
-                            var parameters;
+                            var parameters, groupedLinks;
 
                             function identifyComplete(identifyResults) {
                                 /// <summary>Shows a dialog when the Identify task has completed.</summary>
