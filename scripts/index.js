@@ -1083,6 +1083,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                                 dialog.dialog("option", "position", [event.screenPoint.x, event.screenPoint.y]).dialog("open");
                             }
 
+                            // If there is a map point (there always should be), execute the identify task.
                             if (event && event.mapPoint) {
                                 parameters = new esri.tasks.IdentifyParameters();
                                 parameters.geometry = event.mapPoint;
@@ -1098,11 +1099,13 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
                         });
                     } else {
+                        // When the layer is hidden, disconnect the map click event handler that executes the identify task.
                         dojo.disconnect(interchangeMapClickHandler);
                     }
                 });
             }
 
+            // If the interchange layer is already loaded, trigger its onLoad handler.
             if (interchangeLayer.loaded) {
                 interchangeLayerLoadedHandler(interchangeLayer);
             } else {
