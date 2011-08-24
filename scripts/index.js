@@ -916,6 +916,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         map.addLayer(initBasemap);
 
         dojo.connect(map, "onLoad", map, function () {
+            var interchangeLayer, interchangeMapClickHandler, interchangeIdTask;
             map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
 
             // Set the scale.
@@ -989,18 +990,53 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
             $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
 
-            // Connect the interchange drawings layer's onClick event so that when a graphic is clicked the associated PDF is opened in a new window or tab (depends on user's settings).
-            dojo.connect(map.getLayer("Interchange Drawings"), "onClick", function (event) {
-                var graphic = event.graphic,
-                    pdfUrl;
-                if (graphic) {
-                    pdfUrl = graphic.attributes.PDFURL;
-                    if (pdfUrl) {
-                        // Show the PDF.
-                        window.open(pdfUrl);
+
+            // Create an map "onClick" event handler that queries the interchange drawing layer.
+            interchangeLayer = map.getLayer("Interchange Drawings");
+
+            function interchangeLayerLoadedHandler(layer) {
+                interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
+                dojo.connect(interchangeIdTask, "onComplete", function (identifyResults) {
+                    $.map(identifyResults, function (idResult) {
+                        var attributes = idResult.feature.attributes;
+                        if (attributes.PDFURL) {
+                            window.open(attributes.PDFURL, attributes.SR + " - " + attributes.Label);
+                        }
+                    });
+                });
+
+                // Connect the visibility change handler for the layer, 
+                // which will run the query task when the map is clicked,
+                // but only while this layer is visible.
+                dojo.connect(layer, "onVisibilityChange", function (visibility) {
+                    if (visibility) {
+                        interchangeMapClickHandler = dojo.connect(map, "onClick", function (event) {
+                            var parameters;
+                            if (event && event.mapPoint) {
+                                parameters = new esri.tasks.IdentifyParameters();
+                                parameters.geometry = event.mapPoint;
+                                parameters.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
+                                parameters.tolerance = 4;
+                                parameters.width = map.width;
+                                parameters.height = map.height;
+                                parameters.mapExtent = map.extent;
+                                parameters.geometry = event.mapPoint;
+                                parameters.returnGeometry = false;
+                                interchangeIdTask.execute(parameters);
+                            }
+
+                        });
+                    } else {
+                        dojo.disconnect(interchangeMapClickHandler);
                     }
-                }
-            });
+                });
+            }
+
+            if (interchangeLayer.loaded) {
+                interchangeLayerLoadedHandler(interchangeLayer);
+            } else {
+                dojo.connect(interchangeLayer, "onLoad", interchangeLayerLoadedHandler);
+            }
 
         });
 

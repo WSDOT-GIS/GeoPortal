@@ -180,11 +180,10 @@ wsdot.config = {
           ],
             "Design": [
                {
-                   "layerType": "esri.layers.FeatureLayer",
-                   "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer/0",
+                   "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                   "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
                    "options": {
                        "id": "Interchange Drawings",
-                       "outFields": ["PDFURL", "SRID", "Label"],
                        "visible": false
                    },
                    "metadataIds": [37]
