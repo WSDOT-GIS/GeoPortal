@@ -2,8 +2,11 @@
     wsdot = {};
 }
 wsdot.config = {
+    ////"pageTitle": "My Page Title",  // Use this parameter to change the page's title
+    "enableIdentify": true,  // Set to true to enable the Identify tool.  Omit or set to false if you don't want the Identify tool to be available.
     "mapOptions": {
-        "logo": false,
+        "logo": false, // Do you want the esri logo in the corner of the map?
+        // The initial extent of the map.
         "extent": {
             "xmin": -13938444.981854893,
             "ymin": 5800958.950617068,
@@ -13,6 +16,7 @@ wsdot.config = {
                 "wkid": 102100
             }
         },
+        // The levels of detail (LODs) that the map will use.
         "lods": [
                 { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
                 { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
@@ -27,12 +31,17 @@ wsdot.config = {
                 { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
             ]
     },
+    // This parameter specifies which layer will be used as the base layer when the map first loads.
     "mapInitialLayer": {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
         "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
     },
-    "locationInfoUrl": "http://hqolymgis19d/LocationInfo",
-    "geometryServer": "http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer",
+    // The URL of the Location Information service's REST endpoint.  Used with the Location Information tool.
+    "locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+
+    // The ArcGIS Servergeometry server that will be used 
+    "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+    // The "queryTasks" properties are used to populate the drop-down lists of zoom extents.
     "queryTasks": {
         "city": {
             "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
@@ -51,6 +60,7 @@ wsdot.config = {
             }
         }
     },
+    // "basemaps" defines basemaps to be added to the basemap widget (in addition to the default basemaps that ESRI provides).
     "basemaps": [
         {
             "id": "wsdotBasemap",
@@ -69,15 +79,17 @@ wsdot.config = {
             ]
         }
     ],
-    "basemapsToRemove": ["basemap_6"],
+    "basemapsToRemove": ["basemap_6"], // This property is used to remove default basemaps from the basemap widget.
+    // The "locateMileposts" and "locateNearestMileposts" options are used to specify ELC REST endpoints.
     "locateMileposts": {
-        "url": "http://hqolymgis21t/ElcProxy/LocateMileposts.ashx",
+        "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
     "locateNearestMileposts": {
-        "url": "http://hqolymgis21t/ElcProxy/GetRouteCoordinatesNearestXYs.ashx",
+        "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
+    // "identifyLayers" is used to specify which layers will be available in the Identify tool.  It is not necessary for these layers to be added to the map.
     "identifyLayers": [
         {
             "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -87,6 +99,11 @@ wsdot.config = {
             }
         }
     ],
+    /* 
+    The "layers" section specifies which layers will be added to the map and to the layer list.  
+    The outermost grouping level is "Tab" level.  Next is "group" level.
+    If only one "Tab" level group is defined, then the layer list will not have tabs.
+    */
     "layers": {
         "Main": {
             "Political Boundaries": [
@@ -171,7 +188,7 @@ wsdot.config = {
                        "visible": false
                    },
                    "metadataIds": [37]
-               }
+                }
            ],
             "WSDOT Boundaries": [
                 {

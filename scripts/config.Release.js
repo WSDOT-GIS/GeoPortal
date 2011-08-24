@@ -31,8 +31,8 @@ wsdot.config = {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
         "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
     },
-    "locationInfoUrl": "http://hqolymgis19d/LocationInfo",
-    "geometryServer": "http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer",
+    "locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+    "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
     "queryTasks": {
         "city": {
             "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
@@ -71,18 +71,18 @@ wsdot.config = {
     ],
     "basemapsToRemove": ["basemap_6"],
     "locateMileposts": {
-        "url": "http://www.wsdot.wa.gov/Geospatial/Transformation/Coordinate/LocateMileposts.ashx",
+        "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
     "locateNearestMileposts": {
-        "url": "http://www.wsdot.wa.gov/Geospatial/Transformation/Coordinate/GetRouteCoordinatesNearestXYs.ashx",
+        "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
     "layers": {
         "Main": {
             "Political Boundaries": [
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
                     "options": {
                         "id": "City Limits",
@@ -96,16 +96,17 @@ wsdot.config = {
                     "options": {
                         "id": "Congressional Districts",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [30]
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
                     "options": {
                         "id": "County Boundaries",
                         "visible": false
                     },
-                    "metadataIds":[25]
+                    "metadataIds": [25]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -113,10 +114,11 @@ wsdot.config = {
                     "options": {
                         "id": "Legislative Districts",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [31]
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
                     "options": {
                         "id": "MPO",
@@ -124,12 +126,13 @@ wsdot.config = {
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
                     "options": {
                         "id": "RTPO",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [32]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -138,11 +141,11 @@ wsdot.config = {
                         "id": "Township / Section",
                         "visible": false
                     },
-                    "metadataIds":[5]
+                    "metadataIds": [5]
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
                     "options": {
                         "id": "Tribal Lands",
                         "visible": false
@@ -157,7 +160,8 @@ wsdot.config = {
                        "id": "Interchange Drawings",
                        "outFields": ["PDFURL", "SRID", "Label"],
                        "visible": false
-                   }
+                   },
+                   "metadataIds": [37]
                }
            ],
             "WSDOT Boundaries": [
@@ -167,16 +171,17 @@ wsdot.config = {
                     "options": {
                         "id": "Maintenance Areas",
                         "visible": false
-                    }
+                    },
+                    "metadataIds": [33,34]
                 },
                 {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
                     "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
                     "options": {
                         "id": "Region Boundaries",
                         "visible": false
                     },
-                    "metadataIds":[19]
+                    "metadataIds": [19]
                 },
                 {
                     "layerType": "esri.layers.FeatureLayer",
@@ -197,7 +202,7 @@ wsdot.config = {
                         "id": "State Routes",
                         "visible": false
                     },
-                    "metadataIds":[16,15,17]
+                    "metadataIds": [16, 15, 17]
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -206,7 +211,7 @@ wsdot.config = {
                         "id": "Functional Class",
                         "visible": false
                     },
-                    "metadataIds":[8,14]
+                    "metadataIds": [8, 14]
                 }
             ],
             "Other": [

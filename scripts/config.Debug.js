@@ -31,8 +31,8 @@ wsdot.config = {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
         "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
     },
-    "locationInfoUrl": "http://hqolymgis19d/LocationInfo",
-    "geometryServer": "http://hqolymgis17p/ArcGIS/rest/services/Geometry/GeometryServer",
+    "locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+    "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
     "queryTasks": {
         "city": {
             "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
@@ -71,11 +71,11 @@ wsdot.config = {
     ],
     "basemapsToRemove": ["basemap_6"],
     "locateMileposts": {
-        "url": "http://hqolymgis21t/ElcProxy/LocateMileposts.ashx",
+        "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
     "locateNearestMileposts": {
-        "url": "http://hqolymgis21t/ElcProxy/GetRouteCoordinatesNearestXYs.ashx",
+        "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
     "identifyLayers": [

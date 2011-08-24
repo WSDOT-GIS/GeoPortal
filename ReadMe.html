@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>GRDO Map Application</title>
+    <style type="text/css">
+        #configjs 
+        {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <h1>GRDO Map Application Configuration</h1>
+    <h2>Configuration</h2>
+    <a id="webdotconfig" />
+    <h3>web.config</h3>
+    <p>The web.config file contains server-side settings.  Each Visual Studio project configuration will have its own <a href="http://go.microsoft.com/fwlink/?LinkId=125889">web.config transformation file</a>.</p>
+    <p>The following settings are contained in the /configuration/appSettings section of the web.config file.</p>
+    <dl>
+        <dt>wsdotTrafficApiAccessCode</dt>
+        <dd>This setting is used for accessing the <a href="http://www.wsdot.wa.gov/Traffic/api/">WSDOT Trafic API</a> to get traffic cameras, etc.  (Not currently used.)</dd>
+        <dt>config</dt>
+        <dd>Specifies which JavaScript configuration file is used for the client-side settings. (This file will be passed through the browser via <a href="config.ashx">config.ashx</a>. )</dd>
+        <dt>mapIconBaseMap</dt>
+        <dd>Specifies the base map that is used when exporting a map image via <a href="MapIcon.ashx">MapIcon.ashx</a>.</dd>
+        <dt>mapIconDefaultExtent</dt>
+        <dd>Specifies a default extent for <a href="MapIcon.ashx">MapIcon.ashx</a> when an extent is not specified.</dd>
+        <dt>metadataRestUrl</dt>
+        <dd>The URL of an ArcGIS map service's layer's REST endpoint which provides metadata for layers in this application.</dd>
+        <dt>stateRouteMapService</dt>
+        <dd>A map service that is used to retrieve state route data.</dd>
+        <dt>stateRouteMapServiceLayers</dt>
+        <dd>A JSON string that describes the layers in the <em>stateRouteMapService</em>.</dd>
+    </dl>
+    <h3>config.js &amp; config.ashx</h3>
+    <p>The config.ashx is used to provide configuration settings to the JavaScript running on the client.  
+    The <em>config</em> section of the <a href="#webdotconfig">web.config</a> file determines which configuration script is actually returned.
+    <p>See <a href="scripts/config.js">config.js</a> for more details.</p>
+    <pre id="configjs" style="display: none"></pre>
+
+    <h2>Dependencies</h2>
+    <ul>
+        <li><a href="http://help.arcgis.com/EN/webapi/javascript/arcgis/index.html">ArcGIS JavaScript API</a></li>
+        <li><a href="http://jquery.com">JQuery</a></li>
+        <li><a href="http://jqueryui.com">JQuery UI</a></li>
+    </ul>
+    <h3>WSDOT Dependencies</h3>
+    <ul>
+        <li>ELC Proxy</li>
+        <li>Location Information Service</li>
+        <li>Metadata Extractor (Used by Location Information service)</li>
+    </ul>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        // Load the contents of config.js and place them into a pre element.
+        $.get("scripts/config.js", null, function (data, textStatus) {
+            if (textStatus === "success") {
+                $("#configjs").text(data);
+                $("a[href='scripts/config.js']").attr("href", "#").click(function () {
+                    $("#configjs").slideToggle();
+                });
+            }
+        }, "text");
+    </script>
+</body>
+
+</html>

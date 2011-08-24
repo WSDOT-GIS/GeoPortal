@@ -83,6 +83,7 @@
     <Content Include="index.html" />
     <Content Include="lrsToolsTemplate.html" />
     <Content Include="MapIconGenerator.htm" />
+    <Content Include="ReadMe.html" />
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <Content Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
