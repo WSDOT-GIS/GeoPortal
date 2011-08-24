@@ -1000,7 +1000,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                     $.map(identifyResults, function (idResult) {
                         var attributes = idResult.feature.attributes;
                         if (attributes.PDFURL) {
-                            window.open(attributes.PDFURL, attributes.SR + " - " + attributes.Label);
+                            window.open(attributes.PDFURL);
                         }
                     });
                 });
