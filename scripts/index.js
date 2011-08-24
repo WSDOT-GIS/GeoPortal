@@ -192,7 +192,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         var propNames = ["xmin", "ymin", "xmax", "ymax"],
             output = "",
             i, l;
-        for (i = 0, l = propNames.length; i < l; i++) {
+        for (i = 0, l = propNames.length; i < l; i+=1) {
             if (i > 0) {
                 output += ",";
             }
@@ -244,7 +244,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             var layer,
                 visibleLayers = [],
                 i, l;
-            for (i = 0, l = this.layerIds.length; i < l; i++) {
+            for (i = 0, l = this.layerIds.length; i < l; i+=1) {
                 layer = this.getLayer(this.layerIds[i]);
                 if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
                     visibleLayers.push(layer);
@@ -257,7 +257,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             var gfxLayers = [],
                 layer, id,
                 i;
-            for (i = 0; i < this.graphicsLayerIds.length; i++) {
+            for (i = 0; i < this.graphicsLayerIds.length; i+=1) {
                 id = this.graphicsLayerIds[i];
                 layer = this.getLayer(id);
                 if (layer.isInstanceOf(esri.layers.GraphicsLayer) && !layer.isInstanceOf(esri.layers.FeatureLayer)) {
@@ -773,8 +773,8 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                             /// <summary>Gets an existing layer from the map with a matching ID.  If no such layer exists, a new layer object is created.</summary>
                             /// <param name="layerInfo" type="Object">An object with properties that define how a layer object can be created.</param>
                             /// <returns type="esri.layers.Layer" />
-                            var layer = null;
-                            for (var i = 0, l = map.layerIds.length; i < l; i++) {
+                            var layer = null, i, l;
+                            for (i = 0, l = map.layerIds.length; i < l; i+=1) {
                                 if (layerInfo.id === map.layerIds[i]) {
                                     layer = map.getLayer(map.layerIds[i]);
                                     break;
@@ -817,7 +817,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             createLinks.basemapTab = dojo.connect(dijit.byId("basemapTab"), "onShow", function () {
                 var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery;
 
-                for (i = 0, l = basemaps.length; i < l; i++) {
+                for (i = 0, l = basemaps.length; i < l; i+=1) {
                     for (layeri in basemaps.layers) {
                         if (basemaps.layers.hasOwnProperty(layeri)) {
                             basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
@@ -837,7 +837,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                 if (wsdot.config.basemapsToRemove) {
                     dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
                         var i, removed;
-                        for (i = 0; i < this.length; i++) {
+                        for (i = 0; i < this.length; i+=1) {
                             removed = basemapGallery.remove(this[i]);
                             if (console && console.warn) {
                                 if (removed === null) {
@@ -916,7 +916,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         map.addLayer(initBasemap);
 
         dojo.connect(map, "onLoad", map, function () {
-            var interchangeLayer, interchangeMapClickHandler, interchangeIdTask, interchangePdfDialog;
+            var interchangeLayer, interchangeMapClickHandler, interchangeIdTask;
             map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
 
             // Set the scale.
@@ -995,39 +995,74 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             interchangeLayer = map.getLayer("Interchange Drawings");
 
             function interchangeLayerLoadedHandler(layer) {
+                var groupedLinks;
                 interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
                 dojo.connect(interchangeIdTask, "onComplete", function (identifyResults) {
-                    var list;
+                    var srids, dialog;
+
+                    function groupBySRId(identifyResults) {
+                        /// <summary>Converts the identify results into a elements grouped by SRID.</summary>
+                        var output = {}, attributes, link;
+                        $.map(identifyResults, function (idResult) {
+                            attributes = idResult.feature.attributes;
+                            // Create the array for this SRID if it does not yet exist.
+                            if (!output[attributes.SRID]) {
+                                if (!srids) { srids = []; }
+                                srids.push(attributes.SRID);
+                                output[attributes.SRID] = [];
+                            }
+                            // Add the link to the array
+                            link = $("<a>").attr({ href: "#" }).text(attributes.Label).click(function () { window.open(attributes.PDFURL); });
+                            output[attributes.SRID].push(link);
+                        });
+
+                        return output;
+                    }
+
+                    function sortElementsByText(a, b) {
+                        /// <summary>Sorts HTML elements (jQuerys) by their text.</summary>
+                        a = a.text(); b = b.text();
+                        if (a < b) {
+                            return -1;
+                        } else if (a > b) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+
+
                     if (!identifyResults || identifyResults.length < 1) {
                         return;
                     }
-                    if (!interchangePdfDialog) {
-                        interchangePdfDialog = $("<div>").dialog({
-                            autoOpen: false,
-                            title: "Interchange Drawings"
-                        });
-                    } else {
-                        interchangePdfDialog.empty();
-                    }
-                    list = $("<ul>").appendTo(interchangePdfDialog);
-                    $.map(identifyResults, function (idResult) {
-                        var attributes, link;
-                        attributes = idResult.feature.attributes;
-                        link = $("<a>").attr({
-                            href: "#" //attributes.PDFURL
-                        }).html(attributes.SRID + "<br />" + attributes.Label).click(function () {
-                            window.open(attributes.PDFURL);
-                        });
-                        return $("<li>").append(link).appendTo(list);
+                    // Convert the results into links grouped by SRID.  This also generates a list of SRIDs.
+                    groupedLinks = groupBySRId(identifyResults);
+                    // Sort the list of SRIDs.
+                    srids.sort();
+
+                    // Create the dialog.  It will be destroyed when it is closed.
+                    dialog = $("<div>").dialog({
+                        autoOpen: false,
+                        title: "Interchange Drawings",
+                        close: function () {
+                            $(this).dialog("destroy");
+                        }
                     });
 
-                    interchangePdfDialog.dialog("open");
-                    ////$.map(identifyResults, function (idResult) {
-                    ////    var attributes = idResult.feature.attributes;
-                    ////    if (attributes.PDFURL) {
-                    ////        window.open(attributes.PDFURL);
-                    ////    }
-                    ////});
+                    // Add the controls to the dialog.
+                    $.map(srids, function (srid) {
+                        var list;
+                        $("<h2>").text(srid).appendTo(dialog);
+                        list = $("<ul>").appendTo(dialog);
+                        // Sort the links by their text.
+                        groupedLinks[srid].sort(sortElementsByText);
+                        $.each(groupedLinks[srid], function (srid, link) {
+                            $("<li>").append(link).appendTo(list);
+                        });
+                    });
+
+                    // Open the dialog.
+                    dialog.dialog("open");
                 });
 
                 // Connect the visibility change handler for the layer, 
