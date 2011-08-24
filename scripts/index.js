@@ -916,7 +916,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         map.addLayer(initBasemap);
 
         dojo.connect(map, "onLoad", map, function () {
-            var interchangeLayer, interchangeMapClickHandler, interchangeIdTask;
+            var interchangeLayer, interchangeMapClickHandler, interchangeIdTask, interchangePdfDialog;
             map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
 
             // Set the scale.
@@ -997,12 +997,37 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             function interchangeLayerLoadedHandler(layer) {
                 interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
                 dojo.connect(interchangeIdTask, "onComplete", function (identifyResults) {
+                    var list;
+                    if (!identifyResults || identifyResults.length < 1) {
+                        return;
+                    }
+                    if (!interchangePdfDialog) {
+                        interchangePdfDialog = $("<div>").dialog({
+                            autoOpen: false,
+                            title: "Interchange Drawings"
+                        });
+                    } else {
+                        interchangePdfDialog.empty();
+                    }
+                    list = $("<ul>").appendTo(interchangePdfDialog);
                     $.map(identifyResults, function (idResult) {
-                        var attributes = idResult.feature.attributes;
-                        if (attributes.PDFURL) {
+                        var attributes, link;
+                        attributes = idResult.feature.attributes;
+                        link = $("<a>").attr({
+                            href: "#" //attributes.PDFURL
+                        }).html(attributes.SRID + "<br />" + attributes.Label).click(function () {
                             window.open(attributes.PDFURL);
-                        }
+                        });
+                        return $("<li>").append(link).appendTo(list);
                     });
+
+                    interchangePdfDialog.dialog("open");
+                    ////$.map(identifyResults, function (idResult) {
+                    ////    var attributes = idResult.feature.attributes;
+                    ////    if (attributes.PDFURL) {
+                    ////        window.open(attributes.PDFURL);
+                    ////    }
+                    ////});
                 });
 
                 // Connect the visibility change handler for the layer, 
