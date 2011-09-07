@@ -133,7 +133,8 @@ jQuery UI
             pointSymbol: null,
             lineSymbol: null,
             polygonSymbol: null,
-            graphicsLayer: null
+            graphicsLayer: null,
+            templateUrl: "IdentifyTemplate.html"
         },
         isDrawing: false,
         _addLayer: function (layer /*, error*/) {
@@ -194,19 +195,7 @@ jQuery UI
         _create: function () {
             var widget = this,
                 map = this.options.map,
-                layers, tableDiv, layerIds, toolbar, geometryTypeDescriptions;
-
-            function addControlToTable(control, label) {
-                var rowDiv = $("<div>"),
-                    cellDiv = $("<div>").appendTo(rowDiv),
-                    id;
-
-                id = $(control).attr("id");
-                $("<label>").attr("for", id).text(label).appendTo(cellDiv);
-                cellDiv = $("<div>").appendTo(rowDiv).append(control);
-
-                return rowDiv;
-            }
+                tableDiv, layerIds, toolbar, geometryTypeDescriptions;
 
             function handleMapServiceChange(/*event*/) {
                 var selectedMapService, sublayerSelect, childLayerInfos;
@@ -369,7 +358,7 @@ jQuery UI
             if (!widget.options.graphicsLayer) {
                 widget.options.graphicsLayer = new esri.layers.GraphicsLayer({
                     id: "Identify Results",
-                    displayOnPan: (!dojo.isIE || dojo.isIE < 9)
+                    displayOnPan: (!dojo.isIE || dojo.isIE >= 9)
                 });
                 widget.options.map.addLayer(widget.options.graphicsLayer);
 
@@ -377,98 +366,41 @@ jQuery UI
             }
 
             this.element.addClass("ui-widget ui-widget-content ui-corner-all ui-identify");
-            tableDiv = $("<div>").addClass("table ").appendTo(this.element);
 
-            // Setup layer select controls
-            addControlToTable($("<select>").attr({
-                id: "ui-identify-layer-select",
-                title: "Select which map service layer you want to use with the identify tool."
-            }).change(handleMapServiceChange), "Layer").appendTo(tableDiv);
-
-            // Setup layer option controls.
-            addControlToTable($("<select>").attr("id", "ui-identify-layer-option-select"), "Layer Option").appendTo(tableDiv);
-
-            // Setup tolerance controls
-            addControlToTable($("<input>").attr({
-                type: "number",
-                value: 10,
-                min: 0,
-                id: "ui-identify-tolerance-input",
-                title: "The distance in screen pixels from the specified geometry within which the identify should be performed.",
-                name: "tolerance"
-            }), "Tolerance (in pixels)").appendTo(tableDiv);
-
-            // Setup sublayer select
-            addControlToTable($("<select>").attr({ "id": "ui-identify-sublayer-select", multiple: true, name: "sublayers" }), "Sublayers").appendTo(tableDiv);
-
-            $.each(["LAYER_OPTION_ALL", "LAYER_OPTION_TOP", "LAYER_OPTION_VISIBLE"], function (index, optionConstantName) {
-                $("<option>").attr("value", esri.tasks.IdentifyParameters[optionConstantName]).text(optionConstantName.substring(13)).appendTo("#ui-identify-layer-option-select");
-            });
-
-            addControlToTable($("<select>").attr({ "id": "ui-identify-geometry-type-select" }), "Geometry Type").appendTo(tableDiv);
-            $("<optgroup>").attr("label", "Lines").appendTo("#ui-identify-geometry-type-select");
-            $("<optgroup>").attr("label", "Polygons").appendTo("#ui-identify-geometry-type-select");
-            ////$("<optgroup>").attr("label", "Arrows").appendTo("#ui-identify-geometry-type-select");
+            // Load the HTML template and add it to the control
+            $.get(widget.options.templateUrl, function (data, textStatus, jqXHR) {
+                var layers = widget.options.layers;
+                $(data).filter("div[class=table], div[class=ui-identify-toolbar]").appendTo(widget.element);
+                $("#ui-identify-layer-select").change(handleMapServiceChange);
+                $("#ui-identify-identify-button").button({ label: "Identify" }).click(performDraw);
+                $("#ui-identify-clear-button").button({ label: "Clear" }).click(function () { widget.options.graphicsLayer.clear(); });
 
 
+                if (map) {
+                    if (!layers || !layers.length || layers.length < 1) {
+                        widget._layerAddHandler = dojo.connect(map, "onLayerAddResult", widget._addLayer);
+                        widget._layerRemoveHandler = dojo.connect(map, "onLayerRemove", widget._removeLayer);
 
+                        // Get a sorted list of layer ids.
+                        layerIds = $.map(map.layerIds, function (layerId) { return layerId; }).sort();
 
+                        // Add the layer to the list of layers.
+                        $.each(layerIds, function (index, layerId) {
+                            var layer = map.getLayer(layerId);
+                            widget._addLayer(layer);
+                        });
+                    }
 
-            geometryTypeDescriptions = [
-                                        { "geometryType": "POINT", "description": "Draws a point.", "selected": true },
-                                        { "geometryType": "EXTENT", "description": "Draws an extent box." },
-                                        { "geometryType": "LINE", "description": "Draws a line." },
-                                        { "geometryType": "POLYLINE", "description": "Draws a polyline." },
-                                        { "geometryType": "FREEHAND_POLYLINE", "description": "Draws a freehand polyline." },
-                                        { "geometryType": "POLYGON", "description": "Draws a polygon." },
-                                        { "geometryType": "FREEHAND_POLYGON", "description": "Draws a freehand polygon."}];
-
-            $.each(geometryTypeDescriptions, function (index, geometryTypeDesc) {
-                var text, option, select;
-                select = $("#ui-identify-geometry-type-select");
-                text = geometryTypeDesc.geometryType.replace("_", " ");
-                option = $("<option>").text(text).attr({ value: esri.toolbars.Draw[geometryTypeDesc.geometryType], title: geometryTypeDesc.description });
-                if (geometryTypeDesc.selected) {
-                    option.attr("selected", geometryTypeDesc.selected);
-                }
-                if (geometryTypeDesc.geometryType.match(/ARROW/gi)) {
-                    option.appendTo("optgroup[label=Arrows]", select);
-                } else if (geometryTypeDesc.geometryType.match(/LINE/gi)) {
-                    option.appendTo("optgroup[label=Lines]", select);
-                } else if (geometryTypeDesc.geometryType.match(/(?:POLYGON)|(?:EXTENT)/gi)) {
-                    option.appendTo("optgroup[label=Polygons]", select);
                 } else {
-                    option.appendTo(select);
+                    throw new Error("No valid map was provided");
                 }
-            });
-            toolbar = $("<div>").addClass("ui-identify-toolbar").appendTo(widget.element);
-            $("<button>").attr({ id: "ui-identify-identify-button", type: "button" }).button({ label: "Identify" }).appendTo(toolbar).click(performDraw);
-            $("<button>").attr({ type: "button" }).button({ label: "Clear" }).appendTo(toolbar).click(function () { widget.options.graphicsLayer.clear(); });
-            layers = this.options.layers;
-            if (map) {
-                if (!layers || !layers.length || layers.length < 1) {
-                    this._layerAddHandler = dojo.connect(map, "onLayerAddResult", widget._addLayer);
-                    this._layerRemoveHandler = dojo.connect(map, "onLayerRemove", widget._removeLayer);
 
-                    // Get a sorted list of layer ids.
-                    layerIds = $.map(map.layerIds, function (layerId) { return layerId; }).sort();
-
-                    // Add the layer to the list of layers.
-                    $.each(layerIds, function (index, layerId) {
-                        var layer = map.getLayer(layerId);
+                if (layers && layers.length) {
+                    $.each(layers, function (index, layer) {
                         widget._addLayer(layer);
                     });
                 }
-
-            } else {
-                throw new Error("No valid map was provided");
-            }
-
-            if (layers && layers.length) {
-                $.each(layers, function (index, layer) {
-                    widget._addLayer(layer);
-                });
-            }
+            });
         },
         enable: function () {
             $.Widget.prototype.enable.apply(this, arguments);
