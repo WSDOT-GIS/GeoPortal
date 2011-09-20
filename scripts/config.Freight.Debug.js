@@ -3,7 +3,7 @@
 }
 wsdot.config = {
     "pageTitle": "Freight",
-    "enableIdentify" : true,
+    "enableIdentify": true,
     "mapOptions": {
         "logo": false,
         "extent": {
@@ -246,7 +246,7 @@ wsdot.config = {
                         "id": "Maintenance Areas",
                         "visible": false
                     },
-                    "metadataIds": [33,34]
+                    "metadataIds": [33, 34]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -362,6 +362,14 @@ wsdot.config = {
                     "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/FreightGoods/MapServer",
                     "options": {
                         "id": "Freight Goods",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTTrafficSections/MapServer",
+                    "options" : {
+                        "id": "Traffic Sections",
                         "visible": false
                     }
                 }
