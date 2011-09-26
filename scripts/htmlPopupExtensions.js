@@ -43,9 +43,10 @@
                         var layerUrl = mapService.url + "/" + String(layerInfo.id);
                         // Query the layers to see if they support html Popups
                         $.get(layerUrl, { f: "json" }, function (layerResponse, textStatus) {
-                            // If the map supports HTML popups, add the layer to the list.
+                            // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
                             if (/success/i.test(textStatus)) {
-                                if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType)) {
+                                if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) && 
+                                typeof(layerResponse.type) !== "undefined" && !/Annotation/gi.test(layerResponse.type) ) {
                                     // Add this URL to the list of URLs that supports HTML popups.
                                     layerInfo.htmlPopupType = layerResponse.htmlPopupType;
                                     if (typeof (htmlPopupLayerFoundAction) === "function") {
@@ -103,19 +104,6 @@
                 });
 
                 this.detectHtmlPopupsHasRun = true;
-
-                // $.map(map.graphicsLayerIds, function(id) {
-                // var layer = map.getLayer(id);
-                // if (typeof(htmlPopupLayerFoundAction) === "function" && layer.isInstanceOf && layer.isInstanceOf(esri.layers.FeatureLayer)) {
-                // if (layer.loaded && layer.htmlPopupType === esri.layers.FeatureLayer.POPUP_HTML_TEXT) {
-                // htmlPopupLayerFoundAction(layer.url, layer);
-                // } else {
-                // dojo.connect(layer, "onLoad", function(layer) {
-                // htmlPopupLayerFoundAction(layer.url, layer);
-                // });
-                // }
-                // }
-                // });
             },
             identify: function (geometry, identifyCompleteHandler, options, errorHandler) {
                 ///<summary>Runs an identify task for each map service that has HTML Popup sublayers.</summary>
