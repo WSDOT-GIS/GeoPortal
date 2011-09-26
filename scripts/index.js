@@ -164,6 +164,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
     dojo.require("dojox.layout.ExpandoPane");
 
+    dojo.require("dijit.form.RadioButton");
     dojo.require("dijit.form.Select");
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.data.ItemFileReadStore");
@@ -922,7 +923,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             // Set the scale.
             setScaleLabel();
 
-            map.setupIdentifyPopups();
 
 
             setupNorthArrow();
@@ -1042,128 +1042,129 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             }
 
             $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
+            map.setupIdentifyPopups();
 
 
-        ////// Create an map "onClick" event handler that queries the interchange drawing layer.
-        ////interchangeLayer = map.getLayer("Interchange Drawings");
+            ////// Create an map "onClick" event handler that queries the interchange drawing layer.
+            ////interchangeLayer = map.getLayer("Interchange Drawings");
 
-        ////function interchangeLayerLoadedHandler(layer) {
-        ////    var dialog;
+            ////function interchangeLayerLoadedHandler(layer) {
+            ////    var dialog;
 
-        ////    interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
+            ////    interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
 
-        ////    // Connect the visibility change handler for the layer, 
-        ////    // which will run the query task when the map is clicked,
-        ////    // but only while this layer is visible.
-        ////    dojo.connect(layer, "onVisibilityChange", function (visibility) {
-        ////        if (visibility) {
-        ////            interchangeMapClickHandler = dojo.connect(map, "onClick", function (event) {
-        ////                var parameters, groupedLinks;
+            ////    // Connect the visibility change handler for the layer, 
+            ////    // which will run the query task when the map is clicked,
+            ////    // but only while this layer is visible.
+            ////    dojo.connect(layer, "onVisibilityChange", function (visibility) {
+            ////        if (visibility) {
+            ////            interchangeMapClickHandler = dojo.connect(map, "onClick", function (event) {
+            ////                var parameters, groupedLinks;
 
-        ////                function identifyComplete(identifyResults) {
-        ////                    /// <summary>Shows a dialog when the Identify task has completed.</summary>
-        ////                    var srids;
+            ////                function identifyComplete(identifyResults) {
+            ////                    /// <summary>Shows a dialog when the Identify task has completed.</summary>
+            ////                    var srids;
 
-        ////                    function groupBySRId(identifyResults) {
-        ////                        /// <summary>Converts the identify results into a elements grouped by SRID.</summary>
-        ////                        var output = {}, attributes, link;
-        ////                        $.map(identifyResults, function (idResult) {
-        ////                            attributes = idResult.feature.attributes;
-        ////                            // Create the array for this SRID if it does not yet exist.
-        ////                            if (!output[attributes.SRID]) {
-        ////                                if (!srids) { srids = []; }
-        ////                                srids.push(attributes.SRID);
-        ////                                output[attributes.SRID] = [];
-        ////                            }
-        ////                            // Add the link to the array
-        ////                            link = $("<a>").attr({ href: "#" }).text(attributes.Label).click(function () { window.open(attributes.PDFURL); });
-        ////                            output[attributes.SRID].push(link);
-        ////                        });
+            ////                    function groupBySRId(identifyResults) {
+            ////                        /// <summary>Converts the identify results into a elements grouped by SRID.</summary>
+            ////                        var output = {}, attributes, link;
+            ////                        $.map(identifyResults, function (idResult) {
+            ////                            attributes = idResult.feature.attributes;
+            ////                            // Create the array for this SRID if it does not yet exist.
+            ////                            if (!output[attributes.SRID]) {
+            ////                                if (!srids) { srids = []; }
+            ////                                srids.push(attributes.SRID);
+            ////                                output[attributes.SRID] = [];
+            ////                            }
+            ////                            // Add the link to the array
+            ////                            link = $("<a>").attr({ href: "#" }).text(attributes.Label).click(function () { window.open(attributes.PDFURL); });
+            ////                            output[attributes.SRID].push(link);
+            ////                        });
 
-        ////                        return output;
-        ////                    }
+            ////                        return output;
+            ////                    }
 
-        ////                    function sortElementsByText(a, b) {
-        ////                        /// <summary>Sorts HTML elements (jQuerys) by their text.</summary>
-        ////                        a = a.text(); b = b.text();
-        ////                        if (a < b) {
-        ////                            return -1;
-        ////                        } else if (a > b) {
-        ////                            return 1;
-        ////                        } else {
-        ////                            return 0;
-        ////                        }
-        ////                    }
+            ////                    function sortElementsByText(a, b) {
+            ////                        /// <summary>Sorts HTML elements (jQuerys) by their text.</summary>
+            ////                        a = a.text(); b = b.text();
+            ////                        if (a < b) {
+            ////                            return -1;
+            ////                        } else if (a > b) {
+            ////                            return 1;
+            ////                        } else {
+            ////                            return 0;
+            ////                        }
+            ////                    }
 
 
-        ////                    if (!identifyResults || identifyResults.length < 1) {
-        ////                        return;
-        ////                    }
-        ////                    // Convert the results into links grouped by SRID.  This also generates a list of SRIDs.
-        ////                    groupedLinks = groupBySRId(identifyResults);
-        ////                    // Sort the list of SRIDs.
-        ////                    srids.sort();
+            ////                    if (!identifyResults || identifyResults.length < 1) {
+            ////                        return;
+            ////                    }
+            ////                    // Convert the results into links grouped by SRID.  This also generates a list of SRIDs.
+            ////                    groupedLinks = groupBySRId(identifyResults);
+            ////                    // Sort the list of SRIDs.
+            ////                    srids.sort();
 
-        ////                    // Create the dialog.  It will be destroyed when it is closed.
-        ////                    if (!dialog) {
-        ////                        dialog = $("<div>").dialog({
-        ////                            autoOpen: false,
-        ////                            title: "Interchange Drawings",
-        ////                            show: "fade",
-        ////                            buttons: {
-        ////                                Close: function () {
-        ////                                    dialog.dialog("close");
-        ////                                }
-        ////                            }
-        ////                        });
-        ////                    } else {
-        ////                        dialog.empty();
-        ////                    }
+            ////                    // Create the dialog.  It will be destroyed when it is closed.
+            ////                    if (!dialog) {
+            ////                        dialog = $("<div>").dialog({
+            ////                            autoOpen: false,
+            ////                            title: "Interchange Drawings",
+            ////                            show: "fade",
+            ////                            buttons: {
+            ////                                Close: function () {
+            ////                                    dialog.dialog("close");
+            ////                                }
+            ////                            }
+            ////                        });
+            ////                    } else {
+            ////                        dialog.empty();
+            ////                    }
 
-        ////                    // Add the controls to the dialog.
-        ////                    $.map(srids, function (srid) {
-        ////                        var list;
-        ////                        $("<h2>").text(srid).appendTo(dialog);
-        ////                        list = $("<ul>").appendTo(dialog);
-        ////                        // Sort the links by their text.
-        ////                        groupedLinks[srid].sort(sortElementsByText);
-        ////                        $.each(groupedLinks[srid], function (srid, link) {
-        ////                            $("<li>").append(link).appendTo(list);
-        ////                        });
-        ////                    });
+            ////                    // Add the controls to the dialog.
+            ////                    $.map(srids, function (srid) {
+            ////                        var list;
+            ////                        $("<h2>").text(srid).appendTo(dialog);
+            ////                        list = $("<ul>").appendTo(dialog);
+            ////                        // Sort the links by their text.
+            ////                        groupedLinks[srid].sort(sortElementsByText);
+            ////                        $.each(groupedLinks[srid], function (srid, link) {
+            ////                            $("<li>").append(link).appendTo(list);
+            ////                        });
+            ////                    });
 
-        ////                    // Open the dialog.
-        ////                    dialog.dialog("option", "position", [event.screenPoint.x, event.screenPoint.y]).dialog("open");
-        ////                }
+            ////                    // Open the dialog.
+            ////                    dialog.dialog("option", "position", [event.screenPoint.x, event.screenPoint.y]).dialog("open");
+            ////                }
 
-        ////                // If there is a map point (there always should be), execute the identify task.
-        ////                if (event && event.mapPoint) {
-        ////                    parameters = new esri.tasks.IdentifyParameters();
-        ////                    parameters.geometry = event.mapPoint;
-        ////                    parameters.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
-        ////                    parameters.tolerance = 4;
-        ////                    parameters.width = map.width;
-        ////                    parameters.height = map.height;
-        ////                    parameters.mapExtent = map.extent;
-        ////                    parameters.geometry = event.mapPoint;
-        ////                    parameters.returnGeometry = false;
-        ////                    interchangeIdTask.execute(parameters, identifyComplete);
-        ////                }
+            ////                // If there is a map point (there always should be), execute the identify task.
+            ////                if (event && event.mapPoint) {
+            ////                    parameters = new esri.tasks.IdentifyParameters();
+            ////                    parameters.geometry = event.mapPoint;
+            ////                    parameters.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
+            ////                    parameters.tolerance = 4;
+            ////                    parameters.width = map.width;
+            ////                    parameters.height = map.height;
+            ////                    parameters.mapExtent = map.extent;
+            ////                    parameters.geometry = event.mapPoint;
+            ////                    parameters.returnGeometry = false;
+            ////                    interchangeIdTask.execute(parameters, identifyComplete);
+            ////                }
 
-        ////            });
-        ////        } else {
-        ////            // When the layer is hidden, disconnect the map click event handler that executes the identify task.
-        ////            dojo.disconnect(interchangeMapClickHandler);
-        ////        }
-        ////    });
-        ////}
+            ////            });
+            ////        } else {
+            ////            // When the layer is hidden, disconnect the map click event handler that executes the identify task.
+            ////            dojo.disconnect(interchangeMapClickHandler);
+            ////        }
+            ////    });
+            ////}
 
-        ////// If the interchange layer is already loaded, trigger its onLoad handler.
-        ////if (interchangeLayer.loaded) {
-        ////    interchangeLayerLoadedHandler(interchangeLayer);
-        ////} else {
-        ////    dojo.connect(interchangeLayer, "onLoad", interchangeLayerLoadedHandler);
-        ////}
+            ////// If the interchange layer is already loaded, trigger its onLoad handler.
+            ////if (interchangeLayer.loaded) {
+            ////    interchangeLayerLoadedHandler(interchangeLayer);
+            ////} else {
+            ////    dojo.connect(interchangeLayer, "onLoad", interchangeLayerLoadedHandler);
+            ////}
 
         });
 

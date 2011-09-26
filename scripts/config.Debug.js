@@ -230,16 +230,6 @@ wsdot.config = {
                         "id": "Traffic Flow",
                         "visible": false
                     }
-                },
-                {
-                    "layerType": "esri.layers.FeatureLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Scratch/CityHtmlPopupTest/MapServer/0",
-                    "options": {
-                        "id": "City HTML Popup",
-                        "outFields": ["OBJECTID"],
-                        "maxAllowableOffset": 100,
-                        "visible": false
-                    }
                 }
             ]
         }
