@@ -30,9 +30,13 @@
             htmlPopupType: null
         });
 
+        // Extend each of the types in the array with the same proerties and methods.
         dojo.forEach([esri.layers.ArcGISDynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer], function (ctor) {
             dojo.extend(ctor, {
                 detectHtmlPopups: function (htmlPopupLayerFoundAction) {
+                    /// <summary>Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.</summary>
+                    /// <param name="htmlPopupLayerFoundAction" type="Function">Optional.  A function that will be called whenever an HTML popup is found.</param>
+                    /// <returns type="String" />
                     var mapService = this;
                     // Query the map service to get the list of layers.
                     dojo.forEach(mapService.layerInfos, function (layerInfo) {
@@ -51,10 +55,6 @@
                             }
                         }, "jsonp");
                     });
-
-                    if (typeof (mapQueryCompleteAction) === "function") {
-                        mapQueryCompleteAction(mapService);
-                    }
                 },
                 getIdsOfLayersWithHtmlPopups: function () {
                     return getIdsOfLayersWithHtmlPopups(this);

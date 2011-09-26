@@ -112,7 +112,6 @@
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\lrsTools.js" />
     <Content Include="GetRoutes.ashx" />
-    <Content Include="MultiQuery.ashx" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
@@ -191,9 +190,6 @@
     </Compile>
     <Compile Include="Metadata.ashx.cs">
       <DependentUpon>Metadata.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="MultiQuery.ashx.cs">
-      <DependentUpon>MultiQuery.ashx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
