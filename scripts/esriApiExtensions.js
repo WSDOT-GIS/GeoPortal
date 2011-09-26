@@ -29,6 +29,7 @@ Prerequisites:
 (function (dojo) {
     "use strict";
 
+    dojo.require("esri.map");
     dojo.require("esri.layers.FeatureLayer");
 
 
@@ -50,7 +51,8 @@ Prerequisites:
                     } else {
                         return (this.minScale === 0 || this.minScale >= scale) && (this.maxScale === 0 || this.maxScale <= scale);
                     }
-                }
+                },
+                supportsHtmlPopup: null
             });
         }
 
@@ -101,6 +103,5 @@ Prerequisites:
         } else {
             console.log("esri.layers.FeatureLayer type not found.");
         }
-
     });
 } (dojo));

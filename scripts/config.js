@@ -187,7 +187,7 @@ wsdot.config = {
                        "visible": false
                    },
                    "metadataIds": [37]
-                }
+               }
            ],
             "WSDOT Boundaries": [
                 {
@@ -197,7 +197,7 @@ wsdot.config = {
                         "id": "Maintenance Areas",
                         "visible": false
                     },
-                    "metadataIds": [33,34]
+                    "metadataIds": [33, 34]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -245,6 +245,16 @@ wsdot.config = {
                     "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
                     "options": {
                         "id": "Traffic Flow",
+                        "visible": false
+                    }
+                },
+                {
+                    "layerType": "esri.layers.FeatureLayer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Scratch/CityHtmlPopupTest/MapServer/0",
+                    "options": {
+                        "id": "City HTML Popup",
+                        "outFields": ["OBJECTID"],
+                        "maxAllowableOffset": 100,
                         "visible": false
                     }
                 }

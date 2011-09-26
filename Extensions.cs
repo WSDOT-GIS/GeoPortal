@@ -60,6 +60,26 @@ namespace Wsdot.Grdo.Web
 				return default(int?);
 			}
 		}
+
+		public static string[] GetStringArrayParametrer(this NameValueCollection parameters, Regex re)
+		{
+			if (parameters == null) { throw new ArgumentNullException("parameters"); }
+			if (re == null) { throw new ArgumentNullException("re"); }
+
+			Regex csvRe = new Regex(@"[^,\[\]""]+");
+			
+			// Get the list of strings.
+			string csv = parameters.GetStringParameter(re);
+			var matches = csvRe.Matches(csv);
+			if (matches != null && matches.Count > 0)
+			{
+				return (from Match match in matches select match.Value).ToArray();
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 }
 
