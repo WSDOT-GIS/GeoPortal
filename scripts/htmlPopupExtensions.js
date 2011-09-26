@@ -234,7 +234,7 @@
                             result = div.data("result");
 
                             // If there is an object ID field, load the HTML popup.
-                            if (result.feature && result.feature.attributes && result.feature.attributes.OBJECTID) {
+                            if (typeof(result.feature) !== "undefined" && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
                                 // Get the map service url.
                                 var url = layer.url;
                                 // Append the layer ID (except for feature layers, which have the layer id as part of the url).
