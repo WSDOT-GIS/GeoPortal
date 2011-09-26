@@ -1042,7 +1042,9 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             }
 
             $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
-            map.setupIdentifyPopups();
+            map.setupIdentifyPopups({
+                ignoredLayerRE: /^layer\d+$/i
+            });
 
 
             ////// Create an map "onClick" event handler that queries the interchange drawing layer.

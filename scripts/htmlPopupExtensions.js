@@ -45,8 +45,8 @@
                         $.get(layerUrl, { f: "json" }, function (layerResponse, textStatus) {
                             // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
                             if (/success/i.test(textStatus)) {
-                                if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) && 
-                                typeof(layerResponse.type) !== "undefined" && !/Annotation/gi.test(layerResponse.type) ) {
+                                if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
+                                typeof (layerResponse.type) !== "undefined" && !/Annotation/gi.test(layerResponse.type)) {
                                     // Add this URL to the list of URLs that supports HTML popups.
                                     layerInfo.htmlPopupType = layerResponse.htmlPopupType;
                                     if (typeof (htmlPopupLayerFoundAction) === "function") {
@@ -69,6 +69,7 @@
 
 
         dojo.extend(esri.Map, {
+            _ignoredLayerRE: null,
             detectHtmlPopupsHasRun: false,
             detectHtmlPopups: function (htmlPopupLayerFoundAction, mapQueryCompleteAction, layerQueryCompleteAction) {
                 // Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
@@ -131,7 +132,13 @@
 
                 // Loop through all of the map services.
                 dojo.forEach(map.layerIds, function (layerId) {
-                    var layer = map.getLayer(layerId), sublayerIds, idTask, idParams;
+                    var layer, sublayerIds, idTask, idParams;
+                    
+                    // Skip any layers that match the ignored layers regular expression (if one has been specified).
+                    if (map._ignoredLayerRE && map._ignoredLayerRE.test(layerId)) {
+                        return;
+                    }
+                    layer = map.getLayer(layerId);
                     if (layer.visible) {
                         if (typeof (layer.getIdsOfLayersWithHtmlPopups) === "function") {
                             sublayerIds = layer.getIdsOfLayersWithHtmlPopups();
@@ -166,6 +173,7 @@
 
                         }
                     }
+
                 });
 
 
@@ -174,8 +182,19 @@
 
                 return queryCount;
             },
-            setupIdentifyPopups: function () {
+            setupIdentifyPopups: function (options) {
+                /// <param name="options" type="Object">
+                /// Defines options for setting up identify popups.
+                /// ignoredLayerRE: A regular expression.  Any layer with an ID that matches this expression will be ignored by the identify tool.
+                /// </param>
                 var map = this, pointSymbol, lineSymbol, polygonSymbol;
+
+                if (options.ignoredLayerRE) {
+                    map._ignoredLayerRE = options.ignoredLayerRE;
+                }
+
+                // TODO: add symbols to the supported options.
+
                 // map.detectHtmlPopups(function(id, layerId, layerUrl, layerResponse) {
                 // console.log("Html Popup Layer found", [id, layerId, layerUrl, layerResponse]);
                 // });
@@ -222,7 +241,7 @@
                             result = div.data("result");
 
                             // If there is an object ID field, load the HTML popup.
-                            if (typeof(result.feature) !== "undefined" && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
+                            if (typeof (result.feature) !== "undefined" && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
                                 // Get the map service url.
                                 var url = layer.url;
                                 // Append the layer ID (except for feature layers, which have the layer id as part of the url).
@@ -411,7 +430,7 @@
 
                     // Remove the dialog of there are no ID tasks.
                     if (idTaskCount === 0) {
-                         closeExistingDialogs();
+                        closeExistingDialogs();
                     }
                 });
             }
