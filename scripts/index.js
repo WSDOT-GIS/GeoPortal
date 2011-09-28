@@ -493,6 +493,8 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                 showLabel: false,
                 iconClass: "distanceIcon",
                 onClick: function () {
+                    // Disable the identify popups while the measure dialog is active.
+                    map.disablePopups();
                     var measureDialog = $("#measureWidgetContainer"),
                     titleBar;
 
@@ -505,6 +507,8 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                         });
                         measureDialog.hide();
                         $("#measureWidgetContainer").hide();
+                        // Re-enable the identify popups.
+                        map.enablePopups();
                     }
 
                     // Create the measure dialog if it does not already exist.

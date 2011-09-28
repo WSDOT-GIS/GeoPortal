@@ -133,7 +133,7 @@
                 // Loop through all of the map services.
                 dojo.forEach(map.layerIds, function (layerId) {
                     var layer, sublayerIds, idTask, idParams;
-                    
+
                     // Skip any layers that match the ignored layers regular expression (if one has been specified).
                     if (map._ignoredLayerRE && map._ignoredLayerRE.test(layerId)) {
                         return;
@@ -182,12 +182,22 @@
 
                 return queryCount;
             },
+
+            popupsEnabled: null,
+            enablePopups: function () {
+                this.popupsEnabled = true;
+            },
+            disablePopups: function () {
+                this.popupsEnabled = false;
+            },
             setupIdentifyPopups: function (options) {
                 /// <param name="options" type="Object">
                 /// Defines options for setting up identify popups.
                 /// ignoredLayerRE: A regular expression.  Any layer with an ID that matches this expression will be ignored by the identify tool.
                 /// </param>
                 var map = this, pointSymbol, lineSymbol, polygonSymbol;
+
+                map.popupsEnabled = true;
 
                 if (options.ignoredLayerRE) {
                     map._ignoredLayerRE = options.ignoredLayerRE;
@@ -232,6 +242,11 @@
 
                 dojo.connect(map, "onClick", function (event) {
                     var dialog, buttons, idTaskCount;
+
+                    // If popups are disabled, exit instead of showing the popup.
+                    if (!map.popupsEnabled) {
+                        return;
+                    }
 
                     function loadContent(div) {
                         var layer, result;
@@ -322,6 +337,7 @@
                                 selectGeometry(result.feature.geometry, result.feature.attributes);
                             }
                             $("span.result-position", dialog.parent()).text(String(position + 1));
+                            $("span.result-layer", dialog.parent()).text(result.layerName);
                         } else {
                             // If this is the first result...
                             if (map.graphics.graphics.length < 1) {
@@ -355,7 +371,7 @@
                                 setPosition("last");
                             }
                         },
-                        title: "Result&nbsp;<span class='result-position' />&nbsp;of&nbsp;<span class='result-total' />",
+                        title: "Result&nbsp;<span class='result-position' />&nbsp;of&nbsp;<span class='result-total' /><br /><span class='result-layer' />",
                         close: function () {
                             map.graphics.clear();
                             $(this).dialog("destroy");
@@ -422,6 +438,7 @@
                                 progress.remove();
                                 setPosition(0);
                                 $("span.result-position", dialog.parent()).text("1");
+                                $("span.result-layer", dialog.parent()).text(result.layerName);
                             }
                         });
                     }, null, function (layer, error) {
