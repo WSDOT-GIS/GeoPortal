@@ -1,4 +1,6 @@
-﻿if (typeof (wsdot) === "undefined") {
+﻿/*jslint white: true, nomen: true */
+/*global wsdot:true*/
+if (typeof (wsdot) === "undefined") {
     wsdot = {};
 }
 wsdot.config = {
@@ -28,7 +30,9 @@ wsdot.config = {
                 { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
                 { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
                 { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
-                { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
+                { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 },
+                { "level": 12, "resolution": 0.597164283559817, "scale": 2256.994353 },
+                { "level": 13, "resolution": 0.298582141647617, "scale": 1128.497176 }
             ]
     },
     // This parameter specifies which layer will be used as the base layer when the map first loads.
@@ -39,7 +43,7 @@ wsdot.config = {
     // The URL of the Location Information service's REST endpoint.  Used with the Location Information tool.
     "locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
 
-    // The ArcGIS Servergeometry server that will be used 
+    // The ArcGIS Server Geometry server that will be used 
     "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
     // The "queryTasks" properties are used to populate the drop-down lists of zoom extents.
     "queryTasks": {
@@ -79,7 +83,7 @@ wsdot.config = {
             ]
         }
     ],
-    "basemapsToRemove": ["basemap_6"], // This property is used to remove default basemaps from the basemap widget.
+    "basemapsToRemove": ["basemap_4", "basemap_6"], // This property is used to remove default basemaps from the basemap widget.
     // The "locateMileposts" and "locateNearestMileposts" options are used to specify ELC REST endpoints.
     "locateMileposts": {
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",

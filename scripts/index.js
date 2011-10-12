@@ -1,4 +1,4 @@
-﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery */
+﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery, Modernizr */
 /*jslint browser: true, devel: true, white: true, onevar: false, browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 50, indent: 4 */
 
 /*
@@ -45,6 +45,14 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         navToolbar,
         helpDialog,
         createLinks = {};
+
+    // Add support for JSON.
+    Modernizr.load([
+        {
+            test: window.JSON,
+            nope: "scripts/json2.js"
+        }
+    ]);
 
 
     // Add a method to the Date object that will return a short date string.
@@ -188,6 +196,10 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
     dojo.require("esri.tasks.gp");
 
     dojo.require("esri.layers.FeatureLayer");
+
+    if (!dojo.isIE || dojo.isIE >= 9) {
+        dojo.require("esri.dijit.Bookmarks");
+    }
 
     dojo.extend(esri.geometry.Extent, { "toCsv": function () {
         var propNames = ["xmin", "ymin", "xmax", "ymax"],
@@ -816,6 +828,62 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                 });
             });
 
+            // Bookmarks
+            // Add the bookmaks content pane.
+            if (Modernizr.localstorage) {
+                toolsAccordion.addChild(new dijit.layout.ContentPane({
+                    title: "Bookmarks"
+                }, dojo.create("div", {
+                    id: "bookmarksPane"
+                }, "toolsAccordion")));
+                // Setup the on show event to create the contents.
+                createLinks.bookmarks = dojo.connect(dijit.byId("bookmarksPane"), "onShow", function () {
+                    var bookmarksWidget, bookmarks, button;
+
+                    function saveBookmarks() {
+                        /// <summary>Saves bookmarks to localStorage.</summary>
+                        var bookmarks;
+
+                        // If there are no bookmarks in the widget, remove the "bookmarks" item from localStorage.
+                        // Otherwise, save the current bookmarks into localStorage.
+                        if (bookmarksWidget.bookmarks.length < 1) {
+                            localStorage.removeItem("bookmarks");
+                        } else {
+                            bookmarks = dojo.map(bookmarksWidget.bookmarks, function (bookmarkItem) {
+                                return {
+                                    name: bookmarkItem.name || null,
+                                    extent: bookmarkItem.extent.toJson()
+                                };
+                            });
+
+                            localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+                        }
+                    }
+
+                    // Load bookmark data from local storage if it exists.
+                    bookmarks = localStorage.getItem("bookmarks");
+                    if (bookmarks === null) {
+                        bookmarks = [];
+                    } else {
+                        bookmarks = JSON.parse(bookmarks);
+                    }
+
+                    bookmarksWidget = new esri.dijit.Bookmarks({
+                        map: map,
+                        bookmarks: bookmarks,
+                        editable: true
+                    }, dojo.create("div", { id: "bookmarks" }, "bookmarksPane"));
+
+                    // Setup events to save bookmarks to localStorage when they are edited (includes creation) and removed.
+                    dojo.connect(bookmarksWidget, "onEdit", saveBookmarks);
+                    dojo.connect(bookmarksWidget, "onRemove", saveBookmarks);
+
+                    // Now that the bookmarks pane's contents have been created we no longer need this event, so we can remove and delete it.
+                    dojo.disconnect(createLinks.bookmarks);
+                    delete createLinks.bookmarks;
+                });
+            }
+
             tabs.addChild(toolsTab);
             tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 
@@ -832,6 +900,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
                 basemapGallery = new esri.dijit.BasemapGallery({
                     showArcGISBasemaps: true,
+                    bingMapsKey: 'Ap354free_qMBNCGXm35cv8DSmG06nLNYm1skZwgrC4Xr1VCQ5UDojZ_BKDFkD5s',
                     map: map,
                     basemaps: basemaps
                 }, "basemapGallery");
@@ -852,6 +921,14 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                         }
                     });
                 }
+
+                /*
+                // Uncomment this section if you need to find a basemap's ID.
+                // Recomment before publishing.
+                dojo.connect(basemapGallery, "onSelectionChange", function () {
+                console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+                });
+                */
 
 
 
@@ -1006,6 +1083,12 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                     }
                 }
 
+                function setupHtmlPopupClickEvent(layer) {
+                    if (typeof (layer.htmlPopupType) === "string" && layer.htmlPopupType === esri.layers.FeatureLayer.POPUP_HTML_TEXT) {
+                        dojo.connect(layer, "onClick", htmlPopupClickHandler);
+                    }
+                }
+
                 // Load the layers that are defined in the config file.
                 for (tabName in wsdot.config.layers) {
                     if (wsdot.config.layers.hasOwnProperty(tabName)) {
@@ -1024,15 +1107,10 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                                         // If the layer has an htmlPopupType property, associate a handler function with the map's click event.
                                         if (layer.isInstanceOf && layer.isInstanceOf(esri.layers.FeatureLayer)) {
                                             if (layer.loaded) {
-                                                if (typeof (layer.htmlPopupType) === "string" && layer.htmlPopupType === esri.layers.FeatureLayer.POPUP_HTML_TEXT) {
-                                                    dojo.connect(layer, "onClick", htmlPopupClickHandler);
-                                                }
+                                                setupHtmlPopupClickEvent(layer);
                                             } else {
-                                                dojo.connect(layer, "onLoad", function (layer) {
-                                                    if (typeof (layer.htmlPopupType) === "string" && layer.htmlPopupType === esri.layers.FeatureLayer.POPUP_HTML_TEXT) {
-                                                        dojo.connect(layer, "onClick", htmlPopupClickHandler);
+                                                dojo.connect(layer, "onLoad", setupHtmlPopupClickEvent);
                                                     }
-                                                });
                                             }
                                         }
                                     }
@@ -1040,7 +1118,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                             }
                         }
                     }
-                }
 
                 return layers;
             }
@@ -1048,130 +1125,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
             map.setupIdentifyPopups({
                 ignoredLayerRE: /^layer\d+$/i
-            });
-
-
-            ////// Create an map "onClick" event handler that queries the interchange drawing layer.
-            ////interchangeLayer = map.getLayer("Interchange Drawings");
-
-            ////function interchangeLayerLoadedHandler(layer) {
-            ////    var dialog;
-
-            ////    interchangeIdTask = new esri.tasks.IdentifyTask(layer.url);
-
-            ////    // Connect the visibility change handler for the layer, 
-            ////    // which will run the query task when the map is clicked,
-            ////    // but only while this layer is visible.
-            ////    dojo.connect(layer, "onVisibilityChange", function (visibility) {
-            ////        if (visibility) {
-            ////            interchangeMapClickHandler = dojo.connect(map, "onClick", function (event) {
-            ////                var parameters, groupedLinks;
-
-            ////                function identifyComplete(identifyResults) {
-            ////                    /// <summary>Shows a dialog when the Identify task has completed.</summary>
-            ////                    var srids;
-
-            ////                    function groupBySRId(identifyResults) {
-            ////                        /// <summary>Converts the identify results into a elements grouped by SRID.</summary>
-            ////                        var output = {}, attributes, link;
-            ////                        $.map(identifyResults, function (idResult) {
-            ////                            attributes = idResult.feature.attributes;
-            ////                            // Create the array for this SRID if it does not yet exist.
-            ////                            if (!output[attributes.SRID]) {
-            ////                                if (!srids) { srids = []; }
-            ////                                srids.push(attributes.SRID);
-            ////                                output[attributes.SRID] = [];
-            ////                            }
-            ////                            // Add the link to the array
-            ////                            link = $("<a>").attr({ href: "#" }).text(attributes.Label).click(function () { window.open(attributes.PDFURL); });
-            ////                            output[attributes.SRID].push(link);
-            ////                        });
-
-            ////                        return output;
-            ////                    }
-
-            ////                    function sortElementsByText(a, b) {
-            ////                        /// <summary>Sorts HTML elements (jQuerys) by their text.</summary>
-            ////                        a = a.text(); b = b.text();
-            ////                        if (a < b) {
-            ////                            return -1;
-            ////                        } else if (a > b) {
-            ////                            return 1;
-            ////                        } else {
-            ////                            return 0;
-            ////                        }
-            ////                    }
-
-
-            ////                    if (!identifyResults || identifyResults.length < 1) {
-            ////                        return;
-            ////                    }
-            ////                    // Convert the results into links grouped by SRID.  This also generates a list of SRIDs.
-            ////                    groupedLinks = groupBySRId(identifyResults);
-            ////                    // Sort the list of SRIDs.
-            ////                    srids.sort();
-
-            ////                    // Create the dialog.  It will be destroyed when it is closed.
-            ////                    if (!dialog) {
-            ////                        dialog = $("<div>").dialog({
-            ////                            autoOpen: false,
-            ////                            title: "Interchange Drawings",
-            ////                            show: "fade",
-            ////                            buttons: {
-            ////                                Close: function () {
-            ////                                    dialog.dialog("close");
-            ////                                }
-            ////                            }
-            ////                        });
-            ////                    } else {
-            ////                        dialog.empty();
-            ////                    }
-
-            ////                    // Add the controls to the dialog.
-            ////                    $.map(srids, function (srid) {
-            ////                        var list;
-            ////                        $("<h2>").text(srid).appendTo(dialog);
-            ////                        list = $("<ul>").appendTo(dialog);
-            ////                        // Sort the links by their text.
-            ////                        groupedLinks[srid].sort(sortElementsByText);
-            ////                        $.each(groupedLinks[srid], function (srid, link) {
-            ////                            $("<li>").append(link).appendTo(list);
-            ////                        });
-            ////                    });
-
-            ////                    // Open the dialog.
-            ////                    dialog.dialog("option", "position", [event.screenPoint.x, event.screenPoint.y]).dialog("open");
-            ////                }
-
-            ////                // If there is a map point (there always should be), execute the identify task.
-            ////                if (event && event.mapPoint) {
-            ////                    parameters = new esri.tasks.IdentifyParameters();
-            ////                    parameters.geometry = event.mapPoint;
-            ////                    parameters.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
-            ////                    parameters.tolerance = 4;
-            ////                    parameters.width = map.width;
-            ////                    parameters.height = map.height;
-            ////                    parameters.mapExtent = map.extent;
-            ////                    parameters.geometry = event.mapPoint;
-            ////                    parameters.returnGeometry = false;
-            ////                    interchangeIdTask.execute(parameters, identifyComplete);
-            ////                }
-
-            ////            });
-            ////        } else {
-            ////            // When the layer is hidden, disconnect the map click event handler that executes the identify task.
-            ////            dojo.disconnect(interchangeMapClickHandler);
-            ////        }
-            ////    });
-            ////}
-
-            ////// If the interchange layer is already loaded, trigger its onLoad handler.
-            ////if (interchangeLayer.loaded) {
-            ////    interchangeLayerLoadedHandler(interchangeLayer);
-            ////} else {
-            ////    dojo.connect(interchangeLayer, "onLoad", interchangeLayerLoadedHandler);
-            ////}
-
+        });
         });
 
 

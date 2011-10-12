@@ -26,7 +26,9 @@ wsdot.config = {
                 { "level": 8, "resolution": 9.55462853563415, "scale": 36111.909643 },
                 { "level": 9, "resolution": 4.77731426794937, "scale": 18055.954822 },
                 { "level": 10, "resolution": 2.38865713397468, "scale": 9027.977411 },
-                { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 }
+                { "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 },
+                { "level": 12, "resolution": 0.597164283559817, "scale": 2256.994353 },
+                { "level": 13, "resolution": 0.298582141647617, "scale": 1128.497176 }
             ]
     },
     "mapInitialLayer": {
@@ -71,7 +73,7 @@ wsdot.config = {
             ]
         }
     ],
-    "basemapsToRemove": ["basemap_6"],
+    "basemapsToRemove": ["basemap_4", "basemap_6"],
     "locateMileposts": {
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
         "options": { "useProxy": false, "usePost": true }

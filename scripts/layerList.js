@@ -161,12 +161,12 @@ Prerequisites:
             // Add tab container
             tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
 
-            function hideToolbar() {
-                $(".layer-toolbar", this).hide();
+            function hideToolbar(evt) {
+                $(".layer-toolbar", evt.currentTarget).hide();
             }
 
-            function showToolbar() {
-                $(".layer-toolbar", this).show();
+            function showToolbar(evt) {
+                $(".layer-toolbar", evt.currentTarget).show();
             }
 
 
@@ -189,7 +189,7 @@ Prerequisites:
                         // Select all checked child sublayer checkboxes.
                             sublayerCheckboxes = $("ul input[type=checkbox]", layerDiv),
                             visibleLayerInfos = sublayerCheckboxes.filter(":checked").map(function (index, item) { return layer.layerInfos[$(item).data("sublayerId")]; }),
-                            checked = this.checked;
+                            checked = event.currentTarget.checked;
 
                         if (visibleLayerInfos.length < 1) {
                             visibleLayers = [-1];
@@ -314,7 +314,7 @@ Prerequisites:
 
 
                 // If the layer has sublayers, add the controls for the sublayers.
-                if (typeof (layer.setVisibleLayers) !== "undefined") { // && (!dojo.isIE || dojo.isIE >= 9)) {
+                if (typeof (layer.setVisibleLayers) !== "undefined" && (!dojo.isIE || dojo.isIE >= 9)) {
                     if (layer.loaded) {
                         createSublayerLink(layer);
                         setClassForOutOfScaleLayerControls();
@@ -397,15 +397,12 @@ Prerequisites:
 
             var tabIds = [];
 
-            dojo.forEach(tabNames, function (tabName) {
-                // Create an array of group names.
-                // If one of the groups is called "Other", do not add this item until after the array has been sorted so that "Other" appears at the end of the list.
-                var groupNames = createSortedPropertyNameList(settings.layerSource[tabName], ["Other"]);
-
-                var tabId = formatForHtmlId(tabName, "tab");
-                tabIds.push(tabId);
-
-                var tabPane = $("<div>").attr("id", tabId).appendTo(tabContainer).attr("data-tab-name", tabName);
+            function setupGroups(tabName, tabPane, groupNames) {
+                function addControlsForLayers(groupDiv, layers) {
+                    dojo.forEach(layers, function (layer) {
+                        createControlsForLayer(layer, groupDiv);
+                    });
+                }
 
                 dojo.forEach(groupNames, function (groupName) {
                     var layers = settings.layerSource[tabName][groupName];
@@ -416,12 +413,21 @@ Prerequisites:
                     var groupDiv = $("<div>").attr("data-group", groupName).append($("<span>").html(groupName).addClass("esriLegendServiceLabel")).appendTo(tabPane);
 
                     // Add controls for each layer in the group.
-                    dojo.forEach(layers, function (layer) {
-                        createControlsForLayer(layer, groupDiv);
-                    });
+                    addControlsForLayers(groupDiv, layers);
                 });
+            }
 
+            dojo.forEach(tabNames, function (tabName) {
+                // Create an array of group names.
+                // If one of the groups is called "Other", do not add this item until after the array has been sorted so that "Other" appears at the end of the list.
+                var groupNames = createSortedPropertyNameList(settings.layerSource[tabName], ["Other"]);
 
+                var tabId = formatForHtmlId(tabName, "tab");
+                tabIds.push(tabId);
+
+                var tabPane = $("<div>").attr("id", tabId).appendTo(tabContainer).attr("data-tab-name", tabName);
+
+                setupGroups(tabName, tabPane, groupNames);
             });
 
             ////tabContainer = dijit.layout.TabContainer({ style: "height: 100%; width: 100%" }, tabContainer[0]);

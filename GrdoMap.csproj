@@ -113,6 +113,7 @@
     <Content Include="scripts\lrsTools.js" />
     <Content Include="GetRoutes.ashx" />
     <None Include="style\FGDC Plus.xsl" />
+    <Content Include="scripts\modernizr.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
     <Content Include="style\fgdcPlus.css" />
