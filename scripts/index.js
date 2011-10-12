@@ -610,6 +610,12 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                                     showHelpDialog("help/milepost.html");
                                 }
                             }, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+                        },
+                        drawActivate: function () {
+                            map.disablePopups();
+                        },
+                        drawDeactivate: function () {
+                            map.enablePopups();
                         }
                     });
 
@@ -1110,7 +1116,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                                                 setupHtmlPopupClickEvent(layer);
                                             } else {
                                                 dojo.connect(layer, "onLoad", setupHtmlPopupClickEvent);
-                                                    }
                                             }
                                         }
                                     }
@@ -1118,6 +1123,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                             }
                         }
                     }
+                }
 
                 return layers;
             }
@@ -1125,7 +1131,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
             map.setupIdentifyPopups({
                 ignoredLayerRE: /^layer\d+$/i
-        });
+            });
         });
 
 

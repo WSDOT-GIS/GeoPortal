@@ -261,15 +261,14 @@ jQuery UI
                 // Setup find nearest milepost tools
                 dijit.form.NumberSpinner({ constraints: { min: 0 }, value: 200, style: "width:100px" }, "radiusBox");
                 dijit.form.Button({ onClick: function () {
-                    var button = dijit.byId("findNearestMPButton"),
-                loadingIcon = dojo.byId("findNearestLoadingIcon"),
-                drawToolbar;
+                    var button = dijit.byId("findNearestMPButton"), loadingIcon = dojo.byId("findNearestLoadingIcon"), drawToolbar;
 
                     createLocatedMilepostsLayer();
                     drawToolbar = new esri.toolbars.Draw(map);
                     dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
                         esri.show(loadingIcon);
                         drawToolbar.deactivate();
+                        self._trigger("drawDeactivate", self);
                         button.set("disabled", true);
 
                         esri.request({
@@ -325,14 +324,15 @@ jQuery UI
                         }, wsdot.config.locateNearestMileposts.options);
                     });
                     drawToolbar.activate(esri.toolbars.Draw.POINT);
+                    self._trigger("drawActivate", self);
                 }
                 }, "findNearestMPButton");
 
                 dijit.form.Button({ onClick: function () {
-                    if (locatedMilepostsLayer && locatedMilepostsLayer.clear) {
-                        locatedMilepostsLayer.clear();
+                        if (locatedMilepostsLayer && locatedMilepostsLayer.clear) {
+                            locatedMilepostsLayer.clear();
+                        }
                     }
-                }
                 }, "clearMPResultsButton");
                 $("#findNearestMilepost label:first-child").css("display", "block");
 
