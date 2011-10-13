@@ -32,6 +32,11 @@ Prerequisites:
 (function ($) {
     "use strict";
 
+    // Chrome supports the built-in slider control for HTML5's <input type="range" /> tag, so it does not need to use the dojo slider.
+    if (!dojo.isChrome) {
+        dojo.require("dijit.form.Slider");
+    }
+
     $.widget("ui.layerList", {
         options: {
             layerSource: null,
@@ -144,11 +149,6 @@ Prerequisites:
 
 
                 });
-            }
-
-            // Chrome supports the built-in slider control for HTML5's <input type="range" /> tag, so it does not need to use the dojo slider.
-            if (!dojo.isChrome) {
-                dojo.require("dijit.form.Slider");
             }
 
             // Set the map setting to equal layerSource if layerSource is an esri.Map object.
