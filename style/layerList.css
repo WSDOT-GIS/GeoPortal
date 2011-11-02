@@ -1,58 +1,92 @@
-﻿.ui-esri-layer-list ul
+.ui-layer-list-out-of-scale 
 {
-    margin-top: 0.2em;
-    margin-bottom: 0.5em;
-    list-style-type: none;
-    list-style-position: outside;
+    color: #999;
 }
 
-.layer-toolbar {
+
+.ui-layer-list ul 
+{
+    list-style-position: inside;
     padding-left: 1em;
 }
 
-.layer-toolbar button {
-    padding: 0;
-    margin: 0;
-    font-size: 0.6em
+.ui-layer-list li
+{
+    list-style-image: none;
 }
 
-.layer-toolbar div:hover, .layer-toolbar a:hover
+.ui-layer-list .ui-layer-list-group, .ui-layer-list-has-children.expanded
 {
-    background-color: #ccc;
+    list-style-image: url(../images/layerList/TreeMinus10.gif)
 }
 
-li.outOfScale, *.outOfScale a, div.outOfScale label
+.ui-layer-list .ui-layer-list-group.collapsed, .ui-layer-list-has-children.collapsed
 {
-    color: #ccc;
+    list-style-image: url(../images/layerList/TreePlus10.gif)
 }
 
-.map-service:hover 
+.ui-layer-list-group > a
 {
-    background-color: #eeeeff
+    font-weight: bold;
 }
 
-.ui-esri-layer-list .map-service-table 
+.ui-layer-list-item 
 {
-    display: table;
+    background-color: white;
 }
 
-.ui-esri-layer-list .map-service-row
+.ui-layer-list-item * 
 {
-    display: table-row;
+    background-color: transparent;
 }
 
-.ui-esri-layer-list .map-service-row > * 
+.ui-layer-list-item ul
 {
-    display: table-cell;
+    font-style: italic;
 }
 
-.failed *
+.ui-layer-list-item ul
 {
-    color: Red;
+    border: none;
+    list-style-type: circle;
+}
+
+.ui-layer-list a:hover
+{
+    background-color: yellow;
+}
+
+.ui-slider-horizontal
+{
+    height: 0.3em;
+}
+
+.ui-slider .ui-slider-handle 
+{
+    background: url(../images/layerList/sliderSprites.png) no-repeat top left;
+    background-position: 0 0; 
+    width: 11px; 
+    height: 21px;
+    background-color: transparent;
+    border: none;
+}
+
+.ui-slider .ui-slider-handle:hover 
+{
+    background-position: -16px 0
+}
+
+.ui-layer-list-not-loaded 
+{
+    background: #ccccff;
+}
+.ui-layer-list-error 
+{
+    color: red;
     text-decoration: line-through;
 }
-
-.succeeded *
+.ui-layer-list-has-children > label
 {
-    color: Green;
+    text-decoration: underline;
+    cursor: pointer;
 }

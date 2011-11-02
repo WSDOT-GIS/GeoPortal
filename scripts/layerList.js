@@ -1,551 +1,752 @@
-﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js  "/>
-/// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.11/jquery-ui.js"/>
-/*global jQuery, dojo, esri, dijit */
-/*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
+/*jslint browser: true, windows: true, nomen: true, white: true*/
+/*global esri, dojo, jQuery*/
+/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4-vsdoc.js"/>
+/// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.js"/>
+/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.5"/>
+/**
+ * A layer list that only creates a layer object when the user checks the associated checkbox.
+ * @author Jeff Jacobson
+ */
 
-/*
-Copyright (c) 2011 Washington State Department of Transportation
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>
-*/
-
-/*
-This jQuery plugin is used to create a layer list control for an ArcGIS JavaScript API web application.
-Prerequisites:
-    ArcGIS JavaScript API
-    esriApiExtensions.js
-    jQuery
-    jQuery UI
-*/
 
 (function ($) {
     "use strict";
+    dojo.require("esri.layers.agstiled");
+    dojo.require("esri.layers.agsdynamic");
 
-    // Chrome supports the built-in slider control for HTML5's <input type="range" /> tag, so it does not need to use the dojo slider.
-    if (!dojo.isChrome) {
-        dojo.require("dijit.form.Slider");
+    var _defaultContextMenuIcon, _defaultLoadingIcon;
+    _defaultContextMenuIcon = "<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
+    _defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
+
+    function getLayerConstructor(layerType) {
+        ///<summary>Returns a constructor for a specific type of layer.</summary>
+        if (typeof (layerType) === "string") {
+            if (/(?:esri\.layers\.)?ArcGISTiledMapServiceLayer/i.test(layerType)) {
+                return esri.layers.ArcGISTiledMapServiceLayer;
+            } else if (/(?:esri\.layers\.)?ArcGISDynamicMapServiceLayer/i.test(layerType)) {
+                return esri.layers.ArcGISDynamicMapServiceLayer;
+            } else if (/(?:esri\.layers\.)?ArcGISImageServiceLayer/i.test(layerType)) {
+                return esri.layers.ArcGISImageServiceLayer;
+            } else if (/(?:esri\.layers\.)?FeatureLayer/i.test(layerType)) {
+                return esri.layers.FeatureLayer;
+            } else if (/(?:esri\.layers\.)?KMLLayer/i.test(layerType)) {
+                return esri.layers.KMLLayer;
+            } else {
+                throw new Error("Unsupported layer type.");
+            }
+        } else if (typeof (layerType) === "function") {
+            return layerType;
+        }
     }
 
-    $.widget("ui.layerList", {
+    function toggleSublayer(evt) {
+        /// <summary>Toggles the visibility of a sublayer associated with a checkbox.</summary>
+        /// <param name="evt" type="Object">An event object.  Must have a data.list property defined.</param>
+        // Get all of the ids of the checked sublayers.
+        var layers = $.map($(".ui-layer-list-sublayer:checked", evt.data.list), function (checkbox) {
+            return Number(checkbox.value);
+        });
+        // If the array of sublayer ids is empty, add -1 to make the query valid.
+        if (layers.length === 0) {
+            layers.push(-1);
+        }
+        // Set the visible sublayers.
+        evt.data.layer.setVisibleLayers(layers);
+    }
+
+    function setTreeIcon(element, isCollapsed) {
+        /// <summary>Adds either an "expanded" or "collaped" class to the specified elements based on the visibility of its child elements.</summary>
+        /// <param name="element" type="DOMElement">A list item element.</param>
+        /// <param name="isCollapsed" type="boolean">Optional.  Use this to explicitly specify what state the element is in.  If omitted, the expanded/collapsed state will be determined automatically.</param>
+        /// <returns type="undefined" />
+        if (!element) {
+            // Exit if element not specified.
+            return;
+        }
+
+        // Determine the value of "isCollapsed" if not provided.
+        if (typeof (isCollapsed) === "undefined") {
+            isCollapsed = $("> ul", element).css("display") === "none";
+        }
+
+        // Set the class to either expanded or collapsed depending on the value of isCollapsed.
+        if (isCollapsed) {
+            $(element).addClass("collapsed").removeClass("expanded");
+        } else {
+            $(element).addClass("expanded").removeClass("collapsed");
+        }
+    }
+
+    function toggleChildList(evt) {
+        /// <summary>Toggles the child list of a list item on or off.</summary>
+        /// <param name="evt" type="Object">An event object.  The evt must have a data property that has a parent property.</param>
+        var parent, childLists, hidden;
+        parent = evt.data.parent;
+        childLists = $("> ul", parent);
+        hidden = childLists.css("display") !== "none";
+
+        setTreeIcon(parent, hidden);
+        childLists.toggle("blind");
+        return false;
+    }
+
+    function createSublayerControls(layer) {
+        var i, l, layerInfo, output, li, parentLi, parentUl, checkbox, a;
+        if (typeof (layer.layerInfos) === "undefined") {
+            // Layer does not have sublayer infos.
+            return null;
+        }
+
+        output = $("<ul>").hide();
+
+        // Create heirarchy for sublayers.
+        for (i = 0, l = layer.layerInfos.length; i < l; i += 1) {
+            layerInfo = layer.layerInfos[i];
+            li = $("<li>").attr({ "data-sublayerId": layerInfo.id });
+
+            // Create a checkbox only if this is not a parent layer.
+            checkbox = layerInfo.subLayerIds !== null ? null : $("<input>").attr({
+                type: "checkbox",
+                value: layerInfo.id,
+                checked: layerInfo.defaultVisibility
+            }).appendTo(li).addClass('ui-layer-list-sublayer');
+            if (layerInfo.subLayerIds === null) {
+                $("<label>").text(layerInfo.name).appendTo(li);
+            } else {
+                // Attach an event to the label link that will toggle the child list.
+                li.addClass("ui-layer-list-has-children");
+                $("<label>").text(layerInfo.name).appendTo(li).click({
+                    parent: li
+                }, toggleChildList);
+                setTreeIcon(li);
+            }
+
+            // If its a parent layer, add directly to the output list.
+            if (layerInfo.parentLayerId === -1) {
+                output.append(li);
+            } else {
+                // Find the parent li
+                parentLi = $(["li[data-subLayerId=", layerInfo.parentLayerId, "]"].join(""), output);
+                // Get the parent list items child list.
+                parentUl = $("ul", parentLi);
+                // If a child list hasn't been created, create one now.
+                if (parentUl.length === 0) {
+                    parentUl = $("<ul>").appendTo(parentLi);
+                }
+                parentUl.append(li);
+            }
+
+            // Attach an event to the checkbox.
+            if (checkbox) {
+                checkbox.change({
+                    layer: layer,
+                    list: parentUl
+                }, toggleSublayer);
+            }
+        }
+
+        return output;
+    }
+
+    function createLayer(layerInfo) {
+        /// <summary>Creates an esri.layer.Layer based on information in layerInfo.</summary>
+        /// <param name="layerInfo" type="Object">An object containing parameters for a Layer constructor.</param>
+        /// <returns type="esri.layer.Layer" />
+        var constructor;
+        // If layerInfo is already an esri.layers.Layer, just return it.
+        if (typeof (layerInfo) !== "undefined" && typeof (layerInfo.isInstanceOf) !== "undefined" && layerInfo.isInstanceOf(esri.layers.Layer)) {
+            return layerInfo;
+        }
+
+        constructor = getLayerConstructor(layerInfo.type || layerInfo.layerType);
+        return new constructor(layerInfo.url, layerInfo.options);
+    }
+
+    function setOpacity(event, ui) {
+        var value = event.target.valueAsNumber || ui.value, layer = event.data.layer;
+        layer.setOpacity(value);
+    }
+
+    function toggleOpacity(event) {
+        event.data.slider.toggle();
+    }
+
+    function showTools(event) {
+        event.data.tools.show();
+    }
+
+    function hideTools(event) {
+        event.data.tools.hide();
+    }
+
+    function supportsInputRange() {
+        /// <summary>Determines if the browser supports the HTML5 input range type element.</summary>
+        /// <returns type="Boolean" />
+        var input = $("<input type='range'>")[0];
+        return typeof (input.min) !== "undefined";
+    }
+
+    $.widget("ui.layerOptions", {
         options: {
-            layerSource: null,
-            map: null,
-            tabs: true
+            layer: null
         },
         _create: function () {
-            /// <summary>
-            /// Creates a list of layers for a layerSource.  The "this" keyword is the jQuery object containing the DOM element(s) that will be turned into a layer list.
-            /// </summary>
-            var layerListNode = this.element,
-                settings = this.options,
-                basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm))/i, tabContainer;
-
-            function formatForHtmlId(s, prefix) {
-                /// <summary>Removes invalid characters from a string so that it can be used an the ID for an HTML element.</summary>
-                var invalidCharRe = /[\s\/\()]+/;
-                while (invalidCharRe.test(s)) {
-                    s = s.replace(invalidCharRe, "-");
-                }
-                s = s.replace(/-$/, "");
-                // Add the prefix if one was provided.
-                if (prefix) {
-                    s = prefix + "-" + s;
-                }
-                return s;
+            var $this = this, layer, slider, sliderContainer, chromeRe = /Chrome\/([\d\.]+)/gi;
+            if (this.options.layer === null) {
+                throw new Error("No layer specified");
             }
 
-            function createSortedPropertyNameList(obj, propNamesAtEnd) {
-                /// <summary>Returns a sorted array of property names for an object.</summary>
-                /// <param name="obj" type="Object">An object that has properties.</param>
-                /// <param name="propNamesAtEnd" type="Array">An array of property names that will be placed at the end of the list (instead of being sorted).</param>
-                var propNames = [], skippedPropNames = [], re, propName = null;
+            layer = $this.options.layer;
 
-                if (propNamesAtEnd && propNamesAtEnd.length > 0) {
-                    re = "";
-                    $.each(propNamesAtEnd, function (index, propName) {
-                        if (index > 0) {
-                            re += "|";
-                        }
-                        re += "(" + propName + ")";
-                    });
-                    re = new RegExp(re, "gi");
-                }
-
-                for (propName in obj) {
-                    if (obj.hasOwnProperty(propName)) {
-                        if (re && propName.match(re)) {
-                            skippedPropNames.push(propName);
-                        } else {
-                            propNames.push(propName);
-                        }
-                    }
-                }
-                propNames.sort();
-                skippedPropNames.sort();
-                // propNames = propNames.concat(skippedPropNames);
-                dojo.forEach(skippedPropNames, function (propName) {
-                    propNames.push(propName);
-                });
-
-                return propNames;
-            }
-
-            function setClassForOutOfScaleLayerControls(level) {
-                /// <summary>Adds the "outOfScale" class to the controls that represent layers that cannot be seen in the map's current scale.</summary>
-                /// <param name="level" type="Number">Optional.  The level that the map is at.  If omitted, the map's getLevel function will be called to get this info.</param>
-                if (typeof (level) === "undefined") {
-                    level = settings.map.getLevel();
-                }
-                var layerDivs, scale, layers;
-                // Get all of the elements that have a data-layerId attribute and remove the "outOfScale" class from them all.
-                layerDivs = $("*", layerListNode).removeClass("outOfScale");
-                // Get the corresponding layers from the map.
-                layers = $.map(layerDivs, function (layerDiv) {
-                    var layerId = $(layerDiv).attr("data-layerId");
-                    return settings.map.getLayer(layerId);
-                });
-
-                // Filter out the layers that do not have a layerInfos
-                scale = settings.map.getScale(level);
-                layers = $.grep(layers, function (layer) {
-                    return (typeof (layer.layerInfos) !== "undefined" && layer.layerInfos.length > 0) || (typeof (layer.isVisibleAt) !== "undefined");
-                });
-
-                $.each(layers, function (index, layer) {
-                    var visibleLayerCount = 0,
-                        currentLayerDiv = $("[data-layerId='" + layer.id + "']");
-
-                    if (layer.isVisibleAt) {
-                        if (!layer.isVisibleAt(scale)) {
-                            currentLayerDiv.addClass("outOfScale");
-                        }
-                    } else {
-                        // Add the outOfScale class to sublayer controls that we know aren't visible at the current scale.
-                        // Count the layers that ARE visible.
-                        $.each(layer.layerInfos, function (index, layerInfo) {
-                            if (!layerInfo.isVisibleAt(scale)) {
-                                $("[data-sublayer-id=" + layerInfo.id + "]", currentLayerDiv).addClass("outOfScale");
-                            } else {
-                                visibleLayerCount += 1;
-                            }
-                        });
-
-                        // If there are no visible sublayers at the current scale, add the outOfScale class to the layer's div tag.
-                        if (visibleLayerCount < 1) {
-                            currentLayerDiv.addClass("outOfScale");
-                        }
-                    }
-
-
-                });
-            }
-
-            // Set the map setting to equal layerSource if layerSource is an esri.Map object.
-            if (settings.layerSource.isInstanceOf && settings.layerSource.isInstanceOf(esri.Map) && settings.map === null) {
-                settings.map = settings.layerSource;
-            }
-
-            layerListNode.addClass("ui-esri-layer-list");
-
-            // Add tab container
-            tabContainer = $("<div>").attr("id", "layerListTabContainer").appendTo(layerListNode);
-
-            function hideToolbar(evt) {
-                $(".layer-toolbar", evt.currentTarget).hide();
-            }
-
-            function showToolbar(evt) {
-                $(".layer-toolbar", evt.currentTarget).show();
-            }
-
-
-            function createControlsForLayer(layer, elementToAppendTo) {
-                /// <summary>Creates the HTML controls associated with a layer</summary>
-                var checkboxId, sliderId, opacitySlider, layerDiv, layerTable, layerRow, layerCell, sublayerList, controlsToolbar, label,
-                    parentLayers, sublayerListItems, checkbox;
-
-                function createSublayerControls(layerInfo) {
-                    var list,
-                        sublayerListItem = $("<li>").attr("data-sublayer-id", layerInfo.id),  // The list item that represents the current sub layer.
-                        cbId = checkboxId + String(layerInfo.id);                             // The ID that will be given to the current sublayer's checkbox.
-
-                    function setSublayerVisibility(event) {
-                        /// <summary>Sets the visibility</summary>
-                        /// <param name="event" type="Object">This event object should have the following properties: data.layer, data.sublayerId.</param>
-                        var layer = event.data.layer,
-                            sublayerId = event.data.sublayerId,
-                            visibleLayers = [],
-                        // Select all checked child sublayer checkboxes.
-                            sublayerCheckboxes = $("ul input[type=checkbox]", layerDiv),
-                            visibleLayerInfos = sublayerCheckboxes.filter(":checked").map(function (index, item) { return layer.layerInfos[$(item).data("sublayerId")]; }),
-                            checked = event.currentTarget.checked;
-
-                        if (visibleLayerInfos.length < 1) {
-                            visibleLayers = [-1];
-                        } else {
-                            sublayerCheckboxes.each(function (index, checkbox) {
-                                // Get the layer info associated with the current checkbox.
-                                var layerInfo,
-                                    uncheckedParents = $("> [type=checkbox]", $(checkbox).parentsUntil("div").filter("li")).not(":checked").not(checkbox);
-                                if (checkbox.checked && uncheckedParents.length < 1) {
-                                    layerInfo = layer.layerInfos[$(checkbox).data("sublayerId")];
-                                    // If there are no child layers, add this layer to the visible layer list.
-                                    if (layerInfo.subLayerIds === null || layerInfo.subLayerIds.length < 1) {
-                                        visibleLayers.push(layerInfo.id);
-                                    }
-                                }
-                            });
-                            if (visibleLayers.length < 1) {
-                                visibleLayers.push(-1);
-                            }
-                        }
-
-                        // Apply the list of visible layers.
-                        layer.setVisibleLayers(visibleLayers);
-                    }
-
-                    function createSublayerList() {
-                        // Get the sublayerInfo objects that correspond to the current layerInfo's subLayerIds.
-                        var sublayerInfos = $.map(layerInfo.subLayerIds, function (subLayerId) {
-                            var sublayerInfos = [], i, l, layerInfo = null;
-                            for (i = 0, l = layer.layerInfos.length; i < l; i++) {
-                                layerInfo = layer.layerInfos[i];
-                                if (layerInfo.id === subLayerId) {
-                                    return layerInfo;
-                                }
-                            }
-                            return null;
-                        });
-
-                        list = $("<ul>").appendTo(sublayerListItem);
-
-                        $.each(sublayerInfos, function (index, layerInfo) {
-                            createSublayerControls(layerInfo).appendTo(list);
-                        });
-                    }
-
-                    // Add a checkbox for the sublayer if the layer has the ability to set visibility of sublayers.
-                    if (layer.setVisibleLayers) {
-                        checkbox = $("<input>").attr("id", cbId).attr({
-                            type: "checkbox",
-                            checked: layerInfo.defaultVisibility
-                        }).data({
-                            "sublayerId": layerInfo.id
-                        }).appendTo(sublayerListItem);
-
-                        checkbox.change({
-                            layer: layer,
-                            sublayerId: layerInfo.id
-                        }, setSublayerVisibility);
-                    }
-
-                    if (layerInfo.subLayerIds) {
-                        // Create the link that shows or hides the list of sublayers for the current layer.
-                        $("<a>").attr("href", "#").text(layerInfo.name).appendTo(sublayerListItem).click(function () {
-
-                            $("ul", sublayerListItem).toggle();
-                        });
-
-                        createSublayerList();
-
-                    }
-                    else {
-                        $("<label>").attr("for", cbId).text(layerInfo.name).appendTo(sublayerListItem);
-                    }
-                    return sublayerListItem;
-                }
-
-                function createSublayerLink(layer) {
-                    if (layer.layerInfos && layer.layerInfos.length > 0) {
-                        $("<a>").attr("title", "Toggle sublayer list").attr("href", "#").text(layer.wsdotCategory && layer.wsdotCategory === "Basemap" ? "Basemap (" + layer.id + ")" : layer.id).insertBefore(label).click(function () { sublayerList.toggle(); });
-                        label.remove();
-                        // Add sublayer information
-                        parentLayers = $.grep(layer.layerInfos, function (item) { return item && item.parentLayerId === -1; });
-                        sublayerList = $("<ul>").appendTo(layerDiv).hide();
-                        sublayerListItems = $.each(parentLayers, function (index, layerInfo) {
-                            createSublayerControls(layerInfo).appendTo(sublayerList);
-                        });
-
-                    }
-                }
-
-                checkboxId = formatForHtmlId(layer.id, "checkbox");
-                sliderId = formatForHtmlId(layer.id, "slider");
-
-                layerDiv = $("<div>").addClass("map-service").attr("data-layerId", layer.id).mouseenter(showToolbar).mouseleave(hideToolbar);
-                layerTable = $("<div>").addClass("map-service-table").appendTo(layerDiv);
-                layerRow = $("<div>").addClass("map-service-row").appendTo(layerTable);
-
-                // Create a checkbox and label and place inside of a div.
-                layerCell = $("<span>").addClass("map-service-cell").appendTo(layerRow);
-                $("<input>").attr("type", "checkbox").attr("data-layerId", layer.id).attr("id", checkboxId).appendTo(layerCell);
-                label = $("<label>").text(layer.id.match(basemapLayerIdRe) ? "Basemap (" + layer.id + ")" : layer.id).appendTo(layerCell);
-                controlsToolbar = $("<span>").addClass("map-service-cell layer-toolbar").appendTo(layerRow).hide();
-
-                $("<button>").attr("title", "Toggle transparency slider").appendTo(controlsToolbar).text("transparency").click(function () {
-                    var node = (typeof (opacitySlider.domNode) !== "undefined") ? opacitySlider.domNode : opacitySlider;
-                    $(node).toggle();
-                });
-
-
-
-                // Add metadata information if available
-                if (layer.metadataUrls && layer.metadataUrls.length > 0) {
-                    $("<button>").attr("title", "Open metadata documents").text("metadata").appendTo(controlsToolbar).click({
-                        "metadataUrls": layer.metadataUrls
-                    }, function (e) {
-                        $.each(e.data.metadataUrls, function (index, url) {
-                            window.open(url);
-                        });
-                    });
-                }
-
-
-
-                // If the layer has sublayers, add the controls for the sublayers.
-                if (typeof (layer.setVisibleLayers) !== "undefined" && (!dojo.isIE || dojo.isIE >= 9)) {
-                    if (layer.loaded) {
-                        createSublayerLink(layer);
-                        setClassForOutOfScaleLayerControls();
-                    } else {
-                        $("input[type=checkbox]", layerDiv).attr("disabled", true);
-                        dojo.connect(layer, "onLoad", function (layer) {
-                            createSublayerLink(layer);
-                            setClassForOutOfScaleLayerControls();
-                            $("input[type=checkbox]", layerDiv).attr("disabled", false);
-                        });
-                        dojo.connect(layer, "onError", function (error) {
-                            // console.log("Error loading layer", layer.id, layerDiv);
-                            layerDiv.addClass("failed");
-                            layerDiv.attr("title", "This layer is currently not available.");
-                        });
-                    }
-                }
-
-                // Add the div to the document.
-                if (elementToAppendTo) {
-                    layerDiv.appendTo(elementToAppendTo);
-                }
-
-                // Create the opacity slider
-                if (dojo.isChrome) {
-                    opacitySlider = $("<input>").attr({ "id": sliderId, "type": "range", "min": 0, "max": 1, "step": 0.1 }).css({ "display": "block", "width": "100%" }).appendTo(layerDiv).attr("disabled", true).hide().change(function (value) {
-                        layer.setOpacity(this.value);
-                    });
+            if (typeof (layer.setOpacity) === "function") {
+                $("<label>").text("Transparency").appendTo($this.element);
+                sliderContainer = $("<div>").addClass("ui-layer-list-opacity-slider-container").appendTo($this.element);
+                // Add opacity slider
+                if (supportsInputRange()) { //chromeRe.test(navigator.userAgent)) {
+                    // Chrome supports the HTML5 range input control, so we'll just use that...
+                    slider = $("<input>").attr({
+                        type: "range",
+                        min: 0,
+                        max: 1,
+                        value: layer.opacity, // This doesn't actually seem to set the value.  We actually set this value with the val method.
+                        step: 0.1
+                    }).appendTo(sliderContainer).val(layer.opacity).change({ layer: layer }, setOpacity);
                 } else {
-                    opacitySlider = $("<div>").attr("id", sliderId).css("width", "300px").appendTo(layerDiv);
-                    // Create an opacity slider for the layer.
-                    opacitySlider = new dijit.form.HorizontalSlider({
-                        minimum: 0.0,
-                        maximum: 1.0,
-                        value: 1.0,
-                        discreteValues: 100,
-                        showButtons: true,
-                        onChange: function (value) {
-                            layer.setOpacity(value);
-                        },
-                        disabled: layer.visible !== true
-                    }, dojo.byId(sliderId));
-                    $(opacitySlider.domNode).hide();
-
-                    // Add an array of the dijits that are contained in the control so that they can be destroyed if the layer is removed.
-                    layerDiv.data("dijits", [opacitySlider]);
+                    // Convert into a jQuery UI slider.  (HTML5 slider doesn't work in many browsers.)
+                    slider = $("<div>").appendTo(sliderContainer).slider({
+                        value: layer.opacity,
+                        min: 0,
+                        max: 1,
+                        step: 0.1
+                    }).appendTo(sliderContainer).bind("slidechange", {
+                        layer: layer
+                    }, setOpacity);
                 }
 
-                $("#" + checkboxId).attr("checked", layer.visible).change(function (eventHandler) {
-                    layer.setVisibility(this.checked);
-                    if (opacitySlider.set) {
-                        opacitySlider.set("disabled", !this.checked);
-                    } else {
-                        $(opacitySlider).attr("disabled", !this.checked);
-                    }
-                });
+            }
+        },
+        _destroy: function () {
+            // Call the base destroy method.
+            $.Widget.prototype.destroy.apply(this, arguments);
+        }
+    });
+
+    function showOptions(event) {
+        var layer = event.data.layer, dialog;
+        // Create the options widget inside a dialog.
+        dialog = $("<div>").layerOptions({
+            layer: layer
+        }).dialog({
+            title: [layer.id, "Options"].join(" "),
+            position: [
+                event.screenX,
+                event.screenY
+            ],
+            modal: true,
+            close: function (/*event, ui*/) {
+                // Remove the dialog from the DOM and dispose of it.
+                $(this).remove().dialog("dispose");
+            }
+        });
+        return false;
+    }
 
 
+    function onLayerLoad(layer) {
+        /// <summary>Removes the "layer not loaded" class and (if appropriate) sets up controls for the child layers.</summary>
+        /// <param name="layer" type="esri.layers.Layer">A map service layer.</param>
+        // The "this" object is a ui.layerListItem widget.
+        var a, $element = $(this.element), label, slider, tools, opacityToggle, map;
+        this._hideLoading();
+        $element.removeClass("ui-layer-list-not-loaded");
 
-                return layerDiv;
+        // Add options link
+        tools = $(this.options.contextMenuIcon).appendTo($element).click({
+            layer: layer
+        }, showOptions);
+
+        // Setup the mouse over and mouse out events.
+        $element.mouseover({
+            tools: tools
+        }, showTools).mouseout({
+            tools: tools
+        }, hideTools);
+
+        // Add sublayers if the layer supports sub-layer visibility setting, and has more than one sub-layer.
+        if (!this.options.layer.omitSublayers && typeof (layer.setVisibleLayers) === "function" && layer.layerInfos.length > 1) {
+            // Set the label to toggle sublayer list when clicked.
+            $element.addClass("ui-layer-list-has-children");
+            label = $("> label", $element).click({ parent: $element }, toggleChildList);
+            $(createSublayerControls(layer)).appendTo($element);
+
+            setTreeIcon($element[0]);
+        }
+
+        try {
+            this.setIsInScale();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function formatError(error) {
+        /// <summary>Converts an error object into a string.</summary>
+        /// <param name="error" type="Error">An error that occurs when loading a layer.</param>
+        var msgParts;
+        if (typeof (error.details) !== "undefined") {
+            return error.details.join("\n");
+        } else if (typeof (error.message) !== "undefined") {
+            return error.message;
+        } else {
+            return error;
+        }
+    }
+
+    function onLayerError(error) {
+        /// <summary>Modify the control to show that an error has occured with this layer.</summary>
+        this.disable();
+        this._hideLoading();
+        $(this.element).removeClass("ui-layer-list-not-loaded").addClass("ui-state-error").attr("title", "Error\n" + formatError(error));
+        // Trigger an event that can be used by consumers of this control..
+        this._trigger("layerError", {
+            error: error
+        });
+    }
+
+    function toggleLayer(eventObject) {
+        /// <summary>Toggles the layer associated with a checkbox on or off.</summary>
+        /// <param name="eventObject" type="Object">Contains information about the checkbox change event.</param>
+        var $this;
+
+        $this = eventObject.data.widget;
+        // Turn the layer on if it is checked, off if not.
+        if (eventObject.currentTarget.checked) {
+            // If the layer hasn't been created yet, create it and add it to the map.
+            // Otherwise, show the layer.
+            if (!$this._layer) {
+                $this._showLoading();
+                $this._layer = createLayer($this.options.layer);
+                $this.options.map.addLayer($this._layer);
+                // Connect the layer load event.
+                dojo.connect($this._layer, "onError", $this, onLayerError);
+                dojo.connect($this._layer, "onLoad", $this, onLayerLoad);
+            } else {
+                $this._layer.show();
+            }
+        } else {
+            if ($this._layer) {
+                $this._layer.hide();
+            }
+        }
+    }
+
+    function updateIsInScaleStatus(extent, delta, levelChange, lod) {
+        /// <summary>Update the "is in scale" status for each layerListItem in a layerList.  Note: "this" is the layer list widget.</summary>
+        // Get all of the layer list items in the current list.
+        var layerListItems, layerListItem, layer;
+
+        if (levelChange) {
+            layerListItems = $(".ui-layer-list-item", this.element);
+
+            for (var i = 0, l = layerListItems.length; i < l; i += 1) {
+                layerListItem = layerListItems.eq(i);
+                layerListItem.layerListItem("setIsInScale", lod.scale);
+            }
+        }
+    }
+
+    $.widget("ui.layerListItem", {
+        options: {
+            layer: null, // An object that is used to create an esri.layers.layer.  Has an id, url, and layerType.
+            map: null,
+            contextMenuIcon: _defaultContextMenuIcon,
+            loadingIcon: _defaultLoadingIcon
+        },
+        _showLoading: function () {
+            $(".ui-layer-list-item-loading-icon", this.element).show();
+        },
+        _hideLoading: function () {
+            $(".ui-layer-list-item-loading-icon", this.element).hide();
+        },
+        _checkbox: null,
+        _layer: null, // This is where the esri.layers.Layer object will be stored.
+        getLayer: function () {
+            return this._layer;
+        },
+        _sublayerDiv: null,
+        setIsInScale: function (scale) {
+            /// <summary>Sets the "is in scale" status of this control</summary>
+            /// <param name="scale" type="Number">The current scale of the map.</param>
+            var layer, scales, minScale, maxScale, isInScale, outOfScaleClass = "ui-layer-list-out-of-scale";
+
+            if (!this._layer) {
+                return this;
             }
 
+            layer = this._layer;
 
-            // If layerSource is an esri.Map, set the layerSource property to an array of the layers in the map.
-            if (settings.layerSource.isInstanceOf && settings.layerSource.isInstanceOf(esri.Map)) {
-                settings.layerSource = $(settings.map.layerIds).map(function (index, element) {
-                    return settings.map.getLayer(element);
-                });
+            // If scale is not provided, get it from the map.
+            if (scale === null || typeof (scale) === "undefined") {
+                scale = this.options.map.__LOD.scale;
             }
 
-            // Create a sorted list of tab names.
-            var tabNames = createSortedPropertyNameList(settings.layerSource);
-
-            function sortById(a, b) {
-                /// <summary>Used by the Array.sort method to sort elements by their ID property.</summary>
-                if (a.id > b.id) { return 1; }
-                else if (a.id < b.id) { return -1; }
-                else { return 0; }
-            }
-
-            var tabIds = [];
-
-            function setupGroups(tabName, tabPane, groupNames) {
-                function addControlsForLayers(groupDiv, layers) {
-                    dojo.forEach(layers, function (layer) {
-                        createControlsForLayer(layer, groupDiv);
-                    });
+            // Check to see if the layer has a scales property that is an array.
+            scales = this._layer.scales;
+            if (typeof (scales) !== "undefined" && $.isArray(scales)) {
+                minScale = scales[0];
+                maxScale = scales[scales.length - 1];
+                isInScale = (minScale === 0 || minScale >= scale) && (maxScale === 0 || maxScale <= scale);
+                if (isInScale) {
+                    $(this.element).removeClass(outOfScaleClass);
+                } else {
+                    $(this.element).addClass(outOfScaleClass);
                 }
-
-                dojo.forEach(groupNames, function (groupName) {
-                    var layers = settings.layerSource[tabName][groupName];
-                    // Sort the layers in each group by the value of their id properties
-                    layers.sort(sortById);
-
-                    // Create a new div for each group.
-                    var groupDiv = $("<div>").attr("data-group", groupName).append($("<span>").html(groupName).addClass("esriLegendServiceLabel")).appendTo(tabPane);
-
-                    // Add controls for each layer in the group.
-                    addControlsForLayers(groupDiv, layers);
-                });
-            }
-
-            dojo.forEach(tabNames, function (tabName) {
-                // Create an array of group names.
-                // If one of the groups is called "Other", do not add this item until after the array has been sorted so that "Other" appears at the end of the list.
-                var groupNames = createSortedPropertyNameList(settings.layerSource[tabName], ["Other"]);
-
-                var tabId = formatForHtmlId(tabName, "tab");
-                tabIds.push(tabId);
-
-                var tabPane = $("<div>").attr("id", tabId).appendTo(tabContainer).attr("data-tab-name", tabName);
-
-                setupGroups(tabName, tabPane, groupNames);
-            });
-
-            ////tabContainer = dijit.layout.TabContainer({ style: "height: 100%; width: 100%" }, tabContainer[0]);
-            ////dojo.forEach(tabIds, function (tabId) {
-            ////    var tabName = $("#" + tabId).attr("data-tab-name")
-            ////    var contentPane = new dijit.layout.ContentPane({ title: tabName }, tabId);
-            ////    tabContainer.addChild(contentPane);
-            ////});
-            ////tabContainer.startup();
-
-            // Create the jQueryUI tab container only if there is more than one tab.
-            if (tabIds.length > 1) {
-                var anchorList = $("<ul>").prependTo(tabContainer);
-                $(tabIds).each(function (index, tabId) {
-                    var tabName = $("#" + tabId).attr("data-tab-name");
-                    $("<a>").attr("href", "#" + tabId).text(tabName).appendTo($("<li>").appendTo(anchorList));
-                });
-                tabContainer.tabs();
-            }
-
-
-
-            // If a map setting has been specified, add event handlers to the map so that the layer list contents are updated when a layer is added or removed from the map.
-            if (settings.map) {
-                // Add layer item to the layer list when it is added to the layerSource.
-                dojo.connect(settings.map, "onLayerAddResult", layerListNode, function (layer, error) {
-                    var existingControlsForThisLayer = $("div[data-layerId='" + layer.id + "']");
-
-                    if (!dojo.isIE || dojo.isIE >= 9) {
-                        setClassForOutOfScaleLayerControls();
-                    }
-
-                    if (!existingControlsForThisLayer || (existingControlsForThisLayer.length < 1 && !error)) {
-                        var category;
-                        if (layer.id.match(basemapLayerIdRe)) {
-                            category = "Basemap";
-                        } else {
-                            category = "Other";
-                        }
-
-
-                        // Get the div for the group this layer belongs to.
-                        var groupDiv = $("div[data-group='" + category + "']");
-
-                        var tabDiv = $("div[data-tab-name='Main']");
-
-
-                        // If the group div does not already exist, create it.
-                        if (!groupDiv || groupDiv.length < 1) {
-                            groupDiv = $("<div>").attr("data-group", category).append($("<span>").html(category).addClass("esriLegendServiceLabel")).appendTo(tabDiv);
-                        }
-
-                        var layerDiv = createControlsForLayer(layer, groupDiv);
-
-                        groupDiv.append(layerDiv);
-                    }
-
-
-                });
-
-                // When a layerSource layer is removed, also remove it from the layer list.
-                dojo.connect(settings.map, "onLayerRemove", layerListNode, function (layer) {
-                    var layerDiv = $("div[data-layerId='" + layer.id + "']");
-                    // Destroy dijits in the layerDiv.
-                    var dijits = layerDiv.data("dijits");
-                    if (dijits) {
-                        dojo.forEach(dijits, function (item) {
-                            if (item.destroyRecursive) {
-                                item.destroyRecursive(false);
-                            }
-                        });
-                    }
-                    layerDiv.remove();
-                });
-
-
-
-                if (typeof (settings.map.getScale) !== "undefined") {
-                    if (!dojo.isIE || dojo.isIE >= 9) {
-                        dojo.connect(settings.map, "onZoomEnd", function (extent, zoomFactor, anchor, level) { setClassForOutOfScaleLayerControls(level); });
-                    }
-                    if (!dojo.isIE || dojo.isIE >= 9) {
-                        dojo.connect(settings.map, "onUpdateEnd", setClassForOutOfScaleLayerControls);
-                    }
-                }
-
-
             }
 
             return this;
         },
-        add: function (layer) {
-            throw new Error("The add method has not yet been implemented.");
-        },
-        remove: function (layer) {
-            throw new Error("The remove method has not yet been implemented.");
-        },
-        sort: function (groupName) {
-            /// <summary>Sorts the elements in each group by their layer ids.</summary>
-            var groups;
-            if (groupName) {
-                groups = $("div[data-group='" + groupName + "']");
-            }
-            else {
-                groups = $("div[data-group]");
+        _addInfoFromLoadedLayer: onLayerLoad,
+        _create: function () {
+            var $this = this;
+
+            ($this.element).addClass("ui-layer-list-item ui-layer-list-not-loaded");
+
+            // Add the layer checkbox to the widget and add change event handler.
+            $this._checkbox = $("<input>").attr({
+                type: "checkbox"
+            }).appendTo($this.element).change({ widget: $this }, toggleLayer);
+
+            // Add the label for the checkbox.
+            $("<label>").text($this.options.layer.id || $this.options.layer.options.id || "Unnamed").appendTo($this.element);
+
+            ////// Add the loading progress bar.
+            ////$("<progress>").text("Loading...").css({
+            ////    "display": "block"
+            ////}).appendTo($this.element).hide();
+
+            $($this.options.loadingIcon).addClass("ui-layer-list-item-loading-icon").appendTo($this.element).hide();
+
+            // If this layer has already been loaded, call the layer load event handler.
+            if (typeof ($this.options.layer) !== "undefined" && $this.options.layer !== null && typeof ($this.options.layer.isInstanceOf) === "function" && $this.options.layer.isInstanceOf(esri.layers.Layer)) {
+                $this._layer = $this.options.layer;
+                $this._addInfoFromLoadedLayer($this._layer);
+                // Set the checkbox to match the layer's visibility.
+
+                $this._checkbox[0].checked = $this._layer.visible;
+                $($this.element).mouseout();
             }
 
-            ////// TODO: Loop through all of the groups and put the controls in order based on the layer ID.
-            ////for (var i = 0, l = groups.length; i < l; i += 1) {
-
-            ////}
-            throw new Error("Not implemented");
+            return this;
+        },
+        disable: function () {
+            // Remove the change event handler, disable and uncheck the checkbox.
+            this._checkbox.change(null).attr("disabled", true)[0].checked = false;
+            $.Widget.prototype.disable.apply(this, arguments);
+        },
+        _destroy: function () {
+            // Call the base destroy method.
+            $.Widget.prototype.destroy.apply(this, arguments);
         }
     });
 
+    $.widget("ui.layerListGroup", {
+        options: {
+            map: null,
+            groupName: null,
+            layers: null,
+            startCollapsed: false,
+            contextMenuIcon: _defaultContextMenuIcon,
+            loadingIcon: _defaultLoadingIcon
+        },
+        _list: null,
+        toggle: function () {
+            /// <summary>Toggles the list of layers or subgroups on or off.</summary>
+            // Get the list.  If called from a click event, "this" will not be referencing the widget, so we need to get the list an alternate way.
+            var hidden = $("ul", this.element).css("display") === "none";
+            // Expand the list if it is hidden, or collapse it if it is currently visible.  Then trigger the appropriate event.
+            if (hidden) {
+                this._list.show("blind");
+                $(this.element).removeClass("collapsed");
+                this._trigger("collapse", this);
+            } else {
+                this._list.hide("blind");
+                $(this.element).addClass("collapsed");
+                this._trigger("expand", this);
+            }
+            return this;
+        },
+        _addLayer: function (layer) {
+            /// <summary>Adds a layer to the layer list group.</summary>
+            /// <param name="layer" type="esri.layers.Layer">A layer to be added to the group.</param>
+            var layerListItem = $("<li>").appendTo(this._list).layerListItem({
+                layer: layer,
+                map: this.options.map,
+                contextMenuIcon: this.options.contextMenuIcon,
+                loadingIcon: this.options.loadingIcon
+            });
+            this._trigger("layerAdd", this, {
+                layer: layer,
+                layerListItem: layerListItem.data("layerListItem")
+            });
+            return this;
+        },
+        _addGroup: function (name, layers) {
+            /// <summary>Adds a child group to this group.</summary>
+            /// <param name="name" type="String">The name that will be given to the group.</param>
+            /// <param name="layers" type="Array">An array of layer description objects that will be added to the new group.</param>
+            var group = $("<li>").appendTo(this._list).layerListGroup({
+                groupName: name,
+                startCollapsed: this.options.startCollapsed,
+                layers: layers,
+                map: this.options.map,
+                contextMenuIcon: this.options.contextMenuIcon,
+                loadingIcon: this.options.loadingIcon
+            });
+            this._trigger("groupAdd", this, {
+                name: name,
+                layers: layers,
+                group: group.data("layerListGroup")
+            });
+            return this;
+        },
+        _create: function () {
+            var $this = this, layers = this.options.layers, link;
+
+            // Add a class indicating that this is a layer list group.
+            $($this.element).addClass("ui-layer-list-group");
+            // Add the group header link.
+            link = $(["<a href='#'>", $this.options.groupName, "</a>"].join("")).attr("href", "#").appendTo($this.element);
+
+            // Add a list to hold the child elements or arrays.
+            $this._list = $("<ul>").appendTo($this.element);
+
+            // Add the click event to the link which will toggle the list.
+            link.click(function () {
+                $this.toggle();
+                return false;
+            });
+
+            // If layers is an array, it contains layers.  Otherwise it contains groups of layers.
+            if ($.type(layers) === "array") {
+                // For each layer in layers, add a list item and turn it into a layerListItem.
+                for (var i = 0, l = layers.length; i < l; i += 1) {
+                    $this._addLayer(layers[i]);
+                }
+            } else if ($.type(layers) === "object") {
+                // Add layer list groups for each property in the layers object.
+                for (var name in layers) {
+                    if (layers.hasOwnProperty(name)) {
+                        $this._addGroup(name, layers[name]);
+                    }
+                }
+            }
+
+            if ($this.options.startCollapsed) {
+                $this.toggle();
+            }
+
+            return this;
+        },
+        _destroy: function () {
+            $.Widget.prototype.destroy.apply(this, arguments);
+        }
+    });
+
+    function getLayerId(layer) {
+        var type = $.type(layer);
+        if (type === "string") {
+            return layer;
+        } else {
+            return Boolean(layer.id) ? layer.id : Boolean(layer.options) && Boolean(layer.options.id) ? layer.options.id : null;
+        }
+    }
+
+    $.widget("ui.layerList", {
+        options: {
+            map: null,
+            layers: null,
+            startCollapsed: false,
+            contextMenuIcon: _defaultContextMenuIcon,
+            loadingIcon: _defaultLoadingIcon,
+            startLayers: null,
+            basemapRe: /layer((?:\d+)|(?:_osm)|(?:_bing))/i,
+            basemapGroupName: "Basemap",
+            addAdditionalLayers: true
+        },
+        getWidget: function () {
+            return this;
+        },
+
+        _layerExistsInToc: function (layer) {
+            /// <summary>Checks to see if a layer already exists in the layer list.</summary>
+            var existingLayers;
+
+            if (typeof (layer) !== "string") {
+                layer = getLayerId(layer);
+            }
+
+            return $("label").filter(function () {
+                return $(this).text() === layer;
+            }).length > 0;
+
+        },
+        _selectStartLayers: function () {
+            /// <summary>Turns on all of the layers specified in the options.startLayers array.</summary>
+            var startLayerNames, listItems, i, l, listItem, j, nameCount, name, checkbox;
+            startLayerNames = this.options.startLayers;
+            listItems = $("li.ui-layer-list-item", this.element);
+            for (i = 0, l = listItems.length; i < l; i += 1) {
+                listItem = listItems[i];
+                // Loop through all of the names to see if there is a match.
+                for (j = 0, nameCount = startLayerNames.length; j < nameCount; j += 1) {
+                    name = startLayerNames[j];
+                    if ($("label", listItem).text() === name) {
+                        // Get the checkbox
+                        checkbox = $("> input", listItem);
+                        checkbox = checkbox.length ? checkbox[0] : null;
+
+                        // Click the checkbox.  This will check it and activate the associated layer.
+                        if (checkbox) {
+                            checkbox.click();
+                            $(checkbox).change(); // This line is necessary to turn the layer on in IE.
+                        }
+                        break; // Match found.  Go to the next list item.
+                    }
+                }
+            }
+        },
+        _childNodeType: null,
+        _addGroup: function (name) {
+            var group = $(this._childNodeType).appendTo(this.element).layerListGroup({
+                map: this.options.map,
+                startCollapsed: this.options.startCollapsed,
+                groupName: name,
+                layers: this.options.layers[name],
+                contextMenuIcon: this.options.contextMenuIcon,
+                loadingIcon: this.options.loadingIcon
+            });
+            this._trigger("groupAdd", this, {
+                group: group
+            });
+            return group;
+        },
+        _addLayer: function (layer, error) {
+            var parent = this.element, groups, group, groupWidget, i, l, basemapGroupFound = false, layerListItem;
+            if (this.options.basemapRe.test(getLayerId(layer))) {
+                // Check to see if a "Basemap" group exists.  Create one if it does not.  Set "parent" to the "Basemap" group.
+                // $(".ui-layer-list-group").first().data("layerListGroup").options.groupName
+                groups = $(".ui-layer-list-group", this.element);
+                for (i = 0, l = groups.length; i < l; i += 1) {
+                    group = groups.eq(i)
+                    groupWidget = group.data("layerListGroup");
+                    if (Boolean(groupWidget.options) && typeof (groupWidget.options.groupName) === "string" && groupWidget.options.groupName === this.options.basemapGroupName) {
+                        parent = group[0];
+                        basemapGroupFound = true;
+                        break;
+                    }
+                }
+                // TODO: Create "Basemap" group if it does not already exist.  Assign this group to parent.
+                if (!basemapGroupFound) {
+                    parent = this._addGroup(this.options.basemapGroupName);
+                }
+
+                parent = $("ul", parent);
+            }
+            if (!error && !this._layerExistsInToc(layer)) {
+                // Add the layer list item
+                layerListItem = $(this._childNodeType).appendTo(parent).layerListItem({
+                    layer: layer,
+                    map: this.options.map,
+                    contextMenuIcon: this.options.contextMenuIcon,
+                    loadingIcon: this.options.loadingIcon
+                });
+
+                // Trigger an event.
+                this._trigger("layerAdd", this, {
+                    layer: layer,
+                    layerListItem: layerListItem.data("layerListItem")
+                });
+            }
+            return this;
+        },
+        _removeLayer: function (layer) {
+            /// <summary>Removes the list item corresponding to the given layer from the layerList.  Intended to be called from the map's removeLayer event.</summary>
+            /// <param name="layer" type="esri.layers.Layer">The layer that will have its corresponding item removed.</param>
+            var listItems, i, l, item;
+            // Get all of the layer list items that have had their layers loaded.
+            listItems = $(".ui-layer-list-item").filter(":not(.ui-layer-list-not-loaded)");
+            // Find the one that matches the removed layer and remove it.
+            for (i = 0, l = listItems.length; i < l; i += 1) {
+                // Get the item at the current index in a jQuery object.
+                item = listItems.eq(i);
+                if (item.layerListItem("getLayer") === layer) {
+                    item.remove();
+                    break;
+                }
+            }
+            this._trigger("layerRemove", this, {
+                layer: layer
+            });
+        },
+        _addLayersAlreadyInMap: function () {
+            var i, l, map = this.options.map, layerIds = map.layerIds.concat(map.graphicsLayerIds);
+            // Add layers already in map to the TOC.
+            for (i = 0, l = layerIds.length; i < l; i += 1) {
+                this._addLayer(map.getLayer(layerIds[i]));
+            }
+        },
+        _create: function () {
+            var $this = this, layer, baseNode, map = this.options.map, i, l, name;
+
+            // Add classes to this element for jQuery UI styling and for custom styling.
+            $($this.element).addClass('ui-widget ui-widget-content ui-layer-list');
+
+            // Get the base node DOM element.
+            baseNode = this.element.nodeName ? this.element : this.element[0];
+            // Determine the type of DOM element.  If the baseNode is either an OL or UL, we will be adding LI elements.
+            // Otherwise we will be adding DIV elements.
+            $this._childNodeType = /[uo]l/i.test(baseNode.nodeName) ? "<li>" : "<div>";
+
+            if ($.isArray($this.options.layers)) {
+                // If the "layers" option is an array, add a layerListItem for each element in the array.
+                for (i = 0, l = $this.options.layers.length; i < l; i += 1) {
+                    $this._addLayer($this.options.layers[i]);
+                }
+            } else {
+                // For each property in the "layers" object, add a layerListGroup.
+                for (name in $this.options.layers) {
+                    if ($this.options.layers.hasOwnProperty(name)) {
+                        $this._addGroup(name);
+                    }
+
+                }
+            }
+
+            // Check the layers specified in the startLayers option.
+            if ($.isArray($this.options.startLayers)) {
+                $this._selectStartLayers();
+            }
+
+            // Setup zoom events to show if layer is out of scale.
+            dojo.connect(map, "onExtentChange", this, updateIsInScaleStatus);
+
+            if ($this.options.addAdditionalLayers === true) {
+                // Add an event to add layers to the TOC as they are added to the map.
+                dojo.connect(map, "onLayerAddResult", $this, this._addLayer);
+                dojo.connect(map, "onLayerRemove", $this, this._removeLayer);
 
 
+                // Add layers already in map to the TOC.
+                $this._addLayersAlreadyInMap();
+            }
 
-
+            return this;
+        },
+        _destroy: function () {
+            // Call the base destroy method.
+            // TODO: destroy the layer list items.
+            $.Widget.prototype.destroy.apply(this, arguments);
+        }
+    });
 
 } (jQuery));

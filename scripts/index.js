@@ -67,53 +67,53 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
     }
 
-    function layerInfoToLayer(layerInfo) {
-        /// <summary>Converts a layer information object from the config.js file into an ESRI JavaScript API Layer object.</summary>
-        /// <param name="layerInfo" type="Object">An object containing information that will be used to create a esri.layers.Layer object.</param>
-        /// <returns type="esri.layers.Layer" />
-        var constructor, layer = null;
+    ////function layerInfoToLayer(layerInfo) {
+    ////    /// <summary>Converts a layer information object from the config.js file into an ESRI JavaScript API Layer object.</summary>
+    ////    /// <param name="layerInfo" type="Object">An object containing information that will be used to create a esri.layers.Layer object.</param>
+    ////    /// <returns type="esri.layers.Layer" />
+    ////    var constructor, layer = null;
 
-        if (!layerInfo) {
-            throw new Error("layerInfoToLayer: The 'layerInfo' parameter cannot be null or undefined.");
-        }
-        switch (layerInfo.layerType) {
-            case "esri.layers.ArcGISTiledMapServiceLayer":
-                constructor = esri.layers.ArcGISTiledMapServiceLayer;
-                break;
-            case "esri.layers.ArcGISDynamicMapServiceLayer":
-                constructor = esri.layers.ArcGISDynamicMapServiceLayer;
-                break;
-            case "esri.layers.FeatureLayer":
-                constructor = esri.layers.FeatureLayer;
-                // The commented out code below causes a the browser to hang in IE 7 when browser is maximized and display resolution is set at 1280 x 1024.
-                ////// If a mode has been specified by name, convert to the numeric value the constructor is expecting.
-                ////if (layerInfo.options.mode && typeof (layerInfo.options.mode) !== "number") {
-                ////    layerInfo.options.mode = esri.layers.FeatureLayer[layerInfo.options.mode];
-                ////}
-                break;
-            default:
-                // Unsupported type.
-                constructor = null;
-                break;
-        }
-        if (constructor) {
-            // Create an info template object if paramters are defined.
-            if (layerInfo.options && layerInfo.options.infoTemplate) {
-                layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
-            }
-            layer = constructor(layerInfo.url, layerInfo.options);
-            //// map.addLayer(layer);
-            if (layerInfo.visibleLayers) {
-                layer.setVisibleLayers(layerInfo.visibleLayers);
-            }
-            // Add a property containing metadata IDs.
-            if (layerInfo.metadataIds) {
-                layer.metadataUrls = dojo.map(layerInfo.metadataIds, getMetadataUrl);
-            }
-        }
+    ////    if (!layerInfo) {
+    ////        throw new Error("layerInfoToLayer: The 'layerInfo' parameter cannot be null or undefined.");
+    ////    }
+    ////    switch (layerInfo.layerType) {
+    ////        case "esri.layers.ArcGISTiledMapServiceLayer":
+    ////            constructor = esri.layers.ArcGISTiledMapServiceLayer;
+    ////            break;
+    ////        case "esri.layers.ArcGISDynamicMapServiceLayer":
+    ////            constructor = esri.layers.ArcGISDynamicMapServiceLayer;
+    ////            break;
+    ////        case "esri.layers.FeatureLayer":
+    ////            constructor = esri.layers.FeatureLayer;
+    ////            // The commented out code below causes a the browser to hang in IE 7 when browser is maximized and display resolution is set at 1280 x 1024.
+    ////            ////// If a mode has been specified by name, convert to the numeric value the constructor is expecting.
+    ////            ////if (layerInfo.options.mode && typeof (layerInfo.options.mode) !== "number") {
+    ////            ////    layerInfo.options.mode = esri.layers.FeatureLayer[layerInfo.options.mode];
+    ////            ////}
+    ////            break;
+    ////        default:
+    ////            // Unsupported type.
+    ////            constructor = null;
+    ////            break;
+    ////    }
+    ////    if (constructor) {
+    ////        // Create an info template object if paramters are defined.
+    ////        if (layerInfo.options && layerInfo.options.infoTemplate) {
+    ////            layerInfo.options.infoTemplate = new esri.InfoTemplate(layerInfo.options.infoTemplate);
+    ////        }
+    ////        layer = constructor(layerInfo.url, layerInfo.options);
+    ////        //// map.addLayer(layer);
+    ////        if (layerInfo.visibleLayers) {
+    ////            layer.setVisibleLayers(layerInfo.visibleLayers);
+    ////        }
+    ////        // Add a property containing metadata IDs.
+    ////        if (layerInfo.metadataIds) {
+    ////            layer.metadataUrls = dojo.map(layerInfo.metadataIds, getMetadataUrl);
+    ////        }
+    ////    }
 
-        return layer;
-    }
+    ////    return layer;
+    ////}
 
     $(document).ready(function () {
         $("#mainContainer").css("display", "");
@@ -1046,89 +1046,93 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
             setExtentFromParams();
 
-            function setupLayers() {
-                var layers = {},
-                tabName, groupName, i, l, layerInfo, constructor, layer;
+            ////function setupLayers() {
+            ////    var layers = {},
+            ////    tabName, groupName, i, l, layerInfo, constructor, layer;
 
 
 
-                function htmlPopupClickHandler(event) {
-                    /// <summary>Displays a dialog containing the graphic's associated HTML Popup.  Designed for use with Feature Layers with HTML Popups.</summary>
-                    /* event's properties: screenPoint, mapPoint, graphic */
-                    var url, graphic = event.graphic, layer = graphic.getLayer(), dialog = $("#htmlPopupDialog");
+            ////    function htmlPopupClickHandler(event) {
+            ////        /// <summary>Displays a dialog containing the graphic's associated HTML Popup.  Designed for use with Feature Layers with HTML Popups.</summary>
+            ////        /* event's properties: screenPoint, mapPoint, graphic */
+            ////        var url, graphic = event.graphic, layer = graphic.getLayer(), dialog = $("#htmlPopupDialog");
 
-                    // Create the dialog if it does not already exist.
-                    if (dialog.length < 1) {
-                        dialog = $("<div>").attr("id", "htmlPopupDialog").dialog({
-                            "autoOpen": false
-                        });
-                    }
-                    dialog.empty();
-                    $("<img>").attr("src", "images/ajax-loader.gif").appendTo(dialog);
-                    dialog.dialog("open").dialog("option", "position", [event.screenPoint.x, event.screenPoint.y]);
+            ////        // Create the dialog if it does not already exist.
+            ////        if (dialog.length < 1) {
+            ////            dialog = $("<div>").attr("id", "htmlPopupDialog").dialog({
+            ////                "autoOpen": false
+            ////            });
+            ////        }
+            ////        dialog.empty();
+            ////        $("<img>").attr("src", "images/ajax-loader.gif").appendTo(dialog);
+            ////        dialog.dialog("open").dialog("option", "position", [event.screenPoint.x, event.screenPoint.y]);
 
-                    // Call the URL for the HTML popup.  Replace the loading icon with content when it has loaded.
-                    url = layer.url + "/" + graphic.attributes.OBJECTID + "/" + "htmlPopup";
-                    try {
-                        esri.request({
-                            url: url,
-                            content: { f: "json" },
-                            handleAs: "json",
-                            load: function (data) {
-                                dialog.empty().html(data.content);
-                            },
-                            error: function (error) {
-                                dialog.empty().text("Could not load HTML popup content.");
-                                if (console && console.error) {
-                                    console.error(error);
-                                }
-                            }
-                        });
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
+            ////        // Call the URL for the HTML popup.  Replace the loading icon with content when it has loaded.
+            ////        url = layer.url + "/" + graphic.attributes.OBJECTID + "/" + "htmlPopup";
+            ////        try {
+            ////            esri.request({
+            ////                url: url,
+            ////                content: { f: "json" },
+            ////                handleAs: "json",
+            ////                load: function (data) {
+            ////                    dialog.empty().html(data.content);
+            ////                },
+            ////                error: function (error) {
+            ////                    dialog.empty().text("Could not load HTML popup content.");
+            ////                    if (console && console.error) {
+            ////                        console.error(error);
+            ////                    }
+            ////                }
+            ////            });
+            ////        } catch (e) {
+            ////            console.error(e);
+            ////        }
+            ////    }
 
-                function setupHtmlPopupClickEvent(layer) {
-                    if (typeof (layer.htmlPopupType) === "string" && layer.htmlPopupType === esri.layers.FeatureLayer.POPUP_HTML_TEXT) {
-                        dojo.connect(layer, "onClick", htmlPopupClickHandler);
-                    }
-                }
+            ////    function setupHtmlPopupClickEvent(layer) {
+            ////        if (typeof (layer.htmlPopupType) === "string" && layer.htmlPopupType === esri.layers.FeatureLayer.POPUP_HTML_TEXT) {
+            ////            dojo.connect(layer, "onClick", htmlPopupClickHandler);
+            ////        }
+            ////    }
 
-                // Load the layers that are defined in the config file.
-                for (tabName in wsdot.config.layers) {
-                    if (wsdot.config.layers.hasOwnProperty(tabName)) {
-                        layers[tabName] = {};
-                        for (groupName in wsdot.config.layers[tabName]) {
-                            if (wsdot.config.layers[tabName].hasOwnProperty(groupName)) {
-                                layers[tabName][groupName] = [];
-                                for (i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i += 1) {
-                                    layerInfo = wsdot.config.layers[tabName][groupName][i];
-                                    layer = layerInfoToLayer(layerInfo);
-                                    if (layer) {
-                                        map.addLayer(layer);
-                                        ////if (layerInfo.visibleLayers) { layer.setVisibleLayers(layerInfo.visibleLayers); }
-                                        layers[tabName][groupName].push(layer);
+            ////    // Load the layers that are defined in the config file.
+            ////    for (tabName in wsdot.config.layers) {
+            ////        if (wsdot.config.layers.hasOwnProperty(tabName)) {
+            ////            layers[tabName] = {};
+            ////            for (groupName in wsdot.config.layers[tabName]) {
+            ////                if (wsdot.config.layers[tabName].hasOwnProperty(groupName)) {
+            ////                    layers[tabName][groupName] = [];
+            ////                    for (i = 0, l = wsdot.config.layers[tabName][groupName].length; i < l; i += 1) {
+            ////                        layerInfo = wsdot.config.layers[tabName][groupName][i];
+            ////                        layer = layerInfoToLayer(layerInfo);
+            ////                        if (layer) {
+            ////                            map.addLayer(layer);
+            ////                            ////if (layerInfo.visibleLayers) { layer.setVisibleLayers(layerInfo.visibleLayers); }
+            ////                            layers[tabName][groupName].push(layer);
 
-                                        // If the layer has an htmlPopupType property, associate a handler function with the map's click event.
-                                        if (layer.isInstanceOf && layer.isInstanceOf(esri.layers.FeatureLayer)) {
-                                            if (layer.loaded) {
-                                                setupHtmlPopupClickEvent(layer);
-                                            } else {
-                                                dojo.connect(layer, "onLoad", setupHtmlPopupClickEvent);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            ////                            // If the layer has an htmlPopupType property, associate a handler function with the map's click event.
+            ////                            if (layer.isInstanceOf && layer.isInstanceOf(esri.layers.FeatureLayer)) {
+            ////                                if (layer.loaded) {
+            ////                                    setupHtmlPopupClickEvent(layer);
+            ////                                } else {
+            ////                                    dojo.connect(layer, "onLoad", setupHtmlPopupClickEvent);
+            ////                                }
+            ////                            }
+            ////                        }
+            ////                    }
+            ////                }
+            ////            }
+            ////        }
+            ////    }
 
-                return layers;
-            }
+            ////    return layers;
+            ////}
 
-            $("#layerList").layerList({ "layerSource": setupLayers(), "map": map });
+            $("#layerList").layerList({
+                layers: wsdot.config.layers,
+                startCollapsed: true,
+                map: map 
+            });
             map.setupIdentifyPopups({
                 ignoredLayerRE: /^layer\d+$/i
             });
