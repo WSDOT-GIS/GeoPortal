@@ -4,14 +4,7 @@
 }
 
 
-.ui-layer-list ul 
-{
-    list-style-position: inside;
-    padding-left: 1em;
-}
-
-.ui-layer-list li
-{
+.ui-layer-list-group .ui-layer-list-item {
     list-style-image: none;
 }
 
@@ -23,32 +16,6 @@
 .ui-layer-list .ui-layer-list-group.collapsed, .ui-layer-list-has-children.collapsed
 {
     list-style-image: url(../images/layerList/TreePlus10.gif)
-}
-
-.ui-layer-list-group > a
-{
-    font-weight: bold;
-}
-
-.ui-layer-list-item 
-{
-    background-color: white;
-}
-
-.ui-layer-list-item * 
-{
-    background-color: transparent;
-}
-
-.ui-layer-list-item ul
-{
-    font-style: italic;
-}
-
-.ui-layer-list-item ul
-{
-    border: none;
-    list-style-type: circle;
 }
 
 .ui-layer-list a:hover

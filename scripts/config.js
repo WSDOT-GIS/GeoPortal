@@ -93,16 +93,6 @@ wsdot.config = {
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
-    // "identifyLayers" is used to specify which layers will be available in the Identify tool.  It is not necessary for these layers to be added to the map.
-    "identifyLayers": [
-        {
-            "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-            "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/QueryMapService/MapServer",
-            "options": {
-                "id": "Location Information"
-            }
-        }
-    ],
     /* 
     The "layers" section specifies which layers will be added to the map and to the layer list.  
     The outermost grouping level is "Tab" level.  Next is "group" level.

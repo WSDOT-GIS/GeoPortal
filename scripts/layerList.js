@@ -699,7 +699,7 @@
             var $this = this, layer, baseNode, map = this.options.map, i, l, name;
 
             // Add classes to this element for jQuery UI styling and for custom styling.
-            $($this.element).addClass('ui-widget ui-widget-content ui-layer-list');
+            $($this.element).addClass('ui-layer-list');
 
             // Get the base node DOM element.
             baseNode = this.element.nodeName ? this.element : this.element[0];

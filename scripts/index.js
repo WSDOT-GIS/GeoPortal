@@ -201,18 +201,19 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         dojo.require("esri.dijit.Bookmarks");
     }
 
-    dojo.extend(esri.geometry.Extent, { "toCsv": function () {
-        var propNames = ["xmin", "ymin", "xmax", "ymax"],
-            output = "",
-            i, l;
-        for (i = 0, l = propNames.length; i < l; i += 1) {
-            if (i > 0) {
-                output += ",";
+    dojo.extend(esri.geometry.Extent, { 
+        "toCsv": function () {
+            var propNames = ["xmin", "ymin", "xmax", "ymax"],
+                output = "",
+                i, l;
+            for (i = 0, l = propNames.length; i < l; i += 1) {
+                if (i > 0) {
+                    output += ",";
+                }
+                output += this[propNames[i]];
             }
-            output += this[propNames[i]];
+            return output;
         }
-        return output;
-    }
     });
 
     dojo.extend(esri.layers.GraphicsLayer, {
