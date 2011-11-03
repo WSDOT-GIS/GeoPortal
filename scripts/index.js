@@ -63,9 +63,9 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         };
     }
 
-    function getMetadataUrl(id) {
-        return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
-    }
+    //function getMetadataUrl(id) {
+    //    return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
+    //}
 
     ////function layerInfoToLayer(layerInfo) {
     ////    /// <summary>Converts a layer information object from the config.js file into an ESRI JavaScript API Layer object.</summary>
@@ -201,7 +201,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
         dojo.require("esri.dijit.Bookmarks");
     }
 
-    dojo.extend(esri.geometry.Extent, { 
+    dojo.extend(esri.geometry.Extent, {
         "toCsv": function () {
             var propNames = ["xmin", "ymin", "xmax", "ymax"],
                 output = "",
@@ -340,17 +340,27 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
     function getExtentLink() {
         /// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
-        var qsParams = {
-            "extent": map.extent.toCsv()
+        var layers, qsParams = {
+            "extent": map.extent.toCsv(),
         };
-        $(map.getVisibleLayers()).each(function (index, layer) {
-            if (index === 0) {
-                qsParams.visibleLayers = String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
-            }
-            else {
-                qsParams.visibleLayers += "," + String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
-            }
+
+        layers = $.map(map.getVisibleLayers(), function(layer){
+            return layer.id;
+            // return [layer.id, String(layer.opacity)].join(":");
         });
+
+        if (layers) {
+            qsParams.layers = layers.join(",");
+        }
+
+        ////$(map.getVisibleLayers()).each(function (index, layer) {
+        ////    if (index === 0) {
+        ////        qsParams.layers = String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
+        ////    }
+        ////    else {
+        ////        qsParams.layers += "," + String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
+        ////    }
+        ////});
 
         return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
     }
@@ -1045,6 +1055,14 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
                 }
             }
 
+            function getLayersFromParams() {
+                var qsParams = $.deparam.querystring(true), layers;
+                if (typeof (qsParams.layers) === "string") {
+                    layers = qsParams.layers.split(",");
+                }
+                return layers;
+            }
+
             setExtentFromParams();
 
             ////function setupLayers() {
@@ -1131,7 +1149,8 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
             $("#layerList").layerList({
                 layers: wsdot.config.layers,
-                startCollapsed: true,
+                startLayers: getLayersFromParams(),
+                startCollapsed: false,
                 map: map
             });
 

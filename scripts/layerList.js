@@ -186,9 +186,48 @@
         return typeof (input.min) !== "undefined";
     }
 
+    function getMetadataUrl(id) {
+        return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
+    }
+
+    function MetadataInfo(id) {
+        /// <summary>A class containing id and url of a metadata link.  Used with Metadata.ashx.</summary>
+        this.id = Number(id);
+        this.url = getMetadataUrl(this.id);
+    }
+
+    function openMetadataUrls(event) {
+        var metadataInfos, i, l;
+        if (typeof (event) === "object" && typeof (event.data) === "object" && $.isArray(event.data.metadataInfos)) {
+            metadataInfos = event.data.metadataInfos;
+            for (i = 0, l = metadataInfos.length; i < l; i += 1) {
+                window.open(metadataInfos[i].url);
+            }
+        }
+        return false;
+    }
+
     $.widget("ui.layerOptions", {
         options: {
-            layer: null
+            layer: null,
+            metadataIds: null
+        },
+        _addMetadataLink: function () {
+            var id, i, l, metadataInfos;
+            /// <summary>Adds a metadata link if the layer has metadata ids specified.</summary>
+            if ($.isArray(this.options.metadataIds) && this.options.metadataIds.length > 0) {
+                metadataInfos = [];
+                // Loop through each of the metadata ids and create an array of metadata info objects.
+                for (i = 0, l = this.options.metadataIds.length; i < l; i += 1) {
+                    id = this.options.metadataIds[i];
+                    metadataInfos.push(new MetadataInfo(id));
+                }
+                // Add a link that will open metadata urls in a new window.
+                $("<a href='#' class='ui-layer-options-metadata-link'>Metadata</a>").appendTo(this.element).click({
+                    metadataInfos: metadataInfos
+                }, openMetadataUrls);
+            }
+
         },
         _create: function () {
             var $this = this, layer, slider, sliderContainer, chromeRe = /Chrome\/([\d\.]+)/gi;
@@ -198,6 +237,7 @@
 
             layer = $this.options.layer;
 
+            // Add the opacity slider if the layer supports the setOpacity function.
             if (typeof (layer.setOpacity) === "function") {
                 $("<label>").text("Transparency").appendTo($this.element);
                 sliderContainer = $("<div>").addClass("ui-layer-list-opacity-slider-container").appendTo($this.element);
@@ -222,8 +262,10 @@
                         layer: layer
                     }, setOpacity);
                 }
-
             }
+
+            // Add metadata links.
+            $this._addMetadataLink();
         },
         _destroy: function () {
             // Call the base destroy method.
@@ -233,14 +275,16 @@
 
     function showOptions(event) {
         var layer = event.data.layer, dialog;
+
         // Create the options widget inside a dialog.
         dialog = $("<div>").layerOptions({
-            layer: layer
+            layer: layer,
+            metadataIds: event.data.metadataIds
         }).dialog({
             title: [layer.id, "Options"].join(" "),
             position: [
-                event.screenX,
-                event.screenY
+                event.clientX,
+                event.clientY
             ],
             modal: true,
             close: function (/*event, ui*/) {
@@ -262,7 +306,8 @@
 
         // Add options link
         tools = $(this.options.contextMenuIcon).appendTo($element).click({
-            layer: layer
+            layer: layer,
+            metadataIds: this.options.layer.metadataIds || null
         }, showOptions);
 
         // Setup the mouse over and mouse out events.

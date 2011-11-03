@@ -200,7 +200,6 @@ jQuery UI
                             // Process the results.
                             if (results.length >= 1) {
                                 for (i = 0, l = results.length; i < l; i += 1) {
-                                    console.debug(result);
                                     result = results[i];
                                     if (result.RoutePoint) {
                                         geometry = new esri.geometry.Point(result.RoutePoint);

@@ -127,6 +127,7 @@
                     this.detectHtmlPopups();
                 }
 
+                console.debug(options);
                 if (!options) {
                     options = {};
                 }
@@ -452,7 +453,9 @@
                                 $("span.result-layer", dialog.parent()).text(result.layerName);
                             }
                         });
-                    }, null, function (layer, error) {
+                    }, {
+                        tolerance: 20
+                    }, function (layer, error) {
                         console.error(layer, error);
                     });
 
