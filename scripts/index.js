@@ -1132,8 +1132,9 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
             $("#layerList").layerList({
                 layers: wsdot.config.layers,
                 startCollapsed: true,
-                map: map 
+                map: map
             });
+
             map.setupIdentifyPopups({
                 ignoredLayerRE: /^layer\d+$/i
             });

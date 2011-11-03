@@ -30,33 +30,36 @@
             htmlPopupType: null
         });
 
+        function detectHtmlPopups(htmlPopupLayerFoundAction) {
+            /// <summary>Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.</summary>
+            /// <param name="htmlPopupLayerFoundAction" type="Function">Optional.  A function that will be called whenever an HTML popup is found.</param>
+            /// <returns type="String" />
+            var mapService = this, layerInfo;
+            // Query the map service to get the list of layers.
+
+            for (var i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
+                var layerInfo = mapService.layerInfos[i], layerUrl = [mapService.url, String(layerInfo.id)].join("/");
+                // Query the layers to see if they support html Popups
+                $.get(layerUrl, { f: "json" }, function (layerResponse, textStatus) {
+                    // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
+                    if (/success/i.test(textStatus)) {
+                        if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
+                                typeof (layerResponse.type) !== "undefined" && !/Annotation/gi.test(layerResponse.type)) {
+                            // Add this URL to the list of URLs that supports HTML popups.
+                            layerInfo.htmlPopupType = layerResponse.htmlPopupType;
+                            if (typeof (htmlPopupLayerFoundAction) === "function") {
+                                htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
+                            }
+                        }
+                    }
+                }, "jsonp");
+            }
+        }
+
         // Extend each of the types in the array with the same proerties and methods.
         dojo.forEach([esri.layers.ArcGISDynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer], function (ctor) {
             dojo.extend(ctor, {
-                detectHtmlPopups: function (htmlPopupLayerFoundAction) {
-                    /// <summary>Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.</summary>
-                    /// <param name="htmlPopupLayerFoundAction" type="Function">Optional.  A function that will be called whenever an HTML popup is found.</param>
-                    /// <returns type="String" />
-                    var mapService = this;
-                    // Query the map service to get the list of layers.
-                    dojo.forEach(mapService.layerInfos, function (layerInfo) {
-                        var layerUrl = mapService.url + "/" + String(layerInfo.id);
-                        // Query the layers to see if they support html Popups
-                        $.get(layerUrl, { f: "json" }, function (layerResponse, textStatus) {
-                            // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
-                            if (/success/i.test(textStatus)) {
-                                if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
-                                typeof (layerResponse.type) !== "undefined" && !/Annotation/gi.test(layerResponse.type)) {
-                                    // Add this URL to the list of URLs that supports HTML popups.
-                                    layerInfo.htmlPopupType = layerResponse.htmlPopupType;
-                                    if (typeof (htmlPopupLayerFoundAction) === "function") {
-                                        htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
-                                    }
-                                }
-                            }
-                        }, "jsonp");
-                    });
-                },
+                detectHtmlPopups: detectHtmlPopups,
                 getIdsOfLayersWithHtmlPopups: function () {
                     return getIdsOfLayersWithHtmlPopups(this);
                 },
@@ -83,11 +86,15 @@
 
                 // Loop through each of the map service layers.
                 dojo.forEach(map.layerIds, function (id) {
-
-
                     var mapService;
 
+                    // Skip layers with an ID that matches the ignore regex.
+                    if (map._ignoredLayerRE.test(id)) {
+                        return;
+                    }
+
                     mapService = map.getLayer(id);
+
 
                     if (mapService.loaded) {
                         if (typeof (mapService.detectHtmlPopups) === "function") {
@@ -215,6 +222,10 @@
                 dojo.connect(map, "onLayerAddResult", function (layer, error) {
                     // If there was an error loading the layer, there is nothing to do here.
                     if (error) {
+                        return;
+                    }
+
+                    if (map._ignoredLayerRE.test(layer.id)) {
                         return;
                     }
 
