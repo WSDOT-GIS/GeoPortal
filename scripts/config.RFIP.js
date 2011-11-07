@@ -1,6 +1,5 @@
 ﻿{
-    "pageTitle": "WSDOT GeoPortal",
-    "enableIdentify": true,
+    "pageTitle": "Roadside Features",
     "mapOptions": {
         "logo": false,
         "extent": {
@@ -33,7 +32,6 @@
         "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
     },
     "locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
-
     "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
     "queryTasks": {
         "city": {
@@ -124,7 +122,7 @@
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer",
+                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
                     "options": {
                         "id": "RTPO"
                     },
@@ -163,7 +161,7 @@
                     "options": {
                         "id": "Maintenance Areas"
                     },
-                    "metadataIds": [33, 34]
+                    "metadataIds": [33,34]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -210,6 +208,92 @@
                     }
                 }
             ]
-        }
+        },
+        "RFIP": [
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Barrier/MapServer",
+                "options": {
+                    "id": "Barrier"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Bridge/MapServer",
+                "options": {
+                    "id": "Bridge"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Curb/MapServer",
+                "options": {
+                    "id": "Curb"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
+                "options": {
+                    "id": "Drainage"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Fence/MapServer",
+                "options": {
+                    "id": "Fence"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Mailbox/MapServer",
+                "options": {
+                    "id": "Mailbox"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/MiscFixedObject/MapServer",
+                "options": {
+                    "id": "MiscFixedObject"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Other/MapServer",
+                "options": {
+                    "id": "Other"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RockOutcropping/MapServer",
+                "options": {
+                    "id": "RockOutcropping"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Slope/MapServer",
+                "options": {
+                    "id": "Slope"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Tree/MapServer",
+                "options": {
+                    "id": "Tree"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Wall/MapServer",
+                "options": {
+                    "id": "Wall"
+                }
+            }
+        ]
     }
 }

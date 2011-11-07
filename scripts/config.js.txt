@@ -1,10 +1,18 @@
-﻿if (typeof (wsdot) === "undefined") {
-    wsdot = {};
-}
-wsdot.config = {
-    "pageTitle": "RFIP",
+﻿{
+    "pageTitle": "My Page Title",  // Use this parameter to change the page's title
+    // The custom legend property can be used to replace the default legend with a customLegend widget.  This value will match the options object of the 
+    // customLegend widget.  Most configurations will probably be best served by using the default legend (and omitting the "customLegend" setting).
+    "customLegend": {
+            "html": "FunctionalClassLegend.html",
+            "basemapSpecificSections": { 
+                "functionalClassBasemap": "#basemapLegend" 
+            },
+            "htmlType": "url"
+    },
+    "enableIdentify": true,  // Set to true to enable the Identify tool.  Omit or set to false if you don't want the Identify tool to be available.
     "mapOptions": {
-        "logo": false,
+        "logo": false, // Do you want the esri logo in the corner of the map?
+        // The initial extent of the map.
         "extent": {
             "xmin": -13938444.981854893,
             "ymin": 5800958.950617068,
@@ -14,6 +22,7 @@ wsdot.config = {
                 "wkid": 102100
             }
         },
+        // The levels of detail (LODs) that the map will use.
         "lods": [
                 { "level": 1, "resolution": 1222.99245256249, "scale": 4622324.434309 },
                 { "level": 2, "resolution": 611.49622628138, "scale": 2311162.217155 },
@@ -30,12 +39,17 @@ wsdot.config = {
                 { "level": 13, "resolution": 0.298582141647617, "scale": 1128.497176 }
             ]
     },
+    // This parameter specifies which layer will be used as the base layer when the map first loads.
     "mapInitialLayer": {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
         "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
     },
+    // The URL of the Location Information service's REST endpoint.  Used with the Location Information tool.
     "locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+
+    // The ArcGIS Server Geometry server that will be used 
     "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+    // The "queryTasks" properties are used to populate the drop-down lists of zoom extents.
     "queryTasks": {
         "city": {
             "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
@@ -54,6 +68,7 @@ wsdot.config = {
             }
         }
     },
+    // "basemaps" defines basemaps to be added to the basemap widget (in addition to the default basemaps that ESRI provides).
     "basemaps": [
         {
             "id": "wsdotBasemap",
@@ -72,7 +87,8 @@ wsdot.config = {
             ]
         }
     ],
-    "basemapsToRemove": ["basemap_4", "basemap_6"],
+    "basemapsToRemove": ["basemap_4", "basemap_6"], // This property is used to remove default basemaps from the basemap widget.
+    // The "locateMileposts" and "locateNearestMileposts" options are used to specify ELC REST endpoints.
     "locateMileposts": {
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
         "options": { "useProxy": false, "usePost": true }
@@ -81,6 +97,11 @@ wsdot.config = {
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
+    /* 
+    The "layers" section specifies which layers will be added to the map and to the layer list.
+    This value can either be an object or an array.  If an object is provided, each property will be either an array of layer definitions
+    or another object.
+    */
     "layers": {
         "Main": {
             "Political Boundaries": [
@@ -125,7 +146,7 @@ wsdot.config = {
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer", //"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
                     "options": {
                         "id": "RTPO"
                     },
@@ -164,7 +185,7 @@ wsdot.config = {
                     "options": {
                         "id": "Maintenance Areas"
                     },
-                    "metadataIds": [33,34]
+                    "metadataIds": [33, 34]
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -211,92 +232,6 @@ wsdot.config = {
                     }
                 }
             ]
-        },
-        "RFIP": [
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Barrier/MapServer",
-                "options": {
-                    "id": "Barrier"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Bridge/MapServer",
-                "options": {
-                    "id": "Bridge"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Curb/MapServer",
-                "options": {
-                    "id": "Curb"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
-                "options": {
-                    "id": "Drainage"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Fence/MapServer",
-                "options": {
-                    "id": "Fence"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Mailbox/MapServer",
-                "options": {
-                    "id": "Mailbox"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/MiscFixedObject/MapServer",
-                "options": {
-                    "id": "MiscFixedObject"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Other/MapServer",
-                "options": {
-                    "id": "Other"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RockOutcropping/MapServer",
-                "options": {
-                    "id": "RockOutcropping"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Slope/MapServer",
-                "options": {
-                    "id": "Slope"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Tree/MapServer",
-                "options": {
-                    "id": "Tree"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Wall/MapServer",
-                "options": {
-                    "id": "Wall"
-                }
-            }
-        ]
+        }
     }
-};
+}

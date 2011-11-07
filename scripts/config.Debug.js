@@ -1,7 +1,4 @@
-﻿if (typeof (wsdot) === "undefined") {
-    wsdot = {};
-}
-wsdot.config = {
+﻿{
     "mapOptions": {
         "logo": false,
         "extent": {
@@ -221,4 +218,4 @@ wsdot.config = {
             ]
         }
     }
-};
+}

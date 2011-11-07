@@ -127,7 +127,6 @@
                     this.detectHtmlPopups();
                 }
 
-                console.debug(options);
                 if (!options) {
                     options = {};
                 }

@@ -1,8 +1,5 @@
-﻿if (typeof (wsdot) === "undefined") {
-    wsdot = {};
-}
-wsdot.config = {
-    "pageTitle": "Freight",
+﻿{
+    "pageTitle": "Freight Map",
     "enableIdentify": true,
     "mapOptions": {
         "logo": false,
@@ -281,4 +278,4 @@ wsdot.config = {
             ]
         }
     }
-};
+}

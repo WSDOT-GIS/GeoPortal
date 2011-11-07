@@ -33,38 +33,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Rfip.Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\WsdotGrdoMapApplication.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Freight.Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\WsdotGrdoMapApplication.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-  </PropertyGroup>
   <ItemGroup>
+    <Content Include="FunctionalClassLegend.html" />
     <Content Include="help\location_info.html" />
     <Content Include="help\measure.html" />
     <Content Include="help\milepost.html" />
@@ -79,6 +49,7 @@
     <Content Include="images\layerList\sliderSprites.png" />
     <Content Include="images\layerList\treeMinus10.gif" />
     <Content Include="images\layerList\treePlus10.gif" />
+    <Content Include="images\legend\LegendSprites.png" />
     <Content Include="images\loading-bar.gif" />
     <Content Include="images\locationInfo\sprites.png" />
     <Content Include="images\navigation\FeedbackIcon.png" />
@@ -92,11 +63,13 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
-    <Content Include="scripts\config.Debug.js" />
-    <Content Include="scripts\config.Freight.Debug.js" />
+    <Content Include="scripts\config.Freight.js" />
+    <Content Include="scripts\config.FunctionalClass.js" />
     <Content Include="scripts\config.js" />
+    <Content Include="scripts\config.js.txt" />
     <Content Include="scripts\config.Release.js" />
-    <Content Include="scripts\config.Rfip.Debug.js" />
+    <Content Include="scripts\config.RFIP.js" />
+    <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\esriApiExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
@@ -110,27 +83,20 @@
     <Content Include="scripts\json2.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.ashx" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\lrsTools.js" />
     <Content Include="GetRoutes.ashx" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
+    <Content Include="scripts\toc.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
     <Content Include="style\fgdcPlus.css" />
+    <Content Include="style\functionalClass.css" />
     <Content Include="style\identify.css" />
     <Content Include="style\index.css" />
     <Content Include="style\jquery.pnotify.default.css" />
     <Content Include="style\jquery.pnotify.default.icons.css" />
-    <Content Include="web.Rfip.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </Content>
-    <Content Include="web.Freight.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Google.KML">
@@ -180,9 +146,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="config.ashx.cs">
-      <DependentUpon>config.ashx</DependentUpon>
-    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="GetRoutes.ashx.cs">
       <DependentUpon>GetRoutes.ashx</DependentUpon>

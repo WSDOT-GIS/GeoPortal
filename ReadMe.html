@@ -1,66 +1,190 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>GRDO Map Application</title>
-    <style type="text/css">
-        #configjs 
+    <title>WSDOT GeoPortal Configuration</title>
+    <link rel="shortcut icon" href="http://www.wsdot.wa.gov/favicon.ico" />
+    <style>
+        body 
         {
-            font-size: 0.8em;
+            font-family: 'Segoe UI', Arial, Sans-Serif;
+            font-size: 12pt;
+        }
+        h1 
+        {
+            font-family: 'Segoe Condensed';
+        }
+        .filename 
+        {
+            font-family: 'Consolas', Monospace;
+        }
+        em.filename 
+        {
+            font-style: normal;
+        }
+        em > em 
+        {
+            font-weight: bold;
+        }
+        
+        body > header > h1 
+        {
+            text-align: center;
+            font-size: 30pt;
+        }
+        body > section > h1 
+        {
+            font-size: 16pt;
+            font-weight: bold;
+            border-bottom: 1px solid blue;
+        }
+        
+        body > section > section > h1 
+        {
+            font-size: 14pt;
+        }
+        
+        body > section > section > section > h1 
+        {
+            font-size: 12pt;
+        }
+        
+        dt 
+        {
+            font-family: 'Segoe Condensed';
+            font-weight: 600;
+        }
+        
+        dd + dt 
+        {
+            margin-top: 0.2em;
+        }
+        
+        .ui-toc 
+        {
+            font-size: 8pt;
+        }
+        
+        .ui-toc ol 
+        {
+            list-style-type: decimal;
         }
     </style>
+    <script src="scripts/modernizr.js" type="text/javascript"></script>
+    
 </head>
 <body>
-    <h1>GRDO Map Application Configuration</h1>
-    <h2>Configuration</h2>
-    <a id="webdotconfig" />
-    <h3>web.config</h3>
-    <p>The web.config file contains server-side settings.  Each Visual Studio project configuration will have its own <a href="http://go.microsoft.com/fwlink/?LinkId=125889">web.config transformation file</a>.</p>
-    <p>The following settings are contained in the /configuration/appSettings section of the web.config file.</p>
-    <dl>
-        <dt>wsdotTrafficApiAccessCode</dt>
-        <dd>This setting is used for accessing the <a href="http://www.wsdot.wa.gov/Traffic/api/">WSDOT Trafic API</a> to get traffic cameras, etc.  (Not currently used.)</dd>
-        <dt>config</dt>
-        <dd>Specifies which JavaScript configuration file is used for the client-side settings. (This file will be passed through the browser via <a href="config.ashx">config.ashx</a>. )</dd>
-        <dt>mapIconBaseMap</dt>
-        <dd>Specifies the base map that is used when exporting a map image via <a href="MapIcon.ashx">MapIcon.ashx</a>.</dd>
-        <dt>mapIconDefaultExtent</dt>
-        <dd>Specifies a default extent for <a href="MapIcon.ashx">MapIcon.ashx</a> when an extent is not specified.</dd>
-        <dt>metadataRestUrl</dt>
-        <dd>The URL of an ArcGIS map service's layer's REST endpoint which provides metadata for layers in this application.</dd>
-        <dt>stateRouteMapService</dt>
-        <dd>A map service that is used to retrieve state route data.</dd>
-        <dt>stateRouteMapServiceLayers</dt>
-        <dd>A JSON string that describes the layers in the <em>stateRouteMapService</em>.</dd>
-    </dl>
-    <h3>config.js &amp; config.ashx</h3>
-    <p>The config.ashx is used to provide configuration settings to the JavaScript running on the client.  
-    The <em>config</em> section of the <a href="#webdotconfig">web.config</a> file determines which configuration script is actually returned.</p>
-    <p>See <a href="scripts/config.js">config.js</a> for more details.</p>
-    <pre id="configjs" style="display: none"></pre>
+    <header><h1>WSDOT GeoPortal Configuration</h1></header>
+    
+    <section>
+        <h1>Query String Parameters</h1>
+        <section>
+            <h1>config</h1>
+            <p>Use the <em>config</em> parameter to specify a configuration other than the default. The currently supported configurations are listed below.</p>
+            <ul>
+                <li>Freight</li>
+                <li>FunctionalClass</li>
+                <li>RFIP</li>
+            </ul>
+        </section>
+        <section>
+            <h1>layers</h1>
+            <p>The <em>layers</em> parameter is used to specify which layers will be turned on when the map is loaded.  
+            The value of this parameter is a comma-separated list of layer IDs.</p>
+        </section>
+        <section>
+            <h1>extent</h1>
+            <p>The <em>extent</em> parameter is used to specify the initial extent that the map will be zoomed to when it is loaded.
+            The format of this parameter is four comma-separated numbers in this order: xmin, ymin, xmax, ymax
+            </p>
+        </section>
+    </section>
+    <section>
+        <h1>Configuration</h1>
+        <section>
+            <h1><span class="filename">web.config</span></h1>
+            <p>The <span class="filename">web.config</span> file contains server-side settings.  Each Visual Studio project configuration will have its own <a href="http://go.microsoft.com/fwlink/?LinkId=125889">web.config transformation file</a>.</p>
+            <p>The following settings are contained in the <span class="filename">/configuration/appSettings</span> section of the <span class="filename">web.config</span> file.</p>
+            <dl>
+                <dt>wsdotTrafficApiAccessCode</dt>
+                <dd>This setting is used for accessing the <a href="http://www.wsdot.wa.gov/Traffic/api/">WSDOT Trafic API</a> to get traffic cameras, etc.  (Not currently used.)</dd>
+                <dt>mapIconBaseMap</dt>
+                <dd>Specifies the base map that is used when exporting a map image via <a class="filename" href="MapIcon.ashx">MapIcon.ashx</a>.</dd>
+                <dt>mapIconDefaultExtent</dt>
+                <dd>Specifies a default extent for <a class="filename" href="MapIcon.ashx">MapIcon.ashx</a> when an extent is not specified.</dd>
+                <dt>metadataRestUrl</dt>
+                <dd>The URL of an ArcGIS map service's layer's REST endpoint which provides metadata for layers in this application.</dd>
+                <dt>stateRouteMapService</dt>
+                <dd>A map service that is used to retrieve state route data.</dd>
+                <dt>stateRouteMapServiceLayers</dt>
+                <dd>A JSON string that describes the layers in the <em>stateRouteMapService</em>.</dd>
+            </dl>
+        </section>
+        <section>
+            <h1><span class="filename">config.js</span> files</h1>
+            <p>This application supports a number of configurations that can be selected via the <em>config</em> query string parameter.</p>
+            <p>The default configuration is <em class="filename">config.js</em>.  This is the configuration that is used if the <em>config</em> 
+            query string parameter is not provided a value.</p>
+            <p>The settings for other configurations are stored in files named in this format: <span class="filename">config.<em>MyConfigurationName</em>.js</span>, 
+            where <em>MyConfigurationName</em> is replaced by the name of the configuration.</p>
 
-    <h2>Dependencies</h2>
-    <ul>
-        <li><a href="http://help.arcgis.com/EN/webapi/javascript/arcgis/index.html">ArcGIS JavaScript API</a></li>
-        <li><a href="http://jquery.com">JQuery</a></li>
-        <li><a href="http://jqueryui.com">JQuery UI</a></li>
-    </ul>
-    <h3>WSDOT Dependencies</h3>
-    <ul>
-        <li>ELC Proxy</li>
-        <li>Location Information Service</li>
-        <li>Metadata Extractor (Used by Location Information service)</li>
-    </ul>
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js" type="text/javascript"></script>
+            <section>
+            <h1>Additional documentation</h1>
+            <p>The <a href="scripts/config.js.txt" target="_blank">config.js.txt</a> file describes the settings of a config.js file.</p>
+            </section>
+        </section>
+    </section>
+
+    <section>
+        <h1>Utilities</h1>
+        <section>
+            <h1><a href="GetRoutes.ashx">GetRoutes.ashx</a></h1>
+            <p>Provides route information for a <a href="http://jqueryui.com/demos/autocomplete/#remote" target="_blank">jQuery UI autocomplete widget</a>.  See <a href="RouteListDemo.html" target="_blank">RouteListDemo.html</a> for an example.</p>
+        </section>
+        <section>
+            <h1><a href="GraphicExport.ashx">GraphicExport.ashx</a></h1>
+            <p>Converts ArcGIS Server JSON representations of graphics to other formats.  This is called when the map application's <em>export graphics</em> button is clicked.</p>
+        </section>
+        <section>
+            <h1><a href="MapIcon.ashx">MapIcon.ashx</a></h1>
+            <p>Creates an icon representing a given map service.</p>
+        </section>
+        <section>
+            <h1><a href="MapIconGenerator.htm">MapIconGenerator.htm</a></h1>
+            <p>A frontend for <a href="MapIcon.ashx">MapIcon.ashx</a>.</p>
+        </section>
+        <section>
+            <h1><a href="Metadata.ashx">Metadata.ashx</a></h1>
+            Retrieves metadata from the ArcGIS map service specified in the web.config file's <em>metadataRestUrl</em> setting.
+        </section>
+        <section>
+            <h1><a href="RouteListDemo.html">RouteListDemo.html</a></h1>
+            <p>A sample page that looks up WA state routes and uses <a href="GetRoutes.ashx">GetRoutes.ashx</a></p>
+        </section>
+    </section>
+
+    <section>
+        <h1>Dependencies</h1>
+        <ul>
+            <li><a href="http://help.arcgis.com/EN/webapi/javascript/arcgis/index.html">ArcGIS JavaScript API</a></li>
+            <li><a href="http://jquery.com">JQuery</a></li>
+            <li><a href="http://jqueryui.com">JQuery UI</a></li>
+        </ul>
+        <section>
+            <h1>WSDOT Dependencies</h1>
+            <ul>
+                <li>ELC Proxy</li>
+                <li>Location Information Service</li>
+                <li>Metadata Extractor (Used by Location Information service)</li>
+            </ul>
+        </section>
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="scripts/toc.js" type="text/javascript"></script>
     <script type="text/javascript">
-        // Load the contents of config.js and place them into a pre element.
-        $.get("scripts/config.js", null, function (data, textStatus) {
-            if (textStatus === "success") {
-                $("#configjs").text(data);
-                $("a[href='scripts/config.js']").attr("href", "#").click(function () {
-                    $("#configjs").slideToggle();
-                });
-            }
-        }, "text");
+        // Create a table of contents and insert it after the page's header.
+        var toc = $("<section>").toc().insertAfter("body > header");
+
     </script>
 </body>
 
