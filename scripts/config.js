@@ -81,7 +81,6 @@
         "options": { "useProxy": false, "usePost": true }
     },
     "layers": {
-        "Main": {
             "Political Boundaries": [
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -210,6 +209,5 @@
                     }
                 }
             ]
-        }
     }
 }

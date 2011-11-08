@@ -8,15 +8,35 @@
     list-style-image: none;
 }
 
+ul.ui-layer-list, .ui-layer-list ul
+{
+    list-style-type: none;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.ui-layer-list ul 
+{
+    padding-left: 0.5em;
+}
+
+.ui-layer-list-group > a 
+{
+    font-weight: bold;
+}
+
+
+/*
 .ui-layer-list .ui-layer-list-group, .ui-layer-list-has-children.expanded
 {
-    list-style-image: url(../images/layerList/TreeMinus10.gif)
+    list-style-image: url(../images/layerList/TreeMinus10.gif)k
 }
 
 .ui-layer-list .ui-layer-list-group.collapsed, .ui-layer-list-has-children.collapsed
 {
     list-style-image: url(../images/layerList/TreePlus10.gif)
 }
+*/
 
 .ui-layer-list a:hover
 {
@@ -45,7 +65,7 @@
 
 .ui-layer-list-not-loaded 
 {
-    background: #ccccff;
+    background: #f0f0ff;
 }
 .ui-layer-list-error 
 {

@@ -39,6 +39,40 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
 var wsdot;
 
+dojo.require("dojo.number");
+dojo.require("dijit.dijit"); // optimize: load dijit layer
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.layout.AccordionContainer");
+dojo.require("dijit.layout.ContentPane");
+
+dojo.require("dojox.layout.ExpandoPane");
+
+dojo.require("dijit.form.RadioButton");
+dojo.require("dijit.form.Select");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.form.NumberSpinner");
+dojo.require("dijit.form.DateTextBox");
+
+
+dojo.require("dojo.parser");
+
+dojo.require("esri.map");
+//dojo.require("esri.virtualearth.VETiledLayer");
+dojo.require("esri.dijit.BasemapGallery");
+dojo.require("esri.arcgis.utils");
+dojo.require("esri.dijit.Scalebar");
+dojo.require("esri.tasks.geometry");
+dojo.require("esri.tasks.query");
+dojo.require("esri.toolbars.navigation");
+dojo.require("esri.toolbars.draw");
+dojo.require("esri.dijit.Legend");
+dojo.require("esri.dijit.Measurement");
+dojo.require("esri.tasks.gp");
+
+dojo.require("esri.layers.FeatureLayer");
+
 (function ($) {
     "use strict";
 
@@ -151,44 +185,9 @@ var wsdot;
             ////}
 
         });
-
-        dojo.require("dojo.number");
-        dojo.require("dijit.dijit"); // optimize: load dijit layer
-        dojo.require("dijit.layout.BorderContainer");
-        dojo.require("dijit.layout.TabContainer");
-        dojo.require("dijit.layout.AccordionContainer");
-        dojo.require("dijit.layout.ContentPane");
-
-        dojo.require("dojox.layout.ExpandoPane");
-
-        dojo.require("dijit.form.RadioButton");
-        dojo.require("dijit.form.Select");
-        dojo.require("dijit.form.FilteringSelect");
-        dojo.require("dojo.data.ItemFileReadStore");
-        dojo.require("dijit.form.NumberSpinner");
-        dojo.require("dijit.form.DateTextBox");
-
-
-        dojo.require("dojo.parser");
-
-        dojo.require("esri.map");
-        //dojo.require("esri.virtualearth.VETiledLayer");
-        dojo.require("esri.dijit.BasemapGallery");
-        dojo.require("esri.arcgis.utils");
-        dojo.require("esri.dijit.Scalebar");
-        dojo.require("esri.tasks.geometry");
-        dojo.require("esri.tasks.query");
-        dojo.require("esri.toolbars.navigation");
-        dojo.require("esri.toolbars.draw");
-        dojo.require("esri.dijit.Legend");
-        dojo.require("esri.dijit.Measurement");
-        dojo.require("esri.tasks.gp");
-
-        dojo.require("esri.layers.FeatureLayer");
-
-        if (!dojo.isIE || dojo.isIE >= 9) {
-            dojo.require("esri.dijit.Bookmarks");
-        }
+        //if (!dojo.isIE || dojo.isIE >= 9) {
+        //    dojo.require("esri.dijit.Bookmarks");
+        //}
 
         dojo.extend(esri.geometry.Extent, {
             "toCsv": function () {
@@ -894,61 +893,61 @@ var wsdot;
                     });
                 });
 
-                // Bookmarks
-                // Add the bookmaks content pane.
-                if (Modernizr.localstorage) {
-                    toolsAccordion.addChild(new dijit.layout.ContentPane({
-                        title: "Bookmarks"
-                    }, dojo.create("div", {
-                        id: "bookmarksPane"
-                    }, "toolsAccordion")));
-                    // Setup the on show event to create the contents.
-                    createLinks.bookmarks = dojo.connect(dijit.byId("bookmarksPane"), "onShow", function () {
-                        var bookmarksWidget, bookmarks;
+                ////// Bookmarks
+                ////// Add the bookmaks content pane.
+                ////if (Modernizr.localstorage) {
+                ////    toolsAccordion.addChild(new dijit.layout.ContentPane({
+                ////        title: "Bookmarks"
+                ////    }, dojo.create("div", {
+                ////        id: "bookmarksPane"
+                ////    }, "toolsAccordion")));
+                ////    // Setup the on show event to create the contents.
+                ////    createLinks.bookmarks = dojo.connect(dijit.byId("bookmarksPane"), "onShow", function () {
+                ////        var bookmarksWidget, bookmarks;
 
-                        function saveBookmarks() {
-                            /// <summary>Saves bookmarks to localStorage.</summary>
-                            var bookmarks;
+                ////        function saveBookmarks() {
+                ////            /// <summary>Saves bookmarks to localStorage.</summary>
+                ////            var bookmarks;
 
-                            // If there are no bookmarks in the widget, remove the "bookmarks" item from localStorage.
-                            // Otherwise, save the current bookmarks into localStorage.
-                            if (bookmarksWidget.bookmarks.length < 1) {
-                                localStorage.removeItem("bookmarks");
-                            } else {
-                                bookmarks = dojo.map(bookmarksWidget.bookmarks, function (bookmarkItem) {
-                                    return {
-                                        name: bookmarkItem.name || null,
-                                        extent: bookmarkItem.extent.toJson()
-                                    };
-                                });
+                ////            // If there are no bookmarks in the widget, remove the "bookmarks" item from localStorage.
+                ////            // Otherwise, save the current bookmarks into localStorage.
+                ////            if (bookmarksWidget.bookmarks.length < 1) {
+                ////                localStorage.removeItem("bookmarks");
+                ////            } else {
+                ////                bookmarks = dojo.map(bookmarksWidget.bookmarks, function (bookmarkItem) {
+                ////                    return {
+                ////                        name: bookmarkItem.name || null,
+                ////                        extent: bookmarkItem.extent.toJson()
+                ////                    };
+                ////                });
 
-                                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-                            }
-                        }
+                ////                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+                ////            }
+                ////        }
 
-                        // Load bookmark data from local storage if it exists.
-                        bookmarks = localStorage.getItem("bookmarks");
-                        if (bookmarks === null) {
-                            bookmarks = [];
-                        } else {
-                            bookmarks = JSON.parse(bookmarks);
-                        }
+                ////        // Load bookmark data from local storage if it exists.
+                ////        bookmarks = localStorage.getItem("bookmarks");
+                ////        if (bookmarks === null) {
+                ////            bookmarks = [];
+                ////        } else {
+                ////            bookmarks = JSON.parse(bookmarks);
+                ////        }
 
-                        bookmarksWidget = new esri.dijit.Bookmarks({
-                            map: map,
-                            bookmarks: bookmarks,
-                            editable: true
-                        }, dojo.create("div", { id: "bookmarks" }, "bookmarksPane"));
+                ////        bookmarksWidget = new esri.dijit.Bookmarks({
+                ////            map: map,
+                ////            bookmarks: bookmarks,
+                ////            editable: true
+                ////        }, dojo.create("div", { id: "bookmarks" }, "bookmarksPane"));
 
-                        // Setup events to save bookmarks to localStorage when they are edited (includes creation) and removed.
-                        dojo.connect(bookmarksWidget, "onEdit", saveBookmarks);
-                        dojo.connect(bookmarksWidget, "onRemove", saveBookmarks);
+                ////        // Setup events to save bookmarks to localStorage when they are edited (includes creation) and removed.
+                ////        dojo.connect(bookmarksWidget, "onEdit", saveBookmarks);
+                ////        dojo.connect(bookmarksWidget, "onRemove", saveBookmarks);
 
-                        // Now that the bookmarks pane's contents have been created we no longer need this event, so we can remove and delete it.
-                        dojo.disconnect(createLinks.bookmarks);
-                        delete createLinks.bookmarks;
-                    });
-                }
+                ////        // Now that the bookmarks pane's contents have been created we no longer need this event, so we can remove and delete it.
+                ////        dojo.disconnect(createLinks.bookmarks);
+                ////        delete createLinks.bookmarks;
+                ////    });
+                ////}
 
                 tabs.addChild(toolsTab);
                 tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
