@@ -6,9 +6,19 @@
     padding: 0;
     background: white;
     color: Black;
-    font-family: Segoe UI, Verdana, Arial, Helvetica, sans-serif;
     font-size: 10pt;
 }
+
+html, body, .ui-widget
+{
+    font-family: 'Segoe UI', Verdana, 'Arial', Helvetica, sans-serif;
+}
+
+.ui-tabs-nav 
+{
+    font-family: 'Segoe Condensed', 'Arial Narrow';
+}
+
 #headerPane 
 {
     padding: 0;

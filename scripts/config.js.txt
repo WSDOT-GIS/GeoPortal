@@ -97,6 +97,7 @@
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
+    "tabbedLayerList": true, // Set to true to use a tabbed layer list, false (or omit) to use the default style.
     /* 
     The "layers" section specifies which layers will be added to the map and to the layer list.
     This value can either be an object or an array.  If an object is provided, each property will be either an array of layer definitions

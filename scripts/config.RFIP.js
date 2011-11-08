@@ -78,6 +78,7 @@
         "url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
         "options": { "useProxy": false, "usePost": true }
     },
+    "tabbedLayerList": true,
     "layers": {
         "RFIP": [
             {

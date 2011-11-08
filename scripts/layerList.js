@@ -18,6 +18,23 @@
     _defaultContextMenuIcon = "<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
     _defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
 
+    function makeIdSafeString(s, replacement, prefix, alwaysUsePrefix) {
+        /// <summary>Makes a string safe to use as an HTML id property.</summary>
+        /// <param name="s" type="String">A string.</param>
+        /// <param name="replacement" type="String">Optional.  The string that will be used to replace invalid characters.  Defaults to "-".</param>
+        /// <param name="prefix" type="String">Optional.  A string that will be prepended to the output if the input starts with a non-alpha character.  Defaults to "z-".</param>
+        /// <param name="alwaysUsePrefix" type="Boolean">Set to true to always prepend the prefix to the output, false to only use it when the first character of s is non-alpha.</param>
+
+        // Replace invalid characters with hyphen.
+        s = s.replace(/\W/gi, replacement || "-");
+        // Append a prefix if non-alpha character
+        if (alwaysUsePrefix || /^[^a-z]/i.test(s)) {
+            s = [prefix || "z-", s].join("");
+        }
+
+        return s;
+    }
+
     function getLayerConstructor(layerType) {
         ///<summary>Returns a constructor for a specific type of layer.</summary>
         if (typeof (layerType) === "string") {
@@ -790,6 +807,64 @@
         _destroy: function () {
             // Call the base destroy method.
             // TODO: destroy the layer list items.
+            $.Widget.prototype.destroy.apply(this, arguments);
+        }
+    });
+
+    $.widget("ui.tabbedLayerList", {
+        options: {
+            map: null,
+            layers: null,
+            startCollapsed: false,
+            contextMenuIcon: _defaultContextMenuIcon,
+            loadingIcon: _defaultLoadingIcon,
+            startLayers: null,
+            basemapRe: /layer((?:\d+)|(?:_osm)|(?:_bing))/i,
+            basemapGroupName: "Basemap",
+            addAdditionalLayers: true
+        },
+        _create: function () {
+            var $this = this, tabList, tabId, tabDiv, tabsLayers;
+
+            function createTabDiv(tabName, addAdditionalLayers) {
+                var layers = $this.options.layers[tabName] || [];
+                // Create the ID for the current tab.
+                tabId = makeIdSafeString(tabName, "-", "ui-tabbed-layer-list-tab-", true);
+                // Add a link for the current tab.
+                tabList.append(["<li><a href='#", tabId, "'>", tabName, "</a></li>"].join(""));
+                // Create the currrent tab.
+                tabDiv = $("<div>").attr("id", tabId).appendTo($this.element).layerList({
+                    map: $this.options.map,
+                    layers: layers,
+                    startCollapsed: $this.options.startCollapsed,
+                    contextMenuIcon: $this.options.contextMenuIcon,
+                    loadingIcon: $this.options.loadingIcon,
+                    startLayers: $this.options.startLayers,
+                    basemapRe: $this.options.basemapRe,
+                    basemapGroupName: $this.options.basemapGroupName,
+                    addAdditionalLayers: Boolean(addAdditionalLayers)
+                });
+            }
+
+            tabList = $("<ul>").appendTo($this.element);
+
+            // Loop through each property in layers option and create a corresponding list item and div for each.
+            for (var tabName in $this.options.layers) {
+                if ($this.options.layers.hasOwnProperty(tabName)) {
+                    createTabDiv(tabName);
+                }
+            }
+
+            // Add a group for additional layers
+            if ($this.options.addAdditionalLayers) {
+                createTabDiv("Additional", true);
+            }
+
+            $(this.element).tabs();
+
+            return this;
+        },
+        _destroy: function () {
             $.Widget.prototype.destroy.apply(this, arguments);
         }
     });

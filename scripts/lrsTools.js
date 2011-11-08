@@ -234,7 +234,7 @@ jQuery UI
                             if (geometry !== null) {
                                 if (geometry.type === "point") {
                                     if (!isNaN(geometry.x) && !isNaN(geometry.y)) {
-                                        map.centerAndZoom(geometry, 12);
+                                        map.centerAndZoom(geometry, 10);
                                     }
                                 }
                                 else {

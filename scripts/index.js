@@ -1201,12 +1201,26 @@ dojo.require("esri.layers.FeatureLayer");
                 ////    return layers;
                 ////}
 
-                $("#layerList").layerList({
-                    layers: wsdot.config.layers,
-                    startLayers: getLayersFromParams(),
-                    startCollapsed: false,
-                    map: map
-                });
+                // Setup either a tabbed layer list or a normal one depending on the config setting.
+                if (wsdot.config.tabbedLayerList) {
+                    $("#layerList").tabbedLayerList({
+                        layers: wsdot.config.layers,
+                        startLayers: getLayersFromParams(),
+                        startCollapsed: false,
+                        map: map
+                    }).css({
+                        "padding": [0,0,0,0],
+                        "margin": [0,0,0,0]
+                    });
+                    // Setting the padding and margin to 0 is required for IE.
+                } else {
+                    $("#layerList").layerList({
+                        layers: wsdot.config.layers,
+                        startLayers: getLayersFromParams(),
+                        startCollapsed: false,
+                        map: map
+                    });
+                }
 
                 map.setupIdentifyPopups({
                     ignoredLayerRE: /^layer\d+$/i

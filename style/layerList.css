@@ -29,12 +29,12 @@ ul.ui-layer-list, .ui-layer-list ul
 /*
 .ui-layer-list .ui-layer-list-group, .ui-layer-list-has-children.expanded
 {
-    list-style-image: url(../images/layerList/TreeMinus10.gif)k
+    list-style-image: url(../images/layerList/TreeMinus10.gif);
 }
 
 .ui-layer-list .ui-layer-list-group.collapsed, .ui-layer-list-has-children.collapsed
 {
-    list-style-image: url(../images/layerList/TreePlus10.gif)
+    list-style-image: url(../images/layerList/TreePlus10.gif);
 }
 */
 
