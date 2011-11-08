@@ -14,7 +14,7 @@
     dojo.require("esri.layers.agstiled");
     dojo.require("esri.layers.agsdynamic");
 
-    var _defaultContextMenuIcon, _defaultLoadingIcon;
+    var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus;
     _defaultContextMenuIcon = "<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
     _defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
 
@@ -313,7 +313,7 @@
     }
 
 
-    function onLayerLoad(layer) {
+    onLayerLoad = function (layer) {
         /// <summary>Removes the "layer not loaded" class and (if appropriate) sets up controls for the child layers.</summary>
         /// <param name="layer" type="esri.layers.Layer">A map service layer.</param>
         // The "this" object is a ui.layerListItem widget.
@@ -347,9 +347,11 @@
         try {
             this.setIsInScale();
         } catch (e) {
-            console.error(e);
+            if (typeof (console) !== "undefined" && typeof (console.error) === "function") {
+                console.error(e);
+            }
         }
-    }
+    };
 
     function formatError(error) {
         /// <summary>Converts an error object into a string.</summary>
@@ -364,16 +366,20 @@
         }
     }
 
-    function onLayerError(error) {
+    onLayerError = function (error) {
         /// <summary>Modify the control to show that an error has occured with this layer.</summary>
-        this.disable();
-        this._hideLoading();
-        $(this.element).removeClass("ui-layer-list-not-loaded").addClass("ui-state-error").attr("title", "Error\n" + formatError(error));
+        // The "this" keyword will be a layerListItem widget.
+        var layer = this._layer;
+        if (!layer.loaded) {
+            this.disable();
+            this._hideLoading();
+            $(this.element).removeClass("ui-layer-list-not-loaded").addClass("ui-state-error").attr("title", "Error\n" + formatError(error));
+        }
         // Trigger an event that can be used by consumers of this control..
         this._trigger("layerError", {
             error: error
         });
-    }
+    };
 
     function toggleLayer(eventObject) {
         /// <summary>Toggles the layer associated with a checkbox on or off.</summary>
@@ -402,20 +408,20 @@
         }
     }
 
-    function updateIsInScaleStatus(extent, delta, levelChange, lod) {
+    updateIsInScaleStatus = function (extent, delta, levelChange, lod) {
         /// <summary>Update the "is in scale" status for each layerListItem in a layerList.  Note: "this" is the layer list widget.</summary>
         // Get all of the layer list items in the current list.
-        var layerListItems, layerListItem, layer;
+        var layerListItems, layerListItem, layer, i, l;
 
         if (levelChange) {
             layerListItems = $(".ui-layer-list-item", this.element);
 
-            for (var i = 0, l = layerListItems.length; i < l; i += 1) {
+            for (i = 0, l = layerListItems.length; i < l; i += 1) {
                 layerListItem = layerListItems.eq(i);
                 layerListItem.layerListItem("setIsInScale", lod.scale);
             }
         }
-    }
+    };
 
     $.widget("ui.layerListItem", {
         options: {
@@ -572,7 +578,7 @@
             return this;
         },
         _create: function () {
-            var $this = this, layers = this.options.layers, link;
+            var $this = this, layers = this.options.layers, link, i, l, name;
 
             // Add a class indicating that this is a layer list group.
             $($this.element).addClass("ui-layer-list-group");
@@ -591,12 +597,12 @@
             // If layers is an array, it contains layers.  Otherwise it contains groups of layers.
             if ($.type(layers) === "array") {
                 // For each layer in layers, add a list item and turn it into a layerListItem.
-                for (var i = 0, l = layers.length; i < l; i += 1) {
+                for (i = 0, l = layers.length; i < l; i += 1) {
                     $this._addLayer(layers[i]);
                 }
             } else if ($.type(layers) === "object") {
                 // Add layer list groups for each property in the layers object.
-                for (var name in layers) {
+                for (name in layers) {
                     if (layers.hasOwnProperty(name)) {
                         $this._addGroup(name, layers[name]);
                     }
@@ -699,7 +705,7 @@
                 // $(".ui-layer-list-group").first().data("layerListGroup").options.groupName
                 groups = $(".ui-layer-list-group", this.element);
                 for (i = 0, l = groups.length; i < l; i += 1) {
-                    group = groups.eq(i)
+                    group = groups.eq(i);
                     groupWidget = group.data("layerListGroup");
                     if (Boolean(groupWidget.options) && typeof (groupWidget.options.groupName) === "string" && groupWidget.options.groupName === this.options.basemapGroupName) {
                         parent = group[0];
@@ -824,7 +830,7 @@
             addAdditionalLayers: true
         },
         _create: function () {
-            var $this = this, tabList, tabId, tabDiv, tabsLayers;
+            var $this = this, tabList, tabId, tabDiv, tabsLayers, tabName;
 
             function createTabDiv(tabName, addAdditionalLayers) {
                 var layers = $this.options.layers[tabName] || [];
@@ -849,7 +855,7 @@
             tabList = $("<ul>").appendTo($this.element);
 
             // Loop through each property in layers option and create a corresponding list item and div for each.
-            for (var tabName in $this.options.layers) {
+            for (tabName in $this.options.layers) {
                 if ($this.options.layers.hasOwnProperty(tabName)) {
                     createTabDiv(tabName);
                 }
