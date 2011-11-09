@@ -508,6 +508,23 @@ dojo.require("esri.layers.FeatureLayer");
                 }, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
 
                 dijit.form.Button({
+                    label: "Arrange Layers",
+                    showLabel: false,
+                    iconClass: "sortIcon",
+                    onClick: function() {
+                        var layerSorter = $("#layerSorter");
+                        // Create the layer sorter dialog if it does not already exist.
+                        if (layerSorter.length < 1) {
+                            layerSorter = $("<div id='layerSorter'>").layerSorter({map:map}).dialog({
+                                title: "Arrange Layers",
+                                autoOpen: false
+                            });
+                        }
+                        layerSorter.dialog("open");
+                    }
+                }, "sortButton");
+
+                dijit.form.Button({
                     label: "Measure",
                     showLabel: false,
                     iconClass: "distanceIcon",

@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\layerList.js" />
+    <Content Include="scripts\layerSorter.js" />
     <Content Include="scripts\lrsTools.js" />
     <Content Include="GetRoutes.ashx" />
     <None Include="style\FGDC Plus.xsl" />
@@ -123,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="style\layerList.css" />
+    <Content Include="style\layerSorter.css" />
     <Content Include="style\locationInfo.css" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
