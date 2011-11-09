@@ -154,7 +154,7 @@ dojo.require("esri.layers.FeatureLayer");
 
             // If a title is specified in the config file, replace the page title.
             if (wsdot.config.pageTitle) {
-                $("h1").empty().text(wsdot.config.pageTitle);
+                $(".page-title").empty().text(wsdot.config.pageTitle);
                 document.title = wsdot.config.pageTitle;
             }
 
