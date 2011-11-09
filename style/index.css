@@ -14,6 +14,37 @@ html, body, .ui-widget
     font-family: 'Segoe UI', Verdana, 'Arial', Helvetica, sans-serif;
 }
 
+#headerPane > div.table 
+{
+    width: 100%;
+}
+
+div.table *
+{
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+div.table 
+{
+    display: table;
+}
+
+div.table > div 
+{
+    display: table-row;
+}
+
+div.table > div > * 
+{
+    display: table-cell;
+}
+
+div.table > div > * > h1 
+{
+    text-align: center;
+}
+
 .ui-tabs-nav 
 {
     font-family: 'Segoe Condensed', 'Arial Narrow';
@@ -85,7 +116,7 @@ h1
 .topNav {
     color: #ffffff;
     background-color: #017359;
-    padding-right: 50px
+    /* padding-right: 50px */
 }
 .topNav ul {
     text-align: right;
