@@ -67,7 +67,6 @@
     <Content Include="scripts\config.FunctionalClass.js" />
     <Content Include="scripts\config.js" />
     <Content Include="scripts\config.js.txt" />
-    <Content Include="scripts\config.Release.js" />
     <Content Include="scripts\config.RFIP.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\esriApiExtensions.js" />
@@ -139,12 +138,6 @@
   <ItemGroup>
     <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="proxy.ashx" />
-    <Content Include="proxy.config">
-      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

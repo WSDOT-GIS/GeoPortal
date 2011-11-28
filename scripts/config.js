@@ -123,7 +123,7 @@
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer",
+                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
                     "options": {
                         "id": "RTPO"
                     },
@@ -198,15 +198,6 @@
                         "id": "Functional Class"
                     },
                     "metadataIds": [8, 14]
-                }
-            ],
-            "Other": [
-                {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
-                    "options": {
-                        "id": "Traffic Flow"
-                    }
                 }
             ]
     }
