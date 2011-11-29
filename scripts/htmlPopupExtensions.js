@@ -13,7 +13,7 @@
             dojo.forEach(mapServiceLayer.layerInfos, function (layerInfo) {
                 // Add to the output array the ID of any sublayer that has an html popup defined 
                 // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
-                if (/esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType) &&
+                if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType) &&
                     (!layerInfo.visibleLayers || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0)) {
                     if (returnUrls) {
                         ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
@@ -34,13 +34,14 @@
             /// <summary>Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.</summary>
             /// <param name="htmlPopupLayerFoundAction" type="Function">Optional.  A function that will be called whenever an HTML popup is found.</param>
             /// <returns type="String" />
-            var mapService = this, layerInfo;
+            var mapService = this, layerInfo, layerUrl, i, l;
             // Query the map service to get the list of layers.
 
-            for (var i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
-                var layerInfo = mapService.layerInfos[i], layerUrl = [mapService.url, String(layerInfo.id)].join("/");
+            for (i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
+                layerInfo = mapService.layerInfos[i], layerUrl = [mapService.url, String(layerInfo.id)].join("/");
                 // Query the layers to see if they support html Popups
                 $.get(layerUrl, { f: "json" }, function (layerResponse, textStatus) {
+                    var layerInfo = mapService.layerInfos[layerResponse.id];
                     // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
                     if (/success/i.test(textStatus)) {
                         if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&

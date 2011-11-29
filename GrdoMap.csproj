@@ -86,6 +86,8 @@
     <Content Include="scripts\layerSorter.js" />
     <Content Include="scripts\lrsTools.js" />
     <Content Include="GetRoutes.ashx" />
+    <Content Include="proxy.ashx" />
+    <Content Include="proxy.config" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
     <Content Include="scripts\toc.js" />

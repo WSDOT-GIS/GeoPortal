@@ -267,15 +267,6 @@
                     },
                     "metadataIds": [8, 14]
                 }
-            ],
-            "Other": [
-                {
-                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
-                    "options": {
-                        "id": "Traffic Flow"
-                    }
-                }
             ]
         }
 
