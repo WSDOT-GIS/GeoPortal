@@ -171,15 +171,6 @@
                         "id": "Region Boundaries"
                     },
                     "metadataIds": [19]
-                },
-                {
-                    "layerType": "esri.layers.FeatureLayer",
-                    "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
-                    "options": {
-                        "id": "Survey Monuments (NGS)",
-                        "outFields": ["*"],
-                        "infoTemplate": { "title": "NGS Monument", "content": "${*}" }
-                    }
                 }
             ],
             "Transportation Features": [
