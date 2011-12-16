@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Wsdot.Grdo.Web.Mapping</RootNamespace>
-    <AssemblyName>WsdotGrdoMapApplication</AssemblyName>
+    <AssemblyName>GeoPortal</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <TargetFrameworkProfile />
