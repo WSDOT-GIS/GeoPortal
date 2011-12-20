@@ -1,5 +1,5 @@
-﻿/*global dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq */
-/*jslint devel: true, browser: true, white: true, nomen: true */
+﻿/*jslint devel: true, browser: true, white: true, nomen: true */
+/*global dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq */
 
 /*
 Copyright (c) 2011 Washington State Department of Transportation
@@ -1122,7 +1122,7 @@ dojo.require("esri.layers.FeatureLayer");
 
                 // Setup Google Analytics tracking of the layers that are added to the map.
                 if (typeof(_gaq) !== "undefined") {
-                    dojo.connect(map, "onLayerAddResult", legend, gaTrackEvent);
+                    dojo.connect(map, "onLayerAddResult", gaTrackEvent);
                 }
 
                 dojo.connect(dijit.byId('mapContentPane'), 'resize', resizeMap);
