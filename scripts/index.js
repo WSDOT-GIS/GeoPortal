@@ -1,5 +1,5 @@
-﻿/*global dojo, dijit, dojox, esri, jQuery, Modernizr */
-/*jslint devel: true, browser: true, white: true */
+﻿/*global dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq */
+/*jslint devel: true, browser: true, white: true, nomen: true */
 
 /*
 Copyright (c) 2011 Washington State Department of Transportation
@@ -382,7 +382,7 @@ dojo.require("esri.layers.FeatureLayer");
 
 
         function init() {
-            var refreshLegend, initBasemap = null;
+            var refreshLegend, gaTrackEvent, initBasemap = null;
             esri.config.defaults.io.proxyUrl = "proxy.ashx";
             esri.config.defaults.geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
 
@@ -617,6 +617,15 @@ dojo.require("esri.layers.FeatureLayer");
                 
                 if (!isBasemap(layer.id) && typeof(this.isInstanceOf === "function") && this.isInstanceOf(esri.dijit.Legend)) {
                     this.refresh(layerInfos);
+                }
+            };
+
+            gaTrackEvent = function(layer, error) {
+                /// <summary>Adds a Google Analytics tracking event for the addition of a layer to the map.</summary>
+                if (error) {
+                    _gaq.push(['_trackEvent', 'Layers', 'Add - Fail', [layer.id, layer.url].join(",")]);
+                } else {
+                    _gaq.push(['_trackEvent', 'Layers', 'Add', [layer.id, layer.url].join(",")]);
                 }
             };
 
@@ -1109,6 +1118,11 @@ dojo.require("esri.layers.FeatureLayer");
                         map.resize();
                         map.reposition();
                     }, 500);
+                }
+
+                // Setup Google Analytics tracking of the layers that are added to the map.
+                if (typeof(_gaq) !== "undefined") {
+                    dojo.connect(map, "onLayerAddResult", legend, gaTrackEvent);
                 }
 
                 dojo.connect(dijit.byId('mapContentPane'), 'resize', resizeMap);

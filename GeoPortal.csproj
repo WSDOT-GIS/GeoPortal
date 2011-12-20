@@ -66,7 +66,6 @@
     <Content Include="scripts\config.Freight.js" />
     <Content Include="scripts\config.FunctionalClass.js" />
     <Content Include="scripts\config.js" />
-    <Content Include="scripts\config.js.txt" />
     <Content Include="scripts\config.RFIP.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\esriApiExtensions.js" />
