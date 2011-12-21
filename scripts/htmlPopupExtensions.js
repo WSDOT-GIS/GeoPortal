@@ -13,12 +13,13 @@
             dojo.forEach(mapServiceLayer.layerInfos, function (layerInfo) {
                 // Add to the output array the ID of any sublayer that has an html popup defined 
                 // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
-                if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType) &&
-                    (!layerInfo.visibleLayers || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0)) {
-                    if (returnUrls) {
-                        ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
-                    } else {
-                        ids.push(layerInfo.id);
+                if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
+                    if (typeof (layerInfo.visibleLayers) === "undefined" || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+                        if (returnUrls) {
+                            ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
+                        } else {
+                            ids.push(layerInfo.id);
+                        }
                     }
                 }
             });

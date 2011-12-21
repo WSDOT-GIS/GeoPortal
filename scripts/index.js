@@ -622,10 +622,14 @@ dojo.require("esri.layers.FeatureLayer");
 
             gaTrackEvent = function(layer, error) {
                 /// <summary>Adds a Google Analytics tracking event for the addition of a layer to the map.</summary>
+                var label, basemapIdRe = /^layer\d+$/i;
+
+                label = basemapIdRe.exec(layer.id) ? "Basemap: " + layer.url :  layer.id + ": " + layer.url;
+
                 if (error) {
-                    _gaq.push(['_trackEvent', 'Layers', 'Add - Fail', [layer.id, layer.url].join(",")]);
+                    _gaq.push(['_trackEvent', 'Layers', 'Add - Fail', label]);
                 } else {
-                    _gaq.push(['_trackEvent', 'Layers', 'Add', [layer.id, layer.url].join(",")]);
+                    _gaq.push(['_trackEvent', 'Layers', 'Add', label]);
                 }
             };
 
