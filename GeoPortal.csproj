@@ -63,10 +63,9 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
-    <Content Include="scripts\config.Freight.js" />
-    <Content Include="scripts\config.FunctionalClass.js" />
+    <Content Include="scripts\config.internal-Freight.js" />
+    <Content Include="scripts\config.internal-RFIP.js" />
     <Content Include="scripts\config.js" />
-    <Content Include="scripts\config.RFIP.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\esriApiExtensions.js" />
     <Content Include="scripts\extentSelect.js" />

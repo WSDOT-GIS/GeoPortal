@@ -74,7 +74,7 @@
     <file relUrl="images/layerList/sliderSprites.png" publishTime="11/02/2011 13:21:45" />
   </publishProfile>
   <publishProfile publishUrl="\\wsdot\resources\Topics\Software\Deployments\Prod\CGIS\GeoPortal" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Production" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
-    <file relUrl="bin/GeoPortal.pdb" publishTime="12/16/2011 14:19:13" />
+    <file relUrl="bin/GeoPortal.pdb" publishTime="01/05/2012 14:37:53" />
     <file relUrl="images/ajax-loader.gif" publishTime="04/22/2011 12:21:08" />
     <file relUrl="scripts/htmlPopupExtensions.js" publishTime="12/20/2011 12:52:44" />
     <file relUrl="style/layerList.css" publishTime="11/08/2011 10:50:20" />
@@ -82,9 +82,8 @@
     <file relUrl="help/zoom_controls.html" publishTime="09/26/2011 09:08:59" />
     <file relUrl="style/layerSorter.css" publishTime="11/08/2011 17:03:22" />
     <file relUrl="help/navigation.html" publishTime="09/26/2011 09:08:59" />
-    <file relUrl="bin/GeoPortal.dll" publishTime="12/16/2011 14:19:13" />
+    <file relUrl="bin/GeoPortal.dll" publishTime="01/05/2012 14:37:53" />
     <file relUrl="proxy.ashx" publishTime="04/22/2011 12:22:41" />
-    <file relUrl="scripts/config.RFIP.js" publishTime="12/01/2011 08:27:57" />
     <file relUrl="web.config" publishTime="11/28/2011 09:27:55" />
     <file relUrl="scripts/toc.js" publishTime="11/07/2011 14:22:09" />
     <file relUrl="GetRoutes.ashx" publishTime="07/21/2011 14:17:26" />
@@ -95,7 +94,6 @@
     <file relUrl="help/measure.html" publishTime="07/06/2011 13:21:26" />
     <file relUrl="index.html" publishTime="12/16/2011 13:28:08" />
     <file relUrl="images/greenlogo.png" publishTime="04/22/2011 12:21:08" />
-    <file relUrl="scripts/config.Freight.js" publishTime="12/20/2011 11:46:27" />
     <file relUrl="images/layerList/contextMenu.png" publishTime="11/02/2011 13:21:45" />
     <file relUrl="scripts/jquery.pnotify.min.js" publishTime="07/15/2011 13:25:48" />
     <file relUrl="GraphicExport.ashx" publishTime="07/05/2011 16:57:31" />
@@ -109,7 +107,6 @@
     <file relUrl="images/layerList/treePlus10.gif" publishTime="11/02/2011 13:21:45" />
     <file relUrl="scripts/extentSelect.js" publishTime="09/26/2011 09:08:59" />
     <file relUrl="scripts/esriApiExtensions.js" publishTime="09/26/2011 09:08:59" />
-    <file relUrl="scripts/config.FunctionalClass.js" publishTime="11/07/2011 14:22:10" />
     <file relUrl="FunctionalClassLegend.html" publishTime="11/07/2011 14:22:12" />
     <file relUrl="scripts/addressLocator.js" publishTime="08/15/2011 12:38:39" />
     <file relUrl="style/functionalClass.css" publishTime="11/07/2011 14:22:12" />
@@ -137,11 +134,13 @@
     <file relUrl="images/legend/LegendSprites.png" publishTime="11/07/2011 14:22:11" />
     <file relUrl="lrsToolsTemplate.html" publishTime="08/04/2011 15:28:38" />
     <file relUrl="scripts/jquery.ba-bbq.min.js" publishTime="07/15/2011 13:25:48" />
+    <file relUrl="scripts/config.internal-RFIP.js" publishTime="12/01/2011 08:27:57" />
     <file relUrl="help/location_info.html" publishTime="07/06/2011 14:06:56" />
     <file relUrl="scripts/fgdcPlus.js" publishTime="08/15/2011 12:37:14" />
     <file relUrl="IdentifyTemplate.html" publishTime="09/07/2011 14:44:39" />
     <file relUrl="proxy.config" publishTime="11/28/2011 10:44:54" />
     <file relUrl="bin/Google.KML.dll" publishTime="07/13/2011 14:14:49" />
+    <file relUrl="scripts/config.internal-Freight.js" publishTime="12/20/2011 11:46:27" />
     <file relUrl="scripts/jquery.ba-bbq.js" publishTime="04/22/2011 12:21:09" />
     <file relUrl="MapIcon.ashx" publishTime="06/13/2011 14:51:05" />
     <file relUrl="images/FCBasemapThumbnail.png" publishTime="05/25/2011 12:52:57" />
