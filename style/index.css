@@ -88,8 +88,8 @@ div.table > div > * > h1
 #northArrow 
 {
     position: absolute;
-    bottom: 5px;
-    right: 20px;
+    bottom: 40px;
+    left: 20px;
     z-index: 10;
     width: 43px;
     height: 52px;
