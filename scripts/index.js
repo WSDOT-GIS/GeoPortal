@@ -1058,7 +1058,10 @@ dojo.require("esri.layers.FeatureLayer");
                     $("#scaleText").text("");
                 }
                 else {
-                    $("#scaleText").text("1:" + dojo.number.format(scale));
+                    $("#scaleText").text("1:" + dojo.number.format(scale, {
+                        round: 0,
+                        places: 0
+                    }));
                 }
 
             }
