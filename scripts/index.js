@@ -88,6 +88,24 @@ dojo.require("esri.layers.FeatureLayer");
             }
         ]);
 
+        // Show the disclaimer if there is no cookie indicating that the user has seen it before.
+        if (typeof(wsdot.config.disclaimer) !== "undefined" && wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")) {
+            $("<div>" + wsdot.config.disclaimer + "<div>").dialog({
+                title: "Disclaimer",
+                modal: true,
+                closeOnEscape: false,
+                buttons: {
+                    "I Agree": function() {
+                        $(this).dialog("close").dialog("destroy").remove();
+                    }
+                },
+                close: function(event, ui) {
+                    // Add a cookie
+                    $.cookie("AgreedToDisclaimer", true, {expires: 30});
+                }
+            });
+        }
+
 
         // Add a method to the Date object that will return a short date string.
         if (typeof (Date.toShortDateString) === "undefined") {
