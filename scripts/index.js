@@ -421,7 +421,7 @@ dojo.require("esri.layers.FeatureLayer");
                     showLabel: false,
                     onClick: function () {
                         // window.open("help/default.html", "GRDO Map Help");
-                        showHelpDialog("help/navigation.html");
+                        showHelpDialog(wsdot.config.helpUrl); //"help/navigation.html");
                     }
                 }, "helpButton");
 

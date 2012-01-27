@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="FunctionalClassLegend.html" />
+    <Content Include="help\freight.html" />
     <Content Include="help\location_info.html" />
     <Content Include="help\measure.html" />
     <Content Include="help\milepost.html" />

@@ -1,5 +1,6 @@
 ﻿{
     "pageTitle": "WSDOT GeoPortal",
+    "helpUrl": "help/navigation.html",
     "enableIdentify": true,
     "mapOptions": {
         "logo": false,

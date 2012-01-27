@@ -1,5 +1,6 @@
 ﻿{
     "pageTitle": "Roadside Features",
+    "helpUrl": "help/navigation.html",
     "mapOptions": {
         "logo": false,
         "extent": {
