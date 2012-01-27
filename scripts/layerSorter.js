@@ -45,8 +45,12 @@
             $element.addClass("ui-layer-sorter");
             $("<p>Drag items in this list to rearrange layers.</p>").appendTo(this.element);
 
+            $("<div class='ui-corner-top ui-layer-sorter-map-position-label'>Back of map</div>").appendTo(this.element);
+
             // Populate the list of layers.
             this._populateList();
+
+            $("<div class='ui-corner-bottom ui-layer-sorter-map-position-label'>Front of map</div>").appendTo(this.element);
 
             // TODO: Add event handing to reorganize layers when layer's list item has been moved.
             dojo.connect(this.options.map, "onLayerReorder", $this, $this._populateList);
