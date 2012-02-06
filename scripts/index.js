@@ -95,15 +95,22 @@ dojo.require("esri.layers.FeatureLayer");
                 modal: true,
                 closeOnEscape: false,
                 buttons: {
-                    "I Agree": function() {
+                    "Accept": function() {
                         $(this).dialog("close").dialog("destroy").remove();
                     }
+                },
+                open: function(event, ui) {
+                    // Remove the close button from the disclaimer form.
+                    var form = $(event.target).parent();
+                    $("a.ui-dialog-titlebar-close", form).remove();
                 },
                 close: function(event, ui) {
                     // Add a cookie
                     $.cookie("AgreedToDisclaimer", true, {expires: 30});
                 }
             });
+
+
         }
 
 
