@@ -79,18 +79,13 @@ dojo.require("esri.layers.FeatureLayer");
     var map = null, extents = null, navToolbar, helpDialog, createLinks = {}, defaultConfigUrl = "scripts/config.js";
     wsdot = { config: {} };
 
-    function doPostConfig() {
-        // Add support for JSON.
-        Modernizr.load([
-            {
-                test: window.JSON,
-                nope: "scripts/json2.js"
-            }
-        ]);
-
+    function showDisclaimer(showEvenIfAlreadyAgreed) {
+        /// <summary>Shows the disclaimer dialog if the configuration contains a disclaimer.  If the dialog is shown, a jQuery object containing the dialog is returned.</summary>
+        /// <param name="showEvenIfAlreadyAgreed" type="Boolean">Set this to true if you want to force the disclaimer to be shown even if there is a cookie indicating the user has already agreed.</param>
+        /// <returns type="Object" />
         // Show the disclaimer if there is no cookie indicating that the user has seen it before.
-        if (typeof(wsdot.config.disclaimer) !== "undefined" && wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")) {
-            $("<div>" + wsdot.config.disclaimer + "<div>").dialog({
+        if (typeof(wsdot.config.disclaimer) !== "undefined" && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")))) {
+            return $("<div>" + wsdot.config.disclaimer + "<div>").dialog({
                 title: "Disclaimer",
                 modal: true,
                 closeOnEscape: false,
@@ -107,12 +102,22 @@ dojo.require("esri.layers.FeatureLayer");
                 close: function(event, ui) {
                     // Add a cookie
                     $.cookie("AgreedToDisclaimer", true, {expires: 30});
+                    $(this).dialog("destroy").remove();
                 }
             });
-
-
         }
+    }
 
+    function doPostConfig() {
+        // Add support for JSON.
+        Modernizr.load([
+            {
+                test: window.JSON,
+                nope: "scripts/json2.js"
+            }
+        ]);
+
+        showDisclaimer();
 
         // Add a method to the Date object that will return a short date string.
         if (typeof (Date.toShortDateString) === "undefined") {
@@ -397,12 +402,20 @@ dojo.require("esri.layers.FeatureLayer");
 
             helpDialog.dialog("open");
 
+            // Load the content from the specified URL into the help dialog.
             helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
                 // Handle case where content could not be loaded.
                 if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
                     helpContent.text("Error loading help text.");
                 }
+
+                // Add disclaimer link (if applicable)
+                if (wsdot.config.disclaimer) {
+                    $("<p class='disclaimer'><a>Disclaimer</a></p>").click(function(){showDisclaimer(true);}).prependTo(helpContent);
+                }
             });
+
+
         }
 
 

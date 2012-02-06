@@ -304,3 +304,8 @@ img[src$="blank.gif"]
     top: 40px;
     right: 5px;
 }
+
+.disclaimer a, a.disclaimer
+{
+    text-decoration: underline;
+}
