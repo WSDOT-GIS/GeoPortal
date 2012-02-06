@@ -87,10 +87,7 @@
     <Content Include="GetRoutes.ashx" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <Content Include="help\Freight Map Application Description.pdf" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
     <Content Include="scripts\toc.js" />
@@ -164,11 +161,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="WsdotTraffic.cs" />
   </ItemGroup>

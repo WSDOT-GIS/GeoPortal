@@ -390,30 +390,35 @@ dojo.require("esri.layers.FeatureLayer");
             /// <summary>Opens the help dialog and adds content from the given URL.</summary>
             /// <param name="helpUrl" type="String">The URL that containts the content that will be shown in the help dialog.</param>
             var helpContent;
-            if (!helpDialog) {
-                // Create the help dialog if it does not already exist.
-                helpDialog = $("<div>").attr("id", "helpDialog").dialog({ autoOpen: false, title: "Help", height: 480 });
-                helpContent = $("<div>").attr("id", "helpContent").appendTo(helpDialog);
-            }
-            else {
-                // Clear the contents
-                helpContent = $("#helpContent").empty();
-            }
-
-            helpDialog.dialog("open");
-
-            // Load the content from the specified URL into the help dialog.
-            helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
-                // Handle case where content could not be loaded.
-                if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
-                    helpContent.text("Error loading help text.");
+            // If the URL is a PDF, open in a separate window; otherwise open in a jQueryUI dialog.
+            if (/\.pdf$/.test(helpUrl)) {
+                window.open(helpUrl);
+            } else {
+                if (!helpDialog) {
+                    // Create the help dialog if it does not already exist.
+                    helpDialog = $("<div>").attr("id", "helpDialog").dialog({ autoOpen: false, title: "Help", height: 480 });
+                    helpContent = $("<div>").attr("id", "helpContent").appendTo(helpDialog);
+                }
+                else {
+                    // Clear the contents
+                    helpContent = $("#helpContent").empty();
                 }
 
-                // Add disclaimer link (if applicable)
-                if (wsdot.config.disclaimer) {
-                    $("<p class='disclaimer'><a>Disclaimer</a></p>").click(function(){showDisclaimer(true);}).prependTo(helpContent);
-                }
-            });
+                helpDialog.dialog("open");
+
+                // Load the content from the specified URL into the help dialog.
+                helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
+                    // Handle case where content could not be loaded.
+                    if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
+                        helpContent.text("Error loading help text.");
+                    }
+
+                    // Add disclaimer link (if applicable)
+                    if (wsdot.config.disclaimer) {
+                        $("<p class='disclaimer'><a>Disclaimer</a></p>").click(function(){showDisclaimer(true);}).prependTo(helpContent);
+                    }
+                });
+            }
 
 
         }
