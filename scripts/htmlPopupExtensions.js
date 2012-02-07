@@ -339,10 +339,13 @@
                         /// Shows the ".id-result" element at the specified position and hides all others.
                         var all, current, currentIndex, lastIndex, result;
                         if (typeof (position) === "undefined" || position === null) {
-                            throw new Error("Required parameter \"position\" not provieded.");
+                            throw new Error("Required parameter \"position\" not provided.");
                         }
                         all = $(".id-result", dialog);
                         current = all.filter(":visible");
+                        if (current.length > 1) {
+                            current = current.first();
+                        }
                         currentIndex = current.index();
                         lastIndex = all.length - 1;
 
@@ -364,7 +367,7 @@
                         // Change the position if possible. Not possible if position is out of range or already at the current position.
                         if (position !== currentIndex && position >= 0 && position <= lastIndex) {
                             // Hide the current element.
-                            current.hide("fast");
+                            all.hide("fast");
                             // Show the element at the desired position.
                             current = all.filter(function (index) {
                                 return index === position;
