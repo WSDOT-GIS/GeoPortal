@@ -1,6 +1,6 @@
 ﻿{
     "pageTitle": "Freight Map",
-    "helpUrl": "help/Freight Map Application Description.pdf",
+    "helpUrl": "help/freight.html",
     "enableIdentify": true,
     "disclaimer": "<p>The Freight Map Application is intended to provide easy and free access to the Truck Performance Measure (TPM) data and freight related information for WSDOT internal use only. TPM Data is managed and maintained by the Freight System Division, and the rest of the data layers come from different sources. The layers have different degrees of accuracy, and some are more up to date than others. In order to keep up with what is happening in the real world, correct data entry errors, and incorporate newer and more accurate information, the data is regularly being updated and improved.</p><p>Metadata for the layers are provided as a resource to the user to understand the source, accuracy, date and purpose of each layer.  Freight System Division shall assume no liability for any decision made or action taken or not taken by users in reliance upon any information contained in this map.</p><p>By clicking <em>Accept</em> you are acknowledging that you have read this disclaimer.</p>",
     "mapOptions": {

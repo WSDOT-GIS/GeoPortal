@@ -5,24 +5,49 @@
 
     function addExtensions() {
         function getIdsOfLayersWithHtmlPopups(mapServiceLayer, returnUrls) {
-            var ids = [];
+            var ids = [], layerInfo, i, l, layerId;
             if (typeof (mapServiceLayer.layerInfos) === "undefined") {
                 throw new Error("Map service layer does not have a defined \"layerInfos\" property.");
             }
 
-            dojo.forEach(mapServiceLayer.layerInfos, function (layerInfo) {
-                // Add to the output array the ID of any sublayer that has an html popup defined 
-                // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
-                if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
-                    if (typeof (layerInfo.visibleLayers) === "undefined" || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+            if (typeof (mapServiceLayer.visibleLayers) !== "undefined") {
+                // Loop through all of the visibleLayers.  Each element is a layer ID integer.
+                for (i = 0, l = mapServiceLayer.visibleLayers.length; i < l; i += 1) {
+                    // Get the current layer ID.
+                    layerId = mapServiceLayer.visibleLayers[i];
+                    if (layerId === -1) {
+                        break;
+                    }
+                    // Get the layerInfo corresponding to the current layer ID.
+                    layerInfo = mapServiceLayer.layerInfos[layerId];
+
+                    // Add to the output array the ID of any sublayer that has an html popup defined 
+                    // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
+                    if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
                         if (returnUrls) {
-                            ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
+                            ids.push(mapServiceLayer.url + "/" + String(layerId));
                         } else {
-                            ids.push(layerInfo.id);
+                            ids.push(layerId);
                         }
                     }
                 }
-            });
+            }
+            else {
+                for (i = 0, l = mapServiceLayer.layerInfos.length; i < l; i += 1) {
+                    layerInfo = mapServiceLayer.layerInfos[i];
+                    // Add to the output array the ID of any sublayer that has an html popup defined 
+                    // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
+                    if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
+                        if (typeof (layerInfo.visibleLayers) === "undefined" || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+                            if (returnUrls) {
+                                ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
+                            } else {
+                                ids.push(layerInfo.id);
+                            }
+                        }
+                    }
+                }
+            }
 
 
             return ids;
