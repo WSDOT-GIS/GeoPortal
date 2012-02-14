@@ -14,7 +14,7 @@
     dojo.require("esri.layers.agstiled");
     dojo.require("esri.layers.agsdynamic");
 
-    var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus;
+    var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus, toggleSublayer;
     _defaultContextMenuIcon = "<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
     _defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
 
@@ -56,20 +56,31 @@
         }
     }
 
-    function toggleSublayer(evt) {
+    var toggleSublayer = function (evt) {
         /// <summary>Toggles the visibility of a sublayer associated with a checkbox.</summary>
         /// <param name="evt" type="Object">An event object.  Must have a data.list property defined.</param>
-        // Get all of the ids of the checked sublayers.
-        var layers = $.map($(".ui-layer-list-sublayer:checked", evt.data.list), function (checkbox) {
-            return Number(checkbox.value);
-        });
-        // If the array of sublayer ids is empty, add -1 to make the query valid.
+        // Initialize variables.  The currentId is the ID corresponding to the checkbox (this).
+        var layers, currentId = Number(this.value), layer = evt.data.layer, id, i, l;
+
+        // Initialize the list of layers that will be sent to the setVisibleLayers method.
+        layers = this.checked ? [currentId] : [];
+
+        // Copy the ids of the currently visible layers (excluding "currentId") into a new array.
+        for (i = 0, l = layer.visibleLayers.length; i < l; i += 1) {
+            id = layer.visibleLayers[i];
+            if (id !== currentId) {
+                layers.push(id);
+            }
+        }
+
+        // If the array is empty, add the value -1 to make the setVisibleLayers query valid.
         if (layers.length === 0) {
             layers.push(-1);
         }
-        // Set the visible sublayers.
-        evt.data.layer.setVisibleLayers(layers);
-    }
+
+        // Call the setVisibleLayers function.
+        layer.setVisibleLayers(layers);
+    };
 
     function setTreeIcon(element, isCollapsed) {
         /// <summary>Adds either an "expanded" or "collaped" class to the specified elements based on the visibility of its child elements.</summary>
