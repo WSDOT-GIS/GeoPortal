@@ -7,11 +7,13 @@
         },
         _list: null,
         _moveLayer: function (listItem) {
+        	/// <summary>Moves the layer corresponding list item to the same position in the map.</summary>
             var map, index, layer;
             map = this.options.map;
             layer = listItem.data("layer");
             if (map && layer) {
-                index = $(listItem).index();
+            	// Determine the new index.  Remember, map index values are the reverse of that of the layer list.
+                index = map.layerIds.length - 1 - $(listItem).index();
                 map.reorderLayer(layer, index);
             }
         },
@@ -28,8 +30,9 @@
                 }).disableSelection();
             }
             this._list.empty();
-
-            for (i = 0, l = map.layerIds.length; i < l; i += 1) {
+           
+            // Loop through the layers in reverse order, so topmost layer is on the top of the list.
+            for (l = map.layerIds.length, i = l - 1; i >= 0; i -= 1) {
                 layerId = map.layerIds[i];
                 layer = map.getLayer(layerId);
                 $(['<li class="ui-state-default" title="', layer.description, '"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>', layerId, '</li>'].join("")).data("layer", layer).appendTo(this._list);
@@ -45,14 +48,10 @@
             $element.addClass("ui-layer-sorter");
             $("<p>Drag items in this list to rearrange layers.</p>").appendTo(this.element);
 
-            $("<div class='ui-corner-top ui-layer-sorter-map-position-label'>Back of map</div>").appendTo(this.element);
-
             // Populate the list of layers.
             this._populateList();
 
-            $("<div class='ui-corner-bottom ui-layer-sorter-map-position-label'>Front of map</div>").appendTo(this.element);
-
-            // TODO: Add event handing to reorganize layers when layer's list item has been moved.
+            // Add event handing to reorganize layers when layer's list item has been moved.
             dojo.connect(this.options.map, "onLayerReorder", $this, $this._populateList);
 
             return this;

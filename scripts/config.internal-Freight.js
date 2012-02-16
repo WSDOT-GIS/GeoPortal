@@ -87,56 +87,56 @@
             "Truck Performance Measures": [
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/AADTTruckPercentage/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AADTTruckPercentage/MapServer",
                     "options": {
                         "id": "AADT Truck Percentage"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/AverageSpeed/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AverageSpeed/MapServer",
                     "options": {
                         "id": "Average Speed"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckPugetSound/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckPugetSound/MapServer",
                     "options": {
                         "id": "Bottleneck Puget Sound"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckStatewide/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckStatewide/MapServer",
                     "options": {
                         "id": "Bottleneck Statewide"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityPugetSound/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityPugetSound/MapServer",
                     "options": {
                         "id": "Reliability Puget Sound"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityStatewide/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityStatewide/MapServer",
                     "options": {
                         "id": "Reliability Statewide"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/SevereSpeedThreshold/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/SevereSpeedThreshold/MapServer",
                     "options": {
                         "id": "Severe Speed Threshold"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://hqolymgis21t/ArcGIS/rest/services/TruckPerformanceMeasures/FreightGoods/MapServer",
+                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/FreightGoods/MapServer",
                     "options": {
                         "id": "WSDOT Freight and Goods"
                     }

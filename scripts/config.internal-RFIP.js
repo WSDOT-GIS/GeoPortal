@@ -84,86 +84,9 @@
         "RFIP": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Barrier/MapServer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RFIPMapService/MapServer",
                 "options": {
-                    "id": "Barrier"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Bridge/MapServer",
-                "options": {
-                    "id": "Bridge"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Curb/MapServer",
-                "options": {
-                    "id": "Curb"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Drainage/MapServer",
-                "options": {
-                    "id": "Drainage"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Fence/MapServer",
-                "options": {
-                    "id": "Fence"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Mailbox/MapServer",
-                "options": {
-                    "id": "Mailbox"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/MiscFixedObject/MapServer",
-                "options": {
-                    "id": "Misc. Fixed Object"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Other/MapServer",
-                "options": {
-                    "id": "Other"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RockOutcropping/MapServer",
-                "options": {
-                    "id": "Rock Outcropping"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Slope/MapServer",
-                "options": {
-                    "id": "Slope"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Tree/MapServer",
-                "options": {
-                    "id": "Tree"
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/Wall/MapServer",
-                "options": {
-                    "id": "Wall"
+                    "id": "Roadside Features"
                 }
             }
         ],

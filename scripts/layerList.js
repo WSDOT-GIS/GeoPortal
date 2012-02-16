@@ -60,7 +60,7 @@
         /// <summary>Toggles the visibility of a sublayer associated with a checkbox.</summary>
         /// <param name="evt" type="Object">An event object.  Must have a data.list property defined.</param>
         // Initialize variables.  The currentId is the ID corresponding to the checkbox (this).
-        var layers, currentId = Number(this.value), layer = evt.data.layer, id, i, l;
+        var layers, currentId = Number(this.value), layer = evt.data.layer, id, i, l, layerInfo;
 
         // Initialize the list of layers that will be sent to the setVisibleLayers method.
         layers = this.checked ? [currentId] : [];
@@ -68,7 +68,9 @@
         // Copy the ids of the currently visible layers (excluding "currentId") into a new array.
         for (i = 0, l = layer.visibleLayers.length; i < l; i += 1) {
             id = layer.visibleLayers[i];
-            if (id !== currentId) {
+            layerInfo = layer.layerInfos[id];
+            // Omit layers that have subLayers.
+            if (id !== currentId && typeof(layerInfo) !== "undefined" && layerInfo.subLayerIds === null) {
                 layers.push(id);
             }
         }
