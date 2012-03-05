@@ -185,7 +185,7 @@ jQuery UI
                     esri.request({
                         url: wsdot.config.locateMileposts.url,
                         content: {
-                            referenceDate: dijit.byId("referenceDateBox").value,
+                        	referenceDate: dijit.byId("referenceDateBox").value.toShortDateString(),
                             routeLocations: JSON.stringify([location]),
                             spatialReference: map.spatialReference.wkid
                         },
