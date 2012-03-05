@@ -84,7 +84,7 @@
         "RFIP": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/RFIP/RFIPMapService/MapServer",
+                "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/RFIP/RFIPMapService/MapServer",
                 "options": {
                     "id": "Roadside Features"
                 }
