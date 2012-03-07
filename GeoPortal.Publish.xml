@@ -34,10 +34,10 @@
     <file relUrl="images/USA_TopoThumbnail.png" publishTime="03/05/2012 11:09:08" />
     <file relUrl="style/locationInfo.css" publishTime="07/12/2011 16:58:38" />
     <file relUrl="images/layerList/treePlus10.gif" publishTime="11/02/2011 14:58:23" />
+    <file relUrl="scripts/metadataExtensions.js" publishTime="03/05/2012 17:02:16" />
     <file relUrl="proxy.ashx" publishTime="04/22/2011 12:22:41" />
     <file relUrl="scripts/esriApiExtensions.js" publishTime="09/26/2011 09:08:59" />
     <file relUrl="style/functionalClass.css" publishTime="11/07/2011 14:22:28" />
-    <file relUrl="Metadata.ashx" publishTime="07/12/2011 14:23:51" />
     <file relUrl="scripts/modernizr.js" publishTime="10/12/2011 14:07:10" />
     <file relUrl="GetRoutes.ashx" publishTime="07/21/2011 14:17:26" />
     <file relUrl="scripts/layerList.js" publishTime="02/15/2012 17:24:58" />
@@ -113,7 +113,6 @@
     <file relUrl="scripts/extentSelect.js" publishTime="10/12/2011 14:07:10" />
     <file relUrl="scripts/esriApiExtensions.js" publishTime="09/26/2011 09:08:59" />
     <file relUrl="style/functionalClass.css" publishTime="11/07/2011 14:22:28" />
-    <file relUrl="Metadata.ashx" publishTime="07/12/2011 14:23:51" />
     <file relUrl="scripts/modernizr.js" publishTime="10/12/2011 14:07:10" />
     <file relUrl="GetRoutes.ashx" publishTime="07/21/2011 14:17:26" />
     <file relUrl="scripts/layerList.js" publishTime="02/15/2012 17:24:58" />
