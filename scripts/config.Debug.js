@@ -88,59 +88,53 @@
                     "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CityLimits/MapServer",
                     "options": {
                         "id": "City Limits"
-                    },
-                    "metadataIds": [23]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
                     "options": {
                         "id": "Congressional Districts"
-                    },
-                    "metadataIds": [30]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
                     "options": {
                         "id": "County Boundaries"
-                    },
-                    "metadataIds": [25]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
                     "options": {
                         "id": "Legislative Districts"
-                    },
-                    "metadataIds": [31]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/MPO/MapServer",
                     "options": {
                         "id": "MPO"
                     }
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer",
                     "options": {
                         "id": "RTPO"
-                    },
-                    "metadataIds": [32]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
                     "options": {
                         "id": "Township / Section"
-                    },
-                    "metadataIds": [5]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/TribalLands/MapServer",
                     "options": {
                         "id": "Tribal Lands"
                     }
@@ -149,47 +143,42 @@
             "Design": [
                {
                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                   "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
+                   "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
                    "options": {
                        "id": "Interchange Drawings"
-                   },
-                   "metadataIds": [37]
+                   }
                }
            ],
             "WSDOT Boundaries": [
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
                     "options": {
                         "id": "Maintenance Areas"
-                    },
-                    "metadataIds": [33, 34]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
                     "options": {
                         "id": "Region Boundaries"
-                    },
-                    "metadataIds": [19]
+                    }
                 }
             ],
             "Transportation Features": [
                 {
                     "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
                     "options": {
                         "id": "State Routes"
-                    },
-                    "metadataIds": [16, 15, 17]
+                    }
                 },
                 {
                     "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+                    "url": "http://hqolymgis21t/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
                     "options": {
                         "id": "Functional Class"
-                    },
-                    "metadataIds": [8, 14]
+                    }
                 }
             ]
     }
