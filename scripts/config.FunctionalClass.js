@@ -101,8 +101,7 @@
             "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
             "options": {
                 "id": "Functional Class"
-            },
-            "metadataIds": [8, 14]
+            }
         }
     ]
 }
