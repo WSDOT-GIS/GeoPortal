@@ -89,6 +89,7 @@
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
     <Content Include="help\Freight Map Application Description.pdf" />
+    <Content Include="help\Freight Map FAQ.pdf" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\metadataExtensions.js" />
     <Content Include="scripts\modernizr.js" />
