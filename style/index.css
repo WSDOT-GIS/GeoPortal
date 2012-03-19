@@ -309,3 +309,8 @@ img[src$="blank.gif"]
 {
     text-decoration: underline;
 }
+
+#zoomToXY 
+{
+    border: 1px solid black;
+}

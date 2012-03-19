@@ -758,6 +758,9 @@ dojo.require("esri.layers.FeatureLayer");
 						zoomControlsDiv = $("#zoomControls");
 
 						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
+							map: map
+						});
 						table = $("<table>").appendTo(zoomControlsDiv);
 						body = $("<tbody>").appendTo(table);
 						$.each([
