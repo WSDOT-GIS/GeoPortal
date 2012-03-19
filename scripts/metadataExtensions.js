@@ -100,8 +100,8 @@
 	/**
 	* Calls the SOE to get the list of layer IDs that correspond to feature layers. 
 	* @param {String|esri.layers.Layer} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
-	* @param {Function} Event handler function that is called when the query is successful.  Parameter "data" is an array of integers.
-	* @param {Function} Event handler function that is called when the query fails.  Parameter "error" is an Error.
+	* @param {Function} successHandler Event handler function that is called when the query is successful.  Parameter "data" is an array of integers.
+	* @param {Function} failHandler Event handler function that is called when the query fails.  Parameter "error" is an Error.
 	*/
 	function getIdsOfLayersWithMetadata(layer, successHandler, failHandler) {
 		var jsonpArgs;

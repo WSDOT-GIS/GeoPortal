@@ -748,7 +748,7 @@ dojo.require("esri.layers.FeatureLayer");
 				$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
 				$("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom Controls" }, "zoomControlsPane"));
+				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 				createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
 
 					function createZoomControls() {
