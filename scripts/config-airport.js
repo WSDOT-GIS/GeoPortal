@@ -1,5 +1,5 @@
 ﻿{
-	"pageTitle": "WSDOT GeoPortal",
+	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
 	"mapOptions": {
