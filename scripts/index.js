@@ -766,7 +766,8 @@ dojo.require("esri.layers.FeatureLayer");
 						$.each([
 						{ id: "countyZoom", text: "County" },
 						{ id: "cityZoom", text: "City" },
-						{ id: "urbanAreaZoom", text: "Urban Area" }
+						{ id: "urbanAreaZoom", text: "Urban Area" },
+						{ id: "airportZoom", text: "Airport" }
 						], function (index, data) {
 							var row, cell;
 							row = $("<tr>").appendTo(body);
@@ -802,13 +803,16 @@ dojo.require("esri.layers.FeatureLayer");
 							return { "task": qt, "query": query };
 						}
 						function runQueryTasks() {
-							var cityQueryTask, urbanAreaQueryTask;
+							var cityQueryTask, urbanAreaQueryTask, airportQueryTask;
 							// Setup extents for cities and urbanized area zoom tools.
 							cityQueryTask = createQueryTask("city");
 							cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
 
 							urbanAreaQueryTask = createQueryTask("urbanArea");
 							urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
+
+							airportQueryTask = createQueryTask("airport");
+							airportQueryTask.task.execute(airportQueryTask.query, function (featureSet) { $("#airportZoomSelect").extentSelect(featureSet, map); });
 						}
 
 						runQueryTasks();
