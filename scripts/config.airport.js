@@ -2,6 +2,7 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
+	"disableMilepostTools": true,
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -196,10 +197,17 @@
 					}
 				},
 				{
-					"layerType":"esri.layers.ArcGISTiledMapServiceLayer",
+					"layerType":"esri.layers.ArcGISDynamicMapServiceLayer",
 					"url":"http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer",
 					"options": {
 						"id": "Airports"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer",
+					"options": {
+						"id": "Aeronautical Chart"
 					}
 				}
 			]

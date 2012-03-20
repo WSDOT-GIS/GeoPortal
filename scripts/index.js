@@ -698,7 +698,7 @@ dojo.require("esri.layers.FeatureLayer");
 			}
 
 			function setupLayout() {
-				var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion;
+				var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion, zoomControlsDiv;
 				mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
 				mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
 				mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
@@ -707,129 +707,120 @@ dojo.require("esri.layers.FeatureLayer");
 				tabs = new dijit.layout.TabContainer(null, "tabs");
 				tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
 				tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow:  setupLegend }, "legendTab"));
+				tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 				toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
+				tabs.addChild(toolsTab);
 				toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
-				// LRS Tools
-				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
-				createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
-					$.getScript("scripts/lrsTools.js", function () {
-						$("#lrsTools").lrsTools({
-							map: map,
-							controlsCreated: function () {
-								// Add help button to the LrsTools control.
-								dijit.form.Button({
-									label: "Milepost Help",
-									iconClass: "helpIcon",
-									showLabel: false,
-									onClick: function () {
-										showHelpDialog("help/milepost.html");
-									}
-								}, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
-							},
-							drawActivate: function () {
-								map.disablePopups();
-							},
-							drawDeactivate: function () {
-								map.enablePopups();
-							}
+				if (!wsdot.config.disableMilepostTools) {
+					// LRS Tools
+					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
+					createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
+						$.getScript("scripts/lrsTools.js", function () {
+							$("#lrsTools").lrsTools({
+								map: map,
+								controlsCreated: function () {
+									// Add help button to the LrsTools control.
+									dijit.form.Button({
+										label: "Milepost Help",
+										iconClass: "helpIcon",
+										showLabel: false,
+										onClick: function () {
+											showHelpDialog("help/milepost.html");
+										}
+									}, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+								},
+								drawActivate: function () {
+									map.disablePopups();
+								},
+								drawDeactivate: function () {
+									map.enablePopups();
+								}
+							});
+
 						});
 
+						dojo.disconnect(createLinks.milepostTab);
+						delete createLinks.milepostTab;
 					});
-
-					dojo.disconnect(createLinks.milepostTab);
-					delete createLinks.milepostTab;
-				});
+				}
 
 
 
 
 				// Zoom tools
 				$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
-				$("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
+				
 
 				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 				createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
+					var extentTable;
+					zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
+					$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+
+					$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
+						map: map
+					});
+
+					extentTable = $("<table>").appendTo(zoomControlsDiv);
 					
-				$.getScript("scripts/extentSelect.js", function (data, textScatus) {
-					// Set up the zoom select boxes.
-					// Setup the zoom controls.
-					function createZoomControls() {
-						/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+					$.getScript("scripts/extentSelect.js", function (data, textScatus) {
+						function createQueryTask(qtName) {
+							/// <summary>Creates a query task and query using settings from config.js.</summary>
+							/// <param name="qtName" type="String">The name of a query task from config.js.</param>
+							var queryTaskSetting, qt, query, n;
+							queryTaskSetting = wsdot.config.queryTasks[qtName];
+							qt = new esri.tasks.QueryTask(queryTaskSetting.url);
+							query = new esri.tasks.Query();
+												
+							for (n in queryTaskSetting.query) {
+								if (queryTaskSetting.query.hasOwnProperty(n)) {
+									query[n] = queryTaskSetting.query[n];
+								}
+							}
+							return { "task": qt, "query": query };
+						}
 
-						var zoomControlsDiv, table, body, data, row, cell;
+						// Set up the zoom select boxes.
+						// Setup the zoom controls.
+						function createZoomControls() {
+							/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
 
-						function createZoomControl(qtName, data) {
-							var row, cell;
-							row = $("<tr>").appendTo(body);
-							cell = $("<td>").appendTo(row);
-							$("<label>").attr({ id: qtName + "ZoomLabel" }).text(data.label).appendTo(cell);
-							cell = $("<td>").appendTo(row);
-							if (data.url) {
-								$("<img>").attr({ id: qtName + "ZoomSelect", src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
-							} else if (data.extents) {
-								$("<div>").attr("id", qtName + "ZoomSelect").appendTo(cell).extentSelect(data.extents, map);
+							var table, body, data, row, cell;
+
+							function createZoomControl(qtName, data) {
+								var row, cell, selectName, labelName, queryTask;
+								row = $("<tr>").appendTo(body);
+								cell = $("<td>").appendTo(row);
+								selectName = qtName + "ZoomSelect";
+								labelName = qtName + "ZoomLabel"
+								$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+								cell = $("<td>").appendTo(row);
+								if (data.url) {
+									$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+									queryTask = createQueryTask(qtName);
+									queryTask.task.execute(queryTask.query, function(featureSet) {
+										$("#" + selectName).extentSelect(featureSet, map);
+									});
+								} else if (data.extents) {
+									$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+									dojo.attr(labelName, "for", selectName);
+								}
+							}
+
+							body = $("<tbody>").appendTo(extentTable);
+
+							for (var qtName in wsdot.config.queryTasks) {
+								if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
+									data = wsdot.config.queryTasks[qtName];
+									createZoomControl(qtName, data);
+								}
 							}
 						}
 
-
-						zoomControlsDiv = $("#zoomControls");
-
-						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
-						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
-							map: map
-						});
-						table = $("<table>").appendTo(zoomControlsDiv);
-						body = $("<tbody>").appendTo(table);
-
-						// createZoomControl("county", { label: "County" });
-
-						for (var qtName in wsdot.config.queryTasks) {
-							if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
-								data = wsdot.config.queryTasks[qtName];
-								createZoomControl(qtName, data);
-							}
-						}
-					}
-
-					createZoomControls();
-
-					function createQueryTask(qtName) {
-						/// <summary>Creates a query task and query using settings from config.js.</summary>
-						/// <param name="qtName" type="String">The name of a query task from config.js.</param>
-						var queryTaskSetting, qt, query, n;
-						queryTaskSetting = wsdot.config.queryTasks[qtName];
-						qt = new esri.tasks.QueryTask(queryTaskSetting.url);
-						query = new esri.tasks.Query();
-							
-						for (n in queryTaskSetting.query) {
-							if (queryTaskSetting.query.hasOwnProperty(n)) {
-								query[n] = queryTaskSetting.query[n];
-							}
-						}
-						return { "task": qt, "query": query };
-					}
-					function runQueryTasks() {
-						var cityQueryTask, urbanAreaQueryTask, airportQueryTask;
-						// Setup extents for cities and urbanized area zoom tools.
-						cityQueryTask = createQueryTask("city");
-						cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
-
-						urbanAreaQueryTask = createQueryTask("urbanArea");
-						urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
-
-						airportQueryTask = createQueryTask("airport");
-						airportQueryTask.task.execute(airportQueryTask.query, function (featureSet) { $("#airportZoomSelect").extentSelect(featureSet, map); });
-					}
-
-					runQueryTasks();
-
-					// Associate labels with select controls, so that clicking on a label activates the corresponding control.
-					dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
-					dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
-					dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
-				});
+						createZoomControls();
+					});
 
 					if (navigator.geolocation) {
 						dijit.form.Button({
@@ -872,94 +863,37 @@ dojo.require("esri.layers.FeatureLayer");
 						}
 					}, "zoomToMyCurrentLocation");
 				} else {
-					dojo.destroy("zoomToMyCurrentLocation");
-				}
-
-				// Add the help button for the zoom controls.
-				dijit.form.Button({
-					label: "Zoom Help",
-					showLabel: false,
-					iconClass: "helpIcon",
-					onClick: function () {
-						showHelpDialog("help/zoom_controls.html");
+						dojo.destroy("zoomToMyCurrentLocation");
 					}
-				}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
-				dojo.disconnect(createLinks.zoomControls);
-				delete createLinks.zoomControls;
-			});
+					// Add the help button for the zoom controls.
+					dijit.form.Button({
+						label: "Zoom Help",
+						showLabel: false,
+						iconClass: "helpIcon",
+						onClick: function () {
+							showHelpDialog("help/zoom_controls.html");
+						}
+					}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
-				// Address Search
-				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
-				createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
-					$.getScript("scripts/addressLocator.js", function (data, textStatus) {
-						$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
-							map: map,
-							addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
-						});
-						dojo.disconnect(createLinks.search);
-						delete createLinks.search;
-					});
+					dojo.disconnect(createLinks.zoomControls);
+					delete createLinks.zoomControls;
 				});
 
-				////// Bookmarks
-				////// Add the bookmaks content pane.
-				////if (Modernizr.localstorage) {
-				////    toolsAccordion.addChild(new dijit.layout.ContentPane({
-				////        title: "Bookmarks"
-				////    }, dojo.create("div", {
-				////        id: "bookmarksPane"
-				////    }, "toolsAccordion")));
-				////    // Setup the on show event to create the contents.
-				////    createLinks.bookmarks = dojo.connect(dijit.byId("bookmarksPane"), "onShow", function () {
-				////        var bookmarksWidget, bookmarks;
+			// Address Search
+			toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
+			createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
+				$.getScript("scripts/addressLocator.js", function (data, textStatus) {
+					$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
+						map: map,
+						addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
+					});
+					dojo.disconnect(createLinks.search);
+					delete createLinks.search;
+				});
+			});
 
-				////        function saveBookmarks() {
-				////            /// <summary>Saves bookmarks to localStorage.</summary>
-				////            var bookmarks;
 
-				////            // If there are no bookmarks in the widget, remove the "bookmarks" item from localStorage.
-				////            // Otherwise, save the current bookmarks into localStorage.
-				////            if (bookmarksWidget.bookmarks.length < 1) {
-				////                localStorage.removeItem("bookmarks");
-				////            } else {
-				////                bookmarks = dojo.map(bookmarksWidget.bookmarks, function (bookmarkItem) {
-				////                    return {
-				////                        name: bookmarkItem.name || null,
-				////                        extent: bookmarkItem.extent.toJson()
-				////                    };
-				////                });
-
-				////                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-				////            }
-				////        }
-
-				////        // Load bookmark data from local storage if it exists.
-				////        bookmarks = localStorage.getItem("bookmarks");
-				////        if (bookmarks === null) {
-				////            bookmarks = [];
-				////        } else {
-				////            bookmarks = JSON.parse(bookmarks);
-				////        }
-
-				////        bookmarksWidget = new esri.dijit.Bookmarks({
-				////            map: map,
-				////            bookmarks: bookmarks,
-				////            editable: true
-				////        }, dojo.create("div", { id: "bookmarks" }, "bookmarksPane"));
-
-				////        // Setup events to save bookmarks to localStorage when they are edited (includes creation) and removed.
-				////        dojo.connect(bookmarksWidget, "onEdit", saveBookmarks);
-				////        dojo.connect(bookmarksWidget, "onRemove", saveBookmarks);
-
-				////        // Now that the bookmarks pane's contents have been created we no longer need this event, so we can remove and delete it.
-				////        dojo.disconnect(createLinks.bookmarks);
-				////        delete createLinks.bookmarks;
-				////    });
-				////}
-
-				tabs.addChild(toolsTab);
-				tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 
 				createLinks.basemapTab = dojo.connect(dijit.byId("basemapTab"), "onShow", function () {
 					var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;

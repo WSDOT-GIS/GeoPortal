@@ -58,15 +58,6 @@
 				"where": "1 = 1",
 				"returnGeometry": true
 			}
-		},
-		"airport": {
-			"label": "Airport",
-			"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer/0",
-			"query": {
-				"where": "1 = 1",
-				"returnGeometry": true,
-				"outFields": ["NAME"]
-			}
 		}
 	},
 	"basemaps": [
@@ -193,13 +184,6 @@
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
 					"options": {
 						"id": "Functional Class"
-					}
-				},
-				{
-					"layerType":"esri.layers.ArcGISTiledMapServiceLayer",
-					"url":"http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer",
-					"options": {
-						"id": "Airports"
 					}
 				}
 			]
