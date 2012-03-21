@@ -2,7 +2,7 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
-	"disableMilepostTools": true,
+	"disableMilepostTools": false,
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -59,15 +59,6 @@
 				"where": "1 = 1",
 				"returnGeometry": true
 			}
-		},
-		"airport": {
-			"label": "Airport",
-			"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer/0",
-			"query": {
-				"where": "1 = 1",
-				"returnGeometry": true,
-				"outFields": ["NAME"]
-			}
 		}
 	},
 	"basemaps": [
@@ -77,14 +68,6 @@
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
 			"layers": [
 				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
-			]
-		},
-		{
-			"id": "functionalClassBasemap",
-			"title": "Functional Class",
-			"thumbnailUrl": "images/FCBasemapThumbnail.png",
-			"layers": [
-				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
 			]
 		}
 	],
@@ -156,23 +139,8 @@
 					}
 				}
 			],
-			"Design": [
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
-				"options": {
-					"id": "Interchange Drawings"
-				}
-			}
-		],
+			
 			"WSDOT Boundaries": [
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
-					"options": {
-						"id": "Maintenance Areas"
-					}
-				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
@@ -182,20 +150,6 @@
 				}
 			],
 			"Transportation Features": [
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
-					"options": {
-						"id": "State Routes"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
-					"options": {
-						"id": "Functional Class"
-					}
-				},
 				{
 					"layerType":"esri.layers.ArcGISDynamicMapServiceLayer",
 					"url":"http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer",
@@ -209,7 +163,22 @@
 					"options": {
 						"id": "Aeronautical Chart"
 					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+					"options": {
+						"id": "State Routes"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+					"options": {
+						"id": "Functional Class"
+					}
 				}
+
 			]
 	}
 }
