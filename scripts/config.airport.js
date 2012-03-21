@@ -80,7 +80,7 @@
 			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_6"],
+	"basemapsToRemove": ["basemap_4", "basemap_5", "basemap_6", "basemap_8"],
 	"locateMileposts": {
 		"url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
 		"options": { "useProxy": false, "usePost": true }

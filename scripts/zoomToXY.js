@@ -1,4 +1,12 @@
-﻿(function ($) {
+﻿/*jslint browser: true, nomen: true */
+/*jshint dojo, jquery, nomen:false */
+/*global jQuery, dojo, esri */
+
+(function ($) {
+	"use strict";
+	/** Defines the zoomToXY widget.
+	* @example: $("#myDiv").zoomToXY({map: map});
+	*/
 	$.widget("ui.zoomToXY", {
 		options: {
 			map: null,
@@ -9,20 +17,46 @@
 		_yBox: null,
 		_graphicsLayer: null,
 		_submitButton: null,
+		_clearGraphicsButton: null,
+		/** 
+		* Clears all of the graphics created by this tool.
+		*/
+		clearGraphics: function () {
+			if (this._graphicsLayer) {
+				this._graphicsLayer.clear();
+			}
+		},
 		_create: function () {
 			var $this = this;
 
-			$this._xBox = $("<input type='number' placeholder='X' title='Enter X coordinate here'>").appendTo($this.element);
-			$this._yBox = $("<input type='number' placeholder='Y' title='Enter Y coordinate here'>").appendTo($this.element);
-			$this._submitButton = $("<button type='button'>").text("Zoom to XY").appendTo($this.element).click(function () {
+			/** Converts a string to a number.  
+			* Differs from the Number function in that undefined, null, and strings that are empty or contain only whitespace return NaN instead of 0.
+			* @param {string} str A string representation of a number.  If a number is provided instead of a string, the same value will simply be returned.
+			*/
+			function toNumber(str) {
+				var type = typeof (str), output;
+				if (type === "string") {
+					str = str.trim();
+					output = str.length < 1 ? NaN : Number(str);
+				} else if (type === "undefined" || str === null) {
+					output = NaN;
+				} else {
+					output = Number(str);
+				}
+				return output;
+			}
+
+			/** Adds a point to the map at the location specified in the widget's controls.
+			*/
+			function submitHandler() {
 				var x, y, point, map, renderer, graphic;
 				map = $this.options.map;
-				// Get the X and Y values from the input boxes, then convert to numbers.
+				// Get the X and Y values from the input boxes, then convert from string to numbers.
 				x = $this._xBox.attr("value");
 				y = $this._yBox.attr("value");
 
-				x = Number(x);
-				y = Number(y);
+				x = toNumber(x);
+				y = toNumber(y);
 
 				// Check to make sure that the user put numbers into the text boxes.  (If the browser supports the HTML5 number type input, the boxes will not allow non-number values.)
 				if (!isNaN(x) && !isNaN(y)) {
@@ -65,12 +99,38 @@
 					$this._graphicsLayer.add(graphic);
 
 				} else {
-					alert("Invalid value in X or Y coordinate box");
+					window.alert("Invalid value in X or Y coordinate box");
 				}
 
+			}
+
+			$this._xBox = $("<input class='ui-zoomToXY-X' type='number' placeholder='X' title='Enter X coordinate here'>").appendTo($this.element);
+			$this._yBox = $("<input class='ui-zoomToXY-Y' type='number' placeholder='Y' title='Enter Y coordinate here'>").appendTo($this.element);
+			$this._submitButton = $("<button type='button' class='ui-zoomToXY-button'>").text("Zoom to XY").appendTo($this.element).click(submitHandler).button({
+				text: false,
+				icons: {
+					primary: "ui-icon-search"
+				}
 			});
+
+			$this._clearGraphicsButton = $("<button type='button'>").click(function () {
+				$this.clearGraphics() 
+			}).button({
+				text: false,
+				label: "Clear Graphics",
+				icons: {
+					primary: "ui-icon-close"
+				}
+			}).appendTo($this.element);
 		},
 		_destroy: function () {
+			// Remove the graphics layer from the map.
+			this.options.map.removeLayer(this._graphicsLayer);
+			this._graphicsLayer = null;
+			// Remove controls that were created by this widget.
+			this._xBox.remove();
+			this._yBox.remove();
+			this._submitButton.remove();
 			// Call the base destroy method.
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}

@@ -759,6 +759,7 @@ dojo.require("esri.layers.FeatureLayer");
 
 					$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
+					$("<div class='tool-header'>Zoom to XY</div>").appendTo(zoomControlsDiv);
 					$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
 						map: map
 					});
@@ -934,7 +935,7 @@ dojo.require("esri.layers.FeatureLayer");
 					// Uncomment this section if you need to find a basemap's ID.
 					// Recomment before publishing.
 					dojo.connect(basemapGallery, "onSelectionChange", function () {
-					console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+						console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
 					});
 					*/
 

@@ -310,7 +310,19 @@ img[src$="blank.gif"]
     text-decoration: underline;
 }
 
+#zoomControls .tool-header 
+{
+    text-decoration: underline;
+    margin-bottom: 0.1em;
+}
+
 #zoomToXY 
 {
-    border: 1px solid black;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-left: 0.5em;
+}
+#zoomToXY input[type=number]
+{
+    width: 80px;
 }
