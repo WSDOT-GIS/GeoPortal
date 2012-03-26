@@ -380,7 +380,7 @@
 			$element.addClass("ui-layer-list-has-children");
 			label = $("> label", $element).click({ parent: $element }, toggleChildList);
 			$(createSublayerControls(layer)).appendTo($element);
-
+			label.click();
 			setTreeIcon($element[0]);
 		}
 
