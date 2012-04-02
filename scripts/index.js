@@ -1081,6 +1081,10 @@ dojo.require("esri.layers.FeatureLayer");
 			dojo.connect(map, "onLoad", map, function () {
 				map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
 
+				$("#copyright").copyrightInfo({
+					map: map
+				});
+
 				// Set the scale.
 				setScaleLabel();
 

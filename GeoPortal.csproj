@@ -68,6 +68,7 @@
     <Content Include="scripts\config.internal-Freight.js" />
     <Content Include="scripts\config.internal-RFIP.js" />
     <Content Include="scripts\config.js" />
+    <Content Include="scripts\copyrightInfo.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\esriApiExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
