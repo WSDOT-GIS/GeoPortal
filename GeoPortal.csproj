@@ -68,6 +68,7 @@
     <Content Include="scripts\config.internal-Freight.js" />
     <Content Include="scripts\config.internal-RFIP.js" />
     <Content Include="scripts\config.js" />
+    <Content Include="scripts\copyrightInfo.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\esriApiExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
@@ -129,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="style\layerList.css" />
+    <Content Include="style\layerListPlusMinus.css" />
     <Content Include="style\layerSorter.css" />
     <Content Include="style\locationInfo.css" />
     <Content Include="web.config">

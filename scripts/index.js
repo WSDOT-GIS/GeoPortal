@@ -164,6 +164,14 @@ dojo.require("esri.layers.FeatureLayer");
 		}
 
 		$(document).ready(function () {
+			var qs = $.deparam.querystring();
+			
+			// If the "tree" query string parameter is set to true, replace the stylesheet for the layer list.
+			if (qs.tree && !/false/.test(qs.tree)) {
+				$("link[href='style/layerList.css']").attr("href", "style/layerListPlusMinus.css");
+			}
+			
+
 			$("#mainContainer").css("display", "");
 
 			// If a title is specified in the config file, replace the page title.
@@ -1004,6 +1012,10 @@ dojo.require("esri.layers.FeatureLayer");
 
 			dojo.connect(map, "onLoad", map, function () {
 				map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
+
+				$("#copyright").copyrightInfo({
+					map: map
+				});
 
 				// Set the scale.
 				setScaleLabel();
