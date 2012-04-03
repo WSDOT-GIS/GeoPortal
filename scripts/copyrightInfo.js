@@ -4,7 +4,7 @@
 	*/
 	$.widget("ui.copyrightInfo", {
 		options: {
-			/** esri.Map */map: null
+			/** {esri.Map} */map: null
 		},
 		_onLayerAddResultLink: null,
 		_visibilityChangeLinks: [],
@@ -13,6 +13,7 @@
 			var i, l, layer, layerId, map = this.options.map;
 			// Clear existing copyright notices.
 			this._list.empty();
+			// Add a copyright notice for each layer that is visible and has a copyright property.
 			for (i = 0, l = map.layerIds.length; i < l; i++) {
 				layerId = map.layerIds[i];
 				layer = map.getLayer(layerId);
@@ -21,6 +22,7 @@
 				}
 			}
 
+			// If there are no copyright notices, hide this widget.  Otherwise, show it.
 			if ($("> *", this._list).length === 0) {
 				$(this.element).hide();
 			} else {
@@ -30,8 +32,10 @@
 		_create: function () {
 			var $this = this, layerAddHandler, layerRemoveHandler, visibiltiyChangeHandler;
 
+			// Add a class to allow styling.
 			$this.element.addClass("ui-copyrightInfo");
 
+			// Create a list to add the copyright items.
 			$this._list = $("<ul>").appendTo($this.element);
 
 			/** this {esri.layers.Layer} */
@@ -39,7 +43,8 @@
 				$this.updateCopyrights();
 			};
 
-			layerAddHandler = function (/** {esri.layers.Layer} */layer, /** {Error} */error) {
+			// This method is called when a layer is added.
+			layerAddHandler = function (/** {esri.layers.Layer} */ layer, /** {Error} */ error) {
 				var link;
 
 				if (error) {
@@ -57,25 +62,31 @@
 
 			};
 
-			layerRemoveHandler = function (/**{esri.layers.Layer}*/layer) {
+			// Update the copyright information.
+			layerRemoveHandler = function (/**{esri.layers.Layer}*/ layer) {
 				$this.updateCopyrights();
 			};
 
 			if ($this.options.map) {
 				_onLayerAddResultLink = dojo.connect($this.options.map, "onLayerAddResult", $this, layerAddHandler);
+				dojo.connect($this.options.map, "onLayerRemove", $this, layerRemoveHandler);
 			}
 			return this;
 		},
 		_destroy: function () {
-			this.element.removeClass("ui-copyrightInfo");
 			var i, l;
+			// Restore the element to the state it was in before becoming a copyrightInfo widget.
+			this._list.remove();
+			this.element.removeClass("ui-copyrightInfo");
 			// Disconnect dojo event handlers created by this widget.
 			if (this._onLayerAddResultLink) {
 				dojo.disconnect(this._onLayerAddResultLink);
 			}
+			// Disconnect the visibility change event handler links created by this widget.
 			for (i = 0, l = this._visibilityChangeLinks.length; i < l; i += 1) {
 				dojo.disconnect(this._visibilityChangeLinks[i]);
 			}
+			// Call the base destroy method.
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}
 	});
