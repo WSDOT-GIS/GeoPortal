@@ -41,6 +41,7 @@
     <Content Include="help\navigation.html" />
     <Content Include="help\zoom_controls.html" />
     <Content Include="IdentifyTemplate.html" />
+    <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
