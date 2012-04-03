@@ -1,4 +1,8 @@
-﻿(function ($, dojo) {
+﻿/*jshint jquery:true*/
+/*jslint white: true, nomen: true*/
+/*global dojo, jQuery */
+(function ($, dojo) {
+	"use strict";
 	/**
 	* A widget that displays visible layers' copyright information.
 	*/
@@ -14,7 +18,7 @@
 			// Clear existing copyright notices.
 			this._list.empty();
 			// Add a copyright notice for each layer that is visible and has a copyright property.
-			for (i = 0, l = map.layerIds.length; i < l; i++) {
+			for (i = 0, l = map.layerIds.length; i < l; i += 1) {
 				layerId = map.layerIds[i];
 				layer = map.getLayer(layerId);
 				if (typeof (layer.copyright) !== "undefined" && layer.visible) {
@@ -44,7 +48,7 @@
 			};
 
 			// This method is called when a layer is added.
-			layerAddHandler = function (/** {esri.layers.Layer} */ layer, /** {Error} */ error) {
+			layerAddHandler = function (/** {esri.layers.Layer} */layer, /** {Error} */error) {
 				var link;
 
 				if (error) {
@@ -63,12 +67,12 @@
 			};
 
 			// Update the copyright information.
-			layerRemoveHandler = function (/**{esri.layers.Layer}*/ layer) {
+			layerRemoveHandler = function (/**{esri.layers.Layer}*/layer) {
 				$this.updateCopyrights();
 			};
 
 			if ($this.options.map) {
-				_onLayerAddResultLink = dojo.connect($this.options.map, "onLayerAddResult", $this, layerAddHandler);
+				$this._onLayerAddResultLink = dojo.connect($this.options.map, "onLayerAddResult", $this, layerAddHandler);
 				dojo.connect($this.options.map, "onLayerRemove", $this, layerRemoveHandler);
 			}
 			return this;

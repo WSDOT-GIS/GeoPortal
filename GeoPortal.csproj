@@ -55,7 +55,6 @@
     <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
-    <Content Include="images\USA_TopoThumbnail.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
     <Content Include="lrsToolsTemplate.html" />

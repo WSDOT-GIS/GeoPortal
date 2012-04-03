@@ -78,9 +78,17 @@
 			"layers": [
 				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
 			]
+		},
+		{
+			"id": "aeronauticalChart",
+			"title": "Aeronautical Chart",
+			"thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
+			"layers" : [
+				{ "url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
+			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_5", "basemap_6"],
+	"basemapsToRemove": ["basemap_4", "basemap_5"],
 	"locateMileposts": {
 		"url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
 		"options": { "useProxy": false, "usePost": true }
