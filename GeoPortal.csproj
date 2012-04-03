@@ -41,6 +41,7 @@
     <Content Include="help\navigation.html" />
     <Content Include="help\zoom_controls.html" />
     <Content Include="IdentifyTemplate.html" />
+    <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
@@ -55,7 +56,6 @@
     <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
-    <Content Include="images\USA_TopoThumbnail.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
     <Content Include="lrsToolsTemplate.html" />
@@ -64,7 +64,7 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
-    <Content Include="scripts\config.Debug.js" />
+    <Content Include="scripts\config.airport.js" />
     <Content Include="scripts\config.internal-Freight.js" />
     <Content Include="scripts\config.internal-RFIP.js" />
     <Content Include="scripts\config.js" />
@@ -95,6 +95,7 @@
     <Content Include="scripts\metadataExtensions.js" />
     <Content Include="scripts\modernizr.js" />
     <Content Include="scripts\toc.js" />
+    <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
     <Content Include="style\fgdcPlus.css" />

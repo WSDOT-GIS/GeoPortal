@@ -706,7 +706,7 @@ dojo.require("esri.layers.FeatureLayer");
 			}
 
 			function setupLayout() {
-				var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion;
+				var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion, zoomControlsDiv;
 				mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
 				mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
 				mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
@@ -715,90 +715,74 @@ dojo.require("esri.layers.FeatureLayer");
 				tabs = new dijit.layout.TabContainer(null, "tabs");
 				tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
 				tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow:  setupLegend }, "legendTab"));
+				tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 				toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
+				tabs.addChild(toolsTab);
 				toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
-				// LRS Tools
-				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
-				createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
-					$.getScript("scripts/lrsTools.js", function () {
-						$("#lrsTools").lrsTools({
-							map: map,
-							controlsCreated: function () {
-								// Add help button to the LrsTools control.
-								dijit.form.Button({
-									label: "Milepost Help",
-									iconClass: "helpIcon",
-									showLabel: false,
-									onClick: function () {
-										showHelpDialog("help/milepost.html");
-									}
-								}, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
-							},
-							drawActivate: function () {
-								map.disablePopups();
-							},
-							drawDeactivate: function () {
-								map.enablePopups();
-							}
+				if (!wsdot.config.disableMilepostTools) {
+					// LRS Tools
+					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
+					createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
+						$.getScript("scripts/lrsTools.js", function () {
+							$("#lrsTools").lrsTools({
+								map: map,
+								controlsCreated: function () {
+									// Add help button to the LrsTools control.
+									dijit.form.Button({
+										label: "Milepost Help",
+										iconClass: "helpIcon",
+										showLabel: false,
+										onClick: function () {
+											showHelpDialog("help/milepost.html");
+										}
+									}, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
+								},
+								drawActivate: function () {
+									map.disablePopups();
+								},
+								drawDeactivate: function () {
+									map.enablePopups();
+								}
+							});
+
 						});
 
+						dojo.disconnect(createLinks.milepostTab);
+						delete createLinks.milepostTab;
 					});
-
-					dojo.disconnect(createLinks.milepostTab);
-					delete createLinks.milepostTab;
-				});
+				}
 
 
 
 
 				// Zoom tools
 				$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
-				$("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
+				
 
 				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 				createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
+					var extentTable;
+					zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-					function createZoomControls() {
-						/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
-						var zoomControlsDiv, table, body;
+					$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
-						zoomControlsDiv = $("#zoomControls");
+					$("<div class='tool-header'>Zoom to XY</div>").appendTo(zoomControlsDiv);
+					$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
+						map: map
+					});
 
-						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
-						table = $("<table>").appendTo(zoomControlsDiv);
-						body = $("<tbody>").appendTo(table);
-						$.each([
-						{ id: "countyZoom", text: "County" },
-						{ id: "cityZoom", text: "City" },
-						{ id: "urbanAreaZoom", text: "Urban Area" }
-						], function (index, data) {
-							var row, cell;
-							row = $("<tr>").appendTo(body);
-							cell = $("<td>").appendTo(row);
-							$("<label>").attr({ id: data.id + "Label" }).text(data.text).appendTo(cell);
-							cell = $("<td>").appendTo(row);
-							$("<img>").attr({ id: data.id + "Select", src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
-						});
-					}
-
-					createZoomControls();
+					extentTable = $("<table>").appendTo(zoomControlsDiv);
+					
 					$.getScript("scripts/extentSelect.js", function (data, textScatus) {
-						// Set up the zoom select boxes.
-						// Setup the zoom controls.
-						$("#countyZoomSelect").extentSelect(extents.countyExtents, map);
-						delete extents.countyExtents;
-
-
-
-
 						function createQueryTask(qtName) {
 							/// <summary>Creates a query task and query using settings from config.js.</summary>
 							/// <param name="qtName" type="String">The name of a query task from config.js.</param>
-							var queryTaskSetting = wsdot.config.queryTasks[qtName],
-							qt = new esri.tasks.QueryTask(queryTaskSetting.url),
-							query = new esri.tasks.Query(),
-							n;
+							var queryTaskSetting, qt, query, n;
+							queryTaskSetting = wsdot.config.queryTasks[qtName];
+							qt = new esri.tasks.QueryTask(queryTaskSetting.url);
+							query = new esri.tasks.Query();
+												
 							for (n in queryTaskSetting.query) {
 								if (queryTaskSetting.query.hasOwnProperty(n)) {
 									query[n] = queryTaskSetting.query[n];
@@ -806,49 +790,71 @@ dojo.require("esri.layers.FeatureLayer");
 							}
 							return { "task": qt, "query": query };
 						}
-						function runQueryTasks() {
-							var cityQueryTask, urbanAreaQueryTask;
-							// Setup extents for cities and urbanized area zoom tools.
-							cityQueryTask = createQueryTask("city");
-							cityQueryTask.task.execute(cityQueryTask.query, function (featureSet) { $("#cityZoomSelect").extentSelect(featureSet, map); });
 
-							urbanAreaQueryTask = createQueryTask("urbanArea");
-							urbanAreaQueryTask.task.execute(urbanAreaQueryTask.query, function (featureSet) { $("#urbanAreaZoomSelect").extentSelect(featureSet, map); });
+						// Set up the zoom select boxes.
+						// Setup the zoom controls.
+						function createZoomControls() {
+							/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+
+							var table, body, data, row, cell;
+
+							function createZoomControl(qtName, data) {
+								var row, cell, selectName, labelName, queryTask;
+								row = $("<tr>").appendTo(body);
+								cell = $("<td>").appendTo(row);
+								selectName = qtName + "ZoomSelect";
+								labelName = qtName + "ZoomLabel"
+								$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+								cell = $("<td>").appendTo(row);
+								if (data.url) {
+									$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+									queryTask = createQueryTask(qtName);
+									queryTask.task.execute(queryTask.query, function(featureSet) {
+										$("#" + selectName).extentSelect(featureSet, map);
+									});
+								} else if (data.extents) {
+									$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+									dojo.attr(labelName, "for", selectName);
+								}
+							}
+
+							body = $("<tbody>").appendTo(extentTable);
+
+							for (var qtName in wsdot.config.queryTasks) {
+								if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
+									data = wsdot.config.queryTasks[qtName];
+									createZoomControl(qtName, data);
+								}
+							}
 						}
 
-						runQueryTasks();
+						createZoomControls();
+					});
 
-						// Associate labels with select controls, so that clicking on a label activates the corresponding control.
-						dojo.attr("countyZoomLabel", "for", "countyZoomSelect");
-						dojo.attr("cityZoomLabel", "for", "cityZoomSelect");
-						dojo.attr("urbanAreaZoomLabel", "for", "urbanAreaZoomSelect");
-
-
-
-						if (navigator.geolocation) {
-							dijit.form.Button({
-								onClick: function () {
-									navigator.geolocation.getCurrentPosition(
-							function (position) {
-								var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(position.coords.longitude, position.coords.latitude)),
+					if (navigator.geolocation) {
+						dijit.form.Button({
+							onClick: function () {
+								navigator.geolocation.getCurrentPosition(function (position) {
+									var pt, attributes;
+									pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
+									pt = esri.geometry.geographicToWebMercator(pt);
 									attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-								map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
-								map.centerAndZoom(pt, 8);
-							},
-							function (error) {
-								var message = "", strErrorCode;
-								// Check for known errors
-								switch (error.code) {
-									case error.PERMISSION_DENIED:
-										message = "This website does not have permission to use the Geolocation API";
-										break;
-									case error.POSITION_UNAVAILABLE:
-										message = "The current position could not be determined.";
-										break;
-									case error.PERMISSION_DENIED_TIMEOUT:
-										message = "The current position could not be determined within the specified timeout period.";
-										break;
-								}
+									map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
+									map.centerAndZoom(pt, 8);
+								}, function (error) {
+									var message = "", strErrorCode;
+									// Check for known errors
+									switch (error.code) {
+										case error.PERMISSION_DENIED:
+											message = "This website does not have permission to use the Geolocation API";
+											break;
+										case error.POSITION_UNAVAILABLE:
+											message = "The current position could not be determined.";
+											break;
+										case error.PERMISSION_DENIED_TIMEOUT:
+											message = "The current position could not be determined within the specified timeout period.";
+											break;
+									}
 
 								// If it's an unknown error, build a message that includes 
 								// information that helps identify the situation so that 
@@ -858,105 +864,45 @@ dojo.require("esri.layers.FeatureLayer");
 									message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
 								}
 								alert(message);
-							},
-							{
+							}, {
 								maximumAge: 0,
 								timeout: 30000,
 								enableHighAccuracy: true
-							}
-						);
-								}
-							}, "zoomToMyCurrentLocation");
-						} else {
-							dojo.destroy("zoomToMyCurrentLocation");
+							});
 						}
+					}, "zoomToMyCurrentLocation");
+				} else {
+						dojo.destroy("zoomToMyCurrentLocation");
+					}
 
-						// Add the help button for the zoom controls.
-						dijit.form.Button({
-							label: "Zoom Help",
-							showLabel: false,
-							iconClass: "helpIcon",
-							onClick: function () {
-								showHelpDialog("help/zoom_controls.html");
-							}
-						}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
+					// Add the help button for the zoom controls.
+					dijit.form.Button({
+						label: "Zoom Help",
+						showLabel: false,
+						iconClass: "helpIcon",
+						onClick: function () {
+							showHelpDialog("help/zoom_controls.html");
+						}
+					}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
-						dojo.disconnect(createLinks.zoomControls);
-						delete createLinks.zoomControls;
-					});
+					dojo.disconnect(createLinks.zoomControls);
+					delete createLinks.zoomControls;
 				});
 
-				// Address Search
-				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
-				createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
-					$.getScript("scripts/addressLocator.js", function (data, textStatus) {
-						$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
-							map: map,
-							addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
-						});
-						dojo.disconnect(createLinks.search);
-						delete createLinks.search;
+			// Address Search
+			toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
+			createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
+				$.getScript("scripts/addressLocator.js", function (data, textStatus) {
+					$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
+						map: map,
+						addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
 					});
+					dojo.disconnect(createLinks.search);
+					delete createLinks.search;
 				});
+			});
 
-				////// Bookmarks
-				////// Add the bookmaks content pane.
-				////if (Modernizr.localstorage) {
-				////    toolsAccordion.addChild(new dijit.layout.ContentPane({
-				////        title: "Bookmarks"
-				////    }, dojo.create("div", {
-				////        id: "bookmarksPane"
-				////    }, "toolsAccordion")));
-				////    // Setup the on show event to create the contents.
-				////    createLinks.bookmarks = dojo.connect(dijit.byId("bookmarksPane"), "onShow", function () {
-				////        var bookmarksWidget, bookmarks;
 
-				////        function saveBookmarks() {
-				////            /// <summary>Saves bookmarks to localStorage.</summary>
-				////            var bookmarks;
-
-				////            // If there are no bookmarks in the widget, remove the "bookmarks" item from localStorage.
-				////            // Otherwise, save the current bookmarks into localStorage.
-				////            if (bookmarksWidget.bookmarks.length < 1) {
-				////                localStorage.removeItem("bookmarks");
-				////            } else {
-				////                bookmarks = dojo.map(bookmarksWidget.bookmarks, function (bookmarkItem) {
-				////                    return {
-				////                        name: bookmarkItem.name || null,
-				////                        extent: bookmarkItem.extent.toJson()
-				////                    };
-				////                });
-
-				////                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-				////            }
-				////        }
-
-				////        // Load bookmark data from local storage if it exists.
-				////        bookmarks = localStorage.getItem("bookmarks");
-				////        if (bookmarks === null) {
-				////            bookmarks = [];
-				////        } else {
-				////            bookmarks = JSON.parse(bookmarks);
-				////        }
-
-				////        bookmarksWidget = new esri.dijit.Bookmarks({
-				////            map: map,
-				////            bookmarks: bookmarks,
-				////            editable: true
-				////        }, dojo.create("div", { id: "bookmarks" }, "bookmarksPane"));
-
-				////        // Setup events to save bookmarks to localStorage when they are edited (includes creation) and removed.
-				////        dojo.connect(bookmarksWidget, "onEdit", saveBookmarks);
-				////        dojo.connect(bookmarksWidget, "onRemove", saveBookmarks);
-
-				////        // Now that the bookmarks pane's contents have been created we no longer need this event, so we can remove and delete it.
-				////        dojo.disconnect(createLinks.bookmarks);
-				////        delete createLinks.bookmarks;
-				////    });
-				////}
-
-				tabs.addChild(toolsTab);
-				tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 
 				createLinks.basemapTab = dojo.connect(dijit.byId("basemapTab"), "onShow", function () {
 					var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
@@ -997,7 +943,7 @@ dojo.require("esri.layers.FeatureLayer");
 					// Uncomment this section if you need to find a basemap's ID.
 					// Recomment before publishing.
 					dojo.connect(basemapGallery, "onSelectionChange", function () {
-					console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+						console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
 					});
 					*/
 
@@ -1014,7 +960,6 @@ dojo.require("esri.layers.FeatureLayer");
 
 					// Check for an existing customLegend
 					customLegend = $("#legend").data("customLegend");
-					console.debug(customLegend);
 					if (customLegend) {
 						customLegend.setBasemapGallery(basemapGallery);
 					}
@@ -1045,24 +990,11 @@ dojo.require("esri.layers.FeatureLayer");
 			setupLayout();
 
 			function setupExtents() {
+				var extentSpatialReference = new esri.SpatialReference({wkid: 102100});
 				// Define zoom extents for menu.
-				var extentSpatialReference = new esri.SpatialReference({ wkid: 102100 }),
-					extentData = [],
-					i;
 				extents = {
-					fullExtent: new esri.geometry.Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference }),
-					countyExtents: { "Cowlitz": { "xmin": -13716608.1772, "ymin": 5756446.5261, "xmax": -13607638.501, "ymax": 5842754.0508 }, "Whitman": { "xmin": -13163464.6711, "ymin": 5847392.8245, "xmax": -13028774.4496, "ymax": 5984725.1359 }, "Spokane": { "xmin": -13116067.9387, "ymin": 5984489.784, "xmax": -13028809.6233, "ymax": 6114814.6868 }, "Okanogan": { "xmin": -13456929.5548, "ymin": 6097022.1384, "xmax": -13228768.0346, "ymax": 6274958.9602 }, "Whatcom": { "xmin": -13728170.447, "ymin": 6211586.2765, "xmax": -13431350.2501, "ymax": 6275274.979 }, "King": { "xmin": -13641277.0042, "ymin": 5955853.9667, "xmax": -13477001.0149, "ymax": 6070428.8593 }, "Kittitas": { "xmin": -13521532.7745, "ymin": 5899113.9835, "xmax": -13350070.2043, "ymax": 6040226.1383 }, "Yakima": { "xmin": -13527887.9391, "ymin": 5786789.6607, "xmax": -13343374.1361, "ymax": 5956573.2746 }, "Columbia": { "xmin": -13162673.7586, "ymin": 5780181.9819, "xmax": -13091540.6017, "ymax": 5881022.6956 }, "Skagit": { "xmin": -13666072.6368, "ymin": 6156232.4448, "xmax": -13434716.5579, "ymax": 6216862.0714 }, "Wahkiakum": { "xmin": -13773334.2204, "ymin": 5803187.7205, "xmax": -13716034.4264, "ymax": 5842274.2847 }, "San Juan": { "xmin": -13722118.9812, "ymin": 6154236.6866, "xmax": -13659272.347, "ymax": 6246272.0081 }, "Jefferson": { "xmin": -13883451.6533, "ymin": 6026992.6909, "xmax": -13647254.6175, "ymax": 6168652.2854 }, "Lewis": { "xmin": -13733788.4441, "ymin": 5842022.6891, "xmax": -13508975.7523, "ymax": 5908584.5364 }, "Ferry": { "xmin": -13232547.6219, "ymin": 6078547.14, "xmax": -13147311.3041, "ymax": 6274878.086 }, "Pend Oreille": { "xmin": -13094470.0429, "ymin": 6114408.5894, "xmax": -13027916.5477, "ymax": 6274942.0713 }, "Franklin": { "xmin": -13297953.5226, "ymin": 5811290.5149, "xmax": -13157743.3914, "ymax": 5899593.8738 }, "Walla Walla": { "xmin": -13251654.4058, "ymin": 5780326.7638, "xmax": -13134753.0631, "ymax": 5878116.3164 }, "Lincoln": { "xmin": -13244769.7727, "ymin": 5984619.1827, "xmax": -13115603.0047, "ymax": 6099856.8495 }, "Benton": { "xmin": -13344617.6406, "ymin": 5754139.5511, "xmax": -13240449.8207, "ymax": 5897751.643 }, "Clark": { "xmin": -13669582.7159, "ymin": 5707531.0819, "xmax": -13608198.7464, "ymax": 5789926.0889 }, "Pierce": { "xmin": -13675925.5501, "ymin": 5897856.0581, "xmax": -13511306.3151, "ymax": 6008212.5148 }, "Klickitat": { "xmin": -13537868.9285, "ymin": 5717448.7451, "xmax": -13343404.634, "ymax": 5787581.0243 }, "Grant": { "xmin": -13363106.9209, "ymin": 5881154.2164, "xmax": -13243995.6844, "ymax": 6100566.8755 }, "Chelan": { "xmin": -13489786.8267, "ymin": 5984760.3314, "xmax": -13342761.5943, "ymax": 6198989.41 }, "Thurston": { "xmin": -13714908.1752, "ymin": 5903319.5991, "xmax": -13603589.1089, "ymax": 5973834.5544 }, "Clallam": { "xmin": -13899444.6403, "ymin": 6084703.4441, "xmax": -13680883.6168, "ymax": 6189343.3633 }, "Douglas": { "xmin": -13393771.1496, "ymin": 5978080.6643, "xmax": -13241520.921, "ymax": 6132044.942 }, "Stevens": { "xmin": -13180410.3388, "ymin": 6072370.4054, "xmax": -13072245.7038, "ymax": 6274987.4244 }, "Adams": { "xmin": -13288154.3124, "ymin": 5898997.675, "xmax": -13131174.6649, "ymax": 5984917.9955 }, "Pacific": { "xmin": -13823107.8933, "ymin": 5818061.0061, "xmax": -13732083.3359, "ymax": 5908563.6219 }, "Island": { "xmin": -13677515.936, "ymin": 6078202.9272, "xmax": -13617553.3997, "ymax": 6176489.1526 }, "Kitsap": { "xmin": -13696574.1685, "ymin": 6008153.0256, "xmax": -13628515.5078, "ymax": 6102333.7942 }, "Garfield": { "xmin": -13120489.3456, "ymin": 5779994.9236, "xmax": -13049763.0779, "ymax": 5893758.4025 }, "Mason": { "xmin": -13748635.6001, "ymin": 5955512.1077, "xmax": -13670052.185, "ymax": 6041803.2531 }, "Grays Harbor": { "xmin": -13856990.0768, "ymin": 5908013.6975, "xmax": -13709928.0411, "ymax": 6029660.264 }, "Asotin": { "xmin": -13077814.2164, "ymin": 5779598.1341, "xmax": -13014945.7855, "ymax": 5854737.304 }, "Skamania": { "xmin": -13608832.7415, "ymin": 5708314.0933, "xmax": -13526920.5016, "ymax": 5842848.1259 }, "Snohomish": { "xmin": -13632030.2268, "ymin": 6069562.9349, "xmax": -13459351.7812, "ymax": 6156742.2548} }
+					fullExtent: new esri.geometry.Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference })
 				};
-
-				extentData = [];
-				// Convert the county JSON objects into esri.geomtry.Extents.
-				for (i in extents.countyExtents) {
-					if (extents.countyExtents.hasOwnProperty(i)) {
-						extentData.push({ name: i, extent: new esri.geometry.fromJson(extents.countyExtents[i]).setSpatialReference(extentSpatialReference) });
-					}
-				}
-
-				extents.countyExtents = extentData;
 			}
 
 			setupExtents();
