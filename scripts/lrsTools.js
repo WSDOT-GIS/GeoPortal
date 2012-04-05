@@ -45,6 +45,37 @@ jQuery UI
 	dojo.require("dijit.layout.TabContainer");
 	dojo.require("dijit.layout.ContentPane");
 
+	function showErrorMessage(text, title) {
+		/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
+		/// <param name="text" type="String">The text of the error message.</param>
+		/// <param name="title" type="String">The title of the error message.</param>
+		if (!title) {
+			title = "Unable to find route location";
+		}
+		if ($.pnotify) {
+			$.pnotify({
+				pnotify_title: title,
+				pnotify_text: text,
+				pnotify_hide: true
+			}).effect("bounce");
+		}
+		else {
+			$("<div>").html(text).dialog({
+				title: title,
+				dialogClass: "alert",
+				modal: true,
+				buttons: {
+					"OK": function () {
+						$(this).dialog("close");
+					}
+				},
+				close: function () {
+					$(this).dialog("destroy"); $(this).remove();
+				}
+			});
+		}
+	}
+
 	$.widget("ui.lrsTools", {
 		options: {
 			map: null,
@@ -52,9 +83,9 @@ jQuery UI
 		},
 		_create: function () {
 			var self = this, map = this.options.map;
-			if (!$.pnotify) {
-				$.getScript("scripts/jquery.pnotify.min.js");
-			}
+			////if (!$.pnotify) {
+			////	$.getScript("scripts/jquery.pnotify.min.js");
+			////}
 
 			// LRS Tools
 			var locatedMilepostsLayer = null, domNode = this.element;
@@ -132,6 +163,8 @@ jQuery UI
 						}
 
 						return list[0];
+					} else if (graphic.attributes.LocatingError === "LOCATING_E_CANT_FIND_LOCATION") {
+						return "Can't find location";
 					} else {
 						return graphic.attributes.LocatingError;
 					}
@@ -209,21 +242,7 @@ jQuery UI
 										map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
 									}
 									else {
-										if ($.pnotify) {
-											$.pnotify({
-												pnotify_title: 'Unable to find route location',
-												pnotify_text: createElcResultTable({ attributes: result }),
-												pnotify_hide: true
-											}).effect("bounce");
-										}
-										else {
-											$("<div>").html(createElcResultTable({ attributes: result })).dialog({
-												title: "Unable to find route location",
-												dialogClass: "alert",
-												modal: true,
-												close: function () { $(this).dialog("destroy"); $(this).remove(); }
-											});
-										}
+										showErrorMessage(createElcResultTable({ attributes: result }), "Unable to find route location");
 									}
 
 
@@ -245,9 +264,11 @@ jQuery UI
 						error: function (error) {
 							esri.hide(dojo.byId("milepostLoadingIcon"));
 							dijit.byId("findMilepostButton").set("disabled", false);
+							showErrorMessage("The server was unable to process the given parameters.");
 							if (console && console.error) {
 								console.error(error);
 							}
+
 						}
 					}, wsdot.config.locateMileposts.options);
 				}
@@ -328,10 +349,10 @@ jQuery UI
 				}, "findNearestMPButton");
 
 				dijit.form.Button({ onClick: function () {
-						if (locatedMilepostsLayer && locatedMilepostsLayer.clear) {
-							locatedMilepostsLayer.clear();
-						}
+					if (locatedMilepostsLayer && locatedMilepostsLayer.clear) {
+						locatedMilepostsLayer.clear();
 					}
+				}
 				}, "clearMPResultsButton");
 				$("#findNearestMilepost label:first-child").css("display", "block");
 
