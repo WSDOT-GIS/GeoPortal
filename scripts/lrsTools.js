@@ -45,6 +45,37 @@ jQuery UI
 	dojo.require("dijit.layout.TabContainer");
 	dojo.require("dijit.layout.ContentPane");
 
+	function showMessageDialog(text, title, dialogClass) {
+		/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
+		/// <param name="text" type="String">The text of the error message.</param>
+		/// <param name="title" type="String">The title of the error message.</param>
+		if (!title) {
+			title = "Unable to find route location";
+		}
+		if ($.pnotify) {
+			return $.pnotify({
+				pnotify_title: title,
+				pnotify_text: text,
+				pnotify_hide: true
+			}).effect("bounce");
+		}
+		else {
+			return $("<div>").html(text).dialog({
+				title: title,
+				modal: true,
+				buttons: {
+					"OK": function () {
+						$(this).dialog("close");
+					}
+				},
+				close: function () {
+					$(this).dialog("destroy"); $(this).remove();
+				}
+			});
+		}
+	}
+
+
 	function showErrorMessage(text, title) {
 		/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
 		/// <param name="text" type="String">The text of the error message.</param>
@@ -315,31 +346,18 @@ jQuery UI
 											map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
 										}
 										else {
-											$.pnotify({
-												pnotify_title: 'No routes found',
-												pnotify_text: currentResult.LocatingError,
-												pnotify_history: false
-											});
+											showMessageDialog(currentResult.LocatingError, "Locating Error");
 										}
 									}
 								}
 								else {
-									$.pnotify({
-										pnotify_title: 'No routes found',
-										pnotify_text: 'No routes were found within the given search radius',
-										pnotify_history: false
-									});
+									showMessageDialog('No routes were found within the given search radius', 'Locating Error');
 								}
 							},
 							error: function (error) {
 								esri.hide(loadingIcon);
 								button.set("disabled", false);
-								$.pnotify({
-									pnotify_title: 'Locating Error',
-									pnotify_text: error,
-									pnotify_type: 'error',
-									pnotify_hide: false
-								});
+								showMessageDialog(error, 'Locating Error', 'error');
 							}
 						}, wsdot.config.locateNearestMileposts.options);
 					});
