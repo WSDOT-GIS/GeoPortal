@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="error\GenericError.html" />
     <Content Include="FunctionalClassLegend.html" />
     <Content Include="help\freight.html" />
     <Content Include="help\location_info.html" />
