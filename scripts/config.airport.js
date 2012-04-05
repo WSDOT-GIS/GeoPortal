@@ -176,6 +176,13 @@
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirportFacilities/MapServer",
+					"options": {
+						"id": "Airport Facilities"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 					"url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer",
 					"options": {
 						"id": "Aeronautical Chart"
