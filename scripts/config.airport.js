@@ -45,7 +45,8 @@
 				"where": "1 = 1",
 				"returnGeometry": true,
 				"outFields": ["Name"]
-			}
+			},
+			"levelOrFactor": 5
 		},
 		"county" : {
 			"label": "County",
@@ -193,13 +194,6 @@
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
 					"options": {
 						"id": "State Routes"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
-					"options": {
-						"id": "Functional Class"
 					}
 				}
 

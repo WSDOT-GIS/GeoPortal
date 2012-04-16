@@ -814,7 +814,7 @@ dojo.require("esri.layers.FeatureLayer");
 									$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
 									queryTask = createQueryTask(qtName);
 									queryTask.task.execute(queryTask.query, function(featureSet) {
-										$("#" + selectName).extentSelect(featureSet, map);
+										$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
 									});
 								} else if (data.extents) {
 									$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);

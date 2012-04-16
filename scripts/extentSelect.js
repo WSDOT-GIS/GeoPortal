@@ -33,14 +33,18 @@ jQuery
 	dojo.require("dijit.form.FilteringSelect");
 	dojo.require("dojo.data.ItemFileReadStore");
 
-	$.fn.extentSelect = function (featureSet, map) {
+	$.fn.extentSelect = function (featureSet, map, levelOrFactor) {
 		/// <summary>Creates a dijit.form.FilteringSelect from a feature set.</summary>
 		/// <param name="featureSet" type="esri.tasks.FeatureSet">A set of features returned from a query.</param>
 		/// <param name="map" type="esri.Map">The map that will be zoomed when an extent is selected from this control.</param>
+		/// <param name="levelOrFactor" type="number">See the levelOrNumber parameter of the <see href="http://help.arcgis.com/en/webapi/javascript/arcgis/help/jsapi/map.htm#centerAndZoom">esri.Map.centerAndZoom</see> function.</param>
 		/// <returns type="dijit.form.FilteringSelect" />
 
 		// Set up the zoom select boxes.
 		var sortByName, data, extentSpatialReference, filteringSelect;
+		if (typeof (levelOrFactor) === "undefined" || levelOrFactor === null) {
+			levelOrFactor = 10
+		}
 		sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
 		extentSpatialReference = new esri.SpatialReference({ wkid: 102100 });
 
@@ -55,7 +59,8 @@ jQuery
 						data.items.push({
 							name: graphic.attributes[nameAttribute],
 							point: graphic.geometry,
-							extent: null
+							extent: null,
+							levelOrFactor: levelOrFactor
 						});
 					} else {
 						data.items.push({
@@ -67,7 +72,7 @@ jQuery
 				}
 				data.items.sort(sortByName);
 				data = new dojo.data.ItemFileReadStore({ data: data });
-			}());
+			} ());
 		} else {
 			// Convert items to Extents.
 			data = { identifier: "name", label: "name", items: [] };
@@ -103,7 +108,7 @@ jQuery
 					if (map) {
 						try {
 							if (point) {
-								map.centerAndZoom(point, 10);
+								map.centerAndZoom(point, this.item.levelOrFactor);
 							} else {
 								map.setExtent(extent);
 							}
