@@ -79,6 +79,7 @@
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
     <Content Include="scripts\jquery.cookie.js" />
+    <Content Include="scripts\jquery.placeholder.min.js" />
     <Content Include="scripts\jquery.pnotify.js" />
     <Content Include="scripts\jquery.pnotify.min.js" />
     <Content Include="scripts\json2.js" />

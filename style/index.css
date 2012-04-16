@@ -354,3 +354,8 @@ img[src$="blank.gif"]
 {
     width: 80px;
 }
+
+.placeholder  
+{
+    color: #aaa; 
+}

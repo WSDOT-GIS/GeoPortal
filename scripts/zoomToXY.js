@@ -36,7 +36,9 @@
 			function toNumber(str) {
 				var type = typeof (str), output;
 				if (type === "string") {
-					str = str.trim();
+					if (typeof (str.trim) === "function") {
+						str = str.trim();
+					}
 					output = str.length < 1 ? NaN : Number(str);
 				} else if (type === "undefined" || str === null) {
 					output = NaN;
@@ -104,8 +106,10 @@
 
 			}
 
-			$this._xBox = $("<input class='ui-zoomToXY-X' type='number' placeholder='X' title='Enter X coordinate here'>").appendTo($this.element);
-			$this._yBox = $("<input class='ui-zoomToXY-Y' type='number' placeholder='Y' title='Enter Y coordinate here'>").appendTo($this.element);
+			$("<label>").text("X").appendTo($this.element);
+			$this._xBox = $("<input class='ui-zoomToXY-X' type='number' placeholder='e.g., -122.45' title='Enter X coordinate here'>").appendTo($this.element);
+			$("<label>").text("Y").appendTo($this.element);
+			$this._yBox = $("<input class='ui-zoomToXY-Y' type='number' placeholder='e.g., 47.00' title='Enter Y coordinate here'>").appendTo($this.element);
 			$this._submitButton = $("<button type='button' class='ui-zoomToXY-button'>").text("Zoom to XY").appendTo($this.element).click(submitHandler).button({
 				text: false,
 				icons: {
@@ -114,7 +118,7 @@
 			});
 
 			$this._clearGraphicsButton = $("<button type='button'>").click(function () {
-				$this.clearGraphics() 
+				$this.clearGraphics()
 			}).button({
 				text: false,
 				label: "Clear Graphics",
@@ -122,6 +126,13 @@
 					primary: "ui-icon-close"
 				}
 			}).appendTo($this.element);
+
+			// Setup placeholder for non-supporting browsers...
+			if (typeof (Modernizr) !== "undefined" && typeof (Modernizr.input) !== "undefined" && typeof (Modernizr.input.placeholder) !== "undefined") {
+				if (!Modernizr.input.placeholder) {
+					$("[placeholder]", $this.element).placeholder();
+				}
+			}
 		},
 		_destroy: function () {
 			// Remove the graphics layer from the map.

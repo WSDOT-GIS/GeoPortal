@@ -114,6 +114,10 @@ dojo.require("esri.layers.FeatureLayer");
 			{
 				test: window.JSON,
 				nope: "scripts/json2.js"
+			},
+			{
+				test: Modernizr.input.placeholder,
+				nope: "scripts/jquery.placeholder.min.js"
 			}
 		]);
 
