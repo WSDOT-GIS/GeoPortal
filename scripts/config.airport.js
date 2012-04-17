@@ -2,7 +2,6 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
-	"disableMilepostTools": false,
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -37,6 +36,11 @@
 	"locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
 
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+	"tools": [
+		"zoom",
+		"lrs",
+		"search"
+	],
 	"queryTasks": {
 		"airport": {
 			"label": "Airport",
