@@ -724,7 +724,7 @@ dojo.require("esri.layers.FeatureLayer");
 				tabs.addChild(toolsTab);
 				toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
-				if (!wsdot.config.disableMilepostTools) {
+				function setupLrsControls() {
 					// LRS Tools
 					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
 					createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
@@ -757,154 +757,172 @@ dojo.require("esri.layers.FeatureLayer");
 					});
 				}
 
+				function setupZoomControls() {
+					// Zoom tools
+					$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
 
+					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
+					createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
+						var extentTable;
+						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
+						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
-				// Zoom tools
-				$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
-				
+						$("<div class='tool-header'>Zoom to XY</div>").appendTo(zoomControlsDiv);
+						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
+							map: map
+						});
 
-				toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
-				createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
-					var extentTable;
-					zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
-
-					$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
-
-					$("<div class='tool-header'>Zoom to XY</div>").appendTo(zoomControlsDiv);
-					$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
-						map: map
-					});
-
-					extentTable = $("<table>").appendTo(zoomControlsDiv);
+						extentTable = $("<table>").appendTo(zoomControlsDiv);
 					
-					$.getScript("scripts/extentSelect.js", function (data, textScatus) {
-						function createQueryTask(qtName) {
-							/// <summary>Creates a query task and query using settings from config.js.</summary>
-							/// <param name="qtName" type="String">The name of a query task from config.js.</param>
-							var queryTaskSetting, qt, query, n;
-							queryTaskSetting = wsdot.config.queryTasks[qtName];
-							qt = new esri.tasks.QueryTask(queryTaskSetting.url);
-							query = new esri.tasks.Query();
+						$.getScript("scripts/extentSelect.js", function (data, textScatus) {
+							function createQueryTask(qtName) {
+								/// <summary>Creates a query task and query using settings from config.js.</summary>
+								/// <param name="qtName" type="String">The name of a query task from config.js.</param>
+								var queryTaskSetting, qt, query, n;
+								queryTaskSetting = wsdot.config.queryTasks[qtName];
+								qt = new esri.tasks.QueryTask(queryTaskSetting.url);
+								query = new esri.tasks.Query();
 												
-							for (n in queryTaskSetting.query) {
-								if (queryTaskSetting.query.hasOwnProperty(n)) {
-									query[n] = queryTaskSetting.query[n];
-								}
-							}
-							return { "task": qt, "query": query };
-						}
-
-						// Set up the zoom select boxes.
-						// Setup the zoom controls.
-						function createZoomControls() {
-							/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
-
-							var table, body, data, row, cell;
-
-							function createZoomControl(qtName, data) {
-								var row, cell, selectName, labelName, queryTask;
-								row = $("<tr>").appendTo(body);
-								cell = $("<td>").appendTo(row);
-								selectName = qtName + "ZoomSelect";
-								labelName = qtName + "ZoomLabel"
-								$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
-								cell = $("<td>").appendTo(row);
-								if (data.url) {
-									$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
-									queryTask = createQueryTask(qtName);
-									queryTask.task.execute(queryTask.query, function(featureSet) {
-										$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
-									});
-								} else if (data.extents) {
-									$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
-									dojo.attr(labelName, "for", selectName);
-								}
-							}
-
-							body = $("<tbody>").appendTo(extentTable);
-
-							for (var qtName in wsdot.config.queryTasks) {
-								if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
-									data = wsdot.config.queryTasks[qtName];
-									createZoomControl(qtName, data);
-								}
-							}
-						}
-
-						createZoomControls();
-					});
-
-					if (navigator.geolocation) {
-						dijit.form.Button({
-							onClick: function () {
-								navigator.geolocation.getCurrentPosition(function (position) {
-									var pt, attributes;
-									pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
-									pt = esri.geometry.geographicToWebMercator(pt);
-									attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-									map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
-									map.centerAndZoom(pt, 8);
-								}, function (error) {
-									var message = "", strErrorCode;
-									// Check for known errors
-									switch (error.code) {
-										case error.PERMISSION_DENIED:
-											message = "This website does not have permission to use the Geolocation API";
-											break;
-										case error.POSITION_UNAVAILABLE:
-											message = "The current position could not be determined.";
-											break;
-										case error.PERMISSION_DENIED_TIMEOUT:
-											message = "The current position could not be determined within the specified timeout period.";
-											break;
+								for (n in queryTaskSetting.query) {
+									if (queryTaskSetting.query.hasOwnProperty(n)) {
+										query[n] = queryTaskSetting.query[n];
 									}
-
-								// If it's an unknown error, build a message that includes 
-								// information that helps identify the situation so that 
-								// the error handler can be updated.
-								if (message === "") {
-									strErrorCode = error.code.toString();
-									message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
 								}
-								alert(message);
-							}, {
-								maximumAge: 0,
-								timeout: 30000,
-								enableHighAccuracy: true
-							});
+								return { "task": qt, "query": query };
+							}
+
+							// Set up the zoom select boxes.
+							// Setup the zoom controls.
+							function createZoomControls() {
+								/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+
+								var table, body, data, row, cell;
+
+								function createZoomControl(qtName, data) {
+									var row, cell, selectName, labelName, queryTask;
+									row = $("<tr>").appendTo(body);
+									cell = $("<td>").appendTo(row);
+									selectName = qtName + "ZoomSelect";
+									labelName = qtName + "ZoomLabel"
+									$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+									cell = $("<td>").appendTo(row);
+									if (data.url) {
+										$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+										queryTask = createQueryTask(qtName);
+										queryTask.task.execute(queryTask.query, function(featureSet) {
+											$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
+										});
+									} else if (data.extents) {
+										$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+										dojo.attr(labelName, "for", selectName);
+									}
+								}
+
+								body = $("<tbody>").appendTo(extentTable);
+
+								for (var qtName in wsdot.config.queryTasks) {
+									if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
+										data = wsdot.config.queryTasks[qtName];
+										createZoomControl(qtName, data);
+									}
+								}
+							}
+
+							createZoomControls();
+						});
+
+						if (navigator.geolocation) {
+							dijit.form.Button({
+								onClick: function () {
+									navigator.geolocation.getCurrentPosition(function (position) {
+										var pt, attributes;
+										pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
+										pt = esri.geometry.geographicToWebMercator(pt);
+										attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+										map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
+										map.centerAndZoom(pt, 8);
+									}, function (error) {
+										var message = "", strErrorCode;
+										// Check for known errors
+										switch (error.code) {
+											case error.PERMISSION_DENIED:
+												message = "This website does not have permission to use the Geolocation API";
+												break;
+											case error.POSITION_UNAVAILABLE:
+												message = "The current position could not be determined.";
+												break;
+											case error.PERMISSION_DENIED_TIMEOUT:
+												message = "The current position could not be determined within the specified timeout period.";
+												break;
+										}
+
+									// If it's an unknown error, build a message that includes 
+									// information that helps identify the situation so that 
+									// the error handler can be updated.
+									if (message === "") {
+										strErrorCode = error.code.toString();
+										message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+									}
+									alert(message);
+								}, {
+									maximumAge: 0,
+									timeout: 30000,
+									enableHighAccuracy: true
+								});
+							}
+						}, "zoomToMyCurrentLocation");
+					} else {
+							dojo.destroy("zoomToMyCurrentLocation");
 						}
-					}, "zoomToMyCurrentLocation");
-				} else {
-						dojo.destroy("zoomToMyCurrentLocation");
-					}
 
-					// Add the help button for the zoom controls.
-					dijit.form.Button({
-						label: "Zoom Help",
-						showLabel: false,
-						iconClass: "helpIcon",
-						onClick: function () {
-							showHelpDialog("help/zoom_controls.html");
-						}
-					}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
+						// Add the help button for the zoom controls.
+						dijit.form.Button({
+							label: "Zoom Help",
+							showLabel: false,
+							iconClass: "helpIcon",
+							onClick: function () {
+								showHelpDialog("help/zoom_controls.html");
+							}
+						}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
 
-					dojo.disconnect(createLinks.zoomControls);
-					delete createLinks.zoomControls;
-				});
-
-			// Address Search
-			toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
-			createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
-				$.getScript("scripts/addressLocator.js", function (data, textStatus) {
-					$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
-						map: map,
-						addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
+						dojo.disconnect(createLinks.zoomControls);
+						delete createLinks.zoomControls;
 					});
-					dojo.disconnect(createLinks.search);
-					delete createLinks.search;
-				});
-			});
+				}
+
+				function setupSearchControls() {
+					// Address Search
+					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
+					createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
+						$.getScript("scripts/addressLocator.js", function (data, textStatus) {
+							$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
+								map: map,
+								addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
+							});
+							dojo.disconnect(createLinks.search);
+							delete createLinks.search;
+						});
+					});
+				}
+
+				// Look in the configuration to determine which tools to add and in which order.
+				(function(tools){
+					var i, l;
+					// Setup a default value for tools if it hasn't been specified.
+					if (!tools)  {
+						tools = ["lrs", "zoom", "search"];
+					}
+					for (i = 0, l = tools.length; i < l; i++) {
+						if (/zoom/i.test(tools[i])) {
+							setupZoomControls();
+						} else if (/lrs/i.test(tools[i])) {
+							setupLrsControls();
+						} else if (/search/i.test(tools[i])) {
+							setupSearchControls();
+						}
+					}
+				}(wsdot.config.tools));
 
 
 
