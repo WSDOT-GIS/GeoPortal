@@ -352,7 +352,17 @@ img[src$="blank.gif"]
 }
 #zoomToXY input[type=number]
 {
-    width: 80px;
+    width: 90%;
+}
+
+#zoomToXY button
+{
+    vertical-align: top;
+}
+
+#zoomToXY label
+{
+    padding-right: 0.5em
 }
 
 .placeholder  

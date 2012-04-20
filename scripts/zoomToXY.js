@@ -106,33 +106,52 @@
 
 			}
 
-			$("<label>").text("X").appendTo($this.element);
-			$this._xBox = $("<input class='ui-zoomToXY-X' type='number' placeholder='e.g., -122.45' title='Enter X coordinate here'>").appendTo($this.element);
-			$("<label>").text("Y").appendTo($this.element);
-			$this._yBox = $("<input class='ui-zoomToXY-Y' type='number' placeholder='e.g., 47.00' title='Enter Y coordinate here'>").appendTo($this.element);
-			$this._submitButton = $("<button type='button' class='ui-zoomToXY-button'>").text("Zoom to XY").appendTo($this.element).click(submitHandler).button({
-				text: false,
-				icons: {
-					primary: "ui-icon-search"
-				}
-			});
+			(function () {
+				var table, row, cell, outerTable, outerRow, outerCell;
+				outerTable = $("<div class='table'>").appendTo($this.element);
+				outerRow = $("<div class='table-row'>").appendTo(outerTable);
+				outerCell = $("<div class='table-cell'>").appendTo(outerRow);
 
-			$this._clearGraphicsButton = $("<button type='button'>").click(function () {
-				$this.clearGraphics()
-			}).button({
-				text: false,
-				label: "Clear Graphics",
-				icons: {
-					primary: "ui-icon-close"
-				}
-			}).appendTo($this.element);
+				table = $("<div class='table'>").appendTo(outerCell);
 
-			// Setup placeholder for non-supporting browsers...
-			if (typeof (Modernizr) !== "undefined" && typeof (Modernizr.input) !== "undefined" && typeof (Modernizr.input.placeholder) !== "undefined") {
-				if (!Modernizr.input.placeholder) {
-					$("[placeholder]", $this.element).placeholder();
+				row = $("<div class='table-row'>").appendTo(table);
+				cell = $("<div class='table-cell'>").appendTo(row);
+				$("<label>").text("X").appendTo(cell);
+				cell = $("<div class='table-cell'>").appendTo(row);
+				$this._xBox = $("<input class='ui-zoomToXY-X' type='number' placeholder='e.g., -122.45' title='Enter X coordinate here'>").appendTo(cell);
+
+				row = $("<div class='table-row'>").appendTo(table);
+				cell = $("<div class='table-cell'>").appendTo(row);
+				$("<label>").text("Y").appendTo(cell);
+				cell = $("<div class='table-cell'>").appendTo(row);
+				$this._yBox = $("<input class='ui-zoomToXY-Y' type='number' placeholder='e.g., 47.00' title='Enter Y coordinate here'>").appendTo(cell);
+
+				outerCell = $("<div class='table-cell'>").appendTo(outerRow);
+
+				$this._submitButton = $("<button type='button' class='ui-zoomToXY-button'>").text("Zoom to XY").appendTo(outerCell).click(submitHandler).button({
+					text: false,
+					icons: {
+						primary: "ui-icon-search"
+					}
+				});
+
+				$this._clearGraphicsButton = $("<button type='button'>").click(function () {
+					$this.clearGraphics()
+				}).button({
+					text: false,
+					label: "Clear Graphics",
+					icons: {
+						primary: "ui-icon-close"
+					}
+				}).appendTo(outerCell);
+
+				// Setup placeholder for non-supporting browsers...
+				if (typeof (Modernizr) !== "undefined" && typeof (Modernizr.input) !== "undefined" && typeof (Modernizr.input.placeholder) !== "undefined") {
+					if (!Modernizr.input.placeholder) {
+						$("[placeholder]", $this.element).placeholder();
+					}
 				}
-			}
+			} ());
 		},
 		_destroy: function () {
 			// Remove the graphics layer from the map.
