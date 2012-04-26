@@ -194,13 +194,6 @@
 					}
 				},
 				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer",
-					"options": {
-						"id": "Aeronautical Chart"
-					}
-				},
-				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
 					"options": {
