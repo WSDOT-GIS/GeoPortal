@@ -1,6 +1,6 @@
 ﻿/*jslint browser: true, nomen: true */
 /*jshint dojo, jquery, nomen:false */
-/*global jQuery, dojo, esri */
+/*global jQuery, dojo, esri, Modernizr */
 
 (function ($) {
 	"use strict";
@@ -11,7 +11,8 @@
 		options: {
 			map: null,
 			zoomLevel: 10,
-			symbol: null
+			symbol: null,
+			infoWindowTitle: "Zoom to XY"
 		},
 		_xBox: null,
 		_yBox: null,
@@ -24,6 +25,17 @@
 		clearGraphics: function () {
 			if (this._graphicsLayer) {
 				this._graphicsLayer.clear();
+			}
+		},
+		/**
+		* Hides the info window of the map if the title matches this.options.infoWindowTitle.
+		*/
+		hideInfoWindow: function () {
+			var map, infoWindow;
+			map = this.options.map;
+			infoWindow = map.infoWindow;
+			if (infoWindow.isShowing && infoWindow._title.innerText === this.options.infoWindowTitle) {
+				infoWindow.hide();
 			}
 		},
 		_create: function () {
@@ -65,7 +77,7 @@
 					point = new esri.geometry.Point(x, y, new esri.SpatialReference({ wkid: 4326 }));
 					point = esri.geometry.geographicToWebMercator(point);
 					map.centerAndZoom(point, $this.options.zoomLevel);
-					map.infoWindow.setContent([x, y].join(",")).setTitle("Zoom to XY").show(point);
+					map.infoWindow.setContent([x, y].join(",")).setTitle($this.options.infoWindowTitle).show(point);
 
 					// Create the graphics layer if it does not already exist.
 					if (!$this._graphicsLayer) {
@@ -136,7 +148,8 @@
 				});
 
 				$this._clearGraphicsButton = $("<button type='button'>").click(function () {
-					$this.clearGraphics()
+					$this.clearGraphics();
+					$this.hideInfoWindow();
 				}).button({
 					text: false,
 					label: "Clear Graphics",
@@ -151,7 +164,7 @@
 						$("[placeholder]", $this.element).placeholder();
 					}
 				}
-			} ());
+			}());
 		},
 		_destroy: function () {
 			// Remove the graphics layer from the map.
@@ -165,4 +178,4 @@
 			$.Widget.prototype.destroy.apply(this, arguments);
 		}
 	});
-} (jQuery));
+}(jQuery));
