@@ -185,6 +185,13 @@
 					"options": {
 						"id": "Functional Class"
 					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Rail/MapServer",
+					"options": {
+						"id": "Rail"
+					}
 				}
 			]
 	}
