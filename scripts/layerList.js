@@ -28,7 +28,7 @@
 		// Replace invalid characters with hyphen.
 		s = s.replace(/\W/gi, replacement || "-");
 		// Append a prefix if non-alpha character
-		if (alwaysUsePrefix || /^[^a-z]/i.test(s)) {
+		if (alwaysUsePrefix || /^[^a-z]/i.test(s)) { // JSLint will complain about this Regex's "insecure ^", but this is not used for security purposes so it should be fine.
 			s = [prefix || "z-", s].join("");
 		}
 
@@ -357,14 +357,14 @@
 				////} else {
 				////	layer.metadataLayers = null;
 				////}
-			})
+			});
 		}
 
 		// Add options link
 		tools = $(this.options.contextMenuIcon).appendTo($element).click({
 			layer: layer
-//			,
-//			metadataIds: this.options.layer.metadataIds || null
+			//,
+			//`metadataIds: this.options.layer.metadataIds || null
 		}, showOptions);
 
 		// Setup the mouse over and mouse out events.
@@ -468,6 +468,7 @@
 		options: {
 			layer: null, // An object that is used to create an esri.layers.layer.  Has an id, url, and layerType.
 			map: null,
+			label: null, // The label to be used instead of the layer's "id" property.
 			contextMenuIcon: _defaultContextMenuIcon,
 			loadingIcon: _defaultLoadingIcon
 		},
@@ -526,7 +527,7 @@
 			}).appendTo($this.element).change({ widget: $this }, toggleLayer);
 
 			// Add the label for the checkbox.
-			$("<label>").text($this.options.layer.id || $this.options.layer.options.id || "Unnamed").appendTo($this.element);
+			$("<label>").text($this.options.label || $this.options.layer.id || $this.options.layer.options.id || "Unnamed").appendTo($this.element);
 
 			////// Add the loading progress bar.
 			////$("<progress>").text("Loading...").css({
@@ -680,6 +681,11 @@
 			loadingIcon: _defaultLoadingIcon,
 			startLayers: null,
 			basemapRe: /layer((?:\d+)|(?:_osm)|(?:_bing))/i,
+			bingRe: /layer_bing/i,
+			osmRe: /layer_osm/i,
+			bingLabel: "Bing",
+			osmLabel: "OpenStreetMap",
+			defaultBasemapLabel: "Basemap Layer",
 			basemapGroupName: "Basemap",
 			addAdditionalLayers: true
 		},
@@ -689,16 +695,17 @@
 
 		_layerExistsInToc: function (layer) {
 			/// <summary>Checks to see if a layer already exists in the layer list.</summary>
-			var existingLayers;
-
-			if (typeof (layer) !== "string") {
-				layer = getLayerId(layer);
+			var listItemElements, exists = false, i, l, currentLayer;
+			listItemElements = $(".ui-layer-list-item");
+			for (i = 0, l = listItemElements.length; i < l; i += 1) {
+				currentLayer = $(listItemElements.eq(i)).layerListItem("getLayer");
+				if (currentLayer === layer) {
+					exists = true;
+					break;
+				}
 			}
 
-			return $("label").filter(function () {
-				return $(this).text() === layer;
-			}).length > 0;
-
+			return exists;
 		},
 		_selectStartLayers: function () {
 			/// <summary>Turns on all of the layers specified in the options.startLayers array.</summary>
@@ -741,8 +748,9 @@
 			return group;
 		},
 		_addLayer: function (layer, error) {
-			var parent = this.element, groups, group, groupWidget, i, l, basemapGroupFound = false, layerListItem;
-			if (this.options.basemapRe.test(getLayerId(layer))) {
+			var parent = this.element, groups, group, groupWidget, i, l, basemapGroupFound = false, layerListItem, label, layerId;
+			layerId = getLayerId(layer);
+			if (this.options.basemapRe.test(layerId)) {
 				// Check to see if a "Basemap" group exists.  Create one if it does not.  Set "parent" to the "Basemap" group.
 				// $(".ui-layer-list-group").first().data("layerListGroup").options.groupName
 				groups = $(".ui-layer-list-group", this.element);
@@ -755,12 +763,21 @@
 						break;
 					}
 				}
-				// TODO: Create "Basemap" group if it does not already exist.  Assign this group to parent.
+				// Create "Basemap" group if it does not already exist.  Assign this group to parent.
 				if (!basemapGroupFound) {
 					parent = this._addGroup(this.options.basemapGroupName);
 				}
 
 				parent = $("ul", parent);
+
+				// Set the label.
+				if (this.options.bingRe.test(layerId)) {
+					label = this.options.bingLabel;
+				} else if (this.options.osmRe.test(layerId)) {
+					label = this.options.osmLabel;
+				} else {
+					label = this.options.defaultBasemapLabel;
+				}
 			}
 			if (!error && !this._layerExistsInToc(layer)) {
 				// Add the layer list item
@@ -768,7 +785,8 @@
 					layer: layer,
 					map: this.options.map,
 					contextMenuIcon: this.options.contextMenuIcon,
-					loadingIcon: this.options.loadingIcon
+					loadingIcon: this.options.loadingIcon,
+					label: label
 				});
 
 				// Trigger an event.
