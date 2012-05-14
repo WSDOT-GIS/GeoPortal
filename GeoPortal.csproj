@@ -94,10 +94,10 @@
     <Content Include="GetRoutes.ashx" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
-    <None Include="help\Freight Map Help Document -Internal.pdf" />
-    <None Include="help\Freight Map Help Document-Public.pdf" />
-    <None Include="help\GIS Map FAQ Document- Public.pdf" />
-    <None Include="help\GIS Map FAQ Document-Internal.pdf" />
+    <Content Include="help\Freight Map Help Document -Internal.pdf" />
+    <Content Include="help\Freight Map Help Document-Public.pdf" />
+    <Content Include="help\GIS Map FAQ Document- Public.pdf" />
+    <Content Include="help\GIS Map FAQ Document-Internal.pdf" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\metadataExtensions.js" />
     <Content Include="scripts\modernizr.js" />
