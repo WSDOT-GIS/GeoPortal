@@ -29,9 +29,13 @@ jQuery UI
 /// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
 /// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.4"/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
+/// <reference path="elc.js" />
+
 
 (function ($) {
 	"use strict";
+
+	var routeLocator;
 
 	dojo.require("dojo.number");
 	dojo.require("dijit.form.ValidationTextBox");
@@ -161,11 +165,11 @@ jQuery UI
 					/// <param name="graphic" type="esri.Graphic">A graphic object with attributes for a state route location.</param>
 					var arm, srmp, armDef, list;
 
-					if (graphic.attributes.LocatingError === "LOCATING_OK") {
+					if (!graphic.attributes.LocatingError) {
 						list = $("<dl>");
 						// Add the route information
 						$("<dt>").text("Route").appendTo(list);
-						$("<dd>").appendTo(list).text(graphic.attributes.RouteId || "");
+						$("<dd>").appendTo(list).text(graphic.attributes.Route || "");
 
 						// ARM
 						if (typeof (graphic.attributes.Arm) !== "undefined" || typeof (graphic.attributes.Measure) !== "undefined") {
@@ -322,15 +326,14 @@ jQuery UI
 						self._trigger("drawDeactivate", self);
 						button.set("disabled", true);
 
-						esri.request({
-							url: wsdot.config.locateNearestMileposts.url,
-							content: {
-								spatialReference: map.spatialReference.wkid,
-								coordinates: geometry.x + "," + geometry.y,
-								maxSearchDistance: dijit.byId("radiusBox").value
-							},
-							handleAs: "json",
-							load: function (results) {
+
+						routeLocator.findNearestRouteLocations({
+							coordinates: [geometry.x, geometry.y],
+							referenceDate: new Date(),
+							searchRadius: dijit.byId("radiusBox").value,
+							inSR: map.spatialReference.wkid,
+							outSR: map.spatialReference.wkid,
+							successHandler: function (results) {
 								esri.hide(loadingIcon);
 								button.set("disabled", false);
 
@@ -338,8 +341,8 @@ jQuery UI
 									var currentResult, table, graphic, geometry, i, l;
 									for (i = 0, l = results.length; i < l; i += 1) {
 										currentResult = results[i];
-										if (currentResult.RoutePoint) {
-											geometry = new esri.geometry.Point(currentResult.RoutePoint);
+										if (currentResult.RouteGeometry) {
+											geometry = new esri.geometry.Point(currentResult.RouteGeometry);
 											geometry.setSpatialReference(map.spatialReference);
 											graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult });
 											locatedMilepostsLayer.add(graphic);
@@ -354,12 +357,12 @@ jQuery UI
 									showMessageDialog('No routes were found within the given search radius', 'Locating Error');
 								}
 							},
-							error: function (error) {
+							errorHandler: function (error) {
 								esri.hide(loadingIcon);
 								button.set("disabled", false);
 								showMessageDialog(error, 'Locating Error', 'error');
 							}
-						}, wsdot.config.locateNearestMileposts.options);
+						});
 					});
 					drawToolbar.activate(esri.toolbars.Draw.POINT);
 					self._trigger("drawActivate", self);
@@ -378,11 +381,17 @@ jQuery UI
 				return self;
 			}
 
+			// Load the script for the ELC objects.
+			$.getScript("scripts/elc.js", function (script, textStatus, jqXHR) {
+				routeLocator = new $.wsdot.elc.RouteLocator(wsdot.config.routeLocatorUrl);
+			});
+
 			// Load the template file and then add those elements to this widget.  Once completed, add the functionality to the controls.
 			$.ajax("lrsToolsTemplate.html", {
 				dataType: "html",
 				complete: formatTemplate
 			});
+
 		}
 	});
 } (jQuery));
