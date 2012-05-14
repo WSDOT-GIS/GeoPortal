@@ -79,14 +79,7 @@
 		}
 	],
 	"basemapsToRemove": ["basemap_4", "basemap_6"],
-	"locateMileposts": {
-		"url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
-		"options": { "useProxy": false, "usePost": true }
-	},
-	"locateNearestMileposts": {
-		"url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
-		"options": { "useProxy": false, "usePost": true }
-	},
+	"routeLocatorUrl": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
 	"layers": {
 			"Political Boundaries": [
 				{
