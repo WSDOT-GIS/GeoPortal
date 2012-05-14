@@ -1,0 +1,1 @@
+COPY "Sample.GeoPortal.Publish.xml" "Geoportal.Publish.xml"

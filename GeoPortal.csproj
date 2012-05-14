@@ -36,6 +36,7 @@
     <Content Include="error\GenericError.html" />
     <Content Include="FunctionalClassLegend.html" />
     <Content Include="help\freight.html" />
+    <Content Include="help\internal-freight.html" />
     <Content Include="help\location_info.html" />
     <Content Include="help\measure.html" />
     <Content Include="help\milepost.html" />
@@ -65,6 +66,7 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
+    <Content Include="scripts\config.Freight.js" />
     <Content Include="scripts\config.internal-airport.js" />
     <Content Include="scripts\config.internal-Freight.js" />
     <Content Include="scripts\config.internal-RFIP.js" />
@@ -92,8 +94,10 @@
     <Content Include="GetRoutes.ashx" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
-    <Content Include="help\Freight Map Application Description.pdf" />
-    <Content Include="help\Freight Map FAQ.pdf" />
+    <None Include="help\Freight Map Help Document -Internal.pdf" />
+    <None Include="help\Freight Map Help Document-Public.pdf" />
+    <None Include="help\GIS Map FAQ Document- Public.pdf" />
+    <None Include="help\GIS Map FAQ Document-Internal.pdf" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\metadataExtensions.js" />
     <Content Include="scripts\modernizr.js" />
