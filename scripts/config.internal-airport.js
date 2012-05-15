@@ -2,6 +2,7 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
+	"printUrl": "http://servicesbeta4.esri.com/arcgis/rest/services/Utilities/ExportWebMap/GPServer/Export%20Web%20Map%20Task",
 	"mapOptions": {
 		"logo": false,
 		"extent": {

@@ -24,6 +24,7 @@ ArcGIS JavaScript API
 jQuery
 jQuery UI
 jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
+jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as a polyfill for non-HTML5-compliant browsers.
 */
 
 
@@ -72,6 +73,7 @@ dojo.require("esri.dijit.Measurement");
 dojo.require("esri.tasks.gp");
 
 dojo.require("esri.layers.FeatureLayer");
+dojo.require("esri.dijit.Print");
 
 (function ($) {
 	"use strict";
@@ -164,7 +166,7 @@ dojo.require("esri.layers.FeatureLayer");
 				// pad milliseconds to have three digits.
 				return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
 					("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
-			}
+			};
 		}
 
 		$(document).ready(function () {
@@ -615,6 +617,65 @@ dojo.require("esri.layers.FeatureLayer");
 						}
 					}
 				}, "measureButton");
+
+				function setupPrinter(resp) {
+					/// <summary>Setup the print widget</summary>
+					var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
+
+					layoutTemplate = dojo.filter(resp.parameters, function(param, idx) {
+						return param.name === "Layout_Template";
+					});
+
+					if (layoutTemplate.length === 0) {
+						console.log("print service parameters name for templates must be \"Layout_Template\"");
+						return;
+					}
+					templateNames = layoutTemplate[0].choiceList;
+
+					// remove the MAP_ONLY template then add it to the end of the list of templates
+					mapOnlyIndex = dojo.indexOf(templateNames, "MAP_ONLY");
+					if ( mapOnlyIndex > -1 ) {
+						var mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
+						templateNames.push(mapOnly);
+					}
+
+					// create a print template for each choice
+					templates = dojo.map(templateNames, function(ch) {
+						var plate = new esri.tasks.PrintTemplate();
+						plate.layout = plate.label = ch;
+						plate.format = "PDF";
+						plate.layoutOptions = {
+							//"authorText": "May by:  Esri's JS API Team",
+							//"copyrightText": "<copyright info here>",
+							//"legendLayers": [],
+							//"titleText": "Pool Permits",
+							"titleText": "Airport",
+							"scalebarUnit": "Miles"
+						};
+						return plate;
+					});
+
+					$("<div id='printButton'>").appendTo("#toolbar");
+					printer = esri.dijit.Print({
+						map: map,
+						templates: templates,
+						url: wsdot.config.printUrl
+					}, dojo.byId("printButton"));
+
+					printer.startup();
+				}
+
+				// If a print URL has been specified, add the print widget.
+				if (wsdot.config.printUrl) {
+					// get print templates from the export web map task
+					var printInfo = esri.request({
+						"url": wsdot.config.printUrl,
+						"content": { "f": "json" }
+					});
+					printInfo.then(setupPrinter, function(error) {
+						console.error(error);
+					});
+				}
 			}
 
 			function isBasemap(layerId) {
@@ -804,7 +865,7 @@ dojo.require("esri.layers.FeatureLayer");
 									row = $("<tr>").appendTo(body);
 									cell = $("<td>").appendTo(row);
 									selectName = qtName + "ZoomSelect";
-									labelName = qtName + "ZoomLabel"
+									labelName = qtName + "ZoomLabel";
 									$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
 									cell = $("<td>").appendTo(row);
 									if (data.url) {
