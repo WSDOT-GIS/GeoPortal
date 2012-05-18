@@ -42,7 +42,7 @@
 	"queryTasks": {
 		"airport": {
 			"label": "Airport",
-			"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer/0",
+			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer/0",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -87,7 +87,7 @@
 			"title": "Aeronautical Chart",
 			"thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
 			"layers" : [
-				{ "url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
+				{ "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
 			]
 		}
 	],
@@ -165,23 +165,30 @@
 			"Transportation Features": [
 				{
 					"layerType":"esri.layers.ArcGISDynamicMapServiceLayer",
-					"url":"http://hqolymgis21t/ArcGIS/rest/services/Shared/Airports/MapServer",
+					"url":"http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer",
 					"options": {
 						"id": "Airports"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirportFacilities/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportFacilities/MapServer",
 					"options": {
 						"id": "Airport Facilities"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
 					"options": {
 						"id": "Airspace Features"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/FaaObstruction/MapServer",
+					"options": {
+						"id": "FAA Obstacles"
 					}
 				},
 				{
