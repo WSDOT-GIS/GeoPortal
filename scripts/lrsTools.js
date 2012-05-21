@@ -267,7 +267,10 @@ jQuery UI
 								for (i = 0, l = results.length; i < l; i += 1) {
 									result = results[i];
 									if (result.RouteGeometry) {
+										// Create a geometry object.
 										geometry = new esri.geometry.Point(result.RouteGeometry);
+										// Remove the geometry from the results.
+										delete result.RouteGeometry;
 										graphic = new esri.Graphic(geometry, null, result);
 										locatedMilepostsLayer.add(graphic);
 										map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
@@ -342,6 +345,10 @@ jQuery UI
 										currentResult = results[i];
 										if (currentResult.RouteGeometry) {
 											geometry = new esri.geometry.Point(currentResult.RouteGeometry);
+											delete currentResult.RouteGeometry;
+											if (currentResult.EventPoint) {
+												delete currentResult.EventPoint;
+											}
 											geometry.setSpatialReference(map.spatialReference);
 											graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult });
 											locatedMilepostsLayer.add(graphic);
@@ -381,9 +388,11 @@ jQuery UI
 			}
 
 			// Load the script for the ELC objects.
+			/*jslint unparam:true*/
 			$.getScript("scripts/elc.js", function (script, textStatus, jqXHR) {
 				routeLocator = new $.wsdot.elc.RouteLocator(wsdot.config.routeLocatorUrl);
 			});
+			/*jslint unparam:false*/
 
 			// Load the template file and then add those elements to this widget.  Once completed, add the functionality to the controls.
 			$.ajax("lrsToolsTemplate.html", {
