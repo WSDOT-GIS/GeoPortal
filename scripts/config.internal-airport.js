@@ -2,6 +2,12 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
+	"tabOrder": [
+		"Layers",
+		"Tools",
+		"Basemap",
+		"Legend"
+	],
 	"mapOptions": {
 		"logo": false,
 		"extent": {
