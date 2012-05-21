@@ -133,6 +133,7 @@ dojo.require("esri.dijit.Print");
 			};
 		}
 
+		/*jslint plusplus:true */
 		// Enable the Date.toISOString method if browser does not support it.
 		// Copied from https://github.com/kriskowal/es5-shim/
 		// ES5 15.9.5.43
@@ -156,7 +157,7 @@ dojo.require("esri.dijit.Print");
 				year = (year < 0 ? '-' : (year > 9999 ? '+' : '')) + ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6);
 
 				length = result.length;
-				while (length--) {
+				while (length --) {
 					value = result[length];
 					// pad months, days, hours, minutes, and seconds to have two digits.
 					if (value < 10) {
@@ -168,6 +169,7 @@ dojo.require("esri.dijit.Print");
 					("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
 			};
 		}
+		/*jslint plusplus:false */
 
 		$(document).ready(function () {
 			var qs = $.deparam.querystring();
@@ -260,13 +262,11 @@ dojo.require("esri.dijit.Print");
 				/// <summary>Returns the current scale of the map.</summary>
 				/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
 				/// <returns type="Number" />
-				var lod = this.getLOD(level);
+				var lod = this.getLOD(level), output = null;
 				if (lod) {
-					return lod.scale;
+					output = lod.scale;
 				}
-				else {
-					return null;
-				}
+				return output;
 			},
 			"getVisibleLayers": function () {
 				/// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
@@ -633,11 +633,13 @@ dojo.require("esri.dijit.Print");
 					templateNames = layoutTemplate[0].choiceList;
 
 					// remove the MAP_ONLY template then add it to the end of the list of templates
-					mapOnlyIndex = dojo.indexOf(templateNames, "MAP_ONLY");
-					if ( mapOnlyIndex > -1 ) {
-						var mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
-						templateNames.push(mapOnly);
-					}
+					(function(mapOnlyIndex) {
+						var mapOnly;
+						if ( mapOnlyIndex > -1 ) {
+							mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
+							templateNames.push(mapOnly);
+						}
+					}(dojo.indexOf(templateNames, "MAP_ONLY")));
 
 					// create a print template for each choice
 					templates = dojo.map(templateNames, function(ch) {
@@ -681,11 +683,7 @@ dojo.require("esri.dijit.Print");
 			function isBasemap(layerId) {
 				/// <summary>Examines a layer ID and determines if it is a basemap.</summary>
 				var basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm)|(?:_bing))/i;
-				if (layerId.match(basemapLayerIdRe)) {
-					return true;
-				} else {
-					return false;
-				}
+				return layerId.match(basemapLayerIdRe);
 			}
 
 			function getLayerInfos() {
@@ -778,11 +776,25 @@ dojo.require("esri.dijit.Print");
 
 				mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
 				tabs = new dijit.layout.TabContainer(null, "tabs");
-				tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
-				tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow:  setupLegend }, "legendTab"));
-				tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
-				toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
-				tabs.addChild(toolsTab);
+
+				(function(tabOrder) {
+					var i, l, name;
+
+					for (i = 0, l = tabOrder.length; i < l; i += 1) {
+						name = tabOrder[i];
+						if (/Layers/i.test(name)) {
+							tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
+						} else if (/Legend/i.test(name)) {
+							tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow:  setupLegend }, "legendTab"));
+						} else if (/Basemap/i.test(name)) {
+							tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
+						} else if (/Tools/i.test(name)) {
+							toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
+							tabs.addChild(toolsTab);
+						}
+					}
+				} (wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]));
+
 				toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
 
 				function setupLrsControls() {
@@ -882,12 +894,15 @@ dojo.require("esri.dijit.Print");
 
 								body = $("<tbody>").appendTo(extentTable);
 
-								for (var qtName in wsdot.config.queryTasks) {
-									if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
-										data = wsdot.config.queryTasks[qtName];
-										createZoomControl(qtName, data);
+								(function() {
+									var qtName;
+									for (qtName in wsdot.config.queryTasks) {
+										if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
+											data = wsdot.config.queryTasks[qtName];
+											createZoomControl(qtName, data);
+										}
 									}
-								}
+								}());
 							}
 
 							createZoomControls();
@@ -974,7 +989,7 @@ dojo.require("esri.dijit.Print");
 					if (!tools)  {
 						tools = ["lrs", "zoom", "search"];
 					}
-					for (i = 0, l = tools.length; i < l; i++) {
+					for (i = 0, l = tools.length; i < l; i += 1) {
 						if (/zoom/i.test(tools[i])) {
 							setupZoomControls();
 						} else if (/lrs/i.test(tools[i])) {
@@ -1226,14 +1241,7 @@ dojo.require("esri.dijit.Print");
 					navToolbar.zoomToNextExtent();
 				}
 			}, "nextExtentButton");
-
-
-
 		}
-
-
-
-
 
 		//show map on load
 		dojo.addOnLoad(init);
@@ -1242,13 +1250,12 @@ dojo.require("esri.dijit.Print");
 	function getConfigUrl() {
 		/// <summary>Gets the config file specified by the query string.</summary>
 		// Get the query string parameters.
-		var qs = $.deparam.querystring(true);
+		var qs = $.deparam.querystring(true), output = defaultConfigUrl;
 		// If the config parameter has not been specified, return the default.
-		if (!qs.config) {
-			return defaultConfigUrl;
-		} else {
-			return ["scripts/config", qs.config, "js"].join(".");
+		if (qs.config) {
+			output = ["scripts/config", qs.config, "js"].join(".");
 		}
+		return output;
 	}
 
 
