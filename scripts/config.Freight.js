@@ -107,37 +107,9 @@
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckPugetSound/MapServer",
-					"options": {
-						"id": "Bottleneck Puget Sound"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckStatewide/MapServer",
-					"options": {
-						"id": "Bottleneck Statewide"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityPugetSound/MapServer",
-					"options": {
-						"id": "Reliability Puget Sound"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/ReliabilityStatewide/MapServer",
-					"options": {
-						"id": "Reliability Statewide"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/SevereSpeedThreshold/MapServer",
 					"options": {
-						"id": "Severe Speed Threshold"
+						"id": "% of Truck Speed Below 60% of Posted Speed"
 					}
 				},
 				{
