@@ -12,7 +12,9 @@
 			map: null,
 			zoomLevel: 10,
 			symbol: null,
-			infoWindowTitle: "Zoom to XY"
+			infoWindowTitle: "Zoom to XY",
+			xLabel: "X",
+			yLabel: "Y"
 		},
 		_xBox: null,
 		_yBox: null,
@@ -128,13 +130,13 @@
 
 				row = $("<div class='table-row'>").appendTo(table);
 				cell = $("<div class='table-cell'>").appendTo(row);
-				$("<label>").text("X").appendTo(cell);
+				$("<label>").text($this.options.xLabel).appendTo(cell);
 				cell = $("<div class='table-cell'>").appendTo(row);
 				$this._xBox = $("<input class='ui-zoomToXY-X' type='number' placeholder='e.g., -122.45' title='Enter X coordinate here'>").appendTo(cell);
 
 				row = $("<div class='table-row'>").appendTo(table);
 				cell = $("<div class='table-cell'>").appendTo(row);
-				$("<label>").text("Y").appendTo(cell);
+				$("<label>").text($this.options.yLabel).appendTo(cell);
 				cell = $("<div class='table-cell'>").appendTo(row);
 				$this._yBox = $("<input class='ui-zoomToXY-Y' type='number' placeholder='e.g., 47.00' title='Enter Y coordinate here'>").appendTo(cell);
 

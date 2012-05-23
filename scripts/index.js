@@ -841,9 +841,11 @@ dojo.require("esri.dijit.Print");
 
 						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
-						$("<div class='tool-header'>Zoom to XY</div>").appendTo(zoomControlsDiv);
+						$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
 						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
-							map: map
+							map: map,
+							xLabel: "Long.",
+							yLabel: "Lat."
 						});
 
 						extentTable = $("<table>").appendTo(zoomControlsDiv);
