@@ -107,16 +107,9 @@
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckPugetSound/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/PoorTruckSpeedPerformance/MapServer",
 					"options": {
-						"id": "Bottleneck Puget Sound"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/BottleneckStatewide/MapServer",
-					"options": {
-						"id": "Bottleneck Statewide"
+						"id": "Locations with very slow Truck Speed Performance"
 					}
 				},
 				{
