@@ -123,7 +123,8 @@ dojo.require("esri.dijit.Print");
 			}
 		]);
 
-		showDisclaimer();
+		// Show the disclaimer if one has been defined.
+		showDisclaimer(wsdot.config.alwaysShowDisclaimer);
 
 		// Add a method to the Date object that will return a short date string.
 		if (typeof (Date.toShortDateString) === "undefined") {
