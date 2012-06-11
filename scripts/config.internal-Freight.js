@@ -78,7 +78,7 @@
 			]
 		},
 		{
-			"id": "phyisicalBasemap",
+			"id": "physicalBasemap",
 			"title": "Physical",
 			"thumbnailUrl": "images/USA_TopoThumbnail.png",
 			"layers": [

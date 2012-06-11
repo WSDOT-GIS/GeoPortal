@@ -89,6 +89,15 @@
 			]
 		},
 		{
+			"id": "usaTopoMaps",
+			"title": "USA Topo Maps",
+			"thumbnailUrl": "images/USA_TopoThumbnail.png",
+			"layers": [
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer" }
+			]
+		},
+		{
 			"id": "aeronauticalChart",
 			"title": "Aeronautical Chart",
 			"thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
@@ -97,7 +106,7 @@
 			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_5"],
+	"basemapsToRemove": ["basemap_4", "basemap_5", "basemap_8"],
 	"routeLocatorUrl": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
 	"layers": {
 			"Political Boundaries": [
