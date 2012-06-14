@@ -648,10 +648,9 @@ dojo.require("esri.dijit.Print");
 						plate.layout = plate.label = ch;
 						plate.format = "PDF";
 						plate.layoutOptions = {
-							//"authorText": "May by:  Esri's JS API Team",
-							//"copyrightText": "<copyright info here>",
+							"authorText": "Map by WSDOT",
+							"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
 							//"legendLayers": [],
-							//"titleText": "Pool Permits",
 							"titleText": "Airport",
 							"scalebarUnit": "Miles"
 						};
