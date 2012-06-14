@@ -117,7 +117,7 @@
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/SevereSpeedThreshold/MapServer",
 					"options": {
-						"id": "% of Truck Speed Below 60% of Posted Speed"
+						"id": "% of Trucks Traveling below 60% of Posted Speed"
 					}
 				},
 				{
