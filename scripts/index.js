@@ -220,135 +220,138 @@ dojo.require("esri.dijit.Print");
 		//    dojo.require("esri.dijit.Bookmarks");
 		//}
 
-		dojo.extend(esri.geometry.Extent, {
-			"toCsv": function () {
-				var propNames = ["xmin", "ymin", "xmax", "ymax"],
-					output = "",
-					i, l;
-				for (i = 0, l = propNames.length; i < l; i += 1) {
-					if (i > 0) {
-						output += ",";
-					}
-					output += this[propNames[i]];
-				}
-				return output;
-			}
-		});
-
-		dojo.extend(esri.layers.GraphicsLayer, {
-			"getGraphicsAsJson": function () {
-				/// <summary>Returns an array of ArcGIS Server JSON graphics.</summary>
-				return dojo.map(this.graphics, function (item) {
-					// TODO: Make the projection to geographic optional.  For the purposes of this application, though, this works just fine.
-					var geometry = esri.geometry.webMercatorToGeographic(item.geometry),
-						json = item.toJson();
-					json.geometry = geometry.toJson();
-					return json;
-				});
-			}
-		});
-
-		dojo.extend(esri.Map, {
-			"lods": null,
-			"getLOD": function (level) {
-				/// <summary>Gets the current level of detail (LOD) for the map.</summary>
-				/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-				/// <returns type="esri.layers.LOD" />
-				if (typeof (level) === "undefined") {
-					level = map.getLevel();
-				}
-				return map.lods[level];
-			},
-			"getScale": function (level) {
-				/// <summary>Returns the current scale of the map.</summary>
-				/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-				/// <returns type="Number" />
-				var lod = this.getLOD(level), output = null;
-				if (lod) {
-					output = lod.scale;
-				}
-				return output;
-			},
-			"getVisibleLayers": function () {
-				/// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
-				/// <returns type="Array" />
-				var layer,
-					visibleLayers = [],
-					i, l;
-				for (i = 0, l = this.layerIds.length; i < l; i += 1) {
-					layer = this.getLayer(this.layerIds[i]);
-					if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
-						visibleLayers.push(layer);
-					}
-				}
-				return visibleLayers;
-			},
-			"getGraphicsLayers": function () {
-				/// <summary>Returns all graphics layers in the map.</summary>
-				var gfxLayers = [],
-					layer, id,
-					i;
-				for (i = 0; i < this.graphicsLayerIds.length; i += 1) {
-					id = this.graphicsLayerIds[i];
-					layer = this.getLayer(id);
-					if (layer.isInstanceOf(esri.layers.GraphicsLayer) && !layer.isInstanceOf(esri.layers.FeatureLayer)) {
-						gfxLayers.push(layer);
-					}
-				}
-				return gfxLayers;
-
-			},
-			"getGraphicsCount": function () {
-				/// <summary>Returns the total number of graphics displayed on the map (in all graphics layers).</summary>
-				var graphicsLayers = this.getGraphicsLayers(),
-					output = 0;
-
-				// For each layer, get a collection of JSON graphic representations
-				dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
-					output += layer.graphics.length;
-				});
-				return output;
-			},
-			"getGraphicsAsJson": function (options) {
-				/// <summary>Returns all of the graphics in all of the graphics layers in the map.</summary>
-				var graphicsLayers = this.getGraphicsLayers(),
-					output = {};
-
-				// Set default values for omitted options.
-				if (typeof (options) === "undefined") {
-					options = {
-						removeInfoTemplate: true,
-						removeSymbol: true
-					};
-				}
-				if (typeof (options.removeInfoTemplate) === "undefined") {
-					options.removeInfoTemplate = true;
-				}
-				if (typeof (options.removeSymbol) === "undefined") {
-					options.removeSymbol = true;
-				}
-
-				// For each layer, get a collection of JSON graphic representations
-				dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
-					var graphics;
-					if (layer.graphics.length > 0) {
-						graphics = layer.getGraphicsAsJson();
-						if (options.removeInfoTemplate === true || options.removeSymbol === true) {
-							// Remove unwanted properties from each graphic representation as specified in the options object.
-							dojo.forEach(graphics, function (graphic /*, gIndex*/) {
-								if (typeof (graphic.infoTemplate) !== "undefined" && options.removeInfoTemplate === true) {
-									delete graphic.infoTemplate;
-								}
-								if (typeof (graphic.symbol) !== "undefined" && options.removeSymbol === true) {
-									delete graphic.symbol;
-								}
-							});
+		dojo.ready(function() {
+			dojo.extend(esri.geometry.Extent, {
+				"toCsv": function () {
+					var propNames = ["xmin", "ymin", "xmax", "ymax"],
+						output = "",
+						i, l;
+					for (i = 0, l = propNames.length; i < l; i += 1) {
+						if (i > 0) {
+							output += ",";
 						}
-						output[layer.id] = graphics;
+						output += this[propNames[i]];
 					}
-				});
-				return output;
-			}
+					return output;
+				}
+			});
+
+			dojo.extend(esri.layers.GraphicsLayer, {
+				"getGraphicsAsJson": function () {
+					/// <summary>Returns an array of ArcGIS Server JSON graphics.</summary>
+					return dojo.map(this.graphics, function (item) {
+						// TODO: Make the projection to geographic optional.  For the purposes of this application, though, this works just fine.
+						var geometry = esri.geometry.webMercatorToGeographic(item.geometry),
+							json = item.toJson();
+						json.geometry = geometry.toJson();
+						return json;
+					});
+				}
+			});
+
+			dojo.extend(esri.Map, {
+				"lods": null,
+				"getLOD": function (level) {
+					/// <summary>Gets the current level of detail (LOD) for the map.</summary>
+					/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+					/// <returns type="esri.layers.LOD" />
+					if (typeof (level) === "undefined") {
+						level = map.getLevel();
+					}
+					return map.lods[level];
+				},
+				"getScale": function (level) {
+					/// <summary>Returns the current scale of the map.</summary>
+					/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
+					/// <returns type="Number" />
+					var lod = this.getLOD(level), output = null;
+					if (lod) {
+						output = lod.scale;
+					}
+					return output;
+				},
+				"getVisibleLayers": function () {
+					/// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
+					/// <returns type="Array" />
+					var layer,
+						visibleLayers = [],
+						i, l;
+					for (i = 0, l = this.layerIds.length; i < l; i += 1) {
+						layer = this.getLayer(this.layerIds[i]);
+						if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
+							visibleLayers.push(layer);
+						}
+					}
+					return visibleLayers;
+				},
+				"getGraphicsLayers": function () {
+					/// <summary>Returns all graphics layers in the map.</summary>
+					var gfxLayers = [],
+						layer, id,
+						i;
+					for (i = 0; i < this.graphicsLayerIds.length; i += 1) {
+						id = this.graphicsLayerIds[i];
+						layer = this.getLayer(id);
+						if (layer.isInstanceOf(esri.layers.GraphicsLayer) && !layer.isInstanceOf(esri.layers.FeatureLayer)) {
+							gfxLayers.push(layer);
+						}
+					}
+					return gfxLayers;
+
+				},
+				"getGraphicsCount": function () {
+					/// <summary>Returns the total number of graphics displayed on the map (in all graphics layers).</summary>
+					var graphicsLayers = this.getGraphicsLayers(),
+						output = 0;
+
+					// For each layer, get a collection of JSON graphic representations
+					dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
+						output += layer.graphics.length;
+					});
+					return output;
+				},
+				"getGraphicsAsJson": function (options) {
+					/// <summary>Returns all of the graphics in all of the graphics layers in the map.</summary>
+					var graphicsLayers = this.getGraphicsLayers(),
+						output = {};
+
+					// Set default values for omitted options.
+					if (typeof (options) === "undefined") {
+						options = {
+							removeInfoTemplate: true,
+							removeSymbol: true
+						};
+					}
+					if (typeof (options.removeInfoTemplate) === "undefined") {
+						options.removeInfoTemplate = true;
+					}
+					if (typeof (options.removeSymbol) === "undefined") {
+						options.removeSymbol = true;
+					}
+
+					// For each layer, get a collection of JSON graphic representations
+					dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
+						var graphics;
+						if (layer.graphics.length > 0) {
+							graphics = layer.getGraphicsAsJson();
+							if (options.removeInfoTemplate === true || options.removeSymbol === true) {
+								// Remove unwanted properties from each graphic representation as specified in the options object.
+								dojo.forEach(graphics, function (graphic /*, gIndex*/) {
+									if (typeof (graphic.infoTemplate) !== "undefined" && options.removeInfoTemplate === true) {
+										delete graphic.infoTemplate;
+									}
+									if (typeof (graphic.symbol) !== "undefined" && options.removeSymbol === true) {
+										delete graphic.symbol;
+									}
+								});
+							}
+							output[layer.id] = graphics;
+						}
+					});
+					return output;
+				}
+			});
+
 		});
 
 
