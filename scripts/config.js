@@ -1,6 +1,6 @@
 ﻿{
 	"pageTitle": "WSDOT GeoPortal",
-	"helpUrl": "help/navigation.html",
+	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
 	"enableIdentify": true,
 	"mapOptions": {
 		"logo": false,

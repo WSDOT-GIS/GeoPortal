@@ -388,42 +388,42 @@ dojo.require("esri.dijit.Print");
 			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
 		}
 
-		function showHelpDialog(helpUrl) {
-			/// <summary>Opens the help dialog and adds content from the given URL.</summary>
-			/// <param name="helpUrl" type="String">The URL that containts the content that will be shown in the help dialog.</param>
-			var helpContent;
-			// If the URL is a PDF, open in a separate window; otherwise open in a jQueryUI dialog.
-			if (/\.pdf$/.test(helpUrl)) {
-				window.open(helpUrl);
-			} else {
-				if (!helpDialog) {
-					// Create the help dialog if it does not already exist.
-					helpDialog = $("<div>").attr("id", "helpDialog").dialog({ autoOpen: false, title: "Help", height: 480 });
-					helpContent = $("<div>").attr("id", "helpContent").appendTo(helpDialog);
-				}
-				else {
-					// Clear the contents
-					helpContent = $("#helpContent").empty();
-				}
+		////function showHelpDialog(helpUrl) {
+		////	/// <summary>Opens the help dialog and adds content from the given URL.</summary>
+		////	/// <param name="helpUrl" type="String">The URL that containts the content that will be shown in the help dialog.</param>
+		////	var helpContent;
+		////	// If the URL is a PDF, open in a separate window; otherwise open in a jQueryUI dialog.
+		////	if (/\.pdf$/.test(helpUrl)) {
+		////		window.open(helpUrl);
+		////	} else {
+		////		if (!helpDialog) {
+		////			// Create the help dialog if it does not already exist.
+		////			helpDialog = $("<div>").attr("id", "helpDialog").dialog({ autoOpen: false, title: "Help", height: 480 });
+		////			helpContent = $("<div>").attr("id", "helpContent").appendTo(helpDialog);
+		////		}
+		////		else {
+		////			// Clear the contents
+		////			helpContent = $("#helpContent").empty();
+		////		}
 
-				helpDialog.dialog("open");
+		////		helpDialog.dialog("open");
 
-				// Load the content from the specified URL into the help dialog.
-				helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
-					// Handle case where content could not be loaded.
-					if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
-						helpContent.text("Error loading help text.");
-					}
+		////		// Load the content from the specified URL into the help dialog.
+		////		helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
+		////			// Handle case where content could not be loaded.
+		////			if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
+		////				helpContent.text("Error loading help text.");
+		////			}
 
-					// Add disclaimer link (if applicable)
-					if (wsdot.config.disclaimer) {
-						$("<p class='disclaimer'><a>Disclaimer</a></p>").click(function(){showDisclaimer(true);}).prependTo(helpContent);
-					}
-				});
-			}
+		////			// Add disclaimer link (if applicable)
+		////			if (wsdot.config.disclaimer) {
+		////				$("<p class='disclaimer'><a>Disclaimer</a></p>").click(function(){showDisclaimer(true);}).prependTo(helpContent);
+		////			}
+		////		});
+		////	}
 
 
-		}
+		////}
 
 
 		function init() {
@@ -447,8 +447,8 @@ dojo.require("esri.dijit.Print");
 					iconClass: "helpIcon",
 					showLabel: false,
 					onClick: function () {
-						// window.open("help/default.html", "GRDO Map Help");
-						showHelpDialog(wsdot.config.helpUrl); //"help/navigation.html");
+						window.open(wsdot.config.helpUrl);
+						// showHelpDialog(wsdot.config.helpUrl); //"help/navigation.html");
 					}
 				}, "helpButton");
 

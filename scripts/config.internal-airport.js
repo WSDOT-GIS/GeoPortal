@@ -109,112 +109,124 @@
 	],
 	"basemapsToRemove": ["basemap_4", "basemap_5", "basemap_8"],
 	"routeLocatorUrl": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
+	"tabbedLayerList": true,
 	"layers": {
-			"Political Boundaries": [
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
-					"options": {
-						"id": "City Limits"
+			"Airport": [
+					{
+						"layerType":"esri.layers.ArcGISDynamicMapServiceLayer",
+						"url":"http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer",
+						"options": {
+							"id": "Airports"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportFacilities/MapServer",
+						"options": {
+							"id": "Airport Facilities"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
+						"options": {
+							"id": "Airspace Features"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/FaaObstruction/MapServer",
+						"options": {
+							"id": "FAA Obstacles"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportInformation/MapServer",
+						"options": {
+							"id": "Airport Information"
+						}
 					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
-					"options": {
-						"id": "Congressional Districts"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
-					"options": {
-						"id": "County Boundaries"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
-					"options": {
-						"id": "Legislative Districts"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
-					"options": {
-						"id": "MPO"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
-					"options": {
-						"id": "RTPO"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
-					"options": {
-						"id": "Township / Section"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
-					"options": {
-						"id": "Tribal Lands"
-					}
-				}
 			],
+			"General": {
+				"Political Boundaries": [
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+						"options": {
+							"id": "City Limits"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
+						"options": {
+							"id": "Congressional Districts"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+						"options": {
+							"id": "County Boundaries"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+						"options": {
+							"id": "Legislative Districts"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+						"options": {
+							"id": "MPO"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+						"options": {
+							"id": "RTPO"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+						"options": {
+							"id": "Township / Section"
+						}
+					},
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+						"options": {
+							"id": "Tribal Lands"
+						}
+					}
+				],
 			
-			"WSDOT Boundaries": [
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
-					"options": {
-						"id": "Region Boundaries"
+				"WSDOT Boundaries": [
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+						"options": {
+							"id": "Region Boundaries"
+						}
 					}
-				}
-			],
-			"Transportation Features": [
-				{
-					"layerType":"esri.layers.ArcGISDynamicMapServiceLayer",
-					"url":"http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer",
-					"options": {
-						"id": "Airports"
+				],
+				"Transportation Features": [
+					{
+						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+						"options": {
+							"id": "State Routes"
+						}
 					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportFacilities/MapServer",
-					"options": {
-						"id": "Airport Facilities"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
-					"options": {
-						"id": "Airspace Features"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/FaaObstruction/MapServer",
-					"options": {
-						"id": "FAA Obstacles"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
-					"options": {
-						"id": "State Routes"
-					}
-				}
 
-			]
+				]
+			}
 	}
 }
