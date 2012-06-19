@@ -44,7 +44,8 @@
 	"tools": [
 		"zoom",
 		"lrs",
-		"search"
+		"search",
+		"airspaceCalculator"
 	],
 	"queryTasks": {
 		"airport": {

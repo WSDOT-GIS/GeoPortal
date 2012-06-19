@@ -987,6 +987,19 @@ dojo.require("esri.dijit.Print");
 					});
 				}
 
+				function setupAirspaceCalculator() {
+					// Create the child container for the airspace calculator.
+					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Airspace Calculator" }, dojo.create("div", { id: "airspaceCalculatorPane" }, "toolsAccordion")));
+					// Set up the on show event to load the control.
+					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
+						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
+							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator();
+							dojo.disconnect(createLinks.airspaceCalculator);
+							delete createLinks.airspaceCalculator;
+						});
+					});
+				}
+
 				// Look in the configuration to determine which tools to add and in which order.
 				(function(tools){
 					var i, l;
@@ -1001,6 +1014,8 @@ dojo.require("esri.dijit.Print");
 							setupLrsControls();
 						} else if (/search/i.test(tools[i])) {
 							setupSearchControls();
+						} else if (/airspace\s?Calculator/i.test(tools[i])) {
+							setupAirspaceCalculator();
 						}
 					}
 				}(wsdot.config.tools));
