@@ -10,21 +10,28 @@
 		_yInput: null,
 		_heightInput: null,
 		_calculateButton: null,
+		_form: null,
 		_create: function () {
 			var $this = this, table, row, cell, id, baseId = $this.element.attr("id");
 
-			table = $("<div class='table'>").appendTo($this.element);
+			$this._form = $("<form>").attr({
+				id: baseId + "-form",
+				method: "get",
+				action: ""
+			}).appendTo($this.element);
+
+			table = $("<div class='table'>").appendTo($this._form);
 
 			// X
 			id = baseId + "-x";
 			row = $("<div class='table-row'>").appendTo(table);
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._xInput = $("<input>").attr({
-				type: "number",
-				placeholder: "Longitude",
 				id: id,
+				name: "x",
+				placeholder: "Longitude",
 				required: "required"
-			});
+			}).addClass("required coordinate");
 			$("<label>Longitude</label>").attr("for", id).appendTo(cell);
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._xInput.appendTo(cell);
@@ -35,9 +42,9 @@
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._yInput = $("<input>").attr({
 				id: id,
-				type: 'number',
+				name: "y",
 				placeholder: 'Latitude',
-				required: "required"
+				required: "required coordinate"
 			});
 			$("<label>Latitude</label>").attr("for", id).appendTo(cell);
 			cell = $("<div class='table-cell'>").appendTo(row);
@@ -49,17 +56,18 @@
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._heightInput = $("<input>").attr({
 				id: id,
-				type: 'number',
+				name: "height",
 				placeholder: 'Structure Height',
-				min: 0,
 				required: "required"
-			});
+			}).addClass("required number");
 			$("<label>Structure Height</label>").attr("for", id).appendTo(cell);
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._heightInput.appendTo(cell);
 
 			// Calculate button
-			$this._calculateButton = $("<button type='button'>Calculate</button>").appendTo($this.element);
+			$this._calculateButton = $("<button>").attr({
+				type: 'submit'
+			}).text("Calculate").appendTo($this._form);
 
 			// Convert to a JQuery UI button if JQuery UI is loaded.
 			if (typeof ($.fn.button) !== "undefined") {
@@ -70,6 +78,19 @@
 				});
 			}
 
+			// Setup placeholder for non-supporting browsers...
+			if (typeof (Modernizr) !== "undefined" && typeof (Modernizr.input) !== "undefined" && typeof (Modernizr.input.placeholder) !== "undefined") {
+				if (!Modernizr.input.placeholder) {
+					$("[placeholder]", $this.element).placeholder();
+				}
+			}
+
+			$this._form.validate({
+				submitHandler: function (form) {
+					alert("Sorry, this function is not yet available.");
+					return false;
+				}
+			});
 			return this;
 		},
 		_destroy: function () {

@@ -371,6 +371,18 @@ img[src$="blank.gif"]
     padding-right: 0.5em
 }
 
+#airspaceCalculator label.error 
+{
+    font-size: 0.7em;
+    color: Red;
+    display: block
+}
+
+#airspaceCalculator input.error 
+{
+    border-color: Red;
+}
+
 .placeholder  
 {
     color: #aaa; 

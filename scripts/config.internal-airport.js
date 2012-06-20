@@ -43,9 +43,9 @@
 	"geometryServer": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"tools": [
 		"zoom",
+		"airspaceCalculator",
 		"lrs",
-		"search",
-		"airspaceCalculator"
+		"search"
 	],
 	"queryTasks": {
 		"airport": {
