@@ -87,25 +87,29 @@ dojo.require("esri.dijit.Print");
 		/// <returns type="Object" />
 		// Show the disclaimer if there is no cookie indicating that the user has seen it before.
 		if (typeof(wsdot.config.disclaimer) !== "undefined" && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")))) {
-			return $("<div>" + wsdot.config.disclaimer + "<div>").dialog({
-				title: "Disclaimer",
-				modal: true,
-				closeOnEscape: false,
-				buttons: {
-					"Accept": function() {
-						$(this).dialog("close").dialog("destroy").remove();
+			// Load the content into a div.  Only when the source page has loaded do invoke the dialog constructor.
+			// This is to ensure that the dialog is centered on the page.
+			return $("<div>").load(wsdot.config.disclaimer, function() {
+				$(this).dialog({
+					title: "Disclaimer",
+					modal: true,
+					closeOnEscape: false,
+					buttons: {
+						"Accept": function() {
+							$(this).dialog("close").dialog("destroy").remove();
+						}
+					},
+					open: function(event, ui) {
+						// Remove the close button from the disclaimer form.
+						var form = $(event.target).parent();
+						$("a.ui-dialog-titlebar-close", form).remove();
+					},
+					close: function(event, ui) {
+						// Add a cookie
+						$.cookie("AgreedToDisclaimer", true, {expires: 30});
+						$(this).dialog("destroy").remove();
 					}
-				},
-				open: function(event, ui) {
-					// Remove the close button from the disclaimer form.
-					var form = $(event.target).parent();
-					$("a.ui-dialog-titlebar-close", form).remove();
-				},
-				close: function(event, ui) {
-					// Add a cookie
-					$.cookie("AgreedToDisclaimer", true, {expires: 30});
-					$(this).dialog("destroy").remove();
-				}
+				});
 			});
 		}
 	}

@@ -33,6 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="disclaimers\Freight\Internal.html" />
+    <Content Include="disclaimers\Freight\Public.html" />
     <Content Include="error\GenericError.html" />
     <Content Include="FunctionalClassLegend.html" />
     <Content Include="help\freight.html" />
