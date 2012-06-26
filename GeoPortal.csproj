@@ -37,8 +37,8 @@
     <Content Include="disclaimers\Freight\Public.html" />
     <Content Include="error\GenericError.html" />
     <Content Include="FunctionalClassLegend.html" />
-    <Content Include="help\Freight\internal.html" />
-    <Content Include="help\Freight\public.html" />
+    <Content Include="help\Freight\internal\help.html" />
+    <Content Include="help\Freight\public\help.html" />
     <Content Include="help\internal-freight.html" />
     <Content Include="help\location_info.html" />
     <Content Include="help\measure.html" />
@@ -99,10 +99,10 @@
     <Content Include="GetRoutes.ashx" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
-    <Content Include="help\Freight\Freight Map Help Document -Internal.pdf" />
-    <Content Include="help\Freight\Freight Map Help Document-Public.pdf" />
-    <Content Include="help\Freight\GIS Map FAQ Document- Public.pdf" />
-    <Content Include="help\Freight\GIS Map FAQ Document-Internal.pdf" />
+    <Content Include="help\Freight\internal\FAQ.pdf" />
+    <Content Include="help\Freight\internal\Help.pdf" />
+    <Content Include="help\Freight\public\FAQ.pdf" />
+    <Content Include="help\Freight\public\Help.pdf" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\metadataExtensions.js" />
     <Content Include="scripts\modernizr.js" />

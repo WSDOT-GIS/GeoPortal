@@ -1,6 +1,6 @@
 ﻿{
 	"pageTitle": "Freight Map",
-	"helpUrl": "help/Freight/public.html",
+	"helpUrl": "help/Freight/public/help.html",
 	"enableIdentify": true,
 	"disclaimer": "disclaimers/Freight/Public.html",
 	"alwaysShowDisclaimer": true,
