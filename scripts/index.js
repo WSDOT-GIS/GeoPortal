@@ -907,7 +907,12 @@ dojo.require("esri.dijit.Print");
 								url: wsdot.config.airspaceCalculatorUrl,
 								executeComplete: function(event, data) {
 									// TODO: Show results in jqueryui dialog.
-									console.debug(data);
+									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
+									var intersectionCount = 0;
+									if (data.results.length > 0) {
+										intersectionCount = data.results[0].value;
+									}
+									alert(["", intersectionCount, "intersections were found."].join(" "));
 								},
 								error: function(event, data) {
 									alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
