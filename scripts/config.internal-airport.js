@@ -3,6 +3,7 @@
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
 	"printUrl":"http://hqolymgis99t/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
+	"airspaceCalculatorUrl":"http://hqolymgis19d/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Get Intersection Count",
 	"tabOrder": [
 		"Layers",
 		"Tools",

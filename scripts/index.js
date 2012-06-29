@@ -903,7 +903,16 @@ dojo.require("esri.dijit.Print");
 					// Set up the on show event to load the control.
 					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
 						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
-							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator();
+							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
+								url: wsdot.config.airspaceCalculatorUrl,
+								executeComplete: function(event, data) {
+									// TODO: Show results in jqueryui dialog.
+									console.debug(data);
+								},
+								error: function(event, data) {
+									alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
+								}
+							});
 							dojo.disconnect(createLinks.airspaceCalculator);
 							delete createLinks.airspaceCalculator;
 						});
