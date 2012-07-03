@@ -905,6 +905,7 @@ dojo.require("esri.dijit.Print");
 						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
 							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
 								url: wsdot.config.airspaceCalculatorUrl,
+								progressAlternativeImageUrl: "images/loading-bar.gif",
 								executeComplete: function(event, data) {
 									// TODO: Show results in jqueryui dialog.
 									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.

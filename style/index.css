@@ -387,3 +387,8 @@ img[src$="blank.gif"]
 {
     color: #aaa; 
 }
+
+abbr 
+{
+    text-decoration: underline;
+}
