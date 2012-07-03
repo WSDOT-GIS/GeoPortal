@@ -108,6 +108,7 @@
 
 			(function () {
 				var table, row, cell, outerTable, outerRow, outerCell;
+				// TODO: Place controls inside of a form and set up jQuery validation, as is done in airspaceCalculator.js.
 				outerTable = $("<div class='table'>").appendTo($this.element);
 				outerRow = $("<div class='table-row'>").appendTo(outerTable);
 				outerCell = $("<div class='table-cell'>").appendTo(outerRow);
