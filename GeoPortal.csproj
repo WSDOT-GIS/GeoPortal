@@ -69,6 +69,7 @@
     <Content Include="ReadMe.html" />
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
+    <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\cameraGraphicsLayer.js" />
     <Content Include="scripts\config.airport.js" />
     <Content Include="scripts\config.Freight.js" />
@@ -78,6 +79,7 @@
     <Content Include="scripts\config.js" />
     <Content Include="scripts\copyrightInfo.js" />
     <Content Include="scripts\customLegend.js" />
+    <Content Include="scripts\dmsConversion.js" />
     <Content Include="scripts\elc.js" />
     <Content Include="scripts\esriApiExtensions.js" />
     <Content Include="scripts\extentSelect.js" />

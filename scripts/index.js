@@ -193,36 +193,7 @@ dojo.require("esri.dijit.Print");
 				document.title = wsdot.config.pageTitle;
 			}
 
-			////// Show a warning for old versions of IE.
-			////if (dojo.isIE && dojo.isIE < 9) {
-			////    var slowDialog = $("<div>");
-			////    $("<img>").attr("src", "images/turtle.png").css("width", "64px").css("height", "92px").css("float", "left").appendTo(slowDialog);
-			////    $("<p>").text("You are using Internet Explorer " + String(dojo.isIE) + ".").appendTo(slowDialog);
-			////    $("<p>").text("This is an old browser that runs JavaScript very, very slowly.  As this is a very JavaScript intensive site, you will get much better performance if you use a modern web browser.").appendTo(slowDialog);
-			////    var list = $("<ul>").appendTo(slowDialog);
-			////    $("<li>").append($("<a>").attr("href", "http://www.firefox.com/").text("Mozilla Firefox")).appendTo(list);
-			////    $("<li>").append($("<a>").attr("href", "http://www.google.com/chrome/").text("Google Chrome")).appendTo(list);
-			////    $("<li>").append($("<a>").attr("href", "http://www.apple.com/safari/").text("Apple Safari")).appendTo(list);
-			////    if (dojo.isIE > 7) {
-			////        $("<li>").append($("<a>").attr("href", "http://www.microsoft.com/windows/internet-explorer/").text("Internet Explorer 9 or higher (Windows 7 or higher only)")).appendTo(list);
-			////    }
-			////    slowDialog.dialog({
-			////        title: "Warning: IE is slow",
-			////        buttons: {
-			////            "OK": function () {
-			////                $(this).dialog("close");
-			////            }
-			////        },
-			////        close: function () {
-			////            $(this).dialog("destroy").remove();
-			////        }
-			////    });
-			////}
-
 		});
-		//if (!dojo.isIE || dojo.isIE >= 9) {
-		//    dojo.require("esri.dijit.Bookmarks");
-		//}
 
 		dojo.ready(function() {
 			dojo.extend(esri.geometry.Extent, {
@@ -392,44 +363,6 @@ dojo.require("esri.dijit.Print");
 			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
 		}
 
-		////function showHelpDialog(helpUrl) {
-		////	/// <summary>Opens the help dialog and adds content from the given URL.</summary>
-		////	/// <param name="helpUrl" type="String">The URL that containts the content that will be shown in the help dialog.</param>
-		////	var helpContent;
-		////	// If the URL is a PDF, open in a separate window; otherwise open in a jQueryUI dialog.
-		////	if (/\.pdf$/.test(helpUrl)) {
-		////		window.open(helpUrl);
-		////	} else {
-		////		if (!helpDialog) {
-		////			// Create the help dialog if it does not already exist.
-		////			helpDialog = $("<div>").attr("id", "helpDialog").dialog({ autoOpen: false, title: "Help", height: 480 });
-		////			helpContent = $("<div>").attr("id", "helpContent").appendTo(helpDialog);
-		////		}
-		////		else {
-		////			// Clear the contents
-		////			helpContent = $("#helpContent").empty();
-		////		}
-
-		////		helpDialog.dialog("open");
-
-		////		// Load the content from the specified URL into the help dialog.
-		////		helpContent.load(helpUrl, function (responseText, textStatus /*, XMLHttpRequest*/) {
-		////			// Handle case where content could not be loaded.
-		////			if (!textStatus.match(/(?:success)|(?:notmodified)/i)) {
-		////				helpContent.text("Error loading help text.");
-		////			}
-
-		////			// Add disclaimer link (if applicable)
-		////			if (wsdot.config.disclaimer) {
-		////				$("<p class='disclaimer'><a>Disclaimer</a></p>").click(function(){showDisclaimer(true);}).prependTo(helpContent);
-		////			}
-		////		});
-		////	}
-
-
-		////}
-
-
 		function init() {
 			var refreshLegend, gaTrackEvent, initBasemap = null;
 			esri.config.defaults.io.proxyUrl = "proxy.ashx";
@@ -452,7 +385,6 @@ dojo.require("esri.dijit.Print");
 					showLabel: false,
 					onClick: function () {
 						window.open(wsdot.config.helpUrl);
-						// showHelpDialog(wsdot.config.helpUrl); //"help/navigation.html");
 					}
 				}, "helpButton");
 
@@ -602,11 +534,6 @@ dojo.require("esri.dijit.Print");
 							measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
 							titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
 							$("<span>").attr("id", "ui-dialog-title-dialog").addClass("ui-dialog-title").text("Measure").appendTo(titleBar);
-							$("<a>").text("?").addClass("ui-corner-all").appendTo(titleBar).css("position", "absolute").css({
-								right: "2.5em",
-								"text-decoration": "none",
-								cursor: "pointer"
-							}).click(function () { showHelpDialog("help/measure.html"); });
 							$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
 							$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
 							// Create the widget.
@@ -811,17 +738,6 @@ dojo.require("esri.dijit.Print");
 						$.getScript("scripts/lrsTools.js", function () {
 							$("#lrsTools").lrsTools({
 								map: map,
-								controlsCreated: function () {
-									// Add help button to the LrsTools control.
-									dijit.form.Button({
-										label: "Milepost Help",
-										iconClass: "helpIcon",
-										showLabel: false,
-										onClick: function () {
-											showHelpDialog("help/milepost.html");
-										}
-									}, dojo.create("button", { type: "button" }, "milepostContainerBottom"));
-								},
 								drawActivate: function () {
 									map.disablePopups();
 								},
@@ -961,16 +877,6 @@ dojo.require("esri.dijit.Print");
 							dojo.destroy("zoomToMyCurrentLocation");
 						}
 
-						// Add the help button for the zoom controls.
-						dijit.form.Button({
-							label: "Zoom Help",
-							showLabel: false,
-							iconClass: "helpIcon",
-							onClick: function () {
-								showHelpDialog("help/zoom_controls.html");
-							}
-						}, dojo.create("button", { id: "zoomHelp", type: "button" }, "zoomControls"));
-
 						dojo.disconnect(createLinks.zoomControls);
 						delete createLinks.zoomControls;
 					});
@@ -991,6 +897,34 @@ dojo.require("esri.dijit.Print");
 					});
 				}
 
+				function setupAirspaceCalculator() {
+					// Create the child container for the airspace calculator.
+					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Airspace Calculator" }, dojo.create("div", { id: "airspaceCalculatorPane" }, "toolsAccordion")));
+					// Set up the on show event to load the control.
+					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
+						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
+							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
+								url: wsdot.config.airspaceCalculatorUrl,
+								progressAlternativeImageUrl: "images/loading-bar.gif",
+								executeComplete: function(event, data) {
+									// TODO: Show results in jqueryui dialog.
+									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
+									var intersectionCount = 0;
+									if (data.results.length > 0) {
+										intersectionCount = data.results[0].value;
+									}
+									alert(["", intersectionCount, "intersections were found."].join(" "));
+								},
+								error: function(event, data) {
+									alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
+								}
+							});
+							dojo.disconnect(createLinks.airspaceCalculator);
+							delete createLinks.airspaceCalculator;
+						});
+					});
+				}
+
 				// Look in the configuration to determine which tools to add and in which order.
 				(function(tools){
 					var i, l;
@@ -1005,6 +939,8 @@ dojo.require("esri.dijit.Print");
 							setupLrsControls();
 						} else if (/search/i.test(tools[i])) {
 							setupSearchControls();
+						} else if (/airspace\s?Calculator/i.test(tools[i])) {
+							setupAirspaceCalculator();
 						}
 					}
 				}(wsdot.config.tools));
