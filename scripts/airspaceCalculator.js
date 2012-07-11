@@ -5,7 +5,7 @@
 
 	$.widget("ui.airspaceCalculator", {
 		options: {
-			url: null, // e.g., "http://hqolymgis19d/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Get Intersection Count"
+			url: null, // e.g., "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations"
 			progressAlternativeImageUrl: null,
 			isGPAsynch: false
 		},
@@ -139,13 +139,16 @@
 						(function () {
 							var onExecuteComplete, onError;
 
-							
+
 							/** Triggers the executeComplete event. */
 							onExecuteComplete = function (results, messages) {
+								var feature;
 								$this._setInProgress(false);
+								feature = results[0].value.features[0];
 								$this._trigger("executeComplete", null, {
-									results: results, 
-									messages: messages
+									results: results,
+									messages: messages,
+									penetrates: feature.attributes.PenetratesSurface === "yes"
 								});
 							};
 
@@ -164,10 +167,23 @@
 					}
 					// Gather the input parameters.
 					parameters = {
-						X: $.parseDms($this._xInput.val()),
-						Y: $.parseDms($this._yInput.val()),
-						Height: Number($this._heightInput.val())
+						"Input_Obstruction_Features": new esri.tasks.FeatureSet({
+							"geometryType": "esriGeometryPoint",
+							"spatialReference": { "wkid": 4326 },
+							"features": [
+								{
+									"geometry": {
+										"x": $.parseDms($this._xInput.val()),
+										"y": $.parseDms($this._yInput.val())
+									},
+									"attributes": {
+										"AGL": Number($this._heightInput.val())
+									}
+								}
+							]
+						})
 					};
+
 					try {
 						// Submit the paramters to the GP and set the UI to be "busy".
 						$this._geoprocessor.execute(parameters);

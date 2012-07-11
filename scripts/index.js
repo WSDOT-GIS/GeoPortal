@@ -909,11 +909,13 @@ dojo.require("esri.dijit.Print");
 								executeComplete: function(event, data) {
 									// TODO: Show results in jqueryui dialog.
 									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-									var intersectionCount = 0;
-									if (data.results.length > 0) {
-										intersectionCount = data.results[0].value;
+									var penetrates = data.penetrates;
+									if (data.penetrates) {
+										alert("Intersection found.");
+									} else {
+										alert("No intersection found.");
 									}
-									alert(["", intersectionCount, "intersections were found."].join(" "));
+									
 								},
 								error: function(event, data) {
 									alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
