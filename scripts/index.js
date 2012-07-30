@@ -904,6 +904,7 @@ dojo.require("esri.dijit.Print");
 					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
 						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
 							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
+								map: map,
 								url: wsdot.config.airspaceCalculatorUrl,
 								progressAlternativeImageUrl: "images/loading-bar.gif",
 								executeComplete: function(event, data) {

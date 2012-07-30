@@ -3,11 +3,27 @@
 (function ($) {
 	"use strict";
 
+	function _createRenderer() {
+		var renderer, defaultSymbol, lineSymbol, penetrationSymbol;
+		lineSymbol = esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color("black"), 1);
+		defaultSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10, lineSymbol, new dojo.Color([255, 255, 255, 0.5]));
+		renderer = new esri.renderer.UniqueValueRenderer(defaultSymbol, "PenetratesSurface");
+		penetrationSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10, lineSymbol, new dojo.Color("red"));
+		renderer.addValue({
+			value: "yes",
+			symbol: penetrationSymbol,
+			label: "Penetration",
+			description: "Penetration"
+		});
+		return renderer;
+	}
+
 	$.widget("ui.airspaceCalculator", {
 		options: {
 			url: null, // e.g., "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations"
 			progressAlternativeImageUrl: null,
-			isGPAsynch: false
+			isGPAsynch: false,
+			map: null
 		},
 		_xInput: null,
 		_yInput: null,
@@ -16,6 +32,7 @@
 		_progressBar: null,
 		_form: null,
 		_geoprocessor: null,
+		_graphicsLayer: null,
 		/** This will be true when the airspaceCalculator is waiting for a response from the GP service, false otherwise. */
 		isBusy: false,
 
@@ -34,6 +51,25 @@
 				this._calculateButton.show();
 				$("input", this.element).attr("disabled", null);
 			}
+			return this;
+		},
+		getGraphicsLayer: function () {
+			if (this._graphicsLayer === null) {
+				this._graphicsLayer = esri.layers.GraphicsLayer({ id: "Airspace Calculator" });
+				// Setup renderer.
+				this._graphicsLayer.setRenderer(_createRenderer());
+				if (!this.options.map) {
+					throw new Error("The map option has not been set for the Airspace Calculator.");
+				} else {
+					this.options.map.addLayer(this._graphicsLayer);
+				}
+			}
+			return this._graphicsLayer;
+		},
+		_addFeature: function (graphic) {
+			var graphicsLayer = this.getGraphicsLayer();
+			graphicsLayer.add(graphic);
+			graphicsLayer.refresh();
 			return this;
 		},
 		_create: function () {
@@ -145,6 +181,7 @@
 								var feature;
 								$this._setInProgress(false);
 								feature = results[0].value.features[0];
+								$this._addFeature(feature);
 								$this._trigger("executeComplete", null, {
 									results: results,
 									messages: messages,
@@ -161,6 +198,7 @@
 							};
 
 							$this._geoprocessor = esri.tasks.Geoprocessor($this.options.url);
+							$this._geoprocessor.setOutSpatialReference($this.options.map.spatialReference);
 							dojo.connect($this._geoprocessor, "onExecuteComplete", $this, onExecuteComplete);
 							dojo.connect($this._geoprocessor, "onError", $this, onError);
 						} ());
