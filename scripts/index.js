@@ -909,11 +909,14 @@ dojo.require("esri.dijit.Print");
 								executeComplete: function(event, data) {
 									// TODO: Show results in jqueryui dialog.
 									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-									var penetrates = data.penetrates;
+									var penetrates = data.penetrates, feature = data.results[0].value.features[0], feetPerMeter = 3.2808399, distanceM, distanceF;
+									console.debug(data);
+									distanceM = Math.abs(feature.attributes.DistanceFromSurface);
+									distanceF = distanceM * feetPerMeter;
 									if (data.penetrates) {
-										alert("Intersection found.");
+										alert("Intersection found.\nDistance from surface: " + distanceM + " m. (" + distanceF + "')");
 									} else {
-										alert("No intersection found.");
+										alert("No intersection found.\nDistance from surface: " + distanceM + " m. (" + distanceF + "')");
 									}
 									
 								},
