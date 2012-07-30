@@ -25,7 +25,7 @@
 		var inches = feet % 1;
 		feet = feet - inches;
 		inches = Math.round(inches * 12);
-		if (inches = 12) {
+		if (inches === 12) {
 			feet += 1;
 			inches = 0;
 		}
