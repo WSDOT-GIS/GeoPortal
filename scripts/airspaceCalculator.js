@@ -6,9 +6,9 @@
 	function _createRenderer() {
 		var renderer, defaultSymbol, lineSymbol, penetrationSymbol;
 		lineSymbol = esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color("black"), 1);
-		defaultSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10, lineSymbol, new dojo.Color([255, 255, 255, 0.5]));
+		defaultSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, lineSymbol, new dojo.Color([255, 255, 255, 0.5]));
 		renderer = new esri.renderer.UniqueValueRenderer(defaultSymbol, "PenetratesSurface");
-		penetrationSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10, lineSymbol, new dojo.Color("red"));
+		penetrationSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, lineSymbol, new dojo.Color("red"));
 		renderer.addValue({
 			value: "yes",
 			symbol: penetrationSymbol,
@@ -16,6 +16,45 @@
 			description: "Penetration"
 		});
 		return renderer;
+	}
+
+	function formatAsFeetAndInches(feet) {
+		/// <summary>Formats a Number (feet) into a string (feet and inches (rounded))</summary>
+		/// <param name="feet" type="Number">A number of feet.</param>
+		/// <returns type="String" />
+		var inches = feet % 1;
+		feet = feet - inches;
+		inches = Math.round(inches * 12);
+		if (inches = 12) {
+			feet += 1;
+			inches = 0;
+		}
+		return inches > 0 ? [feet, "'", inches, '"'].join("") : [feet, "'"].join("");
+	}
+
+	function formatResults(graphic) {
+		var output, message, list, distanceM = graphic.attributes.DistanceFromSurface, distanceF, ftPerM = 3.28084;
+		message = ["A building ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
+
+
+		// Get the distance in feet (meters to feet conversion).
+		distanceF = distanceM * ftPerM;
+
+		output = $("<div>");
+		$("<p>").text(message).appendTo(output);
+		list = $("<dl>").appendTo(output);
+		$("<dt>AGL</dt>").appendTo(list);
+		$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
+		$("<dt>Distance from Surface</dt>").appendTo(list);
+		$("<dd>").text([formatAsFeetAndInches(distanceF), " (", Math.round(distanceM * 100) / 100, " m.)"].join("")).appendTo(list);
+		$("<dt>Elevation</dt>").appendTo(list);
+		$("<dd>").text([formatAsFeetAndInches(graphic.attributes.Z * ftPerM), "(", Math.round(graphic.attributes.Z * 100) / 100, " m.)"].join("")).appendTo(list);
+
+		return output[0];
+	}
+
+	function formatTitle(graphic) {
+		return graphic.attributes.PenetratesSurface === "yes" ? "Surface Penetration" : "No Surface Penetration";
 	}
 
 	$.widget("ui.airspaceCalculator", {
@@ -58,6 +97,7 @@
 				this._graphicsLayer = esri.layers.GraphicsLayer({ id: "Airspace Calculator" });
 				// Setup renderer.
 				this._graphicsLayer.setRenderer(_createRenderer());
+				this._graphicsLayer.setInfoTemplate(new esri.InfoTemplate(formatTitle, formatResults));
 				if (!this.options.map) {
 					throw new Error("The map option has not been set for the Airspace Calculator.");
 				} else {
@@ -67,10 +107,10 @@
 			return this._graphicsLayer;
 		},
 		_addFeature: function (graphic) {
-			var graphicsLayer = this.getGraphicsLayer();
-			graphicsLayer.add(graphic);
+			var graphicsLayer = this.getGraphicsLayer(), outGraphic;
+			outGraphic = graphicsLayer.add(graphic);
 			graphicsLayer.refresh();
-			return this;
+			return outGraphic;
 		},
 		_create: function () {
 			var $this = this, table, row, cell, id, baseId = $this.element.attr("id");
@@ -178,11 +218,12 @@
 
 							/** Triggers the executeComplete event. */
 							onExecuteComplete = function (results, messages) {
-								var feature;
+								var feature, graphic;
 								$this._setInProgress(false);
 								feature = results[0].value.features[0];
-								$this._addFeature(feature);
+								graphic = $this._addFeature(feature);
 								$this._trigger("executeComplete", null, {
+									graphic: graphic,
 									results: results,
 									messages: messages,
 									penetrates: feature.attributes.PenetratesSurface === "yes"
