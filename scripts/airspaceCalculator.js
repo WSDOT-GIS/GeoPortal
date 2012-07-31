@@ -43,8 +43,8 @@
 		output = $("<div>");
 		$("<p>").text(message).appendTo(output);
 		list = $("<dl>").appendTo(output);
-		$("<dt>AGL</dt>").appendTo(list);
-		$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
+		////$("<dt>AGL</dt>").appendTo(list);
+		////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
 		$("<dt>Distance from Surface</dt>").appendTo(list);
 		$("<dd>").text([formatAsFeetAndInches(distanceF), " (", Math.round(distanceM * 100) / 100, " m.)"].join("")).appendTo(list);
 		$("<dt>Elevation</dt>").appendTo(list);
@@ -72,6 +72,7 @@
 		_form: null,
 		_geoprocessor: null,
 		_graphicsLayer: null,
+		_drawToolbar: null,
 		/** This will be true when the airspaceCalculator is waiting for a response from the GP service, false otherwise. */
 		isBusy: false,
 
@@ -105,6 +106,24 @@
 				}
 			}
 			return this._graphicsLayer;
+		},
+		getDrawToolbar: function () {
+			var $this = this;
+			if (this._drawToolbar === null) {
+				this._drawToolbar = new esri.toolbars.Draw(this.options.map);
+				dojo.connect(this._drawToolbar, "onDrawEnd", function (geometry) {
+					// Fill the X and Y boxes with the 
+					$this._drawToolbar.deactivate();
+					$this._trigger("drawDeactivate", null, { geometry: geometry, airspaceCalculator: $this });
+					if (geometry) {
+						// Convert the geometry to geographic.
+						geometry = esri.geometry.webMercatorToGeographic(geometry);
+						$this._xInput.val(geometry.x);
+						$this._yInput.val(geometry.y);
+					}
+				});
+			}
+			return this._drawToolbar;
 		},
 		_addFeature: function (graphic) {
 			var graphicsLayer = this.getGraphicsLayer(), outGraphic;
@@ -166,13 +185,57 @@
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._heightInput.appendTo(cell);
 
+			// Create the buttons.
+			row = $("<div>").appendTo($this._form);
+			// Get Point
+			$("<button>").attr({
+				type: "button"
+			}).text("Get point from map").button({
+				label: "Get point from map",
+				text: false,
+				icons: {
+					primary: "ui-icon-pencil"
+				}
+			}).click(function () {
+				var toolbar;
+				toolbar = $this.getDrawToolbar();
+				toolbar.activate(esri.toolbars.Draw.POINT);
+				$this._trigger("toolbarActivate", null, { airspaceCalculator: $this });
+			}).appendTo(row);
+
+			// Clear graphics
+			$("<button>").attr({
+				type: "button"
+			}).text("Clear Graphics").button({
+				label: "Clear Graphics",
+				text: false,
+				icons: {
+					primary: "ui-icon-trash"
+				}
+			}).click(function () {
+				if ($this._graphicsLayer) {
+					$this._graphicsLayer.clear();
+				}
+			}).appendTo(row);
+
+			// Reset form
+			$("<button type='reset'>").button({
+				label: "Reset",
+				text: false,
+				icons: {
+					primary: "ui-icon-closethick"
+				}
+			}).appendTo(row);
+
 			// Calculate button
 			// Note that IE7 will not allow the type of the button to be changed once it has been created, therefore the type cannot be assigned via the $().attr function.
-			$this._calculateButton = $("<button type='submit'>").text("Calculate").appendTo($this._form);
+			$this._calculateButton = $("<button type='submit'>").text("Calculate").appendTo(row);
 
 			// Convert the button to a JQuery UI button if JQuery UI is loaded.
 			if (typeof ($.fn.button) !== "undefined") {
 				$this._calculateButton.button({
+					label: "Calculate",
+					text: true,
 					icons: {
 						primary: "ui-icon-calculator"
 					}
@@ -186,7 +249,7 @@
 				progressBar = window.document.createElement("progress");
 				// Test the browser's support for this element.  If the browser supports progress, the element should have a max property.
 				if (typeof (progressBar.max) !== "undefined") {
-					$this._progressBar = $(progressBar).text("Waiting for response from Airpsace Calculator service...");
+					$this._progressBar = $(progressBar).text("Waiting for response from Airspace Calculator service...");
 				} else if ($this.options.progressAlternativeImageUrl) {
 					// If the browser does not supprt the progress element and an aletrnative image has been provided, create an img instead.
 					$this._progressBar = $("<img>").attr({
@@ -194,7 +257,7 @@
 					});
 				} else {
 					// If the browser doesn't support progress and no alternate image has been specified, create a DIV instead.
-					$this._progressBar = $("<div>").text("Waiting for response from Airpsace Calculator service...");
+					$this._progressBar = $("<div>").text("Waiting for response from Airspace Calculator service...");
 				}
 				// Add the progress bar and hide it for now.
 				$this._progressBar.appendTo($this.element).hide();
