@@ -62,17 +62,22 @@
 			url: null, // e.g., "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations"
 			progressAlternativeImageUrl: null,
 			isGPAsynch: false,
-			map: null
+			map: null,
+			pointClickSymbol: new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_X)
 		},
 		_xInput: null,
 		_yInput: null,
 		_heightInput: null,
+		_drawPointButton: null,
+		_clearGraphicsButton: null,
+		_resetButton: null,
 		_calculateButton: null,
 		_progressBar: null,
 		_form: null,
 		_geoprocessor: null,
 		_graphicsLayer: null,
 		_drawToolbar: null,
+		_clickedGraphic: null,
 		/** This will be true when the airspaceCalculator is waiting for a response from the GP service, false otherwise. */
 		isBusy: false,
 
@@ -84,12 +89,12 @@
 				this.isBusy = true;
 				this._progressBar.show();
 				this._calculateButton.hide();
-				$("input", this.element).attr("disabled", true);
+				$("input,button", this.element).attr("disabled", true);
 			} else {
 				this.isBusy = false;
 				this._progressBar.hide();
 				this._calculateButton.show();
-				$("input", this.element).attr("disabled", null);
+				$("input,button", this.element).attr("disabled", null);
 			}
 			return this;
 		},
@@ -107,13 +112,33 @@
 			}
 			return this._graphicsLayer;
 		},
+		_updateTempGraphic: function (point) {
+			/// <summary>Adds a graphic to the map's graphics layer at the specified point, replacing any exiting graphic added to that layer by this widget.</summary>
+			/// <param name="point" type="esri.graphics.Point">The point to be added to the map as a graphic.  
+			// If no point is provided (null or undefined), any existing graphics will simply be removed without adding a new graphic.</param>
+			/// <returns type="jQuery.fn.airspaceCalculator" />
+			var $this = this;
+			if ($this._clickedGraphic) {
+				$this.options.map.graphics.remove($this._clickedGraphic);
+			}
+			if (point) {
+				$this._clickedGraphic = new esri.Graphic(point, $this.options.pointClickSymbol);
+				$this.options.map.graphics.add($this._clickedGraphic);
+			} else {
+				$this._clickedGraphic = null;
+			}
+			return this;
+		},
 		getDrawToolbar: function () {
 			var $this = this;
 			if (this._drawToolbar === null) {
 				this._drawToolbar = new esri.toolbars.Draw(this.options.map);
 				dojo.connect(this._drawToolbar, "onDrawEnd", function (geometry) {
-					// Fill the X and Y boxes with the 
+					// Fill the X and Y boxes with the clicked point's coordinates
 					$this._drawToolbar.deactivate();
+					// Add the clicked location to the map
+					$this._updateTempGraphic(geometry);
+
 					$this._trigger("drawDeactivate", null, { geometry: geometry, airspaceCalculator: $this });
 					if (geometry) {
 						// Convert the geometry to geographic.
@@ -216,6 +241,7 @@
 				if ($this._graphicsLayer) {
 					$this._graphicsLayer.clear();
 				}
+				$this._updateTempGraphic();
 			}).appendTo(row);
 
 			// Reset form
@@ -284,6 +310,8 @@
 								var feature, graphic;
 								$this._setInProgress(false);
 								feature = results[0].value.features[0];
+								// Remove the temporary graphic
+								$this._updateTempGraphic();
 								graphic = $this._addFeature(feature);
 								$this._trigger("executeComplete", null, {
 									graphic: graphic,
