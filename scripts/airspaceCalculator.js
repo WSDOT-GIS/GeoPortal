@@ -3,19 +3,81 @@
 (function ($) {
 	"use strict";
 
+	function _createRenderer() {
+		var renderer, defaultSymbol, lineSymbol, penetrationSymbol;
+		lineSymbol = esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color("black"), 1);
+		defaultSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, lineSymbol, new dojo.Color([255, 255, 255, 0.5]));
+		renderer = new esri.renderer.UniqueValueRenderer(defaultSymbol, "PenetratesSurface");
+		penetrationSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, lineSymbol, new dojo.Color("red"));
+		renderer.addValue({
+			value: "yes",
+			symbol: penetrationSymbol,
+			label: "Penetration",
+			description: "Penetration"
+		});
+		return renderer;
+	}
+
+	function formatAsFeetAndInches(feet) {
+		/// <summary>Formats a Number (feet) into a string (feet and inches (rounded))</summary>
+		/// <param name="feet" type="Number">A number of feet.</param>
+		/// <returns type="String" />
+		var inches = feet % 1;
+		feet = feet - inches;
+		inches = Math.round(inches * 12);
+		if (inches === 12) {
+			feet += 1;
+			inches = 0;
+		}
+		return inches > 0 ? [feet, "'", inches, '"'].join("") : [feet, "'"].join("");
+	}
+
+	function formatResults(graphic) {
+		var output, message, list, distanceM = graphic.attributes.DistanceFromSurface, distanceF, ftPerM = 3.28084;
+		message = ["A building ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
+
+
+		// Get the distance in feet (meters to feet conversion).
+		distanceF = distanceM * ftPerM;
+
+		output = $("<div>");
+		$("<p>").text(message).appendTo(output);
+		list = $("<dl>").appendTo(output);
+		////$("<dt>AGL</dt>").appendTo(list);
+		////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
+		$("<dt>Distance from Surface</dt>").appendTo(list);
+		$("<dd>").text([formatAsFeetAndInches(distanceF), " (", Math.round(distanceM * 100) / 100, " m.)"].join("")).appendTo(list);
+		$("<dt>Elevation</dt>").appendTo(list);
+		$("<dd>").text([formatAsFeetAndInches(graphic.attributes.Z * ftPerM), "(", Math.round(graphic.attributes.Z * 100) / 100, " m.)"].join("")).appendTo(list);
+
+		return output[0];
+	}
+
+	function formatTitle(graphic) {
+		return graphic.attributes.PenetratesSurface === "yes" ? "Surface Penetration" : "No Surface Penetration";
+	}
+
 	$.widget("ui.airspaceCalculator", {
 		options: {
 			url: null, // e.g., "http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations"
 			progressAlternativeImageUrl: null,
-			isGPAsynch: false
+			isGPAsynch: false,
+			map: null,
+			pointClickSymbol: new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_X)
 		},
 		_xInput: null,
 		_yInput: null,
 		_heightInput: null,
+		_drawPointButton: null,
+		_clearGraphicsButton: null,
+		_resetButton: null,
 		_calculateButton: null,
 		_progressBar: null,
 		_form: null,
 		_geoprocessor: null,
+		_graphicsLayer: null,
+		_drawToolbar: null,
+		_clickedGraphic: null,
 		/** This will be true when the airspaceCalculator is waiting for a response from the GP service, false otherwise. */
 		isBusy: false,
 
@@ -27,14 +89,72 @@
 				this.isBusy = true;
 				this._progressBar.show();
 				this._calculateButton.hide();
-				$("input", this.element).attr("disabled", true);
+				$("input,button", this.element).attr("disabled", true);
 			} else {
 				this.isBusy = false;
 				this._progressBar.hide();
 				this._calculateButton.show();
-				$("input", this.element).attr("disabled", null);
+				$("input,button", this.element).attr("disabled", null);
 			}
 			return this;
+		},
+		getGraphicsLayer: function () {
+			if (this._graphicsLayer === null) {
+				this._graphicsLayer = esri.layers.GraphicsLayer({ id: "Airspace Calculator" });
+				// Setup renderer.
+				this._graphicsLayer.setRenderer(_createRenderer());
+				this._graphicsLayer.setInfoTemplate(new esri.InfoTemplate(formatTitle, formatResults));
+				if (!this.options.map) {
+					throw new Error("The map option has not been set for the Airspace Calculator.");
+				} else {
+					this.options.map.addLayer(this._graphicsLayer);
+				}
+			}
+			return this._graphicsLayer;
+		},
+		_updateTempGraphic: function (point) {
+			/// <summary>Adds a graphic to the map's graphics layer at the specified point, replacing any exiting graphic added to that layer by this widget.</summary>
+			/// <param name="point" type="esri.graphics.Point">The point to be added to the map as a graphic.  
+			// If no point is provided (null or undefined), any existing graphics will simply be removed without adding a new graphic.</param>
+			/// <returns type="jQuery.fn.airspaceCalculator" />
+			var $this = this;
+			if ($this._clickedGraphic) {
+				$this.options.map.graphics.remove($this._clickedGraphic);
+			}
+			if (point) {
+				$this._clickedGraphic = new esri.Graphic(point, $this.options.pointClickSymbol);
+				$this.options.map.graphics.add($this._clickedGraphic);
+			} else {
+				$this._clickedGraphic = null;
+			}
+			return this;
+		},
+		getDrawToolbar: function () {
+			var $this = this;
+			if (this._drawToolbar === null) {
+				this._drawToolbar = new esri.toolbars.Draw(this.options.map);
+				dojo.connect(this._drawToolbar, "onDrawEnd", function (geometry) {
+					// Fill the X and Y boxes with the clicked point's coordinates
+					$this._drawToolbar.deactivate();
+					// Add the clicked location to the map
+					$this._updateTempGraphic(geometry);
+
+					$this._trigger("drawDeactivate", null, { geometry: geometry, airspaceCalculator: $this });
+					if (geometry) {
+						// Convert the geometry to geographic.
+						geometry = esri.geometry.webMercatorToGeographic(geometry);
+						$this._xInput.val(geometry.x);
+						$this._yInput.val(geometry.y);
+					}
+				});
+			}
+			return this._drawToolbar;
+		},
+		_addFeature: function (graphic) {
+			var graphicsLayer = this.getGraphicsLayer(), outGraphic;
+			outGraphic = graphicsLayer.add(graphic);
+			graphicsLayer.refresh();
+			return outGraphic;
 		},
 		_create: function () {
 			var $this = this, table, row, cell, id, baseId = $this.element.attr("id");
@@ -90,13 +210,58 @@
 			cell = $("<div class='table-cell'>").appendTo(row);
 			$this._heightInput.appendTo(cell);
 
+			// Create the buttons.
+			row = $("<div>").appendTo($this._form);
+			// Get Point
+			$("<button>").attr({
+				type: "button"
+			}).text("Get point from map").button({
+				label: "Get point from map",
+				text: false,
+				icons: {
+					primary: "ui-icon-pencil"
+				}
+			}).click(function () {
+				var toolbar;
+				toolbar = $this.getDrawToolbar();
+				toolbar.activate(esri.toolbars.Draw.POINT);
+				$this._trigger("toolbarActivate", null, { airspaceCalculator: $this });
+			}).appendTo(row);
+
+			// Clear graphics
+			$("<button>").attr({
+				type: "button"
+			}).text("Clear Graphics").button({
+				label: "Clear Graphics",
+				text: false,
+				icons: {
+					primary: "ui-icon-trash"
+				}
+			}).click(function () {
+				if ($this._graphicsLayer) {
+					$this._graphicsLayer.clear();
+				}
+				$this._updateTempGraphic();
+			}).appendTo(row);
+
+			// Reset form
+			$("<button type='reset'>").button({
+				label: "Reset",
+				text: false,
+				icons: {
+					primary: "ui-icon-closethick"
+				}
+			}).appendTo(row);
+
 			// Calculate button
 			// Note that IE7 will not allow the type of the button to be changed once it has been created, therefore the type cannot be assigned via the $().attr function.
-			$this._calculateButton = $("<button type='submit'>").text("Calculate").appendTo($this._form);
+			$this._calculateButton = $("<button type='submit'>").text("Calculate").appendTo(row);
 
 			// Convert the button to a JQuery UI button if JQuery UI is loaded.
 			if (typeof ($.fn.button) !== "undefined") {
 				$this._calculateButton.button({
+					label: "Calculate",
+					text: true,
 					icons: {
 						primary: "ui-icon-calculator"
 					}
@@ -110,7 +275,7 @@
 				progressBar = window.document.createElement("progress");
 				// Test the browser's support for this element.  If the browser supports progress, the element should have a max property.
 				if (typeof (progressBar.max) !== "undefined") {
-					$this._progressBar = $(progressBar).text("Waiting for response from Airpsace Calculator service...");
+					$this._progressBar = $(progressBar).text("Waiting for response from Airspace Calculator service...");
 				} else if ($this.options.progressAlternativeImageUrl) {
 					// If the browser does not supprt the progress element and an aletrnative image has been provided, create an img instead.
 					$this._progressBar = $("<img>").attr({
@@ -118,7 +283,7 @@
 					});
 				} else {
 					// If the browser doesn't support progress and no alternate image has been specified, create a DIV instead.
-					$this._progressBar = $("<div>").text("Waiting for response from Airpsace Calculator service...");
+					$this._progressBar = $("<div>").text("Waiting for response from Airspace Calculator service...");
 				}
 				// Add the progress bar and hide it for now.
 				$this._progressBar.appendTo($this.element).hide();
@@ -142,10 +307,14 @@
 
 							/** Triggers the executeComplete event. */
 							onExecuteComplete = function (results, messages) {
-								var feature;
+								var feature, graphic;
 								$this._setInProgress(false);
 								feature = results[0].value.features[0];
+								// Remove the temporary graphic
+								$this._updateTempGraphic();
+								graphic = $this._addFeature(feature);
 								$this._trigger("executeComplete", null, {
+									graphic: graphic,
 									results: results,
 									messages: messages,
 									penetrates: feature.attributes.PenetratesSurface === "yes"
@@ -161,6 +330,7 @@
 							};
 
 							$this._geoprocessor = esri.tasks.Geoprocessor($this.options.url);
+							$this._geoprocessor.setOutSpatialReference($this.options.map.spatialReference);
 							dojo.connect($this._geoprocessor, "onExecuteComplete", $this, onExecuteComplete);
 							dojo.connect($this._geoprocessor, "onError", $this, onError);
 						} ());

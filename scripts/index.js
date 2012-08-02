@@ -904,20 +904,17 @@ dojo.require("esri.dijit.Print");
 					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
 						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
 							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
+								map: map,
 								url: wsdot.config.airspaceCalculatorUrl,
 								progressAlternativeImageUrl: "images/loading-bar.gif",
 								executeComplete: function(event, data) {
-									// TODO: Show results in jqueryui dialog.
 									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-									var penetrates = data.penetrates, feature = data.results[0].value.features[0], feetPerMeter = 3.2808399, distanceM, distanceF;
-									console.debug(data);
-									distanceM = Math.abs(feature.attributes.DistanceFromSurface);
-									distanceF = distanceM * feetPerMeter;
-									if (data.penetrates) {
-										alert("Intersection found.\nDistance from surface: " + distanceM + " m. (" + distanceF + "')");
-									} else {
-										alert("No intersection found.\nDistance from surface: " + distanceM + " m. (" + distanceF + "')");
-									}
+									var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
+									screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+									map.infoWindow.setContent(content);
+									map.infoWindow.setTitle(title);
+									map.centerAt(graphic.geometry);
+									map.infoWindow.show(screenPoint);
 									
 								},
 								error: function(event, data) {
