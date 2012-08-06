@@ -1,16 +1,23 @@
+/*jslint nomen: true, white: true, browser: true */
 /*global jQuery:true, esri:true, dojo:true */
 (function ($) {
 	"use strict";
 
 
 	function addExtensions() {
+		var detectHtmlPopups;
+
+		function htmlPopupTypeIsHtmlTextOrUrl(layerInfo) {
+			return layerInfo.htmlPopupType !== undefined && layerInfo.htmlPopupType !== null && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType);
+		}
+
 		function getIdsOfLayersWithHtmlPopups(mapServiceLayer, returnUrls) {
 			var ids = [], layerInfo, i, l, layerId;
-			if (typeof (mapServiceLayer.layerInfos) === "undefined") {
+			if (mapServiceLayer.layerInfos === undefined) {
 				throw new Error("Map service layer does not have a defined \"layerInfos\" property.");
 			}
 
-			if (typeof (mapServiceLayer.visibleLayers) !== "undefined") {
+			if (mapServiceLayer.visibleLayers !== undefined) {
 				// Loop through all of the visibleLayers.  Each element is a layer ID integer.
 				for (i = 0, l = mapServiceLayer.visibleLayers.length; i < l; i += 1) {
 					// Get the current layer ID.
@@ -23,7 +30,7 @@
 
 					// Add to the output array the ID of any sublayer that has an html popup defined 
 					// (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
-					if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
+					if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
 						if (returnUrls) {
 							ids.push(mapServiceLayer.url + "/" + String(layerId));
 						} else {
@@ -37,8 +44,8 @@
 					layerInfo = mapServiceLayer.layerInfos[i];
 					// Add to the output array the ID of any sublayer that has an html popup defined 
 					// (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
-					if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
-						if (typeof (layerInfo.visibleLayers) === "undefined" || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+					if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
+						if (layerInfo.visibleLayers === undefined || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
 							if (returnUrls) {
 								ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
 							} else {
@@ -56,33 +63,35 @@
 			htmlPopupType: null
 		});
 
-		function detectHtmlPopups(htmlPopupLayerFoundAction) {
+		detectHtmlPopups = function (htmlPopupLayerFoundAction) {
 			/// <summary>Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.</summary>
 			/// <param name="htmlPopupLayerFoundAction" type="Function">Optional.  A function that will be called whenever an HTML popup is found.</param>
 			/// <returns type="String" />
 			var mapService = this, layerInfo, layerUrl, i, l;
 			// Query the map service to get the list of layers.
 
+			function handleHtmlPopupResponse(layerResponse, textStatus) {
+				var layerInfo = mapService.layerInfos[layerResponse.id];
+				// If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
+				if (/success/i.test(textStatus)) {
+					if (layerResponse.htmlPopupType !== undefined && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
+								layerResponse.type !== undefined && !/Annotation/gi.test(layerResponse.type)) {
+						// Add this URL to the list of URLs that supports HTML popups.
+						layerInfo.htmlPopupType = layerResponse.htmlPopupType;
+						if (typeof (htmlPopupLayerFoundAction) === "function") {
+							htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
+						}
+					}
+				}
+			}
+
 			for (i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
 				layerInfo = mapService.layerInfos[i];
 				layerUrl = [mapService.url, String(layerInfo.id)].join("/");
 				// Query the layers to see if they support html Popups
-				$.get(layerUrl, { f: "json" }, function (layerResponse, textStatus) {
-					var layerInfo = mapService.layerInfos[layerResponse.id];
-					// If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
-					if (/success/i.test(textStatus)) {
-						if (typeof (layerResponse.htmlPopupType) !== "undefined" && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
-								typeof (layerResponse.type) !== "undefined" && !/Annotation/gi.test(layerResponse.type)) {
-							// Add this URL to the list of URLs that supports HTML popups.
-							layerInfo.htmlPopupType = layerResponse.htmlPopupType;
-							if (typeof (htmlPopupLayerFoundAction) === "function") {
-								htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
-							}
-						}
-					}
-				}, "jsonp");
+				$.get(layerUrl, { f: "json" }, handleHtmlPopupResponse, "jsonp");
 			}
-		}
+		};
 
 		// Extend each of the types in the array with the same proerties and methods.
 		dojo.forEach([esri.layers.ArcGISDynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer], function (ctor) {
@@ -257,7 +266,7 @@
 						return;
 					}
 
-					if (layer && typeof (layer.isInstanceOf) !== "undefined" && (layer.isInstanceOf(esri.layers.ArcGISDynamicMapServiceLayer) || layer.isInstanceOf(esri.layers.ArcGISTiledMapServiceLayer))) {
+					if (layer && layer.isInstanceOf !== undefined && (layer.isInstanceOf(esri.layers.ArcGISDynamicMapServiceLayer) || layer.isInstanceOf(esri.layers.ArcGISTiledMapServiceLayer))) {
 						layer.detectHtmlPopups();
 					}
 				});
@@ -314,12 +323,6 @@
 								handleAs: "text",
 								load: function (data) {
 									var html = $(data), list = html.filter("ul"), listItems = $("li", list);
-									console.debug({
-										data: data,
-										html: html,
-										list: list,
-										listItems: listItems
-									});
 									if (listItems.length > 0) {
 										progressBar.replaceWith(list);
 										$("li a", list).attr({
@@ -344,16 +347,16 @@
 					}
 
 					function loadContent(div) {
-						var layer, result;
+						var layer, result, url;
 						// Load the HTML popup content if it has not already been loaded.
 						if (div.contents().length < 1) {
 							layer = div.data("layer");
 							result = div.data("result");
 
 							// If there is an object ID field, load the HTML popup.
-							if (typeof (result.feature) !== "undefined" && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
+							if (result.feature !== undefined && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
 								// Get the map service url.
-								var url = layer.url;
+								url = layer.url;
 								// Append the layer ID (except for feature layers, which have the layer id as part of the url).
 								if (!layer.isInstanceOf(esri.layers.FeatureLayer)) {
 									url += "/" + String(result.layerId);
@@ -376,12 +379,14 @@
 									}
 								}, "jsonp");
 							} else {
-								var dl = $("<dl>");
-								$.each(result.feature.attributes, function (name, value) {
-									$("<dt>").text(name).appendTo(dl);
-									$("<dd>").text(value).appendTo(dl);
-								});
-								dl.appendTo(div);
+								(function () {
+									var dl = $("<dl>");
+									$.each(result.feature.attributes, function (name, value) {
+										$("<dt>").text(name).appendTo(dl);
+										$("<dd>").text(value).appendTo(dl);
+									});
+									dl.appendTo(div);
+								} ());
 							}
 
 							// 
@@ -396,7 +401,7 @@
 					function setPosition(position) {
 						/// Shows the ".id-result" element at the specified position and hides all others.
 						var all, current, currentIndex, lastIndex, result;
-						if (typeof (position) === "undefined" || position === null) {
+						if (position === undefined || position === null) {
 							throw new Error("Required parameter \"position\" not provided.");
 						}
 						all = $(".id-result", dialog);
@@ -503,12 +508,12 @@
 
 					$("<progress>").text("Running Identify on layers...").appendTo(dialog);
 					idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
-						var totalSpan;
-						idTaskCount--;
+						var totalSpan, resultTotal;
+						idTaskCount = idTaskCount - 1; //idTaskCount--;
 						// Remove the progress bar.
 						// Add a layer property to the identify results.
 						if (!idResults || !idResults.length) {
-							var resultTotal = $("span.result-total", dialog).text();
+							resultTotal = $("span.result-total", dialog).text();
 							if (!dialog.data("hasResults") && idTaskCount < 1) {
 								$("progress", dialog).replaceWith('No results found');
 								dialog.dialog("option", "title", null);
@@ -525,11 +530,12 @@
 						}
 
 						dojo.forEach(idResults, function (result) {
-							var progress = $("progress", dialog);
+							var progress, resultDiv;
+							progress = $("progress", dialog);
 
 							dialog.data("hasResults", true);
 
-							var resultDiv = $("<div>").addClass("id-result").appendTo(dialog).data({
+							resultDiv = $("<div>").addClass("id-result").appendTo(dialog).data({
 								result: result,
 								layer: layer
 							});
@@ -543,7 +549,11 @@
 					}, {
 						tolerance: 20
 					}, function (layer, error) {
-						console.error(layer, error);
+						/*global console:true */
+						if (console !== undefined) {
+							console.error(layer, error);
+						}
+						/*global console:false*/
 					});
 
 					// Remove the dialog of there are no ID tasks.
