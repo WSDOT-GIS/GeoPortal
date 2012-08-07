@@ -28,3 +28,12 @@
 {
     text-align: center;
 }
+
+.ui-identify-hyperlink-list
+{
+    display: block;
+    max-height: 70px;
+    width: 100%;
+    overflow: auto;
+}
+
