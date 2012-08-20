@@ -77,7 +77,6 @@
     <Content Include="scripts\config.internal-Freight.js" />
     <Content Include="scripts\config.internal-RFIP.js" />
     <Content Include="scripts\config.js" />
-    <Content Include="scripts\copyrightInfo.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
     <Content Include="scripts\elc.js" />
@@ -92,6 +91,7 @@
     <Content Include="scripts\jquery.placeholder.min.js" />
     <Content Include="scripts\jquery.pnotify.js" />
     <Content Include="scripts\jquery.pnotify.min.js" />
+    <Content Include="scripts\jsapi_vsdoc_v31.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,6 @@
 .ui-layer-sorter .ui-sortable li span { position: absolute; margin-left: -1.3em; }
 .ui-layer-sorter-map-position-label {
 	text-align: center;
-	background-color: black;
+	background-color: #525252;
 	color: white
 };

@@ -8,7 +8,7 @@
 
 #legend thead *
 {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #525252;
 }
 
 #legend th 
@@ -30,12 +30,12 @@
 .alternate-row 
 {
     background-color: #eeeeee;
-    color: Black;
+    color: #525252;
 }
 
 #fcLegend tr td:first-child
 {
-    background: black;
+    background: #525252;
 }
 
 img[src="images/ajax-loader.gif"] 

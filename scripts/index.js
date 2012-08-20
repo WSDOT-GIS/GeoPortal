@@ -28,12 +28,11 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 */
 
 
-/// <reference path="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"/>
-/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.3"/>
+
+/// <reference path="jsapi_vsdoc_v31.js" />
 /// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
 /// <reference path="jquery.ba-bbq.js" />
-/// <reference path="json2.js" />
 /// <reference path="layerList.js" />
 /// <reference path="locationInfo.js" />
 /// <reference path="config.js" />
@@ -73,6 +72,7 @@ dojo.require("esri.dijit.Measurement");
 dojo.require("esri.tasks.gp");
 
 dojo.require("esri.layers.FeatureLayer");
+dojo.require("esri.IdentityManager");
 dojo.require("esri.dijit.Print");
 
 (function ($) {
@@ -609,7 +609,9 @@ dojo.require("esri.dijit.Print");
 						"content": { "f": "json" }
 					});
 					printInfo.then(setupPrinter, function(error) {
-						console.error(error);
+						if (console !== undefined) {
+							console.error("Failed to load print service URL.", error);
+						}
 					});
 				}
 			}
@@ -1058,9 +1060,9 @@ dojo.require("esri.dijit.Print");
 			dojo.connect(map, "onLoad", map, function () {
 				map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
 
-				$("#copyright").copyrightInfo({
-					map: map
-				});
+				////$("#copyright").copyrightInfo({
+				////	map: map
+				////});
 
 				// Set the scale.
 				setScaleLabel();
