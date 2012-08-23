@@ -141,9 +141,9 @@
 					},
 					{
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportInformation/MapServer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportInformationSystem/MapServer",
 						"options": {
-							"id": "Airport Information"
+							"id": "Airport Information System"
 						}
 					}
 			],
