@@ -225,7 +225,7 @@
 				var toolbar;
 				toolbar = $this.getDrawToolbar();
 				toolbar.activate(esri.toolbars.Draw.POINT);
-				$this._trigger("toolbarActivate", null, { airspaceCalculator: $this });
+				$this._trigger("drawActivate", null, { airspaceCalculator: $this });
 			}).appendTo(row);
 
 			// Clear graphics
