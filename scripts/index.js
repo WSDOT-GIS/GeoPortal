@@ -713,6 +713,37 @@ dojo.require("esri.dijit.Print");
 				mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
 				tabs = new dijit.layout.TabContainer(null, "tabs");
 
+				function setupAirspaceCalculator() {
+					$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
+						$("#airspaceCalculator").airspaceCalculator({
+							map: map,
+							url: wsdot.config.airspaceCalculatorUrl,
+							progressAlternativeImageUrl: "images/loading-bar.gif",
+							executeComplete: function(event, data) {
+								// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
+								var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
+								screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+								map.infoWindow.setContent(content);
+								map.infoWindow.setTitle(title);
+								map.centerAt(graphic.geometry);
+								map.infoWindow.show(screenPoint);
+									
+							},
+							drawActivate: function() {
+								map.disablePopups();
+							},
+							drawDeactivate: function() {
+								map.enablePopups();
+							},
+							error: function(event, data) {
+								alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
+							}
+						});
+						dojo.disconnect(createLinks.airspaceCalculator);
+						delete createLinks.airspaceCalculator;
+					});
+				}
+
 				(function(tabOrder) {
 					var i, l, name;
 
@@ -727,6 +758,14 @@ dojo.require("esri.dijit.Print");
 						} else if (/Tools/i.test(name)) {
 							toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
 							tabs.addChild(toolsTab);
+						} else if (/Airspace\s*Calculator/i.test(name)) {
+							// Add elements that will become the tab to the dom.
+							$("<div id='airspaceCalculatorTab' title='Airspace Calculator'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
+							tabs.addChild(new dijit.layout.ContentPane({ 
+								title: "Airspace Calculator", 
+								id: "airspaceCalculatorTab",
+								onShow: setupAirspaceCalculator
+							}, "airspaceCalculatorTab"));
 						}
 					}
 				} (wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]));
@@ -895,42 +934,6 @@ dojo.require("esri.dijit.Print");
 							});
 							dojo.disconnect(createLinks.search);
 							delete createLinks.search;
-						});
-					});
-				}
-
-				function setupAirspaceCalculator() {
-					// Create the child container for the airspace calculator.
-					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Airspace Calculator" }, dojo.create("div", { id: "airspaceCalculatorPane" }, "toolsAccordion")));
-					// Set up the on show event to load the control.
-					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
-						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
-							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
-								map: map,
-								url: wsdot.config.airspaceCalculatorUrl,
-								progressAlternativeImageUrl: "images/loading-bar.gif",
-								executeComplete: function(event, data) {
-									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-									var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
-									screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
-									map.infoWindow.setContent(content);
-									map.infoWindow.setTitle(title);
-									map.centerAt(graphic.geometry);
-									map.infoWindow.show(screenPoint);
-									
-								},
-								drawActivate: function() {
-									map.disablePopups();
-								},
-								drawDeactivate: function() {
-									map.enablePopups();
-								},
-								error: function(event, data) {
-									alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
-								}
-							});
-							dojo.disconnect(createLinks.airspaceCalculator);
-							delete createLinks.airspaceCalculator;
 						});
 					});
 				}
