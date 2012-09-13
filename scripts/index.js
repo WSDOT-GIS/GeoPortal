@@ -716,6 +716,11 @@ dojo.require("esri.dijit.Print");
 				function setupAirspaceCalculator() {
 					$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
 						$("#airspaceCalculator").airspaceCalculator({
+							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
+							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " + 
+							"IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY," + 
+							"WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE " +
+							"OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
 							map: map,
 							url: wsdot.config.airspaceCalculatorUrl,
 							progressAlternativeImageUrl: "images/loading-bar.gif",
@@ -760,9 +765,9 @@ dojo.require("esri.dijit.Print");
 							tabs.addChild(toolsTab);
 						} else if (/Airspace\s*Calculator/i.test(name)) {
 							// Add elements that will become the tab to the dom.
-							$("<div id='airspaceCalculatorTab' title='Airspace Calculator'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
+							$("<div id='airspaceCalculatorTab'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
 							tabs.addChild(new dijit.layout.ContentPane({ 
-								title: "Airspace Calculator", 
+								title: "Airspace Calculator (β)", 
 								id: "airspaceCalculatorTab",
 								onShow: setupAirspaceCalculator
 							}, "airspaceCalculatorTab"));

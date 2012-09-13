@@ -63,7 +63,8 @@
 			progressAlternativeImageUrl: null,
 			isGPAsynch: false,
 			map: null,
-			pointClickSymbol: new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_X)
+			pointClickSymbol: new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_X),
+			disclaimer: null
 		},
 		_xInput: null,
 		_yInput: null,
@@ -364,6 +365,10 @@
 					}
 				}
 			});
+
+			if ($this.options.disclaimer) {
+				$("<div>").append($this.options.disclaimer).appendTo($this.element);
+			}
 
 			return this;
 		},
