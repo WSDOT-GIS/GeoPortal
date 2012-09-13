@@ -1,5 +1,5 @@
 ﻿/*global jQuery, Modernizr, esri, dojo*/
-/*jslint nomen: true, browser: true */
+/*jslint nomen: true, browser: true, white: true */
 (function ($) {
 	"use strict";
 
@@ -259,7 +259,7 @@
 			$this._calculateButton = $("<button type='submit'>").text("Calculate").appendTo(row);
 
 			// Convert the button to a JQuery UI button if JQuery UI is loaded.
-			if (typeof ($.fn.button) !== "undefined") {
+			if ($.fn.button !== undefined) {
 				$this._calculateButton.button({
 					label: "Calculate",
 					text: true,
@@ -275,7 +275,7 @@
 				// Create the progress element.
 				progressBar = window.document.createElement("progress");
 				// Test the browser's support for this element.  If the browser supports progress, the element should have a max property.
-				if (typeof (progressBar.max) !== "undefined") {
+				if (progressBar.max !== undefined) {
 					$this._progressBar = $(progressBar).text("Waiting for response from Airspace Calculator service...");
 				} else if ($this.options.progressAlternativeImageUrl) {
 					// If the browser does not supprt the progress element and an aletrnative image has been provided, create an img instead.
@@ -291,7 +291,7 @@
 			} ());
 
 			// Setup placeholder for non-supporting browsers...
-			if (typeof (Modernizr) !== "undefined" && typeof (Modernizr.input) !== "undefined" && typeof (Modernizr.input.placeholder) !== "undefined") {
+			if (Modernizr !== undefined && Modernizr.input !== undefined && Modernizr.input.placeholder !== undefined) {
 				if (!Modernizr.input.placeholder) {
 					$("[placeholder]", $this.element).placeholder();
 				}
@@ -367,7 +367,7 @@
 			});
 
 			if ($this.options.disclaimer) {
-				$("<div>").append($this.options.disclaimer).appendTo($this.element);
+				$("<div class='ui-disclaimer'>").append($this.options.disclaimer).appendTo($this.element);
 			}
 
 			return this;

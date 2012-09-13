@@ -400,3 +400,18 @@ abbr
 {
     text-decoration: underline;
 }
+
+.tabLabel, ui-tabs-nav 
+{
+    font-family: 'Segoe Condensed', 'Arial Narrow', 'Nimbus Sans', 'Lucida Sans', sans-serif;
+}
+
+.tabLabel 
+{
+    font-size: 0.8em;
+}
+
+.ui-disclaimer 
+{
+    font-size: 0.5em;
+}

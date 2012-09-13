@@ -767,7 +767,7 @@ dojo.require("esri.dijit.Print");
 							// Add elements that will become the tab to the dom.
 							$("<div id='airspaceCalculatorTab'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
 							tabs.addChild(new dijit.layout.ContentPane({ 
-								title: "Airspace Calculator (β)", 
+								title: "Airspace Calculator (Prototype)", 
 								id: "airspaceCalculatorTab",
 								onShow: setupAirspaceCalculator
 							}, "airspaceCalculatorTab"));
