@@ -292,7 +292,7 @@
 
 			// Setup placeholder for non-supporting browsers...
 			if (Modernizr !== undefined && Modernizr.input !== undefined && Modernizr.input.placeholder !== undefined) {
-				if (!Modernizr.input.placeholder) {
+				if (!Modernizr.input.placeholder && $.fn.placeholder !== undefined) {  // If the browser does not support "placeholder" attribute.
 					$("[placeholder]", $this.element).placeholder();
 				}
 			}
