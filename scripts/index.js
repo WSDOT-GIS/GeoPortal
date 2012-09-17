@@ -78,7 +78,7 @@ dojo.require("esri.dijit.Print");
 (function ($) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, helpDialog, createLinks = {}, defaultConfigUrl = "scripts/config.js";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "scripts/config.js";
 	wsdot = { config: {} };
 
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
@@ -86,7 +86,7 @@ dojo.require("esri.dijit.Print");
 		/// <param name="showEvenIfAlreadyAgreed" type="Boolean">Set this to true if you want to force the disclaimer to be shown even if there is a cookie indicating the user has already agreed.</param>
 		/// <returns type="Object" />
 		// Show the disclaimer if there is no cookie indicating that the user has seen it before.
-		if (typeof(wsdot.config.disclaimer) !== "undefined" && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")))) {
+		if (wsdot.config.disclaimer !== undefined && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")))) {
 			// Load the content into a div.  Only when the source page has loaded do invoke the dialog constructor.
 			// This is to ensure that the dialog is centered on the page.
 			return $("<div>").load(wsdot.config.disclaimer, function() {
@@ -131,7 +131,7 @@ dojo.require("esri.dijit.Print");
 		showDisclaimer(wsdot.config.alwaysShowDisclaimer);
 
 		// Add a method to the Date object that will return a short date string.
-		if (typeof (Date.toShortDateString) === "undefined") {
+		if (Date.toShortDateString === undefined) {
 			Date.prototype.toShortDateString = function () {
 				/// <summary>Returns a string representation of the date in the format Month-Date-Year.</summary>
 				return String(this.getMonth()) + "-" + String(this.getDate()) + "-" + String(this.getFullYear());
@@ -230,7 +230,7 @@ dojo.require("esri.dijit.Print");
 					/// <summary>Gets the current level of detail (LOD) for the map.</summary>
 					/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
 					/// <returns type="esri.layers.LOD" />
-					if (typeof (level) === "undefined") {
+					if (level === undefined) {
 						level = map.getLevel();
 					}
 					return map.lods[level];
@@ -253,7 +253,7 @@ dojo.require("esri.dijit.Print");
 						i, l;
 					for (i = 0, l = this.layerIds.length; i < l; i += 1) {
 						layer = this.getLayer(this.layerIds[i]);
-						if (layer.visible === true && (typeof (layer.wsdotCategory) === "undefined" || layer.wsdotCategory !== "Basemap")) {
+						if (layer.visible === true && (layer.wsdotCategory === undefined || layer.wsdotCategory !== "Basemap")) {
 							visibleLayers.push(layer);
 						}
 					}
@@ -291,16 +291,16 @@ dojo.require("esri.dijit.Print");
 						output = {};
 
 					// Set default values for omitted options.
-					if (typeof (options) === "undefined") {
+					if (options === undefined) {
 						options = {
 							removeInfoTemplate: true,
 							removeSymbol: true
 						};
 					}
-					if (typeof (options.removeInfoTemplate) === "undefined") {
+					if (options.removeInfoTemplate === undefined) {
 						options.removeInfoTemplate = true;
 					}
-					if (typeof (options.removeSymbol) === "undefined") {
+					if (options.removeSymbol === undefined) {
 						options.removeSymbol = true;
 					}
 
@@ -312,10 +312,10 @@ dojo.require("esri.dijit.Print");
 							if (options.removeInfoTemplate === true || options.removeSymbol === true) {
 								// Remove unwanted properties from each graphic representation as specified in the options object.
 								dojo.forEach(graphics, function (graphic /*, gIndex*/) {
-									if (typeof (graphic.infoTemplate) !== "undefined" && options.removeInfoTemplate === true) {
+									if (graphic.infoTemplate !== undefined && options.removeInfoTemplate === true) {
 										delete graphic.infoTemplate;
 									}
-									if (typeof (graphic.symbol) !== "undefined" && options.removeSymbol === true) {
+									if (graphic.symbol !== undefined && options.removeSymbol === true) {
 										delete graphic.symbol;
 									}
 								});
@@ -713,6 +713,42 @@ dojo.require("esri.dijit.Print");
 				mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
 				tabs = new dijit.layout.TabContainer(null, "tabs");
 
+				function setupAirspaceCalculator() {
+					$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
+						$("#airspaceCalculator").airspaceCalculator({
+							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
+							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " + 
+							"IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY," + 
+							"WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE " +
+							"OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+							map: map,
+							url: wsdot.config.airspaceCalculatorUrl,
+							progressAlternativeImageUrl: "images/loading-bar.gif",
+							executeComplete: function(event, data) {
+								// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
+								var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
+								screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+								map.infoWindow.setContent(content);
+								map.infoWindow.setTitle(title);
+								map.centerAt(graphic.geometry);
+								map.infoWindow.show(screenPoint);
+									
+							},
+							drawActivate: function() {
+								map.disablePopups();
+							},
+							drawDeactivate: function() {
+								map.enablePopups();
+							},
+							error: function(event, data) {
+								alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
+							}
+						});
+						dojo.disconnect(createLinks.airspaceCalculator);
+						delete createLinks.airspaceCalculator;
+					});
+				}
+
 				(function(tabOrder) {
 					var i, l, name;
 
@@ -727,6 +763,14 @@ dojo.require("esri.dijit.Print");
 						} else if (/Tools/i.test(name)) {
 							toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
 							tabs.addChild(toolsTab);
+						} else if (/Airspace\s*Calculator/i.test(name)) {
+							// Add elements that will become the tab to the dom.
+							$("<div id='airspaceCalculatorTab'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
+							tabs.addChild(new dijit.layout.ContentPane({ 
+								title: "Airspace Calculator (Prototype)", 
+								id: "airspaceCalculatorTab",
+								onShow: setupAirspaceCalculator
+							}, "airspaceCalculatorTab"));
 						}
 					}
 				} (wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]));
@@ -899,36 +943,6 @@ dojo.require("esri.dijit.Print");
 					});
 				}
 
-				function setupAirspaceCalculator() {
-					// Create the child container for the airspace calculator.
-					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Airspace Calculator" }, dojo.create("div", { id: "airspaceCalculatorPane" }, "toolsAccordion")));
-					// Set up the on show event to load the control.
-					createLinks.airspaceCalculator = dojo.connect(dijit.byId("airspaceCalculatorPane"), "onShow", function () {
-						$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
-							$("<div>").attr("id", "airspaceCalculator").appendTo("#airspaceCalculatorPane").airspaceCalculator({
-								map: map,
-								url: wsdot.config.airspaceCalculatorUrl,
-								progressAlternativeImageUrl: "images/loading-bar.gif",
-								executeComplete: function(event, data) {
-									// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-									var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
-									screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
-									map.infoWindow.setContent(content);
-									map.infoWindow.setTitle(title);
-									map.centerAt(graphic.geometry);
-									map.infoWindow.show(screenPoint);
-									
-								},
-								error: function(event, data) {
-									alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
-								}
-							});
-							dojo.disconnect(createLinks.airspaceCalculator);
-							delete createLinks.airspaceCalculator;
-						});
-					});
-				}
-
 				// Look in the configuration to determine which tools to add and in which order.
 				(function(tools){
 					var i, l;
@@ -1022,7 +1036,7 @@ dojo.require("esri.dijit.Print");
 			function setScaleLabel(level) {
 				// Set the scale.
 				var scale = map.getScale(level);
-				if (typeof (scale) === "undefined" || scale === null) {
+				if (scale === undefined || scale === null) {
 					$("#scaleText").text("");
 				}
 				else {
@@ -1087,7 +1101,7 @@ dojo.require("esri.dijit.Print");
 				}
 
 				// Setup Google Analytics tracking of the layers that are added to the map.
-				if (typeof(_gaq) !== "undefined") {
+				if (_gaq !== undefined) {
 					dojo.connect(map, "onLayerAddResult", gaTrackEvent);
 				}
 

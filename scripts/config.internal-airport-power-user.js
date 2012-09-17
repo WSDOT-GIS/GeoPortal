@@ -2,6 +2,8 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
+	"printUrl":"http://hqolymgis99t/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
+	"airspaceCalculatorUrl":"http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabOrder": [
 		"Layers",
 		"Tools",
@@ -43,6 +45,7 @@
 	"tools": [
 		"zoom",
 		"lrs",
+		"airspaceCalculator",
 		"search"
 	],
 	"queryTasks": {

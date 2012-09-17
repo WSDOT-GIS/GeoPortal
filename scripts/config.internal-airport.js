@@ -6,6 +6,7 @@
 	"airspaceCalculatorUrl":"http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabOrder": [
 		"Layers",
+		"Airspace Calculator",
 		"Tools",
 		"Basemap",
 		"Legend"
@@ -144,9 +145,9 @@
 					},
 					{
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportInformation/MapServer",
+						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportInformationSystem/MapServer",
 						"options": {
-							"id": "Airport Information"
+							"id": "Airport Information System"
 						}
 					}
 			],
