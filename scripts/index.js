@@ -1235,6 +1235,12 @@ dojo.require("esri.dijit.Print");
 			doPostConfig();
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
+			var request = this;
+			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
+			// Redirect to the aspx page which will prompt for a log in.
+			if (/parsererror/i.test(textStatus) && /^AIS\/config.json$/i.test(request.url)) {
+				location.replace("AirportPowerUser.aspx");
+			}
 			$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
 		}
 	});
