@@ -78,7 +78,7 @@ dojo.require("esri.dijit.Print");
 (function ($) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "scripts/config.js";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
 	wsdot = { config: {} };
 
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
@@ -1216,7 +1216,11 @@ dojo.require("esri.dijit.Print");
 		var qs = $.deparam.querystring(true), output = defaultConfigUrl;
 		// If the config parameter has not been specified, return the default.
 		if (qs.config) {
-			output = ["scripts/config", qs.config, "js"].join(".");
+			if (/\//g.test(qs.config)) {
+				output = [qs.config, ".json"].join("");
+			} else {
+				output = ["config/", qs.config, ".json"].join("");
+			}
 		}
 		return output;
 	}
