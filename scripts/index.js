@@ -1,5 +1,5 @@
 ﻿/*jslint devel: true, browser: true, white: true, nomen: true */
-/*global dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq */
+/*global require, dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq, $ */
 
 /*
 Copyright (c) 2011 Washington State Department of Transportation
@@ -39,43 +39,40 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 
 var wsdot;
 
-dojo.require("dojo.number");
-dojo.require("dijit.dijit"); // optimize: load dijit layer
-dojo.require("dijit.layout.BorderContainer");
-dojo.require("dijit.layout.TabContainer");
-dojo.require("dijit.layout.AccordionContainer");
-dojo.require("dijit.layout.ContentPane");
-
-dojo.require("dojox.layout.ExpandoPane");
-
-dojo.require("dijit.form.RadioButton");
-dojo.require("dijit.form.Select");
-dojo.require("dijit.form.FilteringSelect");
-dojo.require("dojo.data.ItemFileReadStore");
-dojo.require("dijit.form.NumberSpinner");
-dojo.require("dijit.form.DateTextBox");
-
-
-dojo.require("dojo.parser");
-
-dojo.require("esri.map");
-//dojo.require("esri.virtualearth.VETiledLayer");
-dojo.require("esri.dijit.BasemapGallery");
-dojo.require("esri.arcgis.utils");
-dojo.require("esri.dijit.Scalebar");
-dojo.require("esri.tasks.geometry");
-dojo.require("esri.tasks.query");
-dojo.require("esri.toolbars.navigation");
-dojo.require("esri.toolbars.draw");
-dojo.require("esri.dijit.Legend");
-dojo.require("esri.dijit.Measurement");
-dojo.require("esri.tasks.gp");
-
-dojo.require("esri.layers.FeatureLayer");
-dojo.require("esri.IdentityManager");
-dojo.require("esri.dijit.Print");
-
-(function ($) {
+require(["require", "dojo/number",
+	"dijit/layout/BorderContainer",
+	"dijit/layout/TabContainer",
+	"dijit/layout/AccordionContainer",
+	"dijit/layout/ContentPane",
+	"dojox/layout/ExpandoPane",
+	"dijit/form/RadioButton",
+	"dijit/form/Select",
+	"dijit/form/FilteringSelect",
+	"dojo/data/ItemFileReadStore",
+	"dijit/form/NumberSpinner",
+	"dijit/form/DateTextBox",
+	"dojo/parser",
+	"esri/map",
+	"esri/dijit/BasemapGallery",
+	"esri/arcgis/utils",
+	"esri/dijit/Scalebar",
+	"esri/tasks/geometry",
+	"esri/tasks/query",
+	"esri/toolbars/navigation",
+	"esri/toolbars/draw",
+	"esri/dijit/Legend",
+	"esri/dijit/Measurement",
+	"esri/tasks/gp",
+	"esri/layers/FeatureLayer",
+	"esri/IdentityManager",
+	"esri/dijit/Print",
+	"extensions/esriApiExtensions",
+	"extensions/htmlPopupExtensions",
+	"extensions/metadataExtensions",
+	"extensions/extent",
+	"extensions/graphicsLayer",
+	"extensions/map"
+], function (require) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "scripts/config.js";
@@ -89,24 +86,24 @@ dojo.require("esri.dijit.Print");
 		if (wsdot.config.disclaimer !== undefined && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")))) {
 			// Load the content into a div.  Only when the source page has loaded do invoke the dialog constructor.
 			// This is to ensure that the dialog is centered on the page.
-			return $("<div>").load(wsdot.config.disclaimer, function() {
+			return $("<div>").load(wsdot.config.disclaimer, function () {
 				$(this).dialog({
 					title: "Disclaimer",
 					modal: true,
 					closeOnEscape: false,
 					buttons: {
-						"Accept": function() {
+						"Accept": function () {
 							$(this).dialog("close").dialog("destroy").remove();
 						}
 					},
-					open: function(event, ui) {
+					open: function (event, ui) {
 						// Remove the close button from the disclaimer form.
 						var form = $(event.target).parent();
 						$("a.ui-dialog-titlebar-close", form).remove();
 					},
-					close: function(event, ui) {
+					close: function (event, ui) {
 						// Add a cookie
-						$.cookie("AgreedToDisclaimer", true, {expires: 30});
+						$.cookie("AgreedToDisclaimer", true, { expires: 30 });
 						$(this).dialog("destroy").remove();
 					}
 				});
@@ -162,7 +159,7 @@ dojo.require("esri.dijit.Print");
 				year = (year < 0 ? '-' : (year > 9999 ? '+' : '')) + ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6);
 
 				length = result.length;
-				while (length --) {
+				while (length--) {
 					value = result[length];
 					// pad months, days, hours, minutes, and seconds to have two digits.
 					if (value < 10) {
@@ -178,12 +175,12 @@ dojo.require("esri.dijit.Print");
 
 		$(document).ready(function () {
 			var qs = $.deparam.querystring();
-			
+
 			// If the "tree" query string parameter is set to true, replace the stylesheet for the layer list.
 			if (qs.tree && !/false/.test(qs.tree)) {
 				$("link[href='style/layerList.css']").attr("href", "style/layerListPlusMinus.css");
 			}
-			
+
 
 			$("#mainContainer").css("display", "");
 
@@ -194,144 +191,6 @@ dojo.require("esri.dijit.Print");
 			}
 
 		});
-
-		dojo.ready(function() {
-			dojo.extend(esri.geometry.Extent, {
-				"toCsv": function () {
-					var propNames = ["xmin", "ymin", "xmax", "ymax"],
-						output = "",
-						i, l;
-					for (i = 0, l = propNames.length; i < l; i += 1) {
-						if (i > 0) {
-							output += ",";
-						}
-						output += this[propNames[i]];
-					}
-					return output;
-				}
-			});
-
-			dojo.extend(esri.layers.GraphicsLayer, {
-				"getGraphicsAsJson": function () {
-					/// <summary>Returns an array of ArcGIS Server JSON graphics.</summary>
-					return dojo.map(this.graphics, function (item) {
-						// TODO: Make the projection to geographic optional.  For the purposes of this application, though, this works just fine.
-						var geometry = esri.geometry.webMercatorToGeographic(item.geometry),
-							json = item.toJson();
-						json.geometry = geometry.toJson();
-						return json;
-					});
-				}
-			});
-
-			dojo.extend(esri.Map, {
-				"lods": null,
-				"getLOD": function (level) {
-					/// <summary>Gets the current level of detail (LOD) for the map.</summary>
-					/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-					/// <returns type="esri.layers.LOD" />
-					if (level === undefined) {
-						level = map.getLevel();
-					}
-					return map.lods[level];
-				},
-				"getScale": function (level) {
-					/// <summary>Returns the current scale of the map.</summary>
-					/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
-					/// <returns type="Number" />
-					var lod = this.getLOD(level), output = null;
-					if (lod) {
-						output = lod.scale;
-					}
-					return output;
-				},
-				"getVisibleLayers": function () {
-					/// <summary>Returns an array of all of the layers in the map that are currently visible.</summary>
-					/// <returns type="Array" />
-					var layer,
-						visibleLayers = [],
-						i, l;
-					for (i = 0, l = this.layerIds.length; i < l; i += 1) {
-						layer = this.getLayer(this.layerIds[i]);
-						if (layer.visible === true && (layer.wsdotCategory === undefined || layer.wsdotCategory !== "Basemap")) {
-							visibleLayers.push(layer);
-						}
-					}
-					return visibleLayers;
-				},
-				"getGraphicsLayers": function () {
-					/// <summary>Returns all graphics layers in the map.</summary>
-					var gfxLayers = [],
-						layer, id,
-						i;
-					for (i = 0; i < this.graphicsLayerIds.length; i += 1) {
-						id = this.graphicsLayerIds[i];
-						layer = this.getLayer(id);
-						if (layer.isInstanceOf(esri.layers.GraphicsLayer) && !layer.isInstanceOf(esri.layers.FeatureLayer)) {
-							gfxLayers.push(layer);
-						}
-					}
-					return gfxLayers;
-
-				},
-				"getGraphicsCount": function () {
-					/// <summary>Returns the total number of graphics displayed on the map (in all graphics layers).</summary>
-					var graphicsLayers = this.getGraphicsLayers(),
-						output = 0;
-
-					// For each layer, get a collection of JSON graphic representations
-					dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
-						output += layer.graphics.length;
-					});
-					return output;
-				},
-				"getGraphicsAsJson": function (options) {
-					/// <summary>Returns all of the graphics in all of the graphics layers in the map.</summary>
-					var graphicsLayers = this.getGraphicsLayers(),
-						output = {};
-
-					// Set default values for omitted options.
-					if (options === undefined) {
-						options = {
-							removeInfoTemplate: true,
-							removeSymbol: true
-						};
-					}
-					if (options.removeInfoTemplate === undefined) {
-						options.removeInfoTemplate = true;
-					}
-					if (options.removeSymbol === undefined) {
-						options.removeSymbol = true;
-					}
-
-					// For each layer, get a collection of JSON graphic representations
-					dojo.forEach(graphicsLayers, function (layer /*, layerIndex*/) {
-						var graphics;
-						if (layer.graphics.length > 0) {
-							graphics = layer.getGraphicsAsJson();
-							if (options.removeInfoTemplate === true || options.removeSymbol === true) {
-								// Remove unwanted properties from each graphic representation as specified in the options object.
-								dojo.forEach(graphics, function (graphic /*, gIndex*/) {
-									if (graphic.infoTemplate !== undefined && options.removeInfoTemplate === true) {
-										delete graphic.infoTemplate;
-									}
-									if (graphic.symbol !== undefined && options.removeSymbol === true) {
-										delete graphic.symbol;
-									}
-								});
-							}
-							output[layer.id] = graphics;
-						}
-					});
-					return output;
-				}
-			});
-
-		});
-
-
-
-
 
 		function getExtentLink() {
 			/// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
@@ -492,13 +351,15 @@ dojo.require("esri.dijit.Print");
 					label: "Arrange Layers",
 					showLabel: false,
 					iconClass: "sortIcon",
-					onClick: function() {
+					onClick: function () {
 						var layerSorter = $("#layerSorter");
 						// Create the layer sorter dialog if it does not already exist.
 						if (layerSorter.length < 1) {
-							layerSorter = $("<div id='layerSorter'>").layerSorter({map:map}).dialog({
-								title: "Arrange Layers",
-								autoOpen: false
+							require(["scripts/layerSorter.js"], function () {
+								layerSorter = $("<div id='layerSorter'>").layerSorter({ map: map }).dialog({
+									title: "Arrange Layers",
+									autoOpen: false
+								});
 							});
 						}
 						layerSorter.dialog("open");
@@ -557,7 +418,7 @@ dojo.require("esri.dijit.Print");
 					/// <summary>Setup the print widget</summary>
 					var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
 
-					layoutTemplate = dojo.filter(resp.parameters, function(param, idx) {
+					layoutTemplate = dojo.filter(resp.parameters, function (param, idx) {
 						return param.name === "Layout_Template";
 					});
 
@@ -568,16 +429,16 @@ dojo.require("esri.dijit.Print");
 					templateNames = layoutTemplate[0].choiceList;
 
 					// remove the MAP_ONLY template then add it to the end of the list of templates
-					(function(mapOnlyIndex) {
+					(function (mapOnlyIndex) {
 						var mapOnly;
-						if ( mapOnlyIndex > -1 ) {
+						if (mapOnlyIndex > -1) {
 							mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
 							templateNames.push(mapOnly);
 						}
-					}(dojo.indexOf(templateNames, "MAP_ONLY")));
+					} (dojo.indexOf(templateNames, "MAP_ONLY")));
 
 					// create a print template for each choice
-					templates = dojo.map(templateNames, function(ch) {
+					templates = dojo.map(templateNames, function (ch) {
 						var plate = new esri.tasks.PrintTemplate();
 						plate.layout = plate.label = ch;
 						plate.format = "PDF";
@@ -608,7 +469,7 @@ dojo.require("esri.dijit.Print");
 						"url": wsdot.config.printUrl,
 						"content": { "f": "json" }
 					});
-					printInfo.then(setupPrinter, function(error) {
+					printInfo.then(setupPrinter, function (error) {
 						if (console !== undefined) {
 							console.error("Failed to load print service URL.", error);
 						}
@@ -640,7 +501,7 @@ dojo.require("esri.dijit.Print");
 			}
 
 			refreshLegend = function (layer, error) {
-			/// <summary>Refreshes the legend using the layers currently in the map that are not basemap layers.</summary>
+				/// <summary>Refreshes the legend using the layers currently in the map that are not basemap layers.</summary>
 				var layerInfos;
 				if (!layer || error) {
 					return;
@@ -648,17 +509,17 @@ dojo.require("esri.dijit.Print");
 
 				layerInfos = getLayerInfos();
 
-				
-				if (!isBasemap(layer.id) && typeof(this.isInstanceOf === "function") && this.isInstanceOf(esri.dijit.Legend)) {
+
+				if (!isBasemap(layer.id) && typeof (this.isInstanceOf === "function") && this.isInstanceOf(esri.dijit.Legend)) {
 					this.refresh(layerInfos);
 				}
 			};
 
-			gaTrackEvent = function(layer, error) {
+			gaTrackEvent = function (layer, error) {
 				/// <summary>Adds a Google Analytics tracking event for the addition of a layer to the map.</summary>
 				var label, basemapIdRe = /^layer\d+$/i;
 
-				label = basemapIdRe.exec(layer.id) ? "Basemap: " + layer.url :  layer.id + ": " + layer.url;
+				label = basemapIdRe.exec(layer.id) ? "Basemap: " + layer.url : layer.id + ": " + layer.url;
 
 				if (error) {
 					_gaq.push(['_trackEvent', 'Layers', 'Add - Fail', label]);
@@ -679,9 +540,9 @@ dojo.require("esri.dijit.Print");
 
 				// Create the legend dijit if it does not already exist.
 				if (!legend) {
-					legend = new esri.dijit.Legend({ 
-						map: map, 
-						layerInfos: layerInfos 
+					legend = new esri.dijit.Legend({
+						map: map,
+						layerInfos: layerInfos
 					}, "legend");
 					legend.startup();
 				}
@@ -691,14 +552,14 @@ dojo.require("esri.dijit.Print");
 			}
 
 			function setupLegend() {
-				if (typeof(wsdot.config.customLegend) === "object") {
+				if (typeof (wsdot.config.customLegend) === "object") {
 					var basemapGallery = dijit.byId("basemapGallery");
 					if (basemapGallery) {
 						wsdot.config.customLegend.basemapGallery = basemapGallery;
 					}
-					$("#legend").customLegend(
-						wsdot.config.customLegend
-					);
+					require(["scripts/customLegend.js"], function () {
+						$("#legend").customLegend(wsdot.config.customLegend);
+					});
 				} else {
 					setupDefaultLegend();
 				}
@@ -714,17 +575,17 @@ dojo.require("esri.dijit.Print");
 				tabs = new dijit.layout.TabContainer(null, "tabs");
 
 				function setupAirspaceCalculator() {
-					$.getScript("scripts/airspaceCalculator.js", function (data, textStatus) {
+					require(["scripts/airspaceCalculator"], function () {
 						$("#airspaceCalculator").airspaceCalculator({
 							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
-							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " + 
-							"IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY," + 
+							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " +
+							"IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY," +
 							"WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE " +
 							"OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
 							map: map,
 							url: wsdot.config.airspaceCalculatorUrl,
 							progressAlternativeImageUrl: "images/loading-bar.gif",
-							executeComplete: function(event, data) {
+							executeComplete: function (event, data) {
 								// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
 								var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
 								screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
@@ -732,15 +593,15 @@ dojo.require("esri.dijit.Print");
 								map.infoWindow.setTitle(title);
 								map.centerAt(graphic.geometry);
 								map.infoWindow.show(screenPoint);
-									
+
 							},
-							drawActivate: function() {
+							drawActivate: function () {
 								map.disablePopups();
 							},
-							drawDeactivate: function() {
+							drawDeactivate: function () {
 								map.enablePopups();
 							},
-							error: function(event, data) {
+							error: function (event, data) {
 								alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
 							}
 						});
@@ -749,7 +610,7 @@ dojo.require("esri.dijit.Print");
 					});
 				}
 
-				(function(tabOrder) {
+				(function (tabOrder) {
 					var i, l, name;
 
 					for (i = 0, l = tabOrder.length; i < l; i += 1) {
@@ -757,7 +618,7 @@ dojo.require("esri.dijit.Print");
 						if (/Layers/i.test(name)) {
 							tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
 						} else if (/Legend/i.test(name)) {
-							tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow:  setupLegend }, "legendTab"));
+							tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: setupLegend }, "legendTab"));
 						} else if (/Basemap/i.test(name)) {
 							tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 						} else if (/Tools/i.test(name)) {
@@ -766,8 +627,8 @@ dojo.require("esri.dijit.Print");
 						} else if (/Airspace\s*Calculator/i.test(name)) {
 							// Add elements that will become the tab to the dom.
 							$("<div id='airspaceCalculatorTab'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
-							tabs.addChild(new dijit.layout.ContentPane({ 
-								title: "Airspace Calculator (Prototype)", 
+							tabs.addChild(new dijit.layout.ContentPane({
+								title: "Airspace Calculator (Prototype)",
 								id: "airspaceCalculatorTab",
 								onShow: setupAirspaceCalculator
 							}, "airspaceCalculatorTab"));
@@ -781,7 +642,7 @@ dojo.require("esri.dijit.Print");
 					// LRS Tools
 					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
 					createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
-						$.getScript("scripts/lrsTools.js", function () {
+						require(["scripts/lrsTools.js"], function () {
 							$("#lrsTools").lrsTools({
 								map: map,
 								drawActivate: function () {
@@ -805,126 +666,128 @@ dojo.require("esri.dijit.Print");
 
 					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 					createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
-						var extentTable;
-						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
+						require(["scripts/zoomToXY.js", "scripts/extentSelect.js"], function () {
+							var extentTable;
+							zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+							$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
-						$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
-						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
-							map: map,
-							xLabel: "Long.",
-							yLabel: "Lat."
-						});
+							$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
+							$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
+								map: map,
+								xLabel: "Long.",
+								yLabel: "Lat."
+							});
 
-						extentTable = $("<table>").appendTo(zoomControlsDiv);
-					
-						$.getScript("scripts/extentSelect.js", function (data, textScatus) {
-							function createQueryTask(qtName) {
-								/// <summary>Creates a query task and query using settings from config.js.</summary>
-								/// <param name="qtName" type="String">The name of a query task from config.js.</param>
-								var queryTaskSetting, qt, query, n;
-								queryTaskSetting = wsdot.config.queryTasks[qtName];
-								qt = new esri.tasks.QueryTask(queryTaskSetting.url);
-								query = new esri.tasks.Query();
-												
-								for (n in queryTaskSetting.query) {
-									if (queryTaskSetting.query.hasOwnProperty(n)) {
-										query[n] = queryTaskSetting.query[n];
+							extentTable = $("<table>").appendTo(zoomControlsDiv);
+
+							require(["scripts/extentSelect.js"], function () {
+								function createQueryTask(qtName) {
+									/// <summary>Creates a query task and query using settings from config.js.</summary>
+									/// <param name="qtName" type="String">The name of a query task from config.js.</param>
+									var queryTaskSetting, qt, query, n;
+									queryTaskSetting = wsdot.config.queryTasks[qtName];
+									qt = new esri.tasks.QueryTask(queryTaskSetting.url);
+									query = new esri.tasks.Query();
+
+									for (n in queryTaskSetting.query) {
+										if (queryTaskSetting.query.hasOwnProperty(n)) {
+											query[n] = queryTaskSetting.query[n];
+										}
 									}
+									return { "task": qt, "query": query };
 								}
-								return { "task": qt, "query": query };
-							}
 
-							// Set up the zoom select boxes.
-							// Setup the zoom controls.
-							function createZoomControls() {
-								/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+								// Set up the zoom select boxes.
+								// Setup the zoom controls.
+								function createZoomControls() {
+									/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
 
-								var table, body, data, row, cell;
+									var table, body, data, row, cell;
 
-								function createZoomControl(qtName, data) {
-									var row, cell, selectName, labelName, queryTask;
-									row = $("<tr>").appendTo(body);
-									cell = $("<td>").appendTo(row);
-									selectName = qtName + "ZoomSelect";
-									labelName = qtName + "ZoomLabel";
-									$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
-									cell = $("<td>").appendTo(row);
-									if (data.url) {
-										$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
-										queryTask = createQueryTask(qtName);
-										queryTask.task.execute(queryTask.query, function(featureSet) {
-											$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
+									function createZoomControl(qtName, data) {
+										var row, cell, selectName, labelName, queryTask;
+										row = $("<tr>").appendTo(body);
+										cell = $("<td>").appendTo(row);
+										selectName = qtName + "ZoomSelect";
+										labelName = qtName + "ZoomLabel";
+										$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+										cell = $("<td>").appendTo(row);
+										if (data.url) {
+											$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+											queryTask = createQueryTask(qtName);
+											queryTask.task.execute(queryTask.query, function (featureSet) {
+												$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
+											});
+										} else if (data.extents) {
+											$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+											dojo.attr(labelName, "for", selectName);
+										}
+									}
+
+									body = $("<tbody>").appendTo(extentTable);
+
+									(function () {
+										var qtName;
+										for (qtName in wsdot.config.queryTasks) {
+											if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
+												data = wsdot.config.queryTasks[qtName];
+												createZoomControl(qtName, data);
+											}
+										}
+									} ());
+								}
+
+								createZoomControls();
+							});
+
+							if (navigator.geolocation) {
+								dijit.form.Button({
+									onClick: function () {
+										navigator.geolocation.getCurrentPosition(function (position) {
+											var pt, attributes;
+											pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
+											pt = esri.geometry.geographicToWebMercator(pt);
+											attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+											map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
+											map.centerAndZoom(pt, 8);
+										}, function (error) {
+											var message = "", strErrorCode;
+											// Check for known errors
+											switch (error.code) {
+												case error.PERMISSION_DENIED:
+													message = "This website does not have permission to use the Geolocation API";
+													break;
+												case error.POSITION_UNAVAILABLE:
+													message = "The current position could not be determined.";
+													break;
+												case error.PERMISSION_DENIED_TIMEOUT:
+													message = "The current position could not be determined within the specified timeout period.";
+													break;
+											}
+
+											// If it's an unknown error, build a message that includes 
+											// information that helps identify the situation so that 
+											// the error handler can be updated.
+											if (message === "") {
+												strErrorCode = error.code.toString();
+												message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+											}
+											alert(message);
+										}, {
+											maximumAge: 0,
+											timeout: 30000,
+											enableHighAccuracy: true
 										});
-									} else if (data.extents) {
-										$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
-										dojo.attr(labelName, "for", selectName);
 									}
-								}
-
-								body = $("<tbody>").appendTo(extentTable);
-
-								(function() {
-									var qtName;
-									for (qtName in wsdot.config.queryTasks) {
-										if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
-											data = wsdot.config.queryTasks[qtName];
-											createZoomControl(qtName, data);
-										}
-									}
-								}());
+								}, "zoomToMyCurrentLocation");
+							} else {
+								dojo.destroy("zoomToMyCurrentLocation");
 							}
 
-							createZoomControls();
+							dojo.disconnect(createLinks.zoomControls);
+							delete createLinks.zoomControls;
 						});
-
-						if (navigator.geolocation) {
-							dijit.form.Button({
-								onClick: function () {
-									navigator.geolocation.getCurrentPosition(function (position) {
-										var pt, attributes;
-										pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
-										pt = esri.geometry.geographicToWebMercator(pt);
-										attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-										map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
-										map.centerAndZoom(pt, 8);
-									}, function (error) {
-										var message = "", strErrorCode;
-										// Check for known errors
-										switch (error.code) {
-											case error.PERMISSION_DENIED:
-												message = "This website does not have permission to use the Geolocation API";
-												break;
-											case error.POSITION_UNAVAILABLE:
-												message = "The current position could not be determined.";
-												break;
-											case error.PERMISSION_DENIED_TIMEOUT:
-												message = "The current position could not be determined within the specified timeout period.";
-												break;
-										}
-
-									// If it's an unknown error, build a message that includes 
-									// information that helps identify the situation so that 
-									// the error handler can be updated.
-									if (message === "") {
-										strErrorCode = error.code.toString();
-										message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
-									}
-									alert(message);
-								}, {
-									maximumAge: 0,
-									timeout: 30000,
-									enableHighAccuracy: true
-								});
-							}
-						}, "zoomToMyCurrentLocation");
-					} else {
-							dojo.destroy("zoomToMyCurrentLocation");
-						}
-
-						dojo.disconnect(createLinks.zoomControls);
-						delete createLinks.zoomControls;
 					});
 				}
 
@@ -944,10 +807,10 @@ dojo.require("esri.dijit.Print");
 				}
 
 				// Look in the configuration to determine which tools to add and in which order.
-				(function(tools){
+				(function (tools) {
 					var i, l;
 					// Setup a default value for tools if it hasn't been specified.
-					if (!tools)  {
+					if (!tools) {
 						tools = ["lrs", "zoom", "search"];
 					}
 					for (i = 0, l = tools.length; i < l; i += 1) {
@@ -961,7 +824,7 @@ dojo.require("esri.dijit.Print");
 							setupAirspaceCalculator();
 						}
 					}
-				}(wsdot.config.tools));
+				} (wsdot.config.tools));
 
 
 
@@ -1004,7 +867,7 @@ dojo.require("esri.dijit.Print");
 					// Uncomment this section if you need to find a basemap's ID.
 					// Recomment before publishing.
 					dojo.connect(basemapGallery, "onSelectionChange", function () {
-						console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+					console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
 					});
 					*/
 
@@ -1051,7 +914,7 @@ dojo.require("esri.dijit.Print");
 			setupLayout();
 
 			function setupExtents() {
-				var extentSpatialReference = new esri.SpatialReference({wkid: 102100});
+				var extentSpatialReference = new esri.SpatialReference({ wkid: 102100 });
 				// Define zoom extents for menu.
 				extents = {
 					fullExtent: new esri.geometry.Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference })
@@ -1130,26 +993,29 @@ dojo.require("esri.dijit.Print");
 
 				setExtentFromParams();
 
-				// Setup either a tabbed layer list or a normal one depending on the config setting.
-				if (wsdot.config.tabbedLayerList) {
-					$("#layerList").tabbedLayerList({
-						layers: wsdot.config.layers,
-						startLayers: getLayersFromParams(),
-						startCollapsed: false,
-						map: map
-					}).css({
-						"padding": [0,0,0,0],
-						"margin": [0,0,0,0]
-					});
-					// Setting the padding and margin to 0 is required for IE.
-				} else {
-					$("#layerList").layerList({
-						layers: wsdot.config.layers,
-						startLayers: getLayersFromParams(),
-						startCollapsed: false,
-						map: map
-					});
-				}
+				require(["scripts/layerList.js"], function () {
+
+					// Setup either a tabbed layer list or a normal one depending on the config setting.
+					if (wsdot.config.tabbedLayerList) {
+						$("#layerList").tabbedLayerList({
+							layers: wsdot.config.layers,
+							startLayers: getLayersFromParams(),
+							startCollapsed: false,
+							map: map
+						}).css({
+							"padding": [0, 0, 0, 0],
+							"margin": [0, 0, 0, 0]
+						});
+						// Setting the padding and margin to 0 is required for IE.
+					} else {
+						$("#layerList").layerList({
+							layers: wsdot.config.layers,
+							startLayers: getLayersFromParams(),
+							startCollapsed: false,
+							map: map
+						});
+					}
+				});
 
 				map.setupIdentifyPopups({
 					ignoredLayerRE: /^layer\d+$/i
@@ -1234,6 +1100,4 @@ dojo.require("esri.dijit.Print");
 			$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
 		}
 	});
-
-
-} (jQuery));
+});
