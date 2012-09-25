@@ -8,11 +8,8 @@
  * @author Jeff Jacobson
  */
 
-
-(function ($) {
+require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], function() {
 	"use strict";
-	dojo.require("esri.layers.agstiled");
-	dojo.require("esri.layers.agsdynamic");
 
 	var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus, toggleSublayer;
 	_defaultContextMenuIcon = "<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
@@ -935,4 +932,4 @@
 		}
 	});
 
-} (jQuery));
+});

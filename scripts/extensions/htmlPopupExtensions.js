@@ -1,10 +1,10 @@
 /*jslint nomen: true, white: true, browser: true */
 /*global jQuery:true, esri:true, dojo:true */
-(function ($) {
+
+require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function() {
 	"use strict";
 
 
-	function addExtensions() {
 		var detectHtmlPopups;
 
 		function htmlPopupTypeIsHtmlTextOrUrl(layerInfo) {
@@ -565,12 +565,6 @@
 			}
 		});
 
-	}
 
-	dojo.require("esri.map");
-	dojo.require("esri.layers.agsdynamic");
-	dojo.require("esri.layers.agstiled");
-	dojo.require("esri.tasks.identify");
-	dojo.addOnLoad(addExtensions);
 
-} (jQuery));
+});
