@@ -39,7 +39,7 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 
 var wsdot;
 
-require(["require", "dojo/number",
+require(["require", "dojo/_base/array", "dojo/number",
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/layout/AccordionContainer",
@@ -69,7 +69,7 @@ require(["require", "dojo/number",
 	"extensions/extent",
 	"extensions/graphicsLayer",
 	"extensions/map"
-], function (require) {
+], function (require, array) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "scripts/config.js";
@@ -440,7 +440,7 @@ require(["require", "dojo/number",
 						} (dojo.indexOf(templateNames, "MAP_ONLY")));
 
 						// create a print template for each choice
-						templates = dojo.map(templateNames, function (ch) {
+						templates = array.map(templateNames, function (ch) {
 							var plate = new esri.tasks.PrintTemplate();
 							plate.layout = plate.label = ch;
 							plate.format = "PDF";
