@@ -53,7 +53,6 @@ require(["require", "dojo/number",
 	"dijit/form/DateTextBox",
 	"dojo/parser",
 	"esri/map",
-	"esri/dijit/BasemapGallery",
 	"esri/arcgis/utils",
 	"esri/dijit/Scalebar",
 	"esri/tasks/geometry",
@@ -575,7 +574,7 @@ require(["require", "dojo/number",
 				tabs = new dijit.layout.TabContainer(null, "tabs");
 
 				function setupAirspaceCalculator() {
-					require(["scripts/airspaceCalculator"], function () {
+					require(["scripts/airspaceCalculator.js"], function () {
 						$("#airspaceCalculator").airspaceCalculator({
 							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
 							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " +
@@ -829,64 +828,66 @@ require(["require", "dojo/number",
 
 
 				createLinks.basemapTab = dojo.connect(dijit.byId("basemapTab"), "onShow", function () {
-					var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
+					require(["esri/dijit/BasemapGallery"], function () {
+						var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
 
-					for (i = 0, l = basemaps.length; i < l; i += 1) {
-						for (layeri in basemaps.layers) {
-							if (basemaps.layers.hasOwnProperty(layeri)) {
-								basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
-							}
-						}
-					}
-
-					basemapGallery = new esri.dijit.BasemapGallery({
-						showArcGISBasemaps: true,
-						bingMapsKey: 'Ap354free_qMBNCGXm35cv8DSmG06nLNYm1skZwgrC4Xr1VCQ5UDojZ_BKDFkD5s',
-						map: map,
-						basemaps: basemaps
-					}, "basemapGallery");
-
-					basemapGallery.startup();
-
-					// Remove the unwanted default basemaps as defined in config.js (if any are defined).
-					if (wsdot.config.basemapsToRemove) {
-						dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
-							var i, removed;
-							for (i = 0; i < this.length; i += 1) {
-								removed = basemapGallery.remove(this[i]);
-								if (console && console.warn) {
-									if (removed === null) {
-										console.warn("Basemap removal failed: basemap not found: " + this[i]);
-									}
+						for (i = 0, l = basemaps.length; i < l; i += 1) {
+							for (layeri in basemaps.layers) {
+								if (basemaps.layers.hasOwnProperty(layeri)) {
+									basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
 								}
 							}
+						}
+
+						basemapGallery = new esri.dijit.BasemapGallery({
+							showArcGISBasemaps: true,
+							bingMapsKey: 'Ap354free_qMBNCGXm35cv8DSmG06nLNYm1skZwgrC4Xr1VCQ5UDojZ_BKDFkD5s',
+							map: map,
+							basemaps: basemaps
+						}, "basemapGallery");
+
+						basemapGallery.startup();
+
+						// Remove the unwanted default basemaps as defined in config.js (if any are defined).
+						if (wsdot.config.basemapsToRemove) {
+							dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
+								var i, removed;
+								for (i = 0; i < this.length; i += 1) {
+									removed = basemapGallery.remove(this[i]);
+									if (console && console.warn) {
+										if (removed === null) {
+											console.warn("Basemap removal failed: basemap not found: " + this[i]);
+										}
+									}
+								}
+							});
+						}
+
+						/*
+						// Uncomment this section if you need to find a basemap's ID.
+						// Recomment before publishing.
+						dojo.connect(basemapGallery, "onSelectionChange", function () {
+						console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
 						});
-					}
+						*/
 
-					/*
-					// Uncomment this section if you need to find a basemap's ID.
-					// Recomment before publishing.
-					dojo.connect(basemapGallery, "onSelectionChange", function () {
-					console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+
+
+						dojo.connect(basemapGallery, "onError", function (msg) {
+							// Show error message
+							alert(msg);
+						});
+
+						dojo.disconnect(createLinks.basemapTab);
+						delete createLinks.basemapTab;
+
+
+						// Check for an existing customLegend
+						customLegend = $("#legend").data("customLegend");
+						if (customLegend) {
+							customLegend.setBasemapGallery(basemapGallery);
+						}
 					});
-					*/
-
-
-
-					dojo.connect(basemapGallery, "onError", function (msg) {
-						// Show error message
-						alert(msg);
-					});
-
-					dojo.disconnect(createLinks.basemapTab);
-					delete createLinks.basemapTab;
-
-
-					// Check for an existing customLegend
-					customLegend = $("#legend").data("customLegend");
-					if (customLegend) {
-						customLegend.setBasemapGallery(basemapGallery);
-					}
 				});
 
 
