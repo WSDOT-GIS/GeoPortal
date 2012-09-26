@@ -1,5 +1,5 @@
 ﻿/*global dojo, dijit, dojox, esri, wsdot, jQuery */
-/*jslint devel: true, browser: true, vars: true, white: true, onevar: false, browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 50, indent: 4 */
+
 
 /*
 Copyright (c) 2011 Washington State Department of Transportation
@@ -42,8 +42,8 @@ jQuery
 
 		// Set up the zoom select boxes.
 		var sortByName, data, extentSpatialReference, filteringSelect;
-		if (typeof (levelOrFactor) === "undefined" || levelOrFactor === null) {
-			levelOrFactor = 10
+		if (levelOrFactor === undefined || levelOrFactor === null) {
+			levelOrFactor = 10;
 		}
 		sortByName = function (a, b) { return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0; };
 		extentSpatialReference = new esri.SpatialReference({ wkid: 102100 });
@@ -80,7 +80,7 @@ jQuery
 				var i;
 				for (i in featureSet) {
 					if (featureSet.hasOwnProperty(i)) {
-						if (typeof (featureSet[i].isInstanceOf) === "undefined") {
+						if (featureSet[i].isInstanceOf === undefined) {
 							data.items.push({
 								name: i,
 								extent: esri.geometry.fromJson(featureSet[i])
@@ -113,9 +113,11 @@ jQuery
 								map.setExtent(extent);
 							}
 						} catch (e) {
-							if (console && console.debug) {
-								console.debug(e);
+							/*jslint devel:true*/
+							if (console !== undefined && console.error !== undefined) {
+								console.error(e);
 							}
+							/*jslint devel:false*/
 						}
 					}
 				}
