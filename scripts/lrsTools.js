@@ -1,4 +1,4 @@
-﻿/*global esri, wsdot, jQuery, require */
+﻿/*global esri, dojo, jQuery, require */
 /*jslint nomen: true, white: true */
 
 /*
@@ -31,6 +31,7 @@ jQuery UI
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
 /// <reference path="elc.js" />
 
+// TODO: Change this to be a dijit instead of the jQuery / dojo hybrid that it is now.
 
 (function ($) {
 	"use strict";

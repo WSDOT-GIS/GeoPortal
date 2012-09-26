@@ -1,5 +1,5 @@
-﻿/*global dojo, dijit, esri, jQuery */
-/*jslint nomen: true, white:true, devel: true, browser: true, maxerr: 50, indent: 4 */
+﻿/*global require, dojo, dijit, esri, jQuery */
+/*jslint nomen: true, white:true, devel: true, browser: true */
 
 /*
 Copyright (c) 2011 Washington State Department of Transportation
@@ -28,8 +28,8 @@ jQuery UI
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2-vsdoc.js"/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.14/jquery-ui.js"/>
 (function ($) {
+	"use strict";
 	require(["dojo/_base/Color", "dojo/_base/array", "esri/tasks/locator"], function (Color, array) {
-		"use strict";
 
 		function createSpatialReference(obj) {
 			/// <summary>
@@ -37,16 +37,19 @@ jQuery UI
 			/// If the input object is already an esri.SpatialReference, the input object is returned.
 			/// </summary>
 			/// <param name="obj" type="esri.SpatialReference or Number or String or Object">Description</param>
-			if (typeof (obj) !== "undefined") {
+			var output;
+			if (obj !== undefined) {
 				if (obj.isInstanceOf && obj.isInstanceOf(esri.SpatialReference)) {
-					return obj;
+					output = obj;
 				} else if (typeof (obj) === "number") {
-					return new esri.SpatialReference({ wkid: obj });
+					output = new esri.SpatialReference({ wkid: obj });
 				} else if (typeof (obj) === "string") {
-					return new esri.SpatialReference({ wkt: obj });
-				} else if (obj.hasOwnProperty("wkid") || obj.hasOwnProperty("wkid")) {
-					return new esri.SpatialReference(obj);
+					output = new esri.SpatialReference({ wkt: obj });
+				} else if (obj.hasOwnProperty("wkid") || obj.hasOwnProperty("wkt")) {
+					output = new esri.SpatialReference(obj);
 				}
+
+				return output;
 			}
 
 			throw new Error("Invalid parameter provided for createSpatialReference method.");
@@ -62,21 +65,22 @@ jQuery UI
 			_dojoEventHandlers: [],
 			_create: function () {
 				// If the supplied address locator is a string, assume it is a URL and create a locator object.
-				var widget = this, element = this.element, inputDiv, resultsDiv, toolbar, stateOrZipRe = /(?:WA(?:shington)?)|(?:\d{5}(?:-\d{4)?)/gi;
+				var widget = this, element = this.element, inputDiv, resultsDiv, toolbar, zoomToSelectedCandidate, stateOrZipRe;
+				stateOrZipRe = /(?:WA(?:shington)?)|(?:\d{5}(?:-\d{4)?)/gi;
 
-				function zoomToSelectedCandidate() {
+				zoomToSelectedCandidate = function () {
 					// Get the currently selected address candidate, then zoom the map to it.
 					var addressCandidate = $(this).data("addressCandidate"); //$("#ui-address-locator-results :checked").data("addressCandidate");
 					widget.options.map.centerAndZoom(addressCandidate.location, 10);
-				}
+				};
 
 				function handleAddressToLocationsComplete(addressCandidates) {
 					widget.enable();
 
 					function createGraphicsLayer() {
-						var renderer, layer;
+						var renderer, layer, infos;
 						renderer = new esri.renderer.ClassBreaksRenderer(new esri.symbol.SimpleMarkerSymbol(), "score");
-						var infos = [
+						infos = [
 						{
 							minValue: 100,
 							maxValue: 101,
@@ -140,7 +144,7 @@ jQuery UI
 					if (addressCandidates.length < 1) {
 						resultsDiv.text("No matches found");
 					} else {
-						var list = $("<ul>").addClass("ui-address-locator-results").appendTo(resultsDiv);
+						list = $("<ul>").addClass("ui-address-locator-results").appendTo(resultsDiv);
 						$.each(addressCandidates, function (index, candidate) {
 							var inputId = "ui-address-locator-result-" + index;
 							graphic = new esri.Graphic(candidate.location).setAttributes({ address: candidate.address, score: candidate.score });
@@ -176,7 +180,7 @@ jQuery UI
 
 				if (typeof (widget.options.addressLocator) === "string") {
 					widget.options.addressLocator = new esri.tasks.Locator(widget.options.addressLocator);
-					if (typeof (widget.options.outSR) !== "undefined") {
+					if (widget.options.outSR !== undefined) {
 						widget.options.outSR = createSpatialReference(widget.options.outSR);
 						widget.options.addressLocator.setOutSpatialReference(widget.options.outSR);
 					}
@@ -199,7 +203,7 @@ jQuery UI
 							address += ", WA";
 							$(this).val(address);
 						}
-					})
+					});
 					button = $("<button>").attr({ type: "button" }).button({ label: "Find", icons: { primary: "ui-icon-search" }, text: false }).appendTo(inputDiv).click(function () {
 						var address = $("#ui-address-locator *[name=address]").val();
 						if (address) {
@@ -223,7 +227,15 @@ jQuery UI
 				} ());
 				resultsDiv = $("<div>").attr({ id: "ui-address-locator-results" }).addClass("ui-corner-all  ui-widget-content").appendTo(element).hide();
 				toolbar = $("<div>").attr("id", "ui-address-locator-results-toolbar").appendTo(element).hide();
-				$("<button>").button({ label: "Clear Results", text: true, icons: { primary: "ui-icon-closethick"} }).appendTo(toolbar).click(function () { widget.clearResults() });
+				$("<button>").button({
+					label: "Clear Results",
+					text: true,
+					icons: {
+						primary: "ui-icon-closethick"
+					}
+				}).appendTo(toolbar).click(function () {
+					widget.clearResults();
+				});
 			},
 			enable: function () {
 				$.Widget.prototype.enable.apply(this, arguments);
@@ -247,4 +259,4 @@ jQuery UI
 			}
 		});
 	});
-} (jQuery));
+}(jQuery));
