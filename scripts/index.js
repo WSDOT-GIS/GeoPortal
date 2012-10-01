@@ -609,6 +609,16 @@ require(["require", "dojo/number",
 					});
 				}
 
+				function setupFaaFar77() {
+					require(["scripts/ais/faaFar77.js"], function () {
+						$("#faaFar77").faaFar77RunwaySelector({
+							map: map,
+							// TODO: put this URL in the options.
+							identifyUrl: "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer"
+						});
+					});
+				}
+
 				(function (tabOrder) {
 					var i, l, name;
 
@@ -631,6 +641,13 @@ require(["require", "dojo/number",
 								id: "airspaceCalculatorTab",
 								onShow: setupAirspaceCalculator
 							}, "airspaceCalculatorTab"));
+						} else if (/FAA\s*FAR\s*77/i.test(name)) {
+							$("<div id='faaFar77Tab'><div id='faaFar77'></div></div>").appendTo("#tabs");
+							tabs.addChild(new dijit.layout.ContentPane({
+								title: "FAA FAR 77",
+								id: "faaFar77Tab",
+								onShow: setupFaaFar77
+							}, "faaFar77Tab"));
 						}
 					}
 				} (wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]));
