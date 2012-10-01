@@ -70,7 +70,6 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\airspaceCalculator.js" />
-    <Content Include="scripts\cameraGraphicsLayer.js" />
     <Content Include="scripts\config.airport.js" />
     <Content Include="scripts\config.Freight.js" />
     <Content Include="scripts\config.internal-airport-power-user.js" />
