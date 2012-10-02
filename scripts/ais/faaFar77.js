@@ -24,9 +24,11 @@
 				var $this = this, id, currentId, table, row, form;
 				id = $this.element.attr("id");
 
+				$(this.element).addClass("ui-faa-far-77");
+
 				form = $("<form>").appendTo($this.element);
 
-				table = $("<div>").addClass("table").appendTo(form);
+				table = $("<div>").appendTo(form);
 
 				// Clearway Length.
 				row = $("<div>").appendTo(table);
@@ -102,6 +104,12 @@
 							"Cancel": function () {
 								$(this).dialog("close");
 							}
+						},
+						open: function () {
+							var buttons = $("button", $(this).parent());
+							// Set the icons for the OK and Cancel buttons, respectively.
+							buttons.first().button("option", "icons", { primary: "ui-icon-check" });
+							buttons.eq(1).button("option", "icons", { primary: "ui-icon-closethick" });
 						}
 					});
 				} else {
