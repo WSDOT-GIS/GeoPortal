@@ -1,6 +1,4 @@
-﻿/*jslint browser: true, nomen: true */
-/*jshint dojo, jquery, nomen:false */
-/*global jQuery */
+﻿/*global jQuery */
 
 (function ($) {
 	"use strict";
@@ -22,8 +20,8 @@
 		if (dmsMatch) {
 			degrees = Number(dmsMatch[1]);
 
-			minutes = typeof (dmsMatch[2]) !== "undefined" ? Number(dmsMatch[2]) / 60 : 0;
-			seconds = typeof (dmsMatch[3]) !== "undefined" ? Number(dmsMatch[3]) / 3600 : 0;
+			minutes = dmsMatch[2] !== undefined ? Number(dmsMatch[2]) / 60 : 0;
+			seconds = dmsMatch[3] !== undefined ? Number(dmsMatch[3]) / 3600 : 0;
 			hemisphere = dmsMatch[4] || null;
 			if (hemisphere !== null && /[SW]/i.test(hemisphere)) {
 				degrees = Math.abs(degrees) * -1;
@@ -38,7 +36,7 @@
 	}
 
 	// Add coordinate validation method to jQuery validator.
-	if (typeof ($.validator) !== "undefined") {
+	if ($.validator !== undefined) {
 		$.validator.addMethod("coordinate", function (value, element) {
 			return this.optional(element) || dmsRe.test(value);
 		}, "Please enter a <abbr title='decimal degree'>DD</abbr> or <abbr title='degree minute second'>DMS</abbr> value.");

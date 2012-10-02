@@ -39,7 +39,7 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 
 var wsdot;
 
-require(["require", "dojo/number",
+require(["require", "dojo/_base/array", "dojo/number",
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/layout/AccordionContainer",
@@ -60,18 +60,16 @@ require(["require", "dojo/number",
 	"esri/toolbars/navigation",
 	"esri/toolbars/draw",
 	"esri/dijit/Legend",
-	"esri/dijit/Measurement",
 	"esri/tasks/gp",
 	"esri/layers/FeatureLayer",
 	"esri/IdentityManager",
-	"esri/dijit/Print",
 	"extensions/esriApiExtensions",
 	"extensions/htmlPopupExtensions",
 	"extensions/metadataExtensions",
 	"extensions/extent",
 	"extensions/graphicsLayer",
 	"extensions/map"
-], function (require) {
+], function (require, array) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "scripts/config.js";
@@ -390,14 +388,16 @@ require(["require", "dojo/number",
 
 						// Create the measure dialog if it does not already exist.
 						if (!measureDialog || measureDialog.length < 1) {
-							// Create the dialog.
-							measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
-							titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
-							$("<span>").attr("id", "ui-dialog-title-dialog").addClass("ui-dialog-title").text("Measure").appendTo(titleBar);
-							$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
-							$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
-							// Create the widget.
-							esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
+							require(["esri/dijit/Measurement"], function () {
+								// Create the dialog.
+								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
+								titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
+								$("<span>").attr("id", "ui-dialog-title-dialog").addClass("ui-dialog-title").text("Measure").appendTo(titleBar);
+								$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
+								$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
+								// Create the widget.
+								esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
+							});
 						} else {
 							// If the dialog already exists, toggle its visibility.
 							measureDialog = $("#measureWidgetContainer:visible");
@@ -410,55 +410,59 @@ require(["require", "dojo/number",
 								$("#measureWidgetContainer").show();
 							}
 						}
+
+						return false;
 					}
 				}, "measureButton");
 
 				function setupPrinter(resp) {
-					/// <summary>Setup the print widget</summary>
-					var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
+					require(["esri/dijit/Print"], function () {
+						/// <summary>Setup the print widget</summary>
+						var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
 
-					layoutTemplate = dojo.filter(resp.parameters, function (param, idx) {
-						return param.name === "Layout_Template";
-					});
+						layoutTemplate = dojo.filter(resp.parameters, function (param, idx) {
+							return param.name === "Layout_Template";
+						});
 
-					if (layoutTemplate.length === 0) {
-						console.log("print service parameters name for templates must be \"Layout_Template\"");
-						return;
-					}
-					templateNames = layoutTemplate[0].choiceList;
-
-					// remove the MAP_ONLY template then add it to the end of the list of templates
-					(function (mapOnlyIndex) {
-						var mapOnly;
-						if (mapOnlyIndex > -1) {
-							mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
-							templateNames.push(mapOnly);
+						if (layoutTemplate.length === 0) {
+							console.log("print service parameters name for templates must be \"Layout_Template\"");
+							return;
 						}
-					} (dojo.indexOf(templateNames, "MAP_ONLY")));
+						templateNames = layoutTemplate[0].choiceList;
 
-					// create a print template for each choice
-					templates = dojo.map(templateNames, function (ch) {
-						var plate = new esri.tasks.PrintTemplate();
-						plate.layout = plate.label = ch;
-						plate.format = "PDF";
-						plate.layoutOptions = {
-							"authorText": "Map by WSDOT",
-							"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
-							//"legendLayers": [],
-							"titleText": "Airport",
-							"scalebarUnit": "Miles"
-						};
-						return plate;
+						// remove the MAP_ONLY template then add it to the end of the list of templates
+						(function (mapOnlyIndex) {
+							var mapOnly;
+							if (mapOnlyIndex > -1) {
+								mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
+								templateNames.push(mapOnly);
+							}
+						} (dojo.indexOf(templateNames, "MAP_ONLY")));
+
+						// create a print template for each choice
+						templates = array.map(templateNames, function (ch) {
+							var plate = new esri.tasks.PrintTemplate();
+							plate.layout = plate.label = ch;
+							plate.format = "PDF";
+							plate.layoutOptions = {
+								"authorText": "Map by WSDOT",
+								"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
+								//"legendLayers": [],
+								"titleText": "Airport",
+								"scalebarUnit": "Miles"
+							};
+							return plate;
+						});
+
+						$("<div id='printButton'>").appendTo("#toolbar");
+						printer = esri.dijit.Print({
+							map: map,
+							templates: templates,
+							url: wsdot.config.printUrl
+						}, dojo.byId("printButton"));
+
+						printer.startup();
 					});
-
-					$("<div id='printButton'>").appendTo("#toolbar");
-					printer = esri.dijit.Print({
-						map: map,
-						templates: templates,
-						url: wsdot.config.printUrl
-					}, dojo.byId("printButton"));
-
-					printer.startup();
 				}
 
 				// If a print URL has been specified, add the print widget.
