@@ -1239,9 +1239,14 @@ dojo.require("esri.dijit.Print");
 			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
 			// Redirect to the aspx page which will prompt for a log in.
 			if (/parsererror/i.test(textStatus) && /^AIS\/config.json$/i.test(request.url)) {
-				location.replace("AirportPowerUser.aspx");
+				if (console !== undefined && console.debug !== undefined) {
+					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
+				}
+				$("body").attr("class", null).empty().append("<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>");
+				// location.replace("AirportPowerUser.aspx");
+			} else {
+				$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
 			}
-			$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
 		}
 	});
 
