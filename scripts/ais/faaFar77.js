@@ -9,24 +9,12 @@
 				runwayCenterline: null, // esri.geometry.Polyline
 				faaFar77GPUrl: null,
 				runwayTypes: [
-					{
-						label: "Utility visual approach"
-					},
-					{
-						label: "Utility nonprecision instrument approach"
-					},
-					{
-						label: "Visual visual approach"
-					},
-					{
-						label: "Nonprecision instrument greater visibility"
-					},
-					{
-						label: "Nonprecision instrument approach low visibility"
-					},
-					{
-						label: "Precision instrument"
-					}
+					"Non Precision Instrument runway Approach Low Visibility",
+					"Non Precision Instrument Runway High Visibility",
+					"Precision Instrument Runway",
+					"Utility Runway Non Precision Instrument Approach",
+					"Utility Runway Visual Approach",
+					"Visual Runway Visual Approach"
 				]
 			},
 			_clearwayLengthBox: null,
@@ -62,8 +50,8 @@
 					for (i = 0, l = $this.options.runwayTypes.length; i < l; i++) {
 						option = $this.options.runwayTypes[i];
 						$("<option>").attr({
-							value: option.value || option.label // Use the label if no value has been defined.
-						}).text(option.label).data(option).appendTo(runwaySelect);
+							value: option
+						}).text(option).appendTo(runwaySelect);
 					}
 				} ());
 
