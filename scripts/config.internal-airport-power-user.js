@@ -6,6 +6,8 @@
 	"airspaceCalculatorUrl":"http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabOrder": [
 		"Layers",
+		"Airspace Calculator",
+		"FAA FAR 77",
 		"Tools",
 		"Basemap",
 		"Legend"

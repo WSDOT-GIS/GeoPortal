@@ -73,6 +73,7 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\airspaceCalculator.js" />
+    <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
     <Content Include="scripts\elc.js" />

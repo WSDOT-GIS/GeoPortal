@@ -613,6 +613,41 @@ require(["require", "dojo/_base/array", "dojo/number",
 					});
 				}
 
+				function setupFaaFar77() {
+					require(["scripts/ais/faaFar77.js"], function () {
+						$("#faaFar77").faaFar77RunwaySelector({
+							map: map,
+							// TODO: put this URL and layer ID in the app. options.
+							identifyUrl: "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
+							identifyLayerId: 0,
+							identifyComplete: function (event, data) {
+								var identifyResults, noFeaturesDialog;
+								identifyResults = data.identifyResults;
+								if (identifyResults.length < 1) {
+									noFeaturesDialog = $("#faaFar77NoRunwaysDialog");
+									if (noFeaturesDialog.length < 1) {
+										$("<div>").text("No runway features were found in this vicinity.").dialog({
+											title: "FAA FAR 77",
+											buttons: {
+												"OK": function () {
+													$(this).dialog("close");
+												}
+											}
+										});
+									} else {
+										noFeaturesDialog.dialog("open");
+									}
+								}
+							},
+							identifyError: function (event, data) {
+								if (console !== undefined && console.error !== undefined) {
+									console.error(data.error);
+								}
+							}
+						});
+					});
+				}
+
 				(function (tabOrder) {
 					var i, l, name;
 
@@ -635,6 +670,13 @@ require(["require", "dojo/_base/array", "dojo/number",
 								id: "airspaceCalculatorTab",
 								onShow: setupAirspaceCalculator
 							}, "airspaceCalculatorTab"));
+						} else if (/FAA\s*FAR\s*77/i.test(name)) {
+							$("<div id='faaFar77Tab'><div id='faaFar77'></div></div>").appendTo("#tabs");
+							tabs.addChild(new dijit.layout.ContentPane({
+								title: "FAA FAR 77",
+								id: "faaFar77Tab",
+								onShow: setupFaaFar77
+							}, "faaFar77Tab"));
 						}
 					}
 				} (wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]));
