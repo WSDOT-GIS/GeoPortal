@@ -72,7 +72,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 ], function (require, array) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "scripts/config.js";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
 	wsdot = { config: {} };
 
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
@@ -473,7 +473,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 						"content": { "f": "json" }
 					});
 					printInfo.then(setupPrinter, function (error) {
-						if (console !== undefined) {
+						if (typeof(console) !== "undefined") {
 							console.error("Failed to load print service URL.", error);
 						}
 					});
@@ -1087,7 +1087,11 @@ require(["require", "dojo/_base/array", "dojo/number",
 		var qs = $.deparam.querystring(true), output = defaultConfigUrl;
 		// If the config parameter has not been specified, return the default.
 		if (qs.config) {
-			output = ["scripts/config", qs.config, "js"].join(".");
+			if (/\//g.test(qs.config)) {
+				output = [qs.config, ".json"].join("");
+			} else {
+				output = ["config/", qs.config, ".json"].join("");
+			}
 		}
 		return output;
 	}
@@ -1102,7 +1106,18 @@ require(["require", "dojo/_base/array", "dojo/number",
 			doPostConfig();
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
-			$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
+			var request = this;
+			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
+			// Redirect to the aspx page which will prompt for a log in.
+			if (/parsererror/i.test(textStatus) && /^AIS\/config.json$/i.test(request.url)) {
+				if (typeof(console) !== "undefined" && typeof(console.debug) !== "undefined") {
+					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
+				}
+				$("body").attr("class", null).empty().append("<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>");
+				// location.replace("AirportPowerUser.aspx");
+			} else {
+				$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
+			}
 		}
 	});
 });
