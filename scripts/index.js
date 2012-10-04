@@ -609,7 +609,7 @@ dojo.require("esri.dijit.Print");
 						"content": { "f": "json" }
 					});
 					printInfo.then(setupPrinter, function(error) {
-						if (console !== undefined) {
+						if (typeof(console) !== "undefined") {
 							console.error("Failed to load print service URL.", error);
 						}
 					});
@@ -1239,7 +1239,7 @@ dojo.require("esri.dijit.Print");
 			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
 			// Redirect to the aspx page which will prompt for a log in.
 			if (/parsererror/i.test(textStatus) && /^AIS\/config.json$/i.test(request.url)) {
-				if (console !== undefined && console.debug !== undefined) {
+				if (typeof(console) !== "undefined" && typeof(console.debug) !== "undefined") {
 					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
 				}
 				$("body").attr("class", null).empty().append("<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>");

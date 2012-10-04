@@ -551,7 +551,7 @@
 						tolerance: 20
 					}, function (layer, error) {
 						/*global console:true */
-						if (console !== undefined) {
+						if (typeof(console) !== "undefined") {
 							console.error(layer, error);
 						}
 						/*global console:false*/
