@@ -50,7 +50,7 @@
 			return inches > 0 ? [feet, "'", inches, '"'].join("") : [feet, "'"].join("");
 		}
 
-		function formatFeetAsFeetAndInhcesAndMeters(feet) {
+		function formatFeetAsFeetAndInchesAndMeters(feet) {
 			/// <summary>Formats feet as X'Y" (Z m.)</summary>
 			/// <param name="feet" type="Number">An amount in feet.</param>
 			/// <returns type="String" />
@@ -58,7 +58,7 @@
 			return [formatAsFeetAndInches(feet), " (", Math.round(m * 100) / 100, " m.)"].join("");
 		}
 
-		function formatMetersAsFeetAndInhcesAndMeters(meters) {
+		function formatMetersAsFeetAndInchesAndMeters(meters) {
 			/// <summary>Formats feet as X'Y" (Z m.)</summary>
 			/// <param name="feet" type="Number">An amount in meters.</param>
 			/// <returns type="String" />
@@ -76,14 +76,14 @@
 			////$("<dt>AGL</dt>").appendTo(list);
 			////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
 			$("<dt>Distance from Surface</dt>").appendTo(list);
-			$("<dd>").text(formatMetersAsFeetAndInhcesAndMeters(distanceM)).appendTo(list);
+			$("<dd>").text(formatMetersAsFeetAndInchesAndMeters(distanceM)).appendTo(list);
 			$("<dt>Elevation</dt>").appendTo(list);
-			$("<dd>").text(formatMetersAsFeetAndInhcesAndMeters(elevationM)).appendTo(list);
+			$("<dd>").text(formatMetersAsFeetAndInchesAndMeters(elevationM)).appendTo(list);
 
 			if (graphic.attributes.PenetratesSurface === "yes") {
 				penetrationDistanceM = Math.abs(distanceM - feetToMeters(graphic.attributes.AGL));
 				$("<dt>Penetration Distance</dt>)").appendTo(list);
-				$("<dd>").text(formatMetersAsFeetAndInhcesAndMeters(penetrationDistanceM)).appendTo(list);
+				$("<dd>").text(formatMetersAsFeetAndInchesAndMeters(penetrationDistanceM)).appendTo(list);
 			}
 			return output[0];
 		}
