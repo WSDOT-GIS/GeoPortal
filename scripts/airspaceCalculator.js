@@ -20,6 +20,22 @@
 			return renderer;
 		}
 
+		function feetToMeters(feet) {
+			/// <summary>Converts feet to meters</summary>
+			/// <param name="feet" type="Number">number of feet</param>
+			/// <returns type="Number" />
+			var ftPerM = 3.28084;
+			return feet / ftPerM;
+		}
+
+		function metersToFeet(meters) {
+			/// <summary>Converts meters to feet</summary>
+			/// <param name="meters" type="Number">number of meters</param>
+			/// <returns type="Number" />
+			var ftPerM = 3.28084;
+			return meters * ftPerM;
+		}
+
 		function formatAsFeetAndInches(feet) {
 			/// <summary>Formats a Number (feet) into a string (feet and inches (rounded))</summary>
 			/// <param name="feet" type="Number">A number of feet.</param>
@@ -34,13 +50,25 @@
 			return inches > 0 ? [feet, "'", inches, '"'].join("") : [feet, "'"].join("");
 		}
 
+		function formatFeetAsFeetAndInhcesAndMeters(feet) {
+			/// <summary>Formats feet as X'Y" (Z m.)</summary>
+			/// <param name="feet" type="Number">An amount in feet.</param>
+			/// <returns type="String" />
+			var m = feetToMeters(feet);
+			return [formatAsFeetAndInches(feet), " (", Math.round(m * 100) / 100, " m.)"].join("");
+		}
+
+		function formatMetersAsFeetAndInhcesAndMeters(meters) {
+			/// <summary>Formats feet as X'Y" (Z m.)</summary>
+			/// <param name="feet" type="Number">An amount in meters.</param>
+			/// <returns type="String" />
+			var feet = metersToFeet(meters);
+			return [formatAsFeetAndInches(feet), " (", Math.round(meters * 100) / 100, " m.)"].join("");
+		}
+
 		function formatResults(graphic) {
-			var output, message, list, distanceM = graphic.attributes.DistanceFromSurface, distanceF, ftPerM = 3.28084;
+			var output, message, list, distanceM = graphic.attributes.DistanceFromSurface, penetrationDistanceM, elevationM = graphic.attributes.Z; ;
 			message = ["A building ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
-
-
-			// Get the distance in feet (meters to feet conversion).
-			distanceF = distanceM * ftPerM;
 
 			output = $("<div>");
 			$("<p>").text(message).appendTo(output);
@@ -48,10 +76,15 @@
 			////$("<dt>AGL</dt>").appendTo(list);
 			////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
 			$("<dt>Distance from Surface</dt>").appendTo(list);
-			$("<dd>").text([formatAsFeetAndInches(distanceF), " (", Math.round(distanceM * 100) / 100, " m.)"].join("")).appendTo(list);
+			$("<dd>").text(formatMetersAsFeetAndInhcesAndMeters(distanceM)).appendTo(list);
 			$("<dt>Elevation</dt>").appendTo(list);
-			$("<dd>").text([formatAsFeetAndInches(graphic.attributes.Z * ftPerM), "(", Math.round(graphic.attributes.Z * 100) / 100, " m.)"].join("")).appendTo(list);
+			$("<dd>").text(formatMetersAsFeetAndInhcesAndMeters(elevationM)).appendTo(list);
 
+			if (graphic.attributes.PenetratesSurface === "yes") {
+				penetrationDistanceM = Math.abs(distanceM - feetToMeters(graphic.attributes.AGL));
+				$("<dt>Penetration Distance</dt>)").appendTo(list);
+				$("<dd>").text(formatMetersAsFeetAndInhcesAndMeters(penetrationDistanceM)).appendTo(list);
+			}
 			return output[0];
 		}
 

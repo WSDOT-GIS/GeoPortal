@@ -473,7 +473,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 						"content": { "f": "json" }
 					});
 					printInfo.then(setupPrinter, function (error) {
-						if (typeof(console) !== "undefined") {
+						if (typeof (console) !== "undefined") {
 							console.error("Failed to load print service URL.", error);
 						}
 					});
@@ -574,8 +574,12 @@ require(["require", "dojo/_base/array", "dojo/number",
 				mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
 				mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
 
-				mapControlsPane = new dojox.layout.ExpandoPane({ region: "leading", splitter: true, title: "Map Controls" }, "mapControlsPane");
-				tabs = new dijit.layout.TabContainer(null, "tabs");
+				mapControlsPane = new dojox.layout.ExpandoPane({
+					region: "leading",
+					splitter: true,
+					title: "Map Controls"
+				}, "mapControlsPane");
+				tabs = new dijit.layout.TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
 				function setupAirspaceCalculator() {
 					require(["scripts/airspaceCalculator.js"], function () {
@@ -664,9 +668,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 							tabs.addChild(toolsTab);
 						} else if (/Airspace\s*Calculator/i.test(name)) {
 							// Add elements that will become the tab to the dom.
-							$("<div id='airspaceCalculatorTab'><div id='airspaceCalculator'></div></div>").appendTo("#tabs");
+							$("<div id='airspaceCalculatorTab'><section><h1>Airspace Calculator (Prototype)</h1><div id='airspaceCalculator'></div></section></div>").appendTo("#tabs");
 							tabs.addChild(new dijit.layout.ContentPane({
-								title: "Airspace Calculator (Prototype)",
+								title: "Airspc. Calc.",
+								tooltip: "Airspace Calculator (Prototype)",
 								id: "airspaceCalculatorTab",
 								onShow: setupAirspaceCalculator
 							}, "airspaceCalculatorTab"));
@@ -1152,8 +1157,8 @@ require(["require", "dojo/_base/array", "dojo/number",
 			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
 			// Redirect to the aspx page which will prompt for a log in.
 			if (/parsererror/i.test(textStatus) && /^AIS\/config.json$/i.test(request.url)) {
-				if (typeof(console) !== "undefined" && typeof(console.debug) !== "undefined") {
-					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
+				if (typeof (console) !== "undefined" && typeof (console.debug) !== "undefined") {
+					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
 				}
 				$("body").attr("class", null).empty().append("<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>");
 				// location.replace("AirportPowerUser.aspx");
