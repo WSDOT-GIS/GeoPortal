@@ -451,6 +451,9 @@ require(["require", "dojo/_base/array", "dojo/number",
 								"titleText": "Airport",
 								"scalebarUnit": "Miles"
 							};
+							plate.exportOptions = {
+								dpi: 300
+							};
 							return plate;
 						});
 
@@ -460,6 +463,23 @@ require(["require", "dojo/_base/array", "dojo/number",
 							templates: templates,
 							url: wsdot.config.printUrl
 						}, dojo.byId("printButton"));
+
+						// Handle errors from the print service.
+						dojo.connect(printer, "onError", function (error) {
+							var message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
+							$("<div>").text(message).dialog({
+								title: "Print Error",
+								modal: true,
+								close: function () {
+									$(this).dialog("destroy").remove();
+								},
+								buttons: {
+									OK: function () {
+										$(this).dialog("close");
+									}
+								}
+							});
+						});
 
 						printer.startup();
 					});
