@@ -6,12 +6,12 @@
 <body>
     <h1>Map Icon Generator</h1>
     <p>Enter the URL of a map service REST endpoint into the Map Service URL box.  When the box loses focus, the icon link will be updated.</p>
-    <p>Additional parameters from the <a href="http://help.arcgis.com/en/arcgisserver/10.0/apis/rest/index.html?export.html">ArcGIS Server REST API's Export Map operation</a>
+    <p>Additional parameters from the <a href="http://resources.arcgis.com/en/help/rest/apiref/index.html?export.html">ArcGIS Server REST API's Export Map operation</a>
      can also be added to the generated URL.
     </p>
     <label for="mapServiceBox">Map Service URL</label><input id="mapServiceBox" type="url" name="mapService" value="" style="width: 100%" />
     <p><a id="iconLink" href="MapIcon.ashx">MapIcon.ashx</a></p>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5-vsdoc.js "/>
         $("#mapServiceBox").blur(function (eventObject) {
