@@ -322,7 +322,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			modal: true,
 			close: function (/*event, ui*/) {
 				// Remove the dialog from the DOM and dispose of it.
-				$(this).remove().dialog("dispose");
+				$(this).dialog("destroy").remove();
 			}
 		});
 		return false;
