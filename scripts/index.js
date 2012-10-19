@@ -445,10 +445,39 @@ require(["require", "dojo/_base/array", "dojo/number",
 								if (!printDialog) {
 									printDialog = $("<div>").dialog({
 										modal: true,
+										title: "Print"
 									}).printer({
 										map: map,
 										templates: templateNames,
-										url: wsdot.config.printUrl
+										url: wsdot.config.printUrl,
+										async: wsdot.config.printAsync,
+										printSubmit: function (e, data) {
+											var parameters = data.parameters;
+											printDialog.dialog("close");
+											printButton.set('disabled', true);
+										},
+										printComplete: function (e, data) {
+											var result = data.result;
+											printButton.set('disabled', null);
+											window.open(result.url, "_blank");
+										},
+										printError: function (e, data) {
+											var error = data.error, message;
+											printButton.set('disabled', null);
+											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
+											$("<div>").text(message).dialog({
+												title: "Print Error",
+												modal: true,
+												close: function () {
+													$(this).dialog("destroy").remove();
+												},
+												buttons: {
+													OK: function () {
+														$(this).dialog("close");
+													}
+												}
+											});
+										}
 									});
 								} else {
 									printDialog.dialog("open");

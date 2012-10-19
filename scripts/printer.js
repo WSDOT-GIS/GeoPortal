@@ -29,9 +29,7 @@
 
 	}
 
-
-
-	require(["esri/tasks/PrintTask", "esri/tasks/gp"], function (PrintTask) {
+	require(["esri/tasks/PrintTask"], function (PrintTask) {
 		$.widget("ui.printer", {
 			options: {
 				map: null,
@@ -44,90 +42,13 @@
 					titleText: null, //"Airport",
 					scalebarUnit: "Miles"
 				},
-				bingTypeRe: /^BingMaps((?:Aerial)|(?:Road)|(?:Hybrid))/i,
-				openStreetMapTypeRe: /^OpenStreetMap$/i,
-				wmtsTypeRe: /^wmts$/i,
-				basemapRe: /layer((?:\d+)|(?:_osm)|(?:_bing))/i
+				async: false
 			},
-			_gp: null,
 			_layoutOptionsSection: null,
 			_printButton: null,
 			_cancelButton: null,
 			_templateSelect: null,
 			_printTask: null,
-			_moveBasemapLayersToBasemapProperty: function (webMap) {
-				/// <summary>
-				/// When esri.PrintTask._getPrintDefinition creates a web map object, it does not place basemap layers in the baseMap property.  
-				/// This function does that.
-				/// </summary>
-				/// <param name="webMap" type="Object">An object conforming to the Export Web Map Specification.  This can be generated using esri.PrintTask._getPrintDefinition.</param>
-				/// <param name="basemapIdRegex" type="Regexp">A regular expression used to determine which layers should be used as basemap layers.</param>
-				/// <returns type="Object">Returns the webMap parameter</returns>
-				var $this = this, i, l, baseMapLayers, operationalLayers, opLayer, bmLayer;
-				/*jslint eqeq:true*/
-				if (webMap.baseMap || !webMap.operationalLayers || webMap.operationalLayers.length < 1) {
-					return webMap;
-				}
-				/*jslint eqeq:false*/
-
-				// Separate basemap and operation layers.
-				baseMapLayers = [], operationalLayers = []
-				for (i = 0, l = webMap.operationalLayers.length; i < l; i++) {
-					opLayer = webMap.operationalLayers[i];
-					bmLayer = null;
-					if (opLayer.type) {
-						if ($this.options.bingTypeRe.test(opLayer.type)) {
-							bmLayer = {
-								id: opLayer.id,
-								type: opLayer.type,
-								opacity: opLayer.opacity,
-								key: opLayer.key
-							}
-						} else if ($this.options.openStreetMapTypeRe.test(opLayer.type)) {
-							bmLayer = {
-								id: opLayer.id,
-								type: opLayer.type,
-								opacity: opLayer.opacity,
-								url: opLayer.url,
-								credits: opLayer.credits
-							}
-						} else if ($this.options.wmtsTypeRe.test(opLayer.type)) {
-							bmLayer = {
-								id: opLayer.id,
-								type: opLayer.type,
-								opacity: opLayer.opacity,
-								url: opLayer.url,
-								layer: opLayer.layer,
-								style: opLayer.style,
-								format: opLayer.format,
-								tilematrixSet: opLayer.tileMatrixSet
-							}
-						}
-					} else if ($this.options.basemapRe.test(opLayer.id)) {
-						bmLayer = {
-							id: opLayer.id,
-							url: opLayer.url,
-							opacity: opLayer.opacity
-						};
-					}
-
-					if (bmLayer) {
-						baseMapLayers.push(bmLayer);
-					} else {
-						operationalLayers.push(opLayer);
-					}
-				}
-
-				webMap.operationalLayers = operationalLayers;
-				if (baseMapLayers.length) {
-					webMap.baseMap = {
-						baseMapLayers: baseMapLayers
-					};
-				}
-
-
-				return webMap;
-			},
 			_create: function () {
 				var $this = this;
 
@@ -162,8 +83,6 @@
 					return output;
 				}
 
-				$this._gp = esri.tasks.Geoprocessor($this.options.url);
-
 				// Add controls for all of the layout options.
 				$("<label>").text("Template").appendTo($this.element);
 				$this._templateSelect = createTemplateSelect().appendTo($this.element);
@@ -180,7 +99,7 @@
 					}
 
 				}).click(function () {
-					var printParameters, printTemplate, printDef;
+					var printParameters, printTemplate;
 					printParameters = new esri.tasks.PrintParameters();
 					printParameters.map = $this.options.map;
 					printTemplate = new esri.tasks.PrintTemplate();
@@ -188,14 +107,21 @@
 					printTemplate.layout = $this._templateSelect.val();
 					printParameters.template = printTemplate;
 
+					// Create the print task if it does not already exist.
 					if (!$this.printTask) {
-						$this.printTask = new PrintTask($this.options.url);
+						$this.printTask = new PrintTask($this.options.url, {
+							async: $this.options.async
+						});
+						dojo.connect($this.printTask, "onComplete", function (result) {
+							$this._trigger("printComplete", null, { result: result });
+						});
+						dojo.connect($this.printTask, "onError", function (error) {
+							$this._trigger("printError", null, { error: error });
+						});
 					}
-					printDef = $this.printTask._getPrintDefinition($this.options.map);
-					// Move the basemap layers to the basemap property.
-					$this._moveBasemapLayersToBasemapProperty(printDef);
 
-					console.debug(printDef);
+					$this.printTask.execute(printParameters);
+					$this._trigger("printSubmit", null, { parameters: printParameters });
 				});
 
 				return this;
