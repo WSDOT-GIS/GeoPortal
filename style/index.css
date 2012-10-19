@@ -420,3 +420,9 @@ abbr
 {
     display: block;
 }
+
+.ui-printer-layout-options > input
+{
+    display: block;
+    width: 100%;
+}
