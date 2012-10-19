@@ -120,6 +120,7 @@
     <None Include="config\README.md" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
+    <Content Include="scripts\printer.js" />
     <Content Include="scripts\toc.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />

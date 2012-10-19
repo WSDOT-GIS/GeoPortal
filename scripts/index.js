@@ -40,6 +40,7 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 var wsdot;
 
 require(["require", "dojo/_base/array", "dojo/number",
+	"dijit/form/Button",
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/layout/AccordionContainer",
@@ -69,7 +70,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 	"extensions/extent",
 	"extensions/graphicsLayer",
 	"extensions/map"
-], function (require, array) {
+], function (require, array, number, Button) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
@@ -416,73 +417,145 @@ require(["require", "dojo/_base/array", "dojo/number",
 				}, "measureButton");
 
 				function setupPrinter(resp) {
-					require(["esri/dijit/Print"], function () {
-						/// <summary>Setup the print widget</summary>
-						var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
+					require(["scripts/printer.js"], function () {
+						var printButton, printDialog, templateNames;
 
-						layoutTemplate = dojo.filter(resp.parameters, function (param, idx) {
-							return param.name === "Layout_Template";
-						});
-
-						if (layoutTemplate.length === 0) {
-							console.log("print service parameters name for templates must be \"Layout_Template\"");
-							return;
-						}
-						templateNames = layoutTemplate[0].choiceList;
-
-						// remove the MAP_ONLY template then add it to the end of the list of templates
-						(function (mapOnlyIndex) {
-							var mapOnly;
-							if (mapOnlyIndex > -1) {
-								mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
-								templateNames.push(mapOnly);
-							}
-						} (dojo.indexOf(templateNames, "MAP_ONLY")));
-
-						// create a print template for each choice
-						templates = array.map(templateNames, function (ch) {
-							var plate = new esri.tasks.PrintTemplate();
-							plate.layout = plate.label = ch;
-							plate.format = "PDF";
-							plate.layoutOptions = {
-								"authorText": "Map by WSDOT",
-								"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
-								//"legendLayers": [],
-								"titleText": "Airport",
-								"scalebarUnit": "Miles"
-							};
-							plate.exportOptions = {
-								dpi: 300
-							};
-							return plate;
-						});
-
-						$("<div id='printButton'>").appendTo("#toolbar");
-						printer = esri.dijit.Print({
-							map: map,
-							templates: templates,
-							url: wsdot.config.printUrl
-						}, dojo.byId("printButton"));
-
-						// Handle errors from the print service.
-						dojo.connect(printer, "onError", function (error) {
-							var message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
-							$("<div>").text(message).dialog({
-								title: "Print Error",
-								modal: true,
-								close: function () {
-									$(this).dialog("destroy").remove();
-								},
-								buttons: {
-									OK: function () {
-										$(this).dialog("close");
-									}
-								}
+						function getTemplateNames() {
+							var layoutTemplateParam = dojo.filter(resp.parameters, function (param, idx) {
+								return param.name === "Layout_Template";
 							});
-						});
 
-						printer.startup();
+							if (layoutTemplateParam.length === 0) {
+								console.log("print service parameters name for templates must be \"Layout_Template\"");
+								return;
+							}
+							return layoutTemplateParam[0].choiceList;
+						}
+
+						templateNames = getTemplateNames();
+
+						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
+
+						printButton = new Button({
+							label: "Print",
+							iconClass: "dijitIconPrint",
+							showLabel: false,
+							onClick: function () {
+								// Create the print dialog if it does not already exist.
+								if (!printDialog) {
+									printDialog = $("<div>").dialog({
+										modal: true,
+										title: "Print"
+									}).printer({
+										map: map,
+										templates: templateNames,
+										url: wsdot.config.printUrl,
+										async: wsdot.config.printAsync,
+										printSubmit: function (e, data) {
+											var parameters = data.parameters;
+											printDialog.dialog("close");
+											printButton.set('disabled', true);
+										},
+										printComplete: function (e, data) {
+											var result = data.result;
+											printButton.set('disabled', null);
+											window.open(result.url, "_blank");
+										},
+										printError: function (e, data) {
+											var error = data.error, message;
+											printButton.set('disabled', null);
+											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
+											$("<div>").text(message).dialog({
+												title: "Print Error",
+												modal: true,
+												close: function () {
+													$(this).dialog("destroy").remove();
+												},
+												buttons: {
+													OK: function () {
+														$(this).dialog("close");
+													}
+												}
+											});
+										}
+									});
+								} else {
+									printDialog.dialog("open");
+								}
+							}
+						}, printButton[0]);
+
+
 					});
+
+					////require(["esri/dijit/Print"], function () {
+					////	/// <summary>Setup the print widget</summary>
+					////	var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
+
+					////	layoutTemplate = dojo.filter(resp.parameters, function (param, idx) {
+					////		return param.name === "Layout_Template";
+					////	});
+
+					////	if (layoutTemplate.length === 0) {
+					////		console.log("print service parameters name for templates must be \"Layout_Template\"");
+					////		return;
+					////	}
+					////	templateNames = layoutTemplate[0].choiceList;
+
+					////	// remove the MAP_ONLY template then add it to the end of the list of templates
+					////	(function (mapOnlyIndex) {
+					////		var mapOnly;
+					////		if (mapOnlyIndex > -1) {
+					////			mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
+					////			templateNames.push(mapOnly);
+					////		}
+					////	} (dojo.indexOf(templateNames, "MAP_ONLY")));
+
+					////	// create a print template for each choice
+					////	templates = array.map(templateNames, function (ch) {
+					////		var plate = new esri.tasks.PrintTemplate();
+					////		plate.layout = plate.label = ch;
+					////		plate.format = "PDF";
+					////		plate.layoutOptions = {
+					////			"authorText": "Map by WSDOT",
+					////			"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
+					////			//"legendLayers": [],
+					////			"titleText": "Airport",
+					////			"scalebarUnit": "Miles"
+					////		};
+					////		plate.exportOptions = {
+					////			dpi: 300
+					////		};
+					////		return plate;
+					////	});
+
+					////	$("<div id='printButton'>").appendTo("#toolbar");
+					////	printer = esri.dijit.Print({
+					////		map: map,
+					////		templates: templates,
+					////		url: wsdot.config.printUrl
+					////	}, dojo.byId("printButton"));
+
+					////	// Handle errors from the print service.
+					////	dojo.connect(printer, "onError", function (error) {
+					////		var message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
+					////		$("<div>").text(message).dialog({
+					////			title: "Print Error",
+					////			modal: true,
+					////			close: function () {
+					////				$(this).dialog("destroy").remove();
+					////			},
+					////			buttons: {
+					////				OK: function () {
+					////					$(this).dialog("close");
+					////				}
+					////			}
+					////		});
+					////	});
+
+					////	printer.startup();
+					////});
+
 				}
 
 				// If a print URL has been specified, add the print widget.
