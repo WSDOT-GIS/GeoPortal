@@ -221,6 +221,12 @@ img[src="images/ajax-loader.gif"]
     height: 16px;
 }
 
+.dijitIconBusy
+{
+    background-position: inherit;
+    background-image: url(../images/ajax-loader.gif);
+}
+
 img[src$="blank.gif"] 
 {
     width: 1px;

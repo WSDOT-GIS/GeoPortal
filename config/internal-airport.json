@@ -2,7 +2,7 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
-	"printUrl":"http://hqolymgis99t/arcgis/rest/services/Airport/ExportMap/GPServer/Export%20PDF",
+	"printUrl":"http://hqolymgis99t/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 	"airspaceCalculatorUrl":"http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabContainerOptions": {
 		"tabPosition": "left"
@@ -141,7 +141,7 @@
 					},
 					{
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/FaaObstruction/MapServer",
+						"url": "http://faaservices-1551414968.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/201101_AirportsGIS_BH/Obstacles/MapServer",
 						"options": {
 							"id": "FAA Obstacles"
 						}
