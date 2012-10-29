@@ -67,7 +67,7 @@
 		}
 
 		function formatResults(graphic) {
-			var output, message, list, distanceM = graphic.attributes.DistanceFromSurface, penetrationDistanceM, elevationM = graphic.attributes.Z; ;
+			var output, message, list, distanceF = graphic.attributes.DistanceFromSurface, penetrationDistanceF, elevationF = graphic.attributes.Z; ;
 			message = ["A building ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
 
 			output = $("<div>");
@@ -76,14 +76,14 @@
 			////$("<dt>AGL</dt>").appendTo(list);
 			////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
 			$("<dt>Distance from Surface</dt>").appendTo(list);
-			$("<dd>").text(formatMetersAsFeetAndInchesAndMeters(distanceM)).appendTo(list);
+			$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(distanceF)).appendTo(list);
 			$("<dt>Elevation</dt>").appendTo(list);
-			$("<dd>").text(formatMetersAsFeetAndInchesAndMeters(elevationM)).appendTo(list);
+			$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(elevationF)).appendTo(list);
 
 			if (graphic.attributes.PenetratesSurface === "yes") {
-				penetrationDistanceM = Math.abs(distanceM - feetToMeters(graphic.attributes.AGL));
+				penetrationDistanceF = Math.abs(distanceF - graphic.attributes.AGL);
 				$("<dt>Penetration Distance</dt>)").appendTo(list);
-				$("<dd>").text(formatMetersAsFeetAndInchesAndMeters(penetrationDistanceM)).appendTo(list);
+				$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(penetrationDistanceF)).appendTo(list);
 			}
 			return output[0];
 		}

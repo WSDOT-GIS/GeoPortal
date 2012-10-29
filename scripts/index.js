@@ -418,7 +418,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 				function setupPrinter(resp) {
 					require(["scripts/printer.js"], function () {
-						var printButton, printDialog, templateNames;
+						var printButton, printDialog, templateNames, pdfList;
 
 						function getTemplateNames() {
 							var layoutTemplateParam = dojo.filter(resp.parameters, function (param, idx) {
@@ -435,6 +435,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 						templateNames = getTemplateNames();
 
 						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
+						pdfList = $("<ol>").appendTo("#toolbar").hide();
 
 						printButton = new Button({
 							label: "Print",
@@ -450,16 +451,23 @@ require(["require", "dojo/_base/array", "dojo/number",
 										map: map,
 										templates: templateNames,
 										url: wsdot.config.printUrl,
-										async: wsdot.config.printAsync,
+										async: resp.executionType === "esriExecutionTypeAsynchronous",
 										printSubmit: function (e, data) {
 											var parameters = data.parameters;
 											printDialog.dialog("close");
 											printButton.set('disabled', true);
 										},
 										printComplete: function (e, data) {
-											var result = data.result;
+											var result = data.result, li;
 											printButton.set('disabled', null);
-											window.open(result.url, "_blank");
+											pdfList.show("fade");
+											li = $("<li>").appendTo(pdfList).hide();
+											$("<a>").attr({
+												href: result.url,
+												target: "_blank"
+											}).text("Printout").appendTo(li);
+											li.show("fade");
+											//window.open(result.url);
 										},
 										printError: function (e, data) {
 											var error = data.error, message;
