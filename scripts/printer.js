@@ -151,6 +151,7 @@
 			_cancelButton: null,
 			_templateSelect: null,
 			_printTask: null,
+			_extraParametersControls: null,
 			_create: function () {
 				var $this = this;
 
@@ -160,7 +161,7 @@
 					function createSelect(param) {
 						var j, jl, choice;
 						if (param.choiceList) {
-							control = $("<select>").appendTo(output);
+							control = $("<select>").data("paramName", param.name);
 							for (j = 0, jl = param.choiceList.length; j < jl; j += 1) {
 								choice = param.choiceList[j];
 								$("<option>").text(choice).attr({
@@ -168,11 +169,12 @@
 									selected: choice === param.defaultValue
 								}).appendTo(control);
 							}
+							control.appendTo(output);
 						}
 					}
 
 					function createInput(param) {
-						control = $("<input>");
+						control = $("<input>").data("paramName", param.name);
 						if (param.dataType === "GPString") {
 							control.attr({
 								type: "text"
@@ -248,12 +250,31 @@
 					return output;
 				}
 
+				function getExtraParameters() {
+					var i, l, output, controls, control, value;
+					if (!$this._extraParametersControls) {
+						output = null;
+					} else {
+						controls = $("input,select", $this._extraParametersControls);
+						output = {};
+						for (i = 0, l = controls.length; i < l; i += 1) {
+							control = controls.eq(i);
+							value = control.val();
+							if (value) {
+								output[control.data("paramName")] = value;
+							}
+						}
+					}
+
+					return output;
+				}
+
 				// Add controls for all of the layout options.
 				$("<label>").text("Template").appendTo($this.element);
 				$this._templateSelect = createTemplateSelect().appendTo($this.element);
 				$this._layoutOptionsSection = $("<div>").addClass("ui-printer-layout-options").appendTo($this.element);
 				addLayoutOptions($this._layoutOptionsSection, $this.options.layoutOptions);
-				addAdditionalParameters().appendTo($this.element);
+				$this._extraParametersControls = addAdditionalParameters().appendTo($this.element);
 
 
 				$("<button>").attr({
@@ -272,6 +293,7 @@
 					printTemplate.format = "PDF";
 					printTemplate.layout = $this._templateSelect.val();
 					printParameters.template = printTemplate;
+					printParameters.extraParameters = getExtraParameters();
 
 					// Create the print task if it does not already exist.
 					if (!$this.printTask) {
