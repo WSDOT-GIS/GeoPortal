@@ -8,7 +8,7 @@
  * @author Jeff Jacobson
  */
 
-require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], function() {
+require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], function () {
 	"use strict";
 
 	var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus, toggleSublayer;
@@ -74,7 +74,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			id = layer.visibleLayers[i];
 			layerInfo = layer.layerInfos[id];
 			// Omit layers that have subLayers.
-			if (id !== currentId && typeof (layerInfo) !== "undefined" && layerInfo.subLayerIds === null) {
+			if (id !== currentId && layerInfo && layerInfo.subLayerIds === null) {
 				layers.push(id);
 			}
 		}

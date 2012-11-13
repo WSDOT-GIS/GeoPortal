@@ -455,11 +455,17 @@ require(["require", "dojo/_base/array", "dojo/number",
 										printSubmit: function (e, data) {
 											var parameters = data.parameters;
 											printDialog.dialog("close");
-											printButton.set('disabled', true);
+											printButton.set({
+												disabled: true,
+												iconClass: "dijitIconBusy"
+											});
 										},
 										printComplete: function (e, data) {
 											var result = data.result, li;
-											printButton.set('disabled', null);
+											printButton.set({
+												disabled: null,
+												iconClass: "dijitIconPrint"
+											});
 											pdfList.show("fade");
 											li = $("<li>").appendTo(pdfList).hide();
 											$("<a>").attr({
@@ -471,7 +477,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 										},
 										printError: function (e, data) {
 											var error = data.error, message;
-											printButton.set('disabled', null);
+											printButton.set({
+												disabled: null,
+												iconClass: "dijitIconPrint"
+											});
 											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
 											$("<div>").text(message).dialog({
 												title: "Print Error",

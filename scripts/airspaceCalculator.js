@@ -2,8 +2,7 @@
 /*jslint nomen: true, browser: true, white: true */
 (function ($) {
 	"use strict";
-	require(["dojo/_base/Color", "esri/graphic", "esri/symbol", "esri/renderer", "esri/layers/graphics", "esri/toolbars/draw", "esri/geometry",
-	"esri/tasks/gp"], function (Color) {
+	require(["dojo/_base/Color", "esri/graphic", "esri/symbol", "esri/renderer", "esri/layers/graphics", "esri/toolbars/draw", "esri/geometry", "esri/tasks/gp"], function (Color) {
 
 		function _createRenderer() {
 			var renderer, defaultSymbol, lineSymbol, penetrationSymbol;
@@ -28,13 +27,13 @@
 			return feet / ftPerM;
 		}
 
-		function metersToFeet(meters) {
-			/// <summary>Converts meters to feet</summary>
-			/// <param name="meters" type="Number">number of meters</param>
-			/// <returns type="Number" />
-			var ftPerM = 3.28084;
-			return meters * ftPerM;
-		}
+		////function metersToFeet(meters) {
+		////	/// <summary>Converts meters to feet</summary>
+		////	/// <param name="meters" type="Number">number of meters</param>
+		////	/// <returns type="Number" />
+		////	var ftPerM = 3.28084;
+		////	return meters * ftPerM;
+		////}
 
 		function formatAsFeetAndInches(feet) {
 			/// <summary>Formats a Number (feet) into a string (feet and inches (rounded))</summary>
@@ -58,31 +57,38 @@
 			return [formatAsFeetAndInches(feet), " (", Math.round(m * 100) / 100, " m.)"].join("");
 		}
 
-		function formatMetersAsFeetAndInchesAndMeters(meters) {
-			/// <summary>Formats feet as X'Y" (Z m.)</summary>
-			/// <param name="feet" type="Number">An amount in meters.</param>
-			/// <returns type="String" />
-			var feet = metersToFeet(meters);
-			return [formatAsFeetAndInches(feet), " (", Math.round(meters * 100) / 100, " m.)"].join("");
-		}
+	////function formatMetersAsFeetAndInchesAndMeters(meters) {
+	////	/// <summary>Formats feet as X'Y" (Z m.)</summary>
+	////	/// <param name="feet" type="Number">An amount in meters.</param>
+	////	/// <returns type="String" />
+	////	var feet = metersToFeet(meters);
+	////	return [formatAsFeetAndInches(feet), " (", Math.round(meters * 100) / 100, " m.)"].join("");
+	////}
 
 		function formatResults(graphic) {
-			var output, message, list, distanceF = graphic.attributes.DistanceFromSurface, penetrationDistanceF, elevationF = graphic.attributes.Z; ;
+			var output, message, list, distanceF = graphic.attributes.DistanceFromSurface, penetrationDistanceF, elevationF = graphic.attributes.Z;
 			message = ["A building ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
 
 			output = $("<div>");
 			$("<p>").text(message).appendTo(output);
+			if (graphic.attributes.PenetratesSurface === "yes") {
+				$("<p>").append($("<a>").attr({
+					href: "http://www.faa.gov/forms/index.cfm/go/document.information/documentID/186273",
+					target: "_blank",
+					title: "Form FAA 7460-1: Notice of Proposed Construction or Alteration"
+				}).text("Form FAA 7460-1: Notice of Proposed Construction or Alteration")).appendTo(output);
+			}
 			list = $("<dl>").appendTo(output);
 			////$("<dt>AGL</dt>").appendTo(list);
 			////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
-			$("<dt>Distance from Surface</dt>").appendTo(list);
+			$("<dt>Elevation of <abbr title='Federal Aviation Regulations'>FAR</abbr> Surface</dt>").appendTo(list);
 			$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(distanceF)).appendTo(list);
-			$("<dt>Elevation</dt>").appendTo(list);
+			$("<dt>Terrain Elevation</dt>").appendTo(list);
 			$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(elevationF)).appendTo(list);
 
 			if (graphic.attributes.PenetratesSurface === "yes") {
 				penetrationDistanceF = Math.abs(distanceF - graphic.attributes.AGL);
-				$("<dt>Penetration Distance</dt>)").appendTo(list);
+				$("<dt>Penetration of Surface</dt>)").appendTo(list);
 				$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(penetrationDistanceF)).appendTo(list);
 			}
 			return output[0];

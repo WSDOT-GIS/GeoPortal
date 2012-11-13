@@ -42,6 +42,108 @@
 					titleText: null, //"Airport",
 					scalebarUnit: "Miles"
 				},
+				additionalParameters: [
+					{
+						"name": "Resolution",
+						"dataType": "GPLong",
+						"displayName": "Resolution",
+						"description": "Resolution (DPI)",
+						"direction": "esriGPParameterDirectionInput",
+						"defaultValue": 96,
+						"parameterType": "esriGPParameterTypeOptional",
+						"category": "Advanced"
+					},
+					{
+						"name": "Image_Quality",
+						"dataType": "GPString",
+						"displayName": "Image Quality",
+						"description": "Image Quality",
+						"direction": "esriGPParameterDirectionInput",
+						"defaultValue": "BEST",
+						"parameterType": "esriGPParameterTypeOptional",
+						"category": "Advanced",
+						"choiceList": [
+							"BEST",
+							"BETTER",
+							"NORMAL",
+							"FASTER",
+							"FASTEST"
+						]
+					},
+					{
+						"name": "Colorspace",
+						"dataType": "GPString",
+						"displayName": "Color Space",
+						"description": "RGB or CYMK",
+						"direction": "esriGPParameterDirectionInput",
+						"defaultValue": "RGB",
+						"parameterType": "esriGPParameterTypeOptional",
+						"category": "Advanced",
+						"choiceList": [
+							"CMYK",
+							"RGB"
+						]
+					},
+					{
+						"name": "Image_Compression",
+						"dataType": "GPString",
+						"displayName": "Image Compression",
+						"description": "Image compression",
+						"direction": "esriGPParameterDirectionInput",
+						"defaultValue": "ADAPTIVE",
+						"parameterType": "esriGPParameterTypeOptional",
+						"category": "Advanced",
+						"choiceList": [
+							"ADAPTIVE",
+							"JPEG",
+							"DEFLATE",
+							"LZW",
+							"NONE",
+							"RLE"
+						]
+					},
+					{
+						"name": "JPEG_Compression_Quality",
+						"dataType": "GPLong",
+						"displayName": "JPEG Compression Quality",
+						"description": "JPEG compression quality",
+						"direction": "esriGPParameterDirectionInput",
+						"defaultValue": 80,
+						"parameterType": "esriGPParameterTypeOptional",
+						"category": "Advanced"
+					}
+				],
+				////additionalParameters: {
+				////	"Resolution": {
+				////		type: "range",
+				////		values: [96, 300],
+				////		value: 96
+				////	},
+				////	"Image_Quality": {
+				////		label: "Image Quality",
+				////		type: "choice",
+				////		values: ["BEST", "BETTER", "NORMAL", "FASTER", "FASTEST"],
+				////		value: "BEST"
+				////	},
+				////	"Color_Space": {
+				////		label: "Color Space",
+				////		type: "choice",
+				////		values: ["RGB", "CMYK"],
+				////		value: "RGB"
+				////	},
+				////	"Image_Compression": {
+				////		label: "Image Compression",
+				////		type: "choice",
+				////		values: ["ADAPTIVE", "JPEG", "DEFLATE", "LZW", "NONE", "RLE"],
+				////		value: "ADAPTIVE"
+				////	},
+				////	"JPEG_Compression_Quality": {
+				////		label: "JPEG Compression Quality",
+				////		type: "range",
+				////		values: [1, 100],
+				////		value: 80
+				////	}
+				////},
 				async: false
 			},
 			_layoutOptionsSection: null,
@@ -51,6 +153,69 @@
 			_printTask: null,
 			_create: function () {
 				var $this = this;
+
+				function addAdditionalParameters() {
+					var additionalParams, i, l, param, label, control, output;
+
+					function createSelect(param) {
+						var j, jl, choice;
+						if (param.choiceList) {
+							control = $("<select>").appendTo(output);
+							for (j = 0, jl = param.choiceList.length; j < jl; j += 1) {
+								choice = param.choiceList[j];
+								$("<option>").text(choice).attr({
+									value: choice,
+									selected: choice === param.defaultValue
+								}).appendTo(control);
+							}
+						}
+					}
+
+					function createInput(param) {
+						control = $("<input>");
+						if (param.dataType === "GPString") {
+							control.attr({
+								type: "text"
+							});
+						} else if (param.dataType === "GPLong") {
+							control.attr({
+								type: "range",
+								step: 1
+							});
+							if (param.name === "Resolution") {
+								control.attr({
+									min: 96,
+									max: 300
+								});
+							} else if (param.name === "JPEG_Compression_Quality") {
+								control.attr({
+									min: 1,
+									max: 100
+								});
+							}
+						}
+						if (param.defaultValue) {
+							control.val(param.defaultValue);
+						}
+						control.appendTo(output);
+					}
+
+					if ($this.options.additionalParameters) {
+						output = $("<div>").addClass("ui-printer-additional-parameters");
+						additionalParams = $this.options.additionalParameters;
+						for (i = 0, l = additionalParams.length; i < l; i += 1) {
+							param = additionalParams[i];
+							// TODO: handle label's "for" attribute.
+							label = $("<label>").text(param.displayName).appendTo(output);
+							if (param.choiceList) {
+								createSelect(param);
+							} else {
+								createInput(param);
+							}
+						}
+					}
+					return output;
+				}
 
 				function addLayoutOptions(container, layoutOptions) {
 					/// <summary>Adds layout options to an element.</summary>
@@ -88,6 +253,7 @@
 				$this._templateSelect = createTemplateSelect().appendTo($this.element);
 				$this._layoutOptionsSection = $("<div>").addClass("ui-printer-layout-options").appendTo($this.element);
 				addLayoutOptions($this._layoutOptionsSection, $this.options.layoutOptions);
+				addAdditionalParameters().appendTo($this.element);
 
 
 				$("<button>").attr({
@@ -113,10 +279,18 @@
 							async: $this.options.async
 						});
 						dojo.connect($this.printTask, "onComplete", function (result) {
-							$this._trigger("printComplete", null, { result: result });
+							$this._trigger("printComplete", null, {
+								printParameters: printParameters,
+								date: Date(),
+								result: result
+							});
 						});
 						dojo.connect($this.printTask, "onError", function (error) {
-							$this._trigger("printError", null, { error: error });
+							$this._trigger("printError", null, {
+								printParameters: printParameters,
+								date: Date(),
+								error: error
+							});
 						});
 					}
 

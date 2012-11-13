@@ -223,8 +223,10 @@ img[src="images/ajax-loader.gif"]
 
 .dijitIconBusy
 {
-    background-position: inherit;
+    background-position: 0 0;
     background-image: url(../images/ajax-loader.gif);
+    height: 16px;
+    width: 16px;
 }
 
 img[src$="blank.gif"] 
@@ -427,7 +429,7 @@ abbr
     display: block;
 }
 
-.ui-printer-layout-options > input
+.ui-printer-layout-options > input, .ui-printer-additional-parameters > input, .ui-printer-additional-parameters > select
 {
     display: block;
     width: 100%;
