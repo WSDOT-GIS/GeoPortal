@@ -429,7 +429,7 @@ abbr
     display: block;
 }
 
-.ui-printer-layout-options > input, .ui-printer-additional-parameters > input, .ui-printer-additional-parameters > select
+.ui-printer-layout-options > input, .ui-printer-extra-parameters > input, .ui-printer-extra-parameters > select
 {
     display: block;
     width: 100%;

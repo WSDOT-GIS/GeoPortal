@@ -42,108 +42,7 @@
 					titleText: null, //"Airport",
 					scalebarUnit: "Miles"
 				},
-				additionalParameters: [
-					{
-						"name": "Resolution",
-						"dataType": "GPLong",
-						"displayName": "Resolution",
-						"description": "Resolution (DPI)",
-						"direction": "esriGPParameterDirectionInput",
-						"defaultValue": 96,
-						"parameterType": "esriGPParameterTypeOptional",
-						"category": "Advanced"
-					},
-					{
-						"name": "Image_Quality",
-						"dataType": "GPString",
-						"displayName": "Image Quality",
-						"description": "Image Quality",
-						"direction": "esriGPParameterDirectionInput",
-						"defaultValue": "BEST",
-						"parameterType": "esriGPParameterTypeOptional",
-						"category": "Advanced",
-						"choiceList": [
-							"BEST",
-							"BETTER",
-							"NORMAL",
-							"FASTER",
-							"FASTEST"
-						]
-					},
-					{
-						"name": "Colorspace",
-						"dataType": "GPString",
-						"displayName": "Color Space",
-						"description": "RGB or CYMK",
-						"direction": "esriGPParameterDirectionInput",
-						"defaultValue": "RGB",
-						"parameterType": "esriGPParameterTypeOptional",
-						"category": "Advanced",
-						"choiceList": [
-							"CMYK",
-							"RGB"
-						]
-					},
-					{
-						"name": "Image_Compression",
-						"dataType": "GPString",
-						"displayName": "Image Compression",
-						"description": "Image compression",
-						"direction": "esriGPParameterDirectionInput",
-						"defaultValue": "ADAPTIVE",
-						"parameterType": "esriGPParameterTypeOptional",
-						"category": "Advanced",
-						"choiceList": [
-							"ADAPTIVE",
-							"JPEG",
-							"DEFLATE",
-							"LZW",
-							"NONE",
-							"RLE"
-						]
-					},
-					{
-						"name": "JPEG_Compression_Quality",
-						"dataType": "GPLong",
-						"displayName": "JPEG Compression Quality",
-						"description": "JPEG compression quality",
-						"direction": "esriGPParameterDirectionInput",
-						"defaultValue": 80,
-						"parameterType": "esriGPParameterTypeOptional",
-						"category": "Advanced"
-					}
-				],
-				////additionalParameters: {
-				////	"Resolution": {
-				////		type: "range",
-				////		values: [96, 300],
-				////		value: 96
-				////	},
-				////	"Image_Quality": {
-				////		label: "Image Quality",
-				////		type: "choice",
-				////		values: ["BEST", "BETTER", "NORMAL", "FASTER", "FASTEST"],
-				////		value: "BEST"
-				////	},
-				////	"Color_Space": {
-				////		label: "Color Space",
-				////		type: "choice",
-				////		values: ["RGB", "CMYK"],
-				////		value: "RGB"
-				////	},
-				////	"Image_Compression": {
-				////		label: "Image Compression",
-				////		type: "choice",
-				////		values: ["ADAPTIVE", "JPEG", "DEFLATE", "LZW", "NONE", "RLE"],
-				////		value: "ADAPTIVE"
-				////	},
-				////	"JPEG_Compression_Quality": {
-				////		label: "JPEG Compression Quality",
-				////		type: "range",
-				////		values: [1, 100],
-				////		value: 80
-				////	}
-				////},
+				extraParameters: null,
 				async: false
 			},
 			_layoutOptionsSection: null,
@@ -155,7 +54,7 @@
 			_create: function () {
 				var $this = this;
 
-				function addAdditionalParameters() {
+				function addextraParameters() {
 					var additionalParams, i, l, param, label, control, output;
 
 					function createSelect(param) {
@@ -202,9 +101,9 @@
 						control.appendTo(output);
 					}
 
-					if ($this.options.additionalParameters) {
-						output = $("<div>").addClass("ui-printer-additional-parameters");
-						additionalParams = $this.options.additionalParameters;
+					if ($this.options.extraParameters) {
+						output = $("<div>").addClass("ui-printer-extra-parameters");
+						additionalParams = $this.options.extraParameters;
 						for (i = 0, l = additionalParams.length; i < l; i += 1) {
 							param = additionalParams[i];
 							// TODO: handle label's "for" attribute.
@@ -274,7 +173,7 @@
 				$this._templateSelect = createTemplateSelect().appendTo($this.element);
 				$this._layoutOptionsSection = $("<div>").addClass("ui-printer-layout-options").appendTo($this.element);
 				addLayoutOptions($this._layoutOptionsSection, $this.options.layoutOptions);
-				$this._extraParametersControls = addAdditionalParameters().appendTo($this.element);
+				$this._extraParametersControls = addextraParameters().appendTo($this.element);
 
 
 				$("<button>").attr({

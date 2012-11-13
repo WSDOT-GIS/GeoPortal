@@ -432,6 +432,12 @@ require(["require", "dojo/_base/array", "dojo/number",
 							return layoutTemplateParam[0].choiceList;
 						}
 
+						function getExtraParameters() {
+							return dojo.filter(resp.parameters, function (param, idx) {
+								return param.name !== "Web_Map_as_JSON" && param.name !== "Format" && param.name !== "Output_File" && param.name !== "Layout_Template";
+							});
+						}
+
 						templateNames = getTemplateNames();
 
 						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
@@ -451,6 +457,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 										map: map,
 										templates: templateNames,
 										url: wsdot.config.printUrl,
+										extraParameters: getExtraParameters(),
 										async: resp.executionType === "esriExecutionTypeAsynchronous",
 										printSubmit: function (e, data) {
 											var parameters = data.parameters;
