@@ -134,6 +134,43 @@
 						"id": "AADT"
 					}
 				}
+			],
+			"State Truck Freight Economic Corridors": [
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/StateTruckFreightEconomicCorridors/MapServer",
+					"options": {
+						"id": "State Truck Freight Economic Corridors"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/IntermodalFacilities/MapServer",
+					"options": {
+						"id": "Intermodal Facilities"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/RuralAgProcessingCenters/MapServer",
+					"options": {
+						"id": "Rural Agricultural Processing Centers"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/IndustrialAndCommercialLands/MapServer",
+					"options": {
+						"id": "Industrial and Commercial Lands"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/HighwayUrbanUrbanized/MapServer",
+					"options": {
+						"id": "Highway Urban and Urbanized Areas"
+					}
+				}
 			]
 		},
 		"General": {

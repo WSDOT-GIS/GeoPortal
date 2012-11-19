@@ -33,8 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="AIS\ReadMe.txt" />
     <Content Include="AirportPowerUser.aspx" />
+    <Content Include="AIS\config.js" />
+    <Content Include="AIS\ReadMe.txt" />
+    <Content Include="AIS\web.config" />
+    <Content Include="config\airport.js" />
+    <Content Include="config\config.js" />
+    <Content Include="config\Freight.js" />
+    <Content Include="config\FunctionalClass.js" />
+    <Content Include="config\internal-airport.js" />
+    <Content Include="config\internal-Freight.js" />
+    <Content Include="config\internal-RFIP.js" />
+    <Content Include="config\Release.js" />
     <Content Include="disclaimers\Freight\Internal.html" />
     <Content Include="disclaimers\Freight\Public.html" />
     <Content Include="error\GenericError.html" />
@@ -108,15 +118,6 @@
     <Content Include="help\Freight\public\Help.pdf" />
     <Content Include="help\Freight\internal\Tutorial.pdf" />
     <Content Include="help\Freight\public\Tutorial.pdf" />
-    <Content Include="AIS\web.config" />
-    <Content Include="AIS\config.json" />
-    <Content Include="config\airport.json" />
-    <Content Include="config\config.json" />
-    <Content Include="config\Freight.json" />
-    <Content Include="config\FunctionalClass.json" />
-    <Content Include="config\internal-airport.json" />
-    <Content Include="config\internal-Freight.json" />
-    <Content Include="config\internal-RFIP.json" />
     <None Include="config\README.md" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />

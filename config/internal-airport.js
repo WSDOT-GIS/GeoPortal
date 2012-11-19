@@ -2,7 +2,7 @@
 	"pageTitle": "Airport",
 	"helpUrl": "help/navigation.html",
 	"enableIdentify": true,
-	"printUrl":"http://hqolymgis99t/arcgis/rest/services/Airport/ExportMap/GPServer/Export%20PDF",
+	"printUrl":"http://hqolymgis99t/arcgis/rest/services/Airport/ExportWebMap/GPServer/Export%20Web%20Map",
 	"airspaceCalculatorUrl":"http://hqolymgis21t/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabContainerOptions": {
 		"tabPosition": "left"

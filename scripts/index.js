@@ -73,7 +73,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 ], function (require, array, number, Button) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.js";
 	wsdot = { config: {} };
 
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
@@ -1252,9 +1252,9 @@ require(["require", "dojo/_base/array", "dojo/number",
 		// If the config parameter has not been specified, return the default.
 		if (qs.config) {
 			if (/\//g.test(qs.config)) {
-				output = [qs.config, ".json"].join("");
+				output = [qs.config, ".js"].join("");
 			} else {
-				output = ["config/", qs.config, ".json"].join("");
+				output = ["config/", qs.config, ".js"].join("");
 			}
 		}
 		return output;
