@@ -3,7 +3,8 @@
 (function ($) {
 	"use strict";
 
-	require(["esri/toolbars/draw", "esri/tasks/query"], function () {
+	require(["esri/toolbars/draw", "esri/tasks/query", "esri/tasks/gp"], function () {
+		// TODO: make this widget inherit dialog.
 		$.widget("ui.faaFar77", {
 			options: {
 				runwayCenterline: null, // esri.geometry.Polyline
@@ -17,9 +18,14 @@
 					"Visual Runway Visual Approach"
 				]
 			},
-			_clearwayLengthBox: null,
+			_isPreparedHardSurfaceCheckbox: null,
 			_runwayTypeBox: null,
-			_airportElevationBox: null,
+			isPreparedHardSurface: function () {
+				return this._isPreparedHardSurfaceCheckbox[0].checked;
+			},
+			runwayType: function () {
+				return $("*:selected", this._runwayTypeBox).val();
+			},
 			_create: function () {
 				var $this = this, id, currentId, table, row, form;
 				id = $this.element.attr("id");
@@ -30,14 +36,15 @@
 
 				table = $("<div>").appendTo(form);
 
-				// Clearway Length.
+				// Is prepared hard surface?
 				row = $("<div>").appendTo(table);
-				currentId = id + "-clearway-length";
-				$("<label>").text("Clearway Length").attr("for", currentId).appendTo(row);
-				$this._clearwayLengthBox = $("<input>").attr({
-					type: "number",
+				currentId = id + "-is-prepared-hard-surface";
+				$("<label>").text("Is prepared hard surface").attr("for", currentId).appendTo(row);
+				$this._isPreparedHardSurfaceCheckbox = $("<input>").attr({
+					type: "checkbox",
 					id: currentId
 				}).appendTo(row);
+
 
 				// Runway Type...
 				(function () {
@@ -56,15 +63,6 @@
 						}).text(option).appendTo(runwaySelect);
 					}
 				} ());
-
-				// Airport elevation
-				row = $("<div>").appendTo(table);
-				currentId = id + "-airport-elevation";
-				$("<label>").text("Airport Elevation").attr("for", currentId).appendTo(row);
-				$("<input>").attr({
-					type: "number",
-					id: currentId
-				}).appendTo(row);
 
 				return this;
 			},
@@ -85,6 +83,11 @@
 			_drawToolbar: null,
 			_faaFar77Dialog: null,
 			_mapClickDeferred: null,
+			_gp: null,
+			_jobCompleteDeferred: null,
+			_getResultDataCompleteDeferred: null,
+			_statusDeferred: null,
+			_errorDeferred: null,
 			_showFaaFar77: function (line) {
 				var $this = this;
 
@@ -99,7 +102,28 @@
 						title: "FAA FAR 77 Surface Generator",
 						buttons: {
 							"OK": function () {
+								var inputParameters;
+								// Setup the geoprocessor for first use.
+								if (!$this._gp) {
+									$this._gp = new esri.tasks.Geoprocessor($this.faaFar77GPUrl);
+									$this._getResultDataCompleteDeferred = dojo.connect($this._gp, "onGetResultDataComplete", function (/*esri.tasks.ParameterValue*/result) {
+										console.log(result);
+									});
+									$this._jobCompleteDeferred = dojo.connect($this._gp, "onJobComplete", function (status) {
+										/// <param name="status" type="esri.tasks.JobInfo">Contains jobId (string), jobStatus (string) and messages (GpMessage[]) attributes.</param>
+										$this._gp.getResultData(status.jobId, "output_feature_class");
+									});
+								}
 								// TODO: Call the geoprocessing function.
+								inputParameters = {
+									line_features: [
+										new esri.Graphic(line)
+									],
+									is_prepared_hard_surface: $this._faaFar77Dialog.faaFar77("isPreparedHardSurface"),
+									runway_type: $this._faaFar77Dialog.faaFar77("runwayType")
+								};
+
+								$this._gp.submitJob(inputParameters);
 							},
 							"Cancel": function () {
 								$(this).dialog("close");
