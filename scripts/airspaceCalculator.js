@@ -81,14 +81,14 @@
 			list = $("<dl>").appendTo(output);
 			////$("<dt>AGL</dt>").appendTo(list);
 			////$("<dd>").text(graphic.attributes.AGL + "'").appendTo(list);
-			$("<dt>Elevation of <abbr title='Federal Aviation Regulations'>FAR</abbr> Surface</dt>").appendTo(list);
+			$("<dt>Penetration of Surface</dt>)").appendTo(list);
 			$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(distanceF)).appendTo(list);
 			$("<dt>Terrain Elevation</dt>").appendTo(list);
 			$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(elevationF)).appendTo(list);
 
 			if (graphic.attributes.PenetratesSurface === "yes") {
 				penetrationDistanceF = Math.abs(distanceF - graphic.attributes.AGL);
-				$("<dt>Penetration of Surface</dt>)").appendTo(list);
+				$("<dt>Elevation of <abbr title='Federal Aviation Regulations'>FAR</abbr> Surface</dt>").appendTo(list);	
 				$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(penetrationDistanceF)).appendTo(list);
 			}
 			return output[0];
