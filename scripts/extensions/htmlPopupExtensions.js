@@ -479,7 +479,7 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						title: "Result&nbsp;<span class='result-position' />&nbsp;of&nbsp;<span class='result-total' /><br /><span class='result-layer' />",
 						close: function () {
 							map.graphics.clear();
-							$(this).dialog("destroy");
+							$(this).dialog("destroy").remove();
 						}
 					});
 
