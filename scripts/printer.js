@@ -136,8 +136,8 @@
 					/// <param name="layoutOptions" type="Object">An object with properties.</param>
 					var optionName, optionValue;
 
-					function handleOptionChange(/*event, data*/) {
-						var element = $(this), name = element.attr("name"), value = element.val();
+					function handleOptionChange(event) {
+						var element = $(event.target), name = element.attr("name"), value = element.val();
 						if (value === "") {
 							value = null;
 						}
