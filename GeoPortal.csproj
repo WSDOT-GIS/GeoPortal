@@ -79,7 +79,6 @@
     <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
     <Content Include="MapIconGenerator.htm" />
-    <Content Include="ReadMe.html" />
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\airspaceCalculator.js" />
@@ -119,6 +118,7 @@
     <Content Include="help\Freight\internal\Tutorial.pdf" />
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <None Include="config\README.md" />
+    <None Include="README.md" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
     <Content Include="scripts\printer.js" />

@@ -1,4 +1,4 @@
-﻿/*global require, jQuery*/
+﻿/*global require, jQuery, esri, dojo */
 /*jslint plusplus:true,nomen:true*/
 (function ($) {
 	"use strict";
@@ -29,6 +29,18 @@
 
 	}
 
+	////function getLegendLayers(map) {
+	////	var output = [], i, l, layerId, legendLayer;
+	////	for (i = 0, l = map.layerIds.length; i < l; i++) {
+	////		//layer = map.getLayer(map.layerIds[i]);
+	////		layerId = map.layerIds[i];
+	////		legendLayer = new esri.tasks.LegendLayer();
+	////		legendLayer.layerId = layerId;
+	////		output.push(legendLayer);
+	////	}
+	////	return output;
+	////}
+
 	require(["esri/tasks/PrintTask"], function (PrintTask) {
 		$.widget("ui.printer", {
 			options: {
@@ -37,7 +49,7 @@
 				url: null,
 				layoutOptions: {
 					authorText: null,
-					copyrightText: ["©", new Date().getFullYear(), " WSDOT"].join(""),
+					// copyrightText: ["©", new Date().getFullYear(), " WSDOT"].join(""),
 					//"legendLayers": [],
 					titleText: null, //"Airport",
 					scalebarUnit: "Miles"
@@ -54,83 +66,115 @@
 			_create: function () {
 				var $this = this;
 
-				function addextraParameters() {
-					var additionalParams, i, l, param, label, control, output;
+				////function addExtraParameters() {
+				////	var additionalParams, i, l, param, label, control, output;
 
-					function createSelect(param) {
-						var j, jl, choice;
-						if (param.choiceList) {
-							control = $("<select>").data("paramName", param.name);
-							for (j = 0, jl = param.choiceList.length; j < jl; j += 1) {
-								choice = param.choiceList[j];
-								$("<option>").text(choice).attr({
-									value: choice,
-									selected: choice === param.defaultValue
-								}).appendTo(control);
-							}
-							control.appendTo(output);
-						}
-					}
+				////	function createSelect(param) {
+				////		var j, jl, choice;
+				////		if (param.choiceList) {
+				////			control = $("<select>").data("paramName", param.name);
+				////			for (j = 0, jl = param.choiceList.length; j < jl; j += 1) {
+				////				choice = param.choiceList[j];
+				////				$("<option>").text(choice).attr({
+				////					value: choice,
+				////					selected: choice === param.defaultValue
+				////				}).appendTo(control);
+				////			}
+				////			control.appendTo(output);
+				////		}
+				////	}
 
-					function createInput(param) {
-						control = $("<input>").data("paramName", param.name);
-						if (param.dataType === "GPString") {
-							control.attr({
-								type: "text"
-							});
-						} else if (param.dataType === "GPLong") {
-							control.attr({
-								type: "range",
-								step: 1
-							});
-							if (param.name === "Resolution") {
-								control.attr({
-									min: 96,
-									max: 300
-								});
-							} else if (param.name === "JPEG_Compression_Quality") {
-								control.attr({
-									min: 1,
-									max: 100
-								});
-							}
-						}
-						if (param.defaultValue) {
-							control.val(param.defaultValue);
-						}
-						control.appendTo(output);
-					}
+				////	function createInput(param) {
+				////		control = $("<input>").data("paramName", param.name);
+				////		if (param.dataType === "GPString") {
+				////			control.attr({
+				////				type: "text"
+				////			});
+				////		} else if (param.dataType === "GPLong") {
+				////			control.attr({
+				////				type: "range",
+				////				step: 1
+				////			});
+				////			if (param.name === "Resolution") {
+				////				control.attr({
+				////					min: 96,
+				////					max: 300
+				////				});
+				////			} else if (param.name === "JPEG_Compression_Quality") {
+				////				control.attr({
+				////					min: 1,
+				////					max: 100
+				////				});
+				////			}
+				////		}
+				////		if (param.defaultValue) {
+				////			control.val(param.defaultValue);
+				////		}
+				////		control.appendTo(output);
+				////	}
 
-					if ($this.options.extraParameters) {
-						output = $("<div>").addClass("ui-printer-extra-parameters");
-						additionalParams = $this.options.extraParameters;
-						for (i = 0, l = additionalParams.length; i < l; i += 1) {
-							param = additionalParams[i];
-							// TODO: handle label's "for" attribute.
-							label = $("<label>").text(param.displayName).appendTo(output);
-							if (param.choiceList) {
-								createSelect(param);
-							} else {
-								createInput(param);
-							}
-						}
-					}
-					return output;
-				}
+				////	if ($this.options.extraParameters) {
+				////		output = $("<div>").addClass("ui-printer-extra-parameters");
+				////		additionalParams = $this.options.extraParameters;
+				////		for (i = 0, l = additionalParams.length; i < l; i += 1) {
+				////			param = additionalParams[i];
+				////			// TODO: handle label's "for" attribute.
+				////			label = $("<label>").text(param.displayName).appendTo(output);
+				////			if (param.choiceList) {
+				////				createSelect(param);
+				////			} else {
+				////				createInput(param);
+				////			}
+				////		}
+				////	}
+				////	return output;
+				////}
 
 				function addLayoutOptions(container, layoutOptions) {
 					/// <summary>Adds layout options to an element.</summary>
 					/// <param name="container" type="jQuery">A container element</param>
 					/// <param name="layoutOptions" type="Object">An object with properties.</param>
 					var optionName, optionValue;
+
+					function handleOptionChange(/*event, data*/) {
+						var element = $(this), name = element.attr("name"), value = element.val();
+						if (value === "") {
+							value = null;
+						}
+
+						$this.options.layoutOptions[name] = value;
+
+					}
+
+					function createSelect() {
+						var select, values = ["Miles", "Kilometers", "Meters", "Feet"].sort(), i, l, value;
+
+						select = $("<select name='scalebarUnit'>").change(handleOptionChange);
+
+						for (i = 0, l = values.length; i < l; i++) {
+							value = values[i];
+							$("<option>").attr({
+								value: value,
+								selected: value === layoutOptions.scalebarUnit
+							}).text(value).appendTo(select);
+						}
+
+						return select;
+					}
+
+
 					for (optionName in layoutOptions) {
 						if (layoutOptions.hasOwnProperty(optionName)) {
 							optionValue = layoutOptions[optionName];
 							$("<label>").text(splitWords(optionName).join(" ")).appendTo(container);
-							$("<input>").attr({
-								type: "text",
-								name: optionName
-							}).appendTo(container).val(optionValue);
+							if (optionName === "scalebarUnit") {
+								createSelect().appendTo(container);
+							} else {
+								$("<input>").attr({
+									type: "text",
+									name: optionName
+								}).appendTo(container).val(optionValue).blur(handleOptionChange);
+							}
 						}
 					}
 				}
@@ -149,31 +193,31 @@
 					return output;
 				}
 
-				function getExtraParameters() {
-					var i, l, output, controls, control, value;
-					if (!$this._extraParametersControls) {
-						output = null;
-					} else {
-						controls = $("input,select", $this._extraParametersControls);
-						output = {};
-						for (i = 0, l = controls.length; i < l; i += 1) {
-							control = controls.eq(i);
-							value = control.val();
-							if (value) {
-								output[control.data("paramName")] = value;
-							}
-						}
-					}
+				////function getExtraParameters() {
+				////	var i, l, output, controls, control, value;
+				////	if (!$this._extraParametersControls) {
+				////		output = null;
+				////	} else {
+				////		controls = $("input,select", $this._extraParametersControls);
+				////		output = {};
+				////		for (i = 0, l = controls.length; i < l; i += 1) {
+				////			control = controls.eq(i);
+				////			value = control.val();
+				////			if (value) {
+				////				output[control.data("paramName")] = value;
+				////			}
+				////		}
+				////	}
 
-					return output;
-				}
+				////	return output;
+				////}
 
 				// Add controls for all of the layout options.
 				$("<label>").text("Template").appendTo($this.element);
 				$this._templateSelect = createTemplateSelect().appendTo($this.element);
 				$this._layoutOptionsSection = $("<div>").addClass("ui-printer-layout-options").appendTo($this.element);
 				addLayoutOptions($this._layoutOptionsSection, $this.options.layoutOptions);
-				$this._extraParametersControls = addextraParameters().appendTo($this.element);
+				////$this._extraParametersControls = addextraParameters().appendTo($this.element);
 
 
 				$("<button>").attr({
@@ -191,8 +235,9 @@
 					printTemplate = new esri.tasks.PrintTemplate();
 					printTemplate.format = "PDF";
 					printTemplate.layout = $this._templateSelect.val();
+					printTemplate.layoutOptions = $this.options.layoutOptions;
 					printParameters.template = printTemplate;
-					printParameters.extraParameters = getExtraParameters();
+					//// printParameters.extraParameters = getExtraParameters();
 
 					// Create the print task if it does not already exist.
 					if (!$this.printTask) {
