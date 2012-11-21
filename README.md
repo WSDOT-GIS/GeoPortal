@@ -62,9 +62,6 @@ Creates an icon representing a given map service.
 ### MapIconGenerator.htm ###
 A frontend for MapIcon.ashx.
 
-### Metadata.ashx ###
-Retrieves metadata from the ArcGIS map service specified in the web.config file's *metadataRestUrl* setting.
-
 ### GetRoutes.ashx ###
 Provides route information for a [jQuery UI autocomplete widget](http://jqueryui.com/demos/autocomplete/#remote).  See `RouteListDemo.html` for an example.
 Note that this handler is not currently used in main map application.
