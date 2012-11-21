@@ -7,11 +7,6 @@
  * This JS file extends the esri.layer.Layers class to provide functions that work with WSDOT's Layer Metadata Server Object Extension (SOE).
  * @author Jeff Jacobson
  */
-////		dojo.require("dojo.io.script");
-////		dojo.require("esri.layers.agsdynamic");
-////		dojo.require("esri.layers.agstiled");
-////		dojo.require("esri.layers.FeatureLayer");
-
 
 require(["dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/layers/FeatureLayer"], function () {
 	"use strict";
