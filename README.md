@@ -46,7 +46,7 @@ The settings for other configurations are stored in files named in this format: 
 where *MyConfigurationName* is replaced by the name of the configuration.
 
 #### Additional documentation ####
-The [config.js.txt](scripts/config.js.txt) file describes the settings of a config.js file.
+The `scripts/config/README.md` file describes the settings of a config.js file.
 
 ## Utilities ##
 
