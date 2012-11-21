@@ -3,11 +3,15 @@
 ## Query String Parameters ##
 
 ### config ###
-Use the *config* parameter to specify a configuration other than the default. The currently supported configurations are listed below.
+Use the *config* parameter to specify a configuration other than the default. The currently supported configurations are listed below.  This value is case-insensitive.
 
+* airport
+* config
 * Freight
 * FunctionalClass
-* RFIP
+* internal-airport
+* internal-Freight
+* internal-RFIP
 
 #### layers ####
 The *layers* parameter is used to specify which layers will be turned on when the map is loaded.  
@@ -21,10 +25,10 @@ The format of this parameter is four comma-separated numbers in this order: xmin
 ## Configuration ##
 
 ### `web.config` ###
-The `web.config` file contains server-side settings.  Each Visual Studio project configuration will have its own <a href="http://go.microsoft.com/fwlink/?LinkId=125889">web.config transformation file</a>.
+The `web.config` file contains server-side settings.  Each Visual Studio project configuration will have its own [web.config transformation file].
 The following settings are contained in the `/configuration/appSettings` section of the `web.config` file.
 #### wsdotTrafficApiAccessCode
-This setting is used for accessing the [WSDOT Trafic API](http://www.wsdot.wa.gov/Traffic/api/) to get traffic cameras, etc.  (Not currently used.)
+This setting is used for accessing the [WSDOT Trafic API] to get traffic cameras, etc.  (Not currently used.)
 #### mapIconBaseMap ####
 Specifies the base map that is used when exporting a map image via `MapIcon.ashx`.
 #### mapIconDefaultExtent ####
@@ -36,14 +40,13 @@ A map service that is used to retrieve state route data.
 #### stateRouteMapServiceLayers ####
 A JSON string that describes the layers in the `stateRouteMapService`.
 
-
+[web.config transformation file](http://go.microsoft.com/fwlink/?LinkId=125889)
+[WSDOT Trafic API]:http://www.wsdot.wa.gov/Traffic/api/
 
 ### `config.js` files ###
 This application supports a number of configurations that can be selected via the *config* query string parameter.
-The default configuration is *config.js*.  This is the configuration that is used if the *config* 
-query string parameter is not provided a value.
-The settings for other configurations are stored in files named in this format: `config.MyConfigurationName.js`, 
-where *MyConfigurationName* is replaced by the name of the configuration.
+The default configuration is *config.js*.  This is the configuration that is used if the *config* query string parameter is not provided a value.
+The settings for other configurations are stored in files named in this format: `config/MyConfigurationName.js`, where *MyConfigurationName* is replaced by the name of the configuration.
 
 #### Additional documentation ####
 The `scripts/config/README.md` file describes the settings of a config.js file.
