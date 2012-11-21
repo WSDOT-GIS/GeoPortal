@@ -1,6 +1,8 @@
 /*jslint nomen: true, white: true, browser: true */
 /*global jQuery:true, esri:true, dojo:true */
 
+// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+
 require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function() {
 	"use strict";
 

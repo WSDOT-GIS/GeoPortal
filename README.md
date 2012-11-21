@@ -40,7 +40,7 @@ A map service that is used to retrieve state route data.
 #### stateRouteMapServiceLayers ####
 A JSON string that describes the layers in the `stateRouteMapService`.
 
-[web.config transformation file](http://go.microsoft.com/fwlink/?LinkId=125889)
+[web.config transformation file]:(http://go.microsoft.com/fwlink/?LinkId=125889)
 [WSDOT Trafic API]:http://www.wsdot.wa.gov/Traffic/api/
 
 ### `config.js` files ###
@@ -63,8 +63,10 @@ Creates an icon representing a given map service.
 A frontend for MapIcon.ashx.
 
 ### GetRoutes.ashx ###
-Provides route information for a [jQuery UI autocomplete widget](http://jqueryui.com/demos/autocomplete/#remote).  See `RouteListDemo.html` for an example.
+Provides route information for a [jQuery UI autocomplete widget].  See `RouteListDemo.html` for an example.
 Note that this handler is not currently used in main map application.
+
+[jQuery UI autocomplete widget]:http://jqueryui.com/autocomplete/#remote
 
 ### RouteListDemo.html ###
 A sample page that looks up WA state routes and uses `GetRoutes.ashx`.

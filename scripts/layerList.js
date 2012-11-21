@@ -2,7 +2,11 @@
 /*global esri, dojo, jQuery*/
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4-vsdoc.js"/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.js"/>
-/// <reference path="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.7"/>
+/// <reference path="jsapi_vsdoc_v31.js" />
+
+
+// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+
 /**
  * A layer list that only creates a layer object when the user checks the associated checkbox.
  * @author Jeff Jacobson

@@ -1,5 +1,8 @@
 ﻿/*global require, jQuery, Modernizr, esri */
 /*jslint nomen: true, browser: true, white: true */
+
+// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+
 (function ($) {
 	"use strict";
 	require(["dojo/_base/Color", "esri/graphic", "esri/symbol", "esri/renderer", "esri/layers/graphics", "esri/toolbars/draw", "esri/geometry", "esri/tasks/gp"], function (Color) {

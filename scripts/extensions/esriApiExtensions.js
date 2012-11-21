@@ -3,7 +3,7 @@
 /*global jQuery, dojo */
 /*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
-/** Copyright (c) 2011 Washington State Department of Transportation.  Licensed under the MIT License. */
+// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 // This script gives existing ArcGIS JavaScript API types additional methods and properties.
 
