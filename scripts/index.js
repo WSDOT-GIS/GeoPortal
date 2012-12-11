@@ -74,9 +74,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 					title: "Disclaimer",
 					modal: true,
 					closeOnEscape: false,
+					width: 600,
 					buttons: {
 						"Accept": function () {
-							$(this).dialog("close").dialog("destroy").remove();
+							$(this).dialog("close");
 						}
 					},
 					open: function (event, ui) {
