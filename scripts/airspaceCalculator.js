@@ -91,7 +91,7 @@
 
 			if (graphic.attributes.PenetratesSurface === "yes") {
 				penetrationDistanceF = Math.abs(distanceF - graphic.attributes.AGL);
-				$("<dt>Elevation of <abbr title='Federal Aviation Regulations'>FAR</abbr> Surface</dt>").appendTo(list);	
+				$("<dt>Elevation Above Terrain of <abbr title='Federal Aviation Regulations'>FAR</abbr> Surface</dt>").appendTo(list);	
 				$("<dd>").text(formatFeetAsFeetAndInchesAndMeters(penetrationDistanceF)).appendTo(list);
 			}
 			return output[0];
