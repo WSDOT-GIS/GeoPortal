@@ -71,7 +71,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 			// This is to ensure that the dialog is centered on the page.
 			return $("<div>").load(wsdot.config.disclaimer, function () {
 				$(this).dialog({
-					title: "Disclaimer",
+					title: wsdot.config.disclaimerTitle != null ? wsdot.config.disclaimerTitle : "Disclaimer",
 					modal: true,
 					closeOnEscape: false,
 					width: 600,
