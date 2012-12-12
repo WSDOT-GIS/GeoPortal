@@ -434,3 +434,35 @@ abbr
     display: block;
     width: 100%;
 }
+
+.airport-disclaimer 
+{
+    font-family: Century Gothic, sans-serif;
+    font-size: 12pt;
+}
+
+.airport-disclaimer .important, .airport-disclaimer h1 
+{
+    text-align: center;
+}
+
+.airport-disclaimer em 
+{
+    font-style: normal;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.airport-disclaimer h1 
+{
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.airport-disclaimer .important 
+{
+    font-family: Arial, sans-serif;
+    font-family: 14pt;
+    text-transform: uppercase;
+    font-weight: bold;
+}

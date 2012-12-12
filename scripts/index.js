@@ -70,8 +70,13 @@ require(["require", "dojo/_base/array", "dojo/number",
 			// Load the content into a div.  Only when the source page has loaded do invoke the dialog constructor.
 			// This is to ensure that the dialog is centered on the page.
 			return $("<div>").load(wsdot.config.disclaimer, function () {
-				$(this).dialog({
-					title: wsdot.config.disclaimerTitle != null ? wsdot.config.disclaimerTitle : "Disclaimer",
+				// Remove the title element.
+				var doc, title;
+				doc = $(this);
+				title = $("title", this).text();
+				$("title,link", this).remove();
+				doc.dialog({
+					title: title.length > 0 ? title : "Disclaimer",
 					modal: true,
 					closeOnEscape: false,
 					width: 600,
