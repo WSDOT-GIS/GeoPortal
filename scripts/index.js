@@ -85,12 +85,12 @@ require(["require", "dojo/_base/array", "dojo/number",
 							$(this).dialog("close");
 						}
 					},
-					open: function (event, ui) {
+					open: function (/*event, ui*/) {
 						// Remove the close button from the disclaimer form.
-						var form = $(event.target).parent();
+						var form = $(this).parent();
 						$("a.ui-dialog-titlebar-close", form).remove();
 					},
-					close: function (event, ui) {
+					close: function (/*event, ui*/) {
 						// Add a cookie
 						$.cookie("AgreedToDisclaimer", true, { expires: 30 });
 						$(this).dialog("destroy").remove();
@@ -479,7 +479,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 												disabled: null,
 												iconClass: "dijitIconPrint"
 											});
-											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
+											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error";
 											$("<div>").text(message).dialog({
 												title: "Print Error",
 												modal: true,
@@ -1255,7 +1255,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 	// Get the configuration
 	$.ajax(getConfigUrl(), {
 		dataType: "json",
-		success: function (data, textStatus, jqXHR) {
+		success: function (data /*, textStatus, jqXHR*/) {
 			wsdot.config = data;
 
 			doPostConfig();
