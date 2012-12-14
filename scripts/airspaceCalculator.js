@@ -70,7 +70,7 @@
 
 		function formatResults(graphic) {
 			var output, message, list, distanceF = graphic.attributes.DistanceFromSurface, penetrationDistanceF, elevationF = graphic.attributes.Z;
-			message = ["A building ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
+			message = ["A structure ", graphic.attributes.AGL, "' above ground level ", graphic.attributes.PenetratesSurface === "yes" ? " would " : " would not ", " penetrate an airport's airpsace."].join("");
 
 			output = $("<div>");
 			$("<p>").text(message).appendTo(output);
