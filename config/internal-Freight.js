@@ -170,6 +170,13 @@
 					"options": {
 						"id": "Highway Urban and Urbanized Areas"
 					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AgriculturalLandUse/MapServer",
+					"options": {
+						"id": "Agricultural Land Use"
+					}
 				}
 			]
 		},
