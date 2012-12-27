@@ -207,7 +207,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="WsdotTraffic.cs" />
+    <Compile Include="proxy.ashx.cs">
+      <DependentUpon>proxy.ashx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MapIcon.ashx" />
