@@ -5,15 +5,12 @@
   url, etc.
 */
 using System;
-using System.Drawing;
-using System.IO;
-using System.Web;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml.Serialization;
-using System.Web.Caching;
 using System.Configuration;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Caching;
+using System.Xml.Serialization;
 
 
 /// <summary>

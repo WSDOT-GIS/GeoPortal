@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   width="16"
+   height="16"
+   id="svg2387">
+  <defs>
+    <style
+       type="text/css"><![CDATA[
+		rect {
+			stroke: black;
+			rx: 0.4;
+			ry: 0.4;
+		}
+		#diamond {
+			fill:#f7921e;
+			fill-opacity:1;
+			stroke-width:0.1;
+			stroke-opacity:1
+		}
+		#innerDiamond {
+			fill:none;
+			stroke-width:0.242;
+		}
+		path {
+			fill:black;
+			fill-opacity:1
+			stroke:none
+		}
+	]]></style>
+  </defs>
+  <rect
+     width="10.566414"
+     height="10.566802"
+     x="6.0305018"
+     y="-5.2834015"
+	 rx="0.4"
+	 ry="0.4"
+     transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+     id="diamond" />
+	<rect
+     width="9.9882145"
+     height="9.9885807"
+     x="6.3196006"
+     y="-4.9942904"
+	 rx="0.4"
+	 ry="0.4"
+     transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+     id="innerDiamond"/>
+  <g
+     transform="matrix(1.1464531,0,0,1.1629956,-1.3270849,-0.91547375)"
+     id="cloud">
+    <path
+       d="m 8.5537806,6.5772099 a 2.087327,1.2779553 0 1 1 -4.1746541,0 2.087327,1.2779553 0 1 1 4.1746541,0 z"
+       transform="matrix(1.0408163,0,0,1.1133333,0.96290015,-1.5377494)"
+       id="cloudPart1" />
+    <path
+       d="m 8.5537806,6.5772099 a 2.087327,1.2779553 0 1 1 -4.1746541,0 2.087327,1.2779553 0 1 1 4.1746541,0 z"
+       transform="translate(0.144835,0.28966971)"
+       id="cloudPart2" />
+    <path
+       d="m 8.5537806,6.5772099 a 2.087327,1.2779553 0 1 1 -4.1746541,0 2.087327,1.2779553 0 1 1 4.1746541,0 z"
+       transform="matrix(1.0040816,0,0,1.1066667,3.3814871,-0.09673492)"
+       id="cloudPart3" />
+  </g>
+  <path
+     d="M 5.9898758,11.067371 C 4.3902127,10.777601 6.0044194,9.3843634 6.8548022,8.6730566 6.9271667,9.5272635 7.6169334,11.362104 5.9898758,11.067371 z"
+     id="raindrop" />
+  <use
+     transform="translate(2.3855166,0.83493076)"
+     id="useRaindrop"
+     x="0"
+     y="0"
+     width="16"
+     height="16"
+     xlink:href="#raindrop" />
+
+</svg>
