@@ -382,13 +382,24 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 									}
 								}, "jsonp");
 							} else {
+								// Create a table to display attributes if no HTML popup is defined.
 								(function () {
-									var dl = $("<dl>");
-									$.each(result.feature.attributes, function (name, value) {
-										$("<dt>").text(name).appendTo(dl);
-										$("<dd>").text(value).appendTo(dl);
-									});
-									dl.appendTo(div);
+									var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
+
+									table = $("<table>").appendTo(div).addClass("default-html-popup");
+
+									// Add a caption if the result has a display field name.
+									title = result.displayFieldName ? result.feature.attributes[result.displayFieldName] : null;
+									if (title) {
+										$("<caption>").text(title).appendTo(table);
+									}
+
+									for (name in result.feature.attributes) {
+										if (!ignoredAttributes.test(name) && result.feature.attributes.hasOwnProperty(name)) {
+											value = result.feature.attributes[name];
+											$(["<tr><th>", name, "</th><td>", value, "</td></tr>"].join("")).appendTo(table);
+										}
+									}
 								} ());
 							}
 

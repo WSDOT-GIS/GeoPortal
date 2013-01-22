@@ -33,7 +33,8 @@
 				{ "level": 11, "resolution": 1.19432856685505, "scale": 4513.988705 },
 				{ "level": 12, "resolution": 0.597164283559817, "scale": 2256.994353 },
 				{ "level": 13, "resolution": 0.298582141647617, "scale": 1128.497176 }
-			]
+		],
+		"sliderStyle": "large"
 	},
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
