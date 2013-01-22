@@ -1252,7 +1252,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 	}
 
 
-	// Get the configuration
+	// Get the configuratio
 	$.ajax(getConfigUrl(), {
 		dataType: "json",
 		success: function (data /*, textStatus, jqXHR*/) {
@@ -1264,7 +1264,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 			var request = this;
 			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
 			// Redirect to the aspx page which will prompt for a log in.
-			if (/parsererror/i.test(textStatus) && /^AIS\/config.json$/i.test(request.url)) {
+			if (/parsererror/i.test(textStatus) && /^AIS\/config.js(?:on)?$/i.test(request.url)) {
 				if (typeof (console) !== "undefined" && typeof (console.debug) !== "undefined") {
 					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
 				}

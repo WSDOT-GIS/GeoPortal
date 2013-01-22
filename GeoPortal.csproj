@@ -68,6 +68,31 @@
     <Content Include="IdentifyTemplate.html" />
     <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
+    <Content Include="images\alert\AccidentAlert1.png" />
+    <Content Include="images\alert\AccidentAlert2.png" />
+    <Content Include="images\alert\AccidentAlert3.png" />
+    <Content Include="images\alert\AccidentAlert4.png" />
+    <Content Include="images\alert\AccidentAlert5.png" />
+    <Content Include="images\alert\Alt\Construction1.png" />
+    <Content Include="images\alert\Alt\Construction2.png" />
+    <Content Include="images\alert\Alt\Construction3.png" />
+    <Content Include="images\alert\Alt\Construction4.png" />
+    <Content Include="images\alert\Construction1.png" />
+    <Content Include="images\alert\Construction2.png" />
+    <Content Include="images\alert\Construction3.png" />
+    <Content Include="images\alert\Construction4.png" />
+    <Content Include="images\alert\Construction5.png" />
+    <Content Include="images\alert\Flagger1.png" />
+    <Content Include="images\alert\Flagger2.png" />
+    <Content Include="images\alert\Flagger3.png" />
+    <Content Include="images\alert\Flagger4.png" />
+    <Content Include="images\alert\Flagger5.png" />
+    <Content Include="images\alert\RoadClosure.png" />
+    <Content Include="images\alert\Weather1.png" />
+    <Content Include="images\alert\Weather2.png" />
+    <Content Include="images\alert\Weather3.png" />
+    <Content Include="images\alert\Weather4.png" />
+    <Content Include="images\alert\Weather5.png" />
     <Content Include="images\camera.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\greenlogo.png" />
@@ -107,9 +132,7 @@
     <Content Include="scripts\jquery.ba-bbq.min.js" />
     <Content Include="scripts\jquery.cookie.js" />
     <Content Include="scripts\jquery.placeholder.min.js" />
-    <Content Include="scripts\jquery.pnotify.js" />
-    <Content Include="scripts\jquery.pnotify.min.js" />
-    <Content Include="scripts\jsapi_vsdoc_v31.js" />
+    <Content Include="scripts\jsapi_vsdoc_v32_2012.js" />
     <Content Include="scripts\json2.js" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +156,10 @@
     <Content Include="scripts\modernizr.js" />
     <Content Include="scripts\printer.js" />
     <Content Include="scripts\toc.js" />
+    <Content Include="scripts\wsdot\layers\CameraGraphicsLayer.js" />
+    <Content Include="scripts\wsdot\layers\TravelerInfoGraphicsLayer.js" />
+    <Content Include="scripts\wsdot\renderer\AlertRendererFactory.js" />
+    <Content Include="scripts\wsdot\utils.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
