@@ -124,8 +124,8 @@
     <Content Include="help\Freight\internal\Tutorial.pdf" />
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <None Include="config\README.md" />
-    <None Include="Properties\PublishProfiles\Production deployment area.pubxml" />
-    <None Include="Properties\PublishProfiles\Profile.pubxml" />
+    <None Include="Properties\PublishProfiles\Production Deployment Area.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
