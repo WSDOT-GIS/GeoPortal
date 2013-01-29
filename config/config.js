@@ -185,14 +185,6 @@
 						"id": "Rail"
 					}
 				}
-			],
-			"Traveler Info": [
-				{
-					"layerType": "wsdot.layers.CameraGraphicsLayer",
-					"options": {
-						"id": "Cameras"
-					}
-				}
 			]
 	}
 }

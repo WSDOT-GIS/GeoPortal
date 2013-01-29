@@ -141,8 +141,6 @@
     <Content Include="style\functionalClass.css" />
     <Content Include="style\identify.css" />
     <Content Include="style\index.css" />
-    <Content Include="style\jquery.pnotify.default.css" />
-    <Content Include="style\jquery.pnotify.default.icons.css" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Google.KML">

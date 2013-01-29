@@ -1,79 +1,79 @@
 .ui-layer-list-out-of-scale 
 {
-    color: #999;
+	color: #999;
 }
 
 
 .ui-layer-list-group .ui-layer-list-item {
-    list-style-image: none;
+	list-style-image: none;
 }
 
 ul.ui-layer-list, .ui-layer-list ul
 {
-    list-style-type: none;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
+	list-style-type: none;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
 }
 
 .ui-layer-list ul 
 {
-    padding-left: 0.5em;
+	padding-left: 0.5em;
 }
 
 .ui-layer-list-group > a 
 {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 
 /*
 .ui-layer-list .ui-layer-list-group, .ui-layer-list-has-children.expanded
 {
-    list-style-image: url(../images/layerList/TreeMinus10.gif);
+	list-style-image: url(../images/layerList/TreeMinus10.gif);
 }
 
 .ui-layer-list .ui-layer-list-group.collapsed, .ui-layer-list-has-children.collapsed
 {
-    list-style-image: url(../images/layerList/TreePlus10.gif);
+	list-style-image: url(../images/layerList/TreePlus10.gif);
 }
 */
 
 .ui-layer-list a:hover
 {
-    background-color: yellow;
+	background-color: yellow;
 }
 
 .ui-slider-horizontal
 {
-    height: 0.3em;
+	height: 0.3em;
 }
 
-.ui-slider .ui-slider-handle 
-{
-    background: url(../images/layerList/sliderSprites.png) no-repeat top left;
-    background-position: 0 0; 
-    width: 11px; 
-    height: 21px;
-    background-color: transparent;
-    border: none;
+.ui-slider .ui-slider-handle {
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAVEAYAAADnTklmAAAC7UlEQVRYw+2Xy0uiURjGazb9C5VZSPRftCiiJGwbVFCUXW1hUNCFKKIE7QopVEZoN2xRkgpZdvFSKmEpI12mGimoaDZpdGOWz3wnO1Mz5fjlTG3GZ/OsPL/z+14X74mJeYzZvLW1swMYjQ6H2w0sLNjtbHp+3mLZ3ATUaoPBbAZiIozFEuQvLjqdb+HrdEH++PhvfCqk0Xi9ej1QV+f1isVAdbXHU1kJVFV5PBUVL1sodLvLyoDs7I2NrCygvHxurrERkEpHRzUa9oJUyOc7OiK/u7iw2WprgfPz5eXSUtImU0nJa72yUlQEHB/PzqanA1br2hq5l0z2yKcTokLl5W63UAjk5jocfD7A59vtOTkvmwrxeIuLKSkAlzs9nZQEtLUNDCiV7MXohKjQ2dnqanExcHKi1WZmkovrdBkZr3VQ6PJycvLTJ+DgQKkk/ZNPR0onRIXS0kym1FRy8aUlcvFQnZw8M0OEOJyhoYQEoKlJJpPL2YtRPp0QFfL7p6fj4oBAYGqKXDhU+3zDw6Rdrt5e0s3N3d0PfHrwdyZ3d8A9k5sb4JbJ1VX49jE5PAQ2mFitkYsR/v19kH97+zb+0VGQb7NFxaJiUbGoWFQsKvafi10z8fuBr0wODgA7E3LwR4k955MPS/jr68/E6HYuEDgcubnAHZPr6/AHXjA5PQU8TFwuIDFRoSArFTlYoWAvRrdzskqR3ZPw//RhQ/Gdzr4+slK1tPT0PPDpc0Mk0utbW592wBsmgUDoAz8z2d4mQoOD8fFAXp5EQrbt+vqurv5+9mL0uUH+yCLR0w7Ilu9wSKWxscDEhEpFBtPQIJH8wh8c1GgMhqfnB49nND4X/Mbk7OylkEDQ2VlYCIjF7e0yWeTvMbk8yKfPD7q1h+JTIbV6bIwIheWHEvzCZHf33wuxFST8vb0IhMIJcrmTkxzO+wmFE9zfVyiIYMRCoQQLCkZGamreXyiUoF6v1ebnvwO/o0MuV6k+Tuhv+T8A91oi4RxyFxAAAAAASUVORK5CYII=') /*../images/layerList/sliderSprites.png*/ no-repeat top left;
+	*background: url(../images/layerList/sliderSprites.png) no-repeat top left; /* For IE 6 and 7 */
+	background-position: 0 0;
+	width: 11px;
+	height: 21px;
+	background-color: transparent;
+	border: none;
 }
 
 .ui-slider .ui-slider-handle:hover 
 {
-    background-position: -16px 0
+	background-position: -16px 0
 }
 
 .ui-layer-list-not-loaded 
 {
-    background: #f0f0ff;
+	background: #f0f0ff;
 }
 .ui-layer-list-error 
 {
-    color: red;
-    text-decoration: line-through;
+	color: red;
+	text-decoration: line-through;
 }
 .ui-layer-list-has-children > label
 {
-    text-decoration: underline;
-    cursor: pointer;
+	text-decoration: underline;
+	cursor: pointer;
 }

@@ -12,7 +12,7 @@ In the following example, the configuration file that will be used is `config/ai
 
 [Markdown]:https://en.wikipedia.org/wiki/Markdown
 [dillinger.io]:http://dillinger.io/
-[Showdown]:http://www.showdown.im/
+[Showdown]:http://showdown.im/
 
 
 ## pageTitle ##
