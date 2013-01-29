@@ -7,7 +7,7 @@ The configuration files for the GeoPortal are located in the `config` folder.  A
 
 In the following example, the configuration file that will be used is `config/airport.js`.
 
-	http://www.wsdot.wa.gov/data/tools/geoportal/?config=airport
+	http://wsdot.wa.gov/data/tools/geoportal/?config=airport
 
 
 [Markdown]:https://en.wikipedia.org/wiki/Markdown
@@ -109,13 +109,13 @@ This parameter specifies which layer will be used as the base layer when the map
 
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+		"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 	},
 
 ## geometryServer ##
 The ArcGIS Server Geometry server that will be used when a geometry server is required.
 
-	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+	"geometryServer": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 
 ## queryTasks ##
 The "queryTasks" properties are used to populate the drop-down lists of zoom extents.
@@ -217,49 +217,49 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Political Boundaries": [
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
 					"options": {
 						"id": "City Limits"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
 					"options": {
 						"id": "Congressional Districts"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
 					"options": {
 						"id": "County Boundaries"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
 					"options": {
 						"id": "Legislative Districts"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
 					"options": {
 						"id": "MPO"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer", //"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+					"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer", //"http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
 					"options": {
 						"id": "RTPO"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
 					"options": {
 						"id": "Township / Section"
 					}
@@ -275,7 +275,7 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Design": [
 			   {
 				   "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				   "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
+				   "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
 				   "options": {
 					   "id": "Interchange Drawings"
 				   }
@@ -284,21 +284,21 @@ This value can either be an object or an array.  If an object is provided, each 
 			"WSDOT Boundaries": [
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
 					"options": {
 						"id": "Maintenance Areas"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
 					"options": {
 						"id": "Region Boundaries"
 					}
 				},
 				{
 					"layerType": "esri.layers.FeatureLayer",
-					"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
+					"url": "http://wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
 					"options": {
 						"id": "Survey Monuments (NGS)",
 						"outFields": ["*"],
@@ -309,14 +309,14 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Transportation Features": [
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
 					"options": {
 						"id": "State Routes"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
 					"options": {
 						"id": "Functional Class"
 					}
@@ -325,7 +325,7 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Other": [
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
+					"url": "http://wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
 					"options": {
 						"id": "Traffic Flow"
 					}

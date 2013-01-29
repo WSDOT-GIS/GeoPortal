@@ -38,11 +38,11 @@
 	},
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+		"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 	},
 	"locationInfoUrl": "http://wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
 
-	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+	"geometryServer": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county" : {
 			"label": "County",
@@ -50,7 +50,7 @@
 		},
 		"city": {
 			"label": "City",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
+			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -60,7 +60,7 @@
 		},
 		"urbanArea": {
 			"label": "Urban Area",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24",
+			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true
@@ -73,7 +73,7 @@
 			"title": "WSDOT Basemap",
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
 			"layers": [
-				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+				{ "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
 			]
 		},
 		{
@@ -81,7 +81,7 @@
 			"title": "Functional Class",
 			"thumbnailUrl": "images/FCBasemapThumbnail.png",
 			"layers": [
-				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
+				{ "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
 			]
 		}
 	],
@@ -105,7 +105,7 @@
 	"layers": [
 		{
 			"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
 			"options": {
 				"id": "Functional Class"
 			}
