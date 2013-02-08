@@ -6,15 +6,36 @@
 require(["dojo/_base/lang", "dojo/_base/array", "esri/map"], function (lang, array) {
 	"use strict";
 	lang.extend(esri.Map, {
-		"lods": null,
+		/** Returns from the first tiled layer the tileInfo.lods property 
+		* @returns [esri.layers.LOD]
+		*/
+		
+		"getLods": function () {
+			var layerId, layer, lods = null;
+			for (layerId in this._layers) {
+				if (this._layers.hasOwnProperty(layerId)) {
+					layer = this._layers[layerId];
+					if (layer.tileInfo) {
+						if (layer.tileInfo.lods) {
+							lods = layer.tileInfo.lods;
+							break;
+						}
+					}
+				}
+			}
+			return lods;
+		},
 		"getLOD": function (level) {
 			/// <summary>Gets the current level of detail (LOD) for the map.</summary>
 			/// <param name="level" type="Number">Optional.  If you know the current LOD ID, you can input it here.  Otherwise the esri.Map.getLevel() method will be called to get this value.</param>
 			/// <returns type="esri.layers.LOD" />
+			var lods, lod;
+			lods = this.getLods();
 			if (level === undefined) {
 				level = this.getLevel();
 			}
-			return this.lods[level];
+			lod = lods && lods.length >= level ? lods[level] : null;
+			return lod;
 		},
 		"getScale": function (level) {
 			/// <summary>Returns the current scale of the map.</summary>

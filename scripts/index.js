@@ -37,6 +37,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 	"dijit/form/NumberSpinner",
 	"dijit/form/DateTextBox",
 	"dojo/parser",
+	"esri/dijit/Attribution",
 	"esri/map",
 	"esri/arcgis/utils",
 	"esri/dijit/Scalebar",
@@ -1058,7 +1059,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 			function setScaleLabel(level) {
 				// Set the scale.
 				var scale = map.getScale(level);
-				if (scale === undefined || scale === null) {
+				if (scale == null) {
 					$("#scaleText").text("");
 				}
 				else {
@@ -1093,15 +1094,9 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 			map.addLayer(initBasemap);
 
-			dojo.connect(map, "onLoad", map, function () {
-				map.lods = dojo.clone(map.getLayer(map.layerIds[0]).tileInfo.lods);
-
-				////$("#copyright").copyrightInfo({
-				////	map: map
-				////});
-
+			dojo.connect(map, "onLoad", function () {
 				// Set the scale.
-				setScaleLabel();
+				 setScaleLabel();
 
 
 
