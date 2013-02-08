@@ -7,6 +7,10 @@
 	  on iOS devices-->
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
 	<title>WSDOT GeoPortal</title>
+	<script>
+		// Redirect www.wsdot.wa.gov to wsdot.wa.gov
+		if (/^www\./.test(document.location.host)) { window.open(document.location.href.replace(/\/\/www\./, "//"), "_self"); }
+	</script>
 	<link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css" />
 	<link rel="stylesheet" type="text/css" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css" />
 	<link href="//serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" type="text/css" />
