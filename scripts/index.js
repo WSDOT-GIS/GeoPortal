@@ -1084,7 +1084,9 @@ require(["require", "dojo/_base/array", "dojo/number",
 			setupExtents();
 
 			// Convert the extent definition in the options into an esri.geometry.Extent object.
-			wsdot.config.mapOptions.extent = new esri.geometry.fromJson(wsdot.config.mapOptions.extent);
+			if (wsdot.config.mapOptions.extent) {
+				wsdot.config.mapOptions.extent = new esri.geometry.fromJson(wsdot.config.mapOptions.extent);
+			}
 			map = new esri.Map("map", wsdot.config.mapOptions);
 			if (wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
 				initBasemap = new esri.layers.ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
