@@ -1,5 +1,4 @@
-﻿/// <reference path="jsapi_vsdoc_v32_2012.js" />
-/*jslint devel: true, browser: true, white: true, nomen: true */
+﻿/*jslint devel: true, browser: true, white: true, nomen: true */
 /*global require, dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq, $ */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -15,7 +14,9 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 
 
 
+/// <reference path="jsapi_vsdoc_v31.js" />
 /// <reference path="dojo.js.uncompressed.js" />
+/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
 /// <reference path="jquery.ba-bbq.js" />
 /// <reference path="layerList.js" />
 /// <reference path="locationInfo.js" />
@@ -1107,10 +1108,24 @@ require(["require", "dojo/_base/array", "dojo/number",
 				esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
 
 
+
+				function resizeMap() {
+					//resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
+					//the following help topic for more details http://help.esri.com/EN/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/inside_guidelines.htm
+					var resizeTimer;
+					clearTimeout(resizeTimer);
+					resizeTimer = setTimeout(function () {
+						map.resize();
+						map.reposition();
+					}, 500);
+				}
+
 				// Setup Google Analytics tracking of the layers that are added to the map.
 				if (_gaq !== undefined) {
 					dojo.connect(map, "onLayerAddResult", gaTrackEvent);
 				}
+
+				dojo.connect(dijit.byId('mapContentPane'), 'resize', resizeMap);
 
 				function setExtentFromParams() {
 					// Zoom to the extent in the query string (if provided).
