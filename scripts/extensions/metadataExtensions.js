@@ -206,4 +206,6 @@ require(["dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "es
 			getMetadataUrl: f
 		});
 	}
+
+	return addExtensions();
 });
