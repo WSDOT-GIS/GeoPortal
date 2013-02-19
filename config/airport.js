@@ -139,7 +139,8 @@
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 						"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
 						"options": {
-							"id": "Airspace Features"
+							"id": "Airspace Features",
+							"opacity": 0.5
 						}
 					},
 					{
