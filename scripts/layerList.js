@@ -279,26 +279,38 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 				$("<label>").text("Transparency").appendTo($this.element);
 				sliderContainer = $("<div>").addClass("ui-layer-list-opacity-slider-container").appendTo($this.element);
 				// Add opacity slider
-				if (supportsInputRange()) { //chromeRe.test(navigator.userAgent)) {
-					// Chrome supports the HTML5 range input control, so we'll just use that...
-					slider = $("<input>").attr({
-						type: "range",
-						min: 0,
-						max: 1,
-						value: layer.opacity, // This doesn't actually seem to set the value.  We actually set this value with the val method.
-						step: 0.1
-					}).appendTo(sliderContainer).val(layer.opacity).change({ layer: layer }, setOpacity);
-				} else {
-					// Convert into a jQuery UI slider.  (HTML5 slider doesn't work in many browsers.)
-					slider = $("<div>").appendTo(sliderContainer).slider({
-						value: layer.opacity,
-						min: 0,
-						max: 1,
-						step: 0.1
-					}).appendTo(sliderContainer).bind("slidechange", {
-						layer: layer
-					}, setOpacity);
-				}
+
+				// Convert into a jQuery UI slider.  (HTML5 slider doesn't work in many browsers.)
+				// Firefox supports the range input type, but doesn't display it as a slider.
+				slider = $("<div>").appendTo(sliderContainer).slider({
+					value: layer.opacity,
+					min: 0,
+					max: 1,
+					step: 0.1
+				}).appendTo(sliderContainer).bind("slidechange", {
+					layer: layer
+				}, setOpacity);
+
+				////if (supportsInputRange()) { //chromeRe.test(navigator.userAgent)) {
+				////	// Chrome supports the HTML5 range input control, so we'll just use that...
+				////	slider = $("<input>").attr({
+				////		type: "range",
+				////		min: 0,
+				////		max: 1,
+				////		value: layer.opacity, // This doesn't actually seem to set the value.  We actually set this value with the val method.
+				////		step: 0.1
+				////	}).appendTo(sliderContainer).val(layer.opacity).change({ layer: layer }, setOpacity);
+				////} else {
+				////	// Convert into a jQuery UI slider.  (HTML5 slider doesn't work in many browsers.)
+				////	slider = $("<div>").appendTo(sliderContainer).slider({
+				////		value: layer.opacity,
+				////		min: 0,
+				////		max: 1,
+				////		step: 0.1
+				////	}).appendTo(sliderContainer).bind("slidechange", {
+				////		layer: layer
+				////	}, setOpacity);
+				////}
 			}
 
 			// Add metadata links.
