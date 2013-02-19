@@ -8,7 +8,9 @@
  * @author Jeff Jacobson
  */
 
-require(["dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/layers/FeatureLayer"], function () {
+// TODO: After upgrading to JS API 3.3 or higher, replace dojo/io/script with dojo/request/script.
+
+require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/layers/FeatureLayer"], function (lang) {
 	"use strict";
 
 	var layerUrlRe = /([\w\d\/\:%\.]+\/MapServer)(?:\/(\d*))?\/?$/i; // Match results: [full url, map server url, layer id]
@@ -172,7 +174,7 @@ require(["dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "es
 	function addExtensions() {
 		var i, l, ctor, f, f2, f3, multiLayerClasses = [esri.layers.DynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer];
 
-		dojo.extend(esri.layers.Layer, {
+		lang.extend(esri.layers.Layer, {
 			getIdsOfLayersWithMetadata: function (successHandler, failHandler) {
 				return getIdsOfLayersWithMetadata(this, successHandler, failHandler);
 			}
@@ -191,7 +193,7 @@ require(["dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "es
 
 		for (i = 0, l = multiLayerClasses.length; i < l; i += 1) {
 			ctor = multiLayerClasses[i];
-			dojo.extend(ctor, {
+			lang.extend(ctor, {
 				getMetadataUrl: f,
 				getMetadataSoeRootUrl: f2,
 				supportsMetadata: f3
@@ -202,7 +204,7 @@ require(["dojo/io/script", "esri/layers/agsdynamic", "esri/layers/agstiled", "es
 			return getMetadataUrl(this, null, format);
 		};
 
-		dojo.extend(esri.layers.FeatureLayer, {
+		lang.extend(esri.layers.FeatureLayer, {
 			getMetadataUrl: f
 		});
 	}
