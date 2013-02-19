@@ -7,7 +7,7 @@ The configuration files for the GeoPortal are located in the `config` folder.  A
 
 In the following example, the configuration file that will be used is `config/airport.js`.
 
-	http://wsdot.wa.gov/data/tools/geoportal/?config=airport
+	http://www.wsdot.wa.gov/data/tools/geoportal/?config=airport
 
 
 [Markdown]:https://en.wikipedia.org/wiki/Markdown
@@ -28,7 +28,7 @@ The location of the help page.
 ## airspaceCalculatorUrl ##
 Provide this value if you want the Airspace Calculator to be available.
 
-	"airspaceCalculatorUrl":"http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
+	"airspaceCalculatorUrl":"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 
 ## tabContainerOptions ##
 Used to control the layout of the tab container.  This value is optional. ([More info](http://dojotoolkit.org/api/jsdoc/HEAD/dijit.layout.TabContainer)).
@@ -109,13 +109,13 @@ This parameter specifies which layer will be used as the base layer when the map
 
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 	},
 
 ## geometryServer ##
 The ArcGIS Server Geometry server that will be used when a geometry server is required.
 
-	"geometryServer": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 
 ## queryTasks ##
 The "queryTasks" properties are used to populate the drop-down lists of zoom extents.
@@ -123,7 +123,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 	"queryTasks": {
 		"airport": {
 			"label": "Airport",
-			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer/0",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer/0",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -137,7 +137,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 		},
 		"city": {
 			"label": "City",
-			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -147,7 +147,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 		},
 		"urbanArea": {
 			"label": "Urban Area",
-			"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true
@@ -164,7 +164,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 			"title": "WSDOT Basemap",
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
 			"layers": [
-				{ "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
 			]
 		},
 		{
@@ -181,7 +181,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 			"title": "Aeronautical Chart",
 			"thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
 			"layers" : [
-				{ "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
+				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
 			]
 		}
 	],
@@ -195,11 +195,11 @@ This property is used to remove default basemaps from the basemap widget.
 The "locateMileposts" and "locateNearestMileposts" options are used to specify ELC REST endpoints.
 
 	"locateMileposts": {
-		"url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
+		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
 		"options": { "useProxy": false, "usePost": true }
 	},
 	"locateNearestMileposts": {
-		"url": "http://wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
+		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
 		"options": { "useProxy": false, "usePost": true }
 	},
 
@@ -217,56 +217,56 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Political Boundaries": [
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
 					"options": {
 						"id": "City Limits"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
 					"options": {
 						"id": "Congressional Districts"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
 					"options": {
 						"id": "County Boundaries"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
 					"options": {
 						"id": "Legislative Districts"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
 					"options": {
 						"id": "MPO"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer", //"http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+					"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer", //"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
 					"options": {
 						"id": "RTPO"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
 					"options": {
 						"id": "Township / Section"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
 					"options": {
 						"id": "Tribal Lands"
 					}
@@ -275,7 +275,7 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Design": [
 			   {
 				   "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				   "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
+				   "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
 				   "options": {
 					   "id": "Interchange Drawings"
 				   }
@@ -284,21 +284,21 @@ This value can either be an object or an array.  If an object is provided, each 
 			"WSDOT Boundaries": [
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
 					"options": {
 						"id": "Maintenance Areas"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
 					"options": {
 						"id": "Region Boundaries"
 					}
 				},
 				{
 					"layerType": "esri.layers.FeatureLayer",
-					"url": "http://wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
+					"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
 					"options": {
 						"id": "Survey Monuments (NGS)",
 						"outFields": ["*"],
@@ -309,14 +309,14 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Transportation Features": [
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
 					"options": {
 						"id": "State Routes"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
 					"options": {
 						"id": "Functional Class"
 					}
@@ -325,7 +325,7 @@ This value can either be an object or an array.  If an object is provided, each 
 			"Other": [
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
+					"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
 					"options": {
 						"id": "Traffic Flow"
 					}

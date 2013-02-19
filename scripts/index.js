@@ -731,7 +731,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 						$("#faaFar77").faaFar77RunwaySelector({
 							map: map,
 							// TODO: put this URL and layer ID in the app. options.
-							identifyUrl: "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
+							identifyUrl: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
 							identifyLayerId: 0,
 							identifyComplete: function (event, data) {
 								var identifyResults, noFeaturesDialog;

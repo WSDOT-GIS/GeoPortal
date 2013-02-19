@@ -41,7 +41,7 @@ A map service that is used to retrieve state route data.
 A JSON string that describes the layers in the `stateRouteMapService`.
 
 [web.config transformation file]:(http://go.microsoft.com/fwlink/?LinkId=125889)
-[WSDOT Trafic API]:http://wsdot.wa.gov/Traffic/api/
+[WSDOT Trafic API]:http://www.wsdot.wa.gov/Traffic/api/
 
 ### `config.js` files ###
 This application supports a number of configurations that can be selected via the *config* query string parameter.
