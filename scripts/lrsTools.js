@@ -256,6 +256,7 @@ jQuery UI
 											if (map.infoWindow.setFeatures) {
 												// Handle popup style InfoWindow
 												map.infoWindow.setFeatures([graphic]);
+												map.infoWindow.setTitle(graphic.getTitle());
 												map.infoWindow.show(map.toScreen(geometry));
 											} else {
 												// Handle default style InfoWindow
