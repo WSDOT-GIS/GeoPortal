@@ -68,7 +68,9 @@
 					point = new esri.geometry.Point(x, y, new esri.SpatialReference({ wkid: 4326 }));
 					point = esri.geometry.geographicToWebMercator(point);
 					map.centerAndZoom(point, $this.options.zoomLevel);
-					map.infoWindow.setContent([x, y].join(",")).setTitle($this.options.infoWindowTitle).show(point);
+					map.infoWindow.setContent([x, y].join(","));
+					map.infoWindow.setTitle($this.options.infoWindowTitle);
+					map.infoWindow.show(point);
 
 					// Create the graphics layer if it does not already exist.
 					if (!$this._graphicsLayer) {
