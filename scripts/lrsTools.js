@@ -253,10 +253,18 @@ jQuery UI
 											delete result.RouteGeometry;
 											graphic = new esri.Graphic(geometry, null, result);
 											locatedMilepostsLayer.add(graphic);
-											map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
+											if (map.infoWindow.setFeatures) {
+												// Handle popup style InfoWindow
+												map.infoWindow.setFeatures([graphic]);
+												map.infoWindow.show(map.toScreen(geometry));
+											} else {
+												// Handle default style InfoWindow
+												map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
+											}
 											map.centerAndZoom(geometry, 10);
 										}
 										else {
+											// TODO: Show error message without setting map extent.
 											showErrorMessage(createElcResultTable({ attributes: result }), "Unable to find route location");
 										}
 
