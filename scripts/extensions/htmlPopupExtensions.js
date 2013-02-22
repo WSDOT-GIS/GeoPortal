@@ -4,7 +4,7 @@
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(dom, domConstruct, on) {
+require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeList-manipulate", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(dom, domConstruct, on, query) {
 	"use strict";
 
 
@@ -297,31 +297,35 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 						// Create a new on click event.
 						link.click(function (event) {
 							var a, url, progressBar;
-							a = $(event.currentTarget);
-							url = a.attr("href");
+							a = event.currentTarget;
+							url = a.href;
+							progressBar = domConstruct.toDom("<progress>Loading related image data...</progress>");
+							domConstruct.place(progressBar, a, "replace");
 
-							progressBar = $("<progress>").text("Loading related image data...");
-							a.replaceWith(progressBar);
 
 							esri.request({
 								url: url,
 								handleAs: "text",
 								load: function (data) {
-									var html = $(data), list = html.filter("ul"), listItems = $("li", list), div;
+									var html, list, listItems, div, links;
+									html = domConstruct.toDom(data);
+									list = query("ul", html);
+									listItems = list.length >= 0 ? query("li", list[0]) : [];
+
 									if (listItems.length > 0) {
-										div = $("<div class='ui-identify-hyperlink-list'>");
+										div = domConstruct.toDom("<div class='ui-identify-hyperlink-list'>");
 										list.appendTo(div);
-										progressBar.replaceWith(div);
-										$("li a", list).attr({
-											"onclick": 'onclick="window.open(this.href, "imgWin"); return false;',
-											"target": "imgWin"
-										});
+										domConstruct.place(div, progressBar, "replace");
+										query("li a[target]", list).val("imgWin");
+										query("li a[onclick]", list).val('onclick="window.open(this.href, "imgWin"); return false;');
 									} else {
-										progressBar.replaceWith("<p>No related images found for this feature.</p>");
+										domConstruct.place("<p>No related images found for this feature.</p>", progressBar, "replace");
 									}
 								},
 								error: function (error) {
-									progressBar.replaceWith($("<p>").text("Error loading related image data." + String(error)));
+									domConstruct.place(domConstruct("<p>", {
+										innerHTML: "Error loading related image data." + String(error)
+									}), progressBar, "replace");
 								}
 							}, {
 								useProxy: true,
