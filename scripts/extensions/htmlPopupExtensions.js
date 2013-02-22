@@ -4,7 +4,7 @@
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeList-manipulate", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(dom, domConstruct, on, query) {
+require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeList-manipulate", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(djArray, domConstruct, on, query) {
 	"use strict";
 
 
@@ -101,7 +101,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 		};
 
 		// Extend each of the types in the array with the same proerties and methods.
-		dojo.forEach([esri.layers.ArcGISDynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer], function (ctor) {
+		djArray.forEach([esri.layers.ArcGISDynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer], function (ctor) {
 			dojo.extend(ctor, {
 				detectHtmlPopups: detectHtmlPopups,
 				getIdsOfLayersWithHtmlPopups: function () {
@@ -118,9 +118,8 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 		dojo.extend(esri.Map, {
 			_ignoredLayerRE: null,
 			detectHtmlPopupsHasRun: false,
-			detectHtmlPopups: function (htmlPopupLayerFoundAction) { //, mapQueryCompleteAction, layerQueryCompleteAction) {
+			detectHtmlPopups: function (htmlPopupLayerFoundAction) {
 				// Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
-				////var mapServiceUrlRe = /MapServer\/?$/i, layerUrlRe = /(?:(?:Map)|(?:Feature))Server\/\d+\/?$/i ;
 
 				var map = this;
 
@@ -129,7 +128,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 				// }
 
 				// Loop through each of the map service layers.
-				dojo.forEach(map.layerIds, function (id) {
+				djArray.forEach(map.layerIds, function (id) {
 					var mapService;
 
 					// Skip layers with an ID that matches the ignore regex.
@@ -182,7 +181,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 				}
 
 				// Loop through all of the map services.
-				dojo.forEach(map.layerIds, function (layerId) {
+				djArray.forEach(map.layerIds, function (layerId) {
 					var layer, sublayerIds, idTask, idParams;
 
 					// Skip any layers that match the ignored layers regular expression (if one has been specified).
