@@ -1,7 +1,8 @@
+/// <reference path="../jsapi_vsdoc_v32_2012.js" />
+/*global require, jQuery, esri, dojo */
 /*jslint nomen: true, white: true, browser: true */
-/*global jQuery:true, esri:true, dojo:true */
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+// Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function() {
 	"use strict";
@@ -241,7 +242,7 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 				/// Defines options for setting up identify popups.
 				/// ignoredLayerRE: A regular expression.  Any layer with an ID that matches this expression will be ignored by the identify tool.
 				/// </param>
-				var map = this, pointSymbol, lineSymbol, polygonSymbol;
+				var map = this;
 
 				map.popupsEnabled = true;
 
@@ -249,11 +250,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 					map._ignoredLayerRE = options.ignoredLayerRE;
 				}
 
-				// TODO: add symbols to the supported options.
-
-				// map.detectHtmlPopups(function(id, layerId, layerUrl, layerResponse) {
-				// console.log("Html Popup Layer found", [id, layerId, layerUrl, layerResponse]);
-				// });
 				// Load the HTML Popup data from each of the layers.
 				map.detectHtmlPopups();
 
@@ -273,25 +269,8 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 					}
 				});
 
-				// Create symbols for selected graphics.
-				pointSymbol = new esri.symbol.SimpleMarkerSymbol().setColor("#00ffff");
-				lineSymbol = new esri.symbol.SimpleLineSymbol().setColor("#00ffff");
-				polygonSymbol = new esri.symbol.SimpleFillSymbol().setColor("00ffff");
-
-
-				function selectGeometry(geometry, attributes) {
-					var graphic, symbol;
-					map.graphics.clear();
-					// Set the appropriate symbol based on the geometry type.
-					symbol = geometry.isInstanceOf(esri.geometry.Point) ? pointSymbol : geometry.isInstanceOf(esri.geometry.Polyline) ? lineSymbol : geometry.isInstanceOf(esri.geometry.Polygon) ? polygonSymbol : null;
-					// Create the graphic.
-					graphic = new esri.Graphic(geometry, symbol, attributes || null);
-					map.graphics.add(graphic);
-					map.graphics.refresh();
-				}
-
 				dojo.connect(map, "onClick", function (event) {
-					var dialog, buttons, idTaskCount;
+					var idTaskCount;
 
 					// If popups are disabled, exit instead of showing the popup.
 					if (!map.popupsEnabled) {
@@ -407,159 +386,74 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						}
 					}
 
-					function closeExistingDialogs() {
-						// Close any pre-existing dialogs.
-						$('.result-dialog').dialog("close");
-					}
+					map.infoWindow.clearFeatures();
+					map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
+					map.infoWindow.show(event.mapPoint);
 
-					function setPosition(position) {
-						/// Shows the ".id-result" element at the specified position and hides all others.
-						var all, current, currentIndex, lastIndex, result;
-						if (position === undefined || position === null) {
-							throw new Error("Required parameter \"position\" not provided.");
-						}
-						all = $(".id-result", dialog);
-						current = all.filter(":visible");
-						if (current.length > 1) {
-							current = current.first();
-						}
-						currentIndex = current.index();
-						lastIndex = all.length - 1;
-
-						// If the position is a string (i.e., first, previous, next, or last), set position to a number.
-						if (typeof (position) === "string") {
-							if (/d+/.test(position)) {
-								position = Number(position); // Convert position to a number if it is a numerical string.
-							} else if (/first/i.test(position)) { // Set position to 0 if it is currently set to "first". 
-								position = 0;
-							} else if (/prev(?:ious)?/i.test(position)) {
-								position = currentIndex - 1;
-							} else if (/next/i.test(position)) {
-								position = currentIndex + 1;
-							} else if (/last/i.test(position)) {
-								position = lastIndex;
-							}
-						}
-
-						// Change the position if possible. Not possible if position is out of range or already at the current position.
-						if (position !== currentIndex && position >= 0 && position <= lastIndex) {
-							// Hide the current element.
-							all.hide("fast");
-							// Show the element at the desired position.
-							current = all.filter(function (index) {
-								return index === position;
-							}).show("fast");
-
-							result = current.data("result");
-							if (result && result.feature) {
-								selectGeometry(result.feature.geometry, result.feature.attributes);
-							}
-							$("span.result-position", dialog.parent()).text(String(position + 1));
-							$("span.result-layer", dialog.parent()).text(result.layerName);
-						} else {
-							// If this is the first result...
-							if (map.graphics.graphics.length < 1) {
-								result = current.data("result");
-								if (result && result.feature) {
-									selectGeometry(result.feature.geometry, result.feature.attributes);
-								}
-							}
-						}
-						// Update the dialog title with the current result number.
-						loadContent(current);
-					}
-
-					// Close any pre-existing dialogs.
-					closeExistingDialogs();
-
-					// Create a new dialog.
-					dialog = $("<div>").addClass('result-dialog').data("hasResults", false).dialog({
-						position: [event.screenPoint.x, event.screenPoint.y],
-						buttons: {
-							First: function () {
-								setPosition("first");
-							},
-							Previous: function () {
-								setPosition("previous");
-							},
-							Next: function () {
-								setPosition("next");
-							},
-							Last: function () {
-								setPosition("last");
-							}
-						},
-						title: "Result&nbsp;<span class='result-position' />&nbsp;of&nbsp;<span class='result-total' /><br /><span class='result-layer' />",
-						close: function () {
-							map.graphics.clear();
-							$(this).dialog("destroy").remove();
-						}
-					});
-
-					// Style buttons
-					buttons = $(".ui-dialog-buttonset button", dialog.parent());
-					// Style the "first" button.
-					$(buttons[0]).button("option", {
-						icons: { primary: "ui-icon-seek-first" },
-						text: false,
-						label: "first result"
-					});
-					$(buttons[1]).button("option", {
-						icons: { primary: "ui-icon-seek-prev" },
-						text: false,
-						label: "previous result"
-					});
-					$(buttons[2]).button("option", {
-						icons: { primary: "ui-icon-seek-next" },
-						text: false,
-						label: "next result"
-					});
-					$(buttons[3]).button("option", {
-						icons: { primary: "ui-icon-seek-end" },
-						text: false,
-						label: "last result"
-					});
-
-					$("<progress>").text("Running Identify on layers...").appendTo(dialog);
 					idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
-						var totalSpan, resultTotal;
-						idTaskCount = idTaskCount - 1; //idTaskCount--;
-						// Remove the progress bar.
-						// Add a layer property to the identify results.
-						if (!idResults || !idResults.length) {
-							resultTotal = $("span.result-total", dialog).text();
-							if (!dialog.data("hasResults") && idTaskCount < 1) {
-								$("progress", dialog).replaceWith('No results found');
-								dialog.dialog("option", "title", null);
+
+						var features, infoTemplate = new esri.InfoTemplate({ content: "${*}" });
+
+						// Get the existing features in the info window.  If there are no existing features, create a new array.
+						features = map.infoWindow.features || [];
+
+						// Get an array of features...
+						(function () {
+							var i, l, idResult, feature;
+
+							for (i = 0, l = idResults.length; i < l; i += 1) {
+								idResult = idResults[i];
+								feature = idResult.feature;
+								feature.setInfoTemplate(infoTemplate);
+								feature.attributes.layerName = idResult.layerName;
+								feature.attributes.layerId = idResult.layerId;
+								features.push(feature);
 							}
-							return;
-						}
+						}());
 
-						totalSpan = $("span.result-total", dialog.parent());
-						// If the total already has a value add to it.  Otherwise set it to the count of the results.
-						if (totalSpan.text().length > 0) {
-							totalSpan.text(String(Number(totalSpan.text()) + idResults.length));
-						} else {
-							totalSpan.text(String(idResults.length));
-						}
-
-						dojo.forEach(idResults, function (result) {
-							var progress, resultDiv;
-							progress = $("progress", dialog);
-
-							dialog.data("hasResults", true);
-
-							resultDiv = $("<div>").addClass("id-result").appendTo(dialog).data({
-								result: result,
-								layer: layer
-							});
-							if (progress.length > 0) {
-								progress.remove();
-								setPosition(0);
-								$("span.result-position", dialog.parent()).text("1");
-								$("span.result-layer", dialog.parent()).text(result.layerName);
-							}
+						map.infoWindow.setFeatures(features);
+						map.infoWindow.show(event.mapPoint, {
+							closetFirst: true
 						});
+
+						////var totalSpan, resultTotal;
+						////idTaskCount = idTaskCount - 1; //idTaskCount--;
+						////// Remove the progress bar.
+						////// Add a layer property to the identify results.
+						////if (!idResults || !idResults.length) {
+						////	resultTotal = $("span.result-total", dialog).text();
+						////	if (!dialog.data("hasResults") && idTaskCount < 1) {
+						////		$("progress", dialog).replaceWith('No results found');
+						////		dialog.dialog("option", "title", null);
+						////	}
+						////	return;
+						////}
+
+						////totalSpan = $("span.result-total", dialog.parent());
+						////// If the total already has a value add to it.  Otherwise set it to the count of the results.
+						////if (totalSpan.text().length > 0) {
+						////	totalSpan.text(String(Number(totalSpan.text()) + idResults.length));
+						////} else {
+						////	totalSpan.text(String(idResults.length));
+						////}
+
+						////dojo.forEach(idResults, function (result) {
+						////	var progress, resultDiv;
+						////	progress = $("progress", dialog);
+
+						////	dialog.data("hasResults", true);
+
+						////	resultDiv = $("<div>").addClass("id-result").appendTo(dialog).data({
+						////		result: result,
+						////		layer: layer
+						////	});
+						////	if (progress.length > 0) {
+						////		progress.remove();
+						////		setPosition(0);
+						////		$("span.result-position", dialog.parent()).text("1");
+						////		$("span.result-layer", dialog.parent()).text(result.layerName);
+						////	}
+						////});
 					}, {
 						tolerance: 20
 					}, function (layer, error) {
@@ -570,10 +464,10 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						/*global console:false*/
 					});
 
-					// Remove the dialog of there are no ID tasks.
-					if (idTaskCount === 0) {
-						closeExistingDialogs();
-					}
+					////// Remove the dialog of there are no ID tasks.
+					////if (idTaskCount === 0) {
+					////	closeExistingDialogs();
+					////}
 				});
 			}
 		});
