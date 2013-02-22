@@ -1,10 +1,10 @@
 /// <reference path="../jsapi_vsdoc_v32_2012.js" />
-/*global require, jQuery, esri, dojo */
+/*global require, esri, dojo */
 /*jslint nomen: true, white: true, browser: true */
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function() {
+require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(dom, domConstruct) {
 	"use strict";
 
 
@@ -335,7 +335,7 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 							layer = feature.layer;
 							result = feature.result;
 
-							div = $("<div>");
+							div = domConstruct.create("div"); //$("<div>");
 
 							// If there is an object ID field, load the HTML popup.
 							// TODO: Get the layer's ObjectID field setting instead of using hard-coded "OBJECTID". Sometimes the ObjectID field has a different name.
@@ -352,34 +352,42 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 								$.get(url, { f: "json" }, function (data, textStatus) {
 									if (textStatus === "success") {
 										if (/HTMLText$/i.test(data.htmlPopupType)) {
-											$(data.content).appendTo(div);
+											domConstruct.place(data.content, div);
 										} else if (/URL$/i.test(data.htmlPopupType)) {
-											$("<a>").attr("href", "#").click(function () {
+											on(domConstruct.create("a", {
+												attr: {
+													href: "#"
+												}
+											}, div), "click", function () {
 												window.open(data.content);
-											}).appendTo(div);
+											});
 										}
 										setupRelatedImagesLink(div);
 									} else {
-										$("<p>").text(textStatus).appendTo(div);
+										domConstruct("p", { innerHTML: textStatus }, div);
 									}
 								}, "jsonp");
 							} else {
 								// Create a table to display attributes if no HTML popup is defined.
 								(function () {
-									var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
+									var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title, tr;
 
-									table = $("<table>").appendTo(div).addClass("default-html-popup");
+									table = domConstruct("table", {
+										className: "default-html-popup"
+									}, div);
 
 									// Add a caption if the result has a display field name.
 									title = result.displayFieldName ? feature.attributes[result.displayFieldName] : null;
 									if (title) {
-										$("<caption>").text(title).appendTo(table);
+										domConstruct("caption", { innerHTML: title }, table);
 									}
 
 									for (name in feature.attributes) {
 										if (!ignoredAttributes.test(name) && feature.attributes.hasOwnProperty(name)) {
 											value = feature.attributes[name];
-											$(["<tr><th>", name, "</th><td>", value, "</td></tr>"].join("")).appendTo(table);
+											tr = domConstruct("tr", table)
+											domConstruct("th", { innterHTML: name }, tr);
+											domConstruct("td", { innerHTML: value }, tr);
 										}
 									}
 								} ());
@@ -388,7 +396,7 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 							// 
 						}
 
-						return div[0];
+						return div;
 					}
 
 					map.infoWindow.clearFeatures();
