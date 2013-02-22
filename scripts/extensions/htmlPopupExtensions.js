@@ -288,17 +288,19 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 						// Style of container will be .id-result.
 						// $(".id-result a[onclick^='window.open(this.href)']")
 						// Select all links that are set to open in another window via onclick event attribute.
-						link = $("a[href*=Rfip]", container).first();
+						// link = $("a[href*=Rfip]", container).first();
+						link = query("a[href*=Rfip]", container)[0];
 						// Get the image list URL.
-						imgListUrl = link.attr("href");
+						imgListUrl = link.href; // link.attr("href");
 						// Remove the existing onclick attribute.
-						link.attr("onclick", null);
+						link.onclick = null; // link.attr("onclick", null);
 
 						// Create a new on click event.
-						link.click(function (event) {
+						link.onclick = function (event) {
 							var a, url, progressBar;
 							a = event.currentTarget;
 							url = a.href;
+							a.onclick = null;
 							progressBar = domConstruct.toDom("<progress>Loading related image data...</progress>");
 							domConstruct.place(progressBar, a, "replace");
 
@@ -307,7 +309,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 								url: url,
 								handleAs: "text",
 								load: function (data) {
-									var html, list, listItems, div, links;
+									var html, list, listItems, div, link;
 									html = domConstruct.toDom(data);
 									list = query("ul", html);
 									listItems = list.length >= 0 ? query("li", list[0]) : [];
@@ -316,8 +318,16 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 										div = domConstruct.toDom("<div class='ui-identify-hyperlink-list'>");
 										list.appendTo(div);
 										domConstruct.place(div, progressBar, "replace");
-										query("li a[target]", list).val("imgWin");
-										query("li a[onclick]", list).val('onclick="window.open(this.href, "imgWin"); return false;');
+										link = query("li a", list);
+										if (link.length > 0) {
+											link = link[0];
+											link.onclick = function () {
+												window.open(this.href, "imgWin");
+												return false;
+											};
+										}
+
+
 									} else {
 										domConstruct.place("<p>No related images found for this feature.</p>", progressBar, "replace");
 									}
@@ -333,7 +343,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeLi
 							});
 
 							return false;
-						});
+						};
 					}
 
 					function loadContent(feature) {
