@@ -328,62 +328,78 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						});
 					}
 
-					function loadContent(div) {
-						var layer, result, url;
-						// Load the HTML popup content if it has not already been loaded.
-						if (div.contents().length < 1) {
-							layer = div.data("layer");
-							result = div.data("result");
+					function loadContent(feature) {
+						var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
 
-							// If there is an object ID field, load the HTML popup.
-							if (result.feature !== undefined && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
-								// Get the map service url.
-								url = layer.url;
-								// Append the layer ID (except for feature layers, which have the layer id as part of the url).
-								if (!layer.isInstanceOf(esri.layers.FeatureLayer)) {
-									url += "/" + String(result.layerId);
-								}
-								// Complete the htmlPopup URL.
-								url += "/" + result.feature.attributes.OBJECTID + "/htmlPopup";
+						table = "<table class='default-html-popup'>";
 
-								$.get(url, { f: "json" }, function (data, textStatus) {
-									if (textStatus === "success") {
-										if (/HTMLText$/i.test(data.htmlPopupType)) {
-											$(data.content).appendTo(div);
-										} else if (/URL$/i.test(data.htmlPopupType)) {
-											$("<a>").attr("href", "#").click(function () {
-												window.open(data.content);
-											}).appendTo(div);
-										}
-										setupRelatedImagesLink(div);
-									} else {
-										$("<p>").text(textStatus).appendTo(div);
-									}
-								}, "jsonp");
-							} else {
-								// Create a table to display attributes if no HTML popup is defined.
-								(function () {
-									var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
-
-									table = $("<table>").appendTo(div).addClass("default-html-popup");
-
-									// Add a caption if the result has a display field name.
-									title = result.displayFieldName ? result.feature.attributes[result.displayFieldName] : null;
-									if (title) {
-										$("<caption>").text(title).appendTo(table);
-									}
-
-									for (name in result.feature.attributes) {
-										if (!ignoredAttributes.test(name) && result.feature.attributes.hasOwnProperty(name)) {
-											value = result.feature.attributes[name];
-											$(["<tr><th>", name, "</th><td>", value, "</td></tr>"].join("")).appendTo(table);
-										}
-									}
-								} ());
+						for (name in feature.attributes) {
+							if (!ignoredAttributes.test(name) && feature.attributes.hasOwnProperty(name)) {
+								value = feature.attributes[name];
+								table += ["<tr><th>", name, "</th><td>", value, "</td></tr>"].join("");
 							}
-
-							// 
 						}
+
+						table += "</table>";
+
+						return table;
+
+
+						////var layer, result, url;
+						////// Load the HTML popup content if it has not already been loaded.
+						////if (div.contents().length < 1) {
+						////	layer = div.data("layer");
+						////	result = div.data("result");
+
+						////	// If there is an object ID field, load the HTML popup.
+						////	if (result.feature !== undefined && result.feature !== null && result.feature.attributes && result.feature.attributes.OBJECTID) {
+						////		// Get the map service url.
+						////		url = layer.url;
+						////		// Append the layer ID (except for feature layers, which have the layer id as part of the url).
+						////		if (!layer.isInstanceOf(esri.layers.FeatureLayer)) {
+						////			url += "/" + String(result.layerId);
+						////		}
+						////		// Complete the htmlPopup URL.
+						////		url += "/" + result.feature.attributes.OBJECTID + "/htmlPopup";
+
+						////		$.get(url, { f: "json" }, function (data, textStatus) {
+						////			if (textStatus === "success") {
+						////				if (/HTMLText$/i.test(data.htmlPopupType)) {
+						////					$(data.content).appendTo(div);
+						////				} else if (/URL$/i.test(data.htmlPopupType)) {
+						////					$("<a>").attr("href", "#").click(function () {
+						////						window.open(data.content);
+						////					}).appendTo(div);
+						////				}
+						////				setupRelatedImagesLink(div);
+						////			} else {
+						////				$("<p>").text(textStatus).appendTo(div);
+						////			}
+						////		}, "jsonp");
+						////	} else {
+						////		// Create a table to display attributes if no HTML popup is defined.
+						////		(function () {
+						////			var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
+
+						////			table = $("<table>").appendTo(div).addClass("default-html-popup");
+
+						////			// Add a caption if the result has a display field name.
+						////			title = result.displayFieldName ? result.feature.attributes[result.displayFieldName] : null;
+						////			if (title) {
+						////				$("<caption>").text(title).appendTo(table);
+						////			}
+
+						////			for (name in result.feature.attributes) {
+						////				if (!ignoredAttributes.test(name) && result.feature.attributes.hasOwnProperty(name)) {
+						////					value = result.feature.attributes[name];
+						////					$(["<tr><th>", name, "</th><td>", value, "</td></tr>"].join("")).appendTo(table);
+						////				}
+						////			}
+						////		} ());
+						////	}
+
+						////	// 
+						////}
 					}
 
 					map.infoWindow.clearFeatures();
@@ -392,7 +408,7 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 
 					idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
 
-						var features, infoTemplate = new esri.InfoTemplate({ content: "${*}" });
+						var features, infoTemplate = new esri.InfoTemplate({ content: loadContent });
 
 						// Get the existing features in the info window.  If there are no existing features, create a new array.
 						features = map.infoWindow.features || [];
