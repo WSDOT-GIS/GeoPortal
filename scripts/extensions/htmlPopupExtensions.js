@@ -4,7 +4,7 @@
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(dom, domConstruct) {
+require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(dom, domConstruct, on) {
 	"use strict";
 
 
@@ -73,17 +73,15 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 			var mapService = this, layerInfo, layerUrl, i, l;
 			// Query the map service to get the list of layers.
 
-			function handleHtmlPopupResponse(layerResponse, textStatus) {
+			function handleHtmlPopupResponse(layerResponse) {
 				var layerInfo = mapService.layerInfos[layerResponse.id];
 				// If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
-				if (/success/i.test(textStatus)) {
-					if (layerResponse.htmlPopupType !== undefined && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
-								layerResponse.type !== undefined && !/Annotation/gi.test(layerResponse.type)) {
-						// Add this URL to the list of URLs that supports HTML popups.
-						layerInfo.htmlPopupType = layerResponse.htmlPopupType;
-						if (typeof (htmlPopupLayerFoundAction) === "function") {
-							htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
-						}
+				if (layerResponse.htmlPopupType !== undefined && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
+							layerResponse.type !== undefined && !/Annotation/gi.test(layerResponse.type)) {
+					// Add this URL to the list of URLs that supports HTML popups.
+					layerInfo.htmlPopupType = layerResponse.htmlPopupType;
+					if (typeof (htmlPopupLayerFoundAction) === "function") {
+						htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
 					}
 				}
 			}
@@ -91,8 +89,14 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 			for (i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
 				layerInfo = mapService.layerInfos[i];
 				layerUrl = [mapService.url, String(layerInfo.id)].join("/");
+
 				// Query the layers to see if they support html Popups
-				$.get(layerUrl, { f: "json" }, handleHtmlPopupResponse, "jsonp");
+				esri.request({
+					url: layerUrl,
+					content: { f: "json" },
+					handleAs: "json",
+					callbackParamName: "callback"
+				}).then(handleHtmlPopupResponse);
 			}
 		};
 
@@ -330,8 +334,9 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 
 					function loadContent(feature) {
 						var div, layer, result, url;
+						div = feature.content || null;
 						// Load the HTML popup content if it has not already been loaded.
-						if (true) { // div.contents().length < 1) {
+						if (div === null) {
 							layer = feature.layer;
 							result = feature.result;
 
@@ -374,7 +379,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 							} else {
 								// Create a table to display attributes if no HTML popup is defined.
 								(function () {
-									var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title, tr;
+									var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
 
 									table = domConstruct("table", {
 										className: "default-html-popup"
@@ -394,6 +399,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 									}
 								} ());
 							}
+							feature.content = div;
 						}
 
 						return div;
