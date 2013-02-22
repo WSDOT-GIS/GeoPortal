@@ -385,15 +385,11 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 									for (name in feature.attributes) {
 										if (!ignoredAttributes.test(name) && feature.attributes.hasOwnProperty(name)) {
 											value = feature.attributes[name];
-											tr = domConstruct("tr", table)
-											domConstruct("th", { innterHTML: name }, tr);
-											domConstruct("td", { innerHTML: value }, tr);
+											domConstruct.toDom(["<tr><th>", name, "</th><td>", value, "</td></tr>"].join(""), table);
 										}
 									}
 								} ());
 							}
-
-							// 
 						}
 
 						return div;
