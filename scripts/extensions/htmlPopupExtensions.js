@@ -335,7 +335,7 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 							layer = feature.layer;
 							result = feature.result;
 
-							div = domConstruct.create("div"); //$("<div>");
+							div = domConstruct.create("div");
 
 							// If there is an object ID field, load the HTML popup.
 							// TODO: Get the layer's ObjectID field setting instead of using hard-coded "OBJECTID". Sometimes the ObjectID field has a different name.
@@ -349,24 +349,28 @@ require(["dojo/dom", "dojo/dom-construct", "dojo/on", "esri/map", "esri/layers/a
 								// Complete the htmlPopup URL.
 								url += "/" + feature.attributes.OBJECTID + "/htmlPopup";
 
-								$.get(url, { f: "json" }, function (data, textStatus) {
-									if (textStatus === "success") {
-										if (/HTMLText$/i.test(data.htmlPopupType)) {
-											domConstruct.place(data.content, div);
-										} else if (/URL$/i.test(data.htmlPopupType)) {
-											on(domConstruct.create("a", {
-												attr: {
-													href: "#"
-												}
-											}, div), "click", function () {
-												window.open(data.content);
-											});
-										}
-										setupRelatedImagesLink(div);
-									} else {
-										domConstruct("p", { innerHTML: textStatus }, div);
+								// Request the HTML Popup
+								esri.request({
+									url: url,
+									content: { f: "json" },
+									handleAs: "json",
+									callbackParamName: "callback"
+								}).then(function (data) {
+									if (/HTMLText$/i.test(data.htmlPopupType)) {
+										domConstruct.place(data.content, div);
+									} else if (/URL$/i.test(data.htmlPopupType)) {
+										on(domConstruct.create("a", {
+											attr: {
+												href: "#"
+											}
+										}, div), "click", function () {
+											window.open(data.content);
+										});
 									}
-								}, "jsonp");
+									setupRelatedImagesLink(div);
+								}, function (error) {
+									domConstruct("p", { innerHTML: error }, div);
+								});
 							} else {
 								// Create a table to display attributes if no HTML popup is defined.
 								(function () {
