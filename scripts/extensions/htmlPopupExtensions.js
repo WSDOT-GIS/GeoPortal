@@ -415,45 +415,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						map.infoWindow.show(event.mapPoint, {
 							closetFirst: true
 						});
-
-						////var totalSpan, resultTotal;
-						////idTaskCount = idTaskCount - 1; //idTaskCount--;
-						////// Remove the progress bar.
-						////// Add a layer property to the identify results.
-						////if (!idResults || !idResults.length) {
-						////	resultTotal = $("span.result-total", dialog).text();
-						////	if (!dialog.data("hasResults") && idTaskCount < 1) {
-						////		$("progress", dialog).replaceWith('No results found');
-						////		dialog.dialog("option", "title", null);
-						////	}
-						////	return;
-						////}
-
-						////totalSpan = $("span.result-total", dialog.parent());
-						////// If the total already has a value add to it.  Otherwise set it to the count of the results.
-						////if (totalSpan.text().length > 0) {
-						////	totalSpan.text(String(Number(totalSpan.text()) + idResults.length));
-						////} else {
-						////	totalSpan.text(String(idResults.length));
-						////}
-
-						////dojo.forEach(idResults, function (result) {
-						////	var progress, resultDiv;
-						////	progress = $("progress", dialog);
-
-						////	dialog.data("hasResults", true);
-
-						////	resultDiv = $("<div>").addClass("id-result").appendTo(dialog).data({
-						////		result: result,
-						////		layer: layer
-						////	});
-						////	if (progress.length > 0) {
-						////		progress.remove();
-						////		setPosition(0);
-						////		$("span.result-position", dialog.parent()).text("1");
-						////		$("span.result-layer", dialog.parent()).text(result.layerName);
-						////	}
-						////});
 					}, {
 						tolerance: 20
 					}, function (layer, error) {
@@ -463,11 +424,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						}
 						/*global console:false*/
 					});
-
-					////// Remove the dialog of there are no ID tasks.
-					////if (idTaskCount === 0) {
-					////	closeExistingDialogs();
-					////}
 				});
 			}
 		});
