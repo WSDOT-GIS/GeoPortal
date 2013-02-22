@@ -99,7 +99,7 @@ div.table > div > * > h1
 	position: absolute;
 	top: 5px;
 	right: 20px;
-	z-index: 1000;
+	z-index: 10;
 }
 #toolbar > * 
 {
