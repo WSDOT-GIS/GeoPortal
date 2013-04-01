@@ -418,10 +418,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 						return div;
 					}
 
-					map.infoWindow.clearFeatures();
-					map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
-					map.infoWindow.show(event.mapPoint);
-
 					idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
 
 						var features, infoTemplate = new esri.InfoTemplate({ content: loadContent });
@@ -456,6 +452,12 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 						}
 						/*global console:false*/
 					});
+
+					if (idTaskCount) {
+						map.infoWindow.clearFeatures();
+						map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
+						map.infoWindow.show(event.mapPoint);
+					}
 				});
 			}
 		});
