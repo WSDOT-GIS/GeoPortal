@@ -62,7 +62,7 @@
 	"basemaps": [
 		{
 			"id": "esriHybrid",
-			"title": "Esri Hybrid",
+			"title": "Hybrid",
 			"thumbnailUrl": "images/EsriHybridThumbnail.png",
 			"layers": [
 				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" },
