@@ -61,6 +61,16 @@
 	},
 	"basemaps": [
 		{
+			"id": "esriHybrid",
+			"title": "Esri Hybrid",
+			"thumbnailUrl": "images/EsriHybridThumbnail.png",
+			"layers": [
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" }
+			]
+		},
+		{
 			"id": "wsdotBasemap",
 			"title": "WSDOT Basemap",
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
@@ -77,7 +87,7 @@
 			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_6"],
+	"basemapsToRemove": ["basemap_4", "basemap_6", "basemap_7"],
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
 	"layers": {
 			"Political Boundaries": [
