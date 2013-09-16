@@ -1,6 +1,8 @@
 ﻿{
 	"pageTitle": "Roadside Features",
 	"helpUrl": "help/navigation.html",
+	"disclaimer": "disclaimers/RFIP/Internal.html",
+	"alwaysShowDisclaimer": true,
 	"mapOptions": {
 		"logo": false,
 		"extent": {
