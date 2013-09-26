@@ -112,7 +112,10 @@
 			"title": "Aeronautical Chart",
 			"thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
 			"layers" : [
-				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
+				{ 
+					"url": "http://maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
+					"visibleLayers": [4]
+				}
 			]
 		}
 	],
