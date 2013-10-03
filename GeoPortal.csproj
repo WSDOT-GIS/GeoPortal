@@ -51,14 +51,12 @@
     <Content Include="config\FunctionalClass.js" />
     <Content Include="config\internal-airport.js" />
     <Content Include="config\internal-Freight.js" />
-    <Content Include="config\internal-RFIP.js" />
     <Content Include="config\Release.js" />
     <Content Include="config\TrafficPlanningTrends.js" />
     <Content Include="disclaimers\airport\Internal.html" />
     <Content Include="disclaimers\airport\Public.html" />
     <Content Include="disclaimers\Freight\Internal.html" />
     <Content Include="disclaimers\Freight\Public.html" />
-    <Content Include="disclaimers\RFIP\Internal.html" />
     <Content Include="error\GenericError.html" />
     <Content Include="FunctionalClassLegend.html" />
     <Content Include="help\Freight\internal\help.html" />
