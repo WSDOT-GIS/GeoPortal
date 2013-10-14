@@ -714,7 +714,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
 				function setupAirspaceCalculator() {
-					require(["esri/geometry/screenUtils", "scripts/airspaceCalculator.js"], function (screenUtils) {
+					require(["esri/geometry/webMercatorUtils", "scripts/airspaceCalculator.js"], function (webMercatorUtils) {
 						$("#airspaceCalculator").airspaceCalculator({
 							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
 							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " +
@@ -725,12 +725,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							url: wsdot.config.airspaceCalculatorUrl,
 							progressAlternativeImageUrl: "images/loading-bar.gif",
 							executeComplete: function (event, data) {
-								// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-								var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
-								screenPoint = screenUtils.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+								var graphic = data.graphic, geographicPoint, title = graphic.getTitle(), content = graphic.getContent();
+								geographicPoint = webMercatorUtils.webMercatorToGeographic(graphic.geometry);
 								map.infoWindow.setContent(content);
 								map.infoWindow.setTitle(title);
-								map.infoWindow.show(screenPoint);
+								map.infoWindow.show(geographicPoint);
 								map.centerAt(graphic.geometry);
 
 							},
