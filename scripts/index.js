@@ -481,7 +481,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 										printComplete: function (e, data) {
 											var result = data.result, li;
 											printButton.set({
-												disabled: null,
+												disabled: false,
 												iconClass: "dijitIconPrint"
 											});
 											pdfList.show("fade");
