@@ -496,7 +496,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 										printError: function (e, data) {
 											var error = data.error, message;
 											printButton.set({
-												disabled: null,
+												disabled: false,
 												iconClass: "dijitIconPrint"
 											});
 											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error";
