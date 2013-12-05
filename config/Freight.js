@@ -116,7 +116,7 @@
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTTrafficSections/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/TrafficSections/MapServer",
 					"options" : {
 						"id": "AADT"
 					}
