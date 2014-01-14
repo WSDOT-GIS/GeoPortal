@@ -5,13 +5,11 @@
 	"disclaimer": "disclaimers/airport/Public.html",
 	"alwaysShowDisclaimer": true,
 	"printUrl":"http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Airport/ExportWebMap/GPServer/Export%20Web%20Map",
-	"airspaceCalculatorUrl":"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabContainerOptions": {
 		"tabPosition": "left"
 	},
 	"tabOrder": [
 		"Layers",
-		"Airspace Calculator",
 		"Tools",
 		"Basemap",
 		"Legend"
