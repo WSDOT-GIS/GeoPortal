@@ -109,15 +109,15 @@
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
                     "options": {
                         "id": "MPO"
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
                     "options": {
                         "id": "RTPO"
                     }
@@ -130,8 +130,8 @@
                     }
                 },
                 {
-                    "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+                    "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                    "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
                     "options": {
                         "id": "Tribal Lands"
                     }

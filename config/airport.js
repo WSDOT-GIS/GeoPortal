@@ -146,7 +146,7 @@
 					},
 					{
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-						"url": "http://faaservices-1551414968.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/201101_AirportsGIS_BH/Obstacles/MapServer",
+						"url": "http://maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
 						"options": {
 							"id": "FAA Obstacles"
 						}
@@ -190,15 +190,15 @@
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
 						"options": {
 							"id": "MPO"
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
 						"options": {
 							"id": "RTPO"
 						}
@@ -211,8 +211,8 @@
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
 						"options": {
 							"id": "Tribal Lands"
 						}
