@@ -118,7 +118,6 @@
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\layerSorter.js" />
     <Content Include="scripts\lrsTools.js" />
-    <Content Include="GetRoutes.ashx" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
     <Content Include="help\Freight\internal\FAQ.pdf" />
@@ -193,9 +192,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Extensions.cs" />
-    <Compile Include="GetRoutes.ashx.cs">
-      <DependentUpon>GetRoutes.ashx</DependentUpon>
-    </Compile>
     <Compile Include="GraphicExport.ashx.cs">
       <DependentUpon>GraphicExport.ashx</DependentUpon>
     </Compile>
