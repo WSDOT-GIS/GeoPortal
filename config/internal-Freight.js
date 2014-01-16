@@ -88,7 +88,7 @@
 		}
 	],
 	"basemapsToRemove": ["basemap_4", "basemap_6"],
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
+	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"tabbedLayerList": true,
 	"layers": {
 		"Freight": {
