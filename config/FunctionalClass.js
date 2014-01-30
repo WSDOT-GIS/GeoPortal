@@ -8,6 +8,12 @@
 			"htmlType": "url"
 	},
 	"enableIdentify": true,
+	"tabOrder": [
+		"Legend",
+		"Layers",
+		"Tools",
+		"Basemap"
+	],
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -107,7 +113,8 @@
 			"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
 			"options": {
-				"id": "Functional Class"
+				"id": "Functional Class",
+				"visible": true
 			}
 		}
 	]
