@@ -1,5 +1,5 @@
 ﻿/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
-/*global require, jQuery, Modernizr, _gaq, $ */
+/*global require, Modernizr, _gaq, $ */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
@@ -885,7 +885,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								function createZoomControls() {
 									/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
 
-									var table, body, data, row;
+									var body, data;
 
 									function createZoomControl(qtName, data) {
 										var row, cell, selectName, labelName, queryTask;
