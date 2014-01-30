@@ -1,18 +1,34 @@
 /*jslint browser: true, windows: true, nomen: true, white: true*/
-/*global esri, dojo, jQuery*/
+/*global require*/
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4-vsdoc.js"/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.js"/>
 /// <reference path="jsapi_vsdoc_v31.js" />
 
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+// Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 /**
  * A layer list that only creates a layer object when the user checks the associated checkbox.
  * @author Jeff Jacobson
  */
 
-require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], function () {
+require([
+	"esri/layers/layer",
+	"esri/layers/ArcGISTiledMapServiceLayer",
+	"esri/layers/ArcGISDynamicMapServiceLayer",
+	"esri/layers/ArcGISImageServiceLayer",
+	"esri/layers/FeatureLayer",
+	"esri/layers/KMLLayer",
+
+	"extensions/map"
+], function (
+	Layer,
+	ArcGISTiledMapServiceLayer,
+	ArcGISDynamicMapServiceLayer,
+	ArcGISImageServiceLayer,
+	FeatureLayer,
+	KMLLayer
+) {
 	"use strict";
 
 	var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus, toggleSublayer;
@@ -41,15 +57,15 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		var ctor;
 		if (typeof (layerType) === "string") {
 			if (/(?:esri\.layers\.)?ArcGISTiledMapServiceLayer/i.test(layerType)) {
-				ctor = esri.layers.ArcGISTiledMapServiceLayer;
+				ctor = ArcGISTiledMapServiceLayer;
 			} else if (/(?:esri\.layers\.)?ArcGISDynamicMapServiceLayer/i.test(layerType)) {
-				ctor = esri.layers.ArcGISDynamicMapServiceLayer;
+				ctor = ArcGISDynamicMapServiceLayer;
 			} else if (/(?:esri\.layers\.)?ArcGISImageServiceLayer/i.test(layerType)) {
-				ctor = esri.layers.ArcGISImageServiceLayer;
+				ctor = ArcGISImageServiceLayer;
 			} else if (/(?:esri\.layers\.)?FeatureLayer/i.test(layerType)) {
-				ctor = esri.layers.FeatureLayer;
+				ctor = FeatureLayer;
 			} else if (/(?:esri\.layers\.)?KMLLayer/i.test(layerType)) {
-				ctor = esri.layers.KMLLayer;
+				ctor = KMLLayer;
 			} else {
 				ctor = null;
 			}
@@ -129,7 +145,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 	}
 
 	function createSublayerControls(layer) {
-		var i, l, layerInfo, output, li, parentLi, parentUl, checkbox, a;
+		var i, l, layerInfo, output, li, parentLi, parentUl, checkbox;
 		if (typeof (layer.layerInfos) === "undefined") {
 			// Layer does not have sublayer infos.
 			return null;
@@ -191,8 +207,8 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		/// <param name="layerInfo" type="Object">An object containing parameters for a Layer constructor.</param>
 		/// <returns type="esri.layer.Layer" />
 		var constructor;
-		// If layerInfo is already an esri.layers.Layer, just return it.
-		if (typeof (layerInfo) !== "undefined" && typeof (layerInfo.isInstanceOf) !== "undefined" && layerInfo.isInstanceOf(esri.layers.Layer)) {
+		// If layerInfo is already an Layer, just return it.
+		if (typeof (layerInfo) !== "undefined" && typeof (layerInfo.isInstanceOf) !== "undefined" && layerInfo.isInstanceOf(Layer)) {
 			return layerInfo;
 		}
 
@@ -205,9 +221,9 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		layer.setOpacity(value);
 	}
 
-	function toggleOpacity(event) {
-		event.data.slider.toggle();
-	}
+	//function toggleOpacity(event) {
+	//	event.data.slider.toggle();
+	//}
 
 	function showTools(event) {
 		event.data.tools.show();
@@ -217,16 +233,16 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		event.data.tools.hide();
 	}
 
-	function supportsInputRange() {
-		/// <summary>Determines if the browser supports the HTML5 input range type element.</summary>
-		/// <returns type="Boolean" />
-		var input = $("<input type='range'>")[0];
-		return typeof (input.min) !== "undefined";
-	}
-
-	//function getMetadataUrl(id) {
-	//	return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
+	//function supportsInputRange() {
+	//	/// <summary>Determines if the browser supports the HTML5 input range type element.</summary>
+	//	/// <returns type="Boolean" />
+	//	var input = $("<input type='range'>")[0];
+	//	return typeof (input.min) !== "undefined";
 	//}
+
+	function getMetadataUrl(id) {
+		return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
+	}
 
 	function MetadataInfo(id, url) {
 		/// <summary>A class containing id and url of a metadata link.  Used with Metadata.ashx.</summary>
@@ -258,7 +274,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 				// Loop through each of the metadata ids and create an array of metadata info objects.
 				for (i = 0, l = layer.metadataLayers.length; i < l; i += 1) {
 					id = layer.metadataLayers[i];
-					metadataInfos.push(new MetadataInfo(id, esri.layers.getMetadataUrl(layer, id, "html")));
+					metadataInfos.push(new MetadataInfo(id, getMetadataUrl(layer, id, "html")));
 				}
 				// Add a link that will open metadata urls in a new window.
 				$("<a href='#' class='ui-layer-options-metadata-link'>Metadata</a>").appendTo(this.element).click({
@@ -267,7 +283,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			}
 		},
 		_create: function () {
-			var $this = this, layer, slider, sliderContainer, chromeRe = /Chrome\/([\d\.]+)/gi;
+			var $this = this, layer, slider, sliderContainer;
 			if (this.options.layer === null) {
 				throw new Error("No layer specified");
 			}
@@ -347,9 +363,9 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 
 	onLayerLoad = function (layer) {
 		/// <summary>Removes the "layer not loaded" class and (if appropriate) sets up controls for the child layers.</summary>
-		/// <param name="layer" type="esri.layers.Layer">A map service layer.</param>
+		/// <param name="layer" type="Layer">A map service layer.</param>
 		// The "this" object is a ui.layerListItem widget.
-		var a, $element = $(this.element), label, slider, tools, opacityToggle, map;
+		var $element = $(this.element), label, tools;
 		this._hideLoading();
 		$element.removeClass("ui-layer-list-not-loaded");
 
@@ -358,14 +374,14 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		if (typeof (layer.getIdsOfLayersWithMetadata) === "function") {
 			layer.getIdsOfLayersWithMetadata(function (layerIds) {
 				layer.metadataLayers = layerIds;
-				////if (layer.isInstanceOf(esri.layers.FeatureLayer)) { // Feature layers will only every have at most one associated metadata document.
+				////if (layer.isInstanceOf(FeatureLayer)) { // Feature layers will only every have at most one associated metadata document.
 				////	layer.hasMetadata = true;
 				////} else {
 				////	layer.metadataLayers = layerIds;
 				////}
-			}, function (error) {
+			}, function (/*error*/) {
 				layer.metadataLayers = null;
-				////if (layer.isInstanceOf(esri.layers.FeatureLayer)) { // Feature layers will only every have at most one associated metadata document.
+				////if (layer.isInstanceOf(FeatureLayer)) { // Feature layers will only every have at most one associated metadata document.
 				////	layer.hasMetadata = false;
 				////} else {
 				////	layer.metadataLayers = null;
@@ -411,7 +427,6 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 	function formatError(error) {
 		/// <summary>Converts an error object into a string.</summary>
 		/// <param name="error" type="Error">An error that occurs when loading a layer.</param>
-		var msgParts;
 		if (typeof (error.details) !== "undefined") {
 			error = error.details.join("\n");
 		} else if (typeof (error.message) !== "undefined") {
@@ -450,8 +465,9 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 				$this._layer = createLayer($this.options.layer);
 				$this.options.map.addLayer($this._layer);
 				// Connect the layer load event.
-				dojo.connect($this._layer, "onError", $this, onLayerError);
-				dojo.connect($this._layer, "onLoad", $this, onLayerLoad);
+
+				$this._layer.on("error", $this, onLayerError);
+				$this._layer.on("load", $this, onLayerLoad);
 			} else {
 				$this._layer.show();
 			}
@@ -465,7 +481,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 	updateIsInScaleStatus = function (extent, delta, levelChange, lod) {
 		/// <summary>Update the "is in scale" status for each layerListItem in a layerList.  Note: "this" is the layer list widget.</summary>
 		// Get all of the layer list items in the current list.
-		var layerListItems, layerListItem, layer, i, l;
+		var layerListItems, layerListItem, i, l;
 
 		if (levelChange) {
 			layerListItems = $(".ui-layer-list-item", this.element);
@@ -479,7 +495,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 
 	$.widget("ui.layerListItem", {
 		options: {
-			layer: null, // An object that is used to create an esri.layers.layer.  Has an id, url, and layerType.
+			layer: null, // An object that is used to create an layer.  Has an id, url, and layerType.
 			map: null,
 			label: null, // The label to be used instead of the layer's "id" property.
 			contextMenuIcon: _defaultContextMenuIcon,
@@ -492,7 +508,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			$(".ui-layer-list-item-loading-icon", this.element).hide();
 		},
 		_checkbox: null,
-		_layer: null, // This is where the esri.layers.Layer object will be stored.
+		_layer: null, // This is where the Layer object will be stored.
 		getLayer: function () {
 			return this._layer;
 		},
@@ -550,7 +566,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			$($this.options.loadingIcon).addClass("ui-layer-list-item-loading-icon").appendTo($this.element).hide();
 
 			// If this layer has already been loaded, call the layer load event handler.
-			if (typeof ($this.options.layer) !== "undefined" && $this.options.layer !== null && typeof ($this.options.layer.isInstanceOf) === "function" && $this.options.layer.isInstanceOf(esri.layers.Layer)) {
+			if (typeof ($this.options.layer) !== "undefined" && $this.options.layer !== null && typeof ($this.options.layer.isInstanceOf) === "function" && $this.options.layer.isInstanceOf(Layer)) {
 				$this._layer = $this.options.layer;
 				$this._addInfoFromLoadedLayer($this._layer);
 				// Set the checkbox to match the layer's visibility.
@@ -600,7 +616,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		},
 		_addLayer: function (layer) {
 			/// <summary>Adds a layer to the layer list group.</summary>
-			/// <param name="layer" type="esri.layers.Layer">A layer to be added to the group.</param>
+			/// <param name="layer" type="Layer">A layer to be added to the group.</param>
 			var layerListItem = $("<li>").appendTo(this._list).layerListItem({
 				layer: layer,
 				map: this.options.map,
@@ -812,7 +828,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 		},
 		_removeLayer: function (layer) {
 			/// <summary>Removes the list item corresponding to the given layer from the layerList.  Intended to be called from the map's removeLayer event.</summary>
-			/// <param name="layer" type="esri.layers.Layer">The layer that will have its corresponding item removed.</param>
+			/// <param name="layer" type="Layer">The layer that will have its corresponding item removed.</param>
 			var listItems, i, l, item;
 			// Get all of the layer list items that have had their layers loaded.
 			listItems = $(".ui-layer-list-item").filter(":not(.ui-layer-list-not-loaded)");
@@ -837,7 +853,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			}
 		},
 		_create: function () {
-			var $this = this, layer, baseNode, map = this.options.map, i, l, name;
+			var $this = this, baseNode, map = this.options.map, i, l, name;
 
 			// Add classes to this element for jQuery UI styling and for custom styling.
 			$($this.element).addClass('ui-layer-list');
@@ -869,12 +885,12 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			}
 
 			// Setup zoom events to show if layer is out of scale.
-			dojo.connect(map, "onExtentChange", this, updateIsInScaleStatus);
+			map.on("extent-change", this, updateIsInScaleStatus);
 
 			if ($this.options.addAdditionalLayers === true) {
 				// Add an event to add layers to the TOC as they are added to the map.
-				dojo.connect(map, "onLayerAddResult", $this, this._addLayer);
-				dojo.connect(map, "onLayerRemove", $this, this._removeLayer);
+				map.on("layer-add-result", $this, this._addLayer);
+				map.on("layer-remove", $this, this._removeLayer);
 
 
 				// Add layers already in map to the TOC.
@@ -903,7 +919,7 @@ require(["esri/layers/agstiled", "esri/layers/agsdynamic", "extensions/map"], fu
 			addAdditionalLayers: true
 		},
 		_create: function () {
-			var $this = this, tabList, tabId, tabDiv, tabsLayers, tabName;
+			var $this = this, tabList, tabId, tabDiv, tabName;
 
 			function createTabDiv(tabName, addAdditionalLayers) {
 				var layers = $this.options.layers[tabName] || [];
