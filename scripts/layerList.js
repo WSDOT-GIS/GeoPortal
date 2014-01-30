@@ -465,8 +465,9 @@ require([
 				$this._layer = createLayer($this.options.layer);
 				$this.options.map.addLayer($this._layer);
 				// Connect the layer load event.
-				dojo.connect($this._layer, "onError", $this, onLayerError);
-				dojo.connect($this._layer, "onLoad", $this, onLayerLoad);
+
+				$this._layer.on("error", $this, onLayerError);
+				$this._layer.on("load", $this, onLayerLoad);
 			} else {
 				$this._layer.show();
 			}
@@ -884,12 +885,12 @@ require([
 			}
 
 			// Setup zoom events to show if layer is out of scale.
-			dojo.connect(map, "onExtentChange", this, updateIsInScaleStatus);
+			map.on("extent-change", this, updateIsInScaleStatus);
 
 			if ($this.options.addAdditionalLayers === true) {
 				// Add an event to add layers to the TOC as they are added to the map.
-				dojo.connect(map, "onLayerAddResult", $this, this._addLayer);
-				dojo.connect(map, "onLayerRemove", $this, this._removeLayer);
+				map.on("layer-add-result", $this, this._addLayer);
+				map.on("layer-remove", $this, this._removeLayer);
 
 
 				// Add layers already in map to the TOC.
