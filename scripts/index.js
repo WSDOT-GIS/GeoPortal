@@ -1230,9 +1230,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 			// Setup the navigation toolbar.
 			navToolbar = new Navigation(map);
-			dojo.connect(navToolbar, "onExtentHistoryChange", function () {
-				registry.byId("previousExtentButton").disabled = navToolbar.isFirstExtent();
-				registry.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
+			navToolbar.on("extent-history-change", function () {
+				registry.byId("previousExtentButton").attr("disabled", navToolbar.isFirstExtent());
+				registry.byId("nextExtentButton").attr("disabled", navToolbar.isLastExtent());
 			});
 
 			// Create the button dijits.
