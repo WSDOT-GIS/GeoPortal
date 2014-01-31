@@ -470,8 +470,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 										url: wsdot.config.printUrl,
 										extraParameters: getExtraParameters(),
 										async: resp.executionType === "esriExecutionTypeAsynchronous",
-										printSubmit: function (/*e, data*/) {
-											//var parameters = data.parameters;
+										printSubmit: function (e, data) {
+											var parameters = data.parameters;
 											printDialog.dialog("close");
 											printButton.set({
 												disabled: true,
@@ -1231,7 +1231,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			// Setup the navigation toolbar.
 			navToolbar = new Navigation(map);
 			navToolbar.on("extent-history-change", function () {
-				// Disables / enables the previous and next buttons.
 				registry.byId("previousExtentButton").attr("disabled", navToolbar.isFirstExtent());
 				registry.byId("nextExtentButton").attr("disabled", navToolbar.isLastExtent());
 			});
