@@ -1,9 +1,9 @@
-/*jslint browser: true, windows: true, nomen: true, white: true*/
-/*global require*/
+/*global require,$,dojo*/
+/*jslint browser:true, windows:true, nomen:true, white:true*/
+
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4-vsdoc.js"/>
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.js"/>
 /// <reference path="jsapi_vsdoc_v31.js" />
-
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
@@ -213,7 +213,9 @@ require([
 		}
 
 		constructor = getLayerConstructor(layerInfo.type || layerInfo.layerType);
+		/*jshint newcap:false*/
 		return new constructor(layerInfo.url, layerInfo.options);
+		/*jshint newcap:true*/
 	}
 
 	function setOpacity(event, ui) {
@@ -360,7 +362,6 @@ require([
 		return false;
 	}
 
-
 	onLayerLoad = function (layer) {
 		/// <summary>Removes the "layer not loaded" class and (if appropriate) sets up controls for the child layers.</summary>
 		/// <param name="layer" type="Layer">A map service layer.</param>
@@ -477,7 +478,7 @@ require([
 		}
 	}
 
-	updateIsInScaleStatus = function (extent, delta, levelChange, lod) {
+	updateIsInScaleStatus = function (extent, delta, levelChange, lod) { // Although delta and extent parameters are not used, they are necessary for the method signature.
 		/// <summary>Update the "is in scale" status for each layerListItem in a layerList.  Note: "this" is the layer list widget.</summary>
 		// Get all of the layer list items in the current list.
 		var layerListItems, layerListItem, i, l;

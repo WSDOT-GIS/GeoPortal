@@ -12,8 +12,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as a polyfill for non-HTML5-compliant browsers.
 */
 
-
-
 /// <reference path="jsapi_vsdoc_v31.js" />
 /// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
@@ -188,7 +186,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				$("link[href='style/layerList.css']").attr("href", "style/layerListPlusMinus.css");
 			}
 
-
 			$("#mainContainer").css("display", "");
 
 			// If a title is specified in the config file, replace the page title.
@@ -254,7 +251,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						window.open(wsdot.config.helpUrl);
 					}
 				}, "helpButton");
-
 
 				button = new Button({
 					iconClass: "starIcon",
@@ -416,8 +412,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 							if (measureDialog && measureDialog.length > 0) {
 								hideMeasureWidget();
-							}
-							else {
+							} else {
 								// Show the dialog.
 								$("#measureWidgetContainer").show();
 							}
@@ -470,8 +465,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 										url: wsdot.config.printUrl,
 										extraParameters: getExtraParameters(),
 										async: resp.executionType === "esriExecutionTypeAsynchronous",
-										printSubmit: function (e, data) {
-											var parameters = data.parameters;
+										printSubmit: function (/*e, data*/) {
+											////var parameters = data.parameters;
 											printDialog.dialog("close");
 											printButton.set({
 												disabled: true,
@@ -519,8 +514,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								}
 							}
 						}, printButton[0]);
-
-
 					});
 
 					////require(["esri/dijit/Print"], function () {
@@ -644,7 +637,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				layerInfos = getLayerInfos();
 
-
 				if (!isBasemap(layer.id) && typeof (this.isInstanceOf === "function") && this.isInstanceOf(Legend)) {
 					this.refresh(layerInfos);
 				}
@@ -662,8 +654,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					_gaq.push(['_trackEvent', 'Layers', 'Add', label]);
 				}
 			};
-
-
 
 			function setupDefaultLegend() {
 				/// <summary>Creates the legend control</summary>
@@ -1010,8 +1000,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					}
 				} (wsdot.config.tools));
 
-
-
 				createLinks.basemapTab = on(registry.byId("basemapTab"), "show", function () {
 					require(["esri/dijit/BasemapGallery", "esri/dijit/BasemapLayer"], function (BasemapGallery, BasemapLayer) {
 						var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
@@ -1055,8 +1043,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						});
 						*/
 
-
-
 						on(basemapGallery, "error", function (msg) {
 							// Show error message
 							if (console) {
@@ -1069,7 +1055,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						createLinks.basemapTab.remove();
 						delete createLinks.basemapTab;
 
-
 						// Check for an existing customLegend
 						customLegend = $("#legend").data("customLegend");
 						if (customLegend) {
@@ -1077,7 +1062,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						}
 					});
 				});
-
 
 				mapControlsPane.addChild(tabs);
 				mainContainer.addChild(mapControlsPane);
@@ -1090,8 +1074,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				var scale = map.getScale(level);
 				if (scale && scale !== 0) {
 					$("#scaleText").text("");
-				}
-				else {
+				} else {
 					$("#scaleText").text("1:" + number.format(scale, {
 						round: 0,
 						places: 0
@@ -1123,23 +1106,17 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
 			}
 
-
-
 			map.addLayer(initBasemap);
 
 			on(map, "load", function () {
 				// Set the scale.
-				 setScaleLabel();
-
-
+				setScaleLabel();
 
 				setupNorthArrow();
 				setupToolbar();
 				require(["esri/dijit/Scalebar"], function(Scalebar) {
 					Scalebar({ map: map, attachTo: "bottom-left" });
 				});
-
-
 
 				function resizeMap() {
 					//resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
@@ -1211,8 +1188,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				});
 			});
 
-
-
 			// Setup update notifications.
 			on(map, "update-start", function () {
 				$("#loading-bar").show();
@@ -1221,12 +1196,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				$("#loading-bar").hide();
 			});
 
-
-
 			on(map, "zoomEnd", function (extent, zoomFactor, anchor, level) {
 				setScaleLabel(level);
 			});
-
 
 			// Setup the navigation toolbar.
 			navToolbar = new Navigation(map);
@@ -1279,7 +1251,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 		}
 		return output;
 	}
-
 
 	// Get the configuratio
 	$.ajax(getConfigUrl(), {
