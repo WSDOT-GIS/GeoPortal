@@ -1,5 +1,6 @@
 ﻿{
 	"pageTitle": "WSDOT Functional Classification Map",
+	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
 	"customLegend": {
 			"html": "FunctionalClassLegend.html",
 			"basemapSpecificSections": { 
@@ -74,6 +75,16 @@
 		}
 	},
 	"basemaps": [
+		{
+			"id": "esriHybrid",
+			"title": "Hybrid",
+			"thumbnailUrl": "images/EsriHybridThumbnail.png",
+			"layers": [
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+			]
+		},
 		{
 			"id": "wsdotBasemap",
 			"title": "WSDOT Basemap",
