@@ -1022,13 +1022,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 						// Remove the unwanted default basemaps as defined in config.js (if any are defined).
 						if (wsdot.config.basemapsToRemove) {
-							on(basemapGallery, "load", wsdot.config.basemapsToRemove, function () {
-								var i, removed;
-								for (i = 0; i < this.length; i += 1) {
-									removed = basemapGallery.remove(this[i]);
+							on(basemapGallery, "load", function () {
+								var i, removed, toRemove = wsdot.config.basemapsToRemove;
+								for (i = 0; i < toRemove.length; i += 1) {
+									removed = basemapGallery.remove(toRemove[i]);
 									if (console && console.warn) {
 										if (removed === null) {
-											console.warn("Basemap removal failed: basemap not found: " + this[i]);
+											console.warn("Basemap removal failed: basemap not found: " + toRemove[i]);
 										}
 									}
 								}
