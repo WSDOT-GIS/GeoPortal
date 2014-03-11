@@ -87,7 +87,7 @@
 			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_6"],
+	"basemapsToRemove": ["Terrain with Labels", "Oceans"],
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"tabbedLayerList": true,
 	"layers": {

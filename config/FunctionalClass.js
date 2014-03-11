@@ -103,13 +103,13 @@
 		}
 	],
 	"basemapsToRemove": [
-		"basemap_8",
-		"basemap_7",
-		"basemap_5",
-		"basemap_4",
-		"basemap_2",
-		"basemap_1",
-		"basemap_0"
+		"Imagery",
+		"Imagery with Labels",
+		"Topographic",
+		"Terrain with Labels",
+		"National Geographic",
+		"Oceans",
+		"OpenStreetMap"
 	],
 	"locateMileposts": {
 		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
