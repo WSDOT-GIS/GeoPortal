@@ -972,7 +972,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						require(["scripts/addressLocator.js"], function() {
 							$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
 								map: map,
-								addressLocator: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+								addressLocator: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find"
 							});
 							createLinks.search.remove();
 							delete createLinks.search;
