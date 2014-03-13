@@ -968,7 +968,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				function setupSearchControls() {
 					// Address Search
 					toolsAccordion.addChild(new ContentPane({ title: "Find an Address" }, domConstruct.create("div", { id: "searchTools" }, "toolsAccordion")));
-					createLinks.search = on(registry.byId("searchTools"), "show", function () {
+					on.once(registry.byId("searchTools"), "show", function () {
+						// Create the Geocoder widget.
 						require(["esri/dijit/Geocoder"], function (Geocoder) {
 							var div, geocoder;
 							div = document.createElement("div");
