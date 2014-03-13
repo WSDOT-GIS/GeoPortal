@@ -969,13 +969,19 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					// Address Search
 					toolsAccordion.addChild(new ContentPane({ title: "Find an Address" }, domConstruct.create("div", { id: "searchTools" }, "toolsAccordion")));
 					createLinks.search = on(registry.byId("searchTools"), "show", function () {
-						require(["scripts/addressLocator.js"], function() {
-							$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
-								map: map,
-								addressLocator: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find"
-							});
-							createLinks.search.remove();
-							delete createLinks.search;
+						require(["esri/dijit/Geocoder"], function (Geocoder) {
+							var div, geocoder;
+							div = document.createElement("div");
+							div.id = "searchControl";
+							document.getElementById("searchTools").appendChild(div);
+							geocoder = new Geocoder({
+								arcgisGeocoder: {
+									sourceCountry: "US",
+									searchExtent: wsdot.config.mapOptions.extent
+								},
+								map: map
+							}, div);
+							geocoder.startup();
 						});
 					});
 				}
