@@ -110,15 +110,15 @@
 			packages: [
 				{
 					name: "extensions",
-					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/extensions"
+					location: location.origin + location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/extensions"
 				},
 				{
 					name: "wsdot",
-					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/wsdot"
+					location: location.origin + location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/wsdot"
 				},
 				{
 					name: "geocoder-setup",
-					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts",
+					location: location.origin + location.pathname.replace(/\/[^\/]+$/, "") + "/scripts",
 					main: "geocoder-setup"
 				}
 			]
