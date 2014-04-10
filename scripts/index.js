@@ -814,7 +814,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				function setupLrsControls() {
 					// LRS Tools
-					toolsAccordion.addChild(new ContentPane({ title: "Milepost", id: "lrsTools" }, domConstruct.create("div", { id: "lrsTools" }, "toolsAccordion")));
+					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, domConstruct.create("div", { id: "lrsTools" }, "toolsAccordion")));
 					createLinks.milepostTab = on(registry.byId("lrsTools"), "show", function () {
 						require(["scripts/lrsTools.js"], function () {
 							$("#lrsTools").lrsTools({
@@ -837,7 +837,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				function setupZoomControls() {
 					var button;
 					// Zoom tools
-					$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
+					var zoomControlsPaneDiv = document.createElement("div");
+					zoomControlsPaneDiv.id = "zoomControlsPane";
+					document.getElementById("toolsAccordion").appendChild(zoomControlsPaneDiv);
 
 					toolsAccordion.addChild(new ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 					createLinks.zoomControls = on(registry.byId("zoomControlsPane"), "show", function () {
