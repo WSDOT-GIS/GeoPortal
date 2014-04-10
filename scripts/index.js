@@ -37,6 +37,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/layers/ArcGISTiledMapServiceLayer",
 	"esri/toolbars/navigation",
 	"esri/layers/GraphicsLayer",
+	"esri/dijit/HomeButton",
 
 	"dijit/form/Button",
 	"dijit/layout/BorderContainer",
@@ -72,7 +73,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"extensions/map"
 ], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
 	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
-	GraphicsLayer, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane) {
+	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.js";
@@ -1130,6 +1131,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
 			}
 
+			(new HomeButton({ map: map }, "homeButton")).startup();
+			
+
 			map.addLayer(initBasemap);
 
 			on(map, "load", function () {
@@ -1230,15 +1234,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				registry.byId("previousExtentButton").attr("disabled", navToolbar.isFirstExtent());
 				registry.byId("nextExtentButton").attr("disabled", navToolbar.isLastExtent());
 			});
-
-			// Create the button dijits.
-			button = new Button({
-				iconClass: "zoomfullextIcon",
-				showLabel: false,
-				onClick: function () {
-					map.setExtent(extents.fullExtent);
-				}
-			}, "fullExtentButton");
 
 			button = new Button({
 				iconClass: "zoomprevIcon",
