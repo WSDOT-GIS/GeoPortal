@@ -105,24 +105,27 @@
 		</div>
 	</div>
 	<script>
-		var dojoConfig = {
-			async: true,
-			packages: [
-				{
-					name: "extensions",
-					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/extensions"
-				},
-				{
-					name: "wsdot",
-					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts/wsdot"
-				},
-				{
-					name: "geocoder-setup",
-					location: location.pathname.replace(/\/[^\/]+$/, "") + "/scripts",
-					main: "geocoder-setup"
-				}
-			]
-		};
+		(function () {
+			var dojoConfig = {
+				async: true,
+				packages: [
+					{
+						name: "extensions",
+						location: location.pathname.replace(/\/[^\/]*$/, "") + "/scripts/extensions"
+					},
+					{
+						name: "wsdot",
+						location: location.pathname.replace(/\/[^\/]*$/, "") + "/scripts/wsdot"
+					},
+					{
+						name: "geocoder-setup",
+						location: location.pathname.replace(/\/[^\/]*$/, "") + "/scripts",
+						main: "geocoder-setup"
+					}
+				]
+			};
+			window.dojoConfig = dojoConfig;
+		}());
 	</script>
 	<script src="//js.arcgis.com/3.9/"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
