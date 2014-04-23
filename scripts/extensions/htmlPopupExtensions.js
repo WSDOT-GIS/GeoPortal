@@ -1,12 +1,10 @@
 /*jslint nomen: true, white: true, browser: true */
-/*global jQuery:true, esri:true, dojo:true */
+/*global require,esri,dojo*/
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+// Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function() {
 	"use strict";
-
-
 		var detectHtmlPopups;
 
 		function htmlPopupTypeIsHtmlTextOrUrl(layerInfo) {
@@ -40,8 +38,7 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				for (i = 0, l = mapServiceLayer.layerInfos.length; i < l; i += 1) {
 					layerInfo = mapServiceLayer.layerInfos[i];
 					// Add to the output array the ID of any sublayer that has an html popup defined 
@@ -57,7 +54,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 					}
 				}
 			}
-
 
 			return ids;
 		}
@@ -108,8 +104,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 			});
 		});
 
-
-
 		dojo.extend(esri.Map, {
 			_ignoredLayerRE: null,
 			detectHtmlPopupsHasRun: false,
@@ -134,7 +128,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 
 					mapService = map.getLayer(id);
 
-
 					if (mapService.loaded) {
 						if (typeof (mapService.detectHtmlPopups) === "function") {
 							mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
@@ -146,7 +139,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 							}
 						});
 					}
-
 
 				});
 
@@ -222,8 +214,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 
 				});
 
-
-
 				//TODO: Handle FeatureLayers
 
 				return queryCount;
@@ -277,7 +267,6 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 				pointSymbol = new esri.symbol.SimpleMarkerSymbol().setColor("#00ffff");
 				lineSymbol = new esri.symbol.SimpleLineSymbol().setColor("#00ffff");
 				polygonSymbol = new esri.symbol.SimpleFillSymbol().setColor("00ffff");
-
 
 				function selectGeometry(geometry, attributes) {
 					var graphic, symbol;
@@ -577,7 +566,5 @@ require(["esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tas
 				});
 			}
 		});
-
-
 
 });
