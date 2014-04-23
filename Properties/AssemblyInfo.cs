@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WSDOT GRDO Mapping Application")]
-[assembly: AssemblyDescription("A browser based mapping application that will be available for WSDOT staff and the public.  This application will include an interface to the data, map services and geoprocessing tools that GRDO maintains.")]
+[assembly: AssemblyTitle("WSDOT TDGO Mapping Application")]
+[assembly: AssemblyDescription("A browser based mapping application that will be available for WSDOT staff and the public.  This application will include an interface to the data, map services and geoprocessing tools that TDGO maintains.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("WSDOT")]
-[assembly: AssemblyProduct("WSDOT GRDO Mapping Application")]
+[assembly: AssemblyProduct("WSDOT TDGO Mapping Application")]
 [assembly: AssemblyCopyright("Copyright © WSDOT 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

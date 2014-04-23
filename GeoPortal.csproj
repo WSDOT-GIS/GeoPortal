@@ -51,8 +51,8 @@
     <Content Include="config\FunctionalClass.js" />
     <Content Include="config\internal-airport.js" />
     <Content Include="config\internal-Freight.js" />
-    <Content Include="config\internal-RFIP.js" />
     <Content Include="config\Release.js" />
+    <Content Include="config\TrafficPlanningTrends.js" />
     <Content Include="disclaimers\airport\Internal.html" />
     <Content Include="disclaimers\airport\Public.html" />
     <Content Include="disclaimers\Freight\Internal.html" />
@@ -71,6 +71,7 @@
     <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
+    <Content Include="images\EsriHybridThumbnail.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\greenlogo.png" />
     <Content Include="images\layerList\contextMenu.png" />
@@ -83,6 +84,7 @@
     <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
+    <Content Include="images\TrafficVolumeThumbnail.png" />
     <Content Include="images\USA_TopoThumbnail.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
@@ -90,7 +92,6 @@
     <Content Include="lrsToolsTemplate.html" />
     <Content Include="MapIconGenerator.htm" />
     <Content Include="RouteListDemo.html" />
-    <Content Include="scripts\addressLocator.js" />
     <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\customLegend.js" />
@@ -104,6 +105,7 @@
     <Content Include="scripts\extensions\metadataExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
+    <Content Include="scripts\geocoder-setup.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
@@ -116,7 +118,6 @@
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\layerSorter.js" />
     <Content Include="scripts\lrsTools.js" />
-    <Content Include="GetRoutes.ashx" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
     <Content Include="help\Freight\internal\FAQ.pdf" />
@@ -191,9 +192,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Extensions.cs" />
-    <Compile Include="GetRoutes.ashx.cs">
-      <DependentUpon>GetRoutes.ashx</DependentUpon>
-    </Compile>
     <Compile Include="GraphicExport.ashx.cs">
       <DependentUpon>GraphicExport.ashx</DependentUpon>
     </Compile>
@@ -237,7 +235,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

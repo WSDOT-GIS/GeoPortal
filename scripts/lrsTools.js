@@ -1,4 +1,4 @@
-﻿/*global esri, dojo, jQuery, require */
+﻿/*global jQuery, require */
 /*jslint nomen: true, white: true */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -341,7 +341,9 @@ jQuery UI
 												geometry.setSpatialReference(map.spatialReference);
 												graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult });
 												locatedMilepostsLayer.add(graphic);
-												map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
+												map.infoWindow.setContent(graphic.getContent());
+												map.infoWindow.setTitle(graphic.getTitle());
+												map.infoWindow.show(map.toScreen(geometry));
 											}
 											else {
 												showMessageDialog(currentResult.LocatingError, "Locating Error");

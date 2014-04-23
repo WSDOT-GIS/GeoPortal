@@ -192,7 +192,7 @@ jQuery UI
 					button = $("<button>").attr({ type: "button" }).button({ label: "Find", icons: { primary: "ui-icon-search" }, text: false }).appendTo(inputDiv).click(function () {
 						var address = $("#ui-address-locator *[name=address]").val();
 						if (address) {
-							address = { "Single Line Input": address };
+							address = { "text": address };
 							widget.options.addressLocator.addressToLocations(address);
 							if (widget._graphicsLayer && widget._graphicsLayer.clear) {
 								widget._graphicsLayer.clear();

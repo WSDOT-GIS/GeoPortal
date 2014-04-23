@@ -1,5 +1,4 @@
-﻿html, body
-{
+﻿html, body {
 	height: 100%;
 	width: 100%;
 	margin: 0;
@@ -9,84 +8,74 @@
 	font-size: 10pt;
 }
 
-html, body, .ui-widget
-{
+html, body, .ui-widget {
 	font-family: 'Segoe UI', Verdana, 'Arial', Helvetica, sans-serif;
 }
 
-.page-title 
-{
+.page-title {
 	font-family: Arial,Helvetica,sans-serif;
 	font-size: 18pt;
 	font-weight: 900;
 	display: inline;
 }
 
-#headerPane > div.table 
-{
+#headerPane > div.table {
 	width: 100%;
 }
 
-div.table *
-{
+div.table * {
 	padding: 0 0 0 0;
 	margin: 0 0 0 0;
 }
 
-div.table 
-{
+div.table {
 	display: table;
 }
 
-div.table > div 
-{
-	display: table-row;
-}
+	div.table > div {
+		display: table-row;
+	}
 
-div.table > div > * 
-{
-	display: table-cell;
-}
+		div.table > div > * {
+			display: table-cell;
+		}
 
-div.table > div > * > h1 
-{
-	text-align: center;
-}
+			div.table > div > * > h1 {
+				text-align: center;
+			}
 
-.ui-tabs-nav 
-{
+.ui-tabs-nav {
 	font-family: 'Segoe Condensed', 'Arial Narrow';
 }
 
-#headerPane 
-{
+#headerPane {
 	padding: 0;
 }
-#mainContainer
-{
+
+#mainContainer {
 	width: 100%;
 	height: 100%;
 	margin: 0;
 }
-#mapContentPane
-{
+
+#mapContentPane {
 	border: 1px solid #000;
 	padding: 0;
-	
-	position: absolute;  top: 0px; right: 0px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
-#map 
-{
+
+#map {
 	width: 100%;
 	height: 100%;
 }
-#mapControlsPane 
-{
+
+#mapControlsPane {
 	width: 305px;
 }
 
-#northArrow 
-{
+#northArrow {
 	position: absolute;
 	bottom: 40px;
 	left: 20px;
@@ -94,29 +83,27 @@ div.table > div > * > h1
 	width: 43px;
 	height: 52px;
 }
-#toolbar 
-{
+
+#toolbar {
 	position: absolute;
 	top: 5px;
 	right: 20px;
 	z-index: 10;
 }
-#toolbar > * 
-{
-	margin: 0;
-}
 
-#toolbar .esriPrint, #printButton 
-{
-	display: inline;
-}
+	#toolbar > * {
+		margin: 0;
+	}
 
-#linkTextBox 
-{
+	#toolbar .esriPrint, #printButton {
+		display: inline;
+	}
+
+#linkTextBox {
 	width: 100%;
 }
-#wsdotLogo 
-{
+
+#wsdotLogo {
 	vertical-align: middle;
 	padding: 9.6px;
 }
@@ -126,54 +113,52 @@ div.table > div > * > h1
 	background-color: #017359;
 	/* padding-right: 50px */
 }
-.topNav ul {
-	text-align: right;
-	padding: 0px;
-	margin-top: 0px;
-	font-size: 10px;
-}
-.topNav li {
-	border-left-width: 1px;
-	border-left-style: dotted;
-	border-left-color: #ffffff;
-	padding: 0px 5px 0px 5px;
-	display: inline;
-}
-.topNav li:first-child {
-	border: none;
-}
-		
-.topNav a 
-{
-	color: White;
-	text-decoration: none;
-}
-.topNav a:hover 
-{
-	text-decoration: underline;
-}
-		
-h3,h4
-{
+
+	.topNav ul {
+		text-align: right;
+		padding: 0px;
+		margin-top: 0px;
+		font-size: 10px;
+	}
+
+	.topNav li {
+		border-left-width: 1px;
+		border-left-style: dotted;
+		border-left-color: #ffffff;
+		padding: 0px 5px 0px 5px;
+		display: inline;
+	}
+
+		.topNav li:first-child {
+			border: none;
+		}
+
+	.topNav a {
+		color: White;
+		text-decoration: none;
+	}
+
+		.topNav a:hover {
+			text-decoration: underline;
+		}
+
+h3, h4 {
 	color: inherit; /* This is to support jQueryUI theming. */
 	font-weight: bold;
 	font-size: inherit;
 }
-		
-#zoomInstructions li 
-{
+
+#zoomInstructions li {
 	font-size: 10pt;
 	font-family: 'Arial Narrow', Sans-Serif;
 }
-		
-#zoomInstructions ul > li
-{
+
+#zoomInstructions ul > li {
 	list-style-type: circle;
 }
 
-#zoomControls label
-{
-	font-family: 'Arial Narrow', Sans-Serif
+#zoomControls label {
+	font-family: 'Arial Narrow', Sans-Serif;
 }
 
 .zoomfullextIcon, .zoomprevIcon, .zoomnextIcon, .helpIcon, .linkIcon, .exportIcon, .starIcon, .sortIcon {
@@ -181,17 +166,55 @@ h3,h4
 	*background: url(../images/navigation/sprites.png) no-repeat top left; /* For IE 6 and 7 */
 }
 
-.helpIcon{ background-position: 0 0; width: 16px; height: 16px; } 
-.linkIcon{ background-position: -21px 0; width: 18px; height: 7px; } 
-.zoomfullextIcon{ background-position: -44px 0; width: 16px; height: 16px; } 
-.zoomnextIcon{ background-position: -65px 0; width: 16px; height: 16px; } 
-.zoomprevIcon{ background-position: -86px 0; width: 16px; height: 16px; } 
-.exportIcon{ background-position: -107px 0; width: 16px; height: 16px; }
-.starIcon{ background-position: -128px 0; width: 16px; height: 16px; }
-.sortIcon{ background-position: -149px 0; width: 16px; height: 16px; }
+.helpIcon {
+	background-position: 0 0;
+	width: 16px;
+	height: 16px;
+}
 
-#scaleText 
-{
+.linkIcon {
+	background-position: -21px 0;
+	width: 18px;
+	height: 7px;
+}
+
+.zoomfullextIcon {
+	background-position: -44px 0;
+	width: 16px;
+	height: 16px;
+}
+
+.zoomnextIcon {
+	background-position: -65px 0;
+	width: 16px;
+	height: 16px;
+}
+
+.zoomprevIcon {
+	background-position: -86px 0;
+	width: 16px;
+	height: 16px;
+}
+
+.exportIcon {
+	background-position: -107px 0;
+	width: 16px;
+	height: 16px;
+}
+
+.starIcon {
+	background-position: -128px 0;
+	width: 16px;
+	height: 16px;
+}
+
+.sortIcon {
+	background-position: -149px 0;
+	width: 16px;
+	height: 16px;
+}
+
+#scaleText {
 	position: absolute;
 	bottom: 30px;
 	left: 25px;
@@ -205,19 +228,12 @@ h3,h4
 }
 
 /* Change the background color of alternating rows */
-.alternate-row 
-{
+.alternate-row {
 	background-color: #eeeeee;
 	color: #525252;
 }
 
-#fcLegend tr td:first-child
-{
-	background: #525252;
-}
-
-img[src="images/ajax-loader.gif"] 
-{
+img[src="images/ajax-loader.gif"] {
 	width: 16px;
 	height: 16px;
 }
@@ -230,30 +246,25 @@ img[src="images/ajax-loader.gif"]
 	width: 16px;
 }
 
-img[src$="blank.gif"] 
-{
+img[src$="blank.gif"] {
 	width: 1px;
 	height: 1px;
 }
 
-.hidden 
-{
+.hidden {
 	display: none;
 }
 
-#map_infowindow table 
-{
+#map_infowindow table {
 	border: 1px solid #525252;
 	border-collapse: collapse;
 }
 
-#map_infowindow table td
-{
-	border: 1px solid #525252;
-}
+	#map_infowindow table td {
+		border: 1px solid #525252;
+	}
 
-.ui-esri-layer-list h3 
-{
+.ui-esri-layer-list h3 {
 	font-size: 10pt;
 	font-weight: bold;
 	margin-bottom: 3px;
@@ -261,69 +272,59 @@ img[src$="blank.gif"]
 
 
 
-.ui-widget-content table
-{
+.ui-widget-content table {
 	border: 1px solid #525252;
 	font-size: 10pt;
 }
 
-.ui-widget-content td, .ui-widget-content th
-{
+.ui-widget-content td, .ui-widget-content th {
 	border: 1px solid #525252;
 }
 
-.ui-esri-layer-list .ui-widget-content table, .ui-esri-layer-list .ui-widget-content td 
-{
+.ui-esri-layer-list .ui-widget-content table, .ui-esri-layer-list .ui-widget-content td {
 	border: none;
 }
 
-.metadata-list:before 
-{
-	content:"Metadata: ";
+.metadata-list:before {
+	content: "Metadata: ";
 }
-.metadata-list 
-{
+
+.metadata-list {
 	display: block;
 	padding: 0;
 	margin: 0;
 	margin-left: 20px;
 }
 
-.metadata-list li 
-{
-	display: inline;
-}
+	.metadata-list li {
+		display: inline;
+	}
 
-.metadata-list li:before 
-{
-	content:", ";
-}
+		.metadata-list li:before {
+			content: ", ";
+		}
 
-.metadata-list li:first-of-type:before
-{
-	content:"";
-}
+		.metadata-list li:first-of-type:before {
+			content: "";
+		}
 
-#loading-bar 
-{
+#loading-bar {
 	width: 220px;
 	height: 19px;
-	
 	position: absolute;
 	bottom: 5px;
 	left: 50%;
 	z-index: 100;
 }
-#measureWidgetContainer 
-{
+
+#measureWidgetContainer {
 	width: 250px;
 	position: absolute;
 	top: 40px;
 	right: 5px;
 }
 
-.disclaimer a, a.disclaimer
-{
+.disclaimer a, a.disclaimer {
 	text-decoration: underline;
 }
 
@@ -355,115 +356,103 @@ img[src$="blank.gif"]
 }
 */
 
-.esriAttributionItem, .esriAttributionLastItem
-{
+.esriAttributionItem, .esriAttributionLastItem {
 	background-color: White;
 	background-color: RGBA(255,255,255,0.7);
 }
 
-#zoomControls .tool-header 
-{
+#zoomControls .tool-header {
 	text-decoration: underline;
 	margin-bottom: 0.1em;
 }
 
-#zoomToXY 
-{
+#zoomToXY {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 	padding-left: 0.5em;
 }
-#zoomToXY input[type=number]
-{
-	width: 90%;
-}
 
-#zoomToXY button
-{
-	vertical-align: top;
-}
+	#zoomToXY input[type=number] {
+		width: 90%;
+	}
 
-#zoomToXY label
-{
-	padding-right: 0.5em
-}
+	#zoomToXY button {
+		vertical-align: top;
+	}
 
-#airspaceCalculator label.error 
-{
+	#zoomToXY label {
+		padding-right: 0.5em;
+	}
+
+#airspaceCalculator label.error {
 	font-size: 0.7em;
 	color: Red;
-	display: block
-}
-
-#airspaceCalculator input.error 
-{
-	border-color: Red;
-}
-
-.placeholder  
-{
-	color: #aaa; 
-}
-
-abbr 
-{
-	text-decoration: underline;
-}
-
-.tabLabel, .ui-tabs-nav 
-{
-	font-family: 'Segoe Condensed', 'Arial Narrow', 'Nimbus Sans', 'Lucida Sans', sans-serif;
-}
-
-.tabLabel 
-{
-	font-size: 0.8em;
-}
-
-.ui-disclaimer 
-{
-	font-size: 0.5em;
-}
-
-.ui-faa-far-77 label
-{
 	display: block;
 }
 
-.ui-printer-layout-options > input, .ui-printer-extra-parameters > input, .ui-printer-extra-parameters > select
-{
+#airspaceCalculator input.error {
+	border-color: Red;
+}
+
+.placeholder {
+	color: #aaa;
+}
+
+abbr {
+	text-decoration: underline;
+}
+
+.tabLabel, .ui-tabs-nav {
+	font-family: 'Segoe Condensed', 'Arial Narrow', 'Nimbus Sans', 'Lucida Sans', sans-serif;
+}
+
+.tabLabel {
+	font-size: 0.8em;
+}
+
+.ui-disclaimer {
+	font-size: 0.5em;
+}
+
+.ui-faa-far-77 label {
+	display: block;
+}
+
+.ui-printer-layout-options > input, .ui-printer-extra-parameters > input, .ui-printer-extra-parameters > select {
 	display: block;
 	width: 100%;
 }
 
-.airport-disclaimer 
-{
+.airport-disclaimer {
 	font-family: Century Gothic, sans-serif;
 	font-size: 12pt;
 }
 
-.airport-disclaimer .important, .airport-disclaimer h1 
-{
+.airport-disclaimer .important, .airport-disclaimer h1 {
 	text-align: center;
 }
 
-.airport-disclaimer em 
-{
+.airport-disclaimer em {
 	font-style: normal;
 	text-decoration: underline;
 	font-weight: bold;
 }
 
-.airport-disclaimer h1 
-{
+.airport-disclaimer h1 {
 	font-size: 14pt;
 	font-weight: bold;
 }
 
-.airport-disclaimer .important 
-{
+.airport-disclaimer .important {
 	font-family: Arial, sans-serif;
 	font-family: 14pt;
 	text-transform: uppercase;
 	font-weight: bold;
+}
+
+.HomeButton {
+	position: absolute;
+	top: 95px;
+	left: 20px;
+	z-index: 50;
 }

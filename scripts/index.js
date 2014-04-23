@@ -1,5 +1,5 @@
-﻿/*jslint devel: true, browser: true, white: true, nomen: true */
-/*global require, dojo, dijit, dojox, esri, jQuery, Modernizr, _gaq, $ */
+﻿/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
+/*global require, Modernizr, _gaq, $ */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
@@ -12,8 +12,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as a polyfill for non-HTML5-compliant browsers.
 */
 
-
-
 /// <reference path="jsapi_vsdoc_v31.js" />
 /// <reference path="dojo.js.uncompressed.js" />
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
@@ -24,13 +22,30 @@ jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as
 
 var wsdot;
 
-require(["require", "dojo/_base/array", "dojo/number",
+require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array", "dojo/number",
+	"dojo/dom",
+	"dojo/dom-attr",
+	"dojo/dom-construct",
+
+	"esri/config",
+	"esri/map",
+	"esri/geometry/jsonUtils",
+	"esri/geometry/Point",
+	"esri/geometry/Extent",
+	"esri/tasks/GeometryService",
+	"esri/dijit/Legend",
+	"esri/layers/ArcGISTiledMapServiceLayer",
+	"esri/toolbars/navigation",
+	"esri/layers/GraphicsLayer",
+	"esri/dijit/HomeButton",
+
 	"dijit/form/Button",
 	"dijit/layout/BorderContainer",
+	"dijit/layout/ContentPane",
 	"dijit/layout/TabContainer",
 	"dijit/layout/AccordionContainer",
-	"dijit/layout/ContentPane",
 	"dojox/layout/ExpandoPane",
+
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
 	"dijit/form/FilteringSelect",
@@ -46,7 +61,6 @@ require(["require", "dojo/_base/array", "dojo/number",
 	"esri/tasks/query",
 	"esri/toolbars/navigation",
 	"esri/toolbars/draw",
-	"esri/dijit/Legend",
 	"esri/tasks/gp",
 	"esri/layers/FeatureLayer",
 	"esri/IdentityManager",
@@ -57,7 +71,9 @@ require(["require", "dojo/_base/array", "dojo/number",
 	"extensions/extent",
 	"extensions/graphicsLayer",
 	"extensions/map"
-], function (require, array, number, Button) {
+], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
+	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
+	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.js";
@@ -103,6 +119,8 @@ require(["require", "dojo/_base/array", "dojo/number",
 	}
 
 	function doPostConfig() {
+		var button;
+
 		// Add support for JSON.
 		Modernizr.load([
 			{
@@ -172,7 +190,6 @@ require(["require", "dojo/_base/array", "dojo/number",
 				$("link[href='style/layerList.css']").attr("href", "style/layerListPlusMinus.css");
 			}
 
-
 			$("#mainContainer").css("display", "");
 
 			// If a title is specified in the config file, replace the page title.
@@ -215,22 +232,23 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 		function init() {
 			var refreshLegend, gaTrackEvent, initBasemap = null;
-			esri.config.defaults.io.proxyUrl = "proxy.ashx";
-			esri.config.defaults.geometryService = new esri.tasks.GeometryService(wsdot.config.geometryServer);
+			config.defaults.io.proxyUrl = "proxy.ashx";
+			config.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
 
-			// Opera doesn't display the zoom slider correctly.  This will make it look better.
-			// For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
-			if (dojo.isOpera) {
-				esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
-			}
+			////// Opera doesn't display the zoom slider correctly.  This will make it look better.
+			////// For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
+			////if (dojo.isOpera) {
+			////	esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
+			////}
 
 			function setupNorthArrow() {
 				// Create the north arrow.
-				dojo.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
+				domConstruct.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
 			}
 
 			function setupToolbar() {
-				dijit.form.Button({
+				var button;
+				button = new Button({
 					iconClass: "helpIcon",
 					showLabel: false,
 					onClick: function () {
@@ -238,8 +256,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 					}
 				}, "helpButton");
 
-
-				dijit.form.Button({
+				button = new Button({
 					iconClass: "starIcon",
 					showLabel: false,
 					onClick: function () {
@@ -271,7 +288,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 				}, "linkButton");
 
 				// TODO: Make drop-down button instead of popping up a dialog.
-				dijit.form.Button({
+				button = new Button({
 					label: "Export Graphics",
 					showLabel: false,
 					iconClass: "exportIcon",
@@ -325,20 +342,20 @@ require(["require", "dojo/_base/array", "dojo/number",
 							// Create the submit button and convert it to a jQueryUI button.
 							$("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
 
-							// The submit button doesn't work in IE without doing the following for some reason.
-							if (dojo.isIE) {
-								$("button", form).click(function () {
-									form.submit();
-								});
-							}
+							////// The submit button doesn't work in IE without doing the following for some reason.
+							////if (dojo.isIE) {
+							////	$("button", form).click(function () {
+							////		form.submit();
+							////	});
+							////}
 						}
 
 						// Show the export dialog
 						exportDialog.dialog("open");
 					}
-				}, dojo.create("button", { id: "saveButton" }, "toolbar", "first"));
+				}, domConstruct.create("button", { id: "saveButton" }, "toolbar", "first"));
 
-				dijit.form.Button({
+				button = new Button({
 					label: "Arrange Layers",
 					showLabel: false,
 					iconClass: "sortIcon",
@@ -357,7 +374,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 					}
 				}, "sortButton");
 
-				dijit.form.Button({
+				button = new Button({
 					label: "Measure",
 					showLabel: false,
 					iconClass: "distanceIcon",
@@ -369,9 +386,9 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 						function hideMeasureWidget() {
 							// Hide the dialog and disable all of the tools.
-							var measureWidget = dijit.byId("measureWidget");
+							var measureWidget = registry.byId("measureWidget");
 							measureWidget.clearResult();
-							dojo.forEach(["area", "distance", "location"], function (toolName) {
+							array.forEach(["area", "distance", "location"], function (toolName) {
 								measureWidget.setTool(toolName, false);
 							});
 							measureDialog.hide();
@@ -382,7 +399,8 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 						// Create the measure dialog if it does not already exist.
 						if (!measureDialog || measureDialog.length < 1) {
-							require(["esri/dijit/Measurement"], function () {
+							require(["esri/dijit/Measurement"], function (Measurement) {
+								var measurement;
 								// Create the dialog.
 								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
 								titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
@@ -390,7 +408,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 								$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
 								$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
 								// Create the widget.
-								esri.dijit.Measurement({ map: map }, dojo.byId("measureWidget")).startup();
+								measurement = new Measurement({ map: map }, dom.byId("measureWidget")).startup();
 							});
 						} else {
 							// If the dialog already exists, toggle its visibility.
@@ -398,8 +416,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 							if (measureDialog && measureDialog.length > 0) {
 								hideMeasureWidget();
-							}
-							else {
+							} else {
 								// Show the dialog.
 								$("#measureWidgetContainer").show();
 							}
@@ -414,7 +431,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 						var printButton, printDialog, templateNames, pdfList;
 
 						function getTemplateNames() {
-							var layoutTemplateParam = dojo.filter(resp.parameters, function (param, idx) {
+							var layoutTemplateParam = array.filter(resp.parameters, function (param /*, idx*/) {
 								return param.name === "Layout_Template";
 							});
 
@@ -426,7 +443,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 						}
 
 						function getExtraParameters() {
-							return dojo.filter(resp.parameters, function (param, idx) {
+							return array.filter(resp.parameters, function (param /*, idx*/) {
 								return param.name !== "Web_Map_as_JSON" && param.name !== "Format" && param.name !== "Output_File" && param.name !== "Layout_Template";
 							});
 						}
@@ -452,8 +469,8 @@ require(["require", "dojo/_base/array", "dojo/number",
 										url: wsdot.config.printUrl,
 										extraParameters: getExtraParameters(),
 										async: resp.executionType === "esriExecutionTypeAsynchronous",
-										printSubmit: function (e, data) {
-											var parameters = data.parameters;
+										printSubmit: function (/*e, data*/) {
+											////var parameters = data.parameters;
 											printDialog.dialog("close");
 											printButton.set({
 												disabled: true,
@@ -463,7 +480,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 										printComplete: function (e, data) {
 											var result = data.result, li;
 											printButton.set({
-												disabled: null,
+												disabled: false,
 												iconClass: "dijitIconPrint"
 											});
 											pdfList.show("fade");
@@ -478,7 +495,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 										printError: function (e, data) {
 											var error = data.error, message;
 											printButton.set({
-												disabled: null,
+												disabled: false,
 												iconClass: "dijitIconPrint"
 											});
 											message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error";
@@ -501,15 +518,13 @@ require(["require", "dojo/_base/array", "dojo/number",
 								}
 							}
 						}, printButton[0]);
-
-
 					});
 
 					////require(["esri/dijit/Print"], function () {
 					////	/// <summary>Setup the print widget</summary>
 					////	var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
 
-					////	layoutTemplate = dojo.filter(resp.parameters, function (param, idx) {
+					////	layoutTemplate = array.filter(resp.parameters, function (param, idx) {
 					////		return param.name === "Layout_Template";
 					////	});
 
@@ -551,7 +566,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 					////		map: map,
 					////		templates: templates,
 					////		url: wsdot.config.printUrl
-					////	}, dojo.byId("printButton"));
+					////	}, dom.byId("printButton"));
 
 					////	// Handle errors from the print service.
 					////	dojo.connect(printer, "onError", function (error) {
@@ -577,15 +592,19 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 				// If a print URL has been specified, add the print widget.
 				if (wsdot.config.printUrl) {
-					// get print templates from the export web map task
-					var printInfo = esri.request({
-						"url": wsdot.config.printUrl,
-						"content": { "f": "json" }
-					});
-					printInfo.then(setupPrinter, function (error) {
-						if (typeof (console) !== "undefined") {
-							console.error("Failed to load print service URL.", error);
-						}
+					require(["esri/request"], function (esriRequest) {
+						// get print templates from the export web map task
+						var printInfo = esriRequest({
+							"url": wsdot.config.printUrl,
+							"content": { "f": "json" }
+						});
+						printInfo.then(setupPrinter, function (error) {
+							if (console) {
+								if (console.error) {
+									console.error("Failed to load print service URL.", error);
+								}
+							}
+						});
 					});
 				}
 			}
@@ -622,8 +641,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 				layerInfos = getLayerInfos();
 
-
-				if (!isBasemap(layer.id) && typeof (this.isInstanceOf === "function") && this.isInstanceOf(esri.dijit.Legend)) {
+				if (!isBasemap(layer.id) && typeof (this.isInstanceOf === "function") && this.isInstanceOf(Legend)) {
 					this.refresh(layerInfos);
 				}
 			};
@@ -641,19 +659,17 @@ require(["require", "dojo/_base/array", "dojo/number",
 				}
 			};
 
-
-
 			function setupDefaultLegend() {
 				/// <summary>Creates the legend control</summary>
 				var legend, layerInfos;
 
 				layerInfos = getLayerInfos();
 
-				legend = dijit.byId("legend");
+				legend = registry.byId("legend");
 
 				// Create the legend dijit if it does not already exist.
 				if (!legend) {
-					legend = new esri.dijit.Legend({
+					legend = new Legend({
 						map: map,
 						layerInfos: layerInfos
 					}, "legend");
@@ -661,12 +677,12 @@ require(["require", "dojo/_base/array", "dojo/number",
 				}
 
 				// Set the legend to refresh when a new layer is added to the map.
-				dojo.connect(map, "onLayerAddResult", legend, refreshLegend);
+				on(map, "layerAddResult", legend, refreshLegend);
 			}
 
 			function setupLegend() {
 				if (typeof (wsdot.config.customLegend) === "object") {
-					var basemapGallery = dijit.byId("basemapGallery");
+					var basemapGallery = registry.byId("basemapGallery");
 					if (basemapGallery) {
 						wsdot.config.customLegend.basemapGallery = basemapGallery;
 					}
@@ -680,19 +696,19 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 			function setupLayout() {
 				var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion, zoomControlsDiv;
-				mainContainer = new dijit.layout.BorderContainer({ design: "headline", gutters: false }, "mainContainer");
-				mainContainer.addChild(new dijit.layout.ContentPane({ region: "top" }, "headerPane"));
-				mainContainer.addChild(new dijit.layout.ContentPane({ region: "center" }, "mapContentPane"));
+				mainContainer = new BorderContainer({ design: "headline", gutters: false }, "mainContainer");
+				mainContainer.addChild(new ContentPane({ region: "top" }, "headerPane"));
+				mainContainer.addChild(new ContentPane({ region: "center" }, "mapContentPane"));
 
-				mapControlsPane = new dojox.layout.ExpandoPane({
+				mapControlsPane = new ExpandoPane({
 					region: "leading",
 					splitter: true,
 					title: "Map Controls"
 				}, "mapControlsPane");
-				tabs = new dijit.layout.TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
+				tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
 				function setupAirspaceCalculator() {
-					require(["scripts/airspaceCalculator.js"], function () {
+					require(["esri/geometry/webMercatorUtils", "scripts/airspaceCalculator.js"], function (webMercatorUtils) {
 						$("#airspaceCalculator").airspaceCalculator({
 							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
 							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " +
@@ -703,13 +719,12 @@ require(["require", "dojo/_base/array", "dojo/number",
 							url: wsdot.config.airspaceCalculatorUrl,
 							progressAlternativeImageUrl: "images/loading-bar.gif",
 							executeComplete: function (event, data) {
-								// TODO: If there are intersections detected, provide instructions on what to do, links to FAA forms, etc.
-								var graphic = data.graphic, screenPoint, title = graphic.getTitle(), content = graphic.getContent();
-								screenPoint = esri.geometry.toScreenGeometry(map.extent, map.width, map.height, graphic.geometry);
+								var graphic = data.graphic, geographicPoint, title = graphic.getTitle(), content = graphic.getContent();
+								geographicPoint = webMercatorUtils.webMercatorToGeographic(graphic.geometry);
 								map.infoWindow.setContent(content);
 								map.infoWindow.setTitle(title);
+								map.infoWindow.show(geographicPoint);
 								map.centerAt(graphic.geometry);
-								map.infoWindow.show(screenPoint);
 
 							},
 							drawActivate: function () {
@@ -722,8 +737,6 @@ require(["require", "dojo/_base/array", "dojo/number",
 								alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
 							}
 						});
-						dojo.disconnect(createLinks.airspaceCalculator);
-						delete createLinks.airspaceCalculator;
 					});
 				}
 
@@ -763,45 +776,47 @@ require(["require", "dojo/_base/array", "dojo/number",
 				}
 
 				(function (tabOrder) {
-					var i, l, name;
+					var i, l, name, contentPane;
 
 					for (i = 0, l = tabOrder.length; i < l; i += 1) {
 						name = tabOrder[i];
 						if (/Layers/i.test(name)) {
-							tabs.addChild(new dijit.layout.ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
+							tabs.addChild(new ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
 						} else if (/Legend/i.test(name)) {
-							tabs.addChild(new dijit.layout.ContentPane({ title: "Legend", onShow: setupLegend }, "legendTab"));
+							tabs.addChild(new ContentPane({ title: "Legend", onShow: setupLegend }, "legendTab"));
 						} else if (/Basemap/i.test(name)) {
-							tabs.addChild(new dijit.layout.ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
+							tabs.addChild(new ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
 						} else if (/Tools/i.test(name)) {
-							toolsTab = new dijit.layout.ContentPane({ title: "Tools" }, "toolsTab");
+							toolsTab = new ContentPane({ title: "Tools" }, "toolsTab");
 							tabs.addChild(toolsTab);
 						} else if (/Airspace\s*Calculator/i.test(name)) {
 							// Add elements that will become the tab to the dom.
 							$("<div id='airspaceCalculatorTab'><section><h1>Airspace Calculator (Prototype)</h1><div id='airspaceCalculator'></div></section></div>").appendTo("#tabs");
-							tabs.addChild(new dijit.layout.ContentPane({
+							contentPane = new ContentPane({
 								title: "Airspc. Calc.",
 								tooltip: "Airspace Calculator (Prototype)",
-								id: "airspaceCalculatorTab",
-								onShow: setupAirspaceCalculator
-							}, "airspaceCalculatorTab"));
+								id: "airspaceCalculatorTab"
+							}, "airspaceCalculatorTab");
+							on.once(contentPane, "show", setupAirspaceCalculator);
+							tabs.addChild(contentPane);
 						} else if (/FAA\s*FAR\s*77/i.test(name)) {
 							$("<div id='faaFar77Tab'><div id='faaFar77'></div></div>").appendTo("#tabs");
-							tabs.addChild(new dijit.layout.ContentPane({
+							contentPane = new ContentPane({
 								title: "FAA FAR 77",
-								id: "faaFar77Tab",
-								onShow: setupFaaFar77
-							}, "faaFar77Tab"));
+								id: "faaFar77Tab"
+							}, "faaFar77Tab");
+							on.once(contentPane, "show", setupFaaFar77);
+							tabs.addChild(contentPane);
 						}
 					}
 				} (wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]));
 
-				toolsAccordion = new dijit.layout.AccordionContainer(null, "toolsAccordion");
+				toolsAccordion = new AccordionContainer(null, "toolsAccordion");
 
 				function setupLrsControls() {
 					// LRS Tools
-					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Milepost", id: "lrsTools" }, dojo.create("div", { id: "lrsTools" }, "toolsAccordion")));
-					createLinks.milepostTab = dojo.connect(dijit.byId("lrsTools"), "onShow", function () {
+					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, domConstruct.create("div", { id: "lrsTools" }, "toolsAccordion")));
+					createLinks.milepostTab = on(registry.byId("lrsTools"), "show", function () {
 						require(["scripts/lrsTools.js"], function () {
 							$("#lrsTools").lrsTools({
 								map: map,
@@ -815,17 +830,20 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 						});
 
-						dojo.disconnect(createLinks.milepostTab);
+						createLinks.milepostTab.remove();
 						delete createLinks.milepostTab;
 					});
 				}
 
 				function setupZoomControls() {
+					var button;
 					// Zoom tools
-					$("<div>").attr({ id: "zoomControlsPane" }).appendTo("#toolsAccordion");
+					var zoomControlsPaneDiv = document.createElement("div");
+					zoomControlsPaneDiv.id = "zoomControlsPane";
+					document.getElementById("toolsAccordion").appendChild(zoomControlsPaneDiv);
 
-					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
-					createLinks.zoomControls = dojo.connect(dijit.byId("zoomControlsPane"), "onShow", function () {
+					toolsAccordion.addChild(new ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
+					createLinks.zoomControls = on(registry.byId("zoomControlsPane"), "show", function () {
 						require(["scripts/zoomToXY.js", "scripts/extentSelect.js"], function () {
 							var extentTable;
 							zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
@@ -841,14 +859,14 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 							extentTable = $("<table>").appendTo(zoomControlsDiv);
 
-							require(["scripts/extentSelect.js"], function () {
+							require(["esri/tasks/QueryTask", "esri/tasks/query", "scripts/extentSelect.js"], function (QueryTask, Query) {
 								function createQueryTask(qtName) {
 									/// <summary>Creates a query task and query using settings from config.js.</summary>
 									/// <param name="qtName" type="String">The name of a query task from config.js.</param>
 									var queryTaskSetting, qt, query, n;
 									queryTaskSetting = wsdot.config.queryTasks[qtName];
-									qt = new esri.tasks.QueryTask(queryTaskSetting.url);
-									query = new esri.tasks.Query();
+									qt = new QueryTask(queryTaskSetting.url);
+									query = new Query();
 
 									for (n in queryTaskSetting.query) {
 										if (queryTaskSetting.query.hasOwnProperty(n)) {
@@ -863,7 +881,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 								function createZoomControls() {
 									/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
 
-									var table, body, data, row, cell;
+									var body, data;
 
 									function createZoomControl(qtName, data) {
 										var row, cell, selectName, labelName, queryTask;
@@ -881,7 +899,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 											});
 										} else if (data.extents) {
 											$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
-											dojo.attr(labelName, "for", selectName);
+											domAttr.set(labelName, "for", selectName);
 										}
 									}
 
@@ -902,7 +920,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 							});
 
 							if (navigator.geolocation) {
-								dijit.form.Button({
+								button = new Button({
 									onClick: function () {
 										navigator.geolocation.getCurrentPosition(function (position) {
 											var pt, attributes;
@@ -947,10 +965,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 									}
 								}, "zoomToMyCurrentLocation");
 							} else {
-								dojo.destroy("zoomToMyCurrentLocation");
+								domConstruct.destroy("zoomToMyCurrentLocation");
 							}
 
-							dojo.disconnect(createLinks.zoomControls);
+							createLinks.zoomControls.remove();
 							delete createLinks.zoomControls;
 						});
 					});
@@ -958,15 +976,14 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 				function setupSearchControls() {
 					// Address Search
-					toolsAccordion.addChild(new dijit.layout.ContentPane({ title: "Find an Address" }, dojo.create("div", { id: "searchTools" }, "toolsAccordion")));
-					createLinks.search = dojo.connect(dijit.byId("searchTools"), "onShow", function () {
-						$.getScript("scripts/addressLocator.js", function (data, textStatus) {
-							$("<div>").attr("id", "searchControl").appendTo("#searchTools").addressLocator({
-								map: map,
-								addressLocator: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer"
-							});
-							dojo.disconnect(createLinks.search);
-							delete createLinks.search;
+					toolsAccordion.addChild(new ContentPane({ title: "Find an Address" }, domConstruct.create("div", { id: "searchTools" }, "toolsAccordion")));
+					on.once(registry.byId("searchTools"), "show", function () {
+						require(["geocoder-setup"], function (setupGeocoder) {
+							var div = document.createElement("div");
+							div.id = "searchControl";
+							document.getElementById("searchTools").appendChild(div);
+
+							setupGeocoder(map, div);
 						});
 					});
 				}
@@ -991,23 +1008,20 @@ require(["require", "dojo/_base/array", "dojo/number",
 					}
 				} (wsdot.config.tools));
 
-
-
-				createLinks.basemapTab = dojo.connect(dijit.byId("basemapTab"), "onShow", function () {
-					require(["esri/dijit/BasemapGallery"], function () {
+				createLinks.basemapTab = on(registry.byId("basemapTab"), "show", function () {
+					require(["esri/dijit/BasemapGallery", "esri/dijit/BasemapLayer"], function (BasemapGallery, BasemapLayer) {
 						var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
 
 						for (i = 0, l = basemaps.length; i < l; i += 1) {
 							for (layeri in basemaps.layers) {
 								if (basemaps.layers.hasOwnProperty(layeri)) {
-									basemaps.layers[layeri] = new esri.dijit.BasemapLayer(basemaps.layers[layeri]);
+									basemaps.layers[layeri] = new BasemapLayer(basemaps.layers[layeri]);
 								}
 							}
 						}
 
-						basemapGallery = new esri.dijit.BasemapGallery({
+						basemapGallery = new BasemapGallery({
 							showArcGISBasemaps: true,
-							bingMapsKey: 'Ap354free_qMBNCGXm35cv8DSmG06nLNYm1skZwgrC4Xr1VCQ5UDojZ_BKDFkD5s',
 							map: map,
 							basemaps: basemaps
 						}, "basemapGallery");
@@ -1016,13 +1030,33 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 						// Remove the unwanted default basemaps as defined in config.js (if any are defined).
 						if (wsdot.config.basemapsToRemove) {
-							dojo.connect(basemapGallery, "onLoad", wsdot.config.basemapsToRemove, function () {
-								var i, removed;
-								for (i = 0; i < this.length; i += 1) {
-									removed = basemapGallery.remove(this[i]);
+							basemapGallery.on("load", function () {
+								/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
+								 * @returns {string[]}
+								 */
+								function getBasemapsByLabel() {
+									var outputIds = [], bItem, rItem;
+									if (wsdot.config.basemapsToRemove) {
+										for (var i = 0, l = wsdot.config.basemapsToRemove.length; i < l; i+=1) {
+											rItem = wsdot.config.basemapsToRemove[i];
+											for (var b = 0, bl = basemapGallery.basemaps.length; b < bl; b += 1) {
+												bItem = basemapGallery.basemaps[b];
+												if (bItem.title === rItem) {
+													outputIds.push(bItem.id);
+													break;
+												}
+											}
+										}
+									}
+									return outputIds;
+								}
+
+								var i, removed, toRemove = getBasemapsByLabel();
+								for (i = 0; i < toRemove.length; i += 1) {
+									removed = basemapGallery.remove(toRemove[i]);
 									if (console && console.warn) {
 										if (removed === null) {
-											console.warn("Basemap removal failed: basemap not found: " + this[i]);
+											console.warn("Basemap removal failed: basemap not found: " + toRemove[i]);
 										}
 									}
 								}
@@ -1037,16 +1071,17 @@ require(["require", "dojo/_base/array", "dojo/number",
 						});
 						*/
 
-
-
-						dojo.connect(basemapGallery, "onError", function (msg) {
+						on(basemapGallery, "error", function (msg) {
 							// Show error message
-							alert(msg);
+							if (console) {
+								if (console.error) {
+									console.error(msg);
+								}
+							}
 						});
 
-						dojo.disconnect(createLinks.basemapTab);
+						createLinks.basemapTab.remove();
 						delete createLinks.basemapTab;
-
 
 						// Check for an existing customLegend
 						customLegend = $("#legend").data("customLegend");
@@ -1055,7 +1090,6 @@ require(["require", "dojo/_base/array", "dojo/number",
 						}
 					});
 				});
-
 
 				mapControlsPane.addChild(tabs);
 				mainContainer.addChild(mapControlsPane);
@@ -1066,11 +1100,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 			function setScaleLabel(level) {
 				// Set the scale.
 				var scale = map.getScale(level);
-				if (scale == null) {
+				if (scale && scale !== 0) {
 					$("#scaleText").text("");
-				}
-				else {
-					$("#scaleText").text("1:" + dojo.number.format(scale, {
+				} else {
+					$("#scaleText").text("1:" + number.format(scale, {
 						round: 0,
 						places: 0
 					}));
@@ -1081,41 +1114,42 @@ require(["require", "dojo/_base/array", "dojo/number",
 			setupLayout();
 
 			function setupExtents() {
-				var extentSpatialReference = new esri.SpatialReference({ wkid: 102100 });
-				// Define zoom extents for menu.
-				extents = {
-					fullExtent: new esri.geometry.Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference })
-				};
+				require(["esri/SpatialReference"], function (SpatialReference) {
+					var extentSpatialReference = new SpatialReference({ wkid: 102100 });
+					// Define zoom extents for menu.
+					extents = {
+						fullExtent: new Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference })
+					};
+				});
 			}
 
 			setupExtents();
 
-			// Convert the extent definition in the options into an esri.geometry.Extent object.
+			// Convert the extent definition in the options into an Extent object.
 			if (wsdot.config.mapOptions.extent) {
-				wsdot.config.mapOptions.extent = new esri.geometry.fromJson(wsdot.config.mapOptions.extent);
+				wsdot.config.mapOptions.extent = new jsonUtils.fromJson(wsdot.config.mapOptions.extent);
 			}
 			// Create the popup to replace the default info window. TODO: Replace dojo.create with non-deprecated equivalent.
 			wsdot.config.mapOptions.infoWindow = new esri.dijit.Popup(null, dojo.create("div"));
 			map = new esri.Map("map", wsdot.config.mapOptions);
 			if (wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
-				initBasemap = new esri.layers.ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
+				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
 			}
 
-
+			(new HomeButton({ map: map }, "homeButton")).startup();
+			
 
 			map.addLayer(initBasemap);
 
-			dojo.connect(map, "onLoad", function () {
+			on(map, "load", function () {
 				// Set the scale.
-				 setScaleLabel();
-
-
+				setScaleLabel();
 
 				setupNorthArrow();
 				setupToolbar();
-				esri.dijit.Scalebar({ map: map, attachTo: "bottom-left" });
-
-
+				require(["esri/dijit/Scalebar"], function(Scalebar) {
+					Scalebar({ map: map, attachTo: "bottom-left" });
+				});
 
 				function resizeMap() {
 					//resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
@@ -1130,10 +1164,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 
 				// Setup Google Analytics tracking of the layers that are added to the map.
 				if (_gaq !== undefined) {
-					dojo.connect(map, "onLayerAddResult", gaTrackEvent);
+					on(map, "layerAddResult", gaTrackEvent);
 				}
 
-				dojo.connect(dijit.byId('mapContentPane'), 'resize', resizeMap);
+				on(registry.byId('mapContentPane'), 'resize', resizeMap);
 
 				function setExtentFromParams() {
 					// Zoom to the extent in the query string (if provided).
@@ -1143,7 +1177,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 					if (qsParams.extent) {
 						// Split the extent into its four coordinates.  Create the extent object and set the map's extent.
 						coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val); });
-						extent = new esri.geometry.Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
+						extent = new Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
 						map.setExtent(extent);
 					}
 				}
@@ -1187,40 +1221,26 @@ require(["require", "dojo/_base/array", "dojo/number",
 				});
 			});
 
-
-
 			// Setup update notifications.
-			dojo.connect(map, "onUpdateStart", map, function () {
+			on(map, "update-start", function () {
 				$("#loading-bar").show();
 			});
-			dojo.connect(map, "onUpdateEnd", map, function () {
+			on(map, "update-end", function () {
 				$("#loading-bar").hide();
 			});
 
-
-
-			dojo.connect(map, "onZoomEnd", function (extent, zoomFactor, anchor, level) {
+			on(map, "zoomEnd", function (extent, zoomFactor, anchor, level) {
 				setScaleLabel(level);
 			});
 
-
 			// Setup the navigation toolbar.
-			navToolbar = new esri.toolbars.Navigation(map);
-			dojo.connect(navToolbar, "onExtentHistoryChange", function () {
-				dijit.byId("previousExtentButton").disabled = navToolbar.isFirstExtent();
-				dijit.byId("nextExtentButton").disabled = navToolbar.isLastExtent();
+			navToolbar = new Navigation(map);
+			navToolbar.on("extent-history-change", function () {
+				registry.byId("previousExtentButton").attr("disabled", navToolbar.isFirstExtent());
+				registry.byId("nextExtentButton").attr("disabled", navToolbar.isLastExtent());
 			});
 
-			// Create the button dijits.
-			dijit.form.Button({
-				iconClass: "zoomfullextIcon",
-				showLabel: false,
-				onClick: function () {
-					map.setExtent(extents.fullExtent);
-				}
-			}, "fullExtentButton");
-
-			dijit.form.Button({
+			button = new Button({
 				iconClass: "zoomprevIcon",
 				showLabel: false,
 				onClick: function () {
@@ -1228,7 +1248,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 				}
 			}, "previousExtentButton");
 
-			dijit.form.Button({
+			button = new Button({
 				iconClass: "zoomnextIcon",
 				showLabel: false,
 				onClick: function () {
@@ -1238,7 +1258,7 @@ require(["require", "dojo/_base/array", "dojo/number",
 		}
 
 		//show map on load
-		dojo.addOnLoad(init);
+		ready(init);
 	}
 
 	function getConfigUrl() {
@@ -1256,7 +1276,6 @@ require(["require", "dojo/_base/array", "dojo/number",
 		return output;
 	}
 
-
 	// Get the configuratio
 	$.ajax(getConfigUrl(), {
 		dataType: "json",
@@ -1270,8 +1289,10 @@ require(["require", "dojo/_base/array", "dojo/number",
 			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
 			// Redirect to the aspx page which will prompt for a log in.
 			if (/parsererror/i.test(textStatus) && /^AIS\/config.js(?:on)?$/i.test(request.url)) {
-				if (typeof (console) !== "undefined" && typeof (console.debug) !== "undefined") {
-					console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
+				if (console) {
+					if (console.debug) {
+						console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
+					}
 				}
 				$("body").attr("class", null).empty().append("<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>");
 				// location.replace("AirportPowerUser.aspx");

@@ -245,14 +245,14 @@ This value can either be an object or an array.  If an object is provided, each 
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
 					"options": {
 						"id": "MPO"
 					}
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RTPO/MapServer", //"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+					"url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", //"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
 					"options": {
 						"id": "RTPO"
 					}
@@ -266,7 +266,7 @@ This value can either be an object or an array.  If an object is provided, each 
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
 					"options": {
 						"id": "Tribal Lands"
 					}

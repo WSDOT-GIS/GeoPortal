@@ -5,13 +5,11 @@
 	"disclaimer": "disclaimers/airport/Public.html",
 	"alwaysShowDisclaimer": true,
 	"printUrl":"http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Airport/ExportWebMap/GPServer/Export%20Web%20Map",
-	"airspaceCalculatorUrl":"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
 	"tabContainerOptions": {
 		"tabPosition": "left"
 	},
 	"tabOrder": [
 		"Layers",
-		"Airspace Calculator",
 		"Tools",
 		"Basemap",
 		"Legend"
@@ -42,7 +40,7 @@
 				{ "level": 11, "resolution": 0.597164283559817, "scale": 2256.994353 },
 				{ "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
 		],
-		"sliderStyle": "large"
+		"sliderStyle":"small"
 	},
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -112,12 +110,15 @@
 			"title": "Aeronautical Chart",
 			"thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
 			"layers" : [
-				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AeronauticalChart/MapServer"}
+				{ 
+					"url": "http://maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
+					"visibleLayers": [4]
+				}
 			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_5", "basemap_8"],
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
+	"basemapsToRemove": ["Terrain with Labels", "Topographic", "Oceans"],
+	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"tabbedLayerList": true,
 	"layers": {
 			"Airport": [
@@ -145,7 +146,7 @@
 					},
 					{
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-						"url": "http://faaservices-1551414968.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/201101_AirportsGIS_BH/Obstacles/MapServer",
+						"url": "http://maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
 						"options": {
 							"id": "FAA Obstacles"
 						}
@@ -189,15 +190,15 @@
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
 						"options": {
 							"id": "MPO"
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
 						"options": {
 							"id": "RTPO"
 						}
@@ -210,8 +211,8 @@
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
 						"options": {
 							"id": "Tribal Lands"
 						}

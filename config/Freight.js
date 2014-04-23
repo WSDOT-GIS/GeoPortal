@@ -30,7 +30,7 @@
 				{ "level": 11, "resolution": 0.597164283559817, "scale": 2256.994353 },
 				{ "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
 		],
-		"sliderStyle": "large"
+		"sliderStyle":"small"
 	},
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -87,8 +87,8 @@
 			]
 		}
 	],
-	"basemapsToRemove": ["basemap_4", "basemap_6"],
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/ElcRestSoe/MapServer/exts/ElcRestSoe",
+	"basemapsToRemove": ["Terrain with Labels", "Oceans"],
+	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"tabbedLayerList": true,
 	"layers": {
 		"Freight": {
@@ -116,7 +116,7 @@
 				},
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTTrafficSections/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/TrafficSections/MapServer",
 					"options" : {
 						"id": "AADT"
 					}
@@ -154,15 +154,15 @@
 					}
 				},
 				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MPO/MapServer",
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
 					"options": {
 						"id": "MPO"
 					}
 				},
 				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RTPO/MapServer",
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
 					"options": {
 						"id": "RTPO"
 					}
@@ -175,8 +175,8 @@
 					}
 				},
 				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalLands/MapServer",
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
 					"options": {
 						"id": "Tribal Lands"
 					}

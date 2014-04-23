@@ -1,5 +1,6 @@
 ﻿{
 	"pageTitle": "WSDOT Functional Classification Map",
+	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
 	"customLegend": {
 			"html": "FunctionalClassLegend.html",
 			"basemapSpecificSections": { 
@@ -8,6 +9,12 @@
 			"htmlType": "url"
 	},
 	"enableIdentify": true,
+	"tabOrder": [
+		"Legend",
+		"Layers",
+		"Tools",
+		"Basemap"
+	],
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -34,7 +41,7 @@
 				{ "level": 11, "resolution": 0.597164283559817, "scale": 2256.994353 },
 				{ "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
 		],
-		"sliderStyle": "large"
+		"sliderStyle":"small"
 	},
 	"mapInitialLayer": {
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -69,6 +76,16 @@
 	},
 	"basemaps": [
 		{
+			"id": "esriHybrid",
+			"title": "Hybrid",
+			"thumbnailUrl": "images/EsriHybridThumbnail.png",
+			"layers": [
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+			]
+		},
+		{
 			"id": "wsdotBasemap",
 			"title": "WSDOT Basemap",
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
@@ -86,13 +103,13 @@
 		}
 	],
 	"basemapsToRemove": [
-		"basemap_1",
-		"basemap_2",
-		"basemap_3",
-		"basemap_4",
-		"basemap_5",
-		"basemap_6",
-		"basemap_7"
+		"Imagery",
+		"Imagery with Labels",
+		"Topographic",
+		"Terrain with Labels",
+		"National Geographic",
+		"Oceans",
+		"OpenStreetMap"
 	],
 	"locateMileposts": {
 		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
@@ -107,7 +124,8 @@
 			"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
 			"options": {
-				"id": "Functional Class"
+				"id": "Functional Class",
+				"visible": true
 			}
 		}
 	]

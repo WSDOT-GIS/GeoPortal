@@ -6,8 +6,6 @@
 
 require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeList-manipulate", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(djArray, domConstruct, on, query) {
 	"use strict";
-
-
 		var detectHtmlPopups;
 
 		function htmlPopupTypeIsHtmlTextOrUrl(layerInfo) {
@@ -41,8 +39,7 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				for (i = 0, l = mapServiceLayer.layerInfos.length; i < l; i += 1) {
 					layerInfo = mapServiceLayer.layerInfos[i];
 					// Add to the output array the ID of any sublayer that has an html popup defined 
@@ -58,7 +55,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 					}
 				}
 			}
-
 
 			return ids;
 		}
@@ -113,8 +109,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 			});
 		});
 
-
-
 		dojo.extend(esri.Map, {
 			_ignoredLayerRE: null,
 			detectHtmlPopupsHasRun: false,
@@ -138,7 +132,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 
 					mapService = map.getLayer(id);
 
-
 					if (mapService.loaded) {
 						if (typeof (mapService.detectHtmlPopups) === "function") {
 							mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
@@ -150,7 +143,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 							}
 						});
 					}
-
 
 				});
 
@@ -226,8 +218,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 
 				});
 
-
-
 				//TODO: Handle FeatureLayers
 
 				return queryCount;
@@ -289,60 +279,62 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 						// Select all links that are set to open in another window via onclick event attribute.
 						// link = $("a[href*=Rfip]", container).first();
 						link = query("a[href*=Rfip]", container)[0];
-						// Get the image list URL.
-						imgListUrl = link.href; // link.attr("href");
-						// Remove the existing onclick attribute.
-						link.onclick = null; // link.attr("onclick", null);
+						if (link) {
+							// Get the image list URL.
+							imgListUrl = link.href; // link.attr("href");
+							// Remove the existing onclick attribute.
+							link.onclick = null; // link.attr("onclick", null);
 
-						// Create a new on click event.
-						link.onclick = function (event) {
-							var a, url, progressBar;
-							a = event.currentTarget;
-							url = a.href;
-							a.onclick = null;
-							progressBar = domConstruct.toDom("<progress>Loading related image data...</progress>");
-							domConstruct.place(progressBar, a, "replace");
+							// Create a new on click event.
+							link.onclick = function (event) {
+								var a, url, progressBar;
+								a = event.currentTarget;
+								url = a.href;
+								a.onclick = null;
+								progressBar = domConstruct.toDom("<progress>Loading related image data...</progress>");
+								domConstruct.place(progressBar, a, "replace");
 
 
-							esri.request({
-								url: url,
-								handleAs: "text",
-								load: function (data) {
-									var html, list, listItems, div, link;
-									html = domConstruct.toDom(data);
-									list = query("ul", html);
-									listItems = list.length >= 0 ? query("li", list[0]) : [];
+								esri.request({
+									url: url,
+									handleAs: "text",
+									load: function (data) {
+										var html, list, listItems, div, link;
+										html = domConstruct.toDom(data);
+										list = query("ul", html);
+										listItems = list.length >= 0 ? query("li", list[0]) : [];
 
-									if (listItems.length > 0) {
-										div = domConstruct.toDom("<div class='ui-identify-hyperlink-list'>");
-										list.appendTo(div);
-										domConstruct.place(div, progressBar, "replace");
-										link = query("li a", list);
-										if (link.length > 0) {
-											link = link[0];
-											link.onclick = function () {
-												window.open(this.href, "imgWin");
-												return false;
-											};
+										if (listItems.length > 0) {
+											div = domConstruct.toDom("<div class='ui-identify-hyperlink-list'>");
+											list.appendTo(div);
+											domConstruct.place(div, progressBar, "replace");
+											link = query("li a", list);
+											if (link.length > 0) {
+												link = link[0];
+												link.onclick = function () {
+													window.open(this.href, "imgWin");
+													return false;
+												};
+											}
+
+
+										} else {
+											domConstruct.place("<p>No related images found for this feature.</p>", progressBar, "replace");
 										}
-
-
-									} else {
-										domConstruct.place("<p>No related images found for this feature.</p>", progressBar, "replace");
+									},
+									error: function (error) {
+										domConstruct.place(domConstruct("<p>", {
+											innerHTML: "Error loading related image data." + String(error)
+										}), progressBar, "replace");
 									}
-								},
-								error: function (error) {
-									domConstruct.place(domConstruct("<p>", {
-										innerHTML: "Error loading related image data." + String(error)
-									}), progressBar, "replace");
-								}
-							}, {
-								useProxy: true,
-								usePost: false
-							});
+								}, {
+									useProxy: true,
+									usePost: false
+								});
 
-							return false;
-						};
+								return false;
+							};
+						}
 					}
 
 					function loadContent(feature) {
@@ -461,7 +453,5 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 				});
 			}
 		});
-
-
 
 });

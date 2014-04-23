@@ -16,26 +16,12 @@
     padding-left: 5px;
     padding-right: 5px;
 }
-#fcLegend 
-{
-    text-align: center;
-    
-}
-
-/* Left-align the fourth column. */
-#fcLegend td:first-child + td + td + td { text-align: left; padding-right: 5px; }
-#fcLegend td:first-child { padding-left: 5px; padding-right: 5px; }
 
 /* Change the background color of alternating rows */
 .alternate-row 
 {
     background-color: #eeeeee;
     color: #525252;
-}
-
-#fcLegend tr td:first-child
-{
-    background: #525252;
 }
 
 img[src="images/ajax-loader.gif"] 
