@@ -339,7 +339,7 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 
 					function loadContent(feature) {
 						var div, layer, result, url;
-						div = feature.content || null;
+						div = null; //feature.content || null;
 						// Load the HTML popup content if it has not already been loaded.
 						if (div === null) {
 							layer = feature.layer;
