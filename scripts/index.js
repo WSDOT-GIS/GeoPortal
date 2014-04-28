@@ -64,7 +64,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/tasks/gp",
 	"esri/layers/FeatureLayer",
 	"esri/IdentityManager",
-
+	"esri/dijit/Popup",
 	"extensions/esriApiExtensions",
 	"extensions/htmlPopupExtensions",
 	"extensions/metadataExtensions",
@@ -923,14 +923,17 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								button = new Button({
 									onClick: function () {
 										navigator.geolocation.getCurrentPosition(function (position) {
-											require(["esri/geometry/webMercatorUtils", "esri/lang"], function (webMercatorUtils, esriLang) {
-												var pt, attributes;
-												pt = new Point(position.coords.longitude, position.coords.latitude);
-												pt = webMercatorUtils.geographicToWebMercator(pt);
-												attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-												map.infoWindow.setTitle("You are here").setContent(esriLang.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
-												map.centerAndZoom(pt, 8);
-											});
+											var pt, attributes;
+											pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
+											pt = esri.geometry.geographicToWebMercator(pt);
+											attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+											if (map.infoWindow.setFeatures) {
+												map.infoWindow.setFeatures([new esri.Graphic(pt, null, attributes, new esri.InfoTemplate("You are here", "Lat: ${lat} <br />Long: ${long}"))]);
+												map.infoWindow.show(map.toScreen(pt));
+											} else {
+												map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
+											}
+											map.centerAndZoom(pt, 8);
 										}, function (error) {
 											var message = "", strErrorCode;
 											// Check for known errors
@@ -1126,7 +1129,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			if (wsdot.config.mapOptions.extent) {
 				wsdot.config.mapOptions.extent = new jsonUtils.fromJson(wsdot.config.mapOptions.extent);
 			}
-			map = new Map("map", wsdot.config.mapOptions);
+			// Create the popup to replace the default info window. TODO: Replace dojo.create with non-deprecated equivalent.
+			wsdot.config.mapOptions.infoWindow = new esri.dijit.Popup(null, dojo.create("div"));
+			map = new esri.Map("map", wsdot.config.mapOptions);
 			if (wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
 				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
 			}
