@@ -4,7 +4,15 @@
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/NodeList-manipulate", "esri/map", "esri/layers/agsdynamic", "esri/layers/agstiled", "esri/tasks/identify"], function(djArray, domConstruct, on, query) {
+require(["dojo/_base/array",
+	"dojo/dom-construct",
+	"dojo/on",
+	"dojo/NodeList-manipulate",
+	"esri/map",
+	"esri/layers/agsdynamic",
+	"esri/layers/agstiled",
+	"esri/tasks/identify"
+], function (djArray, domConstruct, on) {
 	"use strict";
 		var detectHtmlPopups;
 
@@ -270,71 +278,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 						return;
 					}
 
-					function setupRelatedImagesLink(container) {
-						/// <summary>Sets up RFIP "Related Images" link to show the list within the popup window.</summary>
-						var link, imgListUrl;
-						// <a href="http://webprod4.wsdot.loc/geospatial/imageservice/Rfip.svc/list/{965119BC-EC0F-448C-B5E5-5CCE0A198901}" onclick="window.open(this.href); return false;">Related Images</a>
-						// Style of container will be .id-result.
-						// $(".id-result a[onclick^='window.open(this.href)']")
-						// Select all links that are set to open in another window via onclick event attribute.
-						// link = $("a[href*=Rfip]", container).first();
-						link = query("a[href*=Rfip]", container)[0];
-						if (link) {
-							// Get the image list URL.
-							imgListUrl = link.href; // link.attr("href");
-							// Remove the existing onclick attribute.
-							link.onclick = null; // link.attr("onclick", null);
-
-							// Create a new on click event.
-							link.onclick = function (event) {
-								var a, url, progressBar;
-								a = event.currentTarget;
-								url = a.href;
-								a.onclick = null;
-								progressBar = domConstruct.toDom("<progress>Loading related image data...</progress>");
-								domConstruct.place(progressBar, a, "replace");
-
-								esri.request({
-									url: url,
-									handleAs: "text",
-									load: function (data) {
-										var html, list, listItems, div, link;
-										html = domConstruct.toDom(data);
-										list = query("ul", html);
-										listItems = list.length >= 0 ? query("li", list[0]) : [];
-
-										if (listItems.length > 0) {
-											div = domConstruct.toDom("<div class='ui-identify-hyperlink-list'>");
-											list.appendTo(div);
-											domConstruct.place(div, progressBar, "replace");
-											link = query("li a", list);
-											if (link.length > 0) {
-												link = link[0];
-												link.onclick = function () {
-													window.open(this.href, "imgWin");
-													return false;
-												};
-											}
-
-										} else {
-											domConstruct.place("<p>No related images found for this feature.</p>", progressBar, "replace");
-										}
-									},
-									error: function (error) {
-										domConstruct.place(domConstruct("<p>", {
-											innerHTML: "Error loading related image data." + String(error)
-										}), progressBar, "replace");
-									}
-								}, {
-									useProxy: true,
-									usePost: false
-								});
-
-								return false;
-							};
-						}
-					}
-
 					function loadContent(feature) {
 						var div, layer, result, url;
 						div = null; //feature.content || null;
@@ -375,7 +318,6 @@ require(["dojo/_base/array", "dojo/dom-construct", "dojo/on", "dojo/query", "doj
 											window.open(data.content);
 										});
 									}
-									setupRelatedImagesLink(div);
 								}, function (error) {
 									domConstruct("p", { innerHTML: error }, div);
 								});
