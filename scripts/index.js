@@ -231,7 +231,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 		}
 
 		function init() {
-			var refreshLegend, gaTrackEvent, initBasemap = null;
+			var gaTrackEvent, initBasemap = null;
 			config.defaults.io.proxyUrl = "proxy.ashx";
 			config.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
 
@@ -632,19 +632,18 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				return layerInfos;
 			}
 
-			refreshLegend = function (layer, error) {
-				/// <summary>Refreshes the legend using the layers currently in the map that are not basemap layers.</summary>
-				var layerInfos;
-				if (!layer || error) {
-					return;
-				}
-
+			/**
+			 * Refreshes the legend using the layers currently in the map that are not basemap layers.
+			 * @param {Object} layerInfo
+			 * @param {Layer} layerInfo.layer
+			 * @param {Map} layerInfo.target
+			 */
+			function refreshLegend(/*layerInfo*/) {
+				var layerInfos, legend;
+				legend = registry.byId("legend");
 				layerInfos = getLayerInfos();
-
-				if (!isBasemap(layer.id) && typeof (this.isInstanceOf === "function") && this.isInstanceOf(Legend)) {
-					this.refresh(layerInfos);
-				}
-			};
+				legend.refresh(layerInfos);
+			}
 
 			gaTrackEvent = function (layer, error) {
 				/// <summary>Adds a Google Analytics tracking event for the addition of a layer to the map.</summary>
@@ -677,7 +676,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				}
 
 				// Set the legend to refresh when a new layer is added to the map.
-				on(map, "layerAddResult", legend, refreshLegend);
+				map.on("layer-add-result", refreshLegend);
 			}
 
 			function setupLegend() {
