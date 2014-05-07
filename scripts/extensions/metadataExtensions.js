@@ -1,5 +1,5 @@
+/*globals require, dojo, esri */
 /*jslint white:true */
-/*globals dojo, esri */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
@@ -17,7 +17,7 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 
 	/**
 	* Examines a layer (or a layer URL) and returns the map service url and layer id parts as properties in the returned object.
-	* @param {String|esri.layers.Layer} layer Either a map service or map service layer URL, or an esri.layers.Layer object. 
+	* @param {(String|esri.layers.Layer)} layer Either a map service or map service layer URL, or an esri.layers.Layer object. 
 	* @returns {Object} An object with the properties mapServerUrl and layerId.  mapServerUrl is the url to the map server (without any layerIDs).  layerId is the layer ID portion of the URL.  If the URL did not contain a layerID, this property will have a value of null.
 	*/
 	function getMapServerUrl(layer) {
@@ -51,7 +51,7 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 
 	/**
 	* Given an esri.layers.Layer object or a layer URL, returns the URL for a query to the Layer Metadata SOE root page. 
-	* @param {String|esri.layers.Layer} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
+	* @param {(String|esri.layers.Layer)} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
 	* @returns {String} The URL to the SOE root. 
 	*/
 	function getMetadataSoeRootUrl(layer) {
@@ -64,7 +64,7 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 
 	/**
 	* Given an esri.layers.Layer object or a layer URL, returns the URL for a query to the Layer Metadata SOE for a list of valid layer IDs. 
-	* @param {String|esri.layers.Layer} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
+	* @param {(String|esri.layers.Layer)} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
 	* @returns {String} The URL to a query for a list of valid layers. 
 	*/
 	function getValidLayersUrl(layer) {
@@ -76,9 +76,10 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 
 	/**
 	* Returns the Layer Metadata SOE URL to retrieve the metadata for a map service feature layer.
-	* @param {String|esri.layers.Layer} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
+	* @param {(String|esri.layers.Layer)} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
 	* @param {Number} [sublayerId] If the URL provided via the layer parameter does not contain a layer ID, this parameter must be used to supply one.  If the URL already has a layer ID, this parameter will be ignored.
 	* @param {String} [format] The format parameter that will be appended as a query string.  If omitted, no query string will be appended to the URL.
+	* @returns {String}
 	*/
 	function getMetadataUrl(layer, sublayerId, format) {
 		var urlInfo = getMapServerUrl(layer), output;
@@ -101,7 +102,7 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 
 	/**
 	* Calls the SOE to get the list of layer IDs that correspond to feature layers. 
-	* @param {String|esri.layers.Layer} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
+	* @param {(String|esri.layers.Layer)} layer Either a map service or map service layer URL, or an esri.layers.Layer object.
 	* @param {Function} successHandler Event handler function that is called when the query is successful.  Parameter "data" is an array of integers.
 	* @param {Function} failHandler Event handler function that is called when the query fails.  Parameter "error" is an Error.
 	*/
@@ -117,8 +118,7 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 				load: function (data) {
 					if (typeof (data.error) !== "undefined" && typeof (failHandler) === "function") {
 						failHandler(data.error);
-					}
-					else if (typeof (successHandler) === "function") {
+					} else if (typeof (successHandler) === "function") {
 						successHandler(data);
 					}
 				},
@@ -150,8 +150,7 @@ require(["dojo/_base/lang", "dojo/io/script", "esri/layers/agsdynamic", "esri/la
 				load: function (data) {
 					if (typeof (data.error) !== "undefined" && typeof (failHandler) === "function") {
 						failHandler(data.error);
-					}
-					else if (typeof (successHandler) === "function") {
+					} else if (typeof (successHandler) === "function") {
 						successHandler(data);
 					}
 				},

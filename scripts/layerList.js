@@ -242,46 +242,41 @@ require([
 	//	return typeof (input.min) !== "undefined";
 	//}
 
-	function getMetadataUrl(id) {
-		return "Metadata.ashx?oid=" + String(id) + "&cssurl=style/fgdcPlus.css&jsurl=scripts/fgdcPlus.js";
-	}
-
-	function MetadataInfo(id, url) {
-		/// <summary>A class containing id and url of a metadata link.  Used with Metadata.ashx.</summary>
-		this.id = Number(id);
-		this.url = url;
-	}
-
-	function openMetadataUrls(event) {
-		var metadataInfos, i, l;
-		if (typeof (event) === "object" && typeof (event.data) === "object" && $.isArray(event.data.metadataInfos)) {
-			metadataInfos = event.data.metadataInfos;
-			for (i = 0, l = metadataInfos.length; i < l; i += 1) {
-				window.open(metadataInfos[i].url);
-			}
-		}
-		return false;
-	}
-
 	$.widget("ui.layerOptions", {
 		options: {
 			layer: null,
 			metadataIds: null
 		},
 		_addMetadataLink: function () {
-			var layer = this.options.layer, id, i, l, metadataInfos;
+			var layer = this.options.layer, id, i, l, metadataInfos, url, a, docfrag, ul, li;
 			/// <summary>Adds a metadata link if the layer has metadata ids specified.</summary>
 			if ($.isArray(layer.metadataLayers) && layer.metadataLayers.length > 0) {
 				metadataInfos = [];
+				ul = document.createElement("ul");
+				docfrag = document.createDocumentFragment();
+				docfrag.appendChild(ul);
 				// Loop through each of the metadata ids and create an array of metadata info objects.
 				for (i = 0, l = layer.metadataLayers.length; i < l; i += 1) {
 					id = layer.metadataLayers[i];
-					metadataInfos.push(new MetadataInfo(id, getMetadataUrl(layer, id, "html")));
+					try {
+						url = layer.getMetadataUrl(id, "html");
+					} catch (e) {
+						console.error("Error getting metadata URL", e);
+						url = null;
+					}
+					if (url) {
+						// Add a link that will open metadata urls in a new window.
+						li = document.createElement("li");
+						ul.appendChild(li);
+						a = document.createElement("a");
+						a.href = url;
+						a.textContent = "Metadata for sublayer " + id;
+						a.setAttribute("class", "ui-layer-options-metadata-link");
+						a.target = "_blank";
+						li.appendChild(a);
+					}
 				}
-				// Add a link that will open metadata urls in a new window.
-				$("<a href='#' class='ui-layer-options-metadata-link'>Metadata</a>").appendTo(this.element).click({
-					metadataInfos: metadataInfos
-				}, openMetadataUrls);
+				this.element[0].appendChild(ul);
 			}
 		},
 		_create: function () {
@@ -370,23 +365,28 @@ require([
 		this._hideLoading();
 		$element.removeClass("ui-layer-list-not-loaded");
 
-		/* Check to see if layer supports metadata by attempting to retrieve a list of feature layers from the Metadata SOE.  
-		Add a "metadataLayers" property and set the value appropriately. */
+		// Check to see if layer supports metadata by attempting to retrieve a list of feature layers from the Metadata SOE.  
+		// Add a "metadataLayers" property and set the value appropriately.
+		// Add a "metadataUrl property to each layerInfo.
 		if (typeof (layer.getIdsOfLayersWithMetadata) === "function") {
 			layer.getIdsOfLayersWithMetadata(function (layerIds) {
+				var id, i, l, layerInfo;
+
 				layer.metadataLayers = layerIds;
-				////if (layer.isInstanceOf(FeatureLayer)) { // Feature layers will only every have at most one associated metadata document.
-				////	layer.hasMetadata = true;
-				////} else {
-				////	layer.metadataLayers = layerIds;
-				////}
+
+				for (i = 0, l = layerIds.length; i < l; i += 1) {
+					id = layerIds[i];
+					layerInfo = layer.layerInfos[id];
+					layerInfo.metadataUrl = layer.getMetadataUrl(id);
+				}
 			}, function (/*error*/) {
 				layer.metadataLayers = null;
-				////if (layer.isInstanceOf(FeatureLayer)) { // Feature layers will only every have at most one associated metadata document.
-				////	layer.hasMetadata = false;
-				////} else {
-				////	layer.metadataLayers = null;
-				////}
+			});
+		} else if (typeof layer.supportsMetadata === "function") {
+			layer.supportsMetadata(function (metadataSupportInfo) {
+				console.log("supports metadata", metadataSupportInfo);
+			}, function (error) {
+				console.error(error);
 			});
 		}
 
@@ -414,7 +414,6 @@ require([
 			// Expand the child list.
 			label.click();
 		}
-
 
 		try {
 			this.setIsInScale();
@@ -891,7 +890,6 @@ require([
 				// Add an event to add layers to the TOC as they are added to the map.
 				dojo.connect(map, "onLayerAddResult", $this, this._addLayer);
 				dojo.connect(map, "onLayerRemove", $this, this._removeLayer);
-
 
 				// Add layers already in map to the TOC.
 				$this._addLayersAlreadyInMap();
