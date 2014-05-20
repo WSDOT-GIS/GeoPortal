@@ -1022,7 +1022,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						basemapGallery = new BasemapGallery({
 							showArcGISBasemaps: true,
 							map: map,
-							basemaps: basemaps
+							basemaps: basemaps,
+							basemapLayers: map.layerIds
 						}, "basemapGallery");
 
 						basemapGallery.startup();
@@ -1128,10 +1129,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			if (wsdot.config.mapOptions.extent) {
 				wsdot.config.mapOptions.extent = new jsonUtils.fromJson(wsdot.config.mapOptions.extent);
 			}
-			// Create the popup to replace the default info window. TODO: Replace dojo.create with non-deprecated equivalent.
-			wsdot.config.mapOptions.infoWindow = new esri.dijit.Popup(null, dojo.create("div"));
 			map = new esri.Map("map", wsdot.config.mapOptions);
-			if (wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
+			if (wsdot.config.mapInitialLayer && wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
 				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
 			}
 
