@@ -76,7 +76,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.js";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
 	wsdot = { config: {} };
 
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
@@ -1267,9 +1267,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 		// If the config parameter has not been specified, return the default.
 		if (qs.config) {
 			if (/\//g.test(qs.config)) {
-				output = [qs.config, ".js"].join("");
+				output = [qs.config, ".json"].join("");
 			} else {
-				output = ["config/", qs.config, ".js"].join("");
+				output = ["config/", qs.config, ".json"].join("");
 			}
 		}
 		return output;
