@@ -248,12 +248,14 @@ require([
 			metadataIds: null
 		},
 		_addMetadataLink: function () {
-			var layer = this.options.layer, id, i, l, metadataInfos, url, a, docfrag, ul, li;
+			var layer = this.options.layer, id, i, l, url, a, docfrag, ul, li, label, heading;
 			/// <summary>Adds a metadata link if the layer has metadata ids specified.</summary>
 			if ($.isArray(layer.metadataLayers) && layer.metadataLayers.length > 0) {
-				metadataInfos = [];
-				ul = document.createElement("ul");
 				docfrag = document.createDocumentFragment();
+				heading = document.createElement("h3");
+				heading.textContent = "Metadata";
+				docfrag.appendChild(heading);
+				ul = document.createElement("ul");
 				docfrag.appendChild(ul);
 				// Loop through each of the metadata ids and create an array of metadata info objects.
 				for (i = 0, l = layer.metadataLayers.length; i < l; i += 1) {
@@ -265,18 +267,21 @@ require([
 						url = null;
 					}
 					if (url) {
+						if (layer.layerInfos) {
+							label = layer.layerInfos[id].name;
+						}
 						// Add a link that will open metadata urls in a new window.
 						li = document.createElement("li");
 						ul.appendChild(li);
 						a = document.createElement("a");
 						a.href = url;
-						a.textContent = "Metadata for sublayer " + id;
+						a.textContent = label || "Metadata for sublayer " + id;
 						a.setAttribute("class", "ui-layer-options-metadata-link");
 						a.target = "_blank";
 						li.appendChild(a);
 					}
 				}
-				this.element[0].appendChild(ul);
+				this.element[0].appendChild(docfrag);
 			}
 		},
 		_create: function () {
