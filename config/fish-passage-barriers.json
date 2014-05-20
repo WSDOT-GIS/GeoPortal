@@ -110,13 +110,6 @@
 				}
 			},
 			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
-				"options": {
-					"id": "Congressional Districts"
-				}
-			},
-			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
 				"options": {
@@ -129,53 +122,9 @@
 				"options": {
 					"id": "Legislative Districts"
 				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
-				"options": {
-					"id": "MPO"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
-				"options": {
-					"id": "RTPO"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
-				"options": {
-					"id": "Township / Section"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
-				"options": {
-					"id": "Tribal Lands"
-				}
-			}
-		],
-		"Design": [
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
-				"options": {
-					"id": "Interchange Drawings"
-				}
 			}
 		],
 		"WSDOT Boundaries": [
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
-				"options": {
-					"id": "Maintenance Areas"
-				}
-			},
 			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
