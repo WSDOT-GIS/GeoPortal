@@ -32,7 +32,7 @@ require([
 	"use strict";
 
 	var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus, toggleSublayer;
-	_defaultContextMenuIcon = "<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
+	_defaultContextMenuIcon = "<span style='cursor:pointer'>&Rrightarrow;</span>"; //"<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
 	_defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
 
 	function makeIdSafeString(s, replacement, prefix, alwaysUsePrefix) {
