@@ -2,6 +2,9 @@
 	"pageTitle": "Fish Passage Barriers Map",
 	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
 	"enableIdentify": true,
+	"disclaimer": "disclaimers/fish-passage-barriers/Public.html",
+	"alwaysShowDisclaimer": true,
+	"printUrl":"http://www.wsdot.wa.gov/geoservices/ArcGIS/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 	"mapOptions": {
 		"basemap": "topo",
 		"logo": false,
