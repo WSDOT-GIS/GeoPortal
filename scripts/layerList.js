@@ -299,7 +299,7 @@ require([
 				// Add opacity slider
 
 				// Convert into a jQuery UI slider.  (HTML5 slider doesn't work in many browsers.)
-				// Firefox supports the range input type, but doesn't display it as a slider.
+				// Firefox and Chrome support it.
 				slider = $("<div>").appendTo(sliderContainer).slider({
 					value: layer.opacity,
 					min: 0,
