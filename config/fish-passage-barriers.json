@@ -91,7 +91,7 @@
 		"Fish Passage": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassage/MapServer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassage_20140529/MapServer",
 				"options": {
 					"id": "Fish Passage Barriers"
 				}

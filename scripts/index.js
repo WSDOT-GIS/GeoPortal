@@ -1,5 +1,5 @@
 ﻿/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
-/*global require, Modernizr, _gaq, $ */
+/*global require, _gaq, $ */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
@@ -9,7 +9,6 @@ ArcGIS JavaScript API
 jQuery
 jQuery UI
 jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
-jQuery placeholder (https://github.com/mathiasbynens/jquery-placeholder) Used as a polyfill for non-HTML5-compliant browsers.
 */
 
 /// <reference path="jsapi_vsdoc_v31.js" />
@@ -45,6 +44,17 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"dijit/layout/TabContainer",
 	"dijit/layout/AccordionContainer",
 	"dojox/layout/ExpandoPane",
+	"esri/dijit/Scalebar",
+	"esri/graphic",
+	"esri/geometry/webMercatorUtils",
+	"esri/InfoTemplate",
+	"esri/tasks/QueryTask",
+	"esri/tasks/query",
+	"esri/dijit/BasemapGallery",
+	"esri/dijit/BasemapLayer",
+	"esri/SpatialReference",
+	"esri/dijit/Measurement",
+	"esri/request",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -70,10 +80,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"extensions/metadataExtensions",
 	"extensions/extent",
 	"extensions/graphicsLayer",
-	"extensions/map"
+	"extensions/map",
+	"scripts/layerList.js"
 ], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
 	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
-	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane) {
+	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
+	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
+	Measurement, esriRequest
+) {
 	"use strict";
 
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
@@ -120,18 +134,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 	function doPostConfig() {
 		var button;
-
-		// Add support for JSON.
-		Modernizr.load([
-			{
-				test: window.JSON,
-				nope: "scripts/json2.js"
-			},
-			{
-				test: Modernizr.input.placeholder,
-				nope: "scripts/jquery.placeholder.min.js"
-			}
-		]);
 
 		// Show the disclaimer if one has been defined.
 		showDisclaimer(wsdot.config.alwaysShowDisclaimer);
@@ -399,7 +401,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 						// Create the measure dialog if it does not already exist.
 						if (!measureDialog || measureDialog.length < 1) {
-							require(["esri/dijit/Measurement"], function (Measurement) {
+							(function () {
 								var measurement;
 								// Create the dialog.
 								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
@@ -409,7 +411,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
 								// Create the widget.
 								measurement = new Measurement({ map: map }, dom.byId("measureWidget")).startup();
-							});
+							}());
 						} else {
 							// If the dialog already exists, toggle its visibility.
 							measureDialog = $("#measureWidgetContainer:visible");
@@ -592,19 +594,17 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				// If a print URL has been specified, add the print widget.
 				if (wsdot.config.printUrl) {
-					require(["esri/request"], function (esriRequest) {
-						// get print templates from the export web map task
-						var printInfo = esriRequest({
-							"url": wsdot.config.printUrl,
-							"content": { "f": "json" }
-						});
-						printInfo.then(setupPrinter, function (error) {
-							if (console) {
-								if (console.error) {
-									console.error("Failed to load print service URL.", error);
-								}
+					// get print templates from the export web map task
+					var printInfo = esriRequest({
+						"url": wsdot.config.printUrl,
+						"content": { "f": "json" }
+					});
+					printInfo.then(setupPrinter, function (error) {
+						if (console) {
+							if (console.error) {
+								console.error("Failed to load print service URL.", error);
 							}
-						});
+						}
 					});
 				}
 			}
@@ -707,7 +707,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
 				function setupAirspaceCalculator() {
-					require(["esri/geometry/webMercatorUtils", "scripts/airspaceCalculator.js"], function (webMercatorUtils) {
+					require(["scripts/airspaceCalculator.js"], function () {
 						$("#airspaceCalculator").airspaceCalculator({
 							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
 							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " +
@@ -858,7 +858,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 							extentTable = $("<table>").appendTo(zoomControlsDiv);
 
-							require(["esri/tasks/QueryTask", "esri/tasks/query", "scripts/extentSelect.js"], function (QueryTask, Query) {
+							require(["scripts/extentSelect.js"], function () {
 								function createQueryTask(qtName) {
 									/// <summary>Creates a query task and query using settings from config.js.</summary>
 									/// <param name="qtName" type="String">The name of a query task from config.js.</param>
@@ -923,14 +923,20 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 									onClick: function () {
 										navigator.geolocation.getCurrentPosition(function (position) {
 											var pt, attributes;
-											pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
-											pt = esri.geometry.geographicToWebMercator(pt);
+											pt = new Point(position.coords.longitude, position.coords.latitude);
+											pt = webMercatorUtils.geographicToWebMercator(pt);
 											attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
 											if (map.infoWindow.setFeatures) {
-												map.infoWindow.setFeatures([new esri.Graphic(pt, null, attributes, new esri.InfoTemplate("You are here", "Lat: ${lat} <br />Long: ${long}"))]);
+												map.infoWindow.setFeatures([
+													new Graphic(pt, null, attributes, new InfoTemplate(
+														"You are here", "Lat: ${lat} <br />Long: ${long}"
+													))
+												]);
 												map.infoWindow.show(map.toScreen(pt));
 											} else {
-												map.infoWindow.setTitle("You are here").setContent(esri.substitute(attributes, "Lat: ${lat} <br />Long: ${long}")).show(map.toScreen(pt));
+												map.infoWindow.setTitle("You are here").setContent(
+													["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
+												).show(map.toScreen(pt));
 											}
 											map.centerAndZoom(pt, 8);
 										}, function (error) {
@@ -1008,87 +1014,85 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				} (wsdot.config.tools));
 
 				createLinks.basemapTab = on(registry.byId("basemapTab"), "show", function () {
-					require(["esri/dijit/BasemapGallery", "esri/dijit/BasemapLayer"], function (BasemapGallery, BasemapLayer) {
-						var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
+					var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
 
-						for (i = 0, l = basemaps.length; i < l; i += 1) {
-							for (layeri in basemaps.layers) {
-								if (basemaps.layers.hasOwnProperty(layeri)) {
-									basemaps.layers[layeri] = new BasemapLayer(basemaps.layers[layeri]);
-								}
+					for (i = 0, l = basemaps.length; i < l; i += 1) {
+						for (layeri in basemaps.layers) {
+							if (basemaps.layers.hasOwnProperty(layeri)) {
+								basemaps.layers[layeri] = new BasemapLayer(basemaps.layers[layeri]);
 							}
 						}
+					}
 
-						basemapGallery = new BasemapGallery({
-							showArcGISBasemaps: true,
-							map: map,
-							basemaps: basemaps,
-							basemapLayers: map.layerIds
-						}, "basemapGallery");
+					basemapGallery = new BasemapGallery({
+						showArcGISBasemaps: true,
+						map: map,
+						basemaps: basemaps,
+						basemapLayers: map.layerIds
+					}, "basemapGallery");
 
-						basemapGallery.startup();
+					basemapGallery.startup();
 
-						// Remove the unwanted default basemaps as defined in config.js (if any are defined).
-						if (wsdot.config.basemapsToRemove) {
-							basemapGallery.on("load", function () {
-								/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-								 * @returns {string[]}
-								 */
-								function getBasemapsByLabel() {
-									var outputIds = [], bItem, rItem;
-									if (wsdot.config.basemapsToRemove) {
-										for (var i = 0, l = wsdot.config.basemapsToRemove.length; i < l; i+=1) {
-											rItem = wsdot.config.basemapsToRemove[i];
-											for (var b = 0, bl = basemapGallery.basemaps.length; b < bl; b += 1) {
-												bItem = basemapGallery.basemaps[b];
-												if (bItem.title === rItem) {
-													outputIds.push(bItem.id);
-													break;
-												}
+					// Remove the unwanted default basemaps as defined in config.js (if any are defined).
+					if (wsdot.config.basemapsToRemove) {
+						basemapGallery.on("load", function () {
+							/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
+								* @returns {string[]}
+								*/
+							function getBasemapsByLabel() {
+								var outputIds = [], bItem, rItem;
+								if (wsdot.config.basemapsToRemove) {
+									for (var i = 0, l = wsdot.config.basemapsToRemove.length; i < l; i+=1) {
+										rItem = wsdot.config.basemapsToRemove[i];
+										for (var b = 0, bl = basemapGallery.basemaps.length; b < bl; b += 1) {
+											bItem = basemapGallery.basemaps[b];
+											if (bItem.title === rItem) {
+												outputIds.push(bItem.id);
+												break;
 											}
 										}
 									}
-									return outputIds;
 								}
+								return outputIds;
+							}
 
-								var i, removed, toRemove = getBasemapsByLabel();
-								for (i = 0; i < toRemove.length; i += 1) {
-									removed = basemapGallery.remove(toRemove[i]);
-									if (console && console.warn) {
-										if (removed === null) {
-											console.warn("Basemap removal failed: basemap not found: " + toRemove[i]);
-										}
+							var i, removed, toRemove = getBasemapsByLabel();
+							for (i = 0; i < toRemove.length; i += 1) {
+								removed = basemapGallery.remove(toRemove[i]);
+								if (console && console.warn) {
+									if (removed === null) {
+										console.warn("Basemap removal failed: basemap not found: " + toRemove[i]);
 									}
-								}
-							});
-						}
-
-						/*
-						// Uncomment this section if you need to find a basemap's ID.
-						// Recomment before publishing.
-						dojo.connect(basemapGallery, "onSelectionChange", function () {
-						console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
-						});
-						*/
-
-						on(basemapGallery, "error", function (msg) {
-							// Show error message
-							if (console) {
-								if (console.error) {
-									console.error(msg);
 								}
 							}
 						});
+					}
 
-						createLinks.basemapTab.remove();
-						delete createLinks.basemapTab;
+					/*
+					// Uncomment this section if you need to find a basemap's ID.
+					// Recomment before publishing.
+					dojo.connect(basemapGallery, "onSelectionChange", function () {
+					console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+					});
+					*/
 
-						// Check for an existing customLegend
-						customLegend = $("#legend").data("customLegend");
-						if (customLegend) {
-							customLegend.setBasemapGallery(basemapGallery);
+					on(basemapGallery, "error", function (msg) {
+						// Show error message
+						if (console) {
+							if (console.error) {
+								console.error(msg);
+							}
 						}
 					});
+
+					createLinks.basemapTab.remove();
+					delete createLinks.basemapTab;
+
+					// Check for an existing customLegend
+					customLegend = $("#legend").data("customLegend");
+					if (customLegend) {
+						customLegend.setBasemapGallery(basemapGallery);
+					}
 				});
 
 				mapControlsPane.addChild(tabs);
@@ -1114,13 +1118,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			setupLayout();
 
 			function setupExtents() {
-				require(["esri/SpatialReference"], function (SpatialReference) {
-					var extentSpatialReference = new SpatialReference({ wkid: 102100 });
-					// Define zoom extents for menu.
-					extents = {
-						fullExtent: new Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference })
-					};
-				});
+				var extentSpatialReference = new SpatialReference({ wkid: 102100 });
+				// Define zoom extents for menu.
+				extents = {
+					fullExtent: new Extent({ "xmin": -14058520.2360666, "ymin": 5539437.0343901999, "ymax": 6499798.1008670302, "xmax": -12822768.6769759, "spatialReference": extentSpatialReference })
+				};
 			}
 
 			setupExtents();
@@ -1129,15 +1131,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			if (wsdot.config.mapOptions.extent) {
 				wsdot.config.mapOptions.extent = new jsonUtils.fromJson(wsdot.config.mapOptions.extent);
 			}
-			map = new esri.Map("map", wsdot.config.mapOptions);
+			map = new Map("map", wsdot.config.mapOptions);
 			if (wsdot.config.mapInitialLayer && wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
 				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
+				map.addLayer(initBasemap);
 			}
 
 			(new HomeButton({ map: map }, "homeButton")).startup();
-			
-
-			map.addLayer(initBasemap);
 
 			on(map, "load", function () {
 				// Set the scale.
@@ -1145,27 +1145,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				setupNorthArrow();
 				setupToolbar();
-				require(["esri/dijit/Scalebar"], function(Scalebar) {
-					Scalebar({ map: map, attachTo: "bottom-left" });
-				});
 
-				function resizeMap() {
-					//resize the map when the browser resizes - view the 'Resizing and repositioning the map' section in
-					//the following help topic for more details http://help.esri.com/EN/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/inside_guidelines.htm
-					var resizeTimer;
-					clearTimeout(resizeTimer);
-					resizeTimer = setTimeout(function () {
-						map.resize();
-						map.reposition();
-					}, 500);
-				}
+				Scalebar({ map: map, attachTo: "bottom-left" });
 
 				// Setup Google Analytics tracking of the layers that are added to the map.
 				if (_gaq !== undefined) {
 					on(map, "layerAddResult", gaTrackEvent);
 				}
-
-				on(registry.byId('mapContentPane'), 'resize', resizeMap);
 
 				function setExtentFromParams() {
 					// Zoom to the extent in the query string (if provided).
@@ -1190,29 +1176,29 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				setExtentFromParams();
 
-				require(["scripts/layerList.js"], function () {
+				
 
-					// Setup either a tabbed layer list or a normal one depending on the config setting.
-					if (wsdot.config.tabbedLayerList) {
-						$("#layerList").tabbedLayerList({
-							layers: wsdot.config.layers,
-							startLayers: getLayersFromParams(),
-							startCollapsed: false,
-							map: map
-						}).css({
-							"padding": [0, 0, 0, 0],
-							"margin": [0, 0, 0, 0]
-						});
-						// Setting the padding and margin to 0 is required for IE.
-					} else {
-						$("#layerList").layerList({
-							layers: wsdot.config.layers,
-							startLayers: getLayersFromParams(),
-							startCollapsed: false,
-							map: map
-						});
-					}
-				});
+				// Setup either a tabbed layer list or a normal one depending on the config setting.
+				if (wsdot.config.tabbedLayerList) {
+					$("#layerList").tabbedLayerList({
+						layers: wsdot.config.layers,
+						startLayers: getLayersFromParams(),
+						startCollapsed: false,
+						map: map
+					}).css({
+						"padding": [0, 0, 0, 0],
+						"margin": [0, 0, 0, 0]
+					});
+					// Setting the padding and margin to 0 is required for IE.
+				} else {
+					$("#layerList").layerList({
+						layers: wsdot.config.layers,
+						startLayers: getLayersFromParams(),
+						startCollapsed: false,
+						map: map
+					});
+				}
+				
 
 				map.setupIdentifyPopups({
 					ignoredLayerRE: /^layer\d+$/i
@@ -1274,7 +1260,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 		return output;
 	}
 
-	// Get the configuratio
+	// Get the configuration
 	$.ajax(getConfigUrl(), {
 		dataType: "json",
 		success: function (data /*, textStatus, jqXHR*/) {
