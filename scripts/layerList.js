@@ -1,4 +1,4 @@
-/*global require,$,dojo*/
+/*global require,$*/
 /*jslint browser:true, windows:true, nomen:true, white:true*/
 
 /// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4-vsdoc.js"/>

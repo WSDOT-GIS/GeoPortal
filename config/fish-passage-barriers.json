@@ -33,6 +33,10 @@
 			{ "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
 		]
 	},
+	"mapInitialLayer": {
+		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+	},
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county": {

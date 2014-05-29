@@ -135,9 +135,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	function doPostConfig() {
 		var button;
 
-		// Show the disclaimer if one has been defined.
-		showDisclaimer(wsdot.config.alwaysShowDisclaimer);
-
 		// Add a method to the Date object that will return a short date string.
 		if (Date.toShortDateString === undefined) {
 			Date.prototype.toShortDateString = function () {
@@ -1148,6 +1145,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			on(map, "load", function () {
 				// Set the scale.
 				setScaleLabel();
+
+				// Show the disclaimer if one has been defined.
+				showDisclaimer(wsdot.config.alwaysShowDisclaimer);
 
 				setupNorthArrow();
 				setupToolbar();

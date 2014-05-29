@@ -1,4 +1,5 @@
-﻿// Create the Geocoder widget.
+﻿/*global define, wsdot*/
+// Create the Geocoder widget.
 define([
 	"dojo/_base/Color",
 	"esri/layers/GraphicsLayer",
@@ -88,17 +89,16 @@ define([
 		geocoder.startup();
 		geocoder.focus();
 
-
 		/** @typedef {Object} GeocodeResult
-			* @property {string} name - The returned address string.
-			* @property {Extent} extent
-			* @property {Graphic} feature - Attributes include Addr_Type (e.g., "StreetAddress") and Score (e.g., 100).
-			*/
+		 * @property {string} name - The returned address string.
+		 * @property {Extent} extent
+		 * @property {Graphic} feature - Attributes include Addr_Type (e.g., "StreetAddress") and Score (e.g., 100).
+		 */
 
 		/** @typedef {Object} GeocodeResponse
-			* @property {GeocodeResult} result
-			* @property {Geocoder} target
-			*/
+		 * @property {GeocodeResult} result
+		 * @property {Geocoder} target
+		 */
 
 		/** Handles the response from a Geocode operation.
 			* @param {GeocodeResult} response
