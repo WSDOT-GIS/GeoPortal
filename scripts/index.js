@@ -245,7 +245,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 			function setupNorthArrow() {
 				// Create the north arrow.
-				domConstruct.create("img", { id: "northArrow", src: "images/NorthArrow.png", alt: "North Arrow" }, "map_root", "last");
+				var img = document.createElement("img");
+				img.id = "northArrow";
+				img.src = "images/NorthArrow.png";
+				img.alt = "North Arrow";
+				document.getElementById("map_root").appendChild(img);
 			}
 
 			function setupToolbar() {
@@ -410,7 +414,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
 								$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
 								// Create the widget.
-								measurement = new Measurement({ map: map }, dom.byId("measureWidget")).startup();
+								measurement = new Measurement({
+									map: map
+								}, document.getElementById("measureWidget")).startup();
 							}());
 						} else {
 							// If the dialog already exists, toggle its visibility.
