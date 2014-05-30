@@ -1016,88 +1016,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					}
 				} (wsdot.config.tools));
 
-				createLinks.basemapTab = on(registry.byId("basemapTab"), "show", function () {
-					var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
-
-					for (i = 0, l = basemaps.length; i < l; i += 1) {
-						for (layeri in basemaps.layers) {
-							if (basemaps.layers.hasOwnProperty(layeri)) {
-								basemaps.layers[layeri] = new BasemapLayer(basemaps.layers[layeri]);
-							}
-						}
-					}
-
-					basemapGallery = new BasemapGallery({
-						showArcGISBasemaps: true,
-						map: map,
-						basemaps: basemaps,
-						basemapLayers: map.layerIds
-					}, "basemapGallery");
-
-					basemapGallery.startup();
-
-					// Remove the unwanted default basemaps as defined in config.js (if any are defined).
-					if (wsdot.config.basemapsToRemove) {
-						basemapGallery.on("load", function () {
-							/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-								* @returns {string[]}
-								*/
-							function getBasemapsByLabel() {
-								var outputIds = [], bItem, rItem;
-								if (wsdot.config.basemapsToRemove) {
-									for (var i = 0, l = wsdot.config.basemapsToRemove.length; i < l; i+=1) {
-										rItem = wsdot.config.basemapsToRemove[i];
-										for (var b = 0, bl = basemapGallery.basemaps.length; b < bl; b += 1) {
-											bItem = basemapGallery.basemaps[b];
-											if (bItem.title === rItem) {
-												outputIds.push(bItem.id);
-												break;
-											}
-										}
-									}
-								}
-								return outputIds;
-							}
-
-							var i, removed, toRemove = getBasemapsByLabel();
-							for (i = 0; i < toRemove.length; i += 1) {
-								removed = basemapGallery.remove(toRemove[i]);
-								if (console && console.warn) {
-									if (removed === null) {
-										console.warn("Basemap removal failed: basemap not found: " + toRemove[i]);
-									}
-								}
-							}
-						});
-					}
-
-					/*
-					// Uncomment this section if you need to find a basemap's ID.
-					// Recomment before publishing.
-					dojo.connect(basemapGallery, "onSelectionChange", function () {
-					console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
-					});
-					*/
-
-					on(basemapGallery, "error", function (msg) {
-						// Show error message
-						if (console) {
-							if (console.error) {
-								console.error(msg);
-							}
-						}
-					});
-
-					createLinks.basemapTab.remove();
-					delete createLinks.basemapTab;
-
-					// Check for an existing customLegend
-					customLegend = $("#legend").data("customLegend");
-					if (customLegend) {
-						customLegend.setBasemapGallery(basemapGallery);
-					}
-				});
-
 				mapControlsPane.addChild(tabs);
 				mainContainer.addChild(mapControlsPane);
 
@@ -1135,6 +1053,105 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				wsdot.config.mapOptions.extent = new jsonUtils.fromJson(wsdot.config.mapOptions.extent);
 			}
 			map = new Map("map", wsdot.config.mapOptions);
+
+			// Setup the basemap gallery
+			(function () {
+				var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
+
+				for (i = 0, l = basemaps.length; i < l; i += 1) {
+					for (layeri in basemaps.layers) {
+						if (basemaps.layers.hasOwnProperty(layeri)) {
+							basemaps.layers[layeri] = new BasemapLayer(basemaps.layers[layeri]);
+						}
+					}
+				}
+
+				basemapGallery = new BasemapGallery({
+					showArcGISBasemaps: true,
+					map: map,
+					basemaps: basemaps,
+					basemapLayers: map.layerIds
+				}, "basemapGallery");
+
+				basemapGallery.startup();
+
+				// Remove the unwanted default basemaps as defined in config.js (if any are defined).
+				basemapGallery.on("load", function () {
+					/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
+	* @returns {string[]}
+	*/
+					function getBasemapsByLabel() {
+						var outputIds = [], bItem, rItem;
+						if (wsdot.config.basemapsToRemove) {
+							for (var i = 0, l = wsdot.config.basemapsToRemove.length; i < l; i += 1) {
+								rItem = wsdot.config.basemapsToRemove[i];
+								for (var b = 0, bl = basemapGallery.basemaps.length; b < bl; b += 1) {
+									bItem = basemapGallery.basemaps[b];
+									if (bItem.title === rItem) {
+										outputIds.push(bItem.id);
+										break;
+									}
+								}
+							}
+						}
+						return outputIds;
+					}
+
+					if (wsdot.config.basemapsToRemove) {
+						var i, removed, toRemove = getBasemapsByLabel();
+						for (i = 0; i < toRemove.length; i += 1) {
+							removed = basemapGallery.remove(toRemove[i]);
+							if (console && console.warn) {
+								if (removed === null) {
+									console.warn("Basemap removal failed: basemap not found: " + toRemove[i]);
+								}
+							}
+						}
+					}
+
+					// If an initial basemap was specified in the config file, 
+					// select that basemap now.
+					if (wsdot.config.initialBasemap) {
+						(function () {
+							var firstBasemap, currentBasemap;
+							for (var i = 0, l = basemapGallery.basemaps.length; i < l; i += 1) {
+								currentBasemap = basemapGallery.basemaps[i];
+								if (currentBasemap.title === wsdot.config.initialBasemap) {
+									firstBasemap = currentBasemap;
+									break;
+								}
+							}
+							if (firstBasemap) {
+								basemapGallery.select(firstBasemap.id);
+							}
+						}());
+					}
+				});
+
+				/*
+				// Uncomment this section if you need to find a basemap's ID.
+				// Recomment before publishing.
+				dojo.connect(basemapGallery, "onSelectionChange", function () {
+				console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
+				});
+				*/
+
+				on(basemapGallery, "error", function (msg) {
+					// Show error message
+					if (console) {
+						if (console.error) {
+							console.error(msg);
+						}
+					}
+				});
+
+				// Check for an existing customLegend
+				customLegend = $("#legend").data("customLegend");
+				if (customLegend) {
+					customLegend.setBasemapGallery(basemapGallery);
+				}
+			}());
+
 			if (wsdot.config.mapInitialLayer && wsdot.config.mapInitialLayer.layerType === "esri.layers.ArcGISTiledMapServiceLayer") {
 				initBasemap = new ArcGISTiledMapServiceLayer(wsdot.config.mapInitialLayer.url);
 				map.addLayer(initBasemap);
