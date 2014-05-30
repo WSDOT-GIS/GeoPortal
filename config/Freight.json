@@ -32,10 +32,7 @@
 		],
 		"sliderStyle":"small"
 	},
-	"mapInitialLayer": {
-		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-	},
+	"initialBasemap": "WSDOT Basemap",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county" : {

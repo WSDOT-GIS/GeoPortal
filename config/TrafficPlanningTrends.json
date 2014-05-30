@@ -30,10 +30,7 @@
 		],
 		"sliderStyle":"small"
 	},
-	"mapInitialLayer": {
-		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-	},
+	"initialBasemap":  "WSDOT Basemap",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county" : {
@@ -101,21 +98,21 @@
 		"Traffic Volume": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTCounts/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/TrafficCounts/MapServer",
 				"options": {
 					"id": "Traffic Counts"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTATR/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/ATR/MapServer",
 				"options": {
 					"id": "ATR Counts"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTTrafficSections/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/TrafficSections/MapServer",
 				"options": {
 					"id": "Traffic Sections"
 				}
