@@ -6,13 +6,14 @@
 	"alwaysShowDisclaimer": true,
 	"printUrl":"http://www.wsdot.wa.gov/geoservices/ArcGIS/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 	"mapOptions": {
+		"logo": true,
 		"extent": {
-			"xmin": -14058520.2360666,
-			"ymin": 5539437.0343901999,
-			"ymax": 6499798.1008670302,
-			"xmax": -12822768.6769759,
+			"xmin": -13938444.981854893,
+			"ymin": 5800958.950617068,
+			"ymax": 6257746.631649259,
+			"xmax": -12960051.019804686,
 			"spatialReference": {
-				"wkid": 3857
+				"wkid": 102100
 			}
 		},
 		"lods": [
@@ -40,6 +41,7 @@
 		"minZoom": 7,
 		"maxZoom": 19
 	},
+	"initialBasemap": "Topographic",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county": {
@@ -93,10 +95,24 @@
 			]
 		}
 	],
-	"initialBasemap": "Topographic",
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"layers": {
-
+		"Fish Passage": [
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassage_20140529/MapServer",
+				"options": {
+					"id": "Fish Passage Barriers"
+				}
+			},
+			{
+				"layerType":  "esri.layers.ArcGISTiledMapServiceLayer",
+				"url":  "//fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+				"options":  {
+					"id":  "NHD Hydrography"
+				}
+			}
+		],
 		"Political Boundaries": [
 			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
