@@ -39,16 +39,17 @@
 
 	/**
 	 * Creates thumbnails for the selected WDFW ID.
-	 * @param {Event} e
 	 */
-	function handleSelection(e) {
+	function handleSelection() {
 		var thumbContainer = document.getElementById("thumbnailContainer");
 		// Remove child nodes.
 		while (thumbContainer.hasChildNodes()) {
 			thumbContainer.removeChild(thumbContainer.lastChild);
 		}
 
-		var urls = e.target.value ? JSON.parse(e.target.value) : null;
+		var selectedOption = document.querySelector("option:checked");
+
+		var urls = selectedOption ? JSON.parse(selectedOption.value) : null;
 
 		var docFrag = document.createDocumentFragment();
 
@@ -59,9 +60,20 @@
 		}
 		thumbContainer.appendChild(docFrag);
 
-		var wdfwId = e.target.options.item(e.target.selectedIndex).getAttribute("data-wdfwid");
+		var wdfwId = selectedOption.getAttribute("data-wdfwid"); //e.target.options.item(e.target.selectedIndex).getAttribute("data-wdfwid");
 		var url = [location.pathname, "?id=", wdfwId].join("");
 		history.replaceState({ "id": wdfwId }, "Images for " + wdfwId, url);
+	}
+
+	function getWdfwIdFromQueryString() {
+		var wdfwid = null, re = /id=([^&]+)/i, match;
+		if (location.search) {
+			match = location.search.match(re);
+			if (match) {
+				wdfwid = decodeURIComponent(match[1]);
+			}
+		}
+		return wdfwid;
 	}
 
 	/**
@@ -108,8 +120,18 @@
 			}
 		}
 
+		// Create the select element and insert before the thumbnail container.
 		var select = createSelect(imageInfos);
 		document.body.insertBefore(select, document.getElementById("thumbnailContainer"));
+
+		// If an ID is specified in the query string, select that element.
+		var wdfwid = getWdfwIdFromQueryString();
+		console.log(wdfwid);
+		var matchingOption = select.querySelector("[data-wdfwid='" + wdfwid + "']");
+		if (matchingOption) {
+			select.selectedIndex = matchingOption.index;
+			handleSelection();
+		}
 	}
 
 	// Setup the request for the list of images.
