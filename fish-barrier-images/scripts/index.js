@@ -41,30 +41,39 @@
 	 * Creates thumbnails for the selected WDFW ID.
 	 */
 	function handleSelection() {
-		var thumbContainer = document.getElementById("thumbnailContainer");
+		var thumbContainer, selectedOption, urls, docFrag, wdfwId, url;
+		// Get the element that will contain the thumbnails.
+		thumbContainer = document.getElementById("thumbnailContainer");
 		// Remove child nodes.
 		while (thumbContainer.hasChildNodes()) {
 			thumbContainer.removeChild(thumbContainer.lastChild);
 		}
 
-		var selectedOption = document.querySelector("option:checked");
+		// Get the currently selected option.
+		selectedOption = document.querySelector("option:checked");
 
-		var urls = selectedOption ? JSON.parse(selectedOption.value) : null;
+		// Get the list of image URLs associated with the selected option.
+		urls = selectedOption ? JSON.parse(selectedOption.value) : null;
 
-		var docFrag = document.createDocumentFragment();
-
+		// Create thumbnails for each of the image URLs.
 		if (urls) {
+			docFrag = document.createDocumentFragment();
 			urls.forEach(function (url) {
 				docFrag.appendChild(createThumbnailDiv(url));
 			});
+			thumbContainer.appendChild(docFrag);
 		}
-		thumbContainer.appendChild(docFrag);
 
-		var wdfwId = selectedOption.getAttribute("data-wdfwid"); //e.target.options.item(e.target.selectedIndex).getAttribute("data-wdfwid");
-		var url = [location.pathname, "?id=", wdfwId].join("");
+		// Update the query string with the currently selected WDFW ID.
+		wdfwId = selectedOption.getAttribute("data-wdfwid");
+		url = [location.pathname, "?id=", wdfwId].join("");
 		history.replaceState({ "id": wdfwId }, "Images for " + wdfwId, url);
 	}
 
+	/**
+	 * Gets the WDFW ID specified in the query string.
+	 * @returns {(string|null)} Returns the ID specified in the query string, or null if there is no corresponding query string parameter.
+	 */
 	function getWdfwIdFromQueryString() {
 		var wdfwid = null, re = /id=([^&]+)/i, match;
 		if (location.search) {
@@ -76,8 +85,9 @@
 		return wdfwid;
 	}
 
-	/**
+	/** Creates a <select> containing options for each ImageInfo.
 	 * @param {Object.<string,ImageInfo[]>} imageInfos
+	 * @returns {HTMLSelectElement}
 	 */
 	function createSelect(imageInfos) {
 		var select = document.createElement("select"), option;
@@ -100,15 +110,17 @@
 	}
 
 	function handleImageListLoad() {
-		var links, link, imageInfo, i, l;
-		var progress = document.getElementById("progressBar");
+		var links, link, imageInfo, i, l, progress;
+		// Remove the progress bar.
+		progress = document.getElementById("progressBar");
 		progress.parentElement.removeChild(progress);
+		// Get all of the links in the image list page.
 		links = this.response.body.querySelectorAll("a[href]");
+		// Convert links into ImageInfo objects and group by WDFW ID.
 		imageInfos = {};
 		for (i = 0, l = links.length; i < l; i += 1) {
 			link = links[i];
 			if (wdfwIdRe.test(link)) {
-				//imageInfos.push(new ImageInfo(link));
 				imageInfo = new ImageInfo(link);
 
 				// Create the array for this WDFW ID if it doesn't exist.
@@ -126,7 +138,6 @@
 
 		// If an ID is specified in the query string, select that element.
 		var wdfwid = getWdfwIdFromQueryString();
-		console.log(wdfwid);
 		var matchingOption = select.querySelector("[data-wdfwid='" + wdfwid + "']");
 		if (matchingOption) {
 			select.selectedIndex = matchingOption.index;
