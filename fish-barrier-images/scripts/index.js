@@ -3,6 +3,9 @@
 	var wdfwIdRe = /^([^_]+)_(\d+)\.\w+$/;
 	var imageInfos;
 
+	/**
+	 * An object representing information about an image.
+	 */
 	function ImageInfo(anchor) {
 		var filename = anchor.textContent;
 		var match = filename.match(wdfwIdRe);
@@ -10,6 +13,10 @@
 		this.url = [imagesRootUrl, encodeURIComponent(filename)].join("");
 	}
 
+	/** Creates a thumbnail div for an image.
+	 * @param {string} url - URL of an image.
+	 * @returns {HTMLDivElement}
+	 */
 	function createThumbnailDiv(url) {
 		var div, a, img;
 
@@ -19,7 +26,7 @@
 		a = document.createElement("a");
 		a.href = url;
 		a.target = "_blank";
-		a.setAttribute("class", "thumbnail img-thumbnail");
+		a.setAttribute("class", "thumbnail img-responsive");
 		div.appendChild(a);
 
 		img = document.createElement("img");
@@ -30,6 +37,10 @@
 		return div;
 	}
 
+	/**
+	 * Creates thumbnails for the selected WDFW ID.
+	 * @param {Event} e
+	 */
 	function handleSelection(e) {
 		var thumbContainer = document.getElementById("thumbnailContainer");
 		// Remove child nodes.
@@ -47,6 +58,10 @@
 			});
 		}
 		thumbContainer.appendChild(docFrag);
+
+		var wdfwId = e.target.options.item(e.target.selectedIndex).getAttribute("data-wdfwid");
+		var url = [location.pathname, "?id=", wdfwId].join("");
+		history.replaceState({ "id": wdfwId }, "Images for " + wdfwId, url);
 	}
 
 	/**
@@ -63,6 +78,7 @@
 				option = document.createElement("option");
 				option.textContent = [i, " (", imageInfos[i].length, " images )"].join("");
 				option.value = JSON.stringify(imageInfos[i]);
+				option.setAttribute("data-wdfwid", i);
 				select.appendChild(option);
 			}
 		}
@@ -71,8 +87,7 @@
 		return select;
 	}
 
-	var req = new XMLHttpRequest();
-	req.onloadend = function () {
+	function handleImageListLoad() {
 		var links, link, imageInfo, i, l;
 		var progress = document.getElementById("progressBar");
 		progress.parentElement.removeChild(progress);
@@ -92,10 +107,14 @@
 				}
 			}
 		}
-		
+
 		var select = createSelect(imageInfos);
 		document.body.insertBefore(select, document.getElementById("thumbnailContainer"));
-	};
+	}
+
+	// Setup the request for the list of images.
+	var req = new XMLHttpRequest();
+	req.onloadend = handleImageListLoad;
 	req.open("get", imagesRootUrl, true);
 	req.responseType = "document";
 	req.send();
