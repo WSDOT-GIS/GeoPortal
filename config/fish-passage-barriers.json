@@ -111,7 +111,7 @@
 			},
 			{
 				"layerType":  "esri.layers.ArcGISTiledMapServiceLayer",
-				"url":  "//fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+				"url":  "http://fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
 				"options":  {
 					"id":  "Rivers and Lakes"
 				}
