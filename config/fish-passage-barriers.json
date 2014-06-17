@@ -41,6 +41,10 @@
 		"minZoom": 7,
 		"maxZoom": 19
 	},
+	"mapInitialLayer": {
+		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+	},
 	"initialBasemap": "Topographic",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {

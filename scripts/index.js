@@ -216,16 +216,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				qsParams.layers = layers.join(",");
 			}
 
-			// TODO: Add support for setting each layer's opacity in the query string.
-			////$(map.getVisibleLayers()).each(function (index, layer) {
-			////    if (index === 0) {
-			////        qsParams.layers = String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
-			////    }
-			////    else {
-			////        qsParams.layers += "," + String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
-			////    }
-			////});
-
 			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
 		}
 
@@ -233,12 +223,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			var gaTrackEvent, initBasemap = null;
 			config.defaults.io.proxyUrl = "proxy.ashx";
 			config.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
-
-			////// Opera doesn't display the zoom slider correctly.  This will make it look better.
-			////// For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
-			////if (dojo.isOpera) {
-			////	esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
-			////}
 
 			function setupNorthArrow() {
 				// Create the north arrow.
@@ -524,75 +508,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							}
 						}, printButton[0]);
 					});
-
-					////require(["esri/dijit/Print"], function () {
-					////	/// <summary>Setup the print widget</summary>
-					////	var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
-
-					////	layoutTemplate = array.filter(resp.parameters, function (param, idx) {
-					////		return param.name === "Layout_Template";
-					////	});
-
-					////	if (layoutTemplate.length === 0) {
-					////		console.log("print service parameters name for templates must be \"Layout_Template\"");
-					////		return;
-					////	}
-					////	templateNames = layoutTemplate[0].choiceList;
-
-					////	// remove the MAP_ONLY template then add it to the end of the list of templates
-					////	(function (mapOnlyIndex) {
-					////		var mapOnly;
-					////		if (mapOnlyIndex > -1) {
-					////			mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
-					////			templateNames.push(mapOnly);
-					////		}
-					////	} (dojo.indexOf(templateNames, "MAP_ONLY")));
-
-					////	// create a print template for each choice
-					////	templates = array.map(templateNames, function (ch) {
-					////		var plate = new esri.tasks.PrintTemplate();
-					////		plate.layout = plate.label = ch;
-					////		plate.format = "PDF";
-					////		plate.layoutOptions = {
-					////			"authorText": "Map by WSDOT",
-					////			"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
-					////			//"legendLayers": [],
-					////			"titleText": "Airport",
-					////			"scalebarUnit": "Miles"
-					////		};
-					////		plate.exportOptions = {
-					////			dpi: 300
-					////		};
-					////		return plate;
-					////	});
-
-					////	$("<div id='printButton'>").appendTo("#toolbar");
-					////	printer = esri.dijit.Print({
-					////		map: map,
-					////		templates: templates,
-					////		url: wsdot.config.printUrl
-					////	}, dom.byId("printButton"));
-
-					////	// Handle errors from the print service.
-					////	dojo.connect(printer, "onError", function (error) {
-					////		var message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
-					////		$("<div>").text(message).dialog({
-					////			title: "Print Error",
-					////			modal: true,
-					////			close: function () {
-					////				$(this).dialog("destroy").remove();
-					////			},
-					////			buttons: {
-					////				OK: function () {
-					////					$(this).dialog("close");
-					////				}
-					////			}
-					////		});
-					////	});
-
-					////	printer.startup();
-					////});
-
 				}
 
 				// If a print URL has been specified, add the print widget.
@@ -1159,7 +1074,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 			(new HomeButton({ map: map }, "homeButton")).startup();
 
-			on(map, "load", function () {
+			map.on("load", function () {
 				// Set the scale.
 				setScaleLabel();
 
