@@ -41,7 +41,7 @@
 		"minZoom": 7,
 		"maxZoom": 19
 	},
-	"initialBasemap": "Topographic",
+	"initialBasemap": "WSDOT Basemap",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county": {
