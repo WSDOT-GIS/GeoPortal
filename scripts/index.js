@@ -993,8 +993,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				// Remove the unwanted default basemaps as defined in config.js (if any are defined).
 				basemapGallery.on("load", function () {
 					/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-	* @returns {string[]}
-	*/
+					 * @returns {string[]}
+					 */
 					function getBasemapsByLabel() {
 						var outputIds = [], bItem, rItem;
 						if (wsdot.config.basemapsToRemove) {
@@ -1112,6 +1112,51 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					return layers;
 				}
 
+				/**
+				 * Converts an collection of layer definition objects 
+				 * (either an array or arrays grouped into properties of an object)
+				 * into an array of layer definitions.
+				 * 
+				 * If the input is an array, the output will simply be the input.
+				 * @param {(Object)|(Object[])} layers
+				 * @returns {Object[]}
+				 */
+				function getLayerArray(layers) {
+					var output = null, propName, value;
+					if (layers) {
+						if (layers instanceof Array) {
+							output = layers;
+						} else if (typeof layers === "object") {
+							output = [];
+							for (propName in layers) {
+								if (layers.hasOwnProperty(propName)) {
+									value = layers[propName];
+									value = getLayerArray(value);
+									if (value) {
+										output = output.concat(value);
+									}
+								}
+							}
+						}
+					}
+					return output;
+				}
+
+				function getVisibleLayerIdsFromConfig() {
+					var layers = wsdot.config.layers, output = null, i, l, layer;
+					if (layers) {
+						layers = getLayerArray(layers);
+						output = [];
+						for (i = 0, l = layers.length; i < l; i += 1) {
+							layer = layers[i];
+							if (layer.options && layer.options.visible && layer.options.id) {
+								output.push(layer.options.id);
+							}
+						}
+					}
+					return output;
+				}
+
 				setExtentFromParams();
 
 				
@@ -1120,7 +1165,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				if (wsdot.config.tabbedLayerList) {
 					$("#layerList").tabbedLayerList({
 						layers: wsdot.config.layers,
-						startLayers: getLayersFromParams(),
+						startLayers: getVisibleLayerIdsFromConfig().concat(getLayersFromParams()),
 						startCollapsed: false,
 						map: map
 					}).css({
@@ -1131,7 +1176,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				} else {
 					$("#layerList").layerList({
 						layers: wsdot.config.layers,
-						startLayers: getLayersFromParams(),
+						startLayers: getVisibleLayerIdsFromConfig().concat(getLayersFromParams()),
 						startCollapsed: false,
 						map: map
 					});
