@@ -262,22 +262,22 @@ require([
 				map.detectHtmlPopups();
 
 				// Set up an event handler that will update the HTML popup data when a new layer is added.
-				dojo.connect(map, "onLayerAddResult", function (layer, error) {
+				map.on("layer-add-result", function (event) {
 					// If there was an error loading the layer, there is nothing to do here.
-					if (error) {
+					if (event.error) {
 						return;
 					}
 
-					if (map._ignoredLayerRE.test(layer.id)) {
+					if (map._ignoredLayerRE.test(event.layer.id)) {
 						return;
 					}
 
-					if (layer && layer.isInstanceOf !== undefined && (layer.isInstanceOf(ArcGISDynamicMapServiceLayer) || layer.isInstanceOf(ArcGISTiledMapServiceLayer))) {
-						layer.detectHtmlPopups();
+					if (event.layer && event.layer.isInstanceOf !== undefined && (event.layer.isInstanceOf(ArcGISDynamicMapServiceLayer) || event.layer.isInstanceOf(ArcGISTiledMapServiceLayer))) {
+						event.layer.detectHtmlPopups();
 					}
 				});
 
-				dojo.connect(map, "onClick", function (event) {
+				map.on("click", function (event) {
 					var idTaskCount;
 
 					// If popups are disabled, exit instead of showing the popup.
