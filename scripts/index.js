@@ -216,16 +216,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				qsParams.layers = layers.join(",");
 			}
 
-			// TODO: Add support for setting each layer's opacity in the query string.
-			////$(map.getVisibleLayers()).each(function (index, layer) {
-			////    if (index === 0) {
-			////        qsParams.layers = String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
-			////    }
-			////    else {
-			////        qsParams.layers += "," + String(layer.id) + ":" + String(Math.round(layer.opacity * 100) / 100);
-			////    }
-			////});
-
 			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
 		}
 
@@ -233,12 +223,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			var gaTrackEvent, initBasemap = null;
 			config.defaults.io.proxyUrl = "proxy.ashx";
 			config.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
-
-			////// Opera doesn't display the zoom slider correctly.  This will make it look better.
-			////// For more info see http://forums.arcgis.com/threads/24687-Scale-Slider-on-Opera-11.0.1
-			////if (dojo.isOpera) {
-			////	esri.config.defaults.map.sliderLabel = { labels: ["state", "county", "city"], tick: 0 };
-			////}
 
 			function setupNorthArrow() {
 				// Create the north arrow.
@@ -524,75 +508,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							}
 						}, printButton[0]);
 					});
-
-					////require(["esri/dijit/Print"], function () {
-					////	/// <summary>Setup the print widget</summary>
-					////	var layoutTemplate, templateNames, mapOnlyIndex, templates, printer;
-
-					////	layoutTemplate = array.filter(resp.parameters, function (param, idx) {
-					////		return param.name === "Layout_Template";
-					////	});
-
-					////	if (layoutTemplate.length === 0) {
-					////		console.log("print service parameters name for templates must be \"Layout_Template\"");
-					////		return;
-					////	}
-					////	templateNames = layoutTemplate[0].choiceList;
-
-					////	// remove the MAP_ONLY template then add it to the end of the list of templates
-					////	(function (mapOnlyIndex) {
-					////		var mapOnly;
-					////		if (mapOnlyIndex > -1) {
-					////			mapOnly = templateNames.splice(mapOnlyIndex, mapOnlyIndex + 1)[0];
-					////			templateNames.push(mapOnly);
-					////		}
-					////	} (dojo.indexOf(templateNames, "MAP_ONLY")));
-
-					////	// create a print template for each choice
-					////	templates = array.map(templateNames, function (ch) {
-					////		var plate = new esri.tasks.PrintTemplate();
-					////		plate.layout = plate.label = ch;
-					////		plate.format = "PDF";
-					////		plate.layoutOptions = {
-					////			"authorText": "Map by WSDOT",
-					////			"copyrightText": ["©", new Date().getFullYear(), " WSDOT"].join(""),
-					////			//"legendLayers": [],
-					////			"titleText": "Airport",
-					////			"scalebarUnit": "Miles"
-					////		};
-					////		plate.exportOptions = {
-					////			dpi: 300
-					////		};
-					////		return plate;
-					////	});
-
-					////	$("<div id='printButton'>").appendTo("#toolbar");
-					////	printer = esri.dijit.Print({
-					////		map: map,
-					////		templates: templates,
-					////		url: wsdot.config.printUrl
-					////	}, dom.byId("printButton"));
-
-					////	// Handle errors from the print service.
-					////	dojo.connect(printer, "onError", function (error) {
-					////		var message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error"
-					////		$("<div>").text(message).dialog({
-					////			title: "Print Error",
-					////			modal: true,
-					////			close: function () {
-					////				$(this).dialog("destroy").remove();
-					////			},
-					////			buttons: {
-					////				OK: function () {
-					////					$(this).dialog("close");
-					////				}
-					////			}
-					////		});
-					////	});
-
-					////	printer.startup();
-					////});
-
 				}
 
 				// If a print URL has been specified, add the print widget.
@@ -1078,8 +993,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				// Remove the unwanted default basemaps as defined in config.js (if any are defined).
 				basemapGallery.on("load", function () {
 					/** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-	* @returns {string[]}
-	*/
+					 * @returns {string[]}
+					 */
 					function getBasemapsByLabel() {
 						var outputIds = [], bItem, rItem;
 						if (wsdot.config.basemapsToRemove) {
@@ -1159,7 +1074,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 			(new HomeButton({ map: map }, "homeButton")).startup();
 
-			on(map, "load", function () {
+			map.on("load", function () {
 				// Set the scale.
 				setScaleLabel();
 
@@ -1197,6 +1112,54 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					return layers;
 				}
 
+				/**
+				 * Converts an collection of layer definition objects 
+				 * (either an array or arrays grouped into properties of an object)
+				 * into an array of layer definitions.
+				 * 
+				 * If the input is an array, the output will simply be the input.
+				 * @param {(Object)|(Object[])} layers
+				 * @returns {Object[]}
+				 */
+				function getLayerArray(layers) {
+					var output = null, propName, value;
+					if (layers) {
+						if (layers instanceof Array) {
+							output = layers;
+						} else if (typeof layers === "object") {
+							output = [];
+							for (propName in layers) {
+								if (layers.hasOwnProperty(propName)) {
+									value = layers[propName];
+									value = getLayerArray(value);
+									if (value) {
+										output = output.concat(value);
+									}
+								}
+							}
+						}
+					}
+					return output;
+				}
+
+				/**
+				 * Gets all of the layer IDs of layers that are specified with the `visible` option set to true.
+				 * @returns {Object[]}
+				 */
+				function getVisibleLayerIdsFromConfig() {
+					var layers = wsdot.config.layers, output = [], i, l, layer;
+					if (layers) {
+						layers = getLayerArray(layers);
+						for (i = 0, l = layers.length; i < l; i += 1) {
+							layer = layers[i];
+							if (layer.options && layer.options.visible && layer.options.id) {
+								output.push(layer.options.id);
+							}
+						}
+					}
+					return output;
+				}
+
 				setExtentFromParams();
 
 				
@@ -1205,7 +1168,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				if (wsdot.config.tabbedLayerList) {
 					$("#layerList").tabbedLayerList({
 						layers: wsdot.config.layers,
-						startLayers: getLayersFromParams(),
+						startLayers: getVisibleLayerIdsFromConfig().concat(getLayersFromParams()),
 						startCollapsed: false,
 						map: map
 					}).css({
@@ -1216,7 +1179,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				} else {
 					$("#layerList").layerList({
 						layers: wsdot.config.layers,
-						startLayers: getLayersFromParams(),
+						startLayers: getVisibleLayerIdsFromConfig().concat(getLayersFromParams()),
 						startCollapsed: false,
 						map: map
 					});
@@ -1236,8 +1199,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				$("#loading-bar").hide();
 			});
 
-			on(map, "zoomEnd", function (extent, zoomFactor, anchor, level) {
-				setScaleLabel(level);
+			/**
+			 * @param {esri.geometry.ScreenPoint} zoomArgs.anchor
+			 * @param {esri.geometry.Extent} zoomArgs.extent
+			 * @param {number} zoomArgs.level
+			 * @param {esri.Map} zoomArgs.target
+			 * @param {number} zoomArgs.zoomFactor
+			 */
+			on(map, "zoom-end", function (zoomArgs) {
+				setScaleLabel(zoomArgs.level);
 			});
 
 			// Setup the navigation toolbar.

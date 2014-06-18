@@ -41,6 +41,10 @@
 		"minZoom": 7,
 		"maxZoom": 19
 	},
+	"mapInitialLayer": {
+		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+	},
 	"initialBasemap": "Topographic",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
@@ -102,14 +106,16 @@
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassage_20140529/MapServer",
 				"options": {
-					"id": "Fish Passage Barriers"
+					"id": "Fish Passage Barriers",
+					"visible": true
 				}
 			},
 			{
 				"layerType":  "esri.layers.ArcGISTiledMapServiceLayer",
-				"url":  "//fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+				"url":  "http://fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
 				"options":  {
-					"id":  "Rivers and Lakes"
+					"id":  "Rivers and Lakes",
+					"visible": true
 				}
 			}
 		],

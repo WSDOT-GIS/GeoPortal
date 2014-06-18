@@ -73,7 +73,13 @@ define([
 
 	function setupGeocoder(map, node) {
 		graphicsLayer = createGraphicsLayer();
-		map.addLayer(graphicsLayer);
+		if (map.loaded) {
+			map.addLayer(graphicsLayer);
+		} else {
+			map.on("load", function () {
+				map.addLayer(graphicsLayer);
+			});
+		}
 
 		
 		geocoder = new Geocoder({
