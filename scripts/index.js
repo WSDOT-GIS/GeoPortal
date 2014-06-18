@@ -1142,11 +1142,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					return output;
 				}
 
+				/**
+				 * Gets all of the layer IDs of layers that are specified with the `visible` option set to true.
+				 * @returns {Object[]}
+				 */
 				function getVisibleLayerIdsFromConfig() {
-					var layers = wsdot.config.layers, output = null, i, l, layer;
+					var layers = wsdot.config.layers, output = [], i, l, layer;
 					if (layers) {
 						layers = getLayerArray(layers);
-						output = [];
 						for (i = 0, l = layers.length; i < l; i += 1) {
 							layer = layers[i];
 							if (layer.options && layer.options.visible && layer.options.id) {
