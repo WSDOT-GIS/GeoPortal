@@ -127,7 +127,7 @@
 			isBusy: false,
 
 			/** Changes the UI from normal to "busy" mode.  When "busy", no user input is allowed and the progress bar is displayed.
-			* @param Boolean inProgress Set to true to allow user input, false to disallow and display progress bar.
+			* @param {Boolean} inProgress Set to true to allow user input, false to disallow and display progress bar.
 			*/
 			_setInProgress: function (inProgress) {
 				if (inProgress) {
@@ -348,7 +348,6 @@
 							// Setup the geoprocessor object and its event handlers.
 							(function () {
 								var onExecuteComplete, onError;
-
 
 								/** Triggers the executeComplete event. */
 								onExecuteComplete = function (results, messages) {

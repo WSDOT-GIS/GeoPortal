@@ -1151,8 +1151,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				$("#loading-bar").hide();
 			});
 
-			on(map, "zoomEnd", function (extent, zoomFactor, anchor, level) {
-				setScaleLabel(level);
+			/**
+			 * @param {esri.geometry.ScreenPoint} zoomArgs.anchor
+			 * @param {esri.geometry.Extent} zoomArgs.extent
+			 * @param {number} zoomArgs.level
+			 * @param {esri.Map} zoomArgs.target
+			 * @param {number} zoomArgs.zoomFactor
+			 */
+			on(map, "zoom-end", function (zoomArgs) {
+				setScaleLabel(zoomArgs.level);
 			});
 
 			// Setup the navigation toolbar.

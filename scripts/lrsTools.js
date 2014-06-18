@@ -1,4 +1,4 @@
-﻿/*global jQuery, require */
+﻿/*global jQuery, require, wsdot */
 /*jslint nomen: true, white: true */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -21,13 +21,33 @@ jQuery UI
 (function ($) {
 	"use strict";
 
-	require(["dojo/dom", "dojo/_base/Color", "dojo/number", "dijit/registry", "dijit/form/ValidationTextBox", "dijit/form/NumberSpinner", "dijit/form/DateTextBox", "dijit/form/RadioButton",
-	"dijit/form/CheckBox", "dijit/form/Button",
-	"dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/layout/ContentPane"], function (dom, Color, number, registry, ValidationTextBox, NumberSpinner,
-	DateTextBox, RadioButton, CheckBox, Button, BorderContainer, TabContainer, ContentPane) {
+	require([
+		"esri/domUtils",
+		"esri/graphic",
+		"esri/InfoTemplate",
+		"esri/geometry/Point",
+		"esri/layers/GraphicsLayer",
+		"esri/symbols/SimpleMarkerSymbol",
+		"esri/renderers/SimpleRenderer",
+		"esri/toolbars/draw",
+		"dojo/dom",
+		"dojo/_base/Color",
+		"dojo/number",
+		"dijit/registry",
+		"dijit/form/ValidationTextBox",
+		"dijit/form/NumberSpinner",
+		"dijit/form/DateTextBox",
+		"dijit/form/RadioButton",
+		"dijit/form/CheckBox",
+		"dijit/form/Button",
+		"dijit/layout/BorderContainer",
+		"dijit/layout/TabContainer",
+		"dijit/layout/ContentPane"
+	], function (domUtils, Graphic, InfoTemplate, Point, GraphicsLayer, SimpleMarkerSymbol, SimpleRenderer, Draw,
+		dom, Color, number, registry, ValidationTextBox, NumberSpinner,
+		DateTextBox, RadioButton, CheckBox, Button, BorderContainer, TabContainer, ContentPane) {
 
 		var routeLocator;
-
 
 		function showMessageDialog(text, title) {
 			/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
@@ -43,8 +63,7 @@ jQuery UI
 					pnotify_text: text,
 					pnotify_hide: true
 				}).effect("bounce");
-			}
-			else {
+			} else {
 				output = $("<div>").html(text).dialog({
 					title: title,
 					modal: true,
@@ -61,7 +80,6 @@ jQuery UI
 			return output;
 		}
 
-
 		function showErrorMessage(text, title) {
 			/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
 			/// <param name="text" type="String">The text of the error message.</param>
@@ -75,8 +93,7 @@ jQuery UI
 					pnotify_text: text,
 					pnotify_hide: true
 				}).effect("bounce");
-			}
-			else {
+			} else {
 				$("<div>").html(text).dialog({
 					title: title,
 					dialogClass: "alert",
@@ -104,7 +121,7 @@ jQuery UI
 				////	$.getScript("scripts/jquery.pnotify.min.js");
 				////}
 
-				function formatTemplate(jqXHR, textStatus) {
+				function formatTemplate(jqXHR /*, textStatus*/) {
 					$(domNode).append(jqXHR.responseText);
 					// Convert the HTML controls into dijits.
 					ValidationTextBox({ style: "width: 100px", required: true, regExp: "\\d{3}(\\w{2}\\w{6})?", invalidMessage: "Invalid state route ID",
@@ -117,14 +134,13 @@ jQuery UI
 					}, "routeTextBox");
 					NumberSpinner({ constraints: { min: 0 }, value: 0, style: "width: 100px" }, "milepostBox");
 					DateTextBox({ value: new Date() }, "referenceDateBox");
-					RadioButton({ onClick: function () { esri.hide(dom.byId("backContainer")); }, checked: true }, "armRadioButton");
-					RadioButton({ onClick: function () { esri.show(dom.byId("backContainer")); } }, "srmpRadioButton");
+					RadioButton({ onClick: function () { domUtils.hide(dom.byId("backContainer")); }, checked: true }, "armRadioButton");
+					RadioButton({ onClick: function () { domUtils.show(dom.byId("backContainer")); } }, "srmpRadioButton");
 					$("#findMilepost label:first-child").css("display", "block");
 
 					CheckBox(null, "decreaseCheckbox");
 
 					CheckBox(null, "backCheckBox");
-
 
 					var tabContainer = new TabContainer({ style: "width: 100%; height: 100%" }, "milepostTabs");
 					tabContainer.addChild(new ContentPane({ title: "Find Milepost" }, "findMilepost"));
@@ -139,7 +155,7 @@ jQuery UI
 						borderContainer.startup();
 						borderContainer.resize();
 					} ());
-					esri.hide(dom.byId("backContainer"));
+					domUtils.hide(dom.byId("backContainer"));
 
 					function createElcResultTable(graphic) {
 						/// <summary>Used by the GraphicsLayer's InfoTemplate to generate content for the InfoWindow.</summary>
@@ -193,11 +209,11 @@ jQuery UI
 						/// </summary>
 						var symbol, renderer;
 						if (!locatedMilepostsLayer) {
-							locatedMilepostsLayer = new esri.layers.GraphicsLayer({ id: "Located Mileposts" });
-							symbol = new esri.symbol.SimpleMarkerSymbol().setColor(new Color([48, 186, 0])).setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE);
-							renderer = new esri.renderer.SimpleRenderer(symbol);
+							locatedMilepostsLayer = new GraphicsLayer({ id: "Located Mileposts" });
+							symbol = new SimpleMarkerSymbol().setColor(new Color([48, 186, 0])).setStyle(SimpleMarkerSymbol.STYLE_SQUARE);
+							renderer = new SimpleRenderer(symbol);
 							locatedMilepostsLayer.setRenderer(renderer);
-							locatedMilepostsLayer.setInfoTemplate(new esri.InfoTemplate("Route Location", createElcResultTable));
+							locatedMilepostsLayer.setInfoTemplate(new InfoTemplate("Route Location", createElcResultTable));
 							map.addLayer(locatedMilepostsLayer);
 						}
 						// 
@@ -222,13 +238,12 @@ jQuery UI
 						};
 						if (registry.byId("armRadioButton").checked) {
 							location.Arm = registry.byId("milepostBox").value;
-						}
-						else {
+						} else {
 							location.Srmp = registry.byId("milepostBox").value;
 							location.Back = registry.byId("backCheckBox").checked;
 						}
 
-						esri.show(dom.byId("milepostLoadingIcon"));
+						domUtils.show(dom.byId("milepostLoadingIcon"));
 						registry.byId("findMilepostButton").set("disabled", true);
 
 						routeLocator.findRouteLocations({
@@ -236,11 +251,10 @@ jQuery UI
 							referenceDate: registry.byId("referenceDateBox").value,
 							outSR: map.spatialReference.wkid,
 							successHandler: function (results) {
-								var geometry = null, graphic, result, i, l, content;
+								var geometry = null, graphic, result, i, l;
 
-								esri.hide(dom.byId("milepostLoadingIcon"));
+								domUtils.hide(dom.byId("milepostLoadingIcon"));
 								registry.byId("findMilepostButton").set("disabled", false);
-
 
 								// Process the results.
 								if (results.length >= 1) {
@@ -248,10 +262,10 @@ jQuery UI
 										result = results[i];
 										if (result.RouteGeometry) {
 											// Create a geometry object.
-											geometry = new esri.geometry.Point(result.RouteGeometry);
+											geometry = new Point(result.RouteGeometry);
 											// Remove the geometry from the results.
 											delete result.RouteGeometry;
-											graphic = new esri.Graphic(geometry, null, result);
+											graphic = new Graphic(geometry, null, result);
 											locatedMilepostsLayer.add(graphic);
 											if (map.infoWindow.setFeatures) {
 												// Handle popup style InfoWindow
@@ -263,13 +277,10 @@ jQuery UI
 												map.infoWindow.setContent(graphic.getContent()).setTitle(graphic.getTitle()).show(map.toScreen(geometry));
 											}
 											map.centerAndZoom(geometry, 10);
-										}
-										else {
+										} else {
 											// TODO: Show error message without setting map extent.
 											showErrorMessage(createElcResultTable({ attributes: result }), "Unable to find route location");
 										}
-
-
 									}
 								}
 
@@ -286,7 +297,7 @@ jQuery UI
 								////}
 							},
 							errorHandler: function (error) {
-								esri.hide(dom.byId("milepostLoadingIcon"));
+								domUtils.hide(dom.byId("milepostLoadingIcon"));
 								registry.byId("findMilepostButton").set("disabled", false);
 								showErrorMessage("The server was unable to process the given parameters.");
 								/*jslint devel:true */
@@ -300,9 +311,9 @@ jQuery UI
 					}
 					}, "findMilepostButton");
 
-					esri.hide(dom.byId("milepostLoadingIcon"));
+					domUtils.hide(dom.byId("milepostLoadingIcon"));
 
-					esri.hide(dom.byId("findNearestLoadingIcon"));
+					domUtils.hide(dom.byId("findNearestLoadingIcon"));
 
 					// Setup find nearest milepost tools
 					NumberSpinner({ constraints: { min: 0 }, value: 200, style: "width:100px" }, "radiusBox");
@@ -310,13 +321,12 @@ jQuery UI
 						var button = registry.byId("findNearestMPButton"), loadingIcon = dom.byId("findNearestLoadingIcon"), drawToolbar;
 
 						createLocatedMilepostsLayer();
-						drawToolbar = new esri.toolbars.Draw(map);
+						drawToolbar = new Draw(map);
 						dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
-							esri.show(loadingIcon);
+							domUtils.show(loadingIcon);
 							drawToolbar.deactivate();
 							self._trigger("drawDeactivate", self);
 							button.set("disabled", true);
-
 
 							routeLocator.findNearestRouteLocations({
 								coordinates: [geometry.x, geometry.y],
@@ -325,43 +335,41 @@ jQuery UI
 								inSR: map.spatialReference.wkid,
 								outSR: map.spatialReference.wkid,
 								successHandler: function (results) {
-									esri.hide(loadingIcon);
+									domUtils.hide(loadingIcon);
 									button.set("disabled", false);
 
 									if (results && results.length > 0) {
-										var currentResult, table, graphic, geometry, i, l;
+										var currentResult, graphic, geometry, i, l;
 										for (i = 0, l = results.length; i < l; i += 1) {
 											currentResult = results[i];
 											if (currentResult.RouteGeometry) {
-												geometry = new esri.geometry.Point(currentResult.RouteGeometry);
+												geometry = new Point(currentResult.RouteGeometry);
 												delete currentResult.RouteGeometry;
 												if (currentResult.EventPoint) {
 													delete currentResult.EventPoint;
 												}
 												geometry.setSpatialReference(map.spatialReference);
-												graphic = new esri.Graphic({ "geometry": geometry, "attributes": currentResult });
+												graphic = new Graphic({ "geometry": geometry, "attributes": currentResult });
 												locatedMilepostsLayer.add(graphic);
 												map.infoWindow.setContent(graphic.getContent());
 												map.infoWindow.setTitle(graphic.getTitle());
 												map.infoWindow.show(map.toScreen(geometry));
-											}
-											else {
+											} else {
 												showMessageDialog(currentResult.LocatingError, "Locating Error");
 											}
 										}
-									}
-									else {
+									} else {
 										showMessageDialog('No routes were found within the given search radius', 'Locating Error');
 									}
 								},
 								errorHandler: function (error) {
-									esri.hide(loadingIcon);
+									domUtils.hide(loadingIcon);
 									button.set("disabled", false);
 									showMessageDialog(error, 'Locating Error', 'error');
 								}
 							});
 						});
-						drawToolbar.activate(esri.toolbars.Draw.POINT);
+						drawToolbar.activate(Draw.POINT);
 						self._trigger("drawActivate", self);
 					}
 					}, "findNearestMPButton");
@@ -380,7 +388,7 @@ jQuery UI
 
 				// Load the script for the ELC objects.
 				/*jslint unparam:true*/
-				$.getScript("scripts/elc.js", function (script, textStatus, jqXHR) {
+				$.getScript("scripts/elc.js", function (/*script, textStatus, jqXHR*/) {
 					routeLocator = new $.wsdot.elc.RouteLocator(wsdot.config.routeLocatorUrl);
 				});
 				/*jslint unparam:false*/
