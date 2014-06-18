@@ -1,18 +1,25 @@
-/// <reference path="../jsapi_vsdoc_v32_2012.js" />
-/*global require, esri, dojo */
+/*global require */
 /*jslint nomen: true, white: true, browser: true */
 
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-require(["dojo/_base/array",
+require([
+	"dojo/_base/array",
+	"dojo/_base/lang",
 	"dojo/dom-construct",
 	"dojo/on",
-	"dojo/NodeList-manipulate",
+	"esri/request",
+	"esri/InfoTemplate",
 	"esri/map",
-	"esri/layers/agsdynamic",
-	"esri/layers/agstiled",
-	"esri/tasks/identify"
-], function (djArray, domConstruct, on) {
+	"esri/layers/LayerInfo",
+	"esri/layers/ArcGISDynamicMapServiceLayer",
+	"esri/layers/ArcGISTiledMapServiceLayer",
+	"esri/layers/FeatureLayer",
+	"esri/tasks/IdentifyTask",
+	"esri/tasks/IdentifyParameters",
+	"dojo/NodeList-manipulate",
+], function (djArray, lang, domConstruct, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters) {
 	"use strict";
 		var detectHtmlPopups;
 
@@ -53,7 +60,7 @@ require(["dojo/_base/array",
 					// Add to the output array the ID of any sublayer that has an html popup defined 
 					// (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
 					if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
-						if (layerInfo.visibleLayers === undefined || dojo.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+						if (layerInfo.visibleLayers === undefined || djArray.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
 							if (returnUrls) {
 								ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
 							} else {
@@ -66,7 +73,7 @@ require(["dojo/_base/array",
 
 			return ids;
 		}
-		dojo.extend(esri.layers.LayerInfo, {
+		lang.extend(LayerInfo, {
 			htmlPopupType: null
 		});
 
@@ -95,7 +102,7 @@ require(["dojo/_base/array",
 				layerUrl = [mapService.url, String(layerInfo.id)].join("/");
 
 				// Query the layers to see if they support html Popups
-				esri.request({
+				esriRequest({
 					url: layerUrl,
 					content: { f: "json" },
 					handleAs: "json",
@@ -105,8 +112,8 @@ require(["dojo/_base/array",
 		};
 
 		// Extend each of the types in the array with the same proerties and methods.
-		djArray.forEach([esri.layers.ArcGISDynamicMapServiceLayer, esri.layers.ArcGISTiledMapServiceLayer], function (ctor) {
-			dojo.extend(ctor, {
+		djArray.forEach([ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer], function (ctor) {
+			lang.extend(ctor, {
 				detectHtmlPopups: detectHtmlPopups,
 				getIdsOfLayersWithHtmlPopups: function () {
 					return getIdsOfLayersWithHtmlPopups(this);
@@ -117,7 +124,7 @@ require(["dojo/_base/array",
 			});
 		});
 
-		dojo.extend(esri.Map, {
+		lang.extend(Map, {
 			_ignoredLayerRE: null,
 			detectHtmlPopupsHasRun: false,
 			detectHtmlPopups: function (htmlPopupLayerFoundAction) {
@@ -125,8 +132,8 @@ require(["dojo/_base/array",
 
 				var map = this;
 
-				// if (!map || !map.isInstanceOf || !map.isInstanceOf(esri.Map)) {
-				// throw new Error("The \"map\" parameter must be of type esri.Map.");
+				// if (!map || !map.isInstanceOf || !map.isInstanceOf(Map)) {
+				// throw new Error("The \"map\" parameter must be of type Map.");
 				// }
 
 				// Loop through each of the map service layers.
@@ -145,7 +152,7 @@ require(["dojo/_base/array",
 							mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
 						}
 					} else {
-						dojo.connect(mapService, "onLoad", function (/*layer*/) {
+						mapService.on("load", function (/*layer*/) {
 							if (typeof (mapService.detectHtmlPopups) === "function") {
 								mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
 							}
@@ -195,8 +202,8 @@ require(["dojo/_base/array",
 							// If there are sublayers defined, run an identify task.
 							if (sublayerIds && sublayerIds.length > 0) {
 								queryCount += 1;
-								idTask = new esri.tasks.IdentifyTask(layer.url);
-								idParams = new esri.tasks.IdentifyParameters();
+								idTask = new IdentifyTask(layer.url);
+								idParams = new IdentifyParameters();
 								idParams.geometry = geometry;
 								idParams.layerIds = sublayerIds;
 								idParams.mapExtent = map.extent;
@@ -204,7 +211,7 @@ require(["dojo/_base/array",
 								idParams.height = map.height;
 								// The following settings are configurable via the 'options' parameter.
 								idParams.returnGeometry = options.returnGeometry || true;
-								idParams.layerOption = options.layerOption || esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
+								idParams.layerOption = options.layerOption || IdentifyParameters.LAYER_OPTION_ALL;
 								idParams.tolerance = options.tolerance || 5;
 								idParams.maxAllowableOffset = options.maxAllowableOffset || 5;
 
@@ -265,7 +272,7 @@ require(["dojo/_base/array",
 						return;
 					}
 
-					if (layer && layer.isInstanceOf !== undefined && (layer.isInstanceOf(esri.layers.ArcGISDynamicMapServiceLayer) || layer.isInstanceOf(esri.layers.ArcGISTiledMapServiceLayer))) {
+					if (layer && layer.isInstanceOf !== undefined && (layer.isInstanceOf(ArcGISDynamicMapServiceLayer) || layer.isInstanceOf(ArcGISTiledMapServiceLayer))) {
 						layer.detectHtmlPopups();
 					}
 				});
@@ -294,14 +301,14 @@ require(["dojo/_base/array",
 								// Get the map service url.
 								url = layer.url;
 								// Append the layer ID (except for feature layers, which have the layer id as part of the url).
-								if (!layer.isInstanceOf(esri.layers.FeatureLayer)) {
+								if (!layer.isInstanceOf(FeatureLayer)) {
 									url += "/" + String(result.layerId);
 								}
 								// Complete the htmlPopup URL.
 								url += "/" + feature.attributes.OBJECTID + "/htmlPopup";
 
 								// Request the HTML Popup
-								esri.request({
+								esriRequest({
 									url: url,
 									content: { f: "json" },
 									handleAs: "json",
@@ -352,7 +359,7 @@ require(["dojo/_base/array",
 
 					idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
 
-						var features, infoTemplate = new esri.InfoTemplate({ content: loadContent });
+						var features, infoTemplate = new InfoTemplate({ content: loadContent });
 
 						// Get the existing features in the info window.  If there are no existing features, create a new array.
 						features = map.infoWindow.features || [];
