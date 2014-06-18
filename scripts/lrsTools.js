@@ -322,7 +322,8 @@ jQuery UI
 
 						createLocatedMilepostsLayer();
 						drawToolbar = new Draw(map);
-						dojo.connect(drawToolbar, "onDrawEnd", function (geometry) {
+						drawToolbar.on("draw-end", function (e) {
+							var geometry = e.geometry;
 							domUtils.show(loadingIcon);
 							drawToolbar.deactivate();
 							self._trigger("drawDeactivate", self);
