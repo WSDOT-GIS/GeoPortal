@@ -25,7 +25,6 @@
 
 		a = document.createElement("a");
 		a.href = url;
-		a.target = "_blank";
 		a.setAttribute("class", "thumbnail img-responsive");
 		div.appendChild(a);
 
