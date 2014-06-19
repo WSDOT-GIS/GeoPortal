@@ -6,7 +6,6 @@
 require([
 	"dojo/_base/array",
 	"dojo/_base/lang",
-	"dojo/dom-construct",
 	"dojo/on",
 	"esri/request",
 	"esri/InfoTemplate",
@@ -17,8 +16,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
-	"dojo/NodeList-manipulate",
-], function (djArray, lang, domConstruct, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+], function (djArray, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
 ) {
 	"use strict";
@@ -360,40 +358,42 @@ require([
 
 									shortenAnchorText(docFrag);
 
-									//domConstruct.place(data.content, div);
-									//div.innerHTML = data.content;
 									div.appendChild(docFrag);
 								} else if (/URL$/i.test(data.htmlPopupType)) {
-									on(domConstruct.create("a", {
-										attr: {
-											href: "#"
-										}
-									}, div), "click", function () {
-										window.open(data.content);
-									});
+									node = document.createElement("a");
+									node.href = data.content;
+									node.target = "_blank";
+									div.appendChild(node);
 								}
 							}, function (error) {
-								domConstruct("p", { innerHTML: error }, div);
+								var p;
+								p = document.createElement("p");
+								p.appendChild(document.createTextNode(error));
+								div.appendChild(p);
 							});
 						} else {
 							// Create a table to display attributes if no HTML popup is defined.
 							(function () {
-								var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title;
+								var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title, caption, tr;
 
-								table = domConstruct("table", {
-									className: "default-html-popup"
-								}, div);
+								table = document.createElement("table");
+								table.setAttribute("class", "default-html-popup");
+								div.appendChild(table);
 
 								// Add a caption if the result has a display field name.
 								title = result.displayFieldName ? feature.attributes[result.displayFieldName] : null;
 								if (title) {
-									domConstruct("caption", { innerHTML: title }, table);
+									caption = document.createElement("caption");
+									caption.innerText = title;
+									table.appendChild(caption);
 								}
 
 								for (name in feature.attributes) {
 									if (!ignoredAttributes.test(name) && feature.attributes.hasOwnProperty(name)) {
 										value = feature.attributes[name];
-										domConstruct.toDom(["<tr><th>", name, "</th><td>", value, "</td></tr>"].join(""), table);
+										tr = document.createElement("tr");
+										tr.innerHTML = ["<th>", name, "</th><td>", value, "</td>"].join("");
+										table.appendChild(tr);
 									}
 								}
 							}());
