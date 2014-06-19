@@ -22,6 +22,41 @@ require([
 	"use strict";
 	var detectHtmlPopups;
 
+	/**
+	 * Gets the WDFW ID from a table.
+	 * @param {Node} node - An HTML Table node.
+	 * @returns {(string|null)}
+	 */
+	function getWdfwId(node) {
+		var headers, wdfwId = null, current, re = /^WDFW\s?ID$/i;
+		if (node.querySelectorAll) {
+			headers = node.querySelectorAll("tr>:first-child");
+			for (var i = 0, l = headers.length; i < l; i += 1) {
+				current = headers[i];
+				if (current.textContent && re.test(current.textContent)) {
+					wdfwId = current.parentNode.querySelector(":last-child").textContent;
+					break;
+				}
+			}
+		}
+		return wdfwId;
+	}
+
+	/**
+	 * @param {string} wdfwId
+	 * @param {string} [imageViewerUrl]
+	 */
+	function getWdfwImageUrl(wdfwId, imageViewerUrl) {
+		var output = null;
+		if (!!wdfwId) {
+			if (!imageViewerUrl) {
+				imageViewerUrl = "./fish-barrier-images/";
+			}
+			output = [imageViewerUrl, "?id=", wdfwId].join("");
+		}
+		return output;
+	}
+
 	/** For all <a> children of the input node where the href is the same as the text content,
 	 * the text content is replaced with the word "link".
 	 * @param {Node} node
@@ -365,6 +400,19 @@ require([
 									node.target = "_blank";
 									div.appendChild(node);
 								}
+
+								// Add WDFW URL;
+								(function (wdfwId) {
+									var url, a;
+									if (wdfwId) {
+										url = getWdfwImageUrl(wdfwId);
+										a = document.createElement("a");
+										a.href = url;
+										a.target = "_blank";
+										a.appendChild(document.createTextNode("Images"));
+										div.insertBefore(a, div.firstChild);
+									}
+								}(getWdfwId(div)));
 							}, function (error) {
 								var p;
 								p = document.createElement("p");
