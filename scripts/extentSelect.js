@@ -79,7 +79,7 @@ jQuery
 				searchAttr: "name",
 				required: false,
 				onChange: function (/*newValue*/) {
-				    var extent, point;
+					var extent, point;
 					if (this.item && this.item.extent) {
 						extent = this.item.extent[0];
 						point = this.item.point ? this.item.point[0] : null;
@@ -90,7 +90,7 @@ jQuery
 								if (point) {
 									map.centerAndZoom(point, this.item.levelOrFactor);
 								} else {
-								    extent.spatialReference.wkid = 3857;
+									extent.spatialReference.wkid = 3857;
 									map.setExtent(extent);
 								}
 							} catch (e) {
