@@ -343,13 +343,63 @@ require([
 			map.on("click", function (event) {
 				var idTaskCount;
 
+				function getOid(feature) {
+					var output = null, re = /O(BJECT)ID/i;
+					if (feature && feature.attributes) {
+						if (feature.attributes.OBJECTID) {
+							output = feature.attributes.OBJECTID;
+						} else {
+							for (var propName in feature.attributes) {
+								if (feature.attributes.hasOwnProperty(propName) && re.test(propName)) {
+									output = feature.attributes[propName];
+									break;
+								}
+							}
+						}
+					}
+
+					return output;
+				}
+
 				// If popups are disabled, exit instead of showing the popup.
 				if (!map.popupsEnabled) {
 					return;
 				}
 
+				/** 
+				 * Create a table to display attributes if no HTML popup is defined.
+				 * @param {esri/Graphic} feature
+				 * @param {esri/tasks/IdentifyResult} result
+				 * @returns {HTMLTableElement}
+				 */
+				function createDefaultTable(feature, result) {
+					var table, name, value, ignoredAttributes = /^(?:(?:SHAPE(\.STLength\(\))?)|(?:O(?:BJECT)?ID))$/i, title, caption, tr;
+
+					table = document.createElement("table");
+					table.setAttribute("class", "default-html-popup");
+
+					// Add a caption if the result has a display field name.
+					title = result.displayFieldName ? feature.attributes[result.displayFieldName] : null;
+					if (title) {
+						caption = document.createElement("caption");
+						caption.innerText = title;
+						table.appendChild(caption);
+					}
+
+					for (name in feature.attributes) {
+						if (!ignoredAttributes.test(name) && feature.attributes.hasOwnProperty(name)) {
+							value = feature.attributes[name];
+							tr = document.createElement("tr");
+							tr.innerHTML = ["<th>", name, "</th><td>", value, "</td>"].join("");
+							table.appendChild(tr);
+						}
+					}
+
+					return table;
+				}
+
 				function loadContent(feature) {
-					var div, layer, result, url;
+					var div, layer, result, url, oid;
 					div = null; //feature.content || null;
 					// Load the HTML popup content if it has not already been loaded.
 					if (div === null) {
@@ -358,9 +408,11 @@ require([
 
 						div = document.createElement("div");
 
+						oid = getOid(feature);
+
 						// If there is an object ID field, load the HTML popup.
 						// TODO: Get the layer's ObjectID field setting instead of using hard-coded "OBJECTID". Sometimes the ObjectID field has a different name.
-						if (feature !== undefined && feature !== null && feature.attributes && feature.attributes.OBJECTID) {
+						if (oid !== null) {
 							// Get the map service url.
 							url = layer.url;
 							// Append the layer ID (except for feature layers, which have the layer id as part of the url).
@@ -368,7 +420,7 @@ require([
 								url += "/" + String(result.layerId);
 							}
 							// Complete the htmlPopup URL.
-							url += "/" + feature.attributes.OBJECTID + "/htmlPopup";
+							url += "/" + oid + "/htmlPopup";
 
 							// Request the HTML Popup
 							esriRequest({
@@ -377,8 +429,14 @@ require([
 								handleAs: "json",
 								callbackParamName: "callback"
 							}).then(function (data) {
-								var domParser, htmlPopup, docFrag, bodyChildren, node;
-								if (/HTMLText$/i.test(data.htmlPopupType)) {
+								var domParser, htmlPopup, docFrag, bodyChildren, node, table;
+								if (!data.content) {
+									table = createDefaultTable(feature, result);
+									table.classList.add("html-popup-was-blank");
+									if (table) {
+										div.appendChild(table);
+									}
+								} else if (/HTMLText$/i.test(data.htmlPopupType)) {
 									domParser = new DOMParser();
 									htmlPopup = domParser.parseFromString(data.content, "text/html");
 									docFrag = document.createDocumentFragment();
@@ -420,31 +478,7 @@ require([
 								div.appendChild(p);
 							});
 						} else {
-							// Create a table to display attributes if no HTML popup is defined.
-							(function () {
-								var table, name, value, ignoredAttributes = /^(SHAPE(\.STLength\(\))?)$/i, title, caption, tr;
-
-								table = document.createElement("table");
-								table.setAttribute("class", "default-html-popup");
-								div.appendChild(table);
-
-								// Add a caption if the result has a display field name.
-								title = result.displayFieldName ? feature.attributes[result.displayFieldName] : null;
-								if (title) {
-									caption = document.createElement("caption");
-									caption.innerText = title;
-									table.appendChild(caption);
-								}
-
-								for (name in feature.attributes) {
-									if (!ignoredAttributes.test(name) && feature.attributes.hasOwnProperty(name)) {
-										value = feature.attributes[name];
-										tr = document.createElement("tr");
-										tr.innerHTML = ["<th>", name, "</th><td>", value, "</td>"].join("");
-										table.appendChild(tr);
-									}
-								}
-							}());
+							div.appendChild(createDefaultTable(feature, result));
 						}
 						feature.content = div;
 					}

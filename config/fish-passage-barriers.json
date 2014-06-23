@@ -101,12 +101,12 @@
 	],
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"layers": {
-		"Fish Passage": [
+		"Fish Passage Barriers": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersRelevantToCase/MapServer",
 				"options": {
-					"id": "WSDOT Fish Passage Barriers Relevant to US v. WA",
+					"id": "Relevant to US v. WA",
 					"visible": true
 				}
 			},
@@ -114,10 +114,12 @@
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersStatewide/MapServer",
 				"options": {
-					"id": "WSDOT Fish Passage Barriers Statewide",
+					"id": "Statewide",
 					"visible": true
 				}
-			},
+			}
+		],
+		"Fish Passage Boundaries": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
