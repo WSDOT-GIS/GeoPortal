@@ -104,10 +104,47 @@
 		"Fish Passage": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassage_20140529/MapServer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersRelevantToCase/MapServer",
 				"options": {
-					"id": "Fish Passage Barriers",
+					"id": "WSDOT Fish Passage Barriers Relevant to US v. WA",
 					"visible": true
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersStatewide/MapServer",
+				"options": {
+					"id": "WSDOT Fish Passage Barriers Statewide",
+					"visible": true
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
+				"options": {
+					"id": "Case Area Boundary",
+					"visible": true
+				}
+			},
+			{
+				"layerType": "esri.layers.FeatureLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/25",
+				"options": {
+					"id": "State Boundary",
+					"visible": true
+				}
+			},
+			{
+				"layerType": "esri.layers.FeatureLayer",
+				"url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/arcgis/rest/services/WAECY_WRIA/FeatureServer/0",
+				"options": {
+					"id": "WRIA",
+					"visible": true,
+					"outFields":  ["WRIA_NR", "WRIA_NM"],
+					"infoTemplate":  {
+						"title": "${WRIA_NM} (${WRIA_NR})",
+						"content": "WRIA: ${WRIA_NM} (${WRIA_NR})"
+					}
 				}
 			},
 			{
