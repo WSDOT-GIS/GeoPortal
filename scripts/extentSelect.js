@@ -20,6 +20,19 @@ define([
 ], function (FilteringSelect, ItemFileReadStore, geometryJsonUtils, Point, FeatureSet, SpatialReference) {
 	"use strict";
 
+	function getFirstStringAttribute(graphic) {
+		var propName, value, output;
+		for (propName in graphic.attributes) {
+			if (graphic.attributes.hasOwnProperty(propName)) {
+				if (typeof graphic.attributes[propName] === "string") {
+					output = propName;
+					break;
+				}
+			}
+		}
+		return output;
+	}
+
 	/**
 	 * Creates a dijit.form.FilteringSelect from a feature set.
 	 * @param {esri/tasks/FeatureSet} featureSet - A set of features returned from a query.
@@ -50,6 +63,9 @@ define([
 				data = { identifier: "name", label: "name", items: [] };
 				for (i = 0, l = featureSet.features.length; i < l; i += 1) {
 					graphic = featureSet.features[i];
+					if (!graphic.attributes.hasOwnProperty(nameAttribute)) {
+						nameAttribute = getFirstStringAttribute(graphic);
+					}
 					if (graphic.geometry.isInstanceOf(Point)) {
 						data.items.push({
 							name: graphic.attributes[nameAttribute],
