@@ -55,6 +55,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/SpatialReference",
 	"esri/dijit/Measurement",
 	"esri/request",
+	"esri/layers/LabelLayer",
+	"esri/renderers/SimpleRenderer",
 	"extentSelect",
 
 	"dijit/form/RadioButton",
@@ -88,7 +90,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, createExtentSelect
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect
 ) {
 	"use strict";
 
@@ -970,6 +972,54 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			}
 			map = new Map("map", wsdot.config.mapOptions);
 
+			/**
+			 * @typedef {Object} LabelingInfoItem
+			 * @property {string} labelExpression - JSON string representation of array of field names.
+			 * @property {string} labelPlacement - e.g., "always-horizontal"
+			 * @property {TextSymbol} symbol
+			 * @property {Boolean} useCodedValues
+			 */
+
+			/** Add a LabelLayer if a text layer has that defined.
+			 * @param {Object} result
+			 * @param {Layer} result.layer
+			 * @param {LabelingInfoItem[]} result.layer.labelingInfo
+			 * @param {Map} result.target
+			 * @param {Error} [result.error]
+			 */
+			map.on("layer-add-result", function (result) {
+				var layer, labelingInfo, liItem, labelLayer, renderer;
+
+				/**
+				 * @param {string} labelExpression - E.g., "[WRIA_NR]"
+				 * @returns {string} - E.g., "${WRIA_NR}"
+				 */
+				function labelExpressionToTextExpression(labelExpression) {
+					var re = /\[([^\]]+)/i, match, output;
+					match = labelExpression.match(re);
+					if (match) {
+						output = "${" + match[1] + "}";
+					}
+					return output;
+				}
+
+				if (result.layer && result.layer.labelingInfo) {
+					layer = result.layer;
+					labelingInfo = layer.labelingInfo;
+					if (labelingInfo.length) {
+						if (labelingInfo.length === 1) {
+							liItem = labelingInfo[0];
+							labelLayer = new LabelLayer({
+								id: [layer.id, "(label)"].join(" ")
+							});
+							renderer = new SimpleRenderer(liItem.symbol);
+							labelLayer.addFeatureLayer(layer, renderer, labelExpressionToTextExpression(liItem.labelExpression), liItem);
+							map.addLayer(labelLayer);
+						}
+					}
+				}
+			});
+
 			// Setup the basemap gallery
 			(function () {
 				var basemaps = wsdot.config.basemaps, i, l, layeri, basemapGallery, customLegend;
@@ -1089,7 +1139,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				// Setup Google Analytics tracking of the layers that are added to the map.
 				if (_gaq !== undefined) {
-					on(map, "layerAddResult", gaTrackEvent);
+					on(map, "layer-add-result", gaTrackEvent);
 				}
 
 				function setExtentFromParams() {
@@ -1188,7 +1238,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				
 
 				map.setupIdentifyPopups({
-					ignoredLayerRE: /^layer\d+$/i
+					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
 				});
 			});
 
