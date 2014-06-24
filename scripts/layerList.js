@@ -453,8 +453,6 @@ require([
 				// Connect the layer load event.
 				dojo.connect($this._layer, "onError", $this, onLayerError);
 				dojo.connect($this._layer, "onLoad", $this, onLayerLoad);
-
-				console.log($this.options);
 			} else {
 				$this._layer.show();
 			}
