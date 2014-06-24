@@ -5,6 +5,7 @@
 	"disclaimer": "disclaimers/fish-passage-barriers/Public.html",
 	"alwaysShowDisclaimer": true,
 	"printUrl":"http://www.wsdot.wa.gov/geoservices/ArcGIS/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
+	"noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
 	"mapOptions": {
 		"logo": true,
 		"extent": {
@@ -141,20 +142,15 @@
 				"url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/arcgis/rest/services/WAECY_WRIA/FeatureServer/0",
 				"options": {
 					"id": "WRIA",
-					"visible": true,
-					"outFields":  ["WRIA_NR", "WRIA_NM"],
-					"infoTemplate":  {
-						"title": "${WRIA_NM} (${WRIA_NR})",
-						"content": "WRIA: ${WRIA_NM} (${WRIA_NR})"
-					}
+					"outFields": ["WRIA_NR"],
+					"visible": true
 				}
 			},
 			{
-				"layerType":  "esri.layers.ArcGISTiledMapServiceLayer",
+				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 				"url":  "http://fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
 				"options":  {
-					"id":  "Rivers and Lakes",
-					"visible": true
+					"id":  "Rivers and Lakes"
 				}
 			}
 		],

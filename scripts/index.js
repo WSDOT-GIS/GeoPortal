@@ -1187,7 +1187,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				
 
 				map.setupIdentifyPopups({
-					ignoredLayerRE: /^layer\d+$/i
+					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
 				});
 			});
 
