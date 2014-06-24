@@ -20,6 +20,11 @@ Use this parameter to change the page title.
 
 	"pageTitle": "My Page Title",
 
+## noPopupLayerRe ##
+Optional. Text here will be used to create a case-insensitive RegExp. Any layers with a matching layer ID will not be identified on map click.
+
+	"noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
+
 ## helpUrl ##
 The location of the help page.
 

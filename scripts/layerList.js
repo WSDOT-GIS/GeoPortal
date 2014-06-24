@@ -18,6 +18,7 @@ require([
 	"esri/layers/ArcGISDynamicMapServiceLayer",
 	"esri/layers/ArcGISImageServiceLayer",
 	"esri/layers/FeatureLayer",
+	"esri/layers/LabelLayer",
 	"esri/layers/KMLLayer",
 
 	"extensions/map"
@@ -27,6 +28,7 @@ require([
 	ArcGISDynamicMapServiceLayer,
 	ArcGISImageServiceLayer,
 	FeatureLayer,
+	LabelLayer,
 	KMLLayer
 ) {
 	"use strict";
@@ -308,27 +310,6 @@ require([
 				}).appendTo(sliderContainer).bind("slidechange", {
 					layer: layer
 				}, setOpacity);
-
-				////if (supportsInputRange()) { //chromeRe.test(navigator.userAgent)) {
-				////	// Chrome supports the HTML5 range input control, so we'll just use that...
-				////	slider = $("<input>").attr({
-				////		type: "range",
-				////		min: 0,
-				////		max: 1,
-				////		value: layer.opacity, // This doesn't actually seem to set the value.  We actually set this value with the val method.
-				////		step: 0.1
-				////	}).appendTo(sliderContainer).val(layer.opacity).change({ layer: layer }, setOpacity);
-				////} else {
-				////	// Convert into a jQuery UI slider.  (HTML5 slider doesn't work in many browsers.)
-				////	slider = $("<div>").appendTo(sliderContainer).slider({
-				////		value: layer.opacity,
-				////		min: 0,
-				////		max: 1,
-				////		step: 0.1
-				////	}).appendTo(sliderContainer).bind("slidechange", {
-				////		layer: layer
-				////	}, setOpacity);
-				////}
 			}
 
 			// Add metadata links.
@@ -472,6 +453,8 @@ require([
 				// Connect the layer load event.
 				dojo.connect($this._layer, "onError", $this, onLayerError);
 				dojo.connect($this._layer, "onLoad", $this, onLayerLoad);
+
+				console.log($this.options);
 			} else {
 				$this._layer.show();
 			}
