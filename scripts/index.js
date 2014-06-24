@@ -55,6 +55,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/SpatialReference",
 	"esri/dijit/Measurement",
 	"esri/request",
+	"extentSelect",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -87,7 +88,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest
+	Measurement, esriRequest, createExtentSelect
 ) {
 	"use strict";
 
@@ -761,7 +762,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					document.getElementById("toolsAccordion").appendChild(zoomControlsPaneDiv);
 
 					toolsAccordion.addChild(new ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
-					createLinks.zoomControls = on(registry.byId("zoomControlsPane"), "show", function () {
+					on.once(registry.byId("zoomControlsPane"), "show", function () {
 						var extentTable;
 						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
@@ -808,13 +809,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
 								cell = $("<td>").appendTo(row);
 								if (data.url) {
-									$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+									////$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+									$("<progress>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
 									queryTask = createQueryTask(qtName);
 									queryTask.task.execute(queryTask.query, function (featureSet) {
-										$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
+										////$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
+										createExtentSelect(selectName, featureSet, map, data.levelOrFactor);
 									});
 								} else if (data.extents) {
-									$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+									//$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+									createExtentSelect($("<div>").attr("id", selectName).appendTo(cell)[0], data.extents, map);
 									domAttr.set(labelName, "for", selectName);
 								}
 							}
@@ -889,8 +893,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							domConstruct.destroy("zoomToMyCurrentLocation");
 						}
 
-						createLinks.zoomControls.remove();
-						delete createLinks.zoomControls;
 					});
 				}
 

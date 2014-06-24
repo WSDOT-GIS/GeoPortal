@@ -106,21 +106,27 @@
 	</div>
 	<script>
 		(function () {
+			var root = location.pathname.replace(/\/[^\/]*$/, "");
 			var dojoConfig = {
 				async: true,
 				packages: [
 					{
 						name: "extensions",
-						location: location.pathname.replace(/\/[^\/]*$/, "") + "/scripts/extensions"
+						location: root + "/scripts/extensions"
 					},
 					{
 						name: "wsdot",
-						location: location.pathname.replace(/\/[^\/]*$/, "") + "/scripts/wsdot"
+						location: root + "/scripts/wsdot"
 					},
 					{
 						name: "geocoder-setup",
-						location: location.pathname.replace(/\/[^\/]*$/, "") + "/scripts",
+						location: root + "/scripts",
 						main: "geocoder-setup"
+					},
+					{
+						name: "extentSelect",
+						location: root + "/scripts",
+						main: "extentSelect"
 					}
 				]
 			};
