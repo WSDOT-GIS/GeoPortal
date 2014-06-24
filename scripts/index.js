@@ -578,8 +578,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				}
 			};
 
+			/**
+			 * Creates the legend control.
+			 */
 			function setupDefaultLegend() {
-				/// <summary>Creates the legend control</summary>
 				var legend, layerInfos;
 
 				layerInfos = getLayerInfos();
