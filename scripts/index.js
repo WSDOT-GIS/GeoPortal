@@ -999,7 +999,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					labelLayerLI = labelLayerCB.parentElement;
 					layerCB = document.querySelector("[data-layer-id='" + layer.id + "']");
 					layerLI = layerCB.parentElement;
-					layerLI.parentElement.appendChild(labelLayerLI);
+					layerLI.parentElement.insertBefore(labelLayerLI, layerLI.nextSibling);
 				}
 
 				/**
