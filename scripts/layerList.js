@@ -66,6 +66,8 @@ require([
 				ctor = ArcGISImageServiceLayer;
 			} else if (/(?:esri\.layers\.)?FeatureLayer/i.test(layerType)) {
 				ctor = FeatureLayer;
+			} else if (/(?:esri\.layers\.)?LabelLayer/i.test(layerType)) {
+				ctor = LabelLayer;
 			} else if (/(?:esri\.layers\.)?KMLLayer/i.test(layerType)) {
 				ctor = KMLLayer;
 			} else {
@@ -537,7 +539,8 @@ require([
 
 			// Add the layer checkbox to the widget and add change event handler.
 			$this._checkbox = $("<input>").attr({
-				type: "checkbox"
+				type: "checkbox",
+				"data-layer-id": $this.options.layer.id || $this.options.layer.options.id
 			}).appendTo($this.element).change({ widget: $this }, toggleLayer);
 
 			// Add the label for the checkbox.

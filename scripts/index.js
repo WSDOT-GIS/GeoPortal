@@ -991,6 +991,18 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				var layer, labelingInfo, liItem, labelLayer, renderer;
 
 				/**
+				 * Moves the label layer's list item below that of the layer it is labelling.
+				 */
+				function moveLabelLayerListItem() {
+					var labelLayerCB, labelLayerLI, layerCB, layerLI;
+					labelLayerCB = document.querySelector("[data-layer-id='" + labelLayer.id + "']");
+					labelLayerLI = labelLayerCB.parentElement;
+					layerCB = document.querySelector("[data-layer-id='" + layer.id + "']");
+					layerLI = layerCB.parentElement;
+					layerLI.parentElement.appendChild(labelLayerLI);
+				}
+
+				/**
 				 * @param {string} labelExpression - E.g., "[WRIA_NR]"
 				 * @returns {string} - E.g., "${WRIA_NR}"
 				 */
@@ -1007,7 +1019,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					layer = result.layer;
 					labelingInfo = layer.labelingInfo;
 					if (labelingInfo.length) {
-						if (labelingInfo.length === 1) {
+						if (labelingInfo.length >= 1) {
 							liItem = labelingInfo[0];
 							labelLayer = new LabelLayer({
 								id: [layer.id, "(label)"].join(" ")
@@ -1015,6 +1027,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							renderer = new SimpleRenderer(liItem.symbol);
 							labelLayer.addFeatureLayer(layer, renderer, labelExpressionToTextExpression(liItem.labelExpression), liItem);
 							map.addLayer(labelLayer);
+							moveLabelLayerListItem();
 						}
 					}
 				}
