@@ -151,7 +151,8 @@
 				"url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/arcgis/rest/services/WAECY_WRIA/FeatureServer/0",
 				"options": {
 					"id": "WRIA",
-					"visible": true
+					"visible": true,
+					"outFields": ["WRIA_NR"]
 				}
 			},
 			{
