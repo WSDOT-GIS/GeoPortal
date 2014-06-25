@@ -13,11 +13,13 @@ jQuery
 define([
 	"dijit/form/FilteringSelect",
 	"dojo/data/ItemFileReadStore",
+	"esri/graphic",
 	"esri/geometry/jsonUtils",
 	"esri/geometry/Point",
 	"esri/tasks/FeatureSet",
-	"esri/SpatialReference"
-], function (FilteringSelect, ItemFileReadStore, geometryJsonUtils, Point, FeatureSet, SpatialReference) {
+	"esri/SpatialReference",
+	"esri/InfoTemplate"
+], function (FilteringSelect, ItemFileReadStore, Graphic, geometryJsonUtils, Point, FeatureSet, SpatialReference, InfoTemplate) {
 	"use strict";
 
 	function getFirstStringAttribute(graphic) {
@@ -109,8 +111,21 @@ define([
 			store: data,
 			searchAttr: "name",
 			required: false,
-			onChange: function (/*newValue*/) {
+			onChange: function (newValue) {
 				var extent, point;
+
+				function showInfoWindow() {
+					var infoWindow, geometry, graphic;
+					geometry = extent || point || null;
+					if (geometry) {
+						graphic = new Graphic(geometry, null, {name: newValue}, new InfoTemplate("${name}", "${name}"));
+						infoWindow = map.infoWindow;
+						infoWindow.clearFeatures();
+						infoWindow.setFeatures([graphic]);
+						infoWindow.show(point || extent.getCenter());
+					}
+				}
+
 				if (this.item && this.item.extent) {
 					extent = this.item.extent[0];
 					point = this.item.point ? this.item.point[0] : null;
@@ -119,10 +134,10 @@ define([
 					if (map) {
 						try {
 							if (point) {
-								map.centerAndZoom(point, this.item.levelOrFactor);
+								map.centerAndZoom(point, this.item.levelOrFactor).then(showInfoWindow);
 							} else {
 								extent.spatialReference.wkid = 3857;
-								map.setExtent(extent);
+								map.setExtent(extent).then(showInfoWindow);
 							}
 						} catch (e) {
 							/*jslint devel:true*/
