@@ -70,6 +70,15 @@
 				"where": "1 = 1",
 				"returnGeometry": true
 			}
+		},
+		"fishPassageBarriers": {
+			"label": "Fish Passage Barriers",
+			"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
+			"query": {
+				"where":  "1 = 1",
+				"returnGeometry":  true,
+				"outFields": ["Site_Num"]
+			}
 		}
 	},
 	"basemaps": [
@@ -142,7 +151,6 @@
 				"url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/arcgis/rest/services/WAECY_WRIA/FeatureServer/0",
 				"options": {
 					"id": "WRIA",
-					"outFields": ["WRIA_NR"],
 					"visible": true
 				}
 			},

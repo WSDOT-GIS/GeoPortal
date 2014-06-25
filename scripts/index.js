@@ -57,6 +57,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/request",
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
+	"extentSelect",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -83,12 +84,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"extensions/extent",
 	"extensions/graphicsLayer",
 	"extensions/map",
-	"scripts/layerList.js"
+	"scripts/layerList.js",
+	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
 	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect
 ) {
 	"use strict";
 
@@ -578,8 +580,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				}
 			};
 
+			/**
+			 * Creates the legend control.
+			 */
 			function setupDefaultLegend() {
-				/// <summary>Creates the legend control</summary>
 				var legend, layerInfos;
 
 				layerInfos = getLayerInfos();
@@ -762,140 +766,137 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					document.getElementById("toolsAccordion").appendChild(zoomControlsPaneDiv);
 
 					toolsAccordion.addChild(new ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
-					createLinks.zoomControls = on(registry.byId("zoomControlsPane"), "show", function () {
-						require(["scripts/zoomToXY.js", "scripts/extentSelect.js"], function () {
-							var extentTable;
-							zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
+					on.once(registry.byId("zoomControlsPane"), "show", function () {
+						var extentTable;
+						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-							$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
-							$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
-							$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
-								map: map,
-								xLabel: "Long.",
-								yLabel: "Lat."
-							});
+						$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
+						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
+							map: map,
+							xLabel: "Long.",
+							yLabel: "Lat."
+						});
 
-							extentTable = $("<table>").appendTo(zoomControlsDiv);
+						extentTable = $("<table>").appendTo(zoomControlsDiv);
 
-							require(["scripts/extentSelect.js"], function () {
-								function createQueryTask(qtName) {
-									/// <summary>Creates a query task and query using settings from config.js.</summary>
-									/// <param name="qtName" type="String">The name of a query task from config.js.</param>
-									var queryTaskSetting, qt, query, n;
-									queryTaskSetting = wsdot.config.queryTasks[qtName];
-									qt = new QueryTask(queryTaskSetting.url);
-									query = new Query();
+						function createQueryTask(qtName) {
+							/// <summary>Creates a query task and query using settings from config.js.</summary>
+							/// <param name="qtName" type="String">The name of a query task from config.js.</param>
+							var queryTaskSetting, qt, query, n;
+							queryTaskSetting = wsdot.config.queryTasks[qtName];
+							qt = new QueryTask(queryTaskSetting.url);
+							query = new Query();
 
-									for (n in queryTaskSetting.query) {
-										if (queryTaskSetting.query.hasOwnProperty(n)) {
-											query[n] = queryTaskSetting.query[n];
-										}
-									}
-									return { "task": qt, "query": query };
+							for (n in queryTaskSetting.query) {
+								if (queryTaskSetting.query.hasOwnProperty(n)) {
+									query[n] = queryTaskSetting.query[n];
 								}
+							}
+							return { "task": qt, "query": query };
+						}
 
-								// Set up the zoom select boxes.
-								// Setup the zoom controls.
-								function createZoomControls() {
-									/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
+						// Set up the zoom select boxes.
+						// Setup the zoom controls.
+						function createZoomControls() {
+							/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
 
-									var body, data;
+							var body, data;
 
-									function createZoomControl(qtName, data) {
-										var row, cell, selectName, labelName, queryTask;
-										row = $("<tr>").appendTo(body);
-										cell = $("<td>").appendTo(row);
-										selectName = qtName + "ZoomSelect";
-										labelName = qtName + "ZoomLabel";
-										$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
-										cell = $("<td>").appendTo(row);
-										if (data.url) {
-											$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
-											queryTask = createQueryTask(qtName);
-											queryTask.task.execute(queryTask.query, function (featureSet) {
-												$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
-											});
-										} else if (data.extents) {
-											$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
-											domAttr.set(labelName, "for", selectName);
-										}
-									}
-
-									body = $("<tbody>").appendTo(extentTable);
-
-									(function () {
-										var qtName;
-										for (qtName in wsdot.config.queryTasks) {
-											if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
-												data = wsdot.config.queryTasks[qtName];
-												createZoomControl(qtName, data);
-											}
-										}
-									} ());
+							function createZoomControl(qtName, data) {
+								var row, cell, selectName, labelName, queryTask;
+								row = $("<tr>").appendTo(body);
+								cell = $("<td>").appendTo(row);
+								selectName = qtName + "ZoomSelect";
+								labelName = qtName + "ZoomLabel";
+								$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+								cell = $("<td>").appendTo(row);
+								if (data.url) {
+									////$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+									$("<progress>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
+									queryTask = createQueryTask(qtName);
+									queryTask.task.execute(queryTask.query, function (featureSet) {
+										////$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
+										createExtentSelect(selectName, featureSet, map, data.levelOrFactor);
+									});
+								} else if (data.extents) {
+									//$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
+									createExtentSelect($("<div>").attr("id", selectName).appendTo(cell)[0], data.extents, map);
+									domAttr.set(labelName, "for", selectName);
 								}
-
-								createZoomControls();
-							});
-
-							if (navigator.geolocation) {
-								button = new Button({
-									onClick: function () {
-										navigator.geolocation.getCurrentPosition(function (position) {
-											var pt, attributes;
-											pt = new Point(position.coords.longitude, position.coords.latitude);
-											pt = webMercatorUtils.geographicToWebMercator(pt);
-											attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-											if (map.infoWindow.setFeatures) {
-												map.infoWindow.setFeatures([
-													new Graphic(pt, null, attributes, new InfoTemplate(
-														"You are here", "Lat: ${lat} <br />Long: ${long}"
-													))
-												]);
-												map.infoWindow.show(map.toScreen(pt));
-											} else {
-												map.infoWindow.setTitle("You are here").setContent(
-													["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
-												).show(map.toScreen(pt));
-											}
-											map.centerAndZoom(pt, 8);
-										}, function (error) {
-											var message = "", strErrorCode;
-											// Check for known errors
-											switch (error.code) {
-												case error.PERMISSION_DENIED:
-													message = "This website does not have permission to use the Geolocation API";
-													break;
-												case error.POSITION_UNAVAILABLE:
-													message = "The current position could not be determined.";
-													break;
-												case error.PERMISSION_DENIED_TIMEOUT:
-													message = "The current position could not be determined within the specified timeout period.";
-													break;
-											}
-
-											// If it's an unknown error, build a message that includes 
-											// information that helps identify the situation so that 
-											// the error handler can be updated.
-											if (message === "") {
-												strErrorCode = error.code.toString();
-												message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
-											}
-											alert(message);
-										}, {
-											maximumAge: 0,
-											timeout: 30000,
-											enableHighAccuracy: true
-										});
-									}
-								}, "zoomToMyCurrentLocation");
-							} else {
-								domConstruct.destroy("zoomToMyCurrentLocation");
 							}
 
-							createLinks.zoomControls.remove();
-							delete createLinks.zoomControls;
-						});
+							body = $("<tbody>").appendTo(extentTable);
+
+							(function () {
+								var qtName;
+								for (qtName in wsdot.config.queryTasks) {
+									if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
+										data = wsdot.config.queryTasks[qtName];
+										createZoomControl(qtName, data);
+									}
+								}
+							}());
+						}
+
+						createZoomControls();
+
+						if (navigator.geolocation) {
+							button = new Button({
+								onClick: function () {
+									navigator.geolocation.getCurrentPosition(function (position) {
+										var pt, attributes;
+										pt = new Point(position.coords.longitude, position.coords.latitude);
+										pt = webMercatorUtils.geographicToWebMercator(pt);
+										attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
+										if (map.infoWindow.setFeatures) {
+											map.infoWindow.setFeatures([
+												new Graphic(pt, null, attributes, new InfoTemplate(
+													"You are here", "Lat: ${lat} <br />Long: ${long}"
+												))
+											]);
+											map.infoWindow.show(map.toScreen(pt));
+										} else {
+											map.infoWindow.setTitle("You are here").setContent(
+												["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
+											).show(map.toScreen(pt));
+										}
+										map.centerAndZoom(pt, 8);
+									}, function (error) {
+										var message = "", strErrorCode;
+										// Check for known errors
+										switch (error.code) {
+											case error.PERMISSION_DENIED:
+												message = "This website does not have permission to use the Geolocation API";
+												break;
+											case error.POSITION_UNAVAILABLE:
+												message = "The current position could not be determined.";
+												break;
+											case error.PERMISSION_DENIED_TIMEOUT:
+												message = "The current position could not be determined within the specified timeout period.";
+												break;
+										}
+
+										// If it's an unknown error, build a message that includes 
+										// information that helps identify the situation so that 
+										// the error handler can be updated.
+										if (message === "") {
+											strErrorCode = error.code.toString();
+											message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+										}
+										alert(message);
+									}, {
+										maximumAge: 0,
+										timeout: 30000,
+										enableHighAccuracy: true
+									});
+								}
+							}, "zoomToMyCurrentLocation");
+						} else {
+							domConstruct.destroy("zoomToMyCurrentLocation");
+						}
+
 					});
 				}
 
