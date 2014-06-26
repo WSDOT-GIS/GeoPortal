@@ -1,5 +1,5 @@
-﻿/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
-/*global require, _gaq, $ */
+﻿/*global require, _gaq, $ */
+/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
@@ -10,14 +10,6 @@ jQuery
 jQuery UI
 jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 */
-
-/// <reference path="jsapi_vsdoc_v31.js" />
-/// <reference path="dojo.js.uncompressed.js" />
-/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js"/>
-/// <reference path="jquery.ba-bbq.js" />
-/// <reference path="layerList.js" />
-/// <reference path="locationInfo.js" />
-/// <reference path="config.js" />
 
 var wsdot;
 
@@ -97,12 +89,35 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
 	wsdot = { config: {} };
 
+	/**
+	 * Shows the disclaimer dialog if the configuration contains a disclaimer.  If the dialog is shown, a jQuery object containing the dialog is returned.
+	 * @param {Boolean} showEvenIfAlreadyAgreed - Set this to true if you want to force the disclaimer to be shown even if there is a cookie indicating the user has already agreed.
+	 * @returns {Object}
+	 */
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
-		/// <summary>Shows the disclaimer dialog if the configuration contains a disclaimer.  If the dialog is shown, a jQuery object containing the dialog is returned.</summary>
-		/// <param name="showEvenIfAlreadyAgreed" type="Boolean">Set this to true if you want to force the disclaimer to be shown even if there is a cookie indicating the user has already agreed.</param>
-		/// <returns type="Object" />
+		// Get config name
+
+
+		var configName, settingName;
+
+		// Get the configuration name from the query string.
+		(function () {
+			var re = /\bconfig=([^&]+)/i, match;
+			if (location.search) {
+				match = location.search.match(re);
+				if (match) {
+					configName = match[1];
+				}
+			}
+			if (!configName) {
+				configName = "";
+			}
+		}());
+
+		settingName = "AggreedToDisclaimer" + configName;
+
 		// Show the disclaimer if there is no cookie indicating that the user has seen it before.
-		if (wsdot.config.disclaimer !== undefined && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie("AgreedToDisclaimer")))) {
+		if (wsdot.config.disclaimer !== undefined && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie(settingName)))) {
 			// Load the content into a div.  Only when the source page has loaded do invoke the dialog constructor.
 			// This is to ensure that the dialog is centered on the page.
 			return $("<div>").load(wsdot.config.disclaimer, function () {
@@ -128,7 +143,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 					},
 					close: function (/*event, ui*/) {
 						// Add a cookie
-						$.cookie("AgreedToDisclaimer", true, { expires: 30 });
+						$.cookie(settingName, true, { expires: 5 });
 						$(this).dialog("destroy").remove();
 					}
 				});
@@ -146,44 +161,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				return String(this.getMonth()) + "-" + String(this.getDate()) + "-" + String(this.getFullYear());
 			};
 		}
-
-		/*jslint plusplus:true */
-		// Enable the Date.toISOString method if browser does not support it.
-		// Copied from https://github.com/kriskowal/es5-shim/
-		// ES5 15.9.5.43
-		// http://es5.github.com/#x15.9.5.43
-		// This function returns a String value represent the instance in time
-		// represented by this Date object. The format of the String is the Date Time
-		// string format defined in 15.9.1.15. All fields are present in the String.
-		// The time zone is always UTC, denoted by the suffix Z. If the time value of
-		// this object is not a finite Number a RangeError exception is thrown.
-		if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
-			Date.prototype.toISOString = function toISOString() {
-				var result, length, value, year;
-				if (!isFinite(this)) {
-					throw new RangeError("Date.prototype.toISOString called on non-finite value.");
-				}
-
-				// the date time string format is specified in 15.9.1.15.
-				result = [this.getUTCMonth() + 1, this.getUTCDate(),
-					this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
-				year = this.getUTCFullYear();
-				year = (year < 0 ? '-' : (year > 9999 ? '+' : '')) + ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6);
-
-				length = result.length;
-				while (length--) {
-					value = result[length];
-					// pad months, days, hours, minutes, and seconds to have two digits.
-					if (value < 10) {
-						result[length] = "0" + value;
-					}
-				}
-				// pad milliseconds to have three digits.
-				return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
-					("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
-			};
-		}
-		/*jslint plusplus:false */
 
 		$(document).ready(function () {
 			var qs = $.deparam.querystring();
