@@ -22,8 +22,13 @@ define([
 ], function (FilteringSelect, ItemFileReadStore, Graphic, geometryJsonUtils, Point, FeatureSet, SpatialReference, InfoTemplate) {
 	"use strict";
 
+	/**
+	 * Returns the name of the first attribute of a graphic that is of type "string".
+	 * @param {Graphic}
+	 * @returns {(string|null)} - Returns a string if a string attribute is found, null otherwise.
+	 */
 	function getFirstStringAttribute(graphic) {
-		var propName, value, output;
+		var propName, output = null;
 		for (propName in graphic.attributes) {
 			if (graphic.attributes.hasOwnProperty(propName)) {
 				if (typeof graphic.attributes[propName] === "string") {
