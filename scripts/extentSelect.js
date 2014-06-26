@@ -1,14 +1,7 @@
 ﻿/*global define */
-
-
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
-/*
-This jQuery plugin is used to create a dojo Filtering Select dijit that allows the user to zoom to a predefined extend in an ArcGIS JavaScript API web application.
-Prerequisites:
-ArcGIS JavaScript API
-jQuery
-*/
+// Creates a dojo Filtering Select dijit that allows the user to zoom to a predefined extend in an ArcGIS JavaScript API web application.
 
 define([
 	"dijit/form/FilteringSelect",
