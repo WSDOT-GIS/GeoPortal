@@ -226,13 +226,15 @@ require([
 
 			this.detectHtmlPopupsHasRun = true;
 		},
+		/*
+		 * Runs an identify task for each map service that has HTML Popup sublayers.
+		 * @param {esri.geometry.Geometry} geometry
+		 * @param {function} identifyCompleteHandler - A function that has layer and identifyResults parameters.
+		 * @param {Object} options - Use this parameter to override the default identify task options: layerOption, tolerance, and maxAllowableOffset.
+		 * @param {function} errorHandler - A function to handler identify task errors.  Function parameters layer, error.
+		 * @returns {number} - Returns the number of identify tasks that were performed.
+		 */
 		identify: function (geometry, identifyCompleteHandler, options, errorHandler) {
-			///<summary>Runs an identify task for each map service that has HTML Popup sublayers.</summary>
-			///<param name="geometry" type="esri.geometry.Geometry"/>
-			///<param name="identifyCompleteHandler">A function that has layer and identifyResults parameters.</param>
-			///<param name="options">Use this parameter to override the default identify task options: layerOption, tolerance, and maxAllowableOffset</param>
-			///<param name="errorHandler">A function to handler identify task errors.  Function parameters layer, error.</param>
-			///<returns type="Number">Returns the number of identify tasks that were performed.</returns>
 			var map = this, queryCount = 0;
 
 			// Detect which layers have HTML popups.
@@ -308,11 +310,11 @@ require([
 		disablePopups: function () {
 			this.popupsEnabled = false;
 		},
+		/**
+		 * @param {Object} options - Defines options for setting up identify popups.
+		 * @param {RegExp} options.ignoredLayerRE - A regular expression.  Any layer with an ID that matches this expression will be ignored by the identify tool.
+		 */
 		setupIdentifyPopups: function (options) {
-			/// <param name="options" type="Object">
-			/// Defines options for setting up identify popups.
-			/// ignoredLayerRE: A regular expression.  Any layer with an ID that matches this expression will be ignored by the identify tool.
-			/// </param>
 			var map = this;
 
 			map.popupsEnabled = true;
