@@ -52,7 +52,7 @@ require([
 			if (!imageViewerUrl) {
 				imageViewerUrl = "./fish-barrier-images/";
 			}
-			output = [imageViewerUrl, "?id=", wdfwId].join("");
+			output = [imageViewerUrl, "?id=", wdfwId, "&noselect"].join("");
 		}
 		return output;
 	}

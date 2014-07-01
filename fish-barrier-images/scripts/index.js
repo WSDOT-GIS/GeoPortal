@@ -85,14 +85,27 @@
 		return wdfwid;
 	}
 
+	function getNoSelect() {
+		var output = false, re = /no\-?select/i;
+		if (location.search) {
+			if (re.test(location.search)) {
+				output = true;
+			}
+		}
+		return output;
+	}
+
 	/** Creates a <select> containing options for each ImageInfo.
 	 * @param {Object.<string,ImageInfo[]>} imageInfos
 	 * @param {string} [wdfwid]
 	 * @returns {HTMLSelectElement}
 	 */
 	function createSelect(imageInfos, wdfwid) {
-		var select, option, selectedOption, docFrag;
+		var select, option, selectedOption, docFrag, hidden = getNoSelect();
 		select = document.createElement("select");
+		if (hidden) {
+			select.hidden = true;
+		}
 		docFrag = document.createDocumentFragment();
 		option = document.createElement("option");
 		option.disabled = true;
@@ -160,6 +173,7 @@
 
 		// Create the select element and insert before the thumbnail container.
 		var select = createSelect(imageInfos, wdfwid);
+
 
 		var matchingOption = select.querySelector("[data-wdfwid='" + wdfwid + "']");
 		if (matchingOption) {
