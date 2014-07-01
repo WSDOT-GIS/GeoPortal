@@ -469,7 +469,7 @@ require([
 										a = document.createElement("a");
 										a.href = url;
 										a.target = "_blank";
-										a.appendChild(document.createTextNode("Images"));
+										a.appendChild(document.createTextNode("Photos"));
 										div.insertBefore(a, div.firstChild);
 									}
 								}(getWdfwId(div)));

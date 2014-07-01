@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="AirportPowerUser.aspx" />
-    <Content Include="AIS\config.js" />
+    <None Include="AIS\config.json" />
     <Content Include="AIS\ReadMe.txt" />
     <Content Include="AIS\web.config" />
     <Content Include="config\airport.json" />

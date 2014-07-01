@@ -95,9 +95,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	 * @returns {Object}
 	 */
 	function showDisclaimer(showEvenIfAlreadyAgreed) {
-		// Get config name
-
-
 		var configName, settingName;
 
 		// Get the configuration name from the query string.
@@ -114,7 +111,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			}
 		}());
 
-		settingName = "AggreedToDisclaimer" + configName;
+		settingName = "GeoportalAggreedToDisclaimer" + configName;
 
 		// Show the disclaimer if there is no cookie indicating that the user has seen it before.
 		if (wsdot.config.disclaimer !== undefined && (showEvenIfAlreadyAgreed || (wsdot.config.disclaimer !== null && !$.cookie(settingName)))) {
