@@ -17,11 +17,13 @@
 	 * @param {string} url - URL of an image.
 	 * @returns {HTMLDivElement}
 	 */
-	function createThumbnailDiv(url) {
-		var div, a, img;
+	function createThumbnailDiv(url, imgCount) {
+		var div, a, img, md;
 
 		div = document.createElement("div");
-		div.setAttribute("class", "col-xs-6 col-md-3");
+		md = 12 / imgCount;
+		div.classList.add("col-xs-" + Math.round(md * 2));
+		div.classList.add("col-md-" + Math.round(md));
 
 		a = document.createElement("a");
 		a.href = url;
@@ -58,7 +60,7 @@
 		if (urls) {
 			docFrag = document.createDocumentFragment();
 			urls.forEach(function (url) {
-				docFrag.appendChild(createThumbnailDiv(url));
+				docFrag.appendChild(createThumbnailDiv(url, urls.length));
 			});
 			thumbContainer.appendChild(docFrag);
 
