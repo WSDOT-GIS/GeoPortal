@@ -145,11 +145,10 @@
 				}
 			},
 			{
-				"layerType": "esri.layers.FeatureLayer",
-				"url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/arcgis/rest/services/WAECY_WRIA/FeatureServer/0",
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/WRIABoundaries/MapServer",
 				"options": {
-					"id": "WRIA",
-					"outFields": ["WRIA_NR"]
+					"id": "WRIA"
 				}
 			},
 			{
