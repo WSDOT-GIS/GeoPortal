@@ -114,18 +114,39 @@
 		"Fish Passage Barriers": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersRelevantToCase/MapServer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
 				"options": {
-					"id": "Relevant to US v. WA",
+					"id": "Corrected Barriers Statewide",
 					"visible": true
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersStatewide/MapServer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
 				"options": {
-					"id": "Statewide",
+					"id": "Uncorrected Barriers Statewide",
 					"visible": true
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CorrectedBarriersCaseArea/MapServer",
+				"options": {
+					"id": "Corrected Barriers Case Area"
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/InDesignBarriersCaseArea/MapServer",
+				"options": {
+					"id": "In-Design Barriers Case Area"
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
+				"options": {
+					"id": "Uncorrected Barriers Case Area"
 				}
 			}
 		],
