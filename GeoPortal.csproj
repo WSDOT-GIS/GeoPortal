@@ -59,6 +59,29 @@
     <Content Include="disclaimers\Freight\Internal.html" />
     <Content Include="disclaimers\Freight\Public.html" />
     <Content Include="error\GenericError.html" />
+    <Content Include="fish-barrier-images\Gallery\css\blueimp-gallery-indicator.css" />
+    <Content Include="fish-barrier-images\Gallery\css\blueimp-gallery-video.css" />
+    <Content Include="fish-barrier-images\Gallery\css\blueimp-gallery.css" />
+    <Content Include="fish-barrier-images\Gallery\css\blueimp-gallery.min.css" />
+    <Content Include="fish-barrier-images\Gallery\css\demo.css" />
+    <Content Include="fish-barrier-images\Gallery\img\error.png" />
+    <Content Include="fish-barrier-images\Gallery\img\error.svg" />
+    <Content Include="fish-barrier-images\Gallery\img\loading.gif" />
+    <Content Include="fish-barrier-images\Gallery\img\play-pause.png" />
+    <Content Include="fish-barrier-images\Gallery\img\play-pause.svg" />
+    <Content Include="fish-barrier-images\Gallery\img\video-play.png" />
+    <Content Include="fish-barrier-images\Gallery\img\video-play.svg" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery-fullscreen.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery-indicator.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery-video.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery-vimeo.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery-youtube.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-gallery.min.js" />
+    <Content Include="fish-barrier-images\Gallery\js\blueimp-helper.js" />
+    <Content Include="fish-barrier-images\Gallery\js\demo.js" />
+    <Content Include="fish-barrier-images\Gallery\js\jquery.blueimp-gallery.js" />
+    <Content Include="fish-barrier-images\Gallery\js\jquery.blueimp-gallery.min.js" />
     <Content Include="fish-barrier-images\index.html" />
     <Content Include="fish-barrier-images\scripts\index.js" />
     <Content Include="FunctionalClassLegend.html" />
@@ -220,7 +243,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="fish-barrier-images\style\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
