@@ -40,47 +40,37 @@
 	 * @param {string[]} urls - An array of image URL strings.
 	 */
 	function createLightbox(urls) {
-		var galleryDiv, docFrag, linksDiv, a, img, url, re = /([^\/]+)_(\d+)(\.\w+)$/i, match, title;
-		galleryDiv = document.createElement("div");
-		galleryDiv.id = "blueimp-gallery";
-		galleryDiv.setAttribute("class", "blueimp-gallery");
-		galleryDiv.innerHTML = '<div class="slides"></div><h3 class="title"></h3><a class="prev">‹</a><a class="next">›</a><a class="close">×</a><a class="play-pause"></a><ol class="indicator"></ol>';
-		docFrag = document.createDocumentFragment();
-		docFrag.appendChild(galleryDiv);
+		var galleryDiv, docFrag, url;
 
-		// Create links.
-		linksDiv = document.createElement("div");
-		linksDiv.id = "links";
-		docFrag.appendChild(linksDiv);
-		for (var i = 0, l = urls.length; i < l; i += 1) {
-			url = urls[i];
+		function toGalleryItem(url) {
+			var re = /([^\/]+)_(\d+)(\.\w+)$/i, match, title;
 			match = url.match(re);
-			title = !!match ? [match[1], " (", match[2], ")"].join("") : "untitled";
+			title = match ? [match[1], " (", match[2], ")"].join("") : url;
 
-			a = document.createElement("a");
-			a.href = url;
-			a.title = title;
-			linksDiv.appendChild(a);
-
-			img = document.createElement("img");
-			img.style.width = "calc(100%/6)";
-			img.src = url;
-			img.alt = title;
-			a.appendChild(img);
+			return {
+				title: title,
+				href: url,
+				type: "image/jpeg",
+				thumbnail: url
+			};
 		}
+
+		docFrag = document.createDocumentFragment();
+		galleryDiv = document.createElement("div");
+		galleryDiv.id = "blueimp-gallery-carousel";
+		galleryDiv.setAttribute("class", "blueimp-gallery blueimp-gallery-carousel");
+		galleryDiv.innerHTML = '<div class="slides"></div><h3 class="title"></h3><a class="prev">‹</a><a class="next">›</a><a class="play-pause"></a><ol class="indicator"></ol>';
+		docFrag.appendChild(galleryDiv);
 
 		document.body.appendChild(docFrag);
 
-		linksDiv.onclick = function (event) {
-			var target, link, options, links;
-			event = event || window.event;
-			target = event.target || event.srcElement;
-			link = target.src ? target.parentNode : target;
-			options = { index: link, event: event };
-			links = this.getElementsByTagName('a');
-
-			blueimp.Gallery(links, options);
-		};
+		blueimp.Gallery(
+			urls.map(toGalleryItem),
+			{
+				container: '#blueimp-gallery-carousel',
+				carousel: true
+			}
+		);
 	}
 
 	function handleImageListLoad() {
