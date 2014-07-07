@@ -39,13 +39,13 @@
 	 * Creates the lightbox.
 	 * @param {string[]} urls - An array of image URL strings.
 	 */
-	function createLightbox(urls) {
-		var galleryDiv, docFrag, url;
+	function createGallery(urls) {
+		var galleryDiv, docFrag;
 
-		function toGalleryItem(url) {
+		function toGalleryItem(url, index, array) {
 			var re = /([^\/]+)_(\d+)(\.\w+)$/i, match, title;
 			match = url.match(re);
-			title = match ? [match[1], " (", match[2], ")"].join("") : url;
+			title = match ? [match[1], " (", index + 1, " of ", array.length, ")"].join("") : url;
 
 			return {
 				title: title,
@@ -58,7 +58,7 @@
 		docFrag = document.createDocumentFragment();
 		galleryDiv = document.createElement("div");
 		galleryDiv.id = "blueimp-gallery-carousel";
-		galleryDiv.setAttribute("class", "blueimp-gallery blueimp-gallery-carousel");
+		galleryDiv.setAttribute("class", "blueimp-gallery blueimp-gallery-carousel blueimp-gallery-controls");
 		galleryDiv.innerHTML = '<div class="slides"></div><h3 class="title"></h3><a class="prev">‹</a><a class="next">›</a><a class="play-pause"></a><ol class="indicator"></ol>';
 		docFrag.appendChild(galleryDiv);
 
@@ -84,7 +84,7 @@
 		links = this.response.body.querySelectorAll("a[href]");
 		// Convert links into ImageInfo objects and group by WDFW ID.
 		var urls = linksToUrls(links);
-		createLightbox(urls);
+		createGallery(urls);
 	}
 
 	// Setup the request for the list of images.
