@@ -67,9 +67,6 @@
 		blueimp.Gallery(
 			urls.map(toGalleryItem),
 			{
-				onopen: function () {
-					console.debug(this, arguments);
-				},
 				container: '#blueimp-gallery-carousel',
 				carousel: true
 			}
