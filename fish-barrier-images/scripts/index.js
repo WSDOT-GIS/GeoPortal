@@ -36,12 +36,19 @@
 	}
 
 	/**
-	 * Creates the lightbox.
+	 * Creates the Gallery.
 	 * @param {string[]} urls - An array of image URL strings.
 	 */
 	function createGallery(urls) {
 		var galleryDiv, docFrag;
 
+		/**
+		 * Converts a URL into a gallery item for the blueimp.Gallery constructor. Meant for use with Array.prototype.map.
+		 * @param {string} url
+		 * @param {number} index
+		 * @param {string[]} array
+		 * @return {Object.<string, string>}
+		 */
 		function toGalleryItem(url, index, array) {
 			var re = /([^\/]+)_(\d+)(\.\w+)$/i, match, title;
 			match = url.match(re);
@@ -55,6 +62,7 @@
 			};
 		}
 
+		// Create the DOM elements used to create the gallery.
 		docFrag = document.createDocumentFragment();
 		galleryDiv = document.createElement("div");
 		galleryDiv.id = "blueimp-gallery-carousel";
@@ -84,6 +92,7 @@
 		links = this.response.body.querySelectorAll("a[href]");
 		// Convert links into ImageInfo objects and group by WDFW ID.
 		var urls = linksToUrls(links);
+		// Create the gallery.
 		createGallery(urls);
 	}
 
