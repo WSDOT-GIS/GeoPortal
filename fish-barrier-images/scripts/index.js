@@ -25,7 +25,7 @@
 	 */
 	function linksToUrls(links) {
 		var link, i, l, output = [], re;
-		re = new RegExp(["\\b", wdfwId, "_\\d+"].join(""), "i");
+		re = new RegExp(["\\b", encodeURIComponent(wdfwId), "_\\d+"].join(""), "i");
 		for (i = 0, l = links.length; i < l; i += 1) {
 			link = links[i];
 			if (re.test(link.href)) {
@@ -45,7 +45,7 @@
 		function toGalleryItem(url, index, array) {
 			var re = /([^\/]+)_(\d+)(\.\w+)$/i, match, title;
 			match = url.match(re);
-			title = match ? [match[1], " (", index + 1, " of ", array.length, ")"].join("") : url;
+			title = match ? [decodeURIComponent(match[1]), " (", index + 1, " of ", array.length, ")"].join("") : url;
 
 			return {
 				title: title,
