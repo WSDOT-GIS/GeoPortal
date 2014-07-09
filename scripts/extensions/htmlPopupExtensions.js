@@ -43,8 +43,10 @@ require([
 	}
 
 	/**
+	 * Gets the URL for a WDFW Image with the given ID.
 	 * @param {string} wdfwId
 	 * @param {string} [imageViewerUrl]
+	 * @returns {string}
 	 */
 	function getWdfwImageUrl(wdfwId, imageViewerUrl) {
 		var output = null;
@@ -52,7 +54,7 @@ require([
 			if (!imageViewerUrl) {
 				imageViewerUrl = "./fish-barrier-images/";
 			}
-			output = [imageViewerUrl, "?id=", wdfwId, "&noselect"].join("");
+			output = [imageViewerUrl, "?id=", wdfwId].join("");
 		}
 		return output;
 	}
