@@ -456,3 +456,14 @@ abbr {
 	left: 20px;
 	z-index: 1;
 }
+
+.wdfw-photos-link-container {
+	text-align: center;
+	font-size: 2em;
+}
+
+/* Put a camera icon before the link. */
+.wdfw-photos-link:before {
+	content:'📷';
+	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol', 'LastResort', 'Symbola';
+}

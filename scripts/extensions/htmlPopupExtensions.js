@@ -465,14 +465,18 @@ require([
 
 								// Add WDFW URL;
 								(function (wdfwId) {
-									var url, a;
+									var url, a, wdfwLinkContainer;
 									if (wdfwId) {
+										wdfwLinkContainer = document.createElement("div");
+										wdfwLinkContainer.setAttribute("class", "wdfw-photos wdfw-photos-link-container");
 										url = getWdfwImageUrl(wdfwId);
 										a = document.createElement("a");
+										a.setAttribute("class", "wdfw-photos wdfw-photos-link");
 										a.href = url;
 										a.target = "_blank";
 										a.appendChild(document.createTextNode("Photos"));
-										div.insertBefore(a, div.firstChild);
+										wdfwLinkContainer.appendChild(a);
+										div.insertBefore(wdfwLinkContainer, div.firstChild);
 									}
 								}(getWdfwId(div)));
 							}, function (error) {
