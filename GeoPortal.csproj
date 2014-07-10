@@ -154,6 +154,7 @@
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\Production Deployment Area.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
     <None Include="style\FGDC Plus.xsl" />

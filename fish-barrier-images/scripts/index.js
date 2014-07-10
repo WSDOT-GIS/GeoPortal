@@ -24,13 +24,15 @@
 	 * @returns {string[]}
 	 */
 	function linksToUrls(links) {
-		var link, i, l, output = [], re;
+		var link, i, l, output = [], re, url, filenameRe = /[^\/]+$/;
 		// Create a RegExp that only matches image URLs for the WDFW ID.
 		re = new RegExp(["\\b", encodeURIComponent(wdfwId), "_\\d+"].join(""), "i");
 		for (i = 0, l = links.length; i < l; i += 1) {
 			link = links[i];
 			if (re.test(link.href)) {
-				output.push(link.href);
+				// Ensure the URL is pointing to the correct root, not relative to the current page.
+				url = imagesRootUrl + link.href.match(filenameRe)[0];
+				output.push(url);
 			}
 		}
 		return output;
