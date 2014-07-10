@@ -53,6 +53,11 @@ img[src$="blank.gif"]
 .legend-sprite-proposedOtherFwyExpwy{ background-position: 0 -141px; width: 20px; height: 2px; } 
 .legend-sprite-proposedOtherPrincipalArterial{ background-position: 0 -148px; width: 20px; height: 2px; } 
 
+.fcid {
+    color: red;
+    font-weight: bold;
+}
+
 
 .hidden 
 {
