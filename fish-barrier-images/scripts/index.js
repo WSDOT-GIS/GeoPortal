@@ -25,6 +25,7 @@
 	 */
 	function linksToUrls(links) {
 		var link, i, l, output = [], re;
+		// Create a RegExp that only matches image URLs for the WDFW ID.
 		re = new RegExp(["\\b", encodeURIComponent(wdfwId), "_\\d+"].join(""), "i");
 		for (i = 0, l = links.length; i < l; i += 1) {
 			link = links[i];
