@@ -456,3 +456,16 @@ abbr {
 	left: 20px;
 	z-index: 1;
 }
+
+.symbol {
+	font-family: 'Symbola', 'Segoe UI Symbol', 'Segoe UI Emoji';
+}
+
+.fc-info {
+	border: 1px solid darkblue;
+	padding: 0.5em;
+	margin-top: 0.5em;
+	color: darkblue;
+	font-weight: bold;
+	border-radius: 5px;
+}
