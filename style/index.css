@@ -462,8 +462,20 @@ abbr {
 	font-size: 2em;
 }
 
+.wdfw-photos-link:before, .u-email:before, .p-tel:before {
+	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol', 'LastResort', 'Symbola';
+	font-size: 1em;
+}
+
 /* Put a camera icon before the link. */
 .wdfw-photos-link:before {
 	content:'📷';
-	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol', 'LastResort', 'Symbola';
+}
+
+.u-email:before {
+	content: '📧';
+}
+
+.p-tel:before {
+	content: '📞';
 }
