@@ -6,6 +6,11 @@
 	"alwaysShowDisclaimer": false,
 	"printUrl":"http://www.wsdot.wa.gov/geoservices/ArcGIS/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
 	"noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
+	"tools": [
+		"zoom",
+		"search",
+		"lrs"
+	],
 	"mapOptions": {
 		"logo": true,
 		"extent": {

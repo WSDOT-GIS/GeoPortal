@@ -1,4 +1,4 @@
-﻿/*global require, jQuery, esri, dojo */
+﻿/*global require, jQuery, dojo */
 /*jslint plusplus:true,nomen:true*/
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -37,14 +37,37 @@
 	////	for (i = 0, l = map.layerIds.length; i < l; i++) {
 	////		//layer = map.getLayer(map.layerIds[i]);
 	////		layerId = map.layerIds[i];
-	////		legendLayer = new esri.tasks.LegendLayer();
+	////		legendLayer = new LegendLayer();
 	////		legendLayer.layerId = layerId;
 	////		output.push(legendLayer);
 	////	}
 	////	return output;
 	////}
 
-	require(["esri/tasks/PrintTask"], function (PrintTask) {
+	require(["esri/tasks/PrintTask", "esri/tasks/PrintParameters", "esri/tasks/PrintTemplate", "esri/tasks/LegendLayer"], function (PrintTask, PrintParameters, PrintTemplate, LegendLayer) {
+		/**
+		 * Creates an array of LegendLayers of all layers currently visible in the map.
+		 * @param {esri.Map} map
+		 * @returns {esri.tasks.LegendLayer[]}
+		 */
+		function getLegendLayersFromMap(map) {
+			var layer, legendLayer, output = [];
+			for (var i = 0, l = map.layerIds.length; i < l; i += 1) {
+				layer = map.getLayer(map.layerIds[i]);
+				if (layer.visible && layer.visibleAtMapScale) {
+					legendLayer = new LegendLayer();
+					legendLayer.layerId = layer.id;
+					if (layer.visibleLayers) {
+						legendLayer.subLayerIds = layer.visibleLayers;
+					}
+					output.push(legendLayer);
+				}
+			}
+
+			// Return null if the output array has no elements.
+			return output.length > 0 ? output : null;
+		}
+
 		$.widget("ui.printer", {
 			options: {
 				map: null,
@@ -233,12 +256,13 @@
 
 				}).click(function () {
 					var printParameters, printTemplate;
-					printParameters = new esri.tasks.PrintParameters();
+					printParameters = new PrintParameters();
 					printParameters.map = $this.options.map;
-					printTemplate = new esri.tasks.PrintTemplate();
+					printTemplate = new PrintTemplate();
 					printTemplate.format = "PDF";
 					printTemplate.layout = $this._templateSelect.val();
 					printTemplate.layoutOptions = $this.options.layoutOptions;
+					printTemplate.layoutOptions.legendLayers = getLegendLayersFromMap($this.options.map);
 					printParameters.template = printTemplate;
 					//// printParameters.extraParameters = getExtraParameters();
 
