@@ -675,16 +675,30 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				(function (tabOrder) {
 					var i, l, name, contentPane;
 
+					/**
+					 * Gets the alternate title for this tab name from the config file.
+					 * If no alternative is available, the input string is returned.
+					 * @param {string} title
+					 * @returns {string}
+					 */
+					function getTabTitle(title) {
+						var output;
+						if (wsdot.config && wsdot.config.alternateTabTitles && wsdot.config.alternateTabTitles.hasOwnProperty(title)) {
+							output = wsdot.config.alternateTabTitles[title];
+						}
+						return output || title;
+					}
+
 					for (i = 0, l = tabOrder.length; i < l; i += 1) {
 						name = tabOrder[i];
 						if (/Layers/i.test(name)) {
-							tabs.addChild(new ContentPane({ title: "Layers", id: "layersTab" }, "layersTab"));
+							tabs.addChild(new ContentPane({ title: getTabTitle("Layers"), id: "layersTab" }, "layersTab"));
 						} else if (/Legend/i.test(name)) {
-							tabs.addChild(new ContentPane({ title: "Legend", onShow: setupLegend }, "legendTab"));
+							tabs.addChild(new ContentPane({ title: getTabTitle("Legend"), onShow: setupLegend }, "legendTab"));
 						} else if (/Basemap/i.test(name)) {
-							tabs.addChild(new ContentPane({ title: "Basemap", id: "basemapTab" }, "basemapTab"));
+							tabs.addChild(new ContentPane({ title: getTabTitle("Basemap"), id: "basemapTab" }, "basemapTab"));
 						} else if (/Tools/i.test(name)) {
-							toolsTab = new ContentPane({ title: "Tools" }, "toolsTab");
+							toolsTab = new ContentPane({ title: getTabTitle("Tools") }, "toolsTab");
 							tabs.addChild(toolsTab);
 						} else if (/Airspace\s*Calculator/i.test(name)) {
 							// Add elements that will become the tab to the dom.
