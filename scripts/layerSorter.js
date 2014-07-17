@@ -57,7 +57,8 @@
 			this._populateList();
 
 			// Add event handing to reorganize layers when layer's list item has been moved.
-			dojo.connect(this.options.map, "onLayerReorder", $this, $this._populateList);
+			////dojo.connect(this.options.map, "onLayerReorder", $this, $this._populateList);
+			this.options.map.on("layers-reordered", $this._populateList);
 
 			return this;
 		},
