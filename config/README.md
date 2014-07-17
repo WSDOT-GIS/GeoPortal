@@ -53,6 +53,13 @@ Determines the order that the tabs will appear in.  The example below shows all 
 		"Legend"
 	],
 
+## alternateTabTitles ##
+Allows tabs to be given alternate names. In the example below, the tab that would normally be called *Tools* will instead be called *Search*.
+
+	"alternateTabTitles":  {
+		"Tools": "Search"
+	},
+
 ## customLegend ##
 The custom legend property can be used to replace the default legend with a customLegend widget.  This value will match the options object of the customLegend widget.  Most configurations will probably be best served by using the default legend (and omitting the "customLegend" setting).
 
