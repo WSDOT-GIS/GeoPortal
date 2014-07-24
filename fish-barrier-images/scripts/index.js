@@ -85,7 +85,7 @@
 	}
 
 	function handleImageListLoad() {
-		var links, progress;
+		var links, progress, urls, p;
 		// Remove the progress bar.
 		progress = document.getElementById("progressBar");
 		progress.parentElement.removeChild(progress);
@@ -93,10 +93,17 @@
 		wdfwId = getWdfwIdFromQueryString();
 		// Get all of the links in the image list page.
 		links = this.response.body.querySelectorAll("a[href]");
-		// Convert links into ImageInfo objects and group by WDFW ID.
-		var urls = linksToUrls(links);
-		// Create the gallery.
-		createGallery(urls);
+		urls = linksToUrls(links);
+
+		if (urls.length > 0) {
+			// Convert links into ImageInfo objects and group by WDFW ID.
+			// Create the gallery.
+			createGallery(urls);
+		} else {
+			p = document.createElement("p");
+			p.innerHTML = "No images available for <em>" + wdfwId + "</em>.";
+			document.body.appendChild(p);
+		}
 	}
 
 	// Setup the request for the list of images.
