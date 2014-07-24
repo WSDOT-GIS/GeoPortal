@@ -119,7 +119,7 @@
 	],
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"layers": {
-		"Fish Passage Barriers": [
+		"WSDOT Fish Passage Barriers": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
@@ -133,6 +133,13 @@
 				"options": {
 					"id": "Uncorrected Barriers Statewide",
 					"visible": true
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
+				"options": {
+					"id": "Case Area Boundary"
 				}
 			},
 			{
@@ -157,12 +164,19 @@
 				}
 			}
 		],
-		"Fish Passage Boundaries": [
+		"Additional Features": [
 			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
+				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
 				"options": {
-					"id": "Case Area Boundary"
+					"id": "State Routes"
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+				"url":  "http://fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+				"options":  {
+					"id":  "Rivers and Lakes"
 				}
 			},
 			{
@@ -173,26 +187,10 @@
 				}
 			},
 			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/WRIABoundaries/MapServer",
-				"options": {
-					"id": "Water Resource Inventory Area (WRIA)"
-				}
-			},
-			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-				"url":  "http://fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
-				"options":  {
-					"id":  "Rivers and Lakes"
-				}
-			}
-		],
-		"Political Boundaries": [
-			{
-				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
 				"options": {
-					"id": "City Limits"
+					"id": "Region Boundaries"
 				}
 			},
 			{
@@ -208,23 +206,19 @@
 				"options": {
 					"id": "Legislative Districts"
 				}
-			}
-		],
-		"WSDOT Boundaries": [
+			},
 			{
-				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/WRIABoundaries/MapServer",
 				"options": {
-					"id": "Region Boundaries"
+					"id": "Water Resource Inventory Area (WRIA)"
 				}
-			}
-		],
-		"Transportation Features": [
+			},
 			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
 				"options": {
-					"id": "State Routes"
+					"id": "City Limits"
 				}
 			}
 		]
