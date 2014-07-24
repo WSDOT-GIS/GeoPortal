@@ -5,7 +5,7 @@ Interacting with the WSDOT Fish Passage Barriers Interactive Map
 
 1. Layers Tab - Displays list of map layers users can turn on and off.
 2. Legend Tab - Displays the legend for each layer that is visible.
-3. Basemap Tab – Click on the Basemap tab to see the available basemaps.  To select a new basemap, click on its picture.
+3. Basemap Tab - Click on the Basemap tab to see the available basemaps.  To select a new basemap, click on its picture.
 4. Tools Tab - Zoom To Tools. Users can zoom to a specific fish passage barrier, state route milepost, longitude/latitude location, county, city, urban area, and address.
 5. Zoom Buttons - Adjust the map zoom by clicking + and - buttons near the top left of the map.
 

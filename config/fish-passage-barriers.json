@@ -124,8 +124,7 @@
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
 				"options": {
-					"id": "Corrected Barriers Statewide",
-					"visible": true
+					"id": "Corrected Barriers Statewide"
 				}
 			},
 			{
@@ -177,7 +176,7 @@
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/WRIABoundaries/MapServer",
 				"options": {
-					"id": "WRIA"
+					"id": "Water Resource Inventory Area (WRIA)"
 				}
 			},
 			{
