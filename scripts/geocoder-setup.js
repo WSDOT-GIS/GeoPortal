@@ -1,13 +1,9 @@
 ﻿/*global define, wsdot*/
 // Create the Geocoder widget.
 define([
-	"dojo/_base/Color",
-	"esri/layers/GraphicsLayer",
 	"esri/dijit/Geocoder",
-	"esri/symbols/SimpleMarkerSymbol",
-	"esri/renderers/ClassBreaksRenderer",
 	"esri/InfoTemplate"
-], function (Color, GraphicsLayer, Geocoder, SimpleMarkerSymbol, ClassBreaksRenderer, InfoTemplate) {
+], function (Geocoder, InfoTemplate) {
 	var geocoder, infoTemplate;
 
 	infoTemplate = new InfoTemplate("Address", "<p>${name}</p><p>Score: ${Score}</p>");
