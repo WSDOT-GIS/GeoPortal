@@ -482,4 +482,6 @@ abbr {
 
 .printouts-list {
 	background-color: white;
+	padding: 0.5em 1em 0.5em 2em;
+	border-radius: 0 0 10px 10px;
 }
