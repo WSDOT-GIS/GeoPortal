@@ -411,7 +411,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						templateNames = getTemplateNames();
 
 						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
-						pdfList = $("<ol>").appendTo("#toolbar").hide();
+						pdfList = $("<ol class='printouts-list'>").appendTo("#toolbar").hide();
 
 						printButton = new Button({
 							label: "Print",

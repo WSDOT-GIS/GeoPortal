@@ -479,3 +479,7 @@ abbr {
 .p-tel:before {
 	content: '📞';
 }
+
+.printouts-list {
+	background-color: white;
+}
