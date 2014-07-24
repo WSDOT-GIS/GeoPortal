@@ -306,19 +306,12 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 							// Create the submit button and convert it to a jQueryUI button.
 							$("<button>").css("display", "block").attr("type", "submit").text("Export").appendTo(form).button();
-
-							////// The submit button doesn't work in IE without doing the following for some reason.
-							////if (dojo.isIE) {
-							////	$("button", form).click(function () {
-							////		form.submit();
-							////	});
-							////}
 						}
 
 						// Show the export dialog
 						exportDialog.dialog("open");
 					}
-				}, domConstruct.create("button", { id: "saveButton" }, "toolbar", "first"));
+				}, domConstruct.create("button", { id: "saveButton" }, "toolbar", "last"));
 
 				button = new Button({
 					label: "Arrange Layers",
@@ -890,15 +883,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				function setupSearchControls() {
 					// Address Search
-					toolsAccordion.addChild(new ContentPane({ title: "Find an Address" }, domConstruct.create("div", { id: "searchTools" }, "toolsAccordion")));
-					on.once(registry.byId("searchTools"), "show", function () {
-						require(["geocoder-setup"], function (setupGeocoder) {
-							var div = document.createElement("div");
-							div.id = "searchControl";
-							document.getElementById("searchTools").appendChild(div);
-
-							setupGeocoder(map, div);
-						});
+					var toolbar = document.getElementById("toolbar");
+					var addressDiv = document.createElement("div");
+					toolbar.insertBefore(addressDiv, toolbar.firstChild);
+					require(["geocoder-setup"], function (setupGeocoder) {
+						setupGeocoder(map, addressDiv);
 					});
 				}
 

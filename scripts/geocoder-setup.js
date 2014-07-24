@@ -6,7 +6,7 @@ define([
 ], function (Geocoder, InfoTemplate) {
 	var geocoder, infoTemplate;
 
-	infoTemplate = new InfoTemplate("Address", "<p>${name}</p><p>Score: ${Score}</p>");
+	infoTemplate = new InfoTemplate("Address", "<p class='h-adr'>${name}</p><p>Score: ${Score}</p>");
 
 	function setupGeocoder(map, node) {
 		geocoder = new Geocoder({
