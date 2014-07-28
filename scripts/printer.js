@@ -6,10 +6,12 @@
 (function ($) {
 	"use strict";
 
+	/**
+	 * Splits a camel-case or Pascal-case variable name into individual words.
+	 * @param {string} s
+	 * @returns {string[]}
+	 */
 	function splitWords(s) {
-		/// <summary>Splits a camel-case or Pascal-case variable name into individual words.</summary>
-		/// <param name="s" type="String">A string</param>
-		/// <returns type="Array" />
 		var re, match, output = [];
 		// re = /[A-Z]?[a-z]+/g
 		re = /([A-Za-z]?)([a-z]+)/g;
@@ -156,10 +158,12 @@
 				////	return output;
 				////}
 
+				/**
+				 * Adds layout options to an element.
+				 * @param {jQuery} container - A container element.
+				 * @param {Object} layoutOptions
+				 */
 				function addLayoutOptions(container, layoutOptions) {
-					/// <summary>Adds layout options to an element.</summary>
-					/// <param name="container" type="jQuery">A container element</param>
-					/// <param name="layoutOptions" type="Object">An object with properties.</param>
 					var optionName, optionValue;
 
 					function handleOptionChange(event) {
@@ -205,15 +209,27 @@
 					}
 				}
 
+				/**
+				 * Creates the select control for selecting print templates.
+				 * @returns {HTMLSelectElement}
+				 */
 				function createTemplateSelect() {
-					var output, i, l, tName;
+					var output, i, l, tName, ansiRe = /\bANSI\b/i, ansiMatch, firstAnsiFound;
 
 					output = $("<select>");
 					for (i = 0, l = $this.options.templates.length; i < l; i += 1) {
 						tName = $this.options.templates[i];
+						// Test to see if this is an ANSI size template.
+						ansiMatch = ansiRe.test(tName);
 						$("<option>").attr({
-							value: tName
+							value: tName,
+							// Set this to be the default option if it is the first ANSI sized template.
+							selected: !!ansiMatch && !firstAnsiFound 
 						}).text(tName).appendTo(output);
+						// Set variable to indicate that an ANSI template has been set as default value.
+						if (!!ansiMatch) {
+							firstAnsiFound = true;
+						}
 					}
 
 					return output;
