@@ -245,7 +245,7 @@ This value can either be an object or an array.  If an object is provided, each 
 				},
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
 					"options": {
 						"id": "MPO"
 					}
