@@ -121,7 +121,7 @@
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
 					"options": {
-						"id": "MPO"
+						"id": "MPA"
 					}
 				},
 				{
