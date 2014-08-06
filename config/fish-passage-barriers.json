@@ -1,6 +1,6 @@
 ﻿{
 	"pageTitle": "WSDOT Fish Passage Barriers",
-	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/fishpassagehelp.htm",
 	"enableIdentify": true,
 	"disclaimer": "disclaimers/fish-passage-barriers/Public.html",
 	"alwaysShowDisclaimer": false,
