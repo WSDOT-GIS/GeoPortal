@@ -1,6 +1,6 @@
 ﻿/*global blueimp*/
 (function () {
-	var imagesRootUrl = "../proxy.ashx?http://data.wsdot.wa.gov/Environmental/FishPassage/Images/";
+	var imagesRootUrl = "http://data.wsdot.wa.gov/Environmental/FishPassage/Images/";
 	var wdfwId;
 
 
