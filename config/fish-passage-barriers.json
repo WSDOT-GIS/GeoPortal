@@ -139,28 +139,21 @@
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
 				"options": {
-					"id": "Case Area Boundary"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CorrectedBarriersCaseArea/MapServer",
-				"options": {
-					"id": "Corrected Barriers Case Area"
+					"id": "US v. WA Case Area Boundary"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/InDesignBarriersCaseArea/MapServer",
 				"options": {
-					"id": "In-Design Barriers Case Area"
+					"id": "In Design Barriers Subject to Injunction"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
 				"options": {
-					"id": "Uncorrected Barriers Case Area"
+					"id": "Uncorrected Barriers Subject to Injunction"
 				}
 			}
 		],
