@@ -167,7 +167,7 @@
 			},
 			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-				"url":  "http://fortress.wa.gov/dfw/gispublic/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+				"url":  "http://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
 				"options":  {
 					"id":  "Rivers and Lakes"
 				}
@@ -212,7 +212,7 @@
 				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
 				"options": {
 					"id": "City Limits",
-					"opacity": 0.5
+					"opacity": 0.7
 				}
 			}
 		]
