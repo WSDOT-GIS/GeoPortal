@@ -79,7 +79,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
-	config, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
+	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect
@@ -199,8 +199,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 		function init() {
 			var gaTrackEvent, initBasemap = null;
-			config.defaults.io.proxyUrl = "proxy.ashx";
-			config.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
+			esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+			// Specify list of CORS enabled servers.
+			(function (servers) {
+				for (var i = 0; i < servers.length; i++) {
+					esriConfig.defaults.io.corsEnabledServers.push(servers[i]);
+				}
+			}(["www.wsdot.wa.gov", "hqolymgis21t"]));
+			esriConfig.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
 
 			function setupNorthArrow() {
 				// Create the north arrow.
