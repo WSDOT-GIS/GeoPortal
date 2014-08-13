@@ -150,7 +150,6 @@
     <Content Include="help\Freight\internal\Tutorial.pdf" />
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <Content Include="config\fish-passage-barriers.json" />
-    <None Include="config\fish-passage-bug.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
