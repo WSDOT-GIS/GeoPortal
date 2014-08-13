@@ -14,6 +14,18 @@ In the following example, the configuration file that will be used is `config/ai
 [dillinger.io]:http://dillinger.io/
 [Showdown]:http://showdown.im/
 
+## Showing a disclaimer ##
+
+	"disclaimer": "disclaimers/fish-passage-barriers/Public.html",
+	"alwaysShowDisclaimer": false,
+
+### disclaimer ###
+URL to show in a popup when the map first opens.
+
+### alwaysShowDisclaimer ###
+Boolean value indicating if the disclaimer should be shown every time the page is opened.
+If set to false a cookie will be set and the disclaimer will not be shown again for a week.
+
 
 ## pageTitle ##
 Use this parameter to change the page title.
@@ -59,6 +71,16 @@ Allows tabs to be given alternate names. In the example below, the tab that woul
 	"alternateTabTitles":  {
 		"Tools": "Search"
 	},
+
+## tools ##
+If provided, this determines the order of the contents of the *Tools* pane.
+
+	"tools": [
+		"zoom",
+		"search",
+		"lrs"
+	],
+
 
 ## customLegend ##
 The custom legend property can be used to replace the default legend with a customLegend widget.  This value will match the options object of the customLegend widget.  Most configurations will probably be best served by using the default legend (and omitting the "customLegend" setting).
@@ -123,6 +145,14 @@ This parameter specifies which layer will be used as the base layer when the map
 		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 	},
+
+## initialBasemap ##
+
+Specifies the initial basemap to choose from the basemap gallery widget once it has loaded its data.
+
+Note that you must have specified `mapOptions.lods` to use this parameter.
+
+	"initialBasemap": "Topographic",
 
 ## geometryServer ##
 The ArcGIS Server Geometry server that will be used when a geometry server is required.
@@ -203,17 +233,10 @@ This property is used to remove default basemaps from the basemap widget.
 
 	"basemapsToRemove": ["basemap_4", "basemap_6"], 
 
-## locateMileposts _and_ locateNearestMileposts ##
-The "locateMileposts" and "locateNearestMileposts" options are used to specify ELC REST endpoints.
+## routeLocatorUrl ##
+The URL of the ELC web service.
 
-	"locateMileposts": {
-		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
-		"options": { "useProxy": false, "usePost": true }
-	},
-	"locateNearestMileposts": {
-		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
-		"options": { "useProxy": false, "usePost": true }
-	},
+	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 
 ## tabbedLayerList ##
 Set to `true` to use a tabbed layer list, `false` (or omit) to use the default style.
