@@ -439,15 +439,15 @@ abbr {
 
 /* Put a camera icon before the link. */
 .wdfw-photos-link:before {
-	content: '?';
+	content: '📷';
 }
 
 .u-email:before {
-	content: '?';
+	content: '✉';
 }
 
 .p-tel:before {
-	content: '?';
+	content: '☎';
 }
 
 .printouts-list {
