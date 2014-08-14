@@ -926,15 +926,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			function setScaleLabel(level) {
 				// Set the scale.
 				var scale = map.getScale(level);
-				if (scale && scale !== 0) {
-					$("#scaleText").text("");
-				} else {
-					$("#scaleText").text("1:" + number.format(scale, {
-						round: 0,
-						places: 0
-					}));
-				}
-
+				var scaleNode = document.getElementById("scaleText");
+				scaleNode.textContent = scale ? ["1", number.format(scale, {
+					round: 0,
+					places: 0
+				})].join(":") : "";
 			}
 
 			setupLayout();
