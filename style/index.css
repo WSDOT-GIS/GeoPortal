@@ -32,17 +32,17 @@ div.table {
 	display: table;
 }
 
-div.table > div {
-	display: table-row;
-}
+	div.table > div {
+		display: table-row;
+	}
 
-div.table > div > div, div.table > div > span {
-	display: table-cell;
-}
+		div.table > div > div, div.table > div > span {
+			display: table-cell;
+		}
 
-div.table > div > div > h1, div.table > div > span > h1 {
-	text-align: center;
-}
+			div.table > div > div > h1, div.table > div > span > h1 {
+				text-align: center;
+			}
 
 .ui-tabs-nav {
 	font-family: 'Segoe Condensed', 'Arial Narrow';
@@ -326,34 +326,6 @@ img[src$="blank.gif"] {
 	text-decoration: underline;
 }
 
-/*
-.ui-copyrightInfo ul 
-{
-	padding: 0;
-	margin: 0;
-	list-style: none;
-}
-
-.ui-copyrightInfo 
-{
-	font-size: 0.7em;
-	font-family: 'Arial Narrow', sans-serif;
-	padding: 0.5em;
-	text-align: right;
-	position: absolute;
-	right: 1em;
-	bottom: 1em;
-	z-index: 200;
-	background-color: White;
-	background-color: RGBA(255,255,255,0.5);
-	text-shadow: 0px 0px 20px #ffffff;
-	filter: dropshadow(color=#0091ff, offx=0, offy=0);
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
-*/
-
 .esriAttributionItem, .esriAttributionLastItem {
 	background-color: White;
 	background-color: RGBA(255,255,255,0.7);
@@ -467,15 +439,15 @@ abbr {
 
 /* Put a camera icon before the link. */
 .wdfw-photos-link:before {
-	content: '📷';
+	content: '?';
 }
 
 .u-email:before {
-	content: '📧';
+	content: '?';
 }
 
 .p-tel:before {
-	content: '📞';
+	content: '?';
 }
 
 .printouts-list {
