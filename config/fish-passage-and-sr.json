@@ -125,6 +125,13 @@
 		"Additional Features": [
 			{
 				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+				"options": {
+					"id": "State Routes"
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 				"url":  "http://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
 				"options":  {
 					"id":  "Rivers and Lakes"
