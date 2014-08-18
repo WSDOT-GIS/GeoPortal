@@ -46,7 +46,7 @@
 		},
 		"fishPassageBarriers": {
 			"label": "Fish Passage Barriers",
-			"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
 			"query": {
 				"where":  "1 = 1",
 				"returnGeometry":  true,
@@ -87,14 +87,14 @@
 		"WSDOT Fish Passage Barriers": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
 				"options": {
 					"id": "Corrected Barriers Statewide"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
 				"options": {
 					"id": "Uncorrected Barriers Statewide",
 					"visible": true
@@ -102,21 +102,21 @@
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
 				"options": {
 					"id": "US v. WA Case Area Boundary"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/InDesignBarriersCaseArea/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/InDesignBarriersCaseArea/MapServer",
 				"options": {
 					"id": "In Design Barriers Subject to Injunction"
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
 				"options": {
 					"id": "Uncorrected Barriers Subject to Injunction"
 				}
@@ -132,7 +132,7 @@
 			},
 			{
 				"layerType": "esri.layers.FeatureLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/25",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/25",
 				"options": {
 					"id": "State Boundary"
 				}
@@ -160,7 +160,7 @@
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/FishPassage/WRIABoundaries/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/WRIABoundaries/MapServer",
 				"options": {
 					"id": "Water Resource Inventory Area (WRIA)"
 				}
