@@ -87,16 +87,17 @@
 		"WSDOT Fish Passage Barriers": [
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
 				"options": {
-					"id": "Corrected Barriers Statewide"
+					"id": "Uncorrected Barriers Statewide",
+					"visible": true
 				}
 			},
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
+				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
 				"options": {
-					"id": "Uncorrected Barriers Statewide",
+					"id": "Corrected Barriers Statewide",
 					"visible": true
 				}
 			},
