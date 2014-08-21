@@ -37,6 +37,41 @@ require([
 	_defaultContextMenuIcon = "<span style='cursor:pointer'>&Rrightarrow;</span>"; //"<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
 	_defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
 
+	/**
+	 * 
+	 * @param {Object} jsonObject
+	 * @param {boolean} jsonObject.ignoreSoe - Specifies that the metadata list provided by the Layer Metadata SOE is to be ignored. Only the "additionalMetadata" links will be used.
+	 * @param {Object.<string, string>} jsonObject.additionalMetadata - A dictionary of metadata URLs.
+	 */
+	function MetadataOptions(jsonObject) {
+		this.ignoreSoe = Boolean(jsonObject.ignoreSoe);
+		this.additionalMetadata = jsonObject.additionalMetadata;
+	}
+
+	/**
+	 * Creates a list of links.
+	 * @returns {HTMLUListElement}
+	 */
+	MetadataOptions.prototype.createListOfLinks = function () {
+		var ul, li, a;
+
+		ul = document.createElement("ul");
+
+		for (var name in this.additionalMetadata) {
+			if (this.additionalMetadata.hasOwnProperty(name)) {
+				li = document.createElement("li");
+				a = document.createElement("a");
+				li.appendChild(a);
+				a.textContent = name;
+				a.href = this.additionalMetadata[name];
+				a.target = "_blank";
+				ul.appendChild(li);
+			}
+		}
+
+		return ul;
+	};
+
 	function makeIdSafeString(s, replacement, prefix, alwaysUsePrefix) {
 		/// <summary>Makes a string safe to use as an HTML id property.</summary>
 		/// <param name="s" type="String">A string.</param>
@@ -210,16 +245,21 @@ require([
 		/// <summary>Creates an esri.layer.Layer based on information in layerInfo.</summary>
 		/// <param name="layerInfo" type="Object">An object containing parameters for a Layer constructor.</param>
 		/// <returns type="esri.layer.Layer" />
-		var constructor;
+		var constructor, layer;
 		// If layerInfo is already an Layer, just return it.
 		if (typeof (layerInfo) !== "undefined" && typeof (layerInfo.isInstanceOf) !== "undefined" && layerInfo.isInstanceOf(Layer)) {
 			return layerInfo;
 		}
 
 		constructor = getLayerConstructor(layerInfo.type || layerInfo.layerType);
+		
 		/*jshint newcap:false*/
-		return new constructor(layerInfo.url, layerInfo.options);
+		layer = new constructor(layerInfo.url, layerInfo.options);
 		/*jshint newcap:true*/
+
+		// Add metadata options to layer object.
+		layer.metadataOptions = layerInfo.metadataOptions ? new MetadataOptions(layerInfo.metadataOptions) : null;
+		return layer;
 	}
 
 	function setOpacity(event, ui) {
@@ -250,39 +290,50 @@ require([
 		options: {
 			layer: null
 		},
+		/**
+		 * Adds a metadata link if the layer has metadata ids specified.
+		 */
 		_addMetadataLink: function () {
 			var layer = this.options.layer, id, i, l, url, a, docfrag, ul, li, label, heading;
-			/// <summary>Adds a metadata link if the layer has metadata ids specified.</summary>
 			if ($.isArray(layer.metadataLayers) && layer.metadataLayers.length > 0) {
+				//  && !(layer.metadataOptions && !layer.metadataOptions.ignoreSoe
 				docfrag = document.createDocumentFragment();
 				heading = document.createElement("h3");
 				heading.textContent = "Metadata";
 				docfrag.appendChild(heading);
-				ul = document.createElement("ul");
-				docfrag.appendChild(ul);
-				// Loop through each of the metadata ids and create an array of metadata info objects.
-				for (i = 0, l = layer.metadataLayers.length; i < l; i += 1) {
-					id = layer.metadataLayers[i];
-					try {
-						url = layer.getMetadataUrl(id, "html");
-					} catch (e) {
-						console.error("Error getting metadata URL", e);
-						url = null;
-					}
-					if (url) {
-						if (layer.layerInfos) {
-							label = layer.layerInfos[id].name;
+				// Add metadata links from SOE
+				if (!(layer.metadataOptions && layer.metadataOptions.ignoreSoe === true)) {
+					ul = document.createElement("ul");
+					docfrag.appendChild(ul);
+					// Loop through each of the metadata ids and create an array of metadata info objects.
+					for (i = 0, l = layer.metadataLayers.length; i < l; i += 1) {
+						id = layer.metadataLayers[i];
+						try {
+							url = layer.getMetadataUrl(id, "html");
+						} catch (e) {
+							console.error("Error getting metadata URL", e);
+							url = null;
 						}
-						// Add a link that will open metadata urls in a new window.
-						li = document.createElement("li");
-						ul.appendChild(li);
-						a = document.createElement("a");
-						a.href = url;
-						a.textContent = label || "Metadata for sublayer " + id;
-						a.setAttribute("class", "ui-layer-options-metadata-link");
-						a.target = "_blank";
-						li.appendChild(a);
+						if (url) {
+							if (layer.layerInfos) {
+								label = layer.layerInfos[id].name;
+							}
+							// Add a link that will open metadata urls in a new window.
+							li = document.createElement("li");
+							ul.appendChild(li);
+							a = document.createElement("a");
+							a.href = url;
+							a.textContent = label || "Metadata for sublayer " + id;
+							a.setAttribute("class", "ui-layer-options-metadata-link");
+							a.target = "_blank";
+							li.appendChild(a);
+						}
 					}
+				}
+				// Add additional metadata links
+				if (layer.metadataOptions && layer.metadataOptions instanceof MetadataOptions) {
+					ul = layer.metadataOptions.createListOfLinks();
+					docfrag.appendChild(ul);
 				}
 				this.element[0].appendChild(docfrag);
 			}
@@ -434,9 +485,11 @@ require([
 		});
 	};
 
+	/**
+	 * Toggles the layer associated with a checkbox on or off.
+	 * @param {Object} eventObject - Contains information about the checkbox change event.
+	 */
 	function toggleLayer(eventObject) {
-		/// <summary>Toggles the layer associated with a checkbox on or off.</summary>
-		/// <param name="eventObject" type="Object">Contains information about the checkbox change event.</param>
 		var $this;
 
 		$this = eventObject.data.widget;

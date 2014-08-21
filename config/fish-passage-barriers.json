@@ -93,6 +93,7 @@
 					"visible": true
 				},
 				"metadataOptions": {
+					"ignoreSoe":  true,
 					"additionalMetadata": {
 						"Fish Passage - WSDOT": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
 						"WSDOT Fish Passage Inventory Status": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
@@ -107,6 +108,7 @@
 					"visible": true
 				},
 				"metadataOptions": {
+					"ignoreSoe":  true,
 					"additionalMetadata": {
 						"Fish Passage - WSDOT": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
 						"WSDOT Fish Passage Inventory Status": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
@@ -120,6 +122,7 @@
 					"id": "US v. WA Case Area Boundary"
 				},
 				"metadataOptions": {
+					"ignoreSoe":  true,
 					"additionalMetadata": {
 						"Fish Passage - WSDOT": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
 						"WSDOT Fish Passage Inventory Status": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
@@ -133,6 +136,7 @@
 					"id": "In Design Barriers Subject to Injunction"
 				},
 				"metadataOptions": {
+					"ignoreSoe":  true,
 					"additionalMetadata": {
 						"Fish Passage - WSDOT": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
 						"WSDOT Fish Passage Inventory Status": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
@@ -146,6 +150,7 @@
 					"id": "Uncorrected Barriers Subject to Injunction"
 				},
 				"metadataOptions": {
+					"ignoreSoe":  true,
 					"additionalMetadata": {
 						"Fish Passage - WSDOT": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
 						"WSDOT Fish Passage Inventory Status": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
