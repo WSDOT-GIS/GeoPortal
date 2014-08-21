@@ -248,8 +248,7 @@ require([
 
 	$.widget("ui.layerOptions", {
 		options: {
-			layer: null,
-			metadataIds: null
+			layer: null
 		},
 		_addMetadataLink: function () {
 			var layer = this.options.layer, id, i, l, url, a, docfrag, ul, li, label, heading;
@@ -328,8 +327,7 @@ require([
 
 		// Create the options widget inside a dialog.
 		dialog = $("<div>").layerOptions({
-			layer: layer,
-			metadataIds: event.data.metadataIds
+			layer: layer
 		}).dialog({
 			title: [layer.id, "Options"].join(" "),
 			position: [
@@ -381,8 +379,6 @@ require([
 		// Add options link
 		tools = $(this.options.contextMenuIcon).appendTo($element).click({
 			layer: layer
-			//,
-			//`metadataIds: this.options.layer.metadataIds || null
 		}, showOptions);
 
 		// Setup the mouse over and mouse out events.
