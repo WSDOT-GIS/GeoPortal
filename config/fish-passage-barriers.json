@@ -4,7 +4,7 @@
 	"enableIdentify": true,
 	"disclaimer": "disclaimers/fish-passage-barriers/Public.html",
 	"alwaysShowDisclaimer": false,
-	"printUrl": "http://www.wsdot.wa.gov/geoservices/ArcGIS/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
+	"printUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
 	"noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
 	"alternateTabTitles": {
 		"Tools": "Search"
