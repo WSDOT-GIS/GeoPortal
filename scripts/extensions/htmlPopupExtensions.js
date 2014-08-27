@@ -4,7 +4,6 @@
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require([
-	"dojo/_base/array",
 	"dojo/_base/lang",
 	"dojo/on",
 	"esri/request",
@@ -16,7 +15,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
-], function (djArray, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+], function (lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
 ) {
 	"use strict";
@@ -123,7 +122,7 @@ require([
 				// Add to the output array the ID of any sublayer that has an html popup defined 
 				// (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
 				if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
-					if (layerInfo.visibleLayers === undefined || djArray.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+					if (layerInfo.visibleLayers === undefined || layerInfo.visibleLayers.indexOf(layerInfo.id) >= 0) {
 						if (returnUrls) {
 							ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
 						} else {
@@ -177,7 +176,7 @@ require([
 	};
 
 	// Extend each of the types in the array with the same proerties and methods.
-	djArray.forEach([ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer], function (ctor) {
+	[ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer].forEach(function (ctor) {
 		lang.extend(ctor, {
 			detectHtmlPopups: detectHtmlPopups,
 			getIdsOfLayersWithHtmlPopups: function () {
@@ -202,7 +201,7 @@ require([
 			// }
 
 			// Loop through each of the map service layers.
-			djArray.forEach(map.layerIds, function (id) {
+			map.layerIds.forEach(function (id) {
 				var mapService;
 
 				// Skip layers with an ID that matches the ignore regex.
@@ -255,7 +254,7 @@ require([
 			}
 
 			// Loop through all of the map services.
-			djArray.forEach(map.layerIds, function (layerId) {
+			map.layerIds.forEach(function (layerId) {
 				var layer, sublayerIds, idTask, idParams;
 
 				// Skip any layers that match the ignored layers regular expression (if one has been specified).
