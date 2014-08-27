@@ -4,6 +4,7 @@
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require([
+	"dojo/Deferred",
 	"dojo/_base/lang",
 	"dojo/on",
 	"esri/request",
@@ -15,7 +16,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
-], function (lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+], function (Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
 ) {
 	"use strict";
@@ -142,22 +143,50 @@ require([
 	/**
 	 * Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.
 	 * @param {Function} [htmlPopupLayerFoundAction] - Optional.  A function that will be called whenever an HTML popup is found.
-	 * @returns {string}
+	 * @returns {dojo/Deferred}
 	 */
 	detectHtmlPopups = function (htmlPopupLayerFoundAction) {
-		var mapService = this, layerInfo, layerUrl, i, l;
+		var mapService = this, layerInfo, layerUrl, i, l, deferred, completedRequestCount = 0, responses = [];
+
+		deferred = new Deferred();
+
+
 		// Query the map service to get the list of layers.
 
 		function handleHtmlPopupResponse(layerResponse) {
-			var layerInfo = mapService.layerInfos[layerResponse.id];
+			var layerInfo, progressObject;
+			completedRequestCount += 1;
+			layerInfo = mapService.layerInfos[layerResponse.id];
 			// If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
 			if (layerResponse.htmlPopupType !== undefined && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
 						layerResponse.type !== undefined && !/Annotation/gi.test(layerResponse.type)) {
 				// Add this URL to the list of URLs that supports HTML popups.
 				layerInfo.htmlPopupType = layerResponse.htmlPopupType;
+				progressObject = {
+					mapService: mapService,
+					layerInfo: layerInfo,
+					layerUrl: layerUrl,
+					layerResponse: layerResponse
+				};
+				responses.push(progressObject);
+				// Update deferred progress
+				deferred.progress({
+					current: completedRequestCount,
+					total: l,
+					data: progressObject
+				})
 				if (typeof (htmlPopupLayerFoundAction) === "function") {
 					htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
 				}
+			} else {
+				// Update deferred progress
+				deferred.progress({
+					current: completedRequestCount,
+					total: l
+				});
+			}
+			if (completedRequestCount >= l) {
+				deferred.resolve(responses);
 			}
 		}
 
@@ -173,6 +202,8 @@ require([
 				callbackParamName: "callback"
 			}).then(handleHtmlPopupResponse);
 		}
+
+		return deferred;
 	};
 
 	// Extend each of the types in the array with the same proerties and methods.
