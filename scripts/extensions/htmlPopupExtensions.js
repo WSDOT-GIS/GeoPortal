@@ -377,6 +377,11 @@ require([
 			map.on("click", function (event) {
 				var idTaskCount;
 
+				/**
+				 * Gets the name of the object ID field from a feature.
+				 * @param {esri/Graphic} feature
+				 * return {string}
+				 */
 				function getOid(feature) {
 					var output = null, re = /O(BJECT)ID/i;
 					if (feature && feature.attributes) {
@@ -531,19 +536,14 @@ require([
 					// Get the existing features in the info window.  If there are no existing features, create a new array.
 					features = map.infoWindow.features || [];
 
-					// Get an array of features...
-					(function () {
-						var i, l, idResult, feature;
-
-						for (i = 0, l = idResults.length; i < l; i += 1) {
-							idResult = idResults[i];
-							feature = idResult.feature;
-							feature.layer = layer;
-							feature.result = idResult;
-							feature.setInfoTemplate(infoTemplate);
-							features.push(feature);
-						}
-					}());
+					idResults.forEach(function (idResult) {
+						var feature;
+						feature = idResult.feature;
+						feature.layer = layer;
+						feature.result = idResult;
+						feature.setInfoTemplate(infoTemplate);
+						features.push(feature);
+					});
 
 					map.infoWindow.setFeatures(features);
 					map.infoWindow.show(event.mapPoint, {
