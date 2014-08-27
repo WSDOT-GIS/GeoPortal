@@ -221,10 +221,13 @@ require([
 
 	lang.extend(Map, {
 		_ignoredLayerRE: null,
+		/**
+		 * @property {boolean} Determines if detectHtmlPopups has been run.
+		 */
 		detectHtmlPopupsHasRun: false,
 		/**
 		 * Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
-		 * @param {Function} [htmlPopupLayerFoundAction]
+		 * @param {Function} [htmlPopupLayerFoundAction] - Function that will be called for each layer once it has been determined if it supports HTML popups.
 		 * @returns {dojo/Deferred}
 		 */
 		detectHtmlPopups: function (htmlPopupLayerFoundAction) {
