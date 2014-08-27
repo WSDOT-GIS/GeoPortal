@@ -174,7 +174,7 @@ require([
 					current: completedRequestCount,
 					total: l,
 					data: progressObject
-				})
+				});
 				if (typeof (htmlPopupLayerFoundAction) === "function") {
 					htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
 				}
@@ -222,14 +222,31 @@ require([
 	lang.extend(Map, {
 		_ignoredLayerRE: null,
 		detectHtmlPopupsHasRun: false,
+		/**
+		 * Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
+		 * @param {Function} [htmlPopupLayerFoundAction]
+		 * @returns {dojo/Deferred}
+		 */
 		detectHtmlPopups: function (htmlPopupLayerFoundAction) {
-			// Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
-
 			var map = this;
+
+			var deferred = new Deferred();
 
 			// if (!map || !map.isInstanceOf || !map.isInstanceOf(Map)) {
 			// throw new Error("The \"map\" parameter must be of type Map.");
 			// }
+
+			var layerIdCount = map.layerIds.length;
+			var completedCount = 0;
+
+			function onComplete() {
+				completedCount += 1;
+				if (completedCount >= layerIdCount) {
+					deferred.resolve("completed");
+				} else {
+					deferred.progress({current: completedCount, total: layerIdCount});
+				}
+			}
 
 			// Loop through each of the map service layers.
 			map.layerIds.forEach(function (id) {
@@ -244,12 +261,12 @@ require([
 
 				if (mapService.loaded) {
 					if (typeof (mapService.detectHtmlPopups) === "function") {
-						mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
+						mapService.detectHtmlPopups(htmlPopupLayerFoundAction).then(onComplete);
 					}
 				} else {
 					mapService.on("load", function (/*layer*/) {
 						if (typeof (mapService.detectHtmlPopups) === "function") {
-							mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
+							mapService.detectHtmlPopups(htmlPopupLayerFoundAction).then(onComplete);
 						}
 					});
 				}
@@ -257,6 +274,8 @@ require([
 			});
 
 			this.detectHtmlPopupsHasRun = true;
+
+			return deferred;
 		},
 		/*
 		 * Runs an identify task for each map service that has HTML Popup sublayers.
