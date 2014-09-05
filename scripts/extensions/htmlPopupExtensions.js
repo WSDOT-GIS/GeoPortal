@@ -583,7 +583,7 @@ require([
 
 				if (idTaskCount) {
 					// Clear features if there is nothing currently in the info window.
-					if (!(map.infoWindow.isShowing && infoWindow.features)) {
+					if (!(map.infoWindow.isShowing && map.infoWindow.features)) {
 						map.infoWindow.clearFeatures();
 						map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
 					}
