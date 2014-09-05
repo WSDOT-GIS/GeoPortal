@@ -582,8 +582,11 @@ require([
 				});
 
 				if (idTaskCount) {
-					map.infoWindow.clearFeatures();
-					map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
+					// Clear features if there is nothing currently in the info window.
+					if (!(map.infoWindow.isShowing && infoWindow.features)) {
+						map.infoWindow.clearFeatures();
+						map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
+					}
 					map.infoWindow.show(event.mapPoint);
 				}
 			});
