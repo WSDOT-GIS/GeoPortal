@@ -4,7 +4,7 @@
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require([
-	"dojo/_base/array",
+	"dojo/Deferred",
 	"dojo/_base/lang",
 	"dojo/on",
 	"esri/request",
@@ -16,7 +16,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
-], function (djArray, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+], function (Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
 ) {
 	"use strict";
@@ -123,7 +123,7 @@ require([
 				// Add to the output array the ID of any sublayer that has an html popup defined 
 				// (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
 				if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
-					if (layerInfo.visibleLayers === undefined || djArray.indexOf(layerInfo.visibleLayers, layerInfo.id) >= 0) {
+					if (layerInfo.visibleLayers === undefined || layerInfo.visibleLayers.indexOf(layerInfo.id) >= 0) {
 						if (returnUrls) {
 							ids.push(mapServiceLayer.url + "/" + String(layerInfo.id));
 						} else {
@@ -143,22 +143,50 @@ require([
 	/**
 	 * Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.
 	 * @param {Function} [htmlPopupLayerFoundAction] - Optional.  A function that will be called whenever an HTML popup is found.
-	 * @returns {string}
+	 * @returns {dojo/Deferred}
 	 */
 	detectHtmlPopups = function (htmlPopupLayerFoundAction) {
-		var mapService = this, layerInfo, layerUrl, i, l;
+		var mapService = this, layerInfo, layerUrl, i, l, deferred, completedRequestCount = 0, responses = [];
+
+		deferred = new Deferred();
+
+
 		// Query the map service to get the list of layers.
 
 		function handleHtmlPopupResponse(layerResponse) {
-			var layerInfo = mapService.layerInfos[layerResponse.id];
+			var layerInfo, progressObject;
+			completedRequestCount += 1;
+			layerInfo = mapService.layerInfos[layerResponse.id];
 			// If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
 			if (layerResponse.htmlPopupType !== undefined && /As(?:(?:HTMLText)|(?:URL))$/i.test(layerResponse.htmlPopupType) &&
 						layerResponse.type !== undefined && !/Annotation/gi.test(layerResponse.type)) {
 				// Add this URL to the list of URLs that supports HTML popups.
 				layerInfo.htmlPopupType = layerResponse.htmlPopupType;
+				progressObject = {
+					mapService: mapService,
+					layerInfo: layerInfo,
+					layerUrl: layerUrl,
+					layerResponse: layerResponse
+				};
+				responses.push(progressObject);
+				// Update deferred progress
+				deferred.progress({
+					current: completedRequestCount,
+					total: l,
+					data: progressObject
+				});
 				if (typeof (htmlPopupLayerFoundAction) === "function") {
 					htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
 				}
+			} else {
+				// Update deferred progress
+				deferred.progress({
+					current: completedRequestCount,
+					total: l
+				});
+			}
+			if (completedRequestCount >= l) {
+				deferred.resolve(responses);
 			}
 		}
 
@@ -174,10 +202,12 @@ require([
 				callbackParamName: "callback"
 			}).then(handleHtmlPopupResponse);
 		}
+
+		return deferred;
 	};
 
 	// Extend each of the types in the array with the same proerties and methods.
-	djArray.forEach([ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer], function (ctor) {
+	[ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer].forEach(function (ctor) {
 		lang.extend(ctor, {
 			detectHtmlPopups: detectHtmlPopups,
 			getIdsOfLayersWithHtmlPopups: function () {
@@ -191,18 +221,38 @@ require([
 
 	lang.extend(Map, {
 		_ignoredLayerRE: null,
+		/**
+		 * @property {boolean} Determines if detectHtmlPopups has been run.
+		 */
 		detectHtmlPopupsHasRun: false,
+		/**
+		 * Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
+		 * @param {Function} [htmlPopupLayerFoundAction] - Function that will be called for each layer once it has been determined if it supports HTML popups.
+		 * @returns {dojo/Deferred}
+		 */
 		detectHtmlPopups: function (htmlPopupLayerFoundAction) {
-			// Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
-
 			var map = this;
+
+			var deferred = new Deferred();
 
 			// if (!map || !map.isInstanceOf || !map.isInstanceOf(Map)) {
 			// throw new Error("The \"map\" parameter must be of type Map.");
 			// }
 
+			var layerIdCount = map.layerIds.length;
+			var completedCount = 0;
+
+			function onComplete() {
+				completedCount += 1;
+				if (completedCount >= layerIdCount) {
+					deferred.resolve("completed");
+				} else {
+					deferred.progress({current: completedCount, total: layerIdCount});
+				}
+			}
+
 			// Loop through each of the map service layers.
-			djArray.forEach(map.layerIds, function (id) {
+			map.layerIds.forEach(function (id) {
 				var mapService;
 
 				// Skip layers with an ID that matches the ignore regex.
@@ -214,12 +264,12 @@ require([
 
 				if (mapService.loaded) {
 					if (typeof (mapService.detectHtmlPopups) === "function") {
-						mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
+						mapService.detectHtmlPopups(htmlPopupLayerFoundAction).then(onComplete);
 					}
 				} else {
 					mapService.on("load", function (/*layer*/) {
 						if (typeof (mapService.detectHtmlPopups) === "function") {
-							mapService.detectHtmlPopups(htmlPopupLayerFoundAction);
+							mapService.detectHtmlPopups(htmlPopupLayerFoundAction).then(onComplete);
 						}
 					});
 				}
@@ -227,6 +277,8 @@ require([
 			});
 
 			this.detectHtmlPopupsHasRun = true;
+
+			return deferred;
 		},
 		/*
 		 * Runs an identify task for each map service that has HTML Popup sublayers.
@@ -255,7 +307,7 @@ require([
 			}
 
 			// Loop through all of the map services.
-			djArray.forEach(map.layerIds, function (layerId) {
+			map.layerIds.forEach(function (layerId) {
 				var layer, sublayerIds, idTask, idParams;
 
 				// Skip any layers that match the ignored layers regular expression (if one has been specified).
@@ -347,6 +399,11 @@ require([
 			map.on("click", function (event) {
 				var idTaskCount;
 
+				/**
+				 * Gets the name of the object ID field from a feature.
+				 * @param {esri/Graphic} feature
+				 * return {string}
+				 */
 				function getOid(feature) {
 					var output = null, re = /O(BJECT)ID/i;
 					if (feature && feature.attributes) {
@@ -501,19 +558,14 @@ require([
 					// Get the existing features in the info window.  If there are no existing features, create a new array.
 					features = map.infoWindow.features || [];
 
-					// Get an array of features...
-					(function () {
-						var i, l, idResult, feature;
-
-						for (i = 0, l = idResults.length; i < l; i += 1) {
-							idResult = idResults[i];
-							feature = idResult.feature;
-							feature.layer = layer;
-							feature.result = idResult;
-							feature.setInfoTemplate(infoTemplate);
-							features.push(feature);
-						}
-					}());
+					idResults.forEach(function (idResult) {
+						var feature;
+						feature = idResult.feature;
+						feature.layer = layer;
+						feature.result = idResult;
+						feature.setInfoTemplate(infoTemplate);
+						features.push(feature);
+					});
 
 					map.infoWindow.setFeatures(features);
 					map.infoWindow.show(event.mapPoint, {
@@ -530,8 +582,11 @@ require([
 				});
 
 				if (idTaskCount) {
-					map.infoWindow.clearFeatures();
-					map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
+					// Clear features if there is nothing currently in the info window.
+					if (!(map.infoWindow.isShowing && infoWindow.features)) {
+						map.infoWindow.clearFeatures();
+						map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
+					}
 					map.infoWindow.show(event.mapPoint);
 				}
 			});
