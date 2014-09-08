@@ -1,11 +1,9 @@
 ﻿/*jslint browser: true, nomen: true */
-/*jshint dojo, jquery, nomen:false */
 /*global jQuery, dojo, esri, Modernizr */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 /// <reference path="dmsConversion.js" />
-
 
 (function ($) {
 	"use strict";
@@ -48,8 +46,6 @@
 		},
 		_create: function () {
 			var $this = this;
-
-
 
 			/** Adds a point to the map at the location specified in the widget's controls.
 			*/

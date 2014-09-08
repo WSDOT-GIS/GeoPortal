@@ -1,7 +1,9 @@
 ﻿{
-	"pageTitle": "WSDOT GeoPortal",
-	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+	"pageTitle": "Freight Map",
+	"helpUrl": "help/Freight/internal/help.html",
 	"enableIdentify": true,
+	"disclaimer": "disclaimers/Freight/Internal.html",
+	"alwaysShowDisclaimer": true,
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -27,12 +29,10 @@
 				{ "level": 10, "resolution": 1.19432856685505, "scale": 4513.988705 },
 				{ "level": 11, "resolution": 0.597164283559817, "scale": 2256.994353 },
 				{ "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
-		]
+		],
+		"sliderStyle":"small"
 	},
-	"mapInitialLayer": {
-		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-	},
+	"initialBasemap":  "WSDOT Basemap",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county" : {
@@ -60,16 +60,6 @@
 	},
 	"basemaps": [
 		{
-			"id": "esriHybrid",
-			"title": "Hybrid",
-			"thumbnailUrl": "images/EsriHybridThumbnail.png",
-			"layers": [
-				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
-				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
-				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
-			]
-		},
-		{
 			"id": "wsdotBasemap",
 			"title": "WSDOT Basemap",
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
@@ -84,10 +74,111 @@
 			"layers": [
 				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
 			]
+		},
+		{
+			"id": "physicalBasemap",
+			"title": "Physical",
+			"thumbnailUrl": "images/USA_TopoThumbnail.png",
+			"layers": [
+				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer" }
+			]
 		}
 	],
+	"basemapsToRemove": ["Terrain with Labels", "Oceans"],
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+	"tabbedLayerList": true,
 	"layers": {
+		"Freight": {
+			"Truck Performance Measures": [
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AADTTruckPercentage/MapServer",
+					"options": {
+						"id": "AADT Truck Percentage"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AverageSpeed/MapServer",
+					"options": {
+						"id": "Average Speed"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/PoorTruckSpeedPerformance/MapServer",
+					"options": {
+						"id": "Locations with very slow Truck Speed Performance"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/SevereSpeedThreshold/MapServer",
+					"options": {
+						"id": "% of Trucks Traveling below 60% of Posted Speed"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/FreightGoods/MapServer",
+					"options": {
+						"id": "WSDOT Freight and Goods"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/TrafficSections/MapServer",
+					"options" : {
+						"id": "AADT"
+					}
+				}
+			],
+			"State Truck Freight Economic Corridors": [
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/StateTruckFreightEconomicCorridors/MapServer",
+					"options": {
+						"id": "State Truck Freight Economic Corridors"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/IntermodalFacilities/MapServer",
+					"options": {
+						"id": "Intermodal Facilities"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/RuralAgProcessingCenters/MapServer",
+					"options": {
+						"id": "Rural Agricultural Processing Centers"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/IndustrialAndCommercialLands/MapServer",
+					"options": {
+						"id": "Industrial and Commercial Lands"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/HighwayUrbanUrbanized/MapServer",
+					"options": {
+						"id": "Highway Urban and Urbanized Areas"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AgriculturalLandUse/MapServer",
+					"options": {
+						"id": "Agricultural Land Use"
+					}
+				}
+			]
+		},
+		"General": {
 			"Political Boundaries": [
 				{
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
@@ -145,16 +236,16 @@
 						"id": "Tribal Lands"
 					}
 				}
-			],
+		  ],
 			"Design": [
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
-				"options": {
-					"id": "Interchange Drawings"
-				}
-			}
-		],
+			   {
+				   "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				   "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
+				   "options": {
+					   "id": "Interchange Drawings"
+				   }
+			   }
+		   ],
 			"WSDOT Boundaries": [
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
@@ -194,5 +285,7 @@
 					}
 				}
 			]
+		}
+
 	}
 }

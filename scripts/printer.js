@@ -1,4 +1,4 @@
-﻿/*global require, jQuery, esri, dojo */
+﻿/*global require, jQuery, dojo */
 /*jslint plusplus:true,nomen:true*/
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -6,10 +6,12 @@
 (function ($) {
 	"use strict";
 
+	/**
+	 * Splits a camel-case or Pascal-case variable name into individual words.
+	 * @param {string} s
+	 * @returns {string[]}
+	 */
 	function splitWords(s) {
-		/// <summary>Splits a camel-case or Pascal-case variable name into individual words.</summary>
-		/// <param name="s" type="String">A string</param>
-		/// <returns type="Array" />
 		var re, match, output = [];
 		// re = /[A-Z]?[a-z]+/g
 		re = /([A-Za-z]?)([a-z]+)/g;
@@ -37,14 +39,37 @@
 	////	for (i = 0, l = map.layerIds.length; i < l; i++) {
 	////		//layer = map.getLayer(map.layerIds[i]);
 	////		layerId = map.layerIds[i];
-	////		legendLayer = new esri.tasks.LegendLayer();
+	////		legendLayer = new LegendLayer();
 	////		legendLayer.layerId = layerId;
 	////		output.push(legendLayer);
 	////	}
 	////	return output;
 	////}
 
-	require(["esri/tasks/PrintTask"], function (PrintTask) {
+	require(["esri/tasks/PrintTask", "esri/tasks/PrintParameters", "esri/tasks/PrintTemplate", "esri/tasks/LegendLayer"], function (PrintTask, PrintParameters, PrintTemplate, LegendLayer) {
+		/**
+		 * Creates an array of LegendLayers of all layers currently visible in the map.
+		 * @param {esri.Map} map
+		 * @returns {esri.tasks.LegendLayer[]}
+		 */
+		function getLegendLayersFromMap(map) {
+			var layer, legendLayer, output = [];
+			for (var i = 0, l = map.layerIds.length; i < l; i += 1) {
+				layer = map.getLayer(map.layerIds[i]);
+				if (layer.visible && layer.visibleAtMapScale) {
+					legendLayer = new LegendLayer();
+					legendLayer.layerId = layer.id;
+					if (layer.visibleLayers) {
+						legendLayer.subLayerIds = layer.visibleLayers;
+					}
+					output.push(legendLayer);
+				}
+			}
+
+			// Return null if the output array has no elements.
+			return output.length > 0 ? output : null;
+		}
+
 		$.widget("ui.printer", {
 			options: {
 				map: null,
@@ -133,10 +158,12 @@
 				////	return output;
 				////}
 
+				/**
+				 * Adds layout options to an element.
+				 * @param {jQuery} container - A container element.
+				 * @param {Object} layoutOptions
+				 */
 				function addLayoutOptions(container, layoutOptions) {
-					/// <summary>Adds layout options to an element.</summary>
-					/// <param name="container" type="jQuery">A container element</param>
-					/// <param name="layoutOptions" type="Object">An object with properties.</param>
 					var optionName, optionValue;
 
 					function handleOptionChange(event) {
@@ -182,15 +209,27 @@
 					}
 				}
 
+				/**
+				 * Creates the select control for selecting print templates.
+				 * @returns {HTMLSelectElement}
+				 */
 				function createTemplateSelect() {
-					var output, i, l, tName;
+					var output, i, l, tName, ansiRe = /\bANSI\b/i, ansiMatch, firstAnsiFound;
 
 					output = $("<select>");
 					for (i = 0, l = $this.options.templates.length; i < l; i += 1) {
 						tName = $this.options.templates[i];
+						// Test to see if this is an ANSI size template.
+						ansiMatch = ansiRe.test(tName);
 						$("<option>").attr({
-							value: tName
+							value: tName,
+							// Set this to be the default option if it is the first ANSI sized template.
+							selected: !!ansiMatch && !firstAnsiFound 
 						}).text(tName).appendTo(output);
+						// Set variable to indicate that an ANSI template has been set as default value.
+						if (!!ansiMatch) {
+							firstAnsiFound = true;
+						}
 					}
 
 					return output;
@@ -233,12 +272,13 @@
 
 				}).click(function () {
 					var printParameters, printTemplate;
-					printParameters = new esri.tasks.PrintParameters();
+					printParameters = new PrintParameters();
 					printParameters.map = $this.options.map;
-					printTemplate = new esri.tasks.PrintTemplate();
+					printTemplate = new PrintTemplate();
 					printTemplate.format = "PDF";
 					printTemplate.layout = $this._templateSelect.val();
 					printTemplate.layoutOptions = $this.options.layoutOptions;
+					printTemplate.layoutOptions.legendLayers = getLegendLayersFromMap($this.options.map);
 					printParameters.template = printTemplate;
 					//// printParameters.extraParameters = getExtraParameters();
 

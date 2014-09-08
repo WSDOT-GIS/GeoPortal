@@ -1,7 +1,20 @@
 ﻿{
-	"pageTitle": "Traffic Volume Map",
+	"pageTitle": "WSDOT Functional Classification Map",
 	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+	"customLegend": {
+			"html": "FunctionalClassLegend.html",
+			"basemapSpecificSections": { 
+				"functionalClassBasemap": "#basemapLegend" 
+			},
+			"htmlType": "url"
+	},
 	"enableIdentify": true,
+	"tabOrder": [
+		"Legend",
+		"Layers",
+		"Tools",
+		"Basemap"
+	],
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -30,10 +43,9 @@
 		],
 		"sliderStyle":"small"
 	},
-	"mapInitialLayer": {
-		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-	},
+	"initialBasemap":  "WSDOT Basemap",
+	"locationInfoUrl": "http://www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county" : {
@@ -42,7 +54,7 @@
 		},
 		"city": {
 			"label": "City",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer/2",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -60,15 +72,6 @@
 		}
 	},
 	"basemaps": [
-		{
-			"id": "tpt",
-			"title": "Traffic Planning Trends",
-			"thumbnailUrl": "images/TrafficVolumeThumbnail.png",
-			"layers": [
-				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TPT/TPTLocalRoads/MapServer" },
-				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" }
-			]
-		},
 		{
 			"id": "esriHybrid",
 			"title": "Hybrid",
@@ -96,30 +99,31 @@
 			]
 		}
 	],
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
-	"layers": {
-		"Traffic Volume": [
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTCounts/MapServer",
-				"options": {
-					"id": "Traffic Counts"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTATR/MapServer",
-				"options": {
-					"id": "ATR Counts"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TPT/TPTTrafficSections/MapServer",
-				"options": {
-					"id": "Traffic Sections"
-				}
+	"basemapsToRemove": [
+		"Imagery",
+		"Imagery with Labels",
+		"Topographic",
+		"Terrain with Labels",
+		"National Geographic",
+		"Oceans",
+		"OpenStreetMap"
+	],
+	"locateMileposts": {
+		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
+		"options": { "useProxy": false, "usePost": true }
+	},
+	"locateNearestMileposts": {
+		"url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
+		"options": { "useProxy": false, "usePost": true }
+	},
+	"layers": [
+		{
+			"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+			"options": {
+				"id": "Functional Class",
+				"visible": true
 			}
-		]
-	}
+		}
+	]
 }

@@ -1,8 +1,8 @@
 ﻿{
 	"pageTitle": "Freight Map",
-	"helpUrl": "help/Freight/internal/help.html",
+	"helpUrl": "help/Freight/public/help.html",
 	"enableIdentify": true,
-	"disclaimer": "disclaimers/Freight/Internal.html",
+	"disclaimer": "disclaimers/Freight/Public.html",
 	"alwaysShowDisclaimer": true,
 	"mapOptions": {
 		"logo": false,
@@ -32,10 +32,7 @@
 		],
 		"sliderStyle":"small"
 	},
-	"mapInitialLayer": {
-		"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-		"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-	},
+	"initialBasemap": "WSDOT Basemap",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"queryTasks": {
 		"county" : {
@@ -95,23 +92,9 @@
 			"Truck Performance Measures": [
 				{
 					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AADTTruckPercentage/MapServer",
-					"options": {
-						"id": "AADT Truck Percentage"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AverageSpeed/MapServer",
 					"options": {
 						"id": "Average Speed"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/PoorTruckSpeedPerformance/MapServer",
-					"options": {
-						"id": "Locations with very slow Truck Speed Performance"
 					}
 				},
 				{
@@ -133,50 +116,6 @@
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Traffic/TrafficSections/MapServer",
 					"options" : {
 						"id": "AADT"
-					}
-				}
-			],
-			"State Truck Freight Economic Corridors": [
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/StateTruckFreightEconomicCorridors/MapServer",
-					"options": {
-						"id": "State Truck Freight Economic Corridors"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/IntermodalFacilities/MapServer",
-					"options": {
-						"id": "Intermodal Facilities"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/RuralAgProcessingCenters/MapServer",
-					"options": {
-						"id": "Rural Agricultural Processing Centers"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/IndustrialAndCommercialLands/MapServer",
-					"options": {
-						"id": "Industrial and Commercial Lands"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/HighwayUrbanUrbanized/MapServer",
-					"options": {
-						"id": "Highway Urban and Urbanized Areas"
-					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/TruckPerformanceMeasures/AgriculturalLandUse/MapServer",
-					"options": {
-						"id": "Agricultural Land Use"
 					}
 				}
 			]

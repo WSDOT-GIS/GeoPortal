@@ -528,12 +528,7 @@
 				String(referenceDate.getDate()),
 				String(referenceDate.getFullYear())
 			].join("/");
-		}/*
-		 else if (typeof(referenceDate !== "string")) {
-					console.debug(typeof(referenceDate) !== "string");
-					throw new Error("Unexpected referenceDate type.  Expected a Date or a string.");
-		}*/
-		
+		}
 		
 		if (typeof(outSR) !== "undefined" && outSR !== null && typeof(outSR) !== "number" && typeof(outSR) !== "string") {
 			throw new Error("Unexpected outSR type.  Must be a WKID (number), WKT (string), or omitted (null or undefined).");
