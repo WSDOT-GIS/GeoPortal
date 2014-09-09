@@ -23,6 +23,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/geometry/jsonUtils",
 	"esri/geometry/Point",
 	"esri/geometry/Extent",
+	"esri/geometry/Circle",
 	"esri/tasks/GeometryService",
 	"esri/dijit/Legend",
 	"esri/layers/ArcGISTiledMapServiceLayer",
@@ -79,7 +80,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
-	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
+	esriConfig, Map, jsonUtils, Point, Extent, Circle, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect
@@ -757,7 +758,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						var extentTable;
 						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-						////$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
 
 						$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
 						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
@@ -829,60 +830,74 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 						createZoomControls();
 
-						////if (navigator.geolocation) {
-						////	button = new Button({
-						////		onClick: function () {
-						////			navigator.geolocation.getCurrentPosition(function (position) {
-						////				var pt, attributes;
-						////				pt = new Point(position.coords.longitude, position.coords.latitude);
-						////				pt = webMercatorUtils.geographicToWebMercator(pt);
-						////				attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-						////				if (map.infoWindow.setFeatures) {
-						////					map.infoWindow.setFeatures([
-						////						new Graphic(pt, null, attributes, new InfoTemplate(
-						////							"You are here", "Lat: ${lat} <br />Long: ${long}"
-						////						))
-						////					]);
-						////					map.infoWindow.show(map.toScreen(pt));
-						////				} else {
-						////					map.infoWindow.setTitle("You are here").setContent(
-						////						["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
-						////					).show(map.toScreen(pt));
-						////				}
-						////				map.centerAndZoom(pt, 8);
-						////			}, function (error) {
-						////				var message = "", strErrorCode;
-						////				// Check for known errors
-						////				switch (error.code) {
-						////					case error.PERMISSION_DENIED:
-						////						message = "This website does not have permission to use the Geolocation API";
-						////						break;
-						////					case error.POSITION_UNAVAILABLE:
-						////						message = "The current position could not be determined.";
-						////						break;
-						////					case error.PERMISSION_DENIED_TIMEOUT:
-						////						message = "The current position could not be determined within the specified timeout period.";
-						////						break;
-						////				}
+						if (navigator.geolocation) {
+							button = new Button({
+								onClick: function () {
+									navigator.geolocation.getCurrentPosition(function (position) {
+										var pt, attributes, accuracy, circle;
 
-						////				// If it's an unknown error, build a message that includes 
-						////				// information that helps identify the situation so that 
-						////				// the error handler can be updated.
-						////				if (message === "") {
-						////					strErrorCode = error.code.toString();
-						////					message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
-						////				}
-						////				alert(message);
-						////			}, {
-						////				maximumAge: 0,
-						////				timeout: 30000,
-						////				enableHighAccuracy: true
-						////			});
-						////		}
-						////	}, "zoomToMyCurrentLocation");
-						////} else {
-						////	domConstruct.destroy("zoomToMyCurrentLocation");
-						////}
+										accuracy = position.coords.accuracy; // In meters.
+										console.debug("position", position);
+										pt = new Point(position.coords.longitude, position.coords.latitude);
+										pt = webMercatorUtils.geographicToWebMercator(pt);
+										circle = new Circle(pt, {
+											radius: accuracy
+										});
+										attributes = {
+											lat: position.coords.latitude.toFixed(6),
+											long: position.coords.longitude.toFixed(6),
+											accuracy: accuracy
+										};
+										if (map.infoWindow.setFeatures) {
+											map.infoWindow.setFeatures([
+												new Graphic(circle, null, attributes, new InfoTemplate(
+													"You are here", ["<dl>", "<dt>Lat</dt><dd>${lat}</dd>",
+														"<dt>Long</dt><dd>${long}</dd>", 
+														"<dt>Accuracy</dt><dd>±${accuracy} meters</dd>",
+														"</dl>"].join("")
+												))
+											]);
+											map.infoWindow.show(map.toScreen(pt));
+										} else {
+											map.infoWindow.setTitle("You are here").setContent(
+												["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
+											).show(map.toScreen(pt));
+										}
+										//map.centerAndZoom(pt, 8);
+										map.setExtent(circle.getExtent(), false);
+									}, function (error) {
+										var message = "", strErrorCode;
+										// Check for known errors
+										switch (error.code) {
+											case error.PERMISSION_DENIED:
+												message = "This website does not have permission to use the Geolocation API";
+												break;
+											case error.POSITION_UNAVAILABLE:
+												message = "The current position could not be determined.";
+												break;
+											case error.PERMISSION_DENIED_TIMEOUT:
+												message = "The current position could not be determined within the specified timeout period.";
+												break;
+										}
+
+										// If it's an unknown error, build a message that includes 
+										// information that helps identify the situation so that 
+										// the error handler can be updated.
+										if (message === "") {
+											strErrorCode = error.code.toString();
+											message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+										}
+										alert(message);
+									}, {
+										maximumAge: 0,
+										timeout: 30000,
+										enableHighAccuracy: true
+									});
+								}
+							}, "zoomToMyCurrentLocation");
+						} else {
+							domConstruct.destroy("zoomToMyCurrentLocation");
+						}
 
 					});
 				}
