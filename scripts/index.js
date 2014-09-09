@@ -755,10 +755,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 					toolsAccordion.addChild(new ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 					on.once(registry.byId("zoomControlsPane"), "show", function () {
-						var extentTable;
+						var extentTable, zoomToCurrentButton;
 						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-						$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+						zoomToCurrentButton = document.createElement("button");
+						zoomToCurrentButton.id = "zoomToMyCurrentLocation";
+						zoomToCurrentButton.type = "button";
+						zoomToCurrentButton.textContent = "Zoom to my current location";
+						zoomControlsDiv[0].appendChild(zoomToCurrentButton);
+
 
 						$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
 						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
@@ -841,7 +846,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 										pt = new Point(position.coords.longitude, position.coords.latitude);
 										pt = webMercatorUtils.geographicToWebMercator(pt);
 										circle = new Circle(pt, {
-											radius: accuracy
+											radius: accuracy, // Default unit is already meters.
+											geodesic: true
 										});
 										attributes = {
 											lat: position.coords.latitude.toFixed(6),
