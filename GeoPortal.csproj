@@ -133,6 +133,7 @@
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
     <Content Include="scripts\geocoder-setup.js" />
+    <Content Include="scripts\geolocate-button.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
@@ -163,7 +164,6 @@
     <Content Include="scripts\modernizr.js" />
     <Content Include="scripts\printer.js" />
     <Content Include="scripts\toc.js" />
-    <Content Include="scripts\zoom-button.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />

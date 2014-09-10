@@ -64,7 +64,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
 	"extentSelect",
-	"zoom-button",
+	"geolocate-button",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -97,7 +97,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createZoomButton
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton
 ) {
 	"use strict";
 
@@ -1078,7 +1078,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 			(new HomeButton({ map: map }, "homeButton")).startup();
 
 			// Setup Zoom Button
-			createZoomButton(document.getElementById("geolocateButton"), map);
+			createGeolocateButton(document.getElementById("geolocateButton"), map);
 
 			map.on("load", function () {
 				// Set the scale.
