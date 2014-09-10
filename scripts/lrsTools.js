@@ -26,7 +26,7 @@ jQuery UI
 		"esri/graphic",
 		"esri/InfoTemplate",
 		"esri/geometry/Point",
-		"esri/layers/GraphicsLayer",
+		"esri/layers/FeatureLayer",
 		"esri/symbols/SimpleMarkerSymbol",
 		"esri/renderers/SimpleRenderer",
 		"esri/toolbars/draw",
@@ -43,7 +43,7 @@ jQuery UI
 		"dijit/layout/BorderContainer",
 		"dijit/layout/TabContainer",
 		"dijit/layout/ContentPane"
-	], function (domUtils, Graphic, InfoTemplate, Point, GraphicsLayer, SimpleMarkerSymbol, SimpleRenderer, Draw,
+	], function (domUtils, Graphic, InfoTemplate, Point, FeatureLayer, SimpleMarkerSymbol, SimpleRenderer, Draw,
 		dom, Color, number, registry, ValidationTextBox, NumberSpinner,
 		DateTextBox, RadioButton, CheckBox, Button, BorderContainer, TabContainer, ContentPane) {
 
@@ -158,7 +158,7 @@ jQuery UI
 					domUtils.hide(dom.byId("backContainer"));
 
 					function createElcResultTable(graphic) {
-						/// <summary>Used by the GraphicsLayer's InfoTemplate to generate content for the InfoWindow.</summary>
+						/// <summary>Used by the FeatureLayer's InfoTemplate to generate content for the InfoWindow.</summary>
 						/// <param name="graphic" type="esri.Graphic">A graphic object with attributes for a state route location.</param>
 						var arm, srmp, armDef, list, output;
 
@@ -207,9 +207,34 @@ jQuery UI
 						/// <summary>
 						/// Creates the "Located Mileposts" layer if it does not already exist.  If the layer exists, visibility is turned on if it is not already visible.
 						/// </summary>
-						var symbol, renderer;
+						var symbol, renderer, layerDefinition;
+						layerDefinition = {
+							geometryType: "esriGeometryPoint",
+							fields: [
+								{
+									name: "Route",
+									type: "esriFieldString",
+									alias: "Route"
+								},
+								{
+									name: "ARM",
+									type: "esriFieldDouble",
+									alias: "ARM"
+								},
+								{
+									name: "SRMP",
+									type: "esriFieldDouble",
+									alias: "SRMP"
+								}
+							]
+						};
 						if (!locatedMilepostsLayer) {
-							locatedMilepostsLayer = new GraphicsLayer({ id: "Located Mileposts" });
+							locatedMilepostsLayer = new FeatureLayer({
+								layerDefinition: layerDefinition,
+								featureSet: null
+							}, {
+								id: "Located Mileposts"
+							});
 							symbol = new SimpleMarkerSymbol().setColor(new Color([48, 186, 0])).setStyle(SimpleMarkerSymbol.STYLE_SQUARE);
 							renderer = new SimpleRenderer(symbol);
 							locatedMilepostsLayer.setRenderer(renderer);
