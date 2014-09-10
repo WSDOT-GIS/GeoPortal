@@ -388,8 +388,6 @@ require([
 			});
 
 			map.on("click", function (event) {
-				var idTaskCount;
-
 				/**
 				 * Gets the name of the object ID field from a feature.
 				 * @param {esri/Graphic} feature
