@@ -28,8 +28,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array", "dojo/number",
-	"dojo/dom",
-	"dojo/dom-attr",
 	"dojo/dom-construct",
 
 	"esri/config",
@@ -93,7 +91,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"extensions/map",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
-], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
+], function (require, ready, on, registry, array, number, domConstruct,
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -805,25 +803,26 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							var body, data;
 
 							function createZoomControl(qtName, data) {
-								var row, cell, selectName, labelName, queryTask;
+								var row, cell, selectName, labelName, queryTask, label;
 								row = $("<tr>").appendTo(body);
 								cell = $("<td>").appendTo(row);
 								selectName = qtName + "ZoomSelect";
 								labelName = qtName + "ZoomLabel";
-								$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+								//$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
+								label = document.createElement(label);
+								label.id = labelName;
+								label.textContent = data.label;
+								cell[0].appendChild(label);
 								cell = $("<td>").appendTo(row);
 								if (data.url) {
-									////$("<img>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
 									$("<progress>").attr({ id: selectName, src: "images/ajax-loader.gif", alt: "Loading..." }).appendTo(cell);
 									queryTask = createQueryTask(qtName);
 									queryTask.task.execute(queryTask.query, function (featureSet) {
-										////$("#" + selectName).extentSelect(featureSet, map, data.levelOrFactor);
 										createExtentSelect(selectName, featureSet, map, data.levelOrFactor);
 									});
 								} else if (data.extents) {
-									//$("<div>").attr("id", selectName).appendTo(cell).extentSelect(data.extents, map);
 									createExtentSelect($("<div>").attr("id", selectName).appendTo(cell)[0], data.extents, map);
-									domAttr.set(labelName, "for", selectName);
+									label.htmlFor = selectName;
 								}
 							}
 
