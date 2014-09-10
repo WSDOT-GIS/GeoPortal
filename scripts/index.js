@@ -164,8 +164,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 		// Add a method to the Date object that will return a short date string.
 		if (Date.toShortDateString === undefined) {
+			/**
+			 * Returns a string representation of the date in the format Month-Date-Year.
+			 * @returns {string}
+			 */
 			Date.prototype.toShortDateString = function () {
-				/// <summary>Returns a string representation of the date in the format Month-Date-Year.</summary>
 				return String(this.getMonth()) + "-" + String(this.getDate()) + "-" + String(this.getFullYear());
 			};
 		}
@@ -188,8 +191,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 		});
 
+		/**
+		 * Sets the extent link in the bookmark tab to the given extent and visible layers.
+		 * @returns {string}
+		 */
 		function getExtentLink() {
-			/// <summary>Sets the extent link in the bookmark tab to the given extent and visible layers.</summary>
 			var layers, qsParams;
 			// Get the current query string parameters.
 			qsParams = $.deparam.querystring(true);
@@ -216,7 +222,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				for (var i = 0; i < servers.length; i++) {
 					esriConfig.defaults.io.corsEnabledServers.push(servers[i]);
 				}
-			}(["www.wsdot.wa.gov", "hqolymgis21t"]));
+			}(["www.wsdot.wa.gov"]));
 			esriConfig.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
 
 			function setupNorthArrow() {
@@ -241,8 +247,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				button = new Button({
 					iconClass: "starIcon",
 					showLabel: false,
+					/**
+					 * Show a dialog with a link to the application, containing query string parameters with the current extent and layers.
+					 */
 					onClick: function () {
-						/// <summary>Show a dialog with a link to the application, containing query string parameters with the current extent and layers.</summary>
 						var linkDialog = $("#linkDialog");
 						// Create the link dialog if it does not already exist.
 						if (linkDialog.length === 0) {
@@ -780,9 +788,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						extentTable = $("<table>").appendTo(zoomControlsDiv);
 
+						/**
+						 * Creates a query task and query using settings from config.json.
+						 * @param {string} qtName - The name of a query task from config.json.
+						 */
 						function createQueryTask(qtName) {
-							/// <summary>Creates a query task and query using settings from config.js.</summary>
-							/// <param name="qtName" type="String">The name of a query task from config.js.</param>
 							var queryTaskSetting, qt, query, n;
 							queryTaskSetting = wsdot.config.queryTasks[qtName];
 							qt = new QueryTask(queryTaskSetting.url);
@@ -798,9 +808,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						// Set up the zoom select boxes.
 						// Setup the zoom controls.
-						function createZoomControls() {
-							/// <summary>Creates the HTML elments that will later be used to create Dojo dijits.</summary>
 
+						/**
+						 * Creates the HTML elments that will later be used to create Dojo dijits.
+						 */
+						function createZoomControls() {
 							var body, data;
 
 							function createZoomControl(qtName, data) {
@@ -1048,14 +1060,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					}
 				});
 
-				/*
-				// Uncomment this section if you need to find a basemap's ID.
-				// Recomment before publishing.
-				dojo.connect(basemapGallery, "onSelectionChange", function () {
-				console.log("Selected basemap is " + basemapGallery.getSelected().id + ".");
-				});
-				*/
-
 				on(basemapGallery, "error", function (msg) {
 					// Show error message
 					if (console) {
@@ -1246,8 +1250,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		ready(init);
 	}
 
+	/**
+	 * Gets the config file specified by the query string.
+	 * @returns {string}l
+	 */
 	function getConfigUrl() {
-		/// <summary>Gets the config file specified by the query string.</summary>
 		// Get the query string parameters.
 		var qs = $.deparam.querystring(true), output = defaultConfigUrl;
 		// If the config parameter has not been specified, return the default.
