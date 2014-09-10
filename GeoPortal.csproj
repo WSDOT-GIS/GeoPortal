@@ -99,6 +99,7 @@
     <Content Include="images\camera.png" />
     <Content Include="images\EsriHybridThumbnail.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
+    <Content Include="images\geolocate.png" />
     <Content Include="images\greenlogo.png" />
     <Content Include="images\layerList\contextMenu.png" />
     <Content Include="images\layerList\sliderSprites.png" />
