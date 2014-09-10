@@ -27,9 +27,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
 var wsdot;
 
-require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array",
-	"dojo/dom-construct",
-
+require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -91,7 +89,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"extensions/map",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
-], function (require, ready, on, registry, array, domConstruct,
+], function (require, ready, on, registry,
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -330,7 +328,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						// Show the export dialog
 						exportDialog.dialog("open");
 					}
-				}, domConstruct.create("button", { id: "saveButton" }, "toolbar", "last"));
+				}, "saveButton");
 
 				button = new Button({
 					label: "Arrange Layers",
@@ -365,7 +363,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 							// Hide the dialog and disable all of the tools.
 							var measureWidget = registry.byId("measureWidget");
 							measureWidget.clearResult();
-							array.forEach(["area", "distance", "location"], function (toolName) {
+							["area", "distance", "location"].forEach(function (toolName) {
 								measureWidget.setTool(toolName, false);
 							});
 							measureDialog.hide();
@@ -410,7 +408,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						var printButton, printDialog, templateNames, pdfList;
 
 						function getTemplateNames() {
-							var layoutTemplateParam = array.filter(resp.parameters, function (param /*, idx*/) {
+							var layoutTemplateParam = resp.parameters.filter(function (param /*, idx*/) {
 								return param.name === "Layout_Template";
 							});
 
@@ -422,7 +420,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 						}
 
 						function getExtraParameters() {
-							return array.filter(resp.parameters, function (param /*, idx*/) {
+							return resp.parameters.filter(function (param /*, idx*/) {
 								return param.name !== "Web_Map_as_JSON" && param.name !== "Format" && param.name !== "Output_File" && param.name !== "Layout_Template";
 							});
 						}
@@ -738,7 +736,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 				function setupLrsControls() {
 					// LRS Tools
-					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, domConstruct.create("div", { id: "lrsTools" }, "toolsAccordion")));
+					var div = document.createElement("div");
+					div.id = "lrsTools";
+					document.getElementById("toolsAccordion").appendChild(div);
+					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div));
 					createLinks.milepostTab = on(registry.byId("lrsTools"), "show", function () {
 						require(["scripts/lrsTools.js"], function () {
 							$("#lrsTools").lrsTools({
