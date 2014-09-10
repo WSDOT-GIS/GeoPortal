@@ -4,6 +4,7 @@
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require([
+	"dojo/promise/all",
 	"dojo/Deferred",
 	"dojo/_base/lang",
 	"dojo/on",
@@ -16,7 +17,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
-], function (Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+], function (all, Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
 ) {
 	"use strict";
@@ -283,12 +284,10 @@ require([
 		/*
 		 * Runs an identify task for each map service that has HTML Popup sublayers.
 		 * @param {esri.geometry.Geometry} geometry
-		 * @param {function} identifyCompleteHandler - A function that has layer and identifyResults parameters.
 		 * @param {Object} options - Use this parameter to override the default identify task options: layerOption, tolerance, and maxAllowableOffset.
-		 * @param {function} errorHandler - A function to handler identify task errors.  Function parameters layer, error.
-		 * @returns {number} - Returns the number of identify tasks that were performed.
+		 * @returns {dojo/promise/Promise}
 		 */
-		identify: function (geometry, identifyCompleteHandler, options, errorHandler) {
+		identify: function (geometry, options) {
 			var map = this, queryCount = 0;
 
 			// Detect which layers have HTML popups.
@@ -302,13 +301,13 @@ require([
 
 			if (!geometry) {
 				throw new Error("Geometry not specified.");
-			} else if (typeof (identifyCompleteHandler) !== "function") {
-				throw new Error("Identify Complete function not defined.");
 			}
+
+			var deferreds = {};
 
 			// Loop through all of the map services.
 			map.layerIds.forEach(function (layerId) {
-				var layer, sublayerIds, idTask, idParams;
+				var layer, sublayerIds, idTask, idParams, deferred;
 
 				// Skip any layers that match the ignored layers regular expression (if one has been specified).
 				if (map._ignoredLayerRE && map._ignoredLayerRE.test(layerId)) {
@@ -335,26 +334,18 @@ require([
 							idParams.maxAllowableOffset = options.maxAllowableOffset || 5;
 
 							// Execute the identify task
-							idTask.execute(idParams, function (idResults) {
-								if (typeof (identifyCompleteHandler) === "function") {
-									// Execute the handler, passing it the current layer and associated ID results.
-									identifyCompleteHandler(layer, idResults);
-								}
-							}, function (error) {
-								if (typeof (errorHandler) === "function") {
-									errorHandler(layer, error);
-								}
-							});
+							deferred = idTask.execute(idParams);
+
+							deferreds[layerId] = deferred;
 						}
 
 					}
 				}
-
 			});
 
 			//TODO: Handle FeatureLayers
 
-			return queryCount;
+			return all(deferreds);
 		},
 
 		popupsEnabled: null,
@@ -551,28 +542,32 @@ require([
 					return div;
 				}
 
-				idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
+				map.identify(event.mapPoint, {
+					tolerance: 20
+				}).then(function (idResults) {
+					//console.debug(idResults);
+					var results, features = [], feature, result;
+					var infoTemplate = new InfoTemplate({ content: loadContent });
+					for (var layerId in idResults) {
+						if (idResults.hasOwnProperty(layerId)) {
+							results = idResults[layerId];
+							for (var i = 0; i < results.length; i++) {
+								result = results[i];
+								feature = result.feature;
+								feature.layer = map.getLayer(layerId);
+								feature.result = result;
+								feature.setInfoTemplate(infoTemplate);
+								features.push(feature);
+							}
 
-					var features, infoTemplate = new InfoTemplate({ content: loadContent });
-
-					// Get the existing features in the info window.  If there are no existing features, create a new array.
-					features = map.infoWindow.features || [];
-
-					idResults.forEach(function (idResult) {
-						var feature;
-						feature = idResult.feature;
-						feature.layer = layer;
-						feature.result = idResult;
-						feature.setInfoTemplate(infoTemplate);
-						features.push(feature);
-					});
+						}
+					}
 
 					map.infoWindow.setFeatures(features);
 					map.infoWindow.show(event.mapPoint, {
 						closetFirst: true
 					});
-				}, {
-					tolerance: 20
+
 				}, function (layer, error) {
 					/*global console:true */
 					if (console !== undefined) {
@@ -580,13 +575,6 @@ require([
 					}
 					/*global console:false*/
 				});
-
-				if (idTaskCount) {
-					// Clear features if there is nothing currently in the info window.
-					map.infoWindow.clearFeatures();
-					map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
-					map.infoWindow.show(event.mapPoint);
-				}
 			});
 		}
 	});
