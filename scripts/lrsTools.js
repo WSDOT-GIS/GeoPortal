@@ -210,23 +210,56 @@ jQuery UI
 						var symbol, renderer, layerDefinition;
 						layerDefinition = {
 							geometryType: "esriGeometryPoint",
-							fields: [
-								{
-									name: "Route",
-									type: "esriFieldString",
-									alias: "Route"
-								},
-								{
-									name: "ARM",
-									type: "esriFieldDouble",
-									alias: "ARM"
-								},
-								{
-									name: "SRMP",
-									type: "esriFieldDouble",
-									alias: "SRMP"
-								}
-							]
+							fields: [{
+								name: "Arm",
+								type: "esriFieldTypeDouble",
+								alias: "Arm"
+							},
+							{
+								name: "ArmCalcReturnCode",
+								type: "esriFieldTypeInteger",
+								alias: "ArmCalcReturnCode"
+							},
+							{
+								name: "ArmCalcReturnMessage",
+								type: "esriFieldTypeString",
+								alias: "ArmCalcReturnMessage"
+							},
+							{
+								name: "Back",
+								type: "esriFieldTypeBoolean",
+								alias: "Back"
+							},
+							{
+								name: "Decrease",
+								type: "esriFieldTypeBoolean",
+								alias: "Decrease"
+							},
+							{
+								name: "RealignmentDate",
+								type: "esriFieldTypeDate",
+								alias: "RealignmentDate"
+							},
+							{
+								name: "ReferenceDate",
+								type: "esriFieldTypeDate",
+								alias: "ReferenceDate"
+							},
+							{
+								name: "ResponseDate",
+								type: "esriFieldTypeDate",
+								alias: "ResponseDate"
+							},
+							{
+								name: "Route",
+								type: "esriFieldTypeString",
+								alias: "Route"
+							},
+							{
+								name: "Srmp",
+								type: "esriFieldTypeDouble",
+								alias: "Srmp"
+							}]
 						};
 						if (!locatedMilepostsLayer) {
 							locatedMilepostsLayer = new FeatureLayer({
