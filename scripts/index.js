@@ -11,6 +11,20 @@ jQuery UI
 jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 */
 
+/**
+ * The Position interface represents the position of the concerned device at a given time. 
+ * The position, represented by a Coordinates object, comprehends the 2D position of the device, 
+ * on a spheroid representing the Earth, but also its altitude and its speed.
+ * @external {Position}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Position Position}
+ */
+
+/**
+ * The PositionError interface represents the reason of an error occuring when using the geolocating device.
+ * @external PositionError
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/PositionError PositionError}
+ */
+
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array", "dojo/number",
@@ -863,6 +877,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								return [value, unit].join(" ");
 							}
 
+							/**
+							 * Shows an info window at the given position.
+							 * Displays a Circle on the map showing the position accuracy.
+							 * @param {external:Position} position
+							 */
 							function showLocationPopup(position) {
 								var pt, attributes, accuracy, circle;
 
@@ -891,6 +910,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								map.setExtent(circle.getExtent(), false);
 							}
 
+							/**
+							 * Shows an error alert message
+							 * @param {external:PositionError} error
+							 */
 							function showLocateError(error) {
 								var message = "", strErrorCode;
 								// Check for known errors
@@ -916,6 +939,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								alert(message);
 							}
 
+							/**
+							 * Calls the navigator.geolocation.getCurrentPosition function.
+							 */
 							function geolocate() {
 								navigator.geolocation.getCurrentPosition(showLocationPopup, showLocateError, {
 									maximumAge: 0,
@@ -924,13 +950,18 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								});
 							}
 
+							// This info template is used to format the geocode results in the info window.
 							infoTemplate = new InfoTemplate(
-								"You are here", ["<dl>", "<dt>Lat</dt><dd>${lat}</dd>",
-									"<dt>Long</dt><dd>${long}</dd>",
+								"You are here", [
+									"<dl>",
+									"<dt>Latitude</dt><dd>${lat}</dd>",
+									"<dt>Longitude</dt><dd>${long}</dd>",
 									"<dt>Accuracy</dt><dd>±${accuracy}</dd>",
 									"</dl>"].join("")
 							);
 
+							// If the browser supports geolocation, setup the button.
+							// Otherwise, remove the button.
 							if (navigator.geolocation) {
 								button = new Button({
 									onClick: geolocate
