@@ -47,7 +47,7 @@ jQuery UI
 		dom, Color, number, registry, ValidationTextBox, NumberSpinner,
 		DateTextBox, RadioButton, CheckBox, Button, BorderContainer, TabContainer, ContentPane) {
 
-		var routeLocator;
+		var routeLocator, objectId = 0;
 
 		function showMessageDialog(text, title) {
 			/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
@@ -157,9 +157,12 @@ jQuery UI
 					} ());
 					domUtils.hide(dom.byId("backContainer"));
 
+					/**
+					 * Used by the FeatureLayer's InfoTemplate to generate content for the InfoWindow.
+					 * @param {esri/Graphic} graphic - A graphic object with attributes for a state route location.
+					 * @returns {HTMLElement}
+					 */
 					function createElcResultTable(graphic) {
-						/// <summary>Used by the FeatureLayer's InfoTemplate to generate content for the InfoWindow.</summary>
-						/// <param name="graphic" type="esri.Graphic">A graphic object with attributes for a state route location.</param>
 						var arm, srmp, armDef, list, output;
 
 						if (!graphic.attributes.LocatingError) {
@@ -203,14 +206,20 @@ jQuery UI
 						return output;
 					}
 
+					/**
+					 * Creates the "Located Mileposts" layer if it does not already exist.  
+					 * If the layer exists, visibility is turned on if it is not already visible.
+					 */
 					function createLocatedMilepostsLayer() {
-						/// <summary>
-						/// Creates the "Located Mileposts" layer if it does not already exist.  If the layer exists, visibility is turned on if it is not already visible.
-						/// </summary>
 						var symbol, renderer, layerDefinition;
 						layerDefinition = {
 							geometryType: "esriGeometryPoint",
 							fields: [{
+								name: "OBJECTID",
+								type: "esriFieldTypeOID",
+								alias: "Object ID"
+							},
+							{
 								name: "Arm",
 								type: "esriFieldTypeDouble",
 								alias: "Arm"
@@ -324,6 +333,7 @@ jQuery UI
 											// Remove the geometry from the results.
 											delete result.RouteGeometry;
 											graphic = new Graphic(geometry, null, result);
+											graphic.attributes.OBJECTID = objectId++;
 											locatedMilepostsLayer.add(graphic);
 											if (map.infoWindow.setFeatures) {
 												// Handle popup style InfoWindow
