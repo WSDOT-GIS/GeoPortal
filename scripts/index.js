@@ -863,7 +863,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								return [value, unit].join(" ");
 							}
 
-							function getPositionHandler(position) {
+							function showLocationPopup(position) {
 								var pt, attributes, accuracy, circle;
 
 								accuracy = position.coords.accuracy; // In meters.
@@ -891,7 +891,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								map.setExtent(circle.getExtent(), false);
 							}
 
-							function positionErrorHandler(error) {
+							function showLocateError(error) {
 								var message = "", strErrorCode;
 								// Check for known errors
 								switch (error.code) {
@@ -916,8 +916,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 								alert(message);
 							}
 
-							function buttonClickHandler() {
-								navigator.geolocation.getCurrentPosition(getPositionHandler, positionErrorHandler, {
+							function geolocate() {
+								navigator.geolocation.getCurrentPosition(showLocationPopup, showLocateError, {
 									maximumAge: 0,
 									timeout: 30000,
 									enableHighAccuracy: true
@@ -933,7 +933,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 							if (navigator.geolocation) {
 								button = new Button({
-									onClick: buttonClickHandler
+									onClick: geolocate
 								}, zoomButtonId);
 							} else {
 								domConstruct.destroy(zoomButtonId);
