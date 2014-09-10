@@ -23,6 +23,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"esri/geometry/jsonUtils",
 	"esri/geometry/Point",
 	"esri/geometry/Extent",
+	"esri/geometry/Circle",
 	"esri/tasks/GeometryService",
 	"esri/dijit/Legend",
 	"esri/layers/ArcGISTiledMapServiceLayer",
@@ -79,7 +80,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry, array, number, dom, domAttr, domConstruct,
-	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
+	esriConfig, Map, jsonUtils, Point, Extent, Circle, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect
@@ -754,10 +755,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 					toolsAccordion.addChild(new ContentPane({ title: "Zoom to" }, "zoomControlsPane"));
 					on.once(registry.byId("zoomControlsPane"), "show", function () {
-						var extentTable;
+						var extentTable, zoomToCurrentButton;
 						zoomControlsDiv = $("<div>").attr({ id: "zoomControls" }).appendTo("#zoomControlsPane");
 
-						////$("<button>").attr({ id: "zoomToMyCurrentLocation", type: "button" }).text("Zoom to my current location").appendTo(zoomControlsDiv);
+						zoomToCurrentButton = document.createElement("button");
+						zoomToCurrentButton.id = "zoomToMyCurrentLocation";
+						zoomToCurrentButton.type = "button";
+						zoomToCurrentButton.textContent = "Zoom to my current location";
+						zoomControlsDiv[0].appendChild(zoomToCurrentButton);
+
 
 						$("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(zoomControlsDiv);
 						$("<div id='zoomToXY'>").appendTo(zoomControlsDiv).zoomToXY({
@@ -829,60 +835,111 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 
 						createZoomControls();
 
-						////if (navigator.geolocation) {
-						////	button = new Button({
-						////		onClick: function () {
-						////			navigator.geolocation.getCurrentPosition(function (position) {
-						////				var pt, attributes;
-						////				pt = new Point(position.coords.longitude, position.coords.latitude);
-						////				pt = webMercatorUtils.geographicToWebMercator(pt);
-						////				attributes = { lat: position.coords.latitude.toFixed(6), long: position.coords.longitude.toFixed(6) };
-						////				if (map.infoWindow.setFeatures) {
-						////					map.infoWindow.setFeatures([
-						////						new Graphic(pt, null, attributes, new InfoTemplate(
-						////							"You are here", "Lat: ${lat} <br />Long: ${long}"
-						////						))
-						////					]);
-						////					map.infoWindow.show(map.toScreen(pt));
-						////				} else {
-						////					map.infoWindow.setTitle("You are here").setContent(
-						////						["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
-						////					).show(map.toScreen(pt));
-						////				}
-						////				map.centerAndZoom(pt, 8);
-						////			}, function (error) {
-						////				var message = "", strErrorCode;
-						////				// Check for known errors
-						////				switch (error.code) {
-						////					case error.PERMISSION_DENIED:
-						////						message = "This website does not have permission to use the Geolocation API";
-						////						break;
-						////					case error.POSITION_UNAVAILABLE:
-						////						message = "The current position could not be determined.";
-						////						break;
-						////					case error.PERMISSION_DENIED_TIMEOUT:
-						////						message = "The current position could not be determined within the specified timeout period.";
-						////						break;
-						////				}
+						// Setup Zoom Button
+						(function (zoomButtonId, map) {
+							var infoTemplate, nFormat;
 
-						////				// If it's an unknown error, build a message that includes 
-						////				// information that helps identify the situation so that 
-						////				// the error handler can be updated.
-						////				if (message === "") {
-						////					strErrorCode = error.code.toString();
-						////					message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
-						////				}
-						////				alert(message);
-						////			}, {
-						////				maximumAge: 0,
-						////				timeout: 30000,
-						////				enableHighAccuracy: true
-						////			});
-						////		}
-						////	}, "zoomToMyCurrentLocation");
-						////} else {
-						////	domConstruct.destroy("zoomToMyCurrentLocation");
-						////}
+							// Setup NumberFormat object if the browser supports it.
+							nFormat = (window.Intl && window.Intl.NumberFormat) ? new window.Intl.NumberFormat() : null;
+							
+							/**
+							 * Formats an amount in meters.
+							 * @param {number} m - A number of meters.
+							 * @returns {string}
+							 */
+							function formatMeters(m) {
+								var value, unit;
+								value = m;
+								unit = "meters";
+
+								if (m > 1000) {
+									value = m / 1000;
+									unit = "km.";
+								}
+
+								if (nFormat) { // Make sure browser implements Intl.NumberFormat
+									value = nFormat.format(value);
+								}
+								return [value, unit].join(" ");
+							}
+
+							function getPositionHandler(position) {
+								var pt, attributes, accuracy, circle;
+
+								accuracy = position.coords.accuracy; // In meters.
+								pt = new Point(position.coords.longitude, position.coords.latitude);
+								pt = webMercatorUtils.geographicToWebMercator(pt);
+								circle = new Circle(pt, {
+									radius: accuracy, // Default unit is already meters.
+									geodesic: true
+								});
+								attributes = {
+									lat: position.coords.latitude.toFixed(6),
+									long: position.coords.longitude.toFixed(6),
+									accuracy: formatMeters(accuracy)
+								};
+								if (map.infoWindow.setFeatures) {
+									map.infoWindow.setFeatures([
+										new Graphic(circle, null, attributes, infoTemplate)
+									]);
+									map.infoWindow.show(map.toScreen(pt));
+								} else {
+									map.infoWindow.setTitle("You are here").setContent(
+										["Lat: ", attributes.lat, "<br /> Long:", attributes.long].join()
+									).show(map.toScreen(pt));
+								}
+								map.setExtent(circle.getExtent(), false);
+							}
+
+							function positionErrorHandler(error) {
+								var message = "", strErrorCode;
+								// Check for known errors
+								switch (error.code) {
+									case error.PERMISSION_DENIED:
+										message = "This website does not have permission to use the Geolocation API";
+										break;
+									case error.POSITION_UNAVAILABLE:
+										message = "The current position could not be determined.";
+										break;
+									case error.PERMISSION_DENIED_TIMEOUT:
+										message = "The current position could not be determined within the specified timeout period.";
+										break;
+								}
+
+								// If it's an unknown error, build a message that includes 
+								// information that helps identify the situation so that 
+								// the error handler can be updated.
+								if (message === "") {
+									strErrorCode = error.code.toString();
+									message = "The position could not be determined due to an unknown error (Code: " + strErrorCode + ").";
+								}
+								alert(message);
+							}
+
+							function buttonClickHandler() {
+								navigator.geolocation.getCurrentPosition(getPositionHandler, positionErrorHandler, {
+									maximumAge: 0,
+									timeout: 30000,
+									enableHighAccuracy: true
+								});
+							}
+
+							infoTemplate = new InfoTemplate(
+								"You are here", ["<dl>", "<dt>Lat</dt><dd>${lat}</dd>",
+									"<dt>Long</dt><dd>${long}</dd>",
+									"<dt>Accuracy</dt><dd>±${accuracy}</dd>",
+									"</dl>"].join("")
+							);
+
+							if (navigator.geolocation) {
+								button = new Button({
+									onClick: buttonClickHandler
+								}, zoomButtonId);
+							} else {
+								domConstruct.destroy(zoomButtonId);
+							}
+						}("zoomToMyCurrentLocation", map));
+						// End setup Zoom Button
 
 					});
 				}
