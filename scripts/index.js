@@ -27,7 +27,7 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 
 var wsdot;
 
-require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array", "dojo/number",
+require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array",
 	"dojo/dom-construct",
 
 	"esri/config",
@@ -91,7 +91,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 	"extensions/map",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
-], function (require, ready, on, registry, array, number, domConstruct,
+], function (require, ready, on, registry, array, domConstruct,
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -882,14 +882,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry", "dojo/_base/array
 				mainContainer.startup();
 			}
 
+			/**
+			 * Updates the scale level.
+			 */
 			function setScaleLabel(level) {
 				// Set the scale.
 				var scale = map.getScale(level);
 				var scaleNode = document.getElementById("scaleText");
-				scaleNode.textContent = scale ? ["1", number.format(scale, {
-					round: 0,
-					places: 0
-				})].join(":") : "";
+				var nFormat = (window.Intl && window.Intl.NumberFormat) ? new window.Intl.NumberFormat() : null;
+				var value = nFormat ? nFormat.format(scale) : scale;
+				scaleNode.textContent = scale ? ["1", value].join(":") : "";
 			}
 
 			setupLayout();
