@@ -7,7 +7,6 @@ require([
 	"dojo/promise/all",
 	"dojo/Deferred",
 	"dojo/_base/lang",
-	"dojo/on",
 	"esri/request",
 	"esri/InfoTemplate",
 	"esri/map",
@@ -19,7 +18,7 @@ require([
 	"esri/tasks/IdentifyParameters",
 	"esri/geometry/jsonUtils",
 	"esri/geometry/Circle"
-], function (all, Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+], function (all, Deferred, lang, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
 	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, Circle
 ) {
 	"use strict";
@@ -248,10 +247,6 @@ require([
 			var map = this;
 
 			var deferred = new Deferred();
-
-			// if (!map || !map.isInstanceOf || !map.isInstanceOf(Map)) {
-			// throw new Error("The \"map\" parameter must be of type Map.");
-			// }
 
 			var layerIdCount = map.layerIds.length;
 			var completedCount = 0;
