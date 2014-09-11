@@ -4,9 +4,9 @@
 // Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 require([
+	"dojo/promise/all",
 	"dojo/Deferred",
 	"dojo/_base/lang",
-	"dojo/on",
 	"esri/request",
 	"esri/InfoTemplate",
 	"esri/map",
@@ -16,10 +16,23 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
-], function (Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
-	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
+	"esri/geometry/jsonUtils",
+	"esri/geometry/Circle"
+], function (all, Deferred, lang, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
+	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, Circle
 ) {
 	"use strict";
+
+	/**
+	 * @external Graphic
+	 * @see {@link https://developers.arcgis.com/javascript/jsapi/graphic-amd.html Graphic}
+	 */
+
+	/**
+	 * @external IdentifyResult
+	 * @see {@link https://developers.arcgis.com/javascript/jsapi/identifyresult-amd.html IdentifyResult}
+	 */
+
 	var detectHtmlPopups;
 
 	/**
@@ -235,10 +248,6 @@ require([
 
 			var deferred = new Deferred();
 
-			// if (!map || !map.isInstanceOf || !map.isInstanceOf(Map)) {
-			// throw new Error("The \"map\" parameter must be of type Map.");
-			// }
-
 			var layerIdCount = map.layerIds.length;
 			var completedCount = 0;
 
@@ -283,13 +292,11 @@ require([
 		/*
 		 * Runs an identify task for each map service that has HTML Popup sublayers.
 		 * @param {esri.geometry.Geometry} geometry
-		 * @param {function} identifyCompleteHandler - A function that has layer and identifyResults parameters.
 		 * @param {Object} options - Use this parameter to override the default identify task options: layerOption, tolerance, and maxAllowableOffset.
-		 * @param {function} errorHandler - A function to handler identify task errors.  Function parameters layer, error.
-		 * @returns {number} - Returns the number of identify tasks that were performed.
+		 * @returns {dojo/promise/Promise}
 		 */
-		identify: function (geometry, identifyCompleteHandler, options, errorHandler) {
-			var map = this, queryCount = 0;
+		identify: function (geometry, options) {
+			var map = this, queryCount = 0, graphicsLayersGrahpics;
 
 			// Detect which layers have HTML popups.
 			if (!this.detectHtmlPopupsHasRun) {
@@ -302,13 +309,13 @@ require([
 
 			if (!geometry) {
 				throw new Error("Geometry not specified.");
-			} else if (typeof (identifyCompleteHandler) !== "function") {
-				throw new Error("Identify Complete function not defined.");
 			}
+
+			var deferreds = {};
 
 			// Loop through all of the map services.
 			map.layerIds.forEach(function (layerId) {
-				var layer, sublayerIds, idTask, idParams;
+				var layer, sublayerIds, idTask, idParams, deferred;
 
 				// Skip any layers that match the ignored layers regular expression (if one has been specified).
 				if (map._ignoredLayerRE && map._ignoredLayerRE.test(layerId)) {
@@ -335,26 +342,58 @@ require([
 							idParams.maxAllowableOffset = options.maxAllowableOffset || 5;
 
 							// Execute the identify task
-							idTask.execute(idParams, function (idResults) {
-								if (typeof (identifyCompleteHandler) === "function") {
-									// Execute the handler, passing it the current layer and associated ID results.
-									identifyCompleteHandler(layer, idResults);
-								}
-							}, function (error) {
-								if (typeof (errorHandler) === "function") {
-									errorHandler(layer, error);
-								}
-							});
+							deferred = idTask.execute(idParams);
+
+							deferreds[layerId] = deferred;
 						}
 
 					}
 				}
-
 			});
 
-			//TODO: Handle FeatureLayers
+			
 
-			return queryCount;
+			// Loop through all graphics layers' graphics to see if the clicked point
+			// intersects.
+
+			function testGraphic(graphic) {
+				var extent, g = graphic.geometry;
+
+				// Point has no "get extent", so create a circle.
+				if (g.type === "point") {
+					g = new Circle(g);
+				}
+
+				if (g.type === "extent") {
+					extent = g;
+				} else {
+					extent = g.getExtent();
+				}
+
+				if (extent.contains(geometry)) {
+					graphicsLayersGrahpics.push(graphic);
+				}
+			}
+
+			graphicsLayersGrahpics = [];
+
+			map.graphicsLayerIds.forEach(function (layerId) {
+				var layer;
+
+				layer = map.getLayer(layerId);
+
+				layer.graphics.forEach(testGraphic);
+			});
+
+			if (graphicsLayersGrahpics && graphicsLayersGrahpics.length) {
+				deferreds.from_graphics_layers = new Deferred();
+				deferreds.from_graphics_layers.resolve({
+					features: graphicsLayersGrahpics
+				});
+			}
+
+
+			return all(deferreds);
 		},
 
 		popupsEnabled: null,
@@ -397,8 +436,6 @@ require([
 			});
 
 			map.on("click", function (event) {
-				var idTaskCount;
-
 				/**
 				 * Gets the name of the object ID field from a feature.
 				 * @param {esri/Graphic} feature
@@ -551,42 +588,60 @@ require([
 					return div;
 				}
 
-				idTaskCount = map.identify(event.mapPoint, function (layer, idResults) {
+				map.identify(event.mapPoint, {
+					tolerance: 20
+				}).then(function (idResults) {
+					//console.debug(idResults);
+					var results, features = [];
+					var infoTemplate = new InfoTemplate({ content: loadContent });
 
-					var features, infoTemplate = new InfoTemplate({ content: loadContent });
+					/**
+					 * Adds a feature the the array of features.
+					 * Intended for use with Array.prototype.forEach().
+					 * @param {Graphic} feature
+					 */
+					function pushFeature(feature) {
+						features.push(feature);
+					}
 
-					// Get the existing features in the info window.  If there are no existing features, create a new array.
-					features = map.infoWindow.features || [];
-
-					idResults.forEach(function (idResult) {
-						var feature;
-						feature = idResult.feature;
-						feature.layer = layer;
-						feature.result = idResult;
+					/**
+					 * Gets a Graphic from an Identify result and adds it to the array of features.
+					 * Intended for use with Array.prototype.forEach().
+					 * @param {IdentifyResult} result
+					 */
+					function pushResult(result) {
+						var feature = result.feature;
+						feature.layer = map.getLayer(layerId);
+						feature.result = result;
 						feature.setInfoTemplate(infoTemplate);
 						features.push(feature);
-					});
+					}
 
+					for (var layerId in idResults) {
+						if (idResults.hasOwnProperty(layerId)) {
+							results = idResults[layerId];
+
+							if (results.features) { // Feature class query result.
+								results.features.forEach(pushFeature);
+							} else { // identify results.
+								results.forEach(pushResult);
+							}
+						}
+					}
+
+					// Add the features to the InfoWindow.
 					map.infoWindow.setFeatures(features);
 					map.infoWindow.show(event.mapPoint, {
 						closetFirst: true
 					});
-				}, {
-					tolerance: 20
-				}, function (layer, error) {
+
+				}, function (error) {
 					/*global console:true */
 					if (console !== undefined) {
-						console.error(layer, error);
+						console.error(error);
 					}
 					/*global console:false*/
 				});
-
-				if (idTaskCount) {
-					// Clear features if there is nothing currently in the info window.
-					map.infoWindow.clearFeatures();
-					map.infoWindow.setContent("<progress>Running Identify on layers...</progress>");
-					map.infoWindow.show(event.mapPoint);
-				}
 			});
 		}
 	});

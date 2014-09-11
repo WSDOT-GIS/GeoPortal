@@ -26,7 +26,7 @@ jQuery UI
 		"esri/graphic",
 		"esri/InfoTemplate",
 		"esri/geometry/Point",
-		"esri/layers/GraphicsLayer",
+		"esri/layers/FeatureLayer",
 		"esri/symbols/SimpleMarkerSymbol",
 		"esri/renderers/SimpleRenderer",
 		"esri/toolbars/draw",
@@ -43,11 +43,11 @@ jQuery UI
 		"dijit/layout/BorderContainer",
 		"dijit/layout/TabContainer",
 		"dijit/layout/ContentPane"
-	], function (domUtils, Graphic, InfoTemplate, Point, GraphicsLayer, SimpleMarkerSymbol, SimpleRenderer, Draw,
+	], function (domUtils, Graphic, InfoTemplate, Point, FeatureLayer, SimpleMarkerSymbol, SimpleRenderer, Draw,
 		dom, Color, number, registry, ValidationTextBox, NumberSpinner,
 		DateTextBox, RadioButton, CheckBox, Button, BorderContainer, TabContainer, ContentPane) {
 
-		var routeLocator;
+		var routeLocator, objectId = 0;
 
 		function showMessageDialog(text, title) {
 			/// <summary>Displays an error message either via pnotify (if possible) or a jQuery UI dialog.</summary>
@@ -157,9 +157,12 @@ jQuery UI
 					} ());
 					domUtils.hide(dom.byId("backContainer"));
 
+					/**
+					 * Used by the FeatureLayer's InfoTemplate to generate content for the InfoWindow.
+					 * @param {esri/Graphic} graphic - A graphic object with attributes for a state route location.
+					 * @returns {HTMLElement}
+					 */
 					function createElcResultTable(graphic) {
-						/// <summary>Used by the GraphicsLayer's InfoTemplate to generate content for the InfoWindow.</summary>
-						/// <param name="graphic" type="esri.Graphic">A graphic object with attributes for a state route location.</param>
 						var arm, srmp, armDef, list, output;
 
 						if (!graphic.attributes.LocatingError) {
@@ -203,13 +206,77 @@ jQuery UI
 						return output;
 					}
 
+					/**
+					 * Creates the "Located Mileposts" layer if it does not already exist.  
+					 * If the layer exists, visibility is turned on if it is not already visible.
+					 */
 					function createLocatedMilepostsLayer() {
-						/// <summary>
-						/// Creates the "Located Mileposts" layer if it does not already exist.  If the layer exists, visibility is turned on if it is not already visible.
-						/// </summary>
-						var symbol, renderer;
+						var symbol, renderer, layerDefinition;
+						layerDefinition = {
+							geometryType: "esriGeometryPoint",
+							fields: [{
+								name: "OBJECTID",
+								type: "esriFieldTypeOID",
+								alias: "Object ID"
+							},
+							{
+								name: "Arm",
+								type: "esriFieldTypeDouble",
+								alias: "Arm"
+							},
+							{
+								name: "ArmCalcReturnCode",
+								type: "esriFieldTypeInteger",
+								alias: "ArmCalcReturnCode"
+							},
+							{
+								name: "ArmCalcReturnMessage",
+								type: "esriFieldTypeString",
+								alias: "ArmCalcReturnMessage"
+							},
+							{
+								name: "Back",
+								type: "esriFieldTypeBoolean",
+								alias: "Back"
+							},
+							{
+								name: "Decrease",
+								type: "esriFieldTypeBoolean",
+								alias: "Decrease"
+							},
+							{
+								name: "RealignmentDate",
+								type: "esriFieldTypeDate",
+								alias: "RealignmentDate"
+							},
+							{
+								name: "ReferenceDate",
+								type: "esriFieldTypeDate",
+								alias: "ReferenceDate"
+							},
+							{
+								name: "ResponseDate",
+								type: "esriFieldTypeDate",
+								alias: "ResponseDate"
+							},
+							{
+								name: "Route",
+								type: "esriFieldTypeString",
+								alias: "Route"
+							},
+							{
+								name: "Srmp",
+								type: "esriFieldTypeDouble",
+								alias: "Srmp"
+							}]
+						};
 						if (!locatedMilepostsLayer) {
-							locatedMilepostsLayer = new GraphicsLayer({ id: "Located Mileposts" });
+							locatedMilepostsLayer = new FeatureLayer({
+								layerDefinition: layerDefinition,
+								featureSet: null
+							}, {
+								id: "Located Mileposts"
+							});
 							symbol = new SimpleMarkerSymbol().setColor(new Color([48, 186, 0])).setStyle(SimpleMarkerSymbol.STYLE_SQUARE);
 							renderer = new SimpleRenderer(symbol);
 							locatedMilepostsLayer.setRenderer(renderer);
@@ -266,6 +333,7 @@ jQuery UI
 											// Remove the geometry from the results.
 											delete result.RouteGeometry;
 											graphic = new Graphic(geometry, null, result);
+											graphic.attributes.OBJECTID = objectId++;
 											locatedMilepostsLayer.add(graphic);
 											if (map.infoWindow.setFeatures) {
 												// Handle popup style InfoWindow
