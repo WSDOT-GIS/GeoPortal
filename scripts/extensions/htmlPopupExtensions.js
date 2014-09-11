@@ -17,10 +17,23 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
+	"esri/geometry/jsonUtils",
+	"esri/geometry/Circle"
 ], function (all, Deferred, lang, on, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
-	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters
+	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, Circle
 ) {
 	"use strict";
+
+	/**
+	 * @external Graphic
+	 * @see {@link https://developers.arcgis.com/javascript/jsapi/graphic-amd.html Graphic}
+	 */
+
+	/**
+	 * @external IdentifyResult
+	 * @see {@link https://developers.arcgis.com/javascript/jsapi/identifyresult-amd.html IdentifyResult}
+	 */
+
 	var detectHtmlPopups;
 
 	/**
@@ -288,7 +301,7 @@ require([
 		 * @returns {dojo/promise/Promise}
 		 */
 		identify: function (geometry, options) {
-			var map = this, queryCount = 0;
+			var map = this, queryCount = 0, graphicsLayersGrahpics;
 
 			// Detect which layers have HTML popups.
 			if (!this.detectHtmlPopupsHasRun) {
@@ -343,7 +356,47 @@ require([
 				}
 			});
 
-			//TODO: Handle FeatureLayers
+			
+
+			// Loop through all graphics layers' graphics to see if the clicked point
+			// intersects.
+
+			function testGraphic(graphic) {
+				var extent, g = graphic.geometry;
+
+				// Point has no "get extent", so create a circle.
+				if (g.type === "point") {
+					g = new Circle(g);
+				}
+
+				if (g.type === "extent") {
+					extent = g;
+				} else {
+					extent = g.getExtent();
+				}
+
+				if (extent.contains(geometry)) {
+					graphicsLayersGrahpics.push(graphic);
+				}
+			}
+
+			graphicsLayersGrahpics = [];
+
+			map.graphicsLayerIds.forEach(function (layerId) {
+				var layer;
+
+				layer = map.getLayer(layerId);
+
+				layer.graphics.forEach(testGraphic);
+			});
+
+			if (graphicsLayersGrahpics && graphicsLayersGrahpics.length) {
+				deferreds.from_graphics_layers = new Deferred();
+				deferreds.from_graphics_layers.resolve({
+					features: graphicsLayersGrahpics
+				});
+			}
+
 
 			return all(deferreds);
 		},
@@ -544,32 +597,53 @@ require([
 					tolerance: 20
 				}).then(function (idResults) {
 					//console.debug(idResults);
-					var results, features = [], feature, result;
+					var results, features = [];
 					var infoTemplate = new InfoTemplate({ content: loadContent });
+
+					/**
+					 * Adds a feature the the array of features.
+					 * Intended for use with Array.prototype.forEach().
+					 * @param {Graphic} feature
+					 */
+					function pushFeature(feature) {
+						features.push(feature);
+					}
+
+					/**
+					 * Gets a Graphic from an Identify result and adds it to the array of features.
+					 * Intended for use with Array.prototype.forEach().
+					 * @param {IdentifyResult} result
+					 */
+					function pushResult(result) {
+						var feature = result.feature;
+						feature.layer = map.getLayer(layerId);
+						feature.result = result;
+						feature.setInfoTemplate(infoTemplate);
+						features.push(feature);
+					}
+
 					for (var layerId in idResults) {
 						if (idResults.hasOwnProperty(layerId)) {
 							results = idResults[layerId];
-							for (var i = 0; i < results.length; i++) {
-								result = results[i];
-								feature = result.feature;
-								feature.layer = map.getLayer(layerId);
-								feature.result = result;
-								feature.setInfoTemplate(infoTemplate);
-								features.push(feature);
-							}
 
+							if (results.features) { // Feature class query result.
+								results.features.forEach(pushFeature);
+							} else { // identify results.
+								results.forEach(pushResult);
+							}
 						}
 					}
 
+					// Add the features to the InfoWindow.
 					map.infoWindow.setFeatures(features);
 					map.infoWindow.show(event.mapPoint, {
 						closetFirst: true
 					});
 
-				}, function (layer, error) {
+				}, function (error) {
 					/*global console:true */
 					if (console !== undefined) {
-						console.error(layer, error);
+						console.error(error);
 					}
 					/*global console:false*/
 				});
