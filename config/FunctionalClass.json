@@ -15,6 +15,10 @@
 		"Tools",
 		"Basemap"
 	],
+	"tools": [
+		"zoom",
+		"lrs"
+	],
 	"mapOptions": {
 		"logo": false,
 		"extent": {
