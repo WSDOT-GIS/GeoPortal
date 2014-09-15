@@ -7,7 +7,12 @@ define([
 	"esri/geometry/Circle",
 	"esri/geometry/webMercatorUtils"
 ], function (Graphic, InfoTemplate, Point, Circle, webMercatorUtils) {
-	function createGeolocateButton(zoomButton, map) {
+	/**
+	 * Creates a geolocate button.
+	 * @param {HTMLButtonElement} button
+	 * @param {esri/Map} map
+	 */
+	function createGeolocateButton(button, map) {
 		var infoTemplate, nFormat;
 
 		// Setup NumberFormat object if the browser supports it.
@@ -42,6 +47,8 @@ define([
 		function showLocationPopup(position) {
 			var pt, attributes, accuracy, circle;
 
+			button.classList.remove("busy");
+
 			accuracy = position.coords.accuracy; // In meters.
 			pt = new Point(position.coords.longitude, position.coords.latitude);
 			pt = webMercatorUtils.geographicToWebMercator(pt);
@@ -73,6 +80,9 @@ define([
 		 */
 		function showLocateError(error) {
 			var message = "", strErrorCode;
+
+			button.classList.remove("busy");
+
 			// Check for known errors
 			switch (error.code) {
 				case error.PERMISSION_DENIED:
@@ -100,6 +110,7 @@ define([
 		 * Calls the navigator.geolocation.getCurrentPosition function.
 		 */
 		function geolocate() {
+			button.classList.add("busy");
 			navigator.geolocation.getCurrentPosition(showLocationPopup, showLocateError, {
 				maximumAge: 0,
 				timeout: 30000,
@@ -120,9 +131,9 @@ define([
 		// If the browser supports geolocation, setup the button.
 		// Otherwise, remove the button.
 		if (navigator.geolocation) {
-			zoomButton.onclick = geolocate;
+			button.onclick = geolocate;
 		} else {
-			zoomButton.disabled = true;
+			button.disabled = true;
 		}
 	}
 
