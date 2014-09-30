@@ -588,6 +588,8 @@ require([
 					return div;
 				}
 
+				map.infoWindow.clearFeatures();
+
 				map.identify(event.mapPoint, {
 					tolerance: 20
 				}).then(function (idResults) {
