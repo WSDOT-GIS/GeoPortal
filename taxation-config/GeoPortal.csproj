@@ -156,6 +156,7 @@
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
+    <Content Include="config\taxation.json" />
     <None Include="Properties\PublishProfiles\Production Deployment Area.pubxml" />
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
