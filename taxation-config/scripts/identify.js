@@ -1,0 +1,417 @@
+﻿/*global dojo, dijit, esri, jQuery */
+/*jslint nomen: true, white:true, devel: true, browser: true, maxerr: 50, indent: 4 */
+
+/*
+Copyright (c) 2011 Washington State Department of Transportation
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+/*
+This jQuery plugin is used to create an identify control for an ArcGIS JavaScript API web application.
+Prerequisites:
+ArcGIS JavaScript API
+jQuery
+jQuery UI
+*/
+
+/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2-vsdoc.js"/>
+/// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.14/jquery-ui.js"/>
+(function ($) {
+    "use strict";
+    dojo.require("esri.graphic");
+    dojo.require("esri.tasks.identify");
+    dojo.require("esri.toolbars.draw");
+    dojo.require("esri.symbol");
+
+    function ResultCollection(json) {
+        /// <summary>An object that represents multiple identify results from the same layer of a map service.</summary>
+        /// <param name="name" type="String">Description</param>
+        this.displayFieldName = json.displayFieldName || null;
+        this.features = json.features || [];
+        this.layerId = json.layerId || null;
+        this.layerName = json.layerName || null;
+
+        this.toHtmlTable = function () {
+            var table, attrNames = [], row, headOrBody, ignoredFieldsRe = /(Shape(?:\.ST(?:(?:Area)|(?:Length))\(\s*\))?)|(O(?:BJECT)?ID(?:_\d+)?)/i;
+            table = $("<table>").addClass("ui-identify-result");
+
+            // Create the table head and body.
+            if (this.features.length > 0) {
+                // Add the table header and the column headings within.
+                headOrBody = $("<thead>").appendTo(table);
+                row = $("<tr>").appendTo(headOrBody);
+
+                // Create a collection of attribute names and add a column header for each name.
+                $.each(this.features[0].attributes, function (attrName /*, attrValue */) {
+                    if (!attrName.match(ignoredFieldsRe)) {
+                        attrNames.push(attrName);
+                        $("<th>").text(attrName).appendTo(row);
+                    }
+                });
+
+                headOrBody = $("<tbody>").appendTo(table);
+
+                // Add all of the attribute values to the table body.
+                $.each(this.features, function (index, feature) {
+                    row = $("<tr>").appendTo(headOrBody);
+                    $.each(attrNames, function (index, attrName) {
+                        $("<td>").text(feature.attributes[attrName]).appendTo(row);
+                    });
+                });
+            }
+
+            return table;
+        };
+
+    }
+
+    function resultCollectionToTabs(resultCollections) {
+        /// <summary>Converts an array of result collections into a jQuery tabs control.</summary>
+        /// <param name="resultCollections" type="ResultCollection[]">An array of ResultCollection objects.</param>
+        /// <returns type="jQuery UI tabs" />
+        var output, select, header, body;
+        output = $("<div>").addClass("ui-identify-result");
+        header = $("<div>").addClass("ui-identify-result-header").appendTo(output);
+        body = $("<div>").addClass("ui-identify-result-body").appendTo(output);
+        $("<label>").text("Select a result table").attr("for", "resultTableSelect").appendTo(header);
+        select = $("<select>").attr("id", "resultTableSelect").appendTo(header).change(function (eventObject) {
+            // Show the currently selected table.
+            var value = $(this).val();
+            $("table", output).hide();
+            $("table[data-layer-id=" + value + "]").show();
+        });
+
+        $.each(resultCollections, function (index, resultCollection) {
+            var table;
+            $("<option>").text(resultCollection.layerName).attr("value", index).appendTo(select);
+            table = resultCollection.toHtmlTable().appendTo(body).attr("data-layer-id", index);
+            if (index > 0) {
+                table.hide();
+            }
+        });
+
+        return output;
+    }
+
+    function showDialog(event) {
+        // The event object contains screenPoint, mapPoint, and graphic attributes.
+        var tabs, dialog;
+        tabs = event.graphic.attributes.results.length < 1 ? $("<p>").text("No results.") : resultCollectionToTabs(event.graphic.attributes.results);
+        dialog = $("<div>").append(tabs).dialog({
+            title: "Results",
+            close: function () {
+                $(this).dialog("destroy").remove();
+            },
+            buttons: {
+                "Close": function () { $(this).dialog("close"); }
+            }
+        });
+
+        dialog.dialog("option", { width: 640, height: 480 });
+    }
+
+
+    $.widget("ui.identify", {
+        // default options
+        options: {
+            map: null,
+            layers: [],  // Specify a list of layers.  If this parameter is provided, then map layers will not be automatically added
+            drawToolbar: null,
+            mapDpi: 96,
+            pointSymbol: null,
+            lineSymbol: null,
+            polygonSymbol: null,
+            graphicsLayer: null,
+            templateUrl: "IdentifyTemplate.html"
+        },
+        isDrawing: false,
+        _addLayer: function (layer /*, error*/) {
+            var option;
+            if (!layer) {
+                if (console) {
+                    console.error({ layer: layer, message: "No layer provided to _addLayer function" });
+                }
+                return this;
+            }
+
+            if (!layer.id || !layer.url) {
+                if (console) {
+                    console.error({ layer: layer, message: "Missing / Invalid id or url parameter." });
+                }
+                return this;
+            }
+
+            if (layer.id.match(/layer\d+/)) {
+                if (console) {
+                    console.warn({ layer: layer, message: "This appears to be a base map layer. Skipping." });
+                }
+                return this;
+            }
+
+            // If it is not an actual layer object, create one.
+            if (!layer.isInstanceOf || !layer.isInstanceOf(esri.layers.Layer)) {
+                // layer = new esri.layers.ArcGISDynamicServiceLayer(layer.url, layer);
+                throw new TypeError("The 'layer' parameter must be derived from esri.layers.Layer.");
+            }
+
+            if (layer.capabilities && !layer.capabilities.search(/Query/gi)) {
+                // Add feature layer to the list of identify layers if it supports "Query".
+                if (console) {
+                    console.warn({ layer: layer, message: "Layer does not support querying." });
+                }
+            } else {
+                option = $("<option>").data("layer", layer).text(layer.id).attr("value", layer.id).appendTo("#ui-identify-layer-select");
+                // Disable the option until the layer has been loaded.
+                if (!layer.loaded) {
+                    option.attr("disabled", true);
+                    dojo.connect(layer, "onLoad", function (layer) {
+                        option.attr("disabled", false);
+                        // If this option is currently selected, you'll need to refresh the sublayers list.
+                        $("#ui-identify-layer-select").change();
+                    });
+                }
+            }
+            $("#ui-identify-layer-select").change();
+
+            return this;
+        },
+        _removeLayer: function (layer) {
+            // Remove any option elements associated with this layer.
+            $("option", "#ui-identify-layer-select").filter(function () { return $(this).data("layer") === layer; }).remove();
+            return this;
+        },
+        _create: function () {
+            var widget = this,
+                map = this.options.map,
+                tableDiv, layerIds, toolbar, geometryTypeDescriptions;
+
+            function handleMapServiceChange(/*event*/) {
+                var selectedMapService, sublayerSelect, childLayerInfos;
+                selectedMapService = $(":selected", this).data("layer"); // "this" is the element that was changed.
+                sublayerSelect = $("#ui-identify-sublayer-select");
+                $("option", sublayerSelect).remove();
+                // Get only the layer infos that are not group layers.
+                childLayerInfos = $(selectedMapService.layerInfos).filter(function () { return !this.subLayerIds; });
+
+                childLayerInfos.map(function (index, layerInfo) {
+                    return $("<option>").attr({
+                        value: layerInfo.id,
+                        name: layerInfo.name,
+                        selected: true,
+                        title: layerInfo.name
+                    }).text(layerInfo.name).appendTo(sublayerSelect);
+                });
+            }
+
+            function getIdentifyParameters(geometry) {
+                /// <summary>Creates an IdentifyParameters object using the values that the user has selected.</summary>
+                var map = widget.options.map, idParams = new esri.tasks.IdentifyParameters();
+                if (typeof (widget.options.mapDpi) !== "undefined") {
+                    idParams.dpi = widget.options.mapDpi;
+                }
+                idParams.geometry = geometry;
+                idParams.tolerance = Number($("#ui-identify-tolerance-input").attr("value"));
+                idParams.layerIds = $("#ui-identify-sublayer-select option:selected", widget.element).map(function (index, option) {
+                    return Number($(option).attr("value"));
+                }).toArray();
+                ////idParams.returnGeometry = false;
+                idParams.layerOption = $("#ui-identify-layer-option-select option:selected", widget.element).attr("value");
+
+                ////idParams.width = map.width;
+                ////idParams.height = map.heigth;
+                idParams.mapExtent = map.extent;
+                ////idParams.spatialReference = map.spatialReference;
+
+                return idParams;
+            }
+
+            function performIdentify(geometry) {
+                var layerOption, layer, idTask, idParameters;
+
+                widget.isDrawing = false;
+                $("#ui-identify-identify-button").button("option", "label", "Identify");
+
+                function handleIdentifyComplete(identifyResults) {
+                    var symbol, options = widget.options, resultAttributes, tabs, graphic;
+
+                    widget.enable();
+
+
+                    // Group the results by layer.
+                    resultAttributes = {};
+                    $.each(identifyResults, function (index, idResult) {
+                        var layerUniqueId = "layer" + String(idResult.layerId);
+                        // If no attributes for this layer have been recorded, create a new property for the layer and assign it an empty array.
+                        if (!resultAttributes.hasOwnProperty(layerUniqueId)) {
+                            resultAttributes[layerUniqueId] = new ResultCollection(idResult);
+                        }
+                        // Add the current results to the appropriate layer's group.
+                        resultAttributes[layerUniqueId].features.push(idResult.feature);
+                    });
+
+                    // Convert from object into array.  (Now that the results are grouped by layer, we no longer need to refer to each set of results by key.)
+                    resultAttributes = $.map(resultAttributes, function (resultAttr, index) {
+                        return resultAttr;
+                    });
+
+
+                    // Choose a symbol based on the type of geometry.
+                    symbol = geometry.type === "point" ? options.pointSymbol : geometry.type === "polyline" ? options.lineSymbol : options.polygonSymbol;
+                    graphic = new esri.Graphic(geometry, symbol, { results: resultAttributes });
+                    options.graphicsLayer.add(graphic);
+
+                    // Pop up the dialog for this graphic.
+                    showDialog({ graphic: graphic });
+                }
+
+                function handleIdentifyError(error) {
+                    widget.enable();
+                    if (console && console.error) {
+                        console.error(error);
+                    }
+                    $("<div>").text(error.message).dialog({
+                        title: "Identify Error",
+                        close: function () {
+                            $(this).dialog("destroy");
+                        },
+                        buttons: {
+                            "OK": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+
+                }
+
+                // Turn off the drawing toolbar so user can once again interact with the map.
+                widget.options.drawToolbar.deactivate();
+
+                // Create the symbols if they are not already defined.
+                if (!widget.options.pointSymbol) {
+                    widget.options.pointSymbol = new esri.symbol.SimpleMarkerSymbol();
+                }
+                if (!widget.options.lineSymbol) {
+                    widget.options.lineSymbol = new esri.symbol.SimpleLineSymbol();
+                }
+                if (!widget.options.polygonSymbol) {
+                    widget.options.polygonSymbol = new esri.symbol.SimpleFillSymbol();
+                }
+
+                // Get the option that is selected in the map service layer select control.
+                layerOption = $("#ui-identify-layer-select :selected");
+                if (!layerOption.length || !$.hasData(layerOption[0])) {
+                    if (console && console.error) {
+                        console.error("Selected option has no associated data");
+                    }
+                    return;
+                }
+
+                layer = layerOption.data("layer");
+                idTask = layerOption.data("identifyTask");
+
+                // If an identify task has not been created for this layer, create one.
+                if (!idTask) {
+                    layerOption.data("identifyTask", new esri.tasks.IdentifyTask(layer.url));
+                    idTask = layerOption.data("identifyTask");
+                }
+
+
+                idParameters = getIdentifyParameters(geometry);
+
+                widget.disable();
+                idTask.execute(idParameters, handleIdentifyComplete, handleIdentifyError);
+            }
+
+            function performDraw() {
+                if (!widget.isDrawing) {
+                    var geometryType = $("#ui-identify-geometry-type-select :selected").attr("value");
+
+                    // If the draw toolbar has not yet been created, create it now.
+                    if (!widget.options.drawToolbar) {
+                        widget.options.drawToolbar = new esri.toolbars.Draw(widget.options.map, { showTooltips: true });
+                        dojo.connect(widget.options.drawToolbar, "onDrawEnd", performIdentify);
+                    }
+                    // TODO: Change label.
+                    widget.options.drawToolbar.activate(geometryType);
+                    widget.isDrawing = true;
+                    $(this).button("option", "label", "Cancel Drawing");
+                } else {
+                    widget.options.drawToolbar.deactivate();
+                    widget.isDrawing = false;
+                    $(this).button("option", "label", "Identify");
+                }
+            }
+
+            // If the graphics layer does not yet exist, create it and add it to the map.
+            if (!widget.options.graphicsLayer) {
+                widget.options.graphicsLayer = new esri.layers.GraphicsLayer({
+                    id: "Identify Results",
+                    displayOnPan: (!dojo.isIE || dojo.isIE >= 9)
+                });
+                widget.options.map.addLayer(widget.options.graphicsLayer);
+
+                widget._clickHandler = dojo.connect(widget.options.graphicsLayer, "onClick", showDialog);
+            }
+
+            this.element.addClass("ui-widget ui-widget-content ui-corner-all ui-identify");
+
+            // Load the HTML template and add it to the control
+            $.get(widget.options.templateUrl, function (data, textStatus, jqXHR) {
+                var layers = widget.options.layers;
+                $(data).filter("div[class=table], div[class=ui-identify-toolbar]").appendTo(widget.element);
+                $("#ui-identify-layer-select").change(handleMapServiceChange);
+                $("#ui-identify-identify-button").button({ label: "Identify" }).click(performDraw);
+                $("#ui-identify-clear-button").button({ label: "Clear" }).click(function () { widget.options.graphicsLayer.clear(); });
+
+
+                if (map) {
+                    if (!layers || !layers.length || layers.length < 1) {
+                        widget._layerAddHandler = dojo.connect(map, "onLayerAddResult", widget._addLayer);
+                        widget._layerRemoveHandler = dojo.connect(map, "onLayerRemove", widget._removeLayer);
+
+                        // Get a sorted list of layer ids.
+                        layerIds = $.map(map.layerIds, function (layerId) { return layerId; }).sort();
+
+                        // Add the layer to the list of layers.
+                        $.each(layerIds, function (index, layerId) {
+                            var layer = map.getLayer(layerId);
+                            widget._addLayer(layer);
+                        });
+                    }
+
+                } else {
+                    throw new Error("No valid map was provided");
+                }
+
+                if (layers && layers.length) {
+                    $.each(layers, function (index, layer) {
+                        widget._addLayer(layer);
+                    });
+                }
+            });
+        },
+        enable: function () {
+            $.Widget.prototype.enable.apply(this, arguments);
+        },
+        disable: function () {
+            $.Widget.prototype.disable.apply(this, arguments);
+        },
+        destroy: function () {
+            $.Widget.prototype.destroy.apply(this, arguments); // default destroy
+            this.element.removeClass("ui-identify");
+            dojo.forEach([this._layerAddHandler, this._layerRemoveHandler, this._clickHandler], dojo.disconnect); // Remove map event handlers
+        }
+    });
+} (jQuery));

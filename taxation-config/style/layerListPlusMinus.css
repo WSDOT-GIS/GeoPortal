@@ -1,0 +1,88 @@
+.ui-layer-list-out-of-scale 
+{
+    color: #999;
+}
+
+
+.ui-layer-list-group .ui-layer-list-item {
+    list-style-image: none;
+}
+
+ul.ui-layer-list, .ui-layer-list ul
+{
+    list-style-type: none;
+    margin: 0 0 0 1em;
+    padding: 0 0 0 1em;
+}
+
+.ui-layer-list ul 
+{
+    padding-left: 0.5em;
+}
+
+.ui-layer-list-group > a 
+{
+    font-weight: bold;
+}
+
+
+
+.ui-layer-list .ui-layer-list-group, .ui-layer-list-has-children.expanded
+{
+    list-style-image: url(../images/layerList/TreeMinus10.gif);
+}
+
+.ui-layer-list .ui-layer-list-group.collapsed, .ui-layer-list-has-children.collapsed
+{
+    list-style-image: url(../images/layerList/TreePlus10.gif);
+}
+
+.ui-layer-list-has-children.expanded ul
+{
+    list-style: none;
+}
+
+
+.ui-layer-list a:hover
+{
+    background-color: yellow;
+}
+
+.ui-slider-horizontal
+{
+    height: 0.3em;
+}
+
+.ui-slider .ui-slider-handle 
+{
+    background: url(../images/layerList/sliderSprites.png) no-repeat top left;
+    background-position: 0 0; 
+    width: 11px; 
+    height: 21px;
+    background-color: transparent;
+    border: none;
+}
+
+.ui-slider .ui-slider-handle:hover 
+{
+    background-position: -16px 0
+}
+
+.ui-layer-list-not-loaded 
+{
+    background: #f0f0ff;
+}
+.ui-layer-list-not-loaded label:after
+{
+	content: " (not loaded)";
+}
+.ui-layer-list-error 
+{
+    color: red;
+    text-decoration: line-through;
+}
+.ui-layer-list-has-children > label
+{
+    text-decoration: underline;
+    cursor: pointer;
+}

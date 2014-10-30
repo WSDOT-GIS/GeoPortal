@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Route List Demo</title>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+     /*
+    * html .ui-autocomplete {
+        height: 300px;
+    }
+    */
+    
+    .ui-autocomplete-loading { background: white url('images/ajax-loader.gif') right center no-repeat; }
+    
+    #routeAutoComplete 
+    {
+        width: 300px;
+    }
+    </style>
+    <script src="scripts/modernizr.js" type="text/javascript"></script>
+</head>
+<body>
+    <div>
+        <label for="routeAutoComplete">Route</label>
+        <img src="images/ajax-loader.gif" alt="loading..." />
+        <label for="routeAutoComplete">Enter a state route ID (min. 3 characters)</label>
+    </div>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function ($) {
+            function getLayersRouteIsIn(selectItem) {
+                /// <summary>Converts an enumeration value into an array of the layer descriptions.</summary>
+                var layers;
+                switch (selectItem.routeLayers) {
+                    case 1:
+                        layers = ["Increase"];
+                        break;
+                    case 2:
+                        layers = ["Decrease"];
+                        break;
+                    case 3:
+                        layers = ["Increase", "Decrease"];
+                        break;
+                    case 4:
+                        layers = ["Ramp"];
+                        break;
+                }
+                return layers;
+            }
+
+            function getLabel(int) {
+                /// <summary>Converts an enumeration value into an array of the layer descriptions.</summary>
+                switch (int) {
+                    case 1:
+                        return "Increase";
+                    case 2:
+                        return "Decrease";
+                    case 3:
+                        return "Increase, Decrease";
+                    case 4:
+                        return "Ramp";
+                }
+            }
+
+            function getListOfLayersRouteIsIn(selectItem) {
+                var layers = getLayersRouteIsIn(selectItem);
+                var output = $("<ul>");
+                $(layers).each(function (index, layer) {
+                    return $("<li>").text(layer).appendTo(output);
+                });
+                return output;
+            }
+
+            $(document).ready(function () {
+                
+                // Ajax queries are performed as the user types.
+                $("img[alt^=loading]").replaceWith('<input type="text" id="routeAutoComplete" placeholder="Enter a state route ID (min. 3 characters)" />');
+                $("#routeAutoComplete").autocomplete({
+                    source: "GetRoutes.ashx?f=jquery",
+                    minLength: 1,
+                    select: function (event, ui) {
+                        var resultDiv = $("#results");
+                        if (resultDiv.length > 0) {
+                            resultDiv.remove();
+                        }
+                        resultDiv = $("<div id='results'>").appendTo("body");
+                        $("<h2>").text(ui.item.value).appendTo(resultDiv);
+                        getListOfLayersRouteIsIn(ui.item).appendTo(resultDiv);
+                    }
+                });
+
+                ////// A single query is performed when the page loads to get all route data.
+                ////var routes = [];
+                ////$.getJSON("GetRoutes.ashx", function (data, textStatus, jqXHR) {
+                ////    var routeTypeLabels;
+                ////    $("img[alt^=loading]").replaceWith('<input type="text" id="routeAutoComplete" placeholder="Enter a state route ID (min. 3 characters)" />');
+                ////    for (var i in data) {
+                ////        routes.push({ label: i + " (" + getLabel(data[i]) + ")", value: i, routeLayers: data[i] });
+                ////    }
+
+                ////    // Sort the routes by label.
+                ////    routes.sort(function (a, b) {
+                ////        if (a.label === b.label) {
+                ////            return 0;
+                ////        } else if (a.label < b.label) {
+                ////            return -1;
+                ////        } else {
+                ////            return 1;
+                ////        }
+
+                ////    });
+
+                ////    $("#routeAutoComplete").autocomplete({
+                ////        source: routes,
+                ////        minLength: 1,
+                ////        select: function (event, ui) {
+                ////            var resultDiv = $("#results");
+                ////            if (resultDiv.length > 0) {
+                ////                resultDiv.remove();
+                ////            }
+                ////            resultDiv = $("<div id='results'>").appendTo("body");
+                ////            $("<h2>").text(ui.item.value).appendTo(resultDiv);
+                ////            getListOfLayersRouteIsIn(ui.item).appendTo(resultDiv);
+                ////        }
+                ////    });
+                ////});
+            });
+
+        } (jQuery));
+
+
+    </script>
+</body>
+</html>

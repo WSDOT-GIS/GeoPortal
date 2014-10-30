@@ -1,0 +1,4 @@
+wsdl /shareTypes /namespace:Wsdot.Traffic /out:WsdotTraffic.cs http://www.wsdot.wa.gov/Traffic/api/BorderCrossings/BorderCrossings.svc?wsdl http://www.wsdot.wa.gov/Traffic/api/HighwayAlerts/HighwayAlerts.svc?wsdl http://www.wsdot.wa.gov/Traffic/api/HighwayCameras/HighwayCameras.svc?wsdl http://www.wsdot.wa.gov/Traffic/api/MountainPassConditions/MountainPassConditions.svc?wsdl http://www.wsdot.wa.gov/Traffic/api/TrafficFlow/TrafficFlow.svc?wsdl http://www.wsdot.wa.gov/Traffic/api/TravelTimes/TravelTimes.svc?wsdl 
+
+
+wsdl /shareTypes /namespace:Wsdot.Ferries /out:WsdotFerries.cs http://b2b.wsdot.wa.gov/ferries/fares/Default.asmx?WSDL http://b2b.wsdot.wa.gov/ferries/schedule/Default.asmx?WSDL http://b2b.wsdot.wa.gov/ferries/terminals/default.asmx?WSDL
