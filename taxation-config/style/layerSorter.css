@@ -1,8 +1,0 @@
-.ui-layer-sorter .ui-sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-.ui-layer-sorter .ui-sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1em; height: 18px; cursor: move; }
-.ui-layer-sorter .ui-sortable li span { position: absolute; margin-left: -1.3em; }
-.ui-layer-sorter-map-position-label {
-	text-align: center;
-	background-color: #525252;
-	color: white
-};
