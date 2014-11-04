@@ -1,4 +1,4 @@
-﻿/*global require, jQuery, dojo */
+﻿/*global require, jQuery */
 /*jslint plusplus:true,nomen:true*/
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -34,26 +34,18 @@
 
 	}
 
-	////function getLegendLayers(map) {
-	////	var output = [], i, l, layerId, legendLayer;
-	////	for (i = 0, l = map.layerIds.length; i < l; i++) {
-	////		//layer = map.getLayer(map.layerIds[i]);
-	////		layerId = map.layerIds[i];
-	////		legendLayer = new LegendLayer();
-	////		legendLayer.layerId = layerId;
-	////		output.push(legendLayer);
-	////	}
-	////	return output;
-	////}
-
 	require(["esri/tasks/PrintTask", "esri/tasks/PrintParameters", "esri/tasks/PrintTemplate", "esri/tasks/LegendLayer"], function (PrintTask, PrintParameters, PrintTemplate, LegendLayer) {
 		/**
 		 * Creates an array of LegendLayers of all layers currently visible in the map.
 		 * @param {esri.Map} map
+		 * @param {?number} sublayerThreshold - Any layer with that has this number or more sublayers will be omitted from the legend. Defaults to 30 if omitted.
 		 * @returns {esri.tasks.LegendLayer[]}
 		 */
-		function getLegendLayersFromMap(map) {
+		function getLegendLayersFromMap(map, sublayerThreshold) {
 			var layer, legendLayer, output = [];
+			if (sublayerThreshold === undefined) {
+				sublayerThreshold = 30;
+			}
 			for (var i = 0, l = map.layerIds.length; i < l; i += 1) {
 				layer = map.getLayer(map.layerIds[i]);
 				if (layer.visible && layer.visibleAtMapScale) {
@@ -62,7 +54,9 @@
 					if (layer.visibleLayers) {
 						legendLayer.subLayerIds = layer.visibleLayers;
 					}
-					output.push(legendLayer);
+					if (legendLayer.subLayerIds.length < sublayerThreshold) {
+						output.push(legendLayer);
+					}
 				}
 			}
 
