@@ -2,6 +2,7 @@
 	"pageTitle": "WSDOT GeoPortal",
 	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
 	"enableIdentify": true,
+	"noPopupLayerRe": "^(?:Milepost Values)$",
 	"mapOptions": {
 		"logo": false,
 		"extent": {
@@ -188,6 +189,13 @@
 					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Rail/MapServer",
 					"options": {
 						"id": "Rail"
+					}
+				},
+				{
+					"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+					"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
+					"options": {
+						"id": "Milepost Values"
 					}
 				}
 			]
