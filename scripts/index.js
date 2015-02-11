@@ -1,4 +1,4 @@
-﻿/*global require, _gaq, $ */
+﻿/*global require, gaTracker, $ */
 /*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -559,17 +559,20 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				legend.refresh(layerInfos);
 			}
 
-			gaTrackEvent = function (layer, error) {
-				/// <summary>Adds a Google Analytics tracking event for the addition of a layer to the map.</summary>
-				var label, basemapIdRe = /^layer\d+$/i;
+		    /**
+			 * Adds a Google Analytics tracking event for the addition of a layer to the map.
+			 */
+			gaTrackEvent = function (e) {
 
-				label = basemapIdRe.exec(layer.id) ? "Basemap: " + layer.url : layer.id + ": " + layer.url;
+			    var label, basemapIdRe = /^layer\d+$/i, layer, error, action;
 
-				if (error) {
-					_gaq.push(['_trackEvent', 'Layers', 'Add - Fail', label]);
-				} else {
-					_gaq.push(['_trackEvent', 'Layers', 'Add', label]);
-				}
+			    layer = e.layer;
+			    error = e.error;
+
+			    label = basemapIdRe.exec(layer.id) ? "Basemap: " + layer.url : layer.id + ": " + layer.url;
+			    action = error ? 'Add - Fail' : 'Add';
+
+			    gaTracker.send('event', 'Layers', action, label);
 			};
 
 			/**
@@ -1099,7 +1102,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				Scalebar({ map: map, attachTo: "bottom-left" });
 
 				// Setup Google Analytics tracking of the layers that are added to the map.
-				if (_gaq !== undefined) {
+				if (window.gaTracker) {
 					on(map, "layer-add-result", gaTrackEvent);
 				}
 
