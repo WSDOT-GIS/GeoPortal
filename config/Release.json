@@ -31,7 +31,8 @@
     "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
     "queryTasks": {
         "city": {
-            "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
+            "label": "City",
+            "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
             "query": {
                 "where": "1 = 1",
                 "returnGeometry": true,
@@ -40,7 +41,8 @@
             }
         },
         "urbanArea": {
-            "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24",
+            "label": "Urban Area",
+            "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
             "query": {
                 "where": "1 = 1",
                 "returnGeometry": true
