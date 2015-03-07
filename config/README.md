@@ -1,18 +1,11 @@
 ﻿WSDOT GeoPortal configuration settings
 ======================================
 
-*This is a [Markdown] document.  It can be viewed in an application such as [dillinger.io] or [Showdown].*
-
 The configuration files for the GeoPortal are located in the `config` folder.  A configuration can be specified from the URL using the `config` query string parameter. If the `config` parameter is absent, `config/config.js` will be used.
 
 In the following example, the configuration file that will be used is `config/airport.js`.
 
 	http://www.wsdot.wa.gov/data/tools/geoportal/?config=airport
-
-
-[Markdown]:https://en.wikipedia.org/wiki/Markdown
-[dillinger.io]:http://dillinger.io/
-[Showdown]:http://showdown.im/
 
 ## Showing a disclaimer ##
 
