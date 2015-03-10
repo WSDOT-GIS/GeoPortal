@@ -61,6 +61,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/renderers/SimpleRenderer",
 	"extentSelect",
 	"geolocate-button",
+	"esri/dijit/Search",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -93,7 +94,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton, Search
 ) {
 	"use strict";
 
@@ -867,9 +868,19 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					var toolbar = document.getElementById("toolbar");
 					var addressDiv = document.createElement("div");
 					toolbar.insertBefore(addressDiv, toolbar.firstChild);
-					require(["geocoder-setup"], function (setupGeocoder) {
-						setupGeocoder(map, addressDiv);
-					});
+					////require(["geocoder-setup"], function (setupGeocoder) {
+					////	setupGeocoder(map, addressDiv);
+					////});
+
+					var search = new Search({
+						map: map
+					}, addressDiv);
+
+					var source = search.get("sources")[0];
+					console.log("source", source);
+					source.countryCode = "US";
+
+					search.startup();
 				}
 
 				// Look in the configuration to determine which tools to add and in which order.
