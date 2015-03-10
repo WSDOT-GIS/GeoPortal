@@ -39,37 +39,6 @@ define([
 
 	function attachBufferUIToMap(map, buffer) {
 		var bufferFeatureLayer, oid = 0;
-		bufferFeatureLayer = new FeatureLayer({
-			featureSet: null,
-			layerDefinition: {
-				geometryType: "esriGeometryPolygon",
-				fields: [
-					{
-						name: "oid",
-						type: "esriFieldTypeOID"
-					},
-					{
-						name: "distance",
-						type: "esriFieldTypeDouble"
-					},
-					{
-						name: "unit",
-						type: "esriFieldTypeInteger",
-						alias: "Measurement Unit ID"
-					},
-					{
-						name: "unioned",
-						type: "esriFieldTypeSmallInteger",
-						alias: "Is Unioned"
-					}
-				]
-			}
-		}, {
-			className: "buffer"
-		});
-
-
-		map.addLayer(bufferFeatureLayer);
 
 		addBufferLink(map.infoWindow, buffer);
 
@@ -110,6 +79,40 @@ define([
 
 			geometryEngineAsync.buffer(detail.geometry, detail.distance, detail.unit, detail.unionResults).then(function (bufferResults) {
 				console.log("buffer results", bufferResults);
+
+				if (!bufferFeatureLayer) {
+					bufferFeatureLayer = new FeatureLayer({
+						featureSet: null,
+						layerDefinition: {
+							geometryType: "esriGeometryPolygon",
+							fields: [
+								{
+									name: "oid",
+									type: "esriFieldTypeOID"
+								},
+								{
+									name: "distance",
+									type: "esriFieldTypeDouble"
+								},
+								{
+									name: "unit",
+									type: "esriFieldTypeInteger",
+									alias: "Measurement Unit ID"
+								},
+								{
+									name: "unioned",
+									type: "esriFieldTypeSmallInteger",
+									alias: "Is Unioned"
+								}
+							]
+						}
+					}, {
+						id: "buffer",
+						className: "buffer"
+					});
+					map.addLayer(bufferFeatureLayer);
+				}
+
 				if (bufferResults) {
 					bufferFeatureLayer.suspend();
 					if (!Array.isArray(bufferResults)) {
