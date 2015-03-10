@@ -1103,9 +1103,17 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			map.on("load", function () {
 				// Set the scale.
 				setScaleLabel();
-				if (bufferUI) {
-					BufferUIHelper.attachBufferUIToMap(map, bufferUI);
-				}
+
+				(function () {
+					var bufferLink;
+					if (bufferUI) {
+						BufferUIHelper.attachBufferUIToMap(map, bufferUI);
+						bufferLink = map.infoWindow.domNode.querySelector("a.buffer");
+						bufferLink.addEventListener("click", function () {
+							registry.byId("toolsAccordion").selectChild("bufferPane");
+						});
+					}
+				}());
 
 				// Show the disclaimer if one has been defined.
 				showDisclaimer(wsdot.config.alwaysShowDisclaimer);
