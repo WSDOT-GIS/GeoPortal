@@ -121,6 +121,13 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\ais\faaFar77.js" />
+    <Content Include="scripts\BufferUI\BufferUIHelper.js" />
+    <Content Include="scripts\BufferUI\main.js" />
+    <Content Include="scripts\BufferUI\Templates\BufferUI.html" />
+    <Content Include="scripts\BufferUI\Templates\BufferUI.min.html">
+      <DependentUpon>BufferUI.html</DependentUpon>
+    </Content>
+    <Content Include="scripts\BufferUI\units.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
     <Content Include="scripts\elc.js" />
@@ -161,8 +168,15 @@
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
+    <Content Include="scripts\polyfills\custom-event-polyfill.min.js.map">
+      <DependentUpon>custom-event-polyfill.min.js</DependentUpon>
+    </Content>
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
+    <Content Include="scripts\polyfills\custom-event-polyfill.js" />
+    <Content Include="scripts\polyfills\custom-event-polyfill.min.js">
+      <DependentUpon>custom-event-polyfill.js</DependentUpon>
+    </Content>
     <Content Include="scripts\printer.js" />
     <Content Include="scripts\toc.js" />
     <Content Include="scripts\zoomToXY.js" />
