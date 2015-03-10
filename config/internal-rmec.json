@@ -123,7 +123,7 @@
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/RiversAndWaterbodies/MapServer",
 				"options": {
-					"id": "RMEC Rivers and Waterbodies"
+					"id": "Rivers and Waterbodies"
 				}
 			},
 			{
@@ -213,7 +213,7 @@
 			},
 						{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/EnvironmentalTransportationFeatures/MapServer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalTransportationFeatures/MapServer",
 				"options": {
 					"id": "Environmental Transportation Features"
 				}
