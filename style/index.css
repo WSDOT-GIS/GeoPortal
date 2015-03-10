@@ -214,6 +214,12 @@ h3, h4 {
 	height: 16px;
 }
 
+/* Ruler icon on measure button*/
+#measureButton:nth-child(1) {
+	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol', 'Symbola';
+	color: darkgoldenrod;
+}
+
 #scaleText {
 	position: absolute;
 	bottom: 1em;

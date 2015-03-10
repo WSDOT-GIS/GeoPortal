@@ -59,6 +59,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/request",
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
+	"BufferUI",
 	"extentSelect",
 	"geolocate-button",
 
@@ -93,7 +94,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, createExtentSelect, createGeolocateButton
 ) {
 	"use strict";
 
@@ -358,9 +359,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				}, "sortButton");
 
 				button = new Button({
-					label: "Measure",
-					showLabel: false,
-					iconClass: "distanceIcon",
+					label: "📐",
+					showLabel: true,
 					onClick: function () {
 						// Disable the identify popups while the measure dialog is active.
 						map.disablePopups();
