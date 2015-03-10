@@ -60,6 +60,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
 	"BufferUI",
+	"BufferUI/BufferUIHelper",
 	"extentSelect",
 	"geolocate-button",
 
@@ -94,11 +95,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, createExtentSelect, createGeolocateButton
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton
 ) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json", bufferUI;
 	wsdot = { config: {} };
 
 	/**
@@ -872,12 +873,20 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					});
 				}
 
+				function setupBuffer() {
+					var div = document.createElement("div");
+					div.id = "bufferPane";
+					bufferUI = new BufferUI(div);
+					document.getElementById("toolsAccordion").appendChild(div);
+					toolsAccordion.addChild(new ContentPane({title: "Buffer", id: "bufferPane"}, div));
+				}
+
 				// Look in the configuration to determine which tools to add and in which order.
 				(function (tools) {
 					var i, l;
 					// Setup a default value for tools if it hasn't been specified.
 					if (!tools) {
-						tools = ["lrs", "zoom", "search"];
+						tools = ["lrs", "zoom", "search", "buffer"];
 					}
 					for (i = 0, l = tools.length; i < l; i += 1) {
 						if (/zoom/i.test(tools[i])) {
@@ -888,6 +897,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							setupSearchControls();
 						} else if (/airspace\s?Calculator/i.test(tools[i])) {
 							setupAirspaceCalculator();
+						} else if (/buffer/i.test(tools[i])) {
+							setupBuffer();
 						}
 					}
 				} (wsdot.config.tools));
@@ -1092,6 +1103,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			map.on("load", function () {
 				// Set the scale.
 				setScaleLabel();
+				if (bufferUI) {
+					BufferUIHelper.attachBufferUIToMap(map, bufferUI);
+				}
 
 				// Show the disclaimer if one has been defined.
 				showDisclaimer(wsdot.config.alwaysShowDisclaimer);
