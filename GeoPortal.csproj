@@ -121,13 +121,11 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\ais\faaFar77.js" />
-    <Content Include="scripts\BufferUI\BufferUIHelper.js" />
-    <Content Include="scripts\BufferUI\main.js" />
-    <Content Include="scripts\BufferUI\Templates\BufferUI.html" />
-    <Content Include="scripts\BufferUI\Templates\BufferUI.min.html">
-      <DependentUpon>BufferUI.html</DependentUpon>
-    </Content>
-    <Content Include="scripts\BufferUI\units.js" />
+    <Content Include="scripts\arcgis-js-buffer\BufferUIHelper.js" />
+    <Content Include="scripts\arcgis-js-buffer\main.js" />
+    <Content Include="scripts\arcgis-js-buffer\Templates\BufferUI.html" />
+    <Content Include="scripts\arcgis-js-buffer\Templates\BufferUI.min.html" />
+    <Content Include="scripts\arcgis-js-buffer\units.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
     <Content Include="scripts\elc.js" />
