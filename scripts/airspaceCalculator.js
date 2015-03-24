@@ -1,4 +1,4 @@
-﻿/*global require, jQuery, Modernizr, esri */
+﻿/*global require, jQuery, esri, dojo */
 /*jslint nomen: true, browser: true, white: true */
 
 // Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
@@ -333,13 +333,6 @@
 					// Add the progress bar and hide it for now.
 					$this._progressBar.appendTo($this.element).hide();
 				} ());
-
-				// Setup placeholder for non-supporting browsers...
-				if (Modernizr !== undefined && Modernizr.input !== undefined && Modernizr.input.placeholder !== undefined) {
-					if (!Modernizr.input.placeholder && $.fn.placeholder !== undefined) {  // If the browser does not support "placeholder" attribute.
-						$("[placeholder]", $this.element).placeholder();
-					}
-				}
 
 				$this._form.validate({
 					submitHandler: function (/*form*/) {

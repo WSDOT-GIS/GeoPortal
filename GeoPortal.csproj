@@ -168,15 +168,7 @@
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
-    <Content Include="scripts\polyfills\custom-event-polyfill.min.js.map">
-      <DependentUpon>custom-event-polyfill.min.js</DependentUpon>
-    </Content>
     <None Include="style\FGDC Plus.xsl" />
-    <Content Include="scripts\modernizr.js" />
-    <Content Include="scripts\polyfills\custom-event-polyfill.js" />
-    <Content Include="scripts\polyfills\custom-event-polyfill.min.js">
-      <DependentUpon>custom-event-polyfill.js</DependentUpon>
-    </Content>
     <Content Include="scripts\printer.js" />
     <Content Include="scripts\toc.js" />
     <Content Include="scripts\zoomToXY.js" />
