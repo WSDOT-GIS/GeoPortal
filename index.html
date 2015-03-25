@@ -27,8 +27,8 @@
 	<link href="style/addressLocator.css" rel="stylesheet" />
 	<link href="style/functionalClass.css" rel="stylesheet" />
 	<link href="style/layerSorter.css" rel="stylesheet" />
-	<script src="scripts/polyfills/custom-event-polyfill.min.js"></script>
-	<script src="scripts/modernizr.js"></script>
+	<link href="scripts/elc/elc-ui/elc-ui.css" rel="stylesheet" />
+	<script src="//cdn.polyfill.io/v1/polyfill.js"></script>
 	<script>
 		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
 		(function (dnt) {
@@ -152,7 +152,11 @@
 					},
 					{
 						name: "BufferUI",
-						location: root + "/scripts/BufferUI"
+						location: root + "/scripts/arcgis-js-buffer"
+					},
+					{
+						name: "elc",
+						location: root + "/scripts/elc"
 					}
 				]
 			};

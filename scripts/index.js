@@ -1,7 +1,4 @@
-﻿/*global require, gaTracker, $ */
-/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
-
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+/*global require, gaTracker, $ */
 
 /*
 Prerequisites:
@@ -99,7 +96,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 ) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json", bufferUI;
+	var map = null, extents = null, navToolbar, defaultConfigUrl = "config/config.json", bufferUI;
 	wsdot = { config: {} };
 
 	/**
@@ -360,7 +357,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				}, "sortButton");
 
 				button = new Button({
-					label: "📐",
+					label: "\uD83D\uDCD0", // Unicode triangle ruler.
 					showLabel: true,
 					onClick: function () {
 						// Disable the identify popups while the measure dialog is active.
@@ -386,8 +383,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							(function () {
 								var measurement;
 								// Create the dialog.
-								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
+								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
 								titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
+								measureDialog.draggable({
+									handle: titleBar
+								});
 								$("<span>").attr("id", "ui-dialog-title-dialog").addClass("ui-dialog-title").text("Measure").appendTo(titleBar);
 								$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
 								$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
@@ -752,22 +752,48 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					div.id = "lrsTools";
 					document.getElementById("toolsAccordion").appendChild(div);
 					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div));
-					createLinks.milepostTab = on(registry.byId("lrsTools"), "show", function () {
-						require(["scripts/lrsTools.js"], function () {
-							$("#lrsTools").lrsTools({
-								map: map,
-								drawActivate: function () {
-									map.disablePopups();
-								},
-								drawDeactivate: function () {
-									map.enablePopups();
-								}
+					on.once(registry.byId("lrsTools"), "show", function () {
+						require(["elc/elc-ui/arcgis-elc-ui"], function (ArcGisElcUI) {
+							var elcUI = new ArcGisElcUI(div);
+							elcUI.setMap(map);
+
+							elcUI.on("elc-results-not-found", function () {
+								alert("No results found");
 							});
 
+							elcUI.on("non-geometry-results-returned", function (e) {
+								console.log("non geometry results found", e);
+								var elcResult = e.elcResults[0];
+								var output = [];
+								var properties = [
+									"LocatingError",
+									"ArmCalcReturnMessage",
+									"ArmCalcEndReturnMessage"
+								];
+								properties.forEach(function (name) {
+									if (elcResult[name]) {
+										output.push([name, elcResult[name]].join(": "));
+									}
+								});
+								output = output.join("\n");
+								alert(output);
+							});
+
+							elcUI.on("elc-results-found", function (e) {
+								var point;
+								if (e && e.graphics && e.graphics.length > 0) {
+									point = e.graphics[0].geometry;
+									if (point.getPoint) {
+										point = point.getPoint(0, 0);
+									}
+									map.infoWindow.show(point);
+									map.centerAt(point);
+									map.infoWindow.setFeatures(e.graphics);
+								}
+							});
 						});
 
-						createLinks.milepostTab.remove();
-						delete createLinks.milepostTab;
+						
 					});
 				}
 
