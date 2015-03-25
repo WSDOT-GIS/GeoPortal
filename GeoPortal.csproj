@@ -128,7 +128,12 @@
     <Content Include="scripts\arcgis-js-buffer\units.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
-    <Content Include="scripts\elc.js" />
+    <Content Include="scripts\elc\elc-ui\arcgis-elc-ui.js" />
+    <Content Include="scripts\elc\elc-ui\elc-ui.css" />
+    <Content Include="scripts\elc\elc-ui\main.js" />
+    <Content Include="scripts\elc\elc-ui\Templates\elc-ui.html" />
+    <Content Include="scripts\elc\elc-ui\Templates\elc-ui.min.html" />
+    <Content Include="scripts\elc\main.js" />
     <Content Include="scripts\extensions\esriApiExtensions.js" />
     <Content Include="scripts\extensions\extent.js" />
     <Content Include="scripts\extensions\graphicsLayer.js" />
@@ -147,7 +152,6 @@
   <ItemGroup>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\layerSorter.js" />
-    <Content Include="scripts\lrsTools.js" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
     <Content Include="help\Freight\internal\FAQ.pdf" />
@@ -267,7 +271,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
