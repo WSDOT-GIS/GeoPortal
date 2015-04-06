@@ -1,8 +1,6 @@
 ﻿/*global require, gaTracker, $ */
 /*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 /*
 Prerequisites:
 ArcGIS JavaScript API

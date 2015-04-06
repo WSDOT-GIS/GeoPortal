@@ -1,8 +1,6 @@
 /*global require */
 /*jslint nomen: true, white: true, browser: true */
 
-// Copyright (C)2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 require([
 	"dojo/promise/all",
 	"dojo/Deferred",

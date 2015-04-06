@@ -7,8 +7,6 @@ Based on the JavaScript code embedded in the original (Public Domain)"FGDC Plus.
 Howie Sternberg. (http://arcscripts.esri.com/details.asp?dbid=14674)
 */
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 /*
 This jQuery plugin is used to create a layer list control for an ArcGIS JavaScript API web application.
 Prerequisites:

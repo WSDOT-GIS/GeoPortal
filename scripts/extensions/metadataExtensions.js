@@ -1,8 +1,6 @@
 /*globals require, dojo, esri */
 /*jslint white:true */
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 /**
  * This JS file extends the esri.layer.Layers class to provide functions that work with WSDOT's Layer Metadata Server Object Extension (SOE).
  * @author Jeff Jacobson

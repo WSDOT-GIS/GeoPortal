@@ -1,8 +1,6 @@
 /*jslint white: true */
 /*globals jQuery*/
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 (function ($) {
 	"use strict";
 	
@@ -692,7 +690,7 @@
 	/**
 	 * Converts a value into a number.  Similar to passing a value into the Number() function, except that this function will throw an error if
 	 * the value cannot be converted to a number, whereas Number() will return NaN.  If null or undefined are passed in, they will also be returned.
-	 * @param value A value that can be converted into a number.  If a number is passed in, the same number will be returned (unless that number is NaN).
+	 * @param {*} value A value that can be converted into a number.  If a number is passed in, the same number will be returned (unless that number is NaN).
 	 * @param {string="this"} [propName] A property name that is only used when value cannot be converted to a number. 
 	 * @return {number|null|undefined} If null or undefined are passed in, the same value will be returned.  Otherwise the number equivalent of "value" is returned.
 	 * @throws {Error} Thrown if "value" cannot be converted into a number (and is not null or undefined).

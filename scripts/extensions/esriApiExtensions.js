@@ -1,9 +1,5 @@
-﻿/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1-vsdoc.js  "/>
-/// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.11/jquery-ui.js"/>
-/*global jQuery, dojo */
-/*jslint browser: true, es5: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
-
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
+﻿/*global dojo */
+/*jslint browser: true, undef: true, nomen: true, regexp: true, plusplus: true, bitwise: true, newcap: true, strict: true, maxerr: 500, indent: 4 */
 
 // This script gives existing ArcGIS JavaScript API types additional methods and properties.
 
@@ -44,7 +40,7 @@ require(["dojo/_base/lang", "esri/map", "esri/layers/FeatureLayer"], function (l
 			});
 			return visibleLayerInfos;
 		},
-		areAnySublayersVisible: function (scale) {
+		areAnySublayersVisible: function (/*scale*/) {
 			/// <summary>Determines if any of the sublayers in the layer are visible at the current scale.  Only supported for ArcGIS 10.01 and higher map services.</summary>
 			if (this.version < 10.01) {
 				return true;

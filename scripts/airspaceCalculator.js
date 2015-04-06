@@ -1,7 +1,5 @@
-﻿/*global require, jQuery, Modernizr, esri */
+﻿/*global require, jQuery, Modernizr, esri, dojo */
 /*jslint nomen: true, browser: true, white: true */
-
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 (function ($) {
 	"use strict";

@@ -1,8 +1,6 @@
 ﻿/*global require */
 /*jslint white:true, nomen:true*/
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 require(["dojo/_base/lang", "esri/map", "esri/layers/GraphicsLayer", "esri/layers/FeatureLayer"], function (lang, Map, GraphicsLayer, FeatureLayer) {
 	"use strict";
 

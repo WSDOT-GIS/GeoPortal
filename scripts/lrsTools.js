@@ -1,8 +1,6 @@
 ﻿/*global jQuery, require, wsdot */
 /*jslint nomen: true, white: true */
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 /*
 This jQuery plugin is used to create a control in an ArcGIS JavaScript API web application that find locations in relation to WA State Routes.
 Prerequisites:
