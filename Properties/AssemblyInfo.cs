@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("WSDOT")]
 [assembly: AssemblyProduct("WSDOT TDGO Mapping Application")]
-[assembly: AssemblyCopyright("Copyright © WSDOT 2011")]
+[assembly: AssemblyCopyright("This is free and unencumbered software released into the public domain. For more info see http://unlicense.org")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,7 +1,5 @@
 ﻿/*global require, esri*/
 
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
-
 require(["dojo/_base/lang", "dojo/_base/array", "esri/layers/graphics"], function (lang, array) {
 	"use strict";
 	lang.extend(esri.layers.GraphicsLayer, {

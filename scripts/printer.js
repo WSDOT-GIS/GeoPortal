@@ -1,7 +1,5 @@
-﻿/*global require, jQuery */
+﻿/*global require, jQuery, dojo */
 /*jslint plusplus:true,nomen:true*/
-
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 (function ($) {
 	"use strict";
@@ -71,7 +69,7 @@
 				url: null,
 				layoutOptions: {
 					authorText: null,
-					// copyrightText: ["©", new Date().getFullYear(), " WSDOT"].join(""),
+					// copyrightText: "",
 					//"legendLayers": [],
 					titleText: null, //"Airport",
 					scalebarUnit: "Miles"

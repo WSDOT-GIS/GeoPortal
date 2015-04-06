@@ -1,6 +1,5 @@
 ﻿/*global jQuery*/
 /*jslint nomen:true*/
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 (function ($) {
 	"use strict";

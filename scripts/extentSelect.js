@@ -1,5 +1,4 @@
 ﻿/*global define */
-// Copyright ©2012 Washington State Department of Transportation (WSDOT).  Released under the MIT license (http://opensource.org/licenses/MIT).
 
 // Creates a dojo Filtering Select dijit that allows the user to zoom to a predefined extend in an ArcGIS JavaScript API web application.
 
@@ -17,7 +16,7 @@ define([
 
 	/**
 	 * Returns the name of the first attribute of a graphic that is of type "string".
-	 * @param {Graphic}
+	 * @param {Graphic} graphic
 	 * @returns {(string|null)} - Returns a string if a string attribute is found, null otherwise.
 	 */
 	function getFirstStringAttribute(graphic) {
@@ -35,6 +34,7 @@ define([
 
 	/**
 	 * Creates a dijit.form.FilteringSelect from a feature set.
+	 * @param {HTMLElement} domElement
 	 * @param {esri/tasks/FeatureSet} featureSet - A set of features returned from a query.
 	 * @param {esri/Map} map - The map that will be zoomed when an extent is selected from this control.
 	 * @param {number} levelOrFactor - See the levelOrFactor parameter of the esri.Map.centerAndZoom function.
