@@ -904,7 +904,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					div.id = "bufferPane";
 					bufferUI = new BufferUI(div);
 					document.getElementById("toolsAccordion").appendChild(div);
-					toolsAccordion.addChild(new ContentPane({title: "Buffer", id: "bufferPane"}, div));
+					toolsAccordion.addChild(new ContentPane({ title: "Buffer", id: "bufferPane" }, div));
 				}
 
 				// Look in the configuration to determine which tools to add and in which order.
@@ -1130,6 +1130,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				// Set the scale.
 				setScaleLabel();
 
+				// Show the buffer tools form when the buffer link is clicked.
 				(function () {
 					var bufferLink;
 					if (bufferUI) {
@@ -1137,6 +1138,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						bufferLink = map.infoWindow.domNode.querySelector("a.buffer");
 						bufferLink.addEventListener("click", function () {
 							registry.byId("toolsAccordion").selectChild("bufferPane");
+							registry.byId("tabs").selectChild("toolsTab");
+
+							document.querySelector(".buffer-ui [name=distances]").focus()
 						});
 					}
 				}());
