@@ -1140,7 +1140,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							registry.byId("toolsAccordion").selectChild("bufferPane");
 							registry.byId("tabs").selectChild("toolsTab");
 
-							document.querySelector(".buffer-ui [name=distances]").focus()
+							document.querySelector(".buffer-ui [name=distances]").focus();
 						});
 					}
 				}());
