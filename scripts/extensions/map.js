@@ -1,7 +1,7 @@
 ﻿/*global require */
 /*jslint white:true, nomen:true*/
 
-require(["dojo/_base/lang", "esri/map", "esri/layers/GraphicsLayer", "esri/layers/FeatureLayer"], function (lang, Map, GraphicsLayer, FeatureLayer) {
+require(["dojo/_base/lang", "esri/map", "esri/layers/GraphicsLayer"], function (lang, Map, GraphicsLayer) {
 	"use strict";
 
 	/**
@@ -34,7 +34,7 @@ require(["dojo/_base/lang", "esri/map", "esri/layers/GraphicsLayer", "esri/layer
 			for (i = 0; i < this.graphicsLayerIds.length; i += 1) {
 				id = this.graphicsLayerIds[i];
 				layer = this.getLayer(id);
-				if (layer.isInstanceOf(GraphicsLayer) && !layer.isInstanceOf(FeatureLayer)) {
+				if (layer.isInstanceOf(GraphicsLayer)) {
 					gfxLayers.push(layer);
 				}
 			}
