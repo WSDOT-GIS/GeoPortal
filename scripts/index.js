@@ -900,9 +900,25 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				}
 
 				function setupBuffer() {
+					function removeUnits() {
+						// Remove unwanted units
+						var select = bufferUI.root.querySelector("select[name=unit]");
+						var unitOptions = select.querySelectorAll("option");
+						var keepUnitsRe = /^((Meter)|(SurveyMile)|(SurveyFoot))$/i;
+						var option, i, l;
+						for (i = 0, l = unitOptions.length; i < l; i += 1) {
+							option = unitOptions[i];
+							if (!keepUnitsRe.test(option.dataset.name)) {
+								option.parentElement.removeChild(option);
+							}
+						}
+
+					}
+
 					var div = document.createElement("div");
 					div.id = "bufferPane";
 					bufferUI = new BufferUI(div);
+					removeUnits();
 					document.getElementById("toolsAccordion").appendChild(div);
 					toolsAccordion.addChild(new ContentPane({ title: "Buffer", id: "bufferPane" }, div));
 				}
