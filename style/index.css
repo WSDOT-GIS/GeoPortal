@@ -535,7 +535,8 @@ button.geolocate {
 }
 
 .draw-ui {
-    display: inline-flex;
-    -ms-flex-flow: column wrap;
-    flex-flow: column wrap;
+    position: absolute;
+    top: 5em;
+    right: 20px;
+    z-index: 1;
 }
