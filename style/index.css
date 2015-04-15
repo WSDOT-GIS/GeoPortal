@@ -533,3 +533,9 @@ button.geolocate {
 .buffer-ui .clear-result-graphics-button {
     display: block;
 }
+
+.draw-ui {
+    display: inline-flex;
+    -ms-flex-flow: column wrap;
+    flex-flow: column wrap;
+}
