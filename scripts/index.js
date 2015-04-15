@@ -60,6 +60,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"BufferUI/BufferUIHelper",
 	"extentSelect",
 	"geolocate-button",
+	"arcgis-draw-ui/arcgis-helper",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -92,7 +93,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
+	DrawUI
 ) {
 	"use strict";
 
@@ -1272,6 +1274,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				map.setupIdentifyPopups({
 					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
 				});
+
+				DrawUI(map, document.getElementById("drawUI"));
+
 			});
 
 			// Setup update notifications.
@@ -1315,7 +1320,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					navToolbar.zoomToNextExtent();
 				}
 			}, "nextExtentButton");
+
 		}
+
+		
 
 		//show map on load
 		ready(init);

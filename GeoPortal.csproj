@@ -121,6 +121,11 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\ais\faaFar77.js" />
+    <Content Include="scripts\arcgis-draw-ui\arcgis-draw-ui.css" />
+    <Content Include="scripts\arcgis-draw-ui\arcgis-helper.js" />
+    <Content Include="scripts\arcgis-draw-ui\icons.png" />
+    <Content Include="scripts\arcgis-draw-ui\icons.svg" />
+    <Content Include="scripts\arcgis-draw-ui\main.js" />
     <Content Include="scripts\arcgis-js-buffer\BufferUIHelper.js" />
     <Content Include="scripts\arcgis-js-buffer\main.js" />
     <Content Include="scripts\arcgis-js-buffer\Templates\BufferUI.html" />
@@ -272,7 +277,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
