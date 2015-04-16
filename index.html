@@ -28,6 +28,7 @@
 	<link href="style/functionalClass.css" rel="stylesheet" />
 	<link href="style/layerSorter.css" rel="stylesheet" />
 	<link href="scripts/elc/elc-ui/elc-ui.css" rel="stylesheet" />
+	<link href="scripts/arcgis-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
 	<script>
 		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
 		(function (dnt) {
@@ -94,6 +95,7 @@
 					<button id="helpButton">Help</button>
 					<button id="saveButton">Save</button>
 				</div>
+				<div id="drawUI"></div>
 				<div id="scaleText"></div>
 				<img id="loading-bar" src="images/loading-bar.gif" alt="Loading..." />
 				<!--<progress id="loading-bar" />-->
@@ -157,6 +159,10 @@
 					{
 						name: "elc",
 						location: root + "/scripts/elc"
+					},
+					{
+						name: "arcgis-draw-ui",
+						location: root + "/scripts/arcgis-draw-ui"
 					}
 				]
 			};

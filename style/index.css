@@ -533,3 +533,10 @@ button.geolocate {
 .buffer-ui .clear-result-graphics-button {
     display: block;
 }
+
+.draw-ui {
+    position: absolute;
+    top: 5em;
+    right: 20px;
+    z-index: 1;
+}
