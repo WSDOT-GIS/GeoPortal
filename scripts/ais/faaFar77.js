@@ -179,7 +179,9 @@
 					// Enable identify on runway centerline layer.
 
 					// Create a map click event...
-					$this.options.map.setInfoWindowOnClick(false);
+					if ($this.options.map.disablePopups) {
+						$this.options.map.disablePopups();
+					}
 
 					// Set the cursor
 					$this.options.map.setMapCursor("pointer");
@@ -189,7 +191,9 @@
 						// Disconnect the map click event.
 						dojo.disconnect($this._mapClickDeferred);
 						$this.options.map.setMapCursor("default");
-						$this.options.map.setInfoWindowOnClick(true);
+						if ($this.options.map.enablePopups) {
+							$this.options.map.enablePopups();
+						}
 
 						idParams = new esri.tasks.IdentifyParameters();
 						idParams.layerIds = [$this.options.identifyLayerId];

@@ -18,6 +18,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/layers/LabelLayer",
 	"esri/layers/KMLLayer",
+
 	"extensions/map"
 ], function (
 	Layer,

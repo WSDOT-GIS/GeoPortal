@@ -142,6 +142,7 @@
     <Content Include="scripts\extensions\esriApiExtensions.js" />
     <Content Include="scripts\extensions\extent.js" />
     <Content Include="scripts\extensions\graphicsLayer.js" />
+    <Content Include="scripts\extensions\htmlPopupExtensions.js" />
     <Content Include="scripts\extensions\map.js" />
     <Content Include="scripts\extensions\metadataExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
@@ -165,7 +166,6 @@
     <Content Include="help\Freight\internal\Tutorial.pdf" />
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <Content Include="config\fish-passage-barriers.json" />
-    <Content Include="config\fish-passage-and-sr.json" />
     <Content Include="config\internal-rmec.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
@@ -276,7 +276,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

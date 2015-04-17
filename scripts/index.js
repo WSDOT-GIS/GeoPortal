@@ -82,6 +82,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/IdentityManager",
 	"esri/dijit/Popup",
 	"extensions/esriApiExtensions",
+	"extensions/htmlPopupExtensions",
 	"extensions/metadataExtensions",
 	"extensions/extent",
 	"extensions/graphicsLayer",
@@ -362,7 +363,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					showLabel: true,
 					onClick: function () {
 						// Disable the identify popups while the measure dialog is active.
-						map.setInfoWindowOnClick(false);
+						map.disablePopups();
 						var measureDialog = $("#measureWidgetContainer"),
 						titleBar;
 
@@ -376,7 +377,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							measureDialog.hide();
 							$("#measureWidgetContainer").hide();
 							// Re-enable the identify popups.
-							map.setInfoWindowOnClick(true);
+							map.enablePopups();
 						}
 
 						// Create the measure dialog if it does not already exist.
@@ -648,10 +649,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 							},
 							drawActivate: function () {
-								map.setInfoWindowOnClick(false);
+								map.disablePopups();
 							},
 							drawDeactivate: function () {
-								map.setInfoWindowOnClick(true);
+								map.enablePopups();
 							},
 							error: function (event, data) {
 								alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
@@ -1268,6 +1269,12 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						map: map
 					});
 				}
+				
+
+				map.setupIdentifyPopups({
+					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
+				});
+
 				DrawUI(map, document.getElementById("drawUI"));
 
 			});
