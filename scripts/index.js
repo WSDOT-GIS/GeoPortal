@@ -59,6 +59,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/renderers/SimpleRenderer",
 	"extentSelect",
 	"geolocate-button",
+	"esri/dijit/Search",
+	"esri/tasks/locator",
+	"dojo/i18n!esri/nls/jsapi",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -91,7 +94,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton, Search, Locator, i18n
 ) {
 	"use strict";
 
@@ -860,16 +863,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					});
 				}
 
-				function setupSearchControls() {
-					// Address Search
-					var toolbar = document.getElementById("toolbar");
-					var addressDiv = document.createElement("div");
-					toolbar.insertBefore(addressDiv, toolbar.firstChild);
-					require(["geocoder-setup"], function (setupGeocoder) {
-						setupGeocoder(map, addressDiv);
-					});
-				}
-
 				// Look in the configuration to determine which tools to add and in which order.
 				(function (tools) {
 					var i, l;
@@ -882,8 +875,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							setupZoomControls();
 						} else if (/lrs/i.test(tools[i])) {
 							setupLrsControls();
-						} else if (/search/i.test(tools[i])) {
-							setupSearchControls();
 						} else if (/airspace\s?Calculator/i.test(tools[i])) {
 							setupAirspaceCalculator();
 						}
@@ -1088,6 +1079,42 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			createGeolocateButton(document.getElementById("geolocateButton"), map);
 
 			map.on("load", function () {
+
+				function setupSearchControls() {
+					// Address Search
+					var toolbar = document.getElementById("toolbar");
+					var addressDiv = document.createElement("div");
+					addressDiv.id = "search";
+					toolbar.insertBefore(addressDiv, toolbar.firstChild);
+
+
+					var search = new Search({
+						map: map,
+						enableHighlight: false,
+						sources: [
+							{
+								locator: new Locator("//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"),
+								singleLineFieldName: "SingleLine",
+								outFields: ["Addr_type"],
+								name: i18n.widgets.Search.main.esriLocatorName,
+								localSearchOptions: {
+									minScale: 300000,
+									distance: 50000
+								},
+								placeholder: i18n.widgets.Search.main.placeholder,
+								//highlightSymbol: new PictureMarkerSymbol(this.basePath + "/images/search-pointer.png", 36, 36).setOffset(9, 18)
+								countryCode: "US",
+								searchExtent: extents.fullExtent
+							}
+						]
+
+					}, addressDiv);
+
+					search.startup();
+				}
+
+				setupSearchControls();
+
 				// Set the scale.
 				setScaleLabel();
 
