@@ -61,6 +61,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"extentSelect",
 	"geolocate-button",
 	"arcgis-draw-ui/arcgis-helper",
+	"info-window-helper",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -94,7 +95,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper
+	DrawUIHelper, infoWindowHelper
 ) {
 	"use strict";
 
@@ -1163,6 +1164,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					}
 				}());
 
+				infoWindowHelper.addExportFeatureLink(map.infoWindow);
+
 				// Show the disclaimer if one has been defined.
 				showDisclaimer(wsdot.config.alwaysShowDisclaimer);
 
@@ -1275,7 +1278,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
 				});
 
-				var drawHelper = DrawUIHelper(map, document.getElementById("drawUI"));
+				var drawHelper = new DrawUIHelper(map, document.getElementById("drawUI"));
 				drawHelper.on("draw-activate", function () { map.disablePopups(); });
 				drawHelper.on("draw-complete", function () { map.enablePopups(); });
 
