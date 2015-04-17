@@ -863,26 +863,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					});
 				}
 
-				function setupSearchControls() {
-					// Address Search
-					var toolbar = document.getElementById("toolbar");
-					var addressDiv = document.createElement("div");
-					toolbar.insertBefore(addressDiv, toolbar.firstChild);
-					////require(["geocoder-setup"], function (setupGeocoder) {
-					////	setupGeocoder(map, addressDiv);
-					////});
-
-					var search = new Search({
-						map: map
-					}, addressDiv);
-
-					var source = search.get("sources")[0];
-					console.log("source", source);
-					source.countryCode = "US";
-
-					search.startup();
-				}
-
 				// Look in the configuration to determine which tools to add and in which order.
 				(function (tools) {
 					var i, l;
@@ -895,8 +875,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							setupZoomControls();
 						} else if (/lrs/i.test(tools[i])) {
 							setupLrsControls();
-						} else if (/search/i.test(tools[i])) {
-							setupSearchControls();
 						} else if (/airspace\s?Calculator/i.test(tools[i])) {
 							setupAirspaceCalculator();
 						}
@@ -1101,6 +1079,28 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			createGeolocateButton(document.getElementById("geolocateButton"), map);
 
 			map.on("load", function () {
+
+				function setupSearchControls() {
+					// Address Search
+					var toolbar = document.getElementById("toolbar");
+					var addressDiv = document.createElement("div");
+					addressDiv.id = "search";
+					toolbar.insertBefore(addressDiv, toolbar.firstChild);
+
+
+					var search = new Search({
+						map: map,
+					}, addressDiv);
+
+					//var source = search.get("sources")[0];
+					//console.log("source", source);
+					//source.countryCode = "US";
+
+					search.startup();
+				}
+
+				setupSearchControls();
+
 				// Set the scale.
 				setScaleLabel();
 
