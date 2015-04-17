@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 define(["esri/SpatialReference", "esri/geometry/webMercatorUtils"], function (SpatialReference, webMercatorUtils) {
 	var wgs84SR = new SpatialReference(4326);
 
