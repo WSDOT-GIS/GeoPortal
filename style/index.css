@@ -1,4 +1,4 @@
-﻿html, body {
+html, body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -445,15 +445,15 @@ abbr {
 
 /* Put a camera icon before the link. */
 .wdfw-photos-link:before {
-    content: '📷';
+    content: '\1F3A5';
 }
 
 .u-email:before {
-    content: '✉';
+    content: '\2709';
 }
 
 .p-tel:before {
-    content: '☎';
+    content: '\260E';
 }
 
 .printouts-list {
