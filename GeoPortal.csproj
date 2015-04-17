@@ -166,7 +166,6 @@
     <Content Include="help\Freight\internal\Tutorial.pdf" />
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <Content Include="config\fish-passage-barriers.json" />
-    <Content Include="config\fish-passage-and-sr.json" />
     <Content Include="config\internal-rmec.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
