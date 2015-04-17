@@ -1,5 +1,7 @@
 ﻿/*global define*/
-define([], function () {
+define(["esri/SpatialReference", "esri/geometry/webMercatorUtils"], function (SpatialReference, webMercatorUtils) {
+	var wgs84SR = new SpatialReference(4326);
+
 	function addExportFeatureLink(infoWindow) {
 		var actionList = infoWindow.domNode.querySelector(".actionList");
 		var link = document.createElement("a");
@@ -17,7 +19,10 @@ define([], function () {
 			// Get the currently selected feature.
 			var feature = infoWindow.features[infoWindow.selectedIndex];
 
-			// TODO: Project to WGS 84.
+			// Project to WGS 84 if possible.
+			if (webMercatorUtils.canProject(feature.geometry, wgs84SR)) {
+				feature.geometry = webMercatorUtils.project(feature.geometry, wgs84SR);
+			}
 
 			// Convert to regular object.
 			feature = feature.toJson();
