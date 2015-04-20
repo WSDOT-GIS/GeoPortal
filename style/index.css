@@ -1,4 +1,4 @@
-﻿html, body {
+html, body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -539,4 +539,21 @@ button.geolocate {
     top: 5em;
     right: 20px;
     z-index: 1;
+}
+
+.drawn-features path, .drawn-features rect {
+    stroke: red;
+    stroke-opacity: 1;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.drawn-features [data-geometry-type='polygon'], .drawn-features [data-geometry-type='extent'] {
+    fill: darkgray;
+    fill-opacity: 0.6;
+}
+
+.drawn-features [data-geometry-type$='point'], .drawn-features [data-geometry-type$='point'] path {
+    stroke-width: 10px;
 }

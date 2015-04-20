@@ -1278,9 +1278,20 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
 				});
 
-				var drawHelper = new DrawUIHelper(map, document.getElementById("drawUI"));
-				drawHelper.on("draw-activate", function () { map.disablePopups(); });
-				drawHelper.on("draw-complete", function () { map.enablePopups(); });
+
+				(function() {
+					var drawHelper = new DrawUIHelper(map, document.getElementById("drawUI"), null, {
+						id: "Drawn Features",
+						infoTemplate: new InfoTemplate()
+					});
+					drawHelper.on("draw-activate", function () {
+						map.disablePopups();
+					});
+					drawHelper.on("draw-complete", function () {
+						map.enablePopups();
+					});
+				}());
+
 
 			});
 
