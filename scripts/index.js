@@ -1,4 +1,4 @@
-﻿/*global require, gaTracker, $ */
+/*global require, gaTracker, $ */
 /*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
 
 /*
@@ -436,7 +436,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						templateNames = getTemplateNames();
 
-						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
+						printButton = document.getElementById("printButton");
 						pdfList = $("<ol class='printouts-list'>").appendTo("#toolbar").hide();
 
 						printButton = new Button({
@@ -503,7 +503,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 									printDialog.dialog("open");
 								}
 							}
-						}, printButton[0]);
+						}, printButton);
 					});
 				}
 
@@ -521,6 +521,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							}
 						}
 					});
+				} else {
+					(function (printButton) {
+						var parent = printButton.parentElement;
+						parent.removeChild(printButton);
+					}(document.getElementById("printButton")));
 				}
 			}
 
