@@ -1,4 +1,4 @@
-/*global require, gaTracker, $ */
+﻿/*global require, gaTracker, $ */
 /*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
 
 /*
@@ -394,7 +394,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 								// Create the widget.
 								measurement = new Measurement({
 									map: map
-								}, document.getElementById("measureWidget")).startup();
+								}, document.getElementById("measureWidget"));
+								measurement.startup();
+
+								// Setup Google Analytics tracking of measurement tool.
+								if (window.gaTracker) {
+									measurement.on("measure-end", function (measureEvent) {
+										gaTracker.send("event", "measure", measureEvent.toolName, measureEvent.unitName);
+									});
+								}
 							}());
 						} else {
 							// If the dialog already exists, toggle its visibility.
@@ -462,6 +470,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 												disabled: true,
 												iconClass: "dijitIconBusy"
 											});
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "submit", wsdot.config.printUrl);
+											}
 										},
 										printComplete: function (e, data) {
 											var result = data.result, li;
@@ -476,7 +487,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 												target: "_blank"
 											}).text("Printout").appendTo(li);
 											li.show("fade");
-											//window.open(result.url);
+											
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "complete", result.url);
+											}
 										},
 										printError: function (e, data) {
 											var error = data.error, message;
@@ -497,6 +511,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 													}
 												}
 											});
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "error", [message, wsdot.config.printUrl].join("\n"));
+											}
 										}
 									});
 								} else {
