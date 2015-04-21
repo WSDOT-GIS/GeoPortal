@@ -91,13 +91,7 @@ define(["esri/SpatialReference", "esri/geometry/webMercatorUtils"], function (Sp
 			if (webMercatorUtils.canProject(geometry, wgs84SR)) {
 				geometry = webMercatorUtils.project(geometry, wgs84SR);
 			}
-
-			console.debug(geometry);
-
 			var url = getGoogleStreetViewUrl(geometry);
-
-			console.debug(url);
-
 			window.open(url, "_blank");
 
 			return false;

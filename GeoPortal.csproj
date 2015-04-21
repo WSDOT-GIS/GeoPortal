@@ -175,8 +175,19 @@
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
+    <Content Include="scripts\polyfills\polyfills.js">
+      <DependentUpon>polyfills.js.bundle</DependentUpon>
+    </Content>
+    <Content Include="scripts\polyfills\polyfills.js.bundle" />
+    <Content Include="scripts\polyfills\polyfills.min.js.map">
+      <DependentUpon>polyfills.min.js</DependentUpon>
+    </Content>
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\polyfills\custom-event-polyfill.js" />
+    <Content Include="scripts\polyfills\polyfills.min.js">
+      <DependentUpon>polyfills.js</DependentUpon>
+    </Content>
+    <Content Include="scripts\polyfills\promise-6.1.0.js" />
     <Content Include="scripts\printer.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
@@ -276,7 +287,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
