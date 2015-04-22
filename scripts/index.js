@@ -242,6 +242,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					showLabel: false,
 					onClick: function () {
 						window.open(wsdot.config.helpUrl);
+
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "help");
+						}
 					}
 				}, "helpButton");
 
@@ -273,6 +277,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 									$(this).dialog("destroy").remove();
 								}
 							});
+						}
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "get link");
 						}
 
 					}
@@ -336,6 +343,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						// Show the export dialog
 						exportDialog.dialog("open");
+
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "export graphics");
+						}
 					}
 				}, "saveButton");
 
@@ -355,6 +366,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							});
 						}
 						layerSorter.dialog("open");
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "layer sorter");
+						}
 					}
 				}, "sortButton");
 
