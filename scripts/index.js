@@ -242,6 +242,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					showLabel: false,
 					onClick: function () {
 						window.open(wsdot.config.helpUrl);
+
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "help");
+						}
 					}
 				}, "helpButton");
 
@@ -273,6 +277,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 									$(this).dialog("destroy").remove();
 								}
 							});
+						}
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "get link");
 						}
 
 					}
@@ -336,6 +343,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						// Show the export dialog
 						exportDialog.dialog("open");
+
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "export graphics");
+						}
 					}
 				}, "saveButton");
 
@@ -355,6 +366,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							});
 						}
 						layerSorter.dialog("open");
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "layer sorter");
+						}
 					}
 				}, "sortButton");
 
@@ -394,7 +408,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 								// Create the widget.
 								measurement = new Measurement({
 									map: map
-								}, document.getElementById("measureWidget")).startup();
+								}, document.getElementById("measureWidget"));
+								measurement.startup();
+
+								// Setup Google Analytics tracking of measurement tool.
+								if (window.gaTracker) {
+									measurement.on("measure-end", function (measureEvent) {
+										gaTracker.send("event", "measure", measureEvent.toolName, measureEvent.unitName);
+									});
+								}
 							}());
 						} else {
 							// If the dialog already exists, toggle its visibility.
@@ -436,7 +458,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						templateNames = getTemplateNames();
 
-						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
+						printButton = document.getElementById("printButton");
 						pdfList = $("<ol class='printouts-list'>").appendTo("#toolbar").hide();
 
 						printButton = new Button({
@@ -462,6 +484,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 												disabled: true,
 												iconClass: "dijitIconBusy"
 											});
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "submit", wsdot.config.printUrl);
+											}
 										},
 										printComplete: function (e, data) {
 											var result = data.result, li;
@@ -476,7 +501,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 												target: "_blank"
 											}).text("Printout").appendTo(li);
 											li.show("fade");
-											//window.open(result.url);
+											
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "complete", result.url);
+											}
 										},
 										printError: function (e, data) {
 											var error = data.error, message;
@@ -497,13 +525,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 													}
 												}
 											});
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "error", [message, wsdot.config.printUrl].join("\n"));
+											}
 										}
 									});
 								} else {
 									printDialog.dialog("open");
 								}
 							}
-						}, printButton[0]);
+						}, printButton);
 					});
 				}
 
@@ -521,6 +552,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							}
 						}
 					});
+				} else {
+					(function (printButton) {
+						var parent = printButton.parentElement;
+						parent.removeChild(printButton);
+					}(document.getElementById("printButton")));
 				}
 			}
 
