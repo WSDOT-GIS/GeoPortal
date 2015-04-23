@@ -324,7 +324,7 @@ img[src$="blank.gif"] {
 #measureWidgetContainer {
     width: 250px;
     position: absolute;
-    top: 40px;
+    top: 100px;
     right: 5px;
 }
 
