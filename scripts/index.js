@@ -62,6 +62,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"geolocate-button",
 	"arcgis-draw-ui/arcgis-helper",
 	"info-window-helper",
+	"esri/dijit/Search",
+	"esri/tasks/locator",
+	"dojo/i18n!esri/nls/jsapi",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -95,7 +98,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper, infoWindowHelper
+	DrawUIHelper, infoWindowHelper, Search, Locator, i18n
 ) {
 	"use strict";
 
@@ -243,6 +246,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					showLabel: false,
 					onClick: function () {
 						window.open(wsdot.config.helpUrl);
+
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "help");
+						}
 					}
 				}, "helpButton");
 
@@ -274,6 +281,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 									$(this).dialog("destroy").remove();
 								}
 							});
+						}
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "get link");
 						}
 
 					}
@@ -337,6 +347,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						// Show the export dialog
 						exportDialog.dialog("open");
+
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "export graphics");
+						}
 					}
 				}, "saveButton");
 
@@ -356,6 +370,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							});
 						}
 						layerSorter.dialog("open");
+						if (window.gaTracker) {
+							gaTracker.send("event", "button", "click", "layer sorter");
+						}
 					}
 				}, "sortButton");
 
@@ -397,7 +414,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 								// Create the widget.
 								measurement = new Measurement({
 									map: map
-								}, document.getElementById("measureWidget")).startup();
+								}, document.getElementById("measureWidget"));
+								measurement.startup();
+
+								// Setup Google Analytics tracking of measurement tool.
+								if (window.gaTracker) {
+									measurement.on("measure-end", function (measureEvent) {
+										gaTracker.send("event", "measure", measureEvent.toolName, measureEvent.unitName);
+									});
+								}
 							}());
 						} else {
 							// If the dialog already exists, toggle its visibility.
@@ -439,7 +464,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 						templateNames = getTemplateNames();
 
-						printButton = $("<button>").text("Print...").appendTo("#toolbar").click();
+						printButton = document.getElementById("printButton");
 						pdfList = $("<ol class='printouts-list'>").appendTo("#toolbar").hide();
 
 						printButton = new Button({
@@ -465,6 +490,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 												disabled: true,
 												iconClass: "dijitIconBusy"
 											});
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "submit", wsdot.config.printUrl);
+											}
 										},
 										printComplete: function (e, data) {
 											var result = data.result, li;
@@ -479,7 +507,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 												target: "_blank"
 											}).text("Printout").appendTo(li);
 											li.show("fade");
-											//window.open(result.url);
+											
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "complete", result.url);
+											}
 										},
 										printError: function (e, data) {
 											var error = data.error, message;
@@ -500,13 +531,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 													}
 												}
 											});
+											if (window.gaTracker) {
+												gaTracker.send("event", "print", "error", [message, wsdot.config.printUrl].join("\n"));
+											}
 										}
 									});
 								} else {
 									printDialog.dialog("open");
 								}
 							}
-						}, printButton[0]);
+						}, printButton);
 					});
 				}
 
@@ -524,6 +558,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							}
 						}
 					});
+				} else {
+					(function (printButton) {
+						var parent = printButton.parentElement;
+						parent.removeChild(printButton);
+					}(document.getElementById("printButton")));
 				}
 			}
 
@@ -892,16 +931,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					});
 				}
 
-				function setupSearchControls() {
-					// Address Search
-					var toolbar = document.getElementById("toolbar");
-					var addressDiv = document.createElement("div");
-					toolbar.insertBefore(addressDiv, toolbar.firstChild);
-					require(["geocoder-setup"], function (setupGeocoder) {
-						setupGeocoder(map, addressDiv);
-					});
-				}
-
 				function setupBuffer() {
 					function removeUnits() {
 						// Remove unwanted units
@@ -938,8 +967,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							setupZoomControls();
 						} else if (/lrs/i.test(tools[i])) {
 							setupLrsControls();
-						} else if (/search/i.test(tools[i])) {
-							setupSearchControls();
 						} else if (/airspace\s?Calculator/i.test(tools[i])) {
 							setupAirspaceCalculator();
 						} else if (/buffer/i.test(tools[i])) {
@@ -1146,6 +1173,42 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			createGeolocateButton(document.getElementById("geolocateButton"), map);
 
 			map.on("load", function () {
+
+				function setupSearchControls() {
+					// Address Search
+					var toolbar = document.getElementById("toolbar");
+					var addressDiv = document.createElement("div");
+					addressDiv.id = "search";
+					toolbar.insertBefore(addressDiv, toolbar.firstChild);
+
+
+					var search = new Search({
+						map: map,
+						enableHighlight: false,
+						sources: [
+							{
+								locator: new Locator("//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"),
+								singleLineFieldName: "SingleLine",
+								outFields: ["Addr_type"],
+								name: i18n.widgets.Search.main.esriLocatorName,
+								localSearchOptions: {
+									minScale: 300000,
+									distance: 50000
+								},
+								placeholder: i18n.widgets.Search.main.placeholder,
+								//highlightSymbol: new PictureMarkerSymbol(this.basePath + "/images/search-pointer.png", 36, 36).setOffset(9, 18)
+								countryCode: "US",
+								searchExtent: extents.fullExtent
+							}
+						]
+
+					}, addressDiv);
+
+					search.startup();
+				}
+
+				setupSearchControls();
+
 				// Set the scale.
 				setScaleLabel();
 

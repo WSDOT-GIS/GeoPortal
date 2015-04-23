@@ -147,7 +147,6 @@
     <Content Include="scripts\extensions\metadataExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
-    <Content Include="scripts\geocoder-setup.js" />
     <Content Include="scripts\geolocate-button.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\info-window-helper\main.js" />
