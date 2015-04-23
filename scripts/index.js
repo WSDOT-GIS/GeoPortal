@@ -1343,11 +1343,31 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				});
 
 
-				(function() {
+				// Setup drawing toolbar.
+				(function () {
+					function createInfoWindowContent(graphic) {
+						var btn = document.createElement("button");
+						var deleteButtonGraphic = function () {
+							if (this.graphic) {
+								map.infoWindow.hide();
+								drawHelper.layer.remove(this.graphic);
+							}
+						};
+
+						btn.type = "button";
+						btn.textContent = "Delete";
+						btn.title = "Delete this graphic";
+						btn.graphic = graphic;
+						btn.classList.add("delete-graphic-button");
+						btn.onclick = deleteButtonGraphic;
+						return btn;
+					}
+
 					var drawHelper = new DrawUIHelper(map, document.getElementById("drawUI"), null, {
 						id: "Drawn Features",
-						infoTemplate: new InfoTemplate()
+						infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
 					});
+
 					drawHelper.on("draw-activate", function () {
 						map.disablePopups();
 					});
