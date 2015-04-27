@@ -18,6 +18,7 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/layers/LabelLayer",
 	"esri/layers/KMLLayer",
+	"esri/layers/ImageParameters",
 
 	"extensions/map"
 ], function (
@@ -27,7 +28,8 @@ require([
 	ArcGISImageServiceLayer,
 	FeatureLayer,
 	LabelLayer,
-	KMLLayer
+	KMLLayer,
+	ImageParameters
 ) {
 	"use strict";
 
@@ -239,6 +241,34 @@ require([
 		return output;
 	}
 
+	function jsonToImageParameters(json) {
+		var output = json ? new ImageParameters() : null;
+		if (output) {
+			for (var propName in json) {
+				if (json.hasOwnProperty(propName)) {
+					output[propName] = json[propName];
+				}
+			}
+		}
+		return output;
+	}
+
+	function processLayerOptions(layerOptions) {
+		var output = layerOptions ? {} : null;
+		if (output) {
+			for (var propName in layerOptions) {
+				if (layerOptions.hasOwnProperty(propName)) {
+					if (propName === "imageParameters") {
+						output[propName] = jsonToImageParameters(layerOptions[propName]);
+					} else {
+						output[propName] = layerOptions[propName];
+					}
+				}
+			}
+		}
+		return output;
+	}
+
 	function createLayer(layerInfo) {
 		/// <summary>Creates an esri.layer.Layer based on information in layerInfo.</summary>
 		/// <param name="layerInfo" type="Object">An object containing parameters for a Layer constructor.</param>
@@ -252,7 +282,7 @@ require([
 		constructor = getLayerConstructor(layerInfo.type || layerInfo.layerType);
 		
 		/*jshint newcap:false*/
-		layer = new constructor(layerInfo.url, layerInfo.options);
+		layer = new constructor(layerInfo.url, processLayerOptions(layerInfo.options));
 		/*jshint newcap:true*/
 
 		// Add metadata options to layer object.

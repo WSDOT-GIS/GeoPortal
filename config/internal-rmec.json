@@ -90,62 +90,16 @@
 	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"layers": {
 		"Environmental": [
-
-
 			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/StormwaterFeaturesInventory/MapServer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
 				"options": {
-					"id": "Stormwater Features Inventory"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/CulturalResources/MapServer",
-				"options": {
-					"id": "Cultural Resources"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalHealth/MapServer",
-				"options": {
-					"id": "Environmental Health"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/FishAndWildlife/MapServer",
-				"options": {
-					"id": "Fish and Wildlife"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/RiversAndWaterbodies/MapServer",
-				"options": {
-					"id": "Rivers and Waterbodies"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/WaterQuality/MapServer",
-				"options": {
-					"id": "Water Quality"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/Wetlands/MapServer",
-				"options": {
-					"id": "Wetlands"
-				}
-			},
-						{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/FEMAFloodInformation/MapServer",
-				"options": {
-					"id": "FEMA Flood Information"
+					"id": "Environmental Mapping",
+					"visible": true,
+					"imageParameters": {
+						"layerIds": [3],
+						"layerOption": "show"
+					}
 				}
 			}
 		],
@@ -219,7 +173,7 @@
 					"id": "Milepost Values"
 				}
 			},
-						{
+			{
 				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalTransportationFeatures/MapServer",
 				"options": {
