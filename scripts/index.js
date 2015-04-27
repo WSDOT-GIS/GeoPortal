@@ -1,4 +1,4 @@
-/*global require, gaTracker, $ */
+﻿/*global require, gaTracker, $ */
 
 /*
 Prerequisites:
@@ -63,8 +63,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"arcgis-draw-ui/arcgis-helper",
 	"info-window-helper",
 	"esri/dijit/Search",
-	"esri/tasks/locator",
-	"dojo/i18n!esri/nls/jsapi",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -98,7 +96,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper, infoWindowHelper, Search, Locator, i18n
+	DrawUIHelper, infoWindowHelper, Search
 ) {
 	"use strict";
 
@@ -1185,24 +1183,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					var search = new Search({
 						map: map,
 						enableHighlight: false,
-						sources: [
-							{
-								locator: new Locator("//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"),
-								singleLineFieldName: "SingleLine",
-								outFields: ["Addr_type"],
-								name: i18n.widgets.Search.main.esriLocatorName,
-								localSearchOptions: {
-									minScale: 300000,
-									distance: 50000
-								},
-								placeholder: i18n.widgets.Search.main.placeholder,
-								//highlightSymbol: new PictureMarkerSymbol(this.basePath + "/images/search-pointer.png", 36, 36).setOffset(9, 18)
-								countryCode: "US",
-								searchExtent: extents.fullExtent
-							}
-						]
-
 					}, addressDiv);
+
+					search.on("load", function () {
+						var source = search.sources[0];
+						source.countryCode = "US";
+						// Set the extent to WA. Values from http://epsg.io/1416-area.
+						source.searchExtent = extents.fullExtent;
+					});
 
 					search.startup();
 				}
