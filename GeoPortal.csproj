@@ -58,6 +58,7 @@
     <Content Include="disclaimers\fish-passage-barriers\Public.html" />
     <Content Include="disclaimers\Freight\Internal.html" />
     <Content Include="disclaimers\Freight\Public.html" />
+    <Content Include="disclaimers\internal-rmec\Internal.html" />
     <Content Include="error\GenericError.html" />
     <Content Include="fish-barrier-images\Gallery\css\blueimp-gallery-indicator.css" />
     <Content Include="fish-barrier-images\Gallery\css\blueimp-gallery-video.css" />
@@ -286,7 +287,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -3,6 +3,8 @@
 	"helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
 	"printUrl": "http://hqolymgis98d/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export Web Map",
 	"enableIdentify": true,
+	"disclaimer": "disclaimers/internal-rmec/Internal.html",
+	"alwaysShowDisclaimer": true,
 	"mapOptions": {
 		"logo": false,
 		"extent": {
