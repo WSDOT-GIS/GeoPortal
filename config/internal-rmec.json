@@ -174,13 +174,6 @@
 				"options": {
 					"id": "Milepost Values"
 				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalTransportationFeatures/MapServer",
-				"options": {
-					"id": "Environmental Transportation Features"
-				}
 			}
 		]
 	}
