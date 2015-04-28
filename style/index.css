@@ -541,6 +541,13 @@ button.geolocate {
     display: block;
 }
 
+.drawIcon:before {
+    font-size: 12pt;
+    font-family: 'Segoe UI Symbol';
+    content: '\270F';
+    color: goldenrod;
+}
+
 .draw-ui {
     position: absolute;
     top: 5em;

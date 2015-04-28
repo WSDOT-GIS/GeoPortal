@@ -63,6 +63,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"arcgis-draw-ui/arcgis-helper",
 	"info-window-helper",
 	"esri/dijit/Search",
+	"esri/domUtils",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -96,7 +97,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper, infoWindowHelper, Search
+	DrawUIHelper, infoWindowHelper, Search, domUtils
 ) {
 	"use strict";
 
@@ -1351,7 +1352,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						return btn;
 					}
 
-					var drawHelper = new DrawUIHelper(map, document.getElementById("drawUI"), null, {
+					var drawToolsNode = document.getElementById("drawUI");
+					domUtils.toggle(drawToolsNode);
+
+					var drawHelper = new DrawUIHelper(map, drawToolsNode, null, {
 						id: "Drawn Features",
 						infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
 					});
@@ -1362,6 +1366,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					drawHelper.on("draw-complete", function () {
 						map.enablePopups();
 					});
+
+					// Setup the draw toggle button.
+					Button({
+						iconClass: "drawIcon",
+						showLabel: false,
+						onClick: function () {
+							domUtils.toggle(drawToolsNode);
+						}
+					}, "drawButton");
 				}());
 
 
