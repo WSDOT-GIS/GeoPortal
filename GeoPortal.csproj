@@ -108,6 +108,7 @@
     <Content Include="images\legend\LegendSprites.png" />
     <Content Include="images\loading-bar.gif" />
     <Content Include="images\locationInfo\sprites.png" />
+    <Content Include="images\map-background.png" />
     <Content Include="images\navigation\FeedbackIcon.png" />
     <Content Include="images\navigation\sprites.png" />
     <Content Include="images\NorthArrow.png" />
