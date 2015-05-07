@@ -514,7 +514,8 @@ button.geolocate {
         background-color: rgba(102,102,102,0.60);
     }
 
-.layersDiv {
+/* Add background for blank map where tiles are not present*/
+.map[data-zoom='11'] > .container > .container > .layersDiv, .map[data-zoom='12'] > .container > .container > .layersDiv {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAALklEQVRIx2NksGTAC/7jl2ZgYqAQjBowasCoAYPFABZC+Z1xNBBHDRg1YKQYAADpoQJ6O8ygLgAAAABJRU5ErkJggg==') /*../images/map-background.png*/;
     background-repeat: repeat;
 }
