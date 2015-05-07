@@ -575,3 +575,8 @@ button.geolocate {
 .drawn-features [data-geometry-type$='point'], .drawn-features [data-geometry-type$='point'] path {
     stroke-width: 10px;
 }
+
+.metadata-list-container {
+    max-height: 300px;
+    overflow: auto;
+}

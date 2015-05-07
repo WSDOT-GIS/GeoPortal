@@ -325,7 +325,8 @@ require([
 			var layer = this.options.layer, id, i, l, url, a, docfrag, ul, li, label, heading;
 			if ($.isArray(layer.metadataLayers) && layer.metadataLayers.length > 0) {
 				//  && !(layer.metadataOptions && !layer.metadataOptions.ignoreSoe
-				docfrag = document.createDocumentFragment();
+				docfrag = document.createElement("div");
+				docfrag.classList.add("metadata-list-container");
 				heading = document.createElement("h3");
 				heading.textContent = "Metadata";
 				docfrag.appendChild(heading);
