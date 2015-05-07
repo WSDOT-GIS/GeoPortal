@@ -398,8 +398,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							(function () {
 								var measurement;
 								// Create the dialog.
-								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).draggable().addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
+								measureDialog = $("<div>").attr("id", "measureWidgetContainer").appendTo($("#mapContentPane")).addClass("ui-widget").addClass("ui-dialog ui-widget ui-widget-content ui-corner");
 								titleBar = $("<div>").attr("class", "ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").appendTo(measureDialog);
+								measureDialog.draggable({
+									handle: titleBar
+								});
 								$("<span>").attr("id", "ui-dialog-title-dialog").addClass("ui-dialog-title").text("Measure").appendTo(titleBar);
 								$("<a>").addClass("ui-dialog-titlebar-close ui-corner-all").attr("href", "#").append($('<span>').addClass("ui-icon ui-icon-closethick").text("close")).appendTo(titleBar).click(hideMeasureWidget);
 								$("<div>").attr("id", "measureWidget").appendTo(measureDialog);
