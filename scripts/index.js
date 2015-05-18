@@ -60,6 +60,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"extentSelect",
 	"geolocate-button",
 	"esri/dijit/Search",
+	"AirspaceCalculator/ArcGisUI",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -92,11 +93,12 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton, Search
+	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton, Search,
+	AirspaceCalculatorArcGisUI
 ) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
+	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json", airspaceCalculator;
 	wsdot = { config: {} };
 
 	/**
@@ -664,36 +666,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
 				function setupAirspaceCalculator() {
-					require(["scripts/airspaceCalculator.js"], function () {
-						$("#airspaceCalculator").airspaceCalculator({
-							disclaimer: 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, ' +
-							"INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  " +
-							"IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY," +
-							"WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE " +
-							"OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
-							map: map,
-							url: wsdot.config.airspaceCalculatorUrl,
-							progressAlternativeImageUrl: "images/loading-bar.gif",
-							executeComplete: function (event, data) {
-								var graphic = data.graphic, geographicPoint, title = graphic.getTitle(), content = graphic.getContent();
-								geographicPoint = webMercatorUtils.webMercatorToGeographic(graphic.geometry);
-								map.infoWindow.setContent(content);
-								map.infoWindow.setTitle(title);
-								map.infoWindow.show(geographicPoint);
-								map.centerAt(graphic.geometry);
-
-							},
-							drawActivate: function () {
-								map.disablePopups();
-							},
-							drawDeactivate: function () {
-								map.enablePopups();
-							},
-							error: function (event, data) {
-								alert(['The Airspace Calculator surface returned an error message.', data.error].join("\n"));
-							}
-						});
-					});
+					airspaceCalculator = new AirspaceCalculatorArcGisUI("http://hqolymgis99t/arcgis/rest/services/Airport/Airport_Surfaces_40ft_Int/ImageServer");
+					document.getElementById("airspaceCalculator").appendChild(airspaceCalculator.form);
 				}
 
 				function setupFaaFar77() {
@@ -767,7 +741,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 								tooltip: "Airspace Calculator (Prototype)",
 								id: "airspaceCalculatorTab"
 							}, "airspaceCalculatorTab");
-							on.once(contentPane, "show", setupAirspaceCalculator);
 							tabs.addChild(contentPane);
 						} else if (/FAA\s*FAR\s*77/i.test(name)) {
 							$("<div id='faaFar77Tab'><div id='faaFar77'></div></div>").appendTo("#tabs");
@@ -1138,6 +1111,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					});
 
 					search.startup();
+				}
+
+				if (airspaceCalculator) {
+					airspaceCalculator.map = map;
 				}
 
 				setupSearchControls();

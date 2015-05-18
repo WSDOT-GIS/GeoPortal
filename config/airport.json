@@ -10,6 +10,7 @@
 	},
 	"tabOrder": [
 		"Layers",
+		"Airspace Calculator",
 		"Tools",
 		"Basemap",
 		"Legend"
