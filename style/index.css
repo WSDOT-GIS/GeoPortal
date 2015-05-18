@@ -467,6 +467,10 @@ abbr {
     border-radius: 0 0 10px 10px;
 }
 
+.printouts-list:empty {
+    display: none;
+}
+
 .symbol {
     font-family: 'Symbola', 'Segoe UI Symbol', 'Segoe UI Emoji';
 }
@@ -555,8 +559,8 @@ button.geolocate {
 
 .draw-ui {
     position: absolute;
-    top: 5em;
-    right: 20px;
+    top: 1.5em;
+    left: 5em;
     z-index: 1;
 }
 
