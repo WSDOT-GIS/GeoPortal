@@ -45,6 +45,10 @@
     <None Include="AIS\config.json" />
     <Content Include="AIS\ReadMe.txt" />
     <Content Include="AIS\web.config" />
+    <Content Include="bower_components\arcgis-js-draw-ui\arcgis-draw-ui.css" />
+    <Content Include="bower_components\arcgis-js-draw-ui\ArcGisDrawUI.js" />
+    <Content Include="bower_components\arcgis-js-draw-ui\ArcGisHelper.js" />
+    <Content Include="bower_components\arcgis-js-draw-ui\icons.png" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
     <Content Include="config\Freight.json" />
@@ -123,11 +127,6 @@
     <Content Include="RouteListDemo.html" />
     <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\ais\faaFar77.js" />
-    <Content Include="scripts\arcgis-draw-ui\arcgis-draw-ui.css" />
-    <Content Include="scripts\arcgis-draw-ui\arcgis-helper.js" />
-    <Content Include="scripts\arcgis-draw-ui\icons.png" />
-    <Content Include="scripts\arcgis-draw-ui\icons.svg" />
-    <Content Include="scripts\arcgis-draw-ui\main.js" />
     <Content Include="scripts\arcgis-js-buffer\BufferUIHelper.js" />
     <Content Include="scripts\arcgis-js-buffer\main.js" />
     <Content Include="scripts\arcgis-js-buffer\Templates\BufferUI.html" />
@@ -169,6 +168,7 @@
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <Content Include="config\fish-passage-barriers.json" />
     <Content Include="config\internal-rmec.json" />
+    <Content Include="bower.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
@@ -288,7 +288,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

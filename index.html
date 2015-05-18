@@ -28,7 +28,7 @@
 	<link href="style/functionalClass.css" rel="stylesheet" />
 	<link href="style/layerSorter.css" rel="stylesheet" />
 	<link href="scripts/elc/elc-ui/elc-ui.css" rel="stylesheet" />
-	<link href="scripts/arcgis-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
+	<link href="bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
 	<script>
 		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
 		(function (dnt) {
@@ -163,8 +163,9 @@
 						location: root + "/scripts/elc"
 					},
 					{
-						name: "arcgis-draw-ui",
-						location: root + "/scripts/arcgis-draw-ui"
+						name: "ArcGisDrawUI",
+						location: root + "/bower_components/arcgis-js-draw-ui",
+						main: "ArcGisDrawUI"
 					},
 					{
 						name: "info-window-helper",

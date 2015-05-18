@@ -1,0 +1,27 @@
+{
+  "name": "GeoPortal",
+  "version": "0.0.0",
+  "authors": [
+    "WSDOT"
+  ],
+  "description": "WSDOT GeoPortal",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "WSDOT",
+    "GeoPortal"
+  ],
+  "license": "Unlicense",
+  "homepage": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_ext.htm",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.0.0"
+  }
+}
