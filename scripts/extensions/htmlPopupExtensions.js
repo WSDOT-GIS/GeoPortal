@@ -336,7 +336,7 @@ require([
 							// The following settings are configurable via the 'options' parameter.
 							idParams.returnGeometry = options.returnGeometry || true;
 							idParams.layerOption = options.layerOption || IdentifyParameters.LAYER_OPTION_ALL;
-							idParams.tolerance = options.tolerance || 5;
+							idParams.tolerance = options.tolerance || 1;
 							idParams.maxAllowableOffset = options.maxAllowableOffset || 5;
 
 							// Execute the identify task
