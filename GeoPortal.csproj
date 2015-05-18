@@ -207,6 +207,7 @@
     <Content Include="bower_components\promises\bower.json" />
     <Content Include="bower_components\setImmediate\.bower.json" />
     <Content Include="bower_components\setImmediate\bower.json" />
+    <Content Include="bower.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
@@ -214,8 +215,18 @@
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
+    <Content Include="scripts\polyfills.js">
+      <DependentUpon>polyfills.js.bundle</DependentUpon>
+    </Content>
+    <Content Include="scripts\polyfills.js.bundle" />
+    <Content Include="scripts\polyfills.min.js.map">
+      <DependentUpon>polyfills.min.js</DependentUpon>
+    </Content>
     <None Include="style\FGDC Plus.xsl" />
     <Content Include="scripts\modernizr.js" />
+    <Content Include="scripts\polyfills.min.js">
+      <DependentUpon>polyfills.js</DependentUpon>
+    </Content>
     <Content Include="scripts\printer.js" />
     <Content Include="scripts\toc.js" />
     <Content Include="scripts\zoomToXY.js" />

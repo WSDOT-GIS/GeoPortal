@@ -1,0 +1,24 @@
+{
+  "name": "GeoPortal",
+  "version": "0.0.0",
+  "authors": [
+    "WSDOT"
+  ],
+  "description": "WSDOT Geoportal",
+  "keywords": [
+    "GIS"
+  ],
+  "license": "Unlicense",
+  "homepage": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_ext.htm",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~0.1.0"
+  },
+  "private": true
+}

@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//js.arcgis.com/3.13/dijit/themes/claro/claro.css" />
     <link href="//js.arcgis.com/3.13/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
     <link href="//ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/themes/base/jquery-ui.css" rel="stylesheet" />
-    
+
     <link rel="shortcut icon" href="//images.wsdot.wa.gov/favicon.ico" />
     <link href="style/locationInfo.css" rel="stylesheet" />
     <link href="style/index.css" rel="stylesheet" />
@@ -27,6 +27,7 @@
     <link href="style/addressLocator.css" rel="stylesheet" />
     <link href="style/functionalClass.css" rel="stylesheet" />
     <link href="style/layerSorter.css" rel="stylesheet" />
+    <script src="scripts/polyfills.min.js"></script>
     <script src="scripts/modernizr.js"></script>
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
@@ -55,24 +56,26 @@
 </head>
 <body class="claro">
     <noscript>
-    You need to have JavaScript enabled on your browser to view this page.
+        You need to have JavaScript enabled on your browser to view this page.
     </noscript>
     <div id="mainContainer" style="display: none">
         <header id="headerPane">
             <div class="table">
-                <div class="topNav"><!-- row -->
+                <div class="topNav">
+                    <!-- row -->
                     <div><!-- blank --></div>
                     <div>
                         <ul>
-                          <li><a href="http://www.wsdot.wa.gov/news/" target="_blank">News</a></li>
-                          <li><a href="http://www.wsdot.wa.gov/employment/" target="_blank">Employment</a></li>
-                          <li><a href="http://www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a></li>
-                          <li><a href="http://www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a></li>
-                          <li><a href="http://www.wsdot.wa.gov/" target="_blank">WSDOT Home</a></li>
+                            <li><a href="http://www.wsdot.wa.gov/news/" target="_blank">News</a></li>
+                            <li><a href="http://www.wsdot.wa.gov/employment/" target="_blank">Employment</a></li>
+                            <li><a href="http://www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a></li>
+                            <li><a href="http://www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a></li>
+                            <li><a href="http://www.wsdot.wa.gov/" target="_blank">WSDOT Home</a></li>
                         </ul>
                     </div>
                 </div>
-                <div><!-- row -->
+                <div>
+                    <!-- row -->
                     <span><img id="wsdotLogo" src="http://www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT Logo" width="240" height="39" /></span>
                     <span class="page-title"><abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
                 </div>
@@ -106,8 +109,7 @@
                     <div id="legend"></div>
                 </div>
                 <div id="layersTab" title="Layers">
-                    <ul id="layerList">
-                    </ul>
+                    <ul id="layerList"></ul>
                 </div>
                 <div id="toolsTab" title="Tools">
                     <div id="toolsAccordion">
@@ -118,7 +120,7 @@
                 </div>
             </div>
 
-            
+
         </div>
     </div>
     <script>

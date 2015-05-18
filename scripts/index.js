@@ -1115,6 +1115,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 				if (airspaceCalculator) {
 					airspaceCalculator.map = map;
+
+					airspaceCalculator.form.addEventListener("add-from-map", function () {
+						map.disablePopups();
+					});
+
+					airspaceCalculator.form.addEventListener("draw-complete", function () {
+						map.enablePopups();
+					});
 				}
 
 				setupSearchControls();
