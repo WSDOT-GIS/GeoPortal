@@ -182,11 +182,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		}
 
 		$(document).ready(function () {
-			var qs = $.deparam.querystring();
+			var match = location.search.match(/\btree(=((?:1)|(?:true)|(?:on)))?\b/i), link;
 
 			// If the "tree" query string parameter is set to true, replace the stylesheet for the layer list.
-			if (qs.tree && !/false/.test(qs.tree)) {
-				$("link[href='style/layerList.css']").attr("href", "style/layerListPlusMinus.css");
+			if (match) {
+				link = document.querySelector("link[href='style/layerList.css']");
+				if (link) {
+					link.href = "style/layerListPlusMinus.css";
+				}
 			}
 
 			$("#mainContainer").css("display", "");
