@@ -64,6 +64,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"info-window-helper",
 	"esri/dijit/Search",
 	"esri/domUtils",
+	"esri/symbols/SimpleMarkerSymbol",
+	"esri/symbols/SimpleLineSymbol",
+	"esri/symbols/SimpleFillSymbol",
+	"esri/symbols/TextSymbol",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -97,7 +101,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper, infoWindowHelper, Search, domUtils
+	DrawUIHelper, infoWindowHelper, Search, domUtils, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, TextSymbol
 ) {
 	"use strict";
 
@@ -1355,7 +1359,19 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					var drawToolsNode = document.getElementById("drawUI");
 					domUtils.toggle(drawToolsNode);
 
-					var drawHelper = new DrawUIHelper(map, drawToolsNode, null, {
+					var lineSymbol = new SimpleLineSymbol();
+					var pointSymbol = new SimpleMarkerSymbol();
+					var fillSymbol = new SimpleFillSymbol();
+					var textSymbol = new TextSymbol("Default Label");
+
+					lineSymbol.setColor("red");
+					pointSymbol.setOutline(lineSymbol);
+					fillSymbol.setOutline(lineSymbol);
+					textSymbol.setColor("red");
+
+					var symbolOptions = new DrawUIHelper.SymbolOptions(pointSymbol, lineSymbol, fillSymbol, textSymbol);
+
+					var drawHelper = new DrawUIHelper(map, drawToolsNode, symbolOptions, {
 						id: "Drawn Features",
 						infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
 					});
@@ -1436,13 +1452,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	 */
 	function getConfigUrl() {
 		// Get the query string parameters.
-		var qs = $.deparam.querystring(true), output = defaultConfigUrl;
+		var output = defaultConfigUrl;
+		var qsconfig = location.search.match(/\bconfig=([^=&]+)/);
+		qsconfig = qsconfig ? qsconfig[1] : null;
 		// If the config parameter has not been specified, return the default.
-		if (qs.config) {
-			if (/\//g.test(qs.config)) {
-				output = [qs.config, ".json"].join("");
+		if (qsconfig) {
+			if (/\//g.test(qsconfig)) {
+				output = [qsconfig, ".json"].join("");
 			} else {
-				output = ["config/", qs.config, ".json"].join("");
+				output = ["config/", qsconfig, ".json"].join("");
 			}
 		}
 		return output;
