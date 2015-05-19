@@ -227,6 +227,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 		function init() {
 			var gaTrackEvent, initBasemap = null;
+
+			if (wsdot.config.additionalStylesheets && wsdot.config.additionalStylesheets.length > 0) {
+				wsdot.config.additionalStylesheets.forEach(function (path) {
+					var link = document.createElement("link");
+					link.href = path;
+					link.rel = "stylesheet";
+					document.head.appendChild(link);
+				});
+			}
+
 			esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 			// Specify list of CORS enabled servers.
 			(function (servers) {
