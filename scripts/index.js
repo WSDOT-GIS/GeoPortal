@@ -971,12 +971,22 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					toolsAccordion.addChild(new ContentPane({ title: "Buffer", id: "bufferPane" }, div));
 				}
 
+				function setupDraw() {
+					var div = document.createElement("div");
+					div.id = "drawPane";
+					document.getElementById("toolsAccordion").appendChild(div);
+					toolsAccordion.addChild(new ContentPane({ title: "Draw", id: "drawPane" }, div));
+					var drawUI = document.createElement("div");
+					drawUI.id = "drawUI";
+					div.appendChild(drawUI);
+				}
+
 				// Look in the configuration to determine which tools to add and in which order.
 				(function (tools) {
 					var i, l;
 					// Setup a default value for tools if it hasn't been specified.
 					if (!tools) {
-						tools = ["lrs", "zoom", "search", "buffer"];
+						tools = ["lrs", "zoom", "search", "buffer", "draw"];
 					}
 					for (i = 0, l = tools.length; i < l; i += 1) {
 						if (/zoom/i.test(tools[i])) {
@@ -987,6 +997,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							setupAirspaceCalculator();
 						} else if (/buffer/i.test(tools[i])) {
 							setupBuffer();
+						} else if (/draw/i.test(tools[i])) {
+							setupDraw();
 						}
 					}
 				} (wsdot.config.tools));
@@ -1370,7 +1382,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					}
 
 					var drawToolsNode = document.getElementById("drawUI");
-					domUtils.toggle(drawToolsNode);
 
 					var lineSymbol = new SimpleLineSymbol();
 					var pointSymbol = new SimpleMarkerSymbol();
@@ -1395,15 +1406,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					drawHelper.on("draw-complete", function () {
 						map.enablePopups();
 					});
-
-					// Setup the draw toggle button.
-					Button({
-						iconClass: "drawIcon",
-						showLabel: false,
-						onClick: function () {
-							domUtils.toggle(drawToolsNode);
-						}
-					}, "drawButton");
 				}());
 
 
