@@ -25,9 +25,6 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
-
-	"query-object",
-
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -100,7 +97,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry,
-	queryObject,
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -211,24 +207,22 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		 * @returns {string}
 		 */
 		function getExtentLink() {
-			var layers, q;
-
-			q = query.parse(location.search);
-
+			var layers, qsParams;
+			// Get the current query string parameters.
+			qsParams = $.deparam.querystring(true);
 			// Set the extent to the current extent.
-			q.set("extent", map.extent.toCsv());
+			qsParams.extent = map.extent.toCsv();
 
-			layers = map.getVisibleLayers().map(function (layer) {
+			layers = $.map(map.getVisibleLayers(), function (layer) {
 				return layer.id;
+				// return [layer.id, String(layer.opacity)].join(":");
 			});
 
 			if (layers) {
-				q.set('layers', layers.join(","));
+				qsParams.layers = layers.join(",");
 			}
 
-			//return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
-
-			return [window.location.protocol + "//" + window.location.host + window.location.pathname].join("?");
+			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
 		}
 
 		function init() {
