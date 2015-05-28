@@ -25,6 +25,9 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
+
+	"query-object",
+
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -97,6 +100,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry,
+	queryObject,
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -207,22 +211,24 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		 * @returns {string}
 		 */
 		function getExtentLink() {
-			var layers, qsParams;
-			// Get the current query string parameters.
-			qsParams = $.deparam.querystring(true);
-			// Set the extent to the current extent.
-			qsParams.extent = map.extent.toCsv();
+			var layers, q;
 
-			layers = $.map(map.getVisibleLayers(), function (layer) {
+			q = query.parse(location.search);
+
+			// Set the extent to the current extent.
+			q.set("extent", map.extent.toCsv());
+
+			layers = map.getVisibleLayers().map(function (layer) {
 				return layer.id;
-				// return [layer.id, String(layer.opacity)].join(":");
 			});
 
 			if (layers) {
-				qsParams.layers = layers.join(",");
+				q.set('layers', layers.join(","));
 			}
 
-			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+			//return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+
+			return [window.location.protocol + "//" + window.location.host + window.location.pathname].join("?");
 		}
 
 		function init() {
@@ -1265,20 +1271,31 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					// Zoom to the extent in the query string (if provided).
 					// Test example:
 					// extent=-13677603.622831678,5956814.051290565,-13576171.686297385,6004663.630997022
-					var qsParams = $.deparam.querystring(true), coords, extent;
-					if (qsParams.extent) {
-						// Split the extent into its four coordinates.  Create the extent object and set the map's extent.
-						coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val); });
+
+
+					var re = /\bextent=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i;
+					var match = location.search.match(re);
+					var coords;
+
+					if (match) {
+						match.splice(1, 4);
+						coords = match.map(function (s) {
+							return parseFloat(s);
+						});
 						extent = new Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
 						map.setExtent(extent);
 					}
 				}
 
 				function getLayersFromParams() {
-					var qsParams = $.deparam.querystring(true), layers;
-					if (typeof (qsParams.layers) === "string") {
-						layers = qsParams.layers.split(",");
+					var layers;
+
+					var match = location.search.match(/\blayers=[^&]+/i)
+
+					if (match) {
+						layers = match[0].split(",");
 					}
+
 					return layers;
 				}
 

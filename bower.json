@@ -22,6 +22,7 @@
     "tests"
   ],
   "dependencies": {
-    "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1"
+    "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1",
+    "query": "~0.0.2"
   }
 }
