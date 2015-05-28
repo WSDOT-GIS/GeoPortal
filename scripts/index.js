@@ -5,7 +5,6 @@ Prerequisites:
 ArcGIS JavaScript API
 jQuery
 jQuery UI
-jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 */
 
 /**
@@ -25,6 +24,8 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
+	"queryStringHelper",
+
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -97,6 +98,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry,
+
+	queryStringHelper,
+
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -209,20 +213,19 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		function getExtentLink() {
 			var layers, qsParams;
 			// Get the current query string parameters.
-			qsParams = $.deparam.querystring(true);
+			qsParams = queryStringHelper.queryStringToObject(location.search);
 			// Set the extent to the current extent.
 			qsParams.extent = map.extent.toCsv();
 
-			layers = $.map(map.getVisibleLayers(), function (layer) {
+			layers = map.getVisibleLayers().map(function (layer) {
 				return layer.id;
-				// return [layer.id, String(layer.opacity)].join(":");
 			});
 
 			if (layers) {
 				qsParams.layers = layers.join(",");
 			}
 
-			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+			return [window.location.protocol + "//" + window.location.host + window.location.pathname, queryStringHelper.objectToQueryString(qsParams)].join("?");
 		}
 
 		function init() {
@@ -1269,7 +1272,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 					var re = /\bextent=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i;
 					var match = location.search.match(re);
-					var coords;
+					var coords, extent;
 
 					if (match) {
 						match.splice(1, 4);
@@ -1284,7 +1287,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				function getLayersFromParams() {
 					var layers;
 
-					var match = location.search.match(/\blayers=[^&]+/i)
+					var match = location.search.match(/\blayers=[^&]+/i);
 
 					if (match) {
 						layers = match[0].split(",");
