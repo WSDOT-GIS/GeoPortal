@@ -1,0 +1,26 @@
+{
+  "name": "GeoPortal",
+  "version": "0.0.0",
+  "authors": [
+    "WSDOT"
+  ],
+  "description": "WSDOT GeoPortal",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "GIS",
+    "map",
+    "WSDOT"
+  ],
+  "license": "Unlicense",
+  "homepage": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_ext.htm",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}
