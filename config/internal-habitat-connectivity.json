@@ -1,5 +1,5 @@
 ﻿{
-	"pageTitle": "WSDOT Fish Passage Barriers",
+	"pageTitle": "Habitat Connectivity Support Structures",
 	"enableIdentify": true,
 	"disclaimer": "disclaimers/habitat-connectivity/Internal.html",
 	"alwaysShowDisclaimer": false,
@@ -41,15 +41,6 @@
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true
-			}
-		},
-		"fishPassageBarriers": {
-			"label": "Fish Passage Barriers",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
-			"query": {
-				"where": "1 = 1",
-				"returnGeometry": true,
-				"outFields": [ "Site_Num" ]
 			}
 		}
 	},
