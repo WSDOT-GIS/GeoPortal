@@ -97,7 +97,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"extensions/graphicsLayer",
 	"extensions/map",
 	"scripts/layerList.js",
-	"scripts/zoomToXY.js", "scripts/extentSelect.js"
+	"scripts/zoomToXY.js", "scripts/extentSelect.js", "scripts/layerSorter.js"
 ], function (require, ready, on, registry,
 
 	queryStringHelper,
@@ -382,11 +382,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						var layerSorter = $("#layerSorter");
 						// Create the layer sorter dialog if it does not already exist.
 						if (layerSorter.length < 1) {
-							require(["scripts/layerSorter.js"], function () {
-								layerSorter = $("<div id='layerSorter'>").layerSorter({ map: map }).dialog({
-									title: "Arrange Layers",
-									autoOpen: false
-								});
+							layerSorter = $("<div id='layerSorter'>").layerSorter({ map: map }).dialog({
+								title: "Arrange Layers",
+								autoOpen: false
 							});
 						}
 						layerSorter.dialog("open");
