@@ -1269,16 +1269,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					// Test example:
 					// extent=-13677603.622831678,5956814.051290565,-13576171.686297385,6004663.630997022
 
-
-					var re = /\bextent=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i;
-					var match = location.search.match(re);
-					var coords, extent;
-
-					if (match) {
-						match.splice(1, 4);
-						coords = match.map(function (s) {
-							return parseFloat(s);
-						});
+					var qs, coords, extent;
+					qs = queryStringHelper.queryStringToObject();
+					coords = qs.extent;
+					if (coords) {
 						extent = new Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
 						map.setExtent(extent);
 					}

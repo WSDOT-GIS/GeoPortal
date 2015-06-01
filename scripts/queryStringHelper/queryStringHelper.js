@@ -9,26 +9,22 @@ define(function () {
 
 	//var numberRe = /^-?\d+(?:\.\d+)?$/;
 
-	var extentRe = /\bextent=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i;
+	var extentRe = /(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i;
 
 	/**
-	 * 
-	 * @param {string} [s=location.search]
+	 * Parses a string into an extent.
+	 * @param {string} s
 	 */
 	function getExtentValues(s) {
 		// Zoom to the extent in the query string (if provided).
 		// Test example:
 		// extent=-13677603.622831678,5956814.051290565,-13576171.686297385,6004663.630997022
 
-		if (!s) {
-			s = window.location.search;
-		}
 		var match = s.match(extentRe);
 		var coords;
 
 		if (match) {
-			match.splice(1, 4);
-			coords = match.map(function (s) {
+			coords = s.split(",").map(function (s) {
 				return parseFloat(s);
 			});
 		}
@@ -83,11 +79,11 @@ define(function () {
 			kvPairs = search.split("&");
 			kvPairs.forEach(function (s) {
 				var kvp;
+				kvp = new KeyValuePair(s);
 
-				if (extentRe.test(s)) {
-					o.extent = getExtentValues();
+				if (kvp.key === "extent") {
+					o.extent = getExtentValues(kvp.value);
 				} else {
-					kvp = new KeyValuePair(s);
 					o[kvp.key] = kvp.value;
 				}
 			});
