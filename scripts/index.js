@@ -62,6 +62,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"extentSelect",
 	"geolocate-button",
 	"ArcGisDrawUI/ArcGisHelper",
+	"elc/elc-ui/ArcGisElcUI",
 	"info-window-helper",
 	"esri/dijit/Search",
 	"esri/domUtils",
@@ -105,7 +106,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
 	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper, infoWindowHelper, Search, domUtils, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, TextSymbol
+	DrawUIHelper, ArcGisElcUI, infoWindowHelper, Search, domUtils, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, TextSymbol
 ) {
 	"use strict";
 
@@ -814,47 +815,45 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					document.getElementById("toolsAccordion").appendChild(div);
 					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div));
 					on.once(registry.byId("lrsTools"), "show", function () {
-						require(["elc/elc-ui/ArcGisElcUI"], function (ArcGisElcUI) {
-							var elcUI = new ArcGisElcUI(div);
-							elcUI.setMap(map);
+						var elcUI = new ArcGisElcUI(div);
+						elcUI.setMap(map);
 
-							elcUI.on("elc-results-not-found", function () {
-								alert("No results found");
-							});
-
-							elcUI.on("non-geometry-results-returned", function (e) {
-								console.log("non geometry results found", e);
-								var elcResult = e.elcResults[0];
-								var output = [];
-								var properties = [
-									"LocatingError",
-									"ArmCalcReturnMessage",
-									"ArmCalcEndReturnMessage"
-								];
-								properties.forEach(function (name) {
-									if (elcResult[name]) {
-										output.push([name, elcResult[name]].join(": "));
-									}
-								});
-								output = output.join("\n");
-								alert(output);
-							});
-
-							elcUI.on("elc-results-found", function (e) {
-								var point;
-								if (e && e.graphics && e.graphics.length > 0) {
-									point = e.graphics[0].geometry;
-									if (point.getPoint) {
-										point = point.getPoint(0, 0);
-									}
-									map.infoWindow.show(point);
-									map.centerAt(point);
-									map.infoWindow.setFeatures(e.graphics);
-								}
-							});
+						elcUI.on("elc-results-not-found", function () {
+							alert("No results found");
 						});
 
-						
+						elcUI.on("non-geometry-results-returned", function (e) {
+							console.log("non geometry results found", e);
+							var elcResult = e.elcResults[0];
+							var output = [];
+							var properties = [
+								"LocatingError",
+								"ArmCalcReturnMessage",
+								"ArmCalcEndReturnMessage"
+							];
+							properties.forEach(function (name) {
+								if (elcResult[name]) {
+									output.push([name, elcResult[name]].join(": "));
+								}
+							});
+							output = output.join("\n");
+							alert(output);
+						});
+
+						elcUI.on("elc-results-found", function (e) {
+							var point;
+							if (e && e.graphics && e.graphics.length > 0) {
+								point = e.graphics[0].geometry;
+								if (point.getPoint) {
+									point = point.getPoint(0, 0);
+								}
+								map.infoWindow.show(point);
+								map.centerAt(point);
+								map.infoWindow.setFeatures(e.graphics);
+							}
+						});
+
+
 					});
 				}
 
