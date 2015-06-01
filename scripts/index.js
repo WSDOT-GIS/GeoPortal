@@ -1279,12 +1279,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				}
 
 				function getLayersFromParams() {
-					var layers;
+					var layers, qs;
+					qs = queryStringHelper.queryStringToObject();
 
-					var match = location.search.match(/\blayers=[^&]+/i);
-
-					if (match) {
-						layers = match[0].split(",");
+					if (qs.layers) {
+						layers = qs.layers;
 					}
 
 					return layers;

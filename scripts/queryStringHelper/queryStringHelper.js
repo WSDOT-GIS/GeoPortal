@@ -32,6 +32,17 @@ define(function () {
 	}
 
 	/**
+	 * Parses a string into a list of layers.
+	 */
+	function getLayers(s) {
+		var output;
+		if (s) {
+			output = s.split(",");
+		}
+		return output;
+	}
+
+	/**
 	 * Parses a key/value pair from a query string into an object.
 	 * @param {string} kvp
 	 */
@@ -83,6 +94,8 @@ define(function () {
 
 				if (kvp.key === "extent") {
 					o.extent = getExtentValues(kvp.value);
+				} else if (kvp.key === "layers") {
+					o.layers = getLayers(kvp.value);
 				} else {
 					o[kvp.key] = kvp.value;
 				}
