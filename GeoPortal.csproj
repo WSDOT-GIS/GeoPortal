@@ -49,6 +49,15 @@
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisDrawUI.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisHelper.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\icons.png" />
+    <Content Include="bower_components\elc\elc-ui\ArcGisElcUI.js" />
+    <Content Include="bower_components\elc\elc-ui\elc-ui-behavior.css" />
+    <Content Include="bower_components\elc\elc-ui\elc-ui.css" />
+    <Content Include="bower_components\elc\elc-ui\ElcUI.js" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui-bootstrap.html" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui-bootstrap.min.html" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui.html" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui.min.html" />
+    <Content Include="bower_components\elc\elc.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
     <Content Include="config\Freight.json" />
@@ -134,12 +143,6 @@
     <Content Include="scripts\arcgis-js-buffer\units.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
-    <Content Include="scripts\elc\elc-ui\arcgis-elc-ui.js" />
-    <Content Include="scripts\elc\elc-ui\elc-ui.css" />
-    <Content Include="scripts\elc\elc-ui\main.js" />
-    <Content Include="scripts\elc\elc-ui\Templates\elc-ui.html" />
-    <Content Include="scripts\elc\elc-ui\Templates\elc-ui.min.html" />
-    <Content Include="scripts\elc\main.js" />
     <Content Include="scripts\extensions\esriApiExtensions.js" />
     <Content Include="scripts\extensions\extent.js" />
     <Content Include="scripts\extensions\graphicsLayer.js" />
@@ -151,8 +154,6 @@
     <Content Include="scripts\geolocate-button.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\info-window-helper\main.js" />
-    <Content Include="scripts\jquery.ba-bbq.js" />
-    <Content Include="scripts\jquery.ba-bbq.min.js" />
     <Content Include="scripts\jquery.cookie.js" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +191,7 @@
     </Content>
     <Content Include="scripts\polyfills\promise-6.1.0.js" />
     <Content Include="scripts\printer.js" />
+    <Content Include="scripts\queryStringHelper\queryStringHelper.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
@@ -289,7 +291,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

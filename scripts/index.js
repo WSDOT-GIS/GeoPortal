@@ -5,7 +5,6 @@ Prerequisites:
 ArcGIS JavaScript API
 jQuery
 jQuery UI
-jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 */
 
 /**
@@ -25,6 +24,8 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
+	"queryStringHelper",
+
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -97,6 +98,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js"
 ], function (require, ready, on, registry,
+
+	queryStringHelper,
+
 	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
 	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
 	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
@@ -209,20 +213,19 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		function getExtentLink() {
 			var layers, qsParams;
 			// Get the current query string parameters.
-			qsParams = $.deparam.querystring(true);
+			qsParams = queryStringHelper.queryStringToObject(location.search);
 			// Set the extent to the current extent.
 			qsParams.extent = map.extent.toCsv();
 
-			layers = $.map(map.getVisibleLayers(), function (layer) {
+			layers = map.getVisibleLayers().map(function (layer) {
 				return layer.id;
-				// return [layer.id, String(layer.opacity)].join(":");
 			});
 
 			if (layers) {
 				qsParams.layers = layers.join(",");
 			}
 
-			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+			return [window.location.protocol + "//" + window.location.host + window.location.pathname, queryStringHelper.objectToQueryString(qsParams)].join("?");
 		}
 
 		function init() {
@@ -811,7 +814,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					document.getElementById("toolsAccordion").appendChild(div);
 					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div));
 					on.once(registry.byId("lrsTools"), "show", function () {
-						require(["elc/elc-ui/arcgis-elc-ui"], function (ArcGisElcUI) {
+						require(["elc/elc-ui/ArcGisElcUI"], function (ArcGisElcUI) {
 							var elcUI = new ArcGisElcUI(div);
 							elcUI.setMap(map);
 
@@ -1265,20 +1268,24 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					// Zoom to the extent in the query string (if provided).
 					// Test example:
 					// extent=-13677603.622831678,5956814.051290565,-13576171.686297385,6004663.630997022
-					var qsParams = $.deparam.querystring(true), coords, extent;
-					if (qsParams.extent) {
-						// Split the extent into its four coordinates.  Create the extent object and set the map's extent.
-						coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val); });
+
+					var qs, coords, extent;
+					qs = queryStringHelper.queryStringToObject();
+					coords = qs.extent;
+					if (coords) {
 						extent = new Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
 						map.setExtent(extent);
 					}
 				}
 
 				function getLayersFromParams() {
-					var qsParams = $.deparam.querystring(true), layers;
-					if (typeof (qsParams.layers) === "string") {
-						layers = qsParams.layers.split(",");
+					var layers, qs;
+					qs = queryStringHelper.queryStringToObject();
+
+					if (qs.layers) {
+						layers = qs.layers;
 					}
+
 					return layers;
 				}
 
