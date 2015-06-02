@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1",
-    "elc": "https://github.com/WSDOT-GIS/elc-js.git#~0.0.0"
+    "elc": "https://github.com/WSDOT-GIS/elc-js.git#~0.0.0",
+    "blueimp-gallery": "~2.15.2"
   }
 }
