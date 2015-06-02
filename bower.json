@@ -22,5 +22,8 @@
     "test",
     "tests"
   ],
-  "private": true
+  "private": true,
+  "dependencies": {
+    "blueimp-gallery": "~2.15.2"
+  }
 }
