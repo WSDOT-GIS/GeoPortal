@@ -26,6 +26,8 @@ var wsdot;
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"queryStringHelper",
 
+	"esri/Color",
+
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -98,15 +100,60 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"extensions/map",
 	"scripts/layerList.js",
 	"scripts/zoomToXY.js", "scripts/extentSelect.js", "scripts/layerSorter.js"
-], function (require, ready, on, registry,
+], function (
+	require,
+	ready,
+	on,
+	registry,
 
 	queryStringHelper,
 
-	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
-	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
-	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, BufferUI, BufferUIHelper, createExtentSelect, createGeolocateButton,
-	DrawUIHelper, ArcGisElcUI, infoWindowHelper, Search, domUtils, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, TextSymbol
+	Color,
+	esriConfig,
+	Map,
+	jsonUtils,
+	Point,
+	Extent,
+	GeometryService,
+	Legend,
+	ArcGISTiledMapServiceLayer,
+	Navigation,
+	GraphicsLayer,
+	HomeButton,
+	Button,
+	BorderContainer,
+	ContentPane,
+	TabContainer,
+	AccordionContainer,
+	ExpandoPane,
+	Scalebar,
+	Graphic,
+	webMercatorUtils,
+	InfoTemplate,
+	QueryTask,
+	Query,
+	BasemapGallery,
+	BasemapLayer,
+	SpatialReference,
+	Measurement,
+	esriRequest,
+	LabelLayer,
+	SimpleRenderer,
+
+	BufferUI,
+	BufferUIHelper,
+	createExtentSelect,
+	createGeolocateButton,
+	DrawUIHelper,
+	ArcGisElcUI,
+	infoWindowHelper,
+
+	Search,
+	domUtils,
+	SimpleMarkerSymbol,
+	SimpleLineSymbol,
+	SimpleFillSymbol,
+	TextSymbol
 ) {
 	"use strict";
 
@@ -1391,11 +1438,12 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					var pointSymbol = new SimpleMarkerSymbol();
 					var fillSymbol = new SimpleFillSymbol();
 					var textSymbol = new TextSymbol("Default Label");
+					var lineColor = new Color("red");
 
-					lineSymbol.setColor("red");
+					lineSymbol.setColor(lineColor).setWidth(2);
 					pointSymbol.setOutline(lineSymbol);
 					fillSymbol.setOutline(lineSymbol);
-					textSymbol.setColor("red");
+					textSymbol.setColor(lineColor);
 
 					var symbolOptions = new DrawUIHelper.SymbolOptions(pointSymbol, lineSymbol, fillSymbol, textSymbol);
 
