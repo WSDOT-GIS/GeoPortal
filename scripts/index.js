@@ -99,6 +99,50 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
 	wsdot = { config: {} };
 
+	// Setup other geoportals links
+	(function (form) {
+		var select = form.querySelector("select[name=config]");
+
+		/**
+		 * When a config query string parameter has been specified,
+		 * set the default selected option to match.
+		 */
+		function syncSelectedWithQSSetting() {
+			var currentConfig = location.search.match("config=([^=&]+)");
+			var selectedOption;
+			if (currentConfig) {
+				currentConfig = currentConfig[1];
+				selectedOption = select.querySelector("option[selected]");
+				if (selectedOption) {
+					selectedOption.removeAttribute("selected");
+				}
+				selectedOption = select.querySelector("option[value='" + currentConfig + "']");
+				if (selectedOption) {
+					selectedOption.setAttribute("selected", "selected");
+				}
+			}
+		}
+
+		syncSelectedWithQSSetting();
+
+
+		// If wwwi cannot be reached, remove internal options.
+		var request = new XMLHttpRequest();
+		request.open("head", "proxy.ashx?http://wwwi.wsdot.wa.gov");
+		request.onloadend = function (e) {
+			var internalGroup;
+			if (e.target.status !== 200) {
+				internalGroup = select.querySelector("optgroup[label='internal']");
+				select.removeChild(internalGroup);
+			}
+		}
+		request.send();
+
+		select.addEventListener("change", function () {
+			form.submit();
+		});
+	}(document.getElementById("otherGeoportalsForm")));
+
 	/**
 	 * Shows the disclaimer dialog if the configuration contains a disclaimer.  If the dialog is shown, a jQuery object containing the dialog is returned.
 	 * @param {Boolean} showEvenIfAlreadyAgreed - Set this to true if you want to force the disclaimer to be shown even if there is a cookie indicating the user has already agreed.
