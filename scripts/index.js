@@ -126,16 +126,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		syncSelectedWithQSSetting();
 
 
-		// If wwwi cannot be reached, remove internal options.
+		// If config/internal-airport.json cannot be reached, remove internal options.
 		var request = new XMLHttpRequest();
-		request.open("head", "proxy.ashx?http://wwwi.wsdot.wa.gov");
+		request.open("head", "config/internal-airport.json");
 		request.onloadend = function (e) {
 			var internalGroup;
 			if (e.target.status !== 200) {
 				internalGroup = select.querySelector("optgroup[label='internal']");
 				select.removeChild(internalGroup);
 			}
-		}
+		};
 		request.send();
 
 		select.addEventListener("change", function () {
