@@ -368,7 +368,7 @@ require([
 					extent = g.getExtent();
 				}
 
-				if (extent.contains(geometry)) {
+				if (extent && extent.contains(geometry)) {
 					graphicsLayersGrahpics.push(graphic);
 				}
 			}

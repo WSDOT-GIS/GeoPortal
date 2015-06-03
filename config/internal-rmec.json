@@ -98,11 +98,15 @@
 				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
 				"options": {
 					"id": "Environmental Mapping",
-					"visible": true,
-					"imageParameters": {
-						"layerIds": [3],
-						"layerOption": "show"
-					}
+					"visible": false
+				}
+			},
+			{
+				"layerType": "esri.layers.FeatureLayer",
+				"url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/ArcGIS/rest/services/Municipal_Stormwater_Permit_Areas/FeatureServer/0",
+				"options": {
+					"id": "Municipal Stormwater Permit Areas",
+					"outFields": ["OBJECTID", "PERMIT", "JURISDICTION", "CITY_NAME", "UGA_NAME", "INCORPORATED", "COUNTY_NAME", "UA_NAME", "UA_TYPE", "SYMBOLOGY"]
 				}
 			}
 		],
@@ -135,6 +139,13 @@
 				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
 				"options": {
 					"id": "Tribal Lands"
+				}
+			},
+			{
+				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+				"url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
+				"options": {
+					"id": "Major Public Lands"
 				}
 			}
 		],
