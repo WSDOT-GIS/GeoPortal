@@ -48,6 +48,10 @@ div.table {
     font-family: 'Segoe Condensed', 'Arial Narrow';
 }
 
+.topNav > div > ul > li > form {
+    display: inline-block;
+}
+
 #headerPane {
     padding: 0;
 }

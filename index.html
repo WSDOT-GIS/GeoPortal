@@ -56,7 +56,7 @@
 </head>
 <body class="claro">
     <noscript>
-        You need to have JavaScript enabled on your browser to view this page.
+    You need to have JavaScript enabled on your browser to view this page.
     </noscript>
     <div id="mainContainer" style="display: none">
         <header id="headerPane">
@@ -71,6 +71,23 @@
                             <li><a href="http://www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a></li>
                             <li><a href="http://www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a></li>
                             <li><a href="http://www.wsdot.wa.gov/" target="_blank">WSDOT Home</a></li>
+                            <li>
+                                <form id="otherGeoportalsForm" action="">
+                                    <label>Other GeoPortals</label>
+                                    <select name="config">
+                                        <option value="" selected="selected">Default</option>
+                                        <option value="airport">Airport</option>
+                                        <option value="fish-passage-barriers">Fish Passage Barriers</option>
+                                        <option value="Freight">Freight</option>
+                                        <option value="FunctionalClass">Functional Class</option>
+                                        <!--<option value="TrafficPlanningTrends">Traffic Planning Trends</option>-->
+                                        <optgroup label="internal">
+                                            <option value="internal-airport">Airport</option>
+                                            <option value="internal-Freight">Freight</option>
+                                        </optgroup>
+                                    </select>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -78,6 +95,7 @@
                     <!-- row -->
                     <span><img id="wsdotLogo" src="http://www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT Logo" width="240" height="39" /></span>
                     <span class="page-title"><abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
+
                 </div>
             </div>
         </header>
