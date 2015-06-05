@@ -27,8 +27,20 @@
     <link href="style/addressLocator.css" rel="stylesheet" />
     <link href="style/functionalClass.css" rel="stylesheet" />
     <link href="style/layerSorter.css" rel="stylesheet" />
-    <script src="scripts/polyfills.min.js"></script>
-    <script src="scripts/modernizr.js"></script>
+    <script src="bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
+    <script>
+        // Setup Promise polyfill if required.
+        (function (jsFiles) {
+            if (!window.Promise) {
+                jsFiles.forEach(function (path) {
+                    path = "bower_components/" + path;
+                    var scr = document.createElement("script");
+                    scr.src = path;
+                    document.head.appendChild(scr);
+                });
+            }
+        }(["setImmideiate/setimmediate.js", "promises/promise.js"]));
+    </script>
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -190,7 +202,6 @@
     <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/jquery-ui.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/additional-methods.min.js"></script>
-    <script src="scripts/dmsConversion.js"></script>
     <script src="scripts/jquery.cookie.js"></script>
     <script src="scripts/jquery.ba-bbq.min.js"></script>
     <script src="scripts/index.js"></script>
