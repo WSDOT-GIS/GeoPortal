@@ -24,6 +24,7 @@
   ],
   "private": true,
   "dependencies": {
-    "blueimp-gallery": "~2.15.2"
+    "blueimp-gallery": "~2.15.2",
+    "agolUtils": "https://github.com/WSDOT-GIS/agolUtils.git"
   }
 }

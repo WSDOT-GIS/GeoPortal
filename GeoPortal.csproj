@@ -45,6 +45,10 @@
     <None Include="AIS\config.json" />
     <Content Include="AIS\ReadMe.txt" />
     <Content Include="AIS\web.config" />
+    <Content Include="bower_components\agolUtils\agolUtils.js" />
+    <Content Include="bower_components\agolUtils\AttachmentInfoCollection.js" />
+    <Content Include="bower_components\agolUtils\gallery.html" />
+    <Content Include="bower_components\agolUtils\gallery.js" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.css" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.min.css" />
     <Content Include="bower_components\blueimp-gallery\img\error.png" />
