@@ -494,6 +494,11 @@ require([
 					return table;
 				}
 
+				/**
+				 * Creates InfoWindow content.
+				 * @param {external:Graphic}
+				 * @returns {(string|function)}
+				 */
 				function loadContent(feature) {
 					var div, layer, result, url, oid;
 					div = null; //feature.content || null;
