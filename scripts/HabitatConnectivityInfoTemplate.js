@@ -28,6 +28,7 @@ define([
 		caption.textContent = attr[displayFieldName];
 
 		table.appendChild(caption);
+		table.classList.add("habitat-connectivity");
 
 		var featureUrl = [graphic.layer.url, graphic.result.layerId, attr.OBJECTID].join("/");
 		var link = createGalleryLink(featureUrl);
@@ -35,8 +36,9 @@ define([
 
 		var value, name, row, cell;
 
-		row = table.insertRow(-1);
-		cell = document.createElement("td");
+		row = document.createElement("tr");
+		table.appendChild(row);
+		cell = document.createElement("th");
 		cell.colSpan = "2";
 
 		cell.appendChild(link);
@@ -65,10 +67,7 @@ define([
 	}
 
 	function createContent(graphic) {
-
-		console.log(graphic);
 		var table = createTable(graphic);
-
 		return table;
 	}
 
