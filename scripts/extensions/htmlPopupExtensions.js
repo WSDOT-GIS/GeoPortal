@@ -15,9 +15,11 @@ require([
 	"esri/tasks/IdentifyTask",
 	"esri/tasks/IdentifyParameters",
 	"esri/geometry/jsonUtils",
-	"esri/geometry/Circle"
+	"esri/geometry/Circle",
+	"HabitatConnectivityInfoTemplate"
 ], function (all, Deferred, lang, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
-	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, Circle
+	ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, Circle,
+	HabitatConnectivityInfoTemplate
 ) {
 	"use strict";
 
@@ -496,12 +498,12 @@ require([
 
 				/**
 				 * Creates InfoWindow content.
-				 * @param {external:Graphic}
-				 * @returns {(string|function)}
+				 * @param {external:Graphic} feature
+				 * @returns {(HTMLElement|string|function)}
 				 */
 				function loadContent(feature) {
 					var div, layer, result, url, oid;
-					div = null; //feature.content || null;
+					div = null;
 					// Load the HTML popup content if it has not already been loaded.
 					if (div === null) {
 						layer = feature.layer;
@@ -585,7 +587,7 @@ require([
 						} else {
 							div.appendChild(createDefaultTable(feature, result));
 						}
-						feature.content = div;
+						//feature.content = div;
 					}
 
 					return div;
@@ -618,7 +620,11 @@ require([
 						var feature = result.feature;
 						feature.layer = map.getLayer(layerId);
 						feature.result = result;
-						feature.setInfoTemplate(infoTemplate);
+						if (layerId === "Habitat Connectivity") {
+							feature.setInfoTemplate(HabitatConnectivityInfoTemplate);
+						} else {
+							feature.setInfoTemplate(infoTemplate);
+						}
 						features.push(feature);
 					}
 
