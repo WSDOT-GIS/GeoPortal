@@ -79,7 +79,8 @@
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
                 "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/HabitatConnectivity/MapServer",
                 "options": {
-                    "id": "Habitat Connectivity"
+                    "id": "Habitat Connectivity",
+                    "visible": true
                 },
                 "layers": [
                     {
