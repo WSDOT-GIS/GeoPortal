@@ -589,7 +589,7 @@ require([
 				map.infoWindow.clearFeatures();
 
 				map.identify(event.mapPoint, {
-					tolerance: 20
+					tolerance: 5
 				}).then(function (idResults) {
 					//console.debug(idResults);
 					var results, features = [];
