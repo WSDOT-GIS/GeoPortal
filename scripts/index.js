@@ -335,6 +335,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 			// Specify list of CORS enabled servers.
 			(function (servers) {
+				if (wsdot.config.corsEnabledServers) {
+					servers = servers.concat(wsdot.config.corsEnabledServers);
+				}
 				for (var i = 0; i < servers.length; i++) {
 					esriConfig.defaults.io.corsEnabledServers.push(servers[i]);
 				}
