@@ -5,7 +5,7 @@
     "enableIdentify": true,
     "disclaimer": "disclaimers/internal-rmec/Internal.html",
     "additionalStylesheets": [ "style/rmec.css" ],
-    "corsEnabledServers": ["hqolymgis17p:6080", "hqolymgis21t"],
+    "corsEnabledServers": [ "hqolymgis17p:6080", "hqolymgis21t" ],
     "alwaysShowDisclaimer": true,
     "mapOptions": {
         "logo": false,
@@ -96,9 +96,73 @@
         "Environmental": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/StormwaterFeatures/MapServer",
                 "options": {
-                    "id": "Environmental Mapping",
+                    "id": "Stormwater Features",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/CulturalResources/MapServer",
+                "options": {
+                    "id": "Cultural Resources",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalHealth/MapServer",
+                "options": {
+                    "id": "Environmental Health",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/FishAndWildlife/MapServer",
+                "options": {
+                    "id": "Fish and Wildlife",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/RiversAndWaterbodies/MapServer",
+                "options": {
+                    "id": "Rivers & Waterbodies",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/WaterQuality/MapServer",
+                "options": {
+                    "id": "Water Quality",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/Wetlands/MapServer",
+                "options": {
+                    "id": "Wetlands",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/FEMAFloodInformation/MapServer",
+                "options": {
+                    "id": "FEMA Flood Information",
+                    "visible": false
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TransportationFeatures/MapServer",
+                "options": {
+                    "id": "Transportation Features",
                     "visible": false
                 }
             },
@@ -107,7 +171,7 @@
                 "url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/ArcGIS/rest/services/Municipal_Stormwater_Permit_Areas/FeatureServer/0",
                 "options": {
                     "id": "Municipal Stormwater Permit Areas",
-                    "outFields": ["OBJECTID", "PERMIT", "JURISDICTION", "CITY_NAME", "UGA_NAME", "INCORPORATED", "COUNTY_NAME", "UA_NAME", "UA_TYPE", "SYMBOLOGY"]
+                    "outFields": [ "OBJECTID", "PERMIT", "JURISDICTION", "CITY_NAME", "UGA_NAME", "INCORPORATED", "COUNTY_NAME", "UA_NAME", "UA_TYPE", "SYMBOLOGY" ]
                 }
             }
         ],
