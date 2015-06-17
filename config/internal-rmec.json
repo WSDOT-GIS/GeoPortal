@@ -1,11 +1,11 @@
 ﻿{
     "pageTitle": "Maintenance Environmental Mapping",
     "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
-    "printUrl": "http://hqolymgis98d/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export Web Map",
+    "printUrl": "http://hqolymgis17p:6080/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export Web Map",
     "enableIdentify": true,
     "disclaimer": "disclaimers/internal-rmec/Internal.html",
     "additionalStylesheets": [ "style/rmec.css" ],
-    "corsEnabledServers": ["hqolymgis21t"],
+    "corsEnabledServers": ["hqolymgis17p:6080", "hqolymgis21t"],
     "alwaysShowDisclaimer": true,
     "mapOptions": {
         "logo": false,
@@ -96,73 +96,9 @@
         "Environmental": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_1_StormwaterFeatures/MapServer",
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
                 "options": {
-                    "id": "Stormwater Features",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_2_CulturalResources/MapServer",
-                "options": {
-                    "id": "Cultural Resources",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_3_EnvironmentalHealth/MapServer",
-                "options": {
-                    "id": "Environmental Health",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_4_FishAndWildlife/MapServer",
-                "options": {
-                    "id": "Fish and Wildlife",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_5_RiversAndWaterbodies/MapServer",
-                "options": {
-                    "id": "Rivers & Waterbodies",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_6_WaterQuality/MapServer",
-                "options": {
-                    "id": "Water Quality",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_7_Wetlands/MapServer",
-                "options": {
-                    "id": "Wetlands",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_8_FEMAFloodInformation/MapServer",
-                "options": {
-                    "id": "FEMA Flood Information",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TEST_9_TransportationFeatures/MapServer",
-                "options": {
-                    "id": "Transportation Features",
+                    "id": "Environmental Mapping",
                     "visible": false
                 }
             },
