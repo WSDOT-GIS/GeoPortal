@@ -96,74 +96,9 @@
         "Environmental": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/StormwaterFeatures/MapServer",
-                "options": {
-                    "id": "Stormwater Features",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/CulturalResources/MapServer",
-                "options": {
-                    "id": "Cultural Resources",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalHealth/MapServer",
-                "options": {
-                    "id": "Environmental Health",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/FishAndWildlife/MapServer",
-                "options": {
-                    "id": "Fish and Wildlife",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/RiversAndWaterbodies/MapServer",
-                "options": {
-                    "id": "Rivers & Waterbodies",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/WaterQuality/MapServer",
-                "options": {
-                    "id": "Water Quality",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/Wetlands/MapServer",
-                "options": {
-                    "id": "Wetlands",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/FEMAFloodInformation/MapServer",
-                "options": {
-                    "id": "FEMA Flood Information",
-                    "visible": false
-                }
-            },
-            {
-                "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/TransportationFeatures/MapServer",
-                "options": {
-                    "id": "Transportation Features",
-                    "visible": false
+                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
+                "options": { 
+                    "id": "Environmental Mapping"
                 }
             },
             {
