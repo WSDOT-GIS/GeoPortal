@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 define([
 	"esri/InfoTemplate"
 ], function (InfoTemplate) {
@@ -12,11 +12,38 @@ define([
 
 	function createGalleryLink(featureUrl) {
 		var a = document.createElement("a");
-		a.href = [galleryUrl, featureUrl].join("#");
+		var qs = [
+			["url", encodeURIComponent(featureUrl)].join("="),
+			["fields", encodeURIComponent(attributeOrder.join(","))].join("=")
+		].join("&");
+		a.href = [galleryUrl, qs].join("?");
 		a.textContent = "Attached Images";
 		a.target = "_blank";
 		return a;
 	}
+
+	var attributeOrder = [
+		"Structure ID",
+		"Location Name",
+		"Fence ID",
+		"Feature Name",
+		"State Route ID",
+		"Milepost",
+		"Beginning Milepost",
+		"Ending Milepost",
+		"State Route Direction",
+		"Fence Height",
+		"Fence Material",
+		"Post Material",
+		"Structure Type",
+		"Structure Subtype",
+		"Structure Design Function",
+		"I-4 Program",
+		"Permeability Ranked",
+		"Bridge Structure ID",
+		"Bridge Number"
+	];
+
 
 	function createTable(graphic) {
 		var displayFieldName = graphic.result.displayFieldName;
@@ -46,8 +73,9 @@ define([
 
 
 		row.appendChild(cell);
-
-		for (name in attr) {
+		
+		for (var i = 0, l = attributeOrder.length; i < l; i++) {
+			name = attributeOrder[i];
 			if (attr.hasOwnProperty(name) && !ignoreRe.test(name) && name !== displayFieldName) {
 				value = attr[name];
 				row = table.insertRow(-1);
