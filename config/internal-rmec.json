@@ -157,7 +157,7 @@
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
+                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
                 "options": {
                     "id": "Major Public Lands"
                 }
