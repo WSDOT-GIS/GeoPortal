@@ -1,12 +1,8 @@
 /*global define*/
 define([
+	"esri/request",
 	"esri/InfoTemplate"
-], function (InfoTemplate) {
-
-	// TODO: Don't show link until confirming that there are actually attachments.
-	// Because some features may not have any associated graphics, use esriRequest to get attribute information.
-	// If the response shows that there are attachments, replace the (currently not present) progress element
-	// with the link.
+], function (esriRequest, InfoTemplate) {
 
 	var galleryUrl = "http://wsdot-gis.github.io/arcgis-server-attachment-gallery/";
 
@@ -20,6 +16,16 @@ define([
 		a.textContent = "Attached Images";
 		a.target = "_blank";
 		return a;
+	}
+
+	function getAttributeData(featureUrl) {
+		var attributesUrl = [featureUrl, "attachments"].join("/");
+		return esriRequest({
+			url: attributesUrl,
+			content: {
+				f: "json"
+			}
+		});
 	}
 
 	var attributeOrder = [
@@ -58,19 +64,36 @@ define([
 		table.classList.add("habitat-connectivity");
 
 		var featureUrl = [graphic.layer.url, graphic.result.layerId, attr.OBJECTID].join("/");
-		var link = createGalleryLink(featureUrl);
 
 
-		var value, name, row, cell;
+
+		var value, name, row, cell, linkProgress;
 
 		row = document.createElement("tr");
 		table.appendChild(row);
 		cell = document.createElement("th");
 		cell.colSpan = "2";
 
-		cell.appendChild(link);
+		var linkCell = cell;
+		linkProgress = document.createElement("progress");
+		linkProgress.textContent = "Loading attachment data...";
+		linkCell.appendChild(linkProgress);
 
-
+		// Query the attributes endpoint to see if the feature has attachments.
+		getAttributeData(featureUrl).then(function (response) {
+			linkCell.removeChild(linkProgress);
+			var link;
+			if (response && response.attachmentInfos && response.attachmentInfos.length) {
+				link = createGalleryLink(featureUrl);
+				link.classList.add("gallery-link");
+				linkCell.appendChild(link);
+			} else {
+				linkCell.textContent = "No attachments detected";
+			}
+		}, function (attributesError) {
+			linkCell.removeChild(linkProgress);
+			console.error("attributes error", attributesError);
+		});
 
 		row.appendChild(cell);
 		
