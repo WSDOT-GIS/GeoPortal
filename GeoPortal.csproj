@@ -54,8 +54,8 @@
     <Content Include="bower_components\blueimp-gallery\img\play-pause.svg" />
     <Content Include="bower_components\blueimp-gallery\img\video-play.png" />
     <Content Include="bower_components\blueimp-gallery\img\video-play.svg" />
-    <Content Include="bower_components\blueimp-gallery\js\jquery.blueimp-gallery.js" />
-    <Content Include="bower_components\blueimp-gallery\js\jquery.blueimp-gallery.min.js" />
+    <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.js" />
+    <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.min.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
     <Content Include="config\Freight.json" />
@@ -123,6 +123,7 @@
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
     <Content Include="scripts\geolocate-button.js" />
+    <Content Include="scripts\HabitatConnectivityInfoTemplate.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\jquery.ba-bbq.js" />
     <Content Include="scripts\jquery.ba-bbq.min.js" />
