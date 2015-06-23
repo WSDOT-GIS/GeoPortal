@@ -96,8 +96,8 @@
         "Environmental": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
-                "options": { 
+                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
+                "options": {
                     "id": "Environmental Mapping"
                 }
             },
@@ -107,6 +107,20 @@
                 "options": {
                     "id": "Municipal Stormwater Permit Areas",
                     "outFields": [ "OBJECTID", "PERMIT", "JURISDICTION", "CITY_NAME", "UGA_NAME", "INCORPORATED", "COUNTY_NAME", "UA_NAME", "UA_TYPE", "SYMBOLOGY" ]
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+                "url": "https://fortress.wa.gov/ecy/ecyprodgislb/arcgis/rest/services/NHD/NHD_Hydro_Cache/MapServer",
+                "options": {
+                    "id": "National Hydrology Dataset (NHD)"
+                }
+            },
+            {
+                "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+                "url": "https://fortress.wa.gov/ecy/ecyprodgislb/arcgis/rest/services/NHD/NHD_Label_Cache/MapServer",
+                "options": {
+                    "id": "National Hydrology Dataset (NHD) Labels"
                 }
             }
         ],
@@ -143,7 +157,7 @@
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
+                "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
                 "options": {
                     "id": "Major Public Lands"
                 }
