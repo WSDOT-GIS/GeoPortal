@@ -74,7 +74,7 @@
         "Environmental": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Environmental/HabitatConnectivity/MapServer",
+                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/HabitatConnectivity/MapServer",
                 "options": {
                     "id": "Habitat Connectivity",
                     "visible": true
