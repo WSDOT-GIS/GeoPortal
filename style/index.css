@@ -525,3 +525,15 @@ table.habitat-connectivity {
 table.habitat-connectivity tr:nth-child(even)  {
     background-color: #ccc;
 }
+
+.attachment-link-list {
+    list-style: none;
+    text-align: left;
+    padding: 0;
+    padding-left: 0.3em;
+}
+
+.attachment-link-list .image-link-item {
+    display:none;
+}
+

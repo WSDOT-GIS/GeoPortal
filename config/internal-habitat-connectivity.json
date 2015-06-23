@@ -1,17 +1,14 @@
 ﻿{
     "pageTitle": "Habitat Connectivity Support Structures",
+    "helpUrl": "http://wwwi.wsdot.wa.gov/NR/rdonlyres/38F7285F-0A7C-4609-8851-D6FF419BD2FA/0/HabitatConnectivityStructureWebAppHelpDocument.pdf",
     "enableIdentify": true,
     "disclaimer": "disclaimers/habitat-connectivity/Internal.html",
     "alwaysShowDisclaimer": false,
     "printUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
     "noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
-    "alternateTabTitles": {
-        "Tools": "Search"
-    },
     "tools": [
-        "zoom",
-        "search",
-        "lrs"
+        "lrs",
+        "zoom"
     ],
     "mapOptions": {
         "logo": true,

@@ -1,8 +1,9 @@
 /*global define*/
 define([
+	"dojo/Deferred",
 	"esri/request",
 	"esri/InfoTemplate"
-], function (esriRequest, InfoTemplate) {
+], function (Deferred, esriRequest, InfoTemplate) {
 
 	var galleryUrl = "http://wsdot-gis.github.io/arcgis-server-attachment-gallery/";
 
@@ -13,19 +14,61 @@ define([
 			["fields", encodeURIComponent(attributeOrder.join(","))].join("=")
 		].join("&");
 		a.href = [galleryUrl, qs].join("?");
-		a.textContent = "Attached Images";
+		a.textContent = "View attached images in carousel";
 		a.target = "_blank";
 		return a;
 	}
 
 	function getAttributeData(featureUrl) {
+		var deferred = new Deferred();
 		var attributesUrl = [featureUrl, "attachments"].join("/");
-		return esriRequest({
+		esriRequest({
 			url: attributesUrl,
 			content: {
 				f: "json"
 			}
+		}).then(function (response) {
+			if (response) {
+				response.attachmentsUrl = attributesUrl;
+				if (response.attachmentInfos) {
+					deferred.resolve(response);
+				} else if (response.error) {
+					deferred.reject(response.error);
+				}
+			} else {
+				deferred.reject(response);
+			}
+		}, function (error) {
+			deferred.reject(error);
 		});
+		return deferred;
+	}
+
+	function createImageLinkList(getAttributeDataResponse) {
+		var attachmentsUrl = getAttributeDataResponse.attachmentsUrl;
+		var attachmentInfos = getAttributeDataResponse.attachmentInfos;
+		var attInfo, ul, li, a;
+		ul = document.createElement("ul");
+		var imageTypeRe = /^image\//i;
+		ul.classList.add("attachment-link-list");
+		for (var i = 0, l = attachmentInfos.length; i < l; i += 1) {
+			attInfo = attachmentInfos[i];
+			li = document.createElement("li");
+			a = document.createElement("a");
+			a.href = [attachmentsUrl, attInfo.id].join("/");
+			a.target = "_blank";
+			a.textContent = attInfo.name;
+			a.dataset.size = attInfo.size;
+			a.dataset.contentType = attInfo.contentType;
+
+			if (imageTypeRe.test(attInfo.contentType)) {
+				li.classList.add("image-link-item");
+			}
+
+			li.appendChild(a);
+			ul.appendChild(li);
+		}
+		return ul;
 	}
 
 	var attributeOrder = [
@@ -82,11 +125,14 @@ define([
 		// Query the attributes endpoint to see if the feature has attachments.
 		getAttributeData(featureUrl).then(function (response) {
 			linkCell.removeChild(linkProgress);
-			var link;
-			if (response && response.attachmentInfos && response.attachmentInfos.length) {
+			var link, list;
+			if (response.attachmentInfos && response.attachmentInfos.length > 0) {
 				link = createGalleryLink(featureUrl);
 				link.classList.add("gallery-link");
 				linkCell.appendChild(link);
+
+				list = createImageLinkList(response);
+				linkCell.appendChild(list);
 			} else {
 				linkCell.textContent = "No attachments detected";
 			}
