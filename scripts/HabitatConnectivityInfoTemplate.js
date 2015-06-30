@@ -58,8 +58,10 @@ define([
 			a.href = [attachmentsUrl, attInfo.id].join("/");
 			a.target = "_blank";
 			a.textContent = attInfo.name;
-			a.dataset.size = attInfo.size;
-			a.dataset.contentType = attInfo.contentType;
+			if (a.dataset) {
+				a.dataset.size = attInfo.size;
+				a.dataset.contentType = attInfo.contentType;
+			}
 
 			if (imageTypeRe.test(attInfo.contentType)) {
 				li.classList.add("image-link-item");
