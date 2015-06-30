@@ -18,7 +18,7 @@
     "tests"
   ],
   "dependencies": {
-    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~1.0.1",
+    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~1.0.2",
     "blueimp-gallery": "~2.15.2"
   },
   "private": true

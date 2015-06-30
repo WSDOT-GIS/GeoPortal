@@ -72,6 +72,7 @@
     <Content Include="bower_components\promises\promise.js" />
     <Content Include="bower_components\setImmediate\setimmediate-ie8.js" />
     <Content Include="bower_components\setImmediate\setimmediate.js" />
+    <Content Include="bower_components\usgs-ned\usgsNed.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
     <Content Include="config\Freight.json" />
