@@ -1,11 +1,10 @@
 ﻿{
     "pageTitle": "Maintenance Environmental Mapping",
     "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
-    "printUrl": "http://hqolymgis17p:6080/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export Web Map",
+    "printUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export%20Web%20Map",
     "enableIdentify": true,
     "disclaimer": "disclaimers/internal-rmec/Internal.html",
     "additionalStylesheets": [ "style/rmec.css" ],
-    "corsEnabledServers": [ "hqolymgis17p:6080", "hqolymgis21t" ],
     "alwaysShowDisclaimer": true,
     "mapOptions": {
         "logo": false,
