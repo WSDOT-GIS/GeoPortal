@@ -189,7 +189,7 @@
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://hqolymgis21t/ArcGIS/rest/services/Shared/WSDOTPublicRoads/MapServer",
+                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WSDOTPublicRoads/MapServer",
                 "options": {
                     "id": "Public Roads"
                 }
