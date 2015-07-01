@@ -1479,32 +1479,38 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						return btn;
 					}
 
-					var drawToolsNode = document.getElementById("drawUI");
+					var drawToolsNode, lineSymbol, pointSymbol, fillSymbol, textSymbol, lineColor, symbolOptions, drawHelper;
 
-					var lineSymbol = new SimpleLineSymbol();
-					var pointSymbol = new SimpleMarkerSymbol();
-					var fillSymbol = new SimpleFillSymbol();
-					var textSymbol = new TextSymbol("Default Label");
-					var lineColor = new Color("red");
+					drawToolsNode = document.getElementById("drawUI");
 
-					lineSymbol.setColor(lineColor).setWidth(2);
-					pointSymbol.setOutline(lineSymbol);
-					fillSymbol.setOutline(lineSymbol);
-					textSymbol.setColor(lineColor);
 
-					var symbolOptions = new DrawUIHelper.SymbolOptions(pointSymbol, lineSymbol, fillSymbol, textSymbol);
+					if (drawToolsNode) {
 
-					var drawHelper = new DrawUIHelper(map, drawToolsNode, symbolOptions, {
-						id: "Drawn Features",
-						infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
-					});
+						lineSymbol = new SimpleLineSymbol();
+						pointSymbol = new SimpleMarkerSymbol();
+						fillSymbol = new SimpleFillSymbol();
+						textSymbol = new TextSymbol("Default Label");
+						lineColor = new Color("red");
 
-					drawHelper.on("draw-activate", function () {
-						map.disablePopups();
-					});
-					drawHelper.on("draw-complete", function () {
-						map.enablePopups();
-					});
+						lineSymbol.setColor(lineColor).setWidth(2);
+						pointSymbol.setOutline(lineSymbol);
+						fillSymbol.setOutline(lineSymbol);
+						textSymbol.setColor(lineColor);
+
+						symbolOptions = new DrawUIHelper.SymbolOptions(pointSymbol, lineSymbol, fillSymbol, textSymbol);
+
+						drawHelper = new DrawUIHelper(map, drawToolsNode, symbolOptions, {
+							id: "Drawn Features",
+							infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
+						});
+
+						drawHelper.on("draw-activate", function () {
+							map.disablePopups();
+						});
+						drawHelper.on("draw-complete", function () {
+							map.enablePopups();
+						});
+					}
 				}());
 
 

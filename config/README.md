@@ -182,7 +182,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 		},
 		"urbanArea": {
 			"label": "Urban Area",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/24",
+			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true
