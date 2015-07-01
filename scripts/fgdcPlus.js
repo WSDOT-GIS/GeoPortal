@@ -7,12 +7,6 @@ Based on the JavaScript code embedded in the original (Public Domain)"FGDC Plus.
 Howie Sternberg. (http://arcscripts.esri.com/details.asp?dbid=14674)
 */
 
-/*
-This jQuery plugin is used to create a layer list control for an ArcGIS JavaScript API web application.
-Prerequisites:
-jQuery
-*/
-
 (function ($) {
     "use strict";
 

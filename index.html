@@ -27,7 +27,8 @@
     <link href="style/addressLocator.css" rel="stylesheet" />
     <link href="style/functionalClass.css" rel="stylesheet" />
     <link href="style/layerSorter.css" rel="stylesheet" />
-    <script src="scripts/modernizr.js"></script>
+    <link href="bower_components/elc/elc-ui/elc-ui.css" rel="stylesheet" />
+    <link href="bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -52,6 +53,7 @@
             }
         }(navigator.doNotTrack || navigator.msDoNotTrack || null));
     </script>
+    
 </head>
 <body class="claro">
     <noscript>
@@ -83,6 +85,7 @@
                                             <option value="internal-airport">Airport</option>
                                             <option value="internal-Freight">Freight</option>
                                             <option value="internal-habitat-connectivity">Habitat Connectivity</option>
+                                            <option value="internal-rmec">Maintenance Environmental Mapping</option>
                                         </optgroup>
                                     </select>
                                 </form>
@@ -93,7 +96,6 @@
                 <div><!-- row -->
                     <span><img id="wsdotLogo" src="http://www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT Logo" width="240" height="39" /></span>
                     <span class="page-title"><abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
-
                 </div>
             </div>
         </header>
@@ -173,6 +175,30 @@
                         name: "HabitatConnectivityInfoTemplate",
                         location: root + "/scripts",
                         main: "HabitatConnectivityInfoTemplate"
+                    },
+                    {
+                        name: "BufferUI",
+                        location: root + "/bower_components/arcgis-buffer-ui",
+                        main: "BufferUI"
+                    },
+                    {
+                        name: "elc",
+                        location: root + "/bower_components/elc",
+                        main: "elc"
+                    },
+                    {
+                        name: "ArcGisDrawUI",
+                        location: root + "/bower_components/arcgis-js-draw-ui",
+                        main: "ArcGisDrawUI"
+                    },
+                    {
+                        name: "info-window-helper",
+                        location: root + "/scripts/info-window-helper"
+                    },
+                    {
+                        name: "queryStringHelper",
+                        location: root + "/scripts/queryStringHelper",
+                        main: "queryStringHelper"
                     }
                 ]
             };
@@ -186,7 +212,7 @@
     <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/additional-methods.min.js"></script>
     <script src="scripts/dmsConversion.js"></script>
     <script src="scripts/jquery.cookie.js"></script>
-    <script src="scripts/jquery.ba-bbq.min.js"></script>
+    <script src="scripts/polyfills/polyfills.min.js"></script>
     <script src="scripts/index.js"></script>
 </body>
 </html>

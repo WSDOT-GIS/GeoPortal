@@ -45,6 +45,24 @@
     <None Include="AIS\config.json" />
     <Content Include="AIS\ReadMe.txt" />
     <Content Include="AIS\web.config" />
+    <Content Include="bower_components\arcgis-buffer-ui\BufferUI.js" />
+    <Content Include="bower_components\arcgis-buffer-ui\BufferUIHelper.js" />
+    <Content Include="bower_components\arcgis-buffer-ui\Templates\BufferUI.html" />
+    <Content Include="bower_components\arcgis-buffer-ui\Templates\BufferUI.min.html" />
+    <Content Include="bower_components\arcgis-buffer-ui\units.js" />
+    <Content Include="bower_components\arcgis-js-draw-ui\arcgis-draw-ui.css" />
+    <Content Include="bower_components\arcgis-js-draw-ui\ArcGisDrawUI.js" />
+    <Content Include="bower_components\arcgis-js-draw-ui\ArcGisHelper.js" />
+    <Content Include="bower_components\arcgis-js-draw-ui\icons.png" />
+    <Content Include="bower_components\elc\elc-ui\ArcGisElcUI.js" />
+    <Content Include="bower_components\elc\elc-ui\elc-ui-behavior.css" />
+    <Content Include="bower_components\elc\elc-ui\elc-ui.css" />
+    <Content Include="bower_components\elc\elc-ui\ElcUI.js" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui-bootstrap.html" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui-bootstrap.min.html" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui.html" />
+    <Content Include="bower_components\elc\elc-ui\Templates\elc-ui.min.html" />
+    <Content Include="bower_components\elc\elc.js" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.css" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.min.css" />
     <Content Include="bower_components\blueimp-gallery\img\error.png" />
@@ -56,6 +74,8 @@
     <Content Include="bower_components\blueimp-gallery\img\video-play.svg" />
     <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.js" />
     <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.min.js" />
+    <Content Include="bower_components\promises\promise.js" />
+    <Content Include="bower_components\setImmediate\setimmediate.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
     <Content Include="config\Freight.json" />
@@ -70,6 +90,7 @@
     <Content Include="disclaimers\Freight\Internal.html" />
     <Content Include="disclaimers\Freight\Public.html" />
     <Content Include="disclaimers\habitat-connectivity\Internal.html" />
+    <Content Include="disclaimers\internal-rmec\Internal.html" />
     <Content Include="error\GenericError.html" />
     <Content Include="fish-barrier-images\index.html" />
     <Content Include="fish-barrier-images\scripts\index.js" />
@@ -113,7 +134,6 @@
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
-    <Content Include="scripts\elc.js" />
     <Content Include="scripts\extensions\esriApiExtensions.js" />
     <Content Include="scripts\extensions\extent.js" />
     <Content Include="scripts\extensions\graphicsLayer.js" />
@@ -125,14 +145,12 @@
     <Content Include="scripts\geolocate-button.js" />
     <Content Include="scripts\HabitatConnectivityInfoTemplate.js" />
     <Content Include="scripts\index.js" />
-    <Content Include="scripts\jquery.ba-bbq.js" />
-    <Content Include="scripts\jquery.ba-bbq.min.js" />
+    <Content Include="scripts\info-window-helper\main.js" />
     <Content Include="scripts\jquery.cookie.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\layerSorter.js" />
-    <Content Include="scripts\lrsTools.js" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
     <Content Include="help\Freight\internal\FAQ.pdf" />
@@ -143,6 +161,7 @@
     <Content Include="help\Freight\public\Tutorial.pdf" />
     <Content Include="config\fish-passage-barriers.json" />
     <Content Include="config\internal-habitat-connectivity.json" />
+    <Content Include="config\internal-rmec.json" />
     <Content Include="bower.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
@@ -151,10 +170,21 @@
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="README.md" />
+    <Content Include="scripts\polyfills\polyfills.js">
+      <DependentUpon>polyfills.js.bundle</DependentUpon>
+    </Content>
+    <Content Include="scripts\polyfills\polyfills.js.bundle" />
+    <Content Include="scripts\polyfills\polyfills.min.js.map">
+      <DependentUpon>polyfills.min.js</DependentUpon>
+    </Content>
     <None Include="style\FGDC Plus.xsl" />
-    <Content Include="scripts\modernizr.js" />
+    <Content Include="scripts\polyfills\custom-event-polyfill.js" />
+    <Content Include="scripts\polyfills\polyfills.min.js">
+      <DependentUpon>polyfills.js</DependentUpon>
+    </Content>
+    <Content Include="scripts\polyfills\promise-6.1.0.js" />
     <Content Include="scripts\printer.js" />
-    <Content Include="scripts\toc.js" />
+    <Content Include="scripts\queryStringHelper\queryStringHelper.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
@@ -191,6 +221,7 @@
     <Content Include="style\layerListPlusMinus.css" />
     <Content Include="style\layerSorter.css" />
     <Content Include="style\locationInfo.css" />
+    <Content Include="style\rmec.css" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -253,7 +284,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

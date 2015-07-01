@@ -11,7 +11,8 @@
   "keywords": [
     "GIS",
     "map",
-    "WSDOT"
+    "WSDOT",
+    "GeoPortal"
   ],
   "license": "Unlicense",
   "homepage": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_ext.htm",
@@ -24,6 +25,9 @@
   ],
   "private": true,
   "dependencies": {
-    "blueimp-gallery": "~2.15.2"
+    "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1",
+    "elc": "https://github.com/WSDOT-GIS/elc-js.git#~0.0.0",
+    "blueimp-gallery": "~2.15.2",
+    "arcgis-buffer-ui": "https://github.com/WSDOT-GIS/arcgis-js-buffer.git#v1.0.0"
   }
 }

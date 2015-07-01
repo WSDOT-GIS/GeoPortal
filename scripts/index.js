@@ -1,12 +1,10 @@
 ﻿/*global require, gaTracker, $ */
-/*jslint devel: true, browser: true, white: true, nomen: true, regexp: true */
 
 /*
 Prerequisites:
 ArcGIS JavaScript API
 jQuery
 jQuery UI
-jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 */
 
 /**
@@ -26,6 +24,10 @@ jQuery BBQ plug-in (http://benalman.com/projects/jquery-bbq-plugin/)
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
+	"queryStringHelper",
+
+	"esri/Color",
+
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -57,9 +59,19 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/request",
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
+	"BufferUI",
+	"BufferUI/BufferUIHelper",
 	"extentSelect",
 	"geolocate-button",
+	"ArcGisDrawUI/ArcGisHelper",
+	"elc/elc-ui/ArcGisElcUI",
+	"info-window-helper",
 	"esri/dijit/Search",
+	"esri/domUtils",
+	"esri/symbols/SimpleMarkerSymbol",
+	"esri/symbols/SimpleLineSymbol",
+	"esri/symbols/SimpleFillSymbol",
+	"esri/symbols/TextSymbol",
 
 	"dijit/form/RadioButton",
 	"dijit/form/Select",
@@ -87,16 +99,65 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"extensions/graphicsLayer",
 	"extensions/map",
 	"scripts/layerList.js",
-	"scripts/zoomToXY.js", "scripts/extentSelect.js"
-], function (require, ready, on, registry,
-	esriConfig, Map, jsonUtils, Point, Extent, GeometryService, Legend, ArcGISTiledMapServiceLayer, Navigation,
-	GraphicsLayer, HomeButton, Button, BorderContainer, ContentPane, TabContainer, AccordionContainer, ExpandoPane,
-	Scalebar, Graphic, webMercatorUtils, InfoTemplate, QueryTask, Query, BasemapGallery, BasemapLayer, SpatialReference,
-	Measurement, esriRequest, LabelLayer, SimpleRenderer, createExtentSelect, createGeolocateButton, Search
+	"scripts/zoomToXY.js", "scripts/extentSelect.js", "scripts/layerSorter.js"
+], function (
+	require,
+	ready,
+	on,
+	registry,
+
+	queryStringHelper,
+
+	Color,
+	esriConfig,
+	Map,
+	jsonUtils,
+	Point,
+	Extent,
+	GeometryService,
+	Legend,
+	ArcGISTiledMapServiceLayer,
+	Navigation,
+	GraphicsLayer,
+	HomeButton,
+	Button,
+	BorderContainer,
+	ContentPane,
+	TabContainer,
+	AccordionContainer,
+	ExpandoPane,
+	Scalebar,
+	Graphic,
+	webMercatorUtils,
+	InfoTemplate,
+	QueryTask,
+	Query,
+	BasemapGallery,
+	BasemapLayer,
+	SpatialReference,
+	Measurement,
+	esriRequest,
+	LabelLayer,
+	SimpleRenderer,
+
+	BufferUI,
+	BufferUIHelper,
+	createExtentSelect,
+	createGeolocateButton,
+	DrawUIHelper,
+	ArcGisElcUI,
+	infoWindowHelper,
+
+	Search,
+	domUtils,
+	SimpleMarkerSymbol,
+	SimpleLineSymbol,
+	SimpleFillSymbol,
+	TextSymbol
 ) {
 	"use strict";
 
-	var map = null, extents = null, navToolbar, createLinks = {}, defaultConfigUrl = "config/config.json";
+	var map = null, extents = null, navToolbar, defaultConfigUrl = "config/config.json", bufferUI;
 	wsdot = { config: {} };
 
 	// Setup other geoportals links
@@ -217,11 +278,14 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		}
 
 		$(document).ready(function () {
-			var qs = $.deparam.querystring();
+			var match = location.search.match(/\btree(=((?:1)|(?:true)|(?:on)))?\b/i), link;
 
 			// If the "tree" query string parameter is set to true, replace the stylesheet for the layer list.
-			if (qs.tree && !/false/.test(qs.tree)) {
-				$("link[href='style/layerList.css']").attr("href", "style/layerListPlusMinus.css");
+			if (match) {
+				link = document.querySelector("link[href='style/layerList.css']");
+				if (link) {
+					link.href = "style/layerListPlusMinus.css";
+				}
 			}
 
 			$("#mainContainer").css("display", "");
@@ -241,27 +305,39 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		function getExtentLink() {
 			var layers, qsParams;
 			// Get the current query string parameters.
-			qsParams = $.deparam.querystring(true);
+			qsParams = queryStringHelper.queryStringToObject(location.search);
 			// Set the extent to the current extent.
 			qsParams.extent = map.extent.toCsv();
 
-			layers = $.map(map.getVisibleLayers(), function (layer) {
+			layers = map.getVisibleLayers().map(function (layer) {
 				return layer.id;
-				// return [layer.id, String(layer.opacity)].join(":");
 			});
 
 			if (layers) {
 				qsParams.layers = layers.join(",");
 			}
 
-			return $.param.querystring(window.location.protocol + "//" + window.location.host + window.location.pathname, qsParams);
+			return [window.location.protocol + "//" + window.location.host + window.location.pathname, queryStringHelper.objectToQueryString(qsParams)].join("?");
 		}
 
 		function init() {
 			var gaTrackEvent, initBasemap = null;
+
+			if (wsdot.config.additionalStylesheets && wsdot.config.additionalStylesheets.length > 0) {
+				wsdot.config.additionalStylesheets.forEach(function (path) {
+					var link = document.createElement("link");
+					link.href = path;
+					link.rel = "stylesheet";
+					document.head.appendChild(link);
+				});
+			}
+
 			esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 			// Specify list of CORS enabled servers.
 			(function (servers) {
+				if (wsdot.config.corsEnabledServers) {
+					servers = servers.concat(wsdot.config.corsEnabledServers);
+				}
 				for (var i = 0; i < servers.length; i++) {
 					esriConfig.defaults.io.corsEnabledServers.push(servers[i]);
 				}
@@ -400,11 +476,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						var layerSorter = $("#layerSorter");
 						// Create the layer sorter dialog if it does not already exist.
 						if (layerSorter.length < 1) {
-							require(["scripts/layerSorter.js"], function () {
-								layerSorter = $("<div id='layerSorter'>").layerSorter({ map: map }).dialog({
-									title: "Arrange Layers",
-									autoOpen: false
-								});
+							layerSorter = $("<div id='layerSorter'>").layerSorter({ map: map }).dialog({
+								title: "Arrange Layers",
+								autoOpen: false
 							});
 						}
 						layerSorter.dialog("open");
@@ -415,9 +489,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				}, "sortButton");
 
 				button = new Button({
-					label: "Measure",
-					showLabel: false,
-					iconClass: "distanceIcon",
+					label: "\uD83D\uDCD0", // Unicode triangle ruler.
+					showLabel: true,
 					onClick: function () {
 						// Disable the identify popups while the measure dialog is active.
 						map.disablePopups();
@@ -833,22 +906,46 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					div.id = "lrsTools";
 					document.getElementById("toolsAccordion").appendChild(div);
 					toolsAccordion.addChild(new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div));
-					createLinks.milepostTab = on(registry.byId("lrsTools"), "show", function () {
-						require(["scripts/lrsTools.js"], function () {
-							$("#lrsTools").lrsTools({
-								map: map,
-								drawActivate: function () {
-									map.disablePopups();
-								},
-								drawDeactivate: function () {
-									map.enablePopups();
-								}
-							});
+					on.once(registry.byId("lrsTools"), "show", function () {
+						var elcUI = new ArcGisElcUI(div);
+						elcUI.setMap(map);
 
+						elcUI.on("elc-results-not-found", function () {
+							alert("No results found");
 						});
 
-						createLinks.milepostTab.remove();
-						delete createLinks.milepostTab;
+						elcUI.on("non-geometry-results-returned", function (e) {
+							console.log("non geometry results found", e);
+							var elcResult = e.elcResults[0];
+							var output = [];
+							var properties = [
+								"LocatingError",
+								"ArmCalcReturnMessage",
+								"ArmCalcEndReturnMessage"
+							];
+							properties.forEach(function (name) {
+								if (elcResult[name]) {
+									output.push([name, elcResult[name]].join(": "));
+								}
+							});
+							output = output.join("\n");
+							alert(output);
+						});
+
+						elcUI.on("elc-results-found", function (e) {
+							var point;
+							if (e && e.graphics && e.graphics.length > 0) {
+								point = e.graphics[0].geometry;
+								if (point.getPoint) {
+									point = point.getPoint(0, 0);
+								}
+								map.infoWindow.show(point);
+								map.centerAt(point);
+								map.infoWindow.setFeatures(e.graphics);
+							}
+						});
+
+
 					});
 				}
 
@@ -944,12 +1041,46 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					});
 				}
 
+				function setupBuffer() {
+					function removeUnits() {
+						// Remove unwanted units
+						var select = bufferUI.root.querySelector("select[name=unit]");
+						var unitOptions = select.querySelectorAll("option");
+						var keepUnitsRe = /^((Meter)|(SurveyMile)|(SurveyFoot))$/i;
+						var option, i, l;
+						for (i = 0, l = unitOptions.length; i < l; i += 1) {
+							option = unitOptions[i];
+							if (!keepUnitsRe.test(option.dataset.name)) {
+								option.parentElement.removeChild(option);
+							}
+						}
+
+					}
+
+					var div = document.createElement("div");
+					div.id = "bufferPane";
+					bufferUI = new BufferUI(div);
+					removeUnits();
+					document.getElementById("toolsAccordion").appendChild(div);
+					toolsAccordion.addChild(new ContentPane({ title: "Buffer", id: "bufferPane" }, div));
+				}
+
+				function setupDraw() {
+					var div = document.createElement("div");
+					div.id = "drawPane";
+					document.getElementById("toolsAccordion").appendChild(div);
+					toolsAccordion.addChild(new ContentPane({ title: "Draw", id: "drawPane" }, div));
+					var drawUI = document.createElement("div");
+					drawUI.id = "drawUI";
+					div.appendChild(drawUI);
+				}
+
 				// Look in the configuration to determine which tools to add and in which order.
 				(function (tools) {
 					var i, l;
 					// Setup a default value for tools if it hasn't been specified.
 					if (!tools) {
-						tools = ["lrs", "zoom", "search"];
+						tools = ["lrs", "zoom", "search", "buffer", "draw"];
 					}
 					for (i = 0, l = tools.length; i < l; i += 1) {
 						if (/zoom/i.test(tools[i])) {
@@ -958,6 +1089,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							setupLrsControls();
 						} else if (/airspace\s?Calculator/i.test(tools[i])) {
 							setupAirspaceCalculator();
+						} else if (/buffer/i.test(tools[i])) {
+							setupBuffer();
+						} else if (/draw/i.test(tools[i])) {
+							setupDraw();
 						}
 					}
 				} (wsdot.config.tools));
@@ -1189,6 +1324,24 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				// Set the scale.
 				setScaleLabel();
 
+				// Show the buffer tools form when the buffer link is clicked.
+				(function () {
+					var bufferLink;
+					if (bufferUI) {
+						BufferUIHelper.attachBufferUIToMap(map, bufferUI);
+						bufferLink = map.infoWindow.domNode.querySelector("a.buffer");
+						bufferLink.addEventListener("click", function () {
+							registry.byId("toolsAccordion").selectChild("bufferPane");
+							registry.byId("tabs").selectChild("toolsTab");
+
+							document.querySelector(".buffer-ui [name=distances]").focus();
+						});
+					}
+				}());
+
+				infoWindowHelper.addExportFeatureLink(map.infoWindow);
+				infoWindowHelper.addGoogleStreetViewLink(map.infoWindow);
+
 				// Show the disclaimer if one has been defined.
 				showDisclaimer(wsdot.config.alwaysShowDisclaimer);
 
@@ -1206,20 +1359,24 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					// Zoom to the extent in the query string (if provided).
 					// Test example:
 					// extent=-13677603.622831678,5956814.051290565,-13576171.686297385,6004663.630997022
-					var qsParams = $.deparam.querystring(true), coords, extent;
-					if (qsParams.extent) {
-						// Split the extent into its four coordinates.  Create the extent object and set the map's extent.
-						coords = $(qsParams.extent.split(/,/, 4)).map(function (index, val) { return parseFloat(val); });
+
+					var qs, coords, extent;
+					qs = queryStringHelper.queryStringToObject();
+					coords = qs.extent;
+					if (coords) {
 						extent = new Extent(coords[0], coords[1], coords[2], coords[3], map.spatialReference);
 						map.setExtent(extent);
 					}
 				}
 
 				function getLayersFromParams() {
-					var qsParams = $.deparam.querystring(true), layers;
-					if (typeof (qsParams.layers) === "string") {
-						layers = qsParams.layers.split(",");
+					var layers, qs;
+					qs = queryStringHelper.queryStringToObject();
+
+					if (qs.layers) {
+						layers = qs.layers;
 					}
+
 					return layers;
 				}
 
@@ -1300,6 +1457,57 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				map.setupIdentifyPopups({
 					ignoredLayerRE: wsdot.config.noPopupLayerRe ? new RegExp(wsdot.config.noPopupLayerRe, "i") : /^layer\d+$/i
 				});
+
+
+				// Setup drawing toolbar.
+				(function () {
+					function createInfoWindowContent(graphic) {
+						var btn = document.createElement("button");
+						var deleteButtonGraphic = function () {
+							if (this.graphic) {
+								map.infoWindow.hide();
+								drawHelper.layer.remove(this.graphic);
+							}
+						};
+
+						btn.type = "button";
+						btn.textContent = "Delete";
+						btn.title = "Delete this graphic";
+						btn.graphic = graphic;
+						btn.classList.add("delete-graphic-button");
+						btn.onclick = deleteButtonGraphic;
+						return btn;
+					}
+
+					var drawToolsNode = document.getElementById("drawUI");
+
+					var lineSymbol = new SimpleLineSymbol();
+					var pointSymbol = new SimpleMarkerSymbol();
+					var fillSymbol = new SimpleFillSymbol();
+					var textSymbol = new TextSymbol("Default Label");
+					var lineColor = new Color("red");
+
+					lineSymbol.setColor(lineColor).setWidth(2);
+					pointSymbol.setOutline(lineSymbol);
+					fillSymbol.setOutline(lineSymbol);
+					textSymbol.setColor(lineColor);
+
+					var symbolOptions = new DrawUIHelper.SymbolOptions(pointSymbol, lineSymbol, fillSymbol, textSymbol);
+
+					var drawHelper = new DrawUIHelper(map, drawToolsNode, symbolOptions, {
+						id: "Drawn Features",
+						infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
+					});
+
+					drawHelper.on("draw-activate", function () {
+						map.disablePopups();
+					});
+					drawHelper.on("draw-complete", function () {
+						map.enablePopups();
+					});
+				}());
+
+
 			});
 
 			// Setup update notifications.
@@ -1343,7 +1551,10 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					navToolbar.zoomToNextExtent();
 				}
 			}, "nextExtentButton");
+
 		}
+
+		
 
 		//show map on load
 		ready(init);
@@ -1355,13 +1566,15 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	 */
 	function getConfigUrl() {
 		// Get the query string parameters.
-		var qs = $.deparam.querystring(true), output = defaultConfigUrl;
+		var output = defaultConfigUrl;
+		var qsconfig = location.search.match(/\bconfig=([^=&]+)/);
+		qsconfig = qsconfig ? qsconfig[1] : null;
 		// If the config parameter has not been specified, return the default.
-		if (qs.config) {
-			if (/\//g.test(qs.config)) {
-				output = [qs.config, ".json"].join("");
+		if (qsconfig) {
+			if (/\//g.test(qsconfig)) {
+				output = [qsconfig, ".json"].join("");
 			} else {
-				output = ["config/", qs.config, ".json"].join("");
+				output = ["config/", qsconfig, ".json"].join("");
 			}
 		}
 		return output;

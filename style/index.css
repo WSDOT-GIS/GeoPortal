@@ -217,6 +217,12 @@ h3, h4 {
     height: 16px;
 }
 
+/* Ruler icon on measure button*/
+#measureButton:nth-child(1) {
+    font-family: 'Segoe UI Emoji', 'Segoe UI Symbol', 'Symbola';
+    color: darkgoldenrod;
+}
+
 #scaleText {
     position: absolute;
     bottom: 1em;
@@ -465,6 +471,10 @@ abbr {
     border-radius: 0 0 10px 10px;
 }
 
+.printouts-list:empty {
+    display: none;
+}
+
 .symbol {
     font-family: 'Symbola', 'Segoe UI Symbol', 'Segoe UI Emoji';
 }
@@ -537,3 +547,35 @@ table.habitat-connectivity tr:nth-child(even)  {
     display:none;
 }
 
+}
+
+.buffer-options-list {
+    list-style: none;
+    padding: 0;
+    margin: auto;
+}
+
+.geometry-list:empty:after {
+    content: 'Select a geometry on the map, then click the "Buffer" link in the info window.';
+    width: 100px;
+    font-style: oblique;
+    color: #bb0707;
+}
+
+.buffer-ui label + input, .buffer-ui label + select {
+    display: block;
+}
+
+.buffer-ui button[type=submit] {
+    width: 100%;
+    padding: 1em;
+}
+
+.buffer-ui .clear-result-graphics-button {
+    display: block;
+}
+
+.metadata-list-container {
+    max-height: 300px;
+    overflow: auto;
+}
