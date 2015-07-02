@@ -146,7 +146,6 @@
     <Content Include="scripts\HabitatConnectivityInfoTemplate.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\info-window-helper\main.js" />
-    <Content Include="scripts\jquery.cookie.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\layerList.js" />
@@ -284,7 +283,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
