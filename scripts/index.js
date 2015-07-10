@@ -1100,8 +1100,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 					var div = document.createElement("div");
 					div.id = "bufferPane";
-					bufferUI = new BufferUI(div);
-					removeUnits();
+					// Do not create the BufferUI unless dataset is supported.
+					if (div.dataset) {
+						bufferUI = new BufferUI(div);
+						removeUnits();
+					} else {
+						div.textContent = "Buffer tool not available in this browser.";
+					}
 					document.getElementById("toolsAccordion").appendChild(div);
 					toolsAccordion.addChild(new ContentPane({ title: "Buffer", id: "bufferPane" }, div));
 				}
