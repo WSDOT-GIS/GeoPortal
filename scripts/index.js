@@ -1,4 +1,4 @@
-﻿/*global require, gaTracker, $ */
+﻿/*global require, gaTracker, Promise, $ */
 
 /*
 Prerequisites:
