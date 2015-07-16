@@ -318,7 +318,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 			};
 		}
 
-		$(document).ready(function () {
+		(function () {
 			var match = location.search.match(/\btree(=((?:1)|(?:true)|(?:on)))?\b/i), link;
 
 			// If the "tree" query string parameter is set to true, replace the stylesheet for the layer list.
@@ -328,16 +328,16 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					link.href = "style/layerListPlusMinus.css";
 				}
 			}
+		}());
 
-			$("#mainContainer").css("display", "");
+		document.getElementById("mainContainer").style.display = "";
 
-			// If a title is specified in the config file, replace the page title.
-			if (wsdot.config.pageTitle) {
-				$(".page-title").empty().text(wsdot.config.pageTitle);
-				document.title = wsdot.config.pageTitle;
-			}
+		// If a title is specified in the config file, replace the page title.
+		if (wsdot.config.pageTitle) {
+			document.querySelector(".page-title").innerHTML = wsdot.config.pageTitle;
+			document.title = wsdot.config.pageTitle;
+		}
 
-		});
 
 		/**
 		 * Sets the extent link in the bookmark tab to the given extent and visible layers.
@@ -906,6 +906,21 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 						return output || title;
 					}
 
+					function createAirspaceCalcDom() {
+						var div = document.createElement("div");
+						div.id = "airspaceCalculatorTab";
+						div.innerHTML = "<section><h1>Airspace Calculator (Prototype)</h1><div id='airspaceCalculator'></div></section>";
+						document.getElementById("tabs").appendChild(div);
+					}
+
+					function createFaaFar77Tab() {
+						var tabDiv = document.createElement("div");
+						tabDiv.id = "faaFar77Tab";
+						var innerDiv = document.createElement("div");
+						tabDiv.appendChild(innerDiv);
+						document.getElementById("tabs").appendChild(tabDiv);
+					}
+
 					for (i = 0, l = tabOrder.length; i < l; i += 1) {
 						name = tabOrder[i];
 						if (/Layers/i.test(name)) {
@@ -919,7 +934,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							tabs.addChild(toolsTab);
 						} else if (/Airspace\s*Calculator/i.test(name)) {
 							// Add elements that will become the tab to the dom.
-							$("<div id='airspaceCalculatorTab'><section><h1>Airspace Calculator (Prototype)</h1><div id='airspaceCalculator'></div></section></div>").appendTo("#tabs");
+							createAirspaceCalcDom();
 							contentPane = new ContentPane({
 								title: "Airspc. Calc.",
 								tooltip: "Airspace Calculator (Prototype)",
@@ -928,7 +943,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 							on.once(contentPane, "show", setupAirspaceCalculator);
 							tabs.addChild(contentPane);
 						} else if (/FAA\s*FAR\s*77/i.test(name)) {
-							$("<div id='faaFar77Tab'><div id='faaFar77'></div></div>").appendTo("#tabs");
+							createFaaFar77Tab();
 							contentPane = new ContentPane({
 								title: "FAA FAR 77",
 								id: "faaFar77Tab"
