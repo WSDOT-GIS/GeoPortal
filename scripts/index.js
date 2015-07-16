@@ -27,7 +27,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"queryStringHelper",
 
 	"esri/Color",
-
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -59,6 +58,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/request",
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
+
 	"BufferUI",
 	"BufferUI/BufferUIHelper",
 	"extentSelect",
@@ -121,6 +121,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	Navigation,
 	GraphicsLayer,
 	HomeButton,
+
 	Button,
 	BorderContainer,
 	ContentPane,
@@ -148,14 +149,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	DrawUIHelper,
 	ArcGisElcUI,
 	infoWindowHelper,
-
 	Search,
-	AirspaceCalculatorArcGisUI,
 	domUtils,
 	SimpleMarkerSymbol,
 	SimpleLineSymbol,
 	SimpleFillSymbol,
-	TextSymbol
+	TextSymbol,
+	AirspaceCalculatorArcGisUI
 ) {
 	"use strict";
 
