@@ -128,8 +128,6 @@
     <Content Include="index.html" />
     <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
-    <Content Include="MapIconGenerator.htm" />
-    <Content Include="RouteListDemo.html" />
     <Content Include="scripts\airspaceCalculator.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\customLegend.js" />
@@ -245,18 +243,12 @@
     <Compile Include="GraphicExport.ashx.cs">
       <DependentUpon>GraphicExport.ashx</DependentUpon>
     </Compile>
-    <Compile Include="MapIcon.ashx.cs">
-      <DependentUpon>MapIcon.ashx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MapIcon.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GraphicExport.ashx" />

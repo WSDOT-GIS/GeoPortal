@@ -52,36 +52,12 @@ namespace Wsdot.Grdo.Web.Mapping
 			if (Regex.IsMatch(format, "(?i)km[lz]"))
 			{
 				// Generate a KML document.
-				var kmlDocument = new geDocument();
 				var jsSerializer = new JavaScriptSerializer();
 
 				// Loop through the layers.
 				var layers = jsSerializer.Deserialize<Dictionary<string, object>>(json);
 
-
-				foreach (var kvp in layers)
-				{
-					var folder = new geFolder { Name = kvp.Key };
-					kmlDocument.Features.Add(folder);
-					var graphics = kvp.Value as ArrayList;
-					foreach (Dictionary<string, object> graphic in graphics)
-					{
-						var placemark = new gePlacemark();
-						folder.Features.Add(placemark);
-						placemark.Geometry = JsonToKmlGeometry(graphic["geometry"] as Dictionary<string, object>);
-						var attributesJson = (Dictionary<string, object>)graphic["attributes"];
-						attributesJson.Remove("RouteGeometry");
-						////if (attributesJson.Keys.Contains("BufferedGeometry") && attributesJson.Keys.Contains("BufferSize") && Convert.ToDouble(attributesJson["BufferSize"]) > 0)
-						////{
-						////    // TODO: Set the placemark geometry to a multi-geometry containing both the main and buffered geometries.
-						////}
-						string desc = ToHtmlDL(attributesJson);
-						placemark.Description = desc;
-
-					}
-				}
-
-				var kml = new geKML(kmlDocument);
+				var kml = LayersDictionaryToKml(layers);
 
 				// Export the geKML into either KML or KMZ, depending on the specified format.
 				byte[] bytes;
@@ -101,10 +77,40 @@ namespace Wsdot.Grdo.Web.Mapping
 			}
 			else
 			{
-				context.Response.ContentType = "text/plain";
-				context.Response.AddHeader("Content-Disposition", "filename=ExportedGraphics.json.txt");
+				context.Response.ContentType = "application/json";
+				context.Response.AddHeader("Content-Disposition", "filename=ExportedGraphics.json");
 				context.Response.Write(json);
 			}
+		}
+
+		private static geKML LayersDictionaryToKml(Dictionary<string, object> layers)
+		{
+			var kmlDocument = new geDocument();
+
+			foreach (var kvp in layers)
+			{
+				var folder = new geFolder { Name = kvp.Key };
+				kmlDocument.Features.Add(folder);
+				var graphics = kvp.Value as ArrayList;
+				foreach (Dictionary<string, object> graphic in graphics)
+				{
+					var placemark = new gePlacemark();
+					folder.Features.Add(placemark);
+					placemark.Geometry = JsonToKmlGeometry(graphic["geometry"] as Dictionary<string, object>);
+					var attributesJson = (Dictionary<string, object>)graphic["attributes"];
+					attributesJson.Remove("RouteGeometry");
+					////if (attributesJson.Keys.Contains("BufferedGeometry") && attributesJson.Keys.Contains("BufferSize") && Convert.ToDouble(attributesJson["BufferSize"]) > 0)
+					////{
+					////    // TODO: Set the placemark geometry to a multi-geometry containing both the main and buffered geometries.
+					////}
+					string desc = ToHtmlDL(attributesJson);
+					placemark.Description = desc;
+
+				}
+			}
+
+			var kml = new geKML(kmlDocument);
+			return kml;
 		}
 
 		private static geGeometry JsonToKmlGeometry(Dictionary<string, object> geometry)
