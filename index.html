@@ -29,6 +29,22 @@
     <link href="style/layerSorter.css" rel="stylesheet" />
     <link href="bower_components/elc/elc-ui/elc-ui.css" rel="stylesheet" />
     <link href="bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
+    <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
+    <script src="bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
+    <script>
+        // Setup Promise polyfill if required.
+        (function (jsFiles) {
+            if (!window.Promise) {
+                jsFiles.forEach(function (path) {
+                    path = "bower_components/" + path;
+                    var scr = document.createElement("script");
+                    scr.src = path;
+                    document.head.appendChild(scr);
+                });
+            }
+        }(["setImmideiate/setimmediate.js", "promises/promise.js"]));
+    </script>
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -62,7 +78,8 @@
     <div id="mainContainer" style="display: none">
         <header id="headerPane">
             <div class="table">
-                <div class="topNav"><!-- row -->
+                <div class="topNav">
+                    <!-- row -->
                     <div><!-- blank --></div>
                     <div>
                         <ul>
@@ -82,7 +99,6 @@
                                         <option value="FunctionalClass">Functional Class</option>
                                         <!--<option value="TrafficPlanningTrends">Traffic Planning Trends</option>-->
                                         <optgroup label="internal">
-                                            <option value="internal-airport">Airport</option>
                                             <option value="internal-Freight">Freight</option>
                                             <option value="internal-habitat-connectivity">Habitat Connectivity</option>
                                             <option value="internal-rmec">Maintenance Environmental Mapping</option>
@@ -93,7 +109,8 @@
                         </ul>
                     </div>
                 </div>
-                <div><!-- row -->
+                <div>
+                    <!-- row -->
                     <span><img id="wsdotLogo" src="http://www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT Logo" width="240" height="39" /></span>
                     <span class="page-title"><abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
                 </div>
@@ -127,8 +144,7 @@
                     <div id="legend"></div>
                 </div>
                 <div id="layersTab" title="Layers">
-                    <ul id="layerList">
-                    </ul>
+                    <ul id="layerList"></ul>
                 </div>
                 <div id="toolsTab" title="Tools">
                     <div id="toolsAccordion">
@@ -194,6 +210,21 @@
                         name: "queryStringHelper",
                         location: root + "/scripts/queryStringHelper",
                         main: "queryStringHelper"
+                    },
+                    {
+                        name: "usgsNed",
+                        location: root + "/bower_components/usgs-ned",
+                        main: "usgsNed"
+                    },
+                    {
+                        name: "AirspaceCalculator",
+                        location: root + "/bower_components/AirspaceCalculator",
+                        main: "AirspaceCalculator"
+                    },
+                    {
+                        name: "dms",
+                        location: root + "/bower_components/dms",
+                        main: "dms"
                     }
                 ]
             };
@@ -203,7 +234,6 @@
     <script src="//js.arcgis.com/3.14/init.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/jquery-ui.min.js"></script>
-    <script src="scripts/dmsConversion.js"></script>
     <script src="scripts/polyfills/polyfills.min.js"></script>
     <script src="scripts/index.js"></script>
 </body>

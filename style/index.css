@@ -578,4 +578,9 @@ table.habitat-connectivity tr:nth-child(even)  {
 .metadata-list-container {
     max-height: 300px;
     overflow: auto;
+}}
+
+.airspace-calculator label {
+    display: block;
 }
+

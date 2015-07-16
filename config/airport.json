@@ -10,6 +10,7 @@
 	},
 	"tabOrder": [
 		"Layers",
+		"Airspace Calculator",
 		"Tools",
 		"Basemap",
 		"Legend"
@@ -42,7 +43,7 @@
 		],
 		"sliderStyle":"small"
 	},
-	"initialBasemap":  "WSDOT Basemap",
+	"initialBasemap":  "Imagery with Labels",
 	"geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
 	"tools": [
 		"zoom",
@@ -91,15 +92,6 @@
 			"thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
 			"layers": [
 				{ "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
-			]
-		},
-		{
-			"id": "usaTopoMaps",
-			"title": "USA Topo Maps",
-			"thumbnailUrl": "images/USA_TopoThumbnail.png",
-			"layers": [
-				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer" },
-				{ "url": "http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer" }
 			]
 		},
 		{
