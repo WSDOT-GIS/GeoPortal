@@ -239,6 +239,7 @@
       <DependentUpon>AirportPowerUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ConversionUtilities.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GraphicExport.ashx.cs">
       <DependentUpon>GraphicExport.ashx</DependentUpon>
