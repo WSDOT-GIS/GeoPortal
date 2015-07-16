@@ -1385,7 +1385,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					}
 				}());
 
-				infoWindowHelper.addExportFeatureLink(map.infoWindow);
 				infoWindowHelper.addGoogleStreetViewLink(map.infoWindow);
 
 				// Show the disclaimer if one has been defined.
@@ -1632,29 +1631,29 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 		return output;
 	}
 
-	// Get the configuration
-	$.ajax(getConfigUrl(), {
-		dataType: "json",
-		success: function (data /*, textStatus, jqXHR*/) {
-			wsdot.config = data;
-
-			doPostConfig();
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			var request = this;
-			// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
-			// Redirect to the aspx page which will prompt for a log in.
-			if (/parsererror/i.test(textStatus) && /^AIS\/config.js(?:on)?$/i.test(request.url)) {
-				if (console) {
-					if (console.debug) {
-						console.debug({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
-					}
-				}
-				$("body").attr("class", null).empty().append("<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>");
-				// location.replace("AirportPowerUser.aspx");
+	// Load the configuration.
+	(function (url) {
+		var request = new XMLHttpRequest();
+		request.open("get", url);
+		request.onloadend = function () {
+			var textStatus, bodyText;
+			if (this.status === 200) {
+				wsdot.config = JSON.parse(this.response);
+				doPostConfig();
 			} else {
-				$("body").attr("class", null).empty().append("<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>");
+				// Detect the error that occurs if the user tries to access the airport power user setting via config query string parameter.
+				// Redirect to the aspx page which will prompt for a log in.
+				textStatus = this.statusText;
+				if (/parsererror/i.test(textStatus) && /^AIS\/config.js(?:on)?$/i.test(request.url)) {
+					bodyText = "<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>";
+					// location.replace("AirportPowerUser.aspx");
+				} else {
+					bodyText = "<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>";
+				}
+				document.body.removeAttribute("class");
+				document.body.innerHTML = bodyText;
 			}
-		}
-	});
+		};
+		request.send();
+	}(getConfigUrl()));
 });
