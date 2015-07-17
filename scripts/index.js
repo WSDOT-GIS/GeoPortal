@@ -7,27 +7,12 @@ jQuery
 jQuery UI
 */
 
-/**
- * The Position interface represents the position of the concerned device at a given time. 
- * The position, represented by a Coordinates object, comprehends the 2D position of the device, 
- * on a spheroid representing the Earth, but also its altitude and its speed.
- * @external {Position}
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Position Position}
- */
-
-/**
- * The PositionError interface represents the reason of an error occuring when using the geolocating device.
- * @external PositionError
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/PositionError PositionError}
- */
-
 var wsdot;
 
 require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"queryStringHelper",
 
 	"esri/Color",
-
 	"esri/config",
 	"esri/map",
 	"esri/geometry/jsonUtils",
@@ -59,6 +44,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	"esri/request",
 	"esri/layers/LabelLayer",
 	"esri/renderers/SimpleRenderer",
+
 	"BufferUI",
 	"BufferUI/BufferUIHelper",
 	"extentSelect",
@@ -121,6 +107,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	Navigation,
 	GraphicsLayer,
 	HomeButton,
+
 	Button,
 	BorderContainer,
 	ContentPane,
@@ -148,14 +135,13 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 	DrawUIHelper,
 	ArcGisElcUI,
 	infoWindowHelper,
-
 	Search,
-	AirspaceCalculatorArcGisUI,
 	domUtils,
 	SimpleMarkerSymbol,
 	SimpleLineSymbol,
 	SimpleFillSymbol,
-	TextSymbol
+	TextSymbol,
+	AirspaceCalculatorArcGisUI
 ) {
 	"use strict";
 
