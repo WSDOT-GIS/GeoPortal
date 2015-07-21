@@ -1,5 +1,4 @@
-﻿using SharpKml;
-using SharpKml.Base;
+﻿using SharpKml.Base;
 using SharpKml.Dom;
 using System;
 using System.Collections;
@@ -17,6 +16,11 @@ namespace Wsdot.Gis.Conversion
     {
         private static readonly Regex _geometryInNameRe = new Regex("(?in)Geometry$");
 
+        /// <summary>
+        /// Converts a dictionary representing JSON layer definitions to KML.
+        /// </summary>
+        /// <param name="layers">A dictionary representing ArcGIS JSON Layers.</param>
+        /// <returns><see cref="Kml"/></returns>
         public static Kml LayersDictionaryToKml(this Dictionary<string, object> layers)
         {
             var kmlDocument = new SharpKml.Dom.Document();
@@ -33,13 +37,7 @@ namespace Wsdot.Gis.Conversion
                     placemark.Geometry = JsonToKmlGeometry(graphic["geometry"] as Dictionary<string, object>);
                     var attributesJson = (Dictionary<string, object>)graphic["attributes"];
                     attributesJson.Remove("RouteGeometry");
-                    ////if (attributesJson.Keys.Contains("BufferedGeometry") && attributesJson.Keys.Contains("BufferSize") && Convert.ToDouble(attributesJson["BufferSize"]) > 0)
-                    ////{
-                    ////    // TODO: Set the placemark geometry to a multi-geometry containing both the main and buffered geometries.
-                    ////}
-                    var desc = new Description { Text = ToHtmlDL(attributesJson) };
-                    placemark.Description = desc;
-
+                    placemark.ExtendedData = ToExtendedData(attributesJson);
                 }
             }
 
@@ -48,6 +46,11 @@ namespace Wsdot.Gis.Conversion
             return kml;
         }
 
+        /// <summary>
+        /// Converts JSON geometry to KML geometry.
+        /// </summary>
+        /// <param name="geometry">ArcGIS JSON geometry</param>
+        /// <returns><see cref="Geometry"/></returns>
         public static Geometry JsonToKmlGeometry(Dictionary<string, object> geometry)
         {
             Geometry placemarkGeometry;
@@ -126,6 +129,33 @@ namespace Wsdot.Gis.Conversion
             return placemarkGeometry;
         }
 
+        /// <summary>
+        /// Creates an ExtendedData KML element from a graphic's attributes.
+        /// </summary>
+        /// <param name="attributes">A dictionary of graphic attributes</param>
+        /// <returns></returns>
+        public static ExtendedData ToExtendedData(Dictionary<string, object> attributes)
+        {
+            var datas = from kvp in attributes
+                        where !_geometryInNameRe.IsMatch( kvp.Key)
+                        select new Data
+                        {
+                            Name = kvp.Key,
+                            Value = kvp.Value?.ToString()
+                        };
+            var xData = new ExtendedData();
+            foreach (var data in datas)
+            {
+                xData.AddData(data);
+            }
+            return xData;
+        }
+
+        /// <summary>
+        /// Creates an HTML definition list of a graphic's attributes.
+        /// </summary>
+        /// <param name="attributes">A dictionary of a graphics attributes.</param>
+        /// <returns>An HTML string.</returns>
         public static string ToHtmlDL(Dictionary<string, object> attributes)
         {
             var descriptionBuilder = new StringBuilder("<dl>");
