@@ -56,7 +56,7 @@ namespace Wsdot.Grdo.Web.Mapping
 
                 var kml = ConversionUtilities.LayersDictionaryToKml(layers);
 
-                // Export the geKML into either KML or KMZ, depending on the specified format.
+                // Export the KML markup into either KML or KMZ, depending on the specified format.
                 var kmlFile = KmlFile.Create(kml, true);
                 if (string.Compare(format, "kmz", true) == 0)
                 {
@@ -67,7 +67,6 @@ namespace Wsdot.Grdo.Web.Mapping
                 }
                 else
                 {
-                    ////bytes = kml.ToKML();
                     context.Response.ContentType = "application/vnd.google-earth.kml+xml";
                     context.Response.AddHeader("Content-Disposition", "filename=ExportedGraphics.kml");
                     kmlFile.Save(context.Response.OutputStream);
