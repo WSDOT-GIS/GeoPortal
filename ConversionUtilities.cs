@@ -64,24 +64,24 @@ namespace Wsdot.Gis.Conversion
                 // Create polygon geometry
                 var rings = (ArrayList)geometry["rings"];
 
-                var vectors = new CoordinateCollection(from ArrayList point in rings
-                              select new Vector(Convert.ToDouble(point[1]), Convert.ToDouble(point[0])));
                 var linearRings = from ArrayList ring in rings
-                                  select new LinearRing { Coordinates = vectors };
-
+                                  select new LinearRing
+                                  {
+                                      Coordinates = new CoordinateCollection(from ArrayList point in ring
+                                                                             select new Vector(
+                                                                                 Convert.ToDouble(point[1]),
+                                                                                 Convert.ToDouble(point[0])
+                                                                              ))
+                                  };
                 if (linearRings.Count() > 1)
                 {
-                    var polygon = new Polygon
+                    var polygon = new Polygon();
+                    polygon.OuterBoundary = new OuterBoundary { LinearRing = linearRings.ElementAt(0) };
+                    var innerBoundaries = from lr in linearRings.Skip(1)
+                                          select new InnerBoundary { LinearRing = lr };
+                    foreach (var ib in innerBoundaries)
                     {
-                        OuterBoundary = new OuterBoundary { LinearRing = linearRings.ElementAt(0) }
-                    };
-                    foreach (var ring in linearRings.Skip(1))
-                    {
-                        polygon.AddInnerBoundary(new InnerBoundary
-                        {
-                            LinearRing = ring
-                        });
-
+                        polygon.AddInnerBoundary(ib);
                     }
                     placemarkGeometry = polygon;
                 }
@@ -95,21 +95,21 @@ namespace Wsdot.Gis.Conversion
                 // Create line geometry
                 var paths = (ArrayList)geometry["paths"];
 
-                var lineStrings = from ArrayList ring in paths
+                var lineStrings = from ArrayList path in paths
                                   select new LineString
                                   {
-                                      Coordinates = new CoordinateCollection(from ArrayList point in ring
-                                                                             select new Vector(Convert.ToDouble(point[1]), Convert.ToDouble(point[0]))
-                                                                             )
+                                      Coordinates = new CoordinateCollection(from ArrayList point in path
+                                                     select new Vector(
+                                                         Convert.ToDouble(point[1]),
+                                                         Convert.ToDouble(point[0])
+                                                      ))
                                   };
-
                 if (lineStrings.Count() > 1)
                 {
                     var multiGeo = new MultipleGeometry();
                     foreach (var ls in lineStrings)
                     {
                         multiGeo.AddGeometry(ls);
-
                     }
                     placemarkGeometry = multiGeo;
                 }
