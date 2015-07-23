@@ -89,9 +89,8 @@
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
-    <Content Include="bower_components\promises\promise.js" />
-    <Content Include="bower_components\setImmediate\setimmediate-ie8.js" />
-    <Content Include="bower_components\setImmediate\setimmediate.js" />
+    <Content Include="bower_components\promise-polyfill\Promise.js" />
+    <Content Include="bower_components\promise-polyfill\Promise.min.js" />
     <Content Include="bower_components\usgs-ned\usgsNed.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
@@ -210,10 +209,6 @@
     <Content Include="bower_components\fontawesome\scss\_rotated-flipped.scss" />
     <Content Include="bower_components\fontawesome\scss\_stacked.scss" />
     <Content Include="bower_components\fontawesome\scss\_variables.scss" />
-    <Content Include="bower_components\promises\.bower.json" />
-    <Content Include="bower_components\promises\bower.json" />
-    <Content Include="bower_components\setImmediate\.bower.json" />
-    <Content Include="bower_components\setImmediate\bower.json" />
     <Content Include="bower.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />

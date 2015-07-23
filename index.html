@@ -33,19 +33,7 @@
     <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
     <script src="bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
-    <script>
-        // Setup Promise polyfill if required.
-        (function (jsFiles) {
-            if (!window.Promise) {
-                jsFiles.forEach(function (path) {
-                    path = "bower_components/" + path;
-                    var scr = document.createElement("script");
-                    scr.src = path;
-                    document.head.appendChild(scr);
-                });
-            }
-        }(["setImmideiate/setimmediate.js", "promises/promise.js"]));
-    </script>
+    <script src="bower_components/promise-polyfill/Promise.min.js"></script>
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
