@@ -50,6 +50,8 @@
     <Content Include="bower_components\arcgis-buffer-ui\Templates\BufferUI.html" />
     <Content Include="bower_components\arcgis-buffer-ui\Templates\BufferUI.min.html" />
     <Content Include="bower_components\arcgis-buffer-ui\units.js" />
+    <Content Include="bower_components\arcgis-geolocate-button\GeolocateButton.css" />
+    <Content Include="bower_components\arcgis-geolocate-button\GeolocateButton.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\arcgis-draw-ui.css" />
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisDrawUI.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisHelper.js" />
@@ -154,7 +156,6 @@
     <Content Include="scripts\extensions\metadataExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
-    <Content Include="scripts\geolocate-button.js" />
     <Content Include="scripts\HabitatConnectivityInfoTemplate.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\info-window-helper\main.js" />
@@ -340,7 +341,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

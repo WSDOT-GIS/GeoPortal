@@ -33,6 +33,7 @@
     "elc": "https://github.com/WSDOT-GIS/elc-js.git#~0.0.0",
     "usgs-ned": "~1.0.2",
     "customevent-polyfill": "~1.0.0",
-    "fontawesome": "~4.3.0"
+    "fontawesome": "~4.3.0",
+    "arcgis-geolocate-button": "~1.0.0"
   }
 }
