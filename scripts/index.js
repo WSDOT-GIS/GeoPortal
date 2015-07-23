@@ -229,7 +229,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					request.open("get", wsdot.config.disclaimer);
 					request.onloadend = function (xEvt) {
 						
-						console.log(xEvt);
 						if (this.status === 200) {
 							if (!showEvenIfAlreadyAgreed && this.response === previousDisclaimerText) {
 								resolve(null);
@@ -248,7 +247,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 			deferred.then(function (disclaimerHtml) {
 				var parser;
-				console.log(disclaimerHtml);
 				var doc, title, body;
 				if (disclaimerHtml) {
 					parser = new DOMParser();
