@@ -25,7 +25,7 @@
   ],
   "private": true,
   "dependencies": {
-    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~1.0.2",
+    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~1.0.3",
     "arcgis-buffer-ui": "~1.0.0",
     "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1",
     "blueimp-gallery": "~2.15.2",
