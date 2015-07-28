@@ -141,7 +141,8 @@ namespace Wsdot.Gis.Conversion
                         select new Data
                         {
                             Name = kvp.Key,
-                            Value = kvp.Value?.ToString()
+                            //Value = kvp.Value?.ToString() // VS 2015
+                            Value = kvp.Value != null ? kvp.Value.ToString() : null
                         };
             var xData = new ExtendedData();
             foreach (var data in datas)

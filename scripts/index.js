@@ -808,9 +808,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 				tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
 				function setupAirspaceCalculator() {
-					airspaceCalculator = new AirspaceCalculatorArcGisUI("http://hqolymgis99t/arcgis/rest/services/Airport/Airport_Surfaces_40ft_Int/ImageServer");
-					document.getElementById("airspaceCalculator").appendChild(airspaceCalculator.form);
-							}
+				    airspaceCalculator = new AirspaceCalculatorArcGisUI("http://hqolymgis99t/arcgis/rest/services/Airport/Airport_Surfaces_40ft_Int/ImageServer");
+				    document.getElementById("airspaceCalculator").appendChild(airspaceCalculator.form);
+				}
 
 				function setupFaaFar77() {
 					require(["scripts/ais/faaFar77.js"], function () {
@@ -867,7 +867,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 					function createAirspaceCalcDom() {
 						var div = document.createElement("div");
 						div.id = "airspaceCalculatorTab";
-						div.innerHTML = "<section><h1>Airspace Calculator (Prototype)</h1><div id='airspaceCalculator'></div></section>";
+						div.innerHTML = "<section><h1>Airspace Calculator</h1><div id='airspaceCalculator'></div></section>";
 						document.getElementById("tabs").appendChild(div);
 					}
 
@@ -899,6 +899,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 								id: "airspaceCalculatorTab"
 							}, "airspaceCalculatorTab");
 							tabs.addChild(contentPane);
+							setupAirspaceCalculator();
 						} else if (/FAA\s*FAR\s*77/i.test(name)) {
 							createFaaFar77Tab();
 							contentPane = new ContentPane({

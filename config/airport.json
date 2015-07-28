@@ -10,6 +10,7 @@
 	},
 	"tabOrder": [
 		"Layers",
+		"Airspace Calculator",
 		"Tools",
 		"Basemap",
 		"Legend"
@@ -47,7 +48,6 @@
 	"tools": [
 		"zoom",
 		"lrs",
-		"airspaceCalculator",
 		"search"
 	],
 	"queryTasks": {
