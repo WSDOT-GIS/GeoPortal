@@ -354,7 +354,9 @@ require([
 
 
 
-
+            // Tests a graphic to see if it is <= 50 ft from where the user clicked.
+            // Results of the async distance test are added to the graphicsTestResults
+            // array.
             function testGraphic(graphic) {
                 var g = graphic.geometry;
                 g = webMercatorUtils.project(g, map);
