@@ -56,6 +56,7 @@
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisDrawUI.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisHelper.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\icons.png" />
+    <Content Include="bower_components\arcgis-query-string-utilities\QueryStringManager.js" />
     <Content Include="bower_components\elc\elc-ui\ArcGisElcUI.js" />
     <Content Include="bower_components\elc\elc-ui\elc-ui-behavior.css" />
     <Content Include="bower_components\elc\elc-ui\elc-ui.css" />
@@ -89,6 +90,7 @@
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="bower_components\polyfills\url.js" />
     <Content Include="bower_components\promise-polyfill\Promise.js" />
     <Content Include="bower_components\promise-polyfill\Promise.min.js" />
     <Content Include="bower_components\usgs-ned\usgsNed.js" />
@@ -145,8 +147,10 @@
     <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
     <Content Include="scripts\ais\faaFar77.js" />
+    <Content Include="scripts\configUtils.js" />
     <Content Include="scripts\customLegend.js" />
     <Content Include="scripts\dmsConversion.js" />
+    <Content Include="scripts\drawUIHelper.js" />
     <Content Include="scripts\extensions\esriApiExtensions.js" />
     <Content Include="scripts\extensions\extent.js" />
     <Content Include="scripts\extensions\graphicsLayer.js" />
@@ -210,6 +214,10 @@
     <Content Include="bower_components\fontawesome\scss\_stacked.scss" />
     <Content Include="bower_components\fontawesome\scss\_variables.scss" />
     <Content Include="bower.json" />
+    <Content Include="bower_components\arcgis-query-string-utilities\.bower.json" />
+    <Content Include="bower_components\arcgis-query-string-utilities\bower.json" />
+    <Content Include="bower_components\arcgis-query-string-utilities\README.md" />
+    <Content Include="bower_components\arcgis-query-string-utilities\UNLICENSE" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
@@ -232,7 +240,10 @@
     </Content>
     <Content Include="scripts\polyfills\promise-6.1.0.js" />
     <Content Include="scripts\printer.js" />
-    <Content Include="scripts\queryStringHelper\queryStringHelper.js" />
+    <Content Include="scripts\QueryStringManagerHelper.js" />
+    <Content Include="scripts\setupLayout.js" />
+    <Content Include="scripts\setupToolbar.js" />
+    <Content Include="scripts\showDisclaimer.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
@@ -336,7 +347,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

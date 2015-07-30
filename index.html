@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//js.arcgis.com/3.14/dijit/themes/claro/claro.css" />
     <link href="//js.arcgis.com/3.14/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
     <link href="//ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/themes/base/jquery-ui.css" rel="stylesheet" />
-    
+
     <link rel="shortcut icon" href="//images.wsdot.wa.gov/favicon.ico" />
     <link href="style/locationInfo.css" rel="stylesheet" />
     <link href="style/index.css" rel="stylesheet" />
@@ -34,6 +34,7 @@
     <link href="bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
     <script src="bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
     <script src="bower_components/promise-polyfill/Promise.min.js"></script>
+    <script src="bower_components/polyfills/url.js"></script>
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -58,11 +59,11 @@
             }
         }(navigator.doNotTrack || navigator.msDoNotTrack || null));
     </script>
-    
+
 </head>
 <body class="claro">
     <noscript>
-    You need to have JavaScript enabled on your browser to view this page.
+        You need to have JavaScript enabled on your browser to view this page.
     </noscript>
     <div id="mainContainer" style="display: none">
         <header id="headerPane">
@@ -115,7 +116,6 @@
                     <button id="previousExtentButton" type="button">Previous Extent</button>
                     <button id="nextExtentButton" type="button">Next Extent</button>
                     <button id="measureButton" type="button">Measure</button>
-                    <button id="linkButton" type="button">Share</button>
                     <button id="sortButton" type="button">Arrange Layers</button>
                     <button id="helpButton" type="button">Help</button>
                     <button id="saveButton" type="button">Save</button>
@@ -144,7 +144,7 @@
                 </div>
             </div>
 
-            
+
         </div>
     </div>
     <script>
@@ -154,27 +154,21 @@
                 async: true,
                 packages: [
                     {
+                        name: "geoportal",
+                        location: root + "/scripts"
+                    },
+                    {
                         name: "extensions",
                         location: root + "/scripts/extensions"
                     },
                     {
-                        name: "wsdot",
-                        location: root + "/scripts/wsdot"
-                    },
-                    {
-                        name: "extentSelect",
-                        location: root + "/scripts",
-                        main: "extentSelect"
+                        name: "info-window-helper",
+                        location: root + "/scripts/info-window-helper"
                     },
                     {
                         name: "GeolocateButton",
                         location: root + "/bower_components/arcgis-geolocate-button",
                         main: "GeolocateButton"
-                    },
-                    {
-                        name: "HabitatConnectivityInfoTemplate",
-                        location: root + "/scripts",
-                        main: "HabitatConnectivityInfoTemplate"
                     },
                     {
                         name: "BufferUI",
@@ -191,14 +185,11 @@
                         location: root + "/bower_components/arcgis-js-draw-ui",
                         main: "ArcGisDrawUI"
                     },
+
                     {
-                        name: "info-window-helper",
-                        location: root + "/scripts/info-window-helper"
-                    },
-                    {
-                        name: "queryStringHelper",
-                        location: root + "/scripts/queryStringHelper",
-                        main: "queryStringHelper"
+                        name: "QueryStringManager",
+                        location: root + "/bower_components/arcgis-query-string-utilities",
+                        main: "QueryStringManager"
                     },
                     {
                         name: "usgsNed",

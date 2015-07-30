@@ -17,7 +17,7 @@ require([
     "esri/geometry/jsonUtils",
     "esri/geometry/geometryEngineAsync",
     "esri/geometry/webMercatorUtils",
-    "HabitatConnectivityInfoTemplate"
+    "geoportal/HabitatConnectivityInfoTemplate"
 ], function (all, Deferred, lang, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, geometryEngineAsync,
     webMercatorUtils, HabitatConnectivityInfoTemplate
