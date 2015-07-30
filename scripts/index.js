@@ -291,16 +291,22 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
 
             // Create the map, using options defined in the query string (if available).
-            wsdot.config.mapOptions = QueryStringManager.getMapInitOptions(wsdot.config.mapOptions);
-            if (wsdot.config.mapOptions.center && wsdot.config.mapOptions.zoom && wsdot.config.mapOptions.extent) {
-                delete wsdot.config.mapOptions.extent;
-            } else if (wsdot.config.mapOptions.extent) {
+            ////wsdot.config.mapOptions = QueryStringManager.getMapInitOptions(wsdot.config.mapOptions);
+            if (wsdot.config.mapOptions.extent) {
                 // Convert the extent definition in the options into an Extent object.
                 wsdot.config.mapOptions.extent = new jsonUtils.fromJson(wsdot.config.mapOptions.extent);
             }
 
             wsdot.map = new Map("map", wsdot.config.mapOptions);
-            // Create the QueryStringManager, which will update the query string when the map's state changes.
+
+            // Once the map loads, update the extent or zoom to match query string.
+            (function (ops) {
+                if (ops.zoom && ops.center) {
+                    wsdot.map.on("load", function () {
+                        wsdot.map.centerAndZoom(ops.center, ops.zoom);
+                    });
+                }
+            }(QueryStringManager.getMapInitOptions()));
 
             /**
              * @typedef {Object} LabelingInfoItem
