@@ -532,7 +532,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                 showDisclaimer(wsdot.config.alwaysShowDisclaimer);
 
                 setupNorthArrow();
-                setupToolbar(wsdot.map);
+                setupToolbar();
 
                 Scalebar({ map: wsdot.map, attachTo: "bottom-left" });
 
@@ -571,14 +571,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                 qsManager = new QueryStringManager(wsdot.map);
 
                 QueryStringManagerHelper.setupLayerListForQueryString(wsdot.map);
-            });
-
-            // Setup update notifications.
-            on(wsdot.map, "update-start", function () {
-                $("#loading-bar").show();
-            });
-            on(wsdot.map, "update-end", function () {
-                $("#loading-bar").hide();
             });
 
             /**

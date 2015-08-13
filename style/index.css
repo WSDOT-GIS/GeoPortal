@@ -321,13 +321,17 @@ img[src$="blank.gif"] {
             content: "";
         }
 
-#loading-bar {
+.loading-bar {
     width: 220px;
     height: 19px;
     position: absolute;
     bottom: 5px;
     left: 50%;
     z-index: 100;
+}
+
+.map:not([data-updating]) .loading-bar {
+    display: none;
 }
 
 #measureWidgetContainer {

@@ -6,7 +6,7 @@ define([
     "esri/dijit/Measurement",
     "scripts/printer.js"
 ], function (registry, Button, esriRequest, Measurement) {
-    function setupToolbar(map) {
+    function setupToolbar() {
         var button;
         button = new Button({
             iconClass: "helpIcon",
@@ -41,11 +41,11 @@ define([
                         open: function () {
                             var graphics;
                             // Show / hide the form and "no graphics" message based on the number of graphics in the map.
-                            if (map.getGraphicsCount() < 1) {
+                            if (wsdot.map.getGraphicsCount() < 1) {
                                 $(".no-graphics-message", exportDialog).show();
                                 $("form", exportDialog).hide();
                             } else {
-                                graphics = map.getGraphicsAsJson();
+                                graphics = wsdot.map.getGraphicsAsJson();
 
                                 // Set the hidden graphics element's value.
                                 $("input[name=graphics]", exportDialog).attr("value", JSON.stringify(graphics));
@@ -93,7 +93,7 @@ define([
                 var layerSorter = $("#layerSorter");
                 // Create the layer sorter dialog if it does not already exist.
                 if (layerSorter.length < 1) {
-                    layerSorter = $("<div id='layerSorter'>").layerSorter({ map: map }).dialog({
+                    layerSorter = $("<div id='layerSorter'>").layerSorter({ map: wsdot.map }).dialog({
                         title: "Arrange Layers",
                         autoOpen: false
                     });
@@ -110,7 +110,7 @@ define([
             showLabel: true,
             onClick: function () {
                 // Disable the identify popups while the measure dialog is active.
-                map.disablePopups();
+                wsdot.map.disablePopups();
                 var measureDialog = $("#measureWidgetContainer"),
                 titleBar;
 
@@ -124,7 +124,7 @@ define([
                     measureDialog.hide();
                     $("#measureWidgetContainer").hide();
                     // Re-enable the identify popups.
-                    map.enablePopups();
+                    wsdot.map.enablePopups();
                 }
 
                 // Create the measure dialog if it does not already exist.
@@ -142,7 +142,7 @@ define([
                         $("<div>").attr("id", "measureWidget").appendTo(measureDialog);
                         // Create the widget.
                         measurement = new Measurement({
-                            map: map
+                            map: wsdot.map
                         }, document.getElementById("measureWidget"));
                         measurement.startup();
 
@@ -206,7 +206,7 @@ define([
                             modal: true,
                             title: "Print"
                         }).printer({
-                            map: map,
+                            map: wsdot.map,
                             templates: templateNames,
                             url: wsdot.config.printUrl,
                             extraParameters: getExtraParameters(),
