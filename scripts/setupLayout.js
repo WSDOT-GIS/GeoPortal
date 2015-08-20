@@ -55,7 +55,7 @@ define([
             $.merge(layerIds, wsdot.map.graphicsLayerIds);
 
             // Create layer info objects from the layer IDs, to be used with the Legend constructor.
-            layerInfos = $.wsdot.map(layerIds, function (layerId) {
+            layerInfos = $.map(layerIds, function (layerId) {
                 var layer = wsdot.map.getLayer(layerId);
                 return { layer: layer, title: layerId };
             });

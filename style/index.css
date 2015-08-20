@@ -517,8 +517,6 @@ table.habitat-connectivity tr:nth-child(even)  {
     display:none;
 }
 
-}
-
 .buffer-options-list {
     list-style: none;
     padding: 0;
@@ -548,7 +546,7 @@ table.habitat-connectivity tr:nth-child(even)  {
 .metadata-list-container {
     max-height: 300px;
     overflow: auto;
-}}
+}
 
 .airspace-calculator label {
     display: block;
