@@ -51,6 +51,34 @@ define([
             }
         }
 
+        /**
+         * Sets up sublayer checkboxes to be checked once they have been added to the DOM.
+         * @param {HTMLListItemElement} item
+         * @param {string} selector - query string selector.
+         */
+        function setupMutationObserver(item, selector) {
+            var observer, config;
+            if (!item) {
+                console.error("item is null");
+            } else {
+
+                observer = new MutationObserver(function (/*mutations*/) {
+                    var sublayerCheckboxes = item.querySelectorAll(selector);
+                    checkAllBoxes(sublayerCheckboxes);
+                    // Disconnect the observer, as it is no longer needed.
+                    observer.disconnect();
+                });
+
+                config = {
+                    attributes: false,
+                    childList: true,
+                    characterData: false
+                };
+
+                observer.observe(item, config);
+            }
+        }
+
         // Once the layer has loaded, set sublayers (if layer supports this).
         map.on("layer-add-result", function (e) {
             var checkbox, sublayerIds, sublayerCheckboxes, selector;
@@ -69,8 +97,11 @@ define([
                     console.debug(selector);
                     sublayerCheckboxes = checkbox.parentElement.querySelectorAll(selector);
                     if (!sublayerCheckboxes || !sublayerCheckboxes.length) {
-                        console.warn("No checkboxes found matching selector.", { checkbox: checkbox, selector: selector });
+                        // If the corresponding sublayer checkboxes don't yet exist, setup a mutation observer
+                        // to check them once they are added.
+                        setupMutationObserver(checkbox.parentNode, selector);
                     } else {
+                        // If the checkboxes are already present, check them.
                         checkAllBoxes(sublayerCheckboxes);
                     }
                 }
