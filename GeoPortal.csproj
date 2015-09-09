@@ -61,11 +61,11 @@
     <Content Include="bower_components\elc\elc-ui\elc-ui-behavior.css" />
     <Content Include="bower_components\elc\elc-ui\elc-ui.css" />
     <Content Include="bower_components\elc\elc-ui\ElcUI.js" />
+    <Content Include="bower_components\elc\elc-ui\RouteSelector.js" />
     <Content Include="bower_components\elc\elc-ui\Templates\elc-ui-bootstrap.html" />
     <Content Include="bower_components\elc\elc-ui\Templates\elc-ui-bootstrap.min.html" />
     <Content Include="bower_components\elc\elc-ui\Templates\elc-ui.html" />
     <Content Include="bower_components\elc\elc-ui\Templates\elc-ui.min.html" />
-    <Content Include="bower_components\elc\elc.js" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.css" />
     <Content Include="bower_components\blueimp-gallery\css\blueimp-gallery.min.css" />
     <Content Include="bower_components\blueimp-gallery\img\error.png" />
@@ -86,6 +86,12 @@
     <Content Include="bower_components\customevent-polyfill\customevent-polyfill.js" />
     <Content Include="bower_components\customevent-polyfill\customevent-polyfill.min.js" />
     <Content Include="bower_components\dms\dms.js" />
+    <Content Include="bower_components\elc\Route.js" />
+    <Content Include="bower_components\elc\RouteId.js" />
+    <Content Include="bower_components\elc\RouteList.js" />
+    <Content Include="bower_components\elc\RouteLocation.js" />
+    <Content Include="bower_components\elc\RouteLocator.js" />
+    <Content Include="bower_components\elc\routeUtils.js" />
     <Content Include="bower_components\fontawesome\.gitignore" />
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
@@ -346,7 +352,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

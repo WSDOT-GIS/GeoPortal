@@ -14,7 +14,7 @@ define([
     "esri/tasks/query",
 
     "AirspaceCalculator/ArcGisUI",
-    "elc/elc-ui/ArcGisElcUI",
+    "RouteLocator/elc-ui/ArcGisElcUI",
     "BufferUI",
     "BufferUI/BufferUIHelper",
 
