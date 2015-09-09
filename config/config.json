@@ -83,7 +83,7 @@
 		}
 	],
 	"initialBasemap":  "WSDOT Basemap",
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+	"routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"layers": {
 			"Political Boundaries": [
 				{

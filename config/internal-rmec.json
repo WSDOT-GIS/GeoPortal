@@ -1,7 +1,7 @@
 ﻿{
     "pageTitle": "Maintenance Environmental Mapping",
     "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
-    "printUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export%20Web%20Map",
+    "printUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Environmental/ExportWebMap/GPServer/Export%20Web%20Map",
     "enableIdentify": true,
     "disclaimer": "disclaimers/internal-rmec/Internal.html",
     "additionalStylesheets": [ "style/rmec.css" ],
@@ -90,7 +90,7 @@
         "OpenStreetMap",
         "Functional Class"
     ],
-    "routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+    "routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
     "layers": {
         "Environmental": [
             {
