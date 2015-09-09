@@ -2,6 +2,10 @@
     "pageTitle": "Projects",
     "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
     "enableIdentify": true,
+    "tools": [
+        "zoom",
+        "lrs"
+    ],
     "mapOptions": {
         "logo": false,
         "extent": {
