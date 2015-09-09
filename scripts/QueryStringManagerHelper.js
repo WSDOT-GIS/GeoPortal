@@ -34,7 +34,7 @@ define([
             var output;
             if (ids && Array.isArray(ids)) {
                 output = ids.map(function (id) {
-                    return ["li[data-sublayerid='", "']:not(.ui-layer-list-has-children) > input[type=checkbox]:not(:checked)"].join(id);
+                    return ["li[data-sublayerid='", "']:not(.ui-layer-list-has-children) > input[type=checkbox]"].join(id);
                 }).join(",");
             }
             return output;
@@ -42,12 +42,12 @@ define([
 
         /**
          * Checks all of the checkboxes in a node list.
-         * @param {NodeList.<HTMLInputElement>} checkboxes
+         * @param {NodeList.<HTMLInputElement>} checkboxes - A list of input elements returned from a query selector.
+         * @param {Boolean} newCheckedState - Set to true to check all the boxes, false otherwise.
          */
-        function checkAllBoxes(checkboxes) {
-            console.debug(checkboxes);
+        function checkAllBoxes(checkboxes, newCheckedState) {
             for (var i = 0, l = checkboxes.length; i < l; i += 1) {
-                checkboxes[i].checked = true;
+                checkboxes[i].checked = Boolean(newCheckedState);
             }
         }
 
@@ -63,8 +63,12 @@ define([
             } else {
 
                 observer = new MutationObserver(function (/*mutations*/) {
+                    // Uncheck all boxes
+                    var allBoxes = item.querySelectorAll("li:not(.ui-layer-list-has-children) > input[type=checkbox]:checked");
+                    console.debug("allBoxes", allBoxes);
                     var sublayerCheckboxes = item.querySelectorAll(selector);
-                    checkAllBoxes(sublayerCheckboxes);
+                    checkAllBoxes(allBoxes, false);
+                    checkAllBoxes(sublayerCheckboxes, true);
                     // Disconnect the observer, as it is no longer needed.
                     observer.disconnect();
                 });
