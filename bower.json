@@ -30,7 +30,7 @@
     "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1",
     "blueimp-gallery": "~2.15.2",
     "dms": "~1.0.2",
-    "elc": "https://github.com/WSDOT-GIS/elc-js.git#~2.2.2",
+    "elc": "https://github.com/WSDOT-GIS/elc-js.git#~2.3.0",
     "usgs-ned": "~1.0.2",
     "customevent-polyfill": "~1.0.0",
     "fontawesome": "~4.3.0",
