@@ -67,7 +67,7 @@
 		},
 		"city": {
 			"label": "City",
-			"url": "http://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/12",
+			"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -77,7 +77,7 @@
 		},
 		"urbanArea": {
 			"label": "Urban Area",
-			"url": "http://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+			"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true
@@ -141,7 +141,7 @@
 					},
 					{
 						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-						"url": "http://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirportInformationSystem/MapServer",
+						"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirportInformationSystem/MapServer",
 						"options": {
 							"id": "Airport Information System"
 						}
@@ -150,7 +150,7 @@
 			"General": {
 				"Political Boundaries": [
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 						"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
 						"options": {
 							"id": "City Limits"
@@ -164,7 +164,7 @@
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 						"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
 						"options": {
 							"id": "County Boundaries"
@@ -192,7 +192,7 @@
 						}
 					},
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 						"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/TownshipSection/MapServer",
 						"options": {
 							"id": "Township / Section"
@@ -209,7 +209,7 @@
 			
 				"WSDOT Boundaries": [
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 						"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/RegionBoundaries/MapServer",
 						"options": {
 							"id": "Region Boundaries"
@@ -218,7 +218,7 @@
 				],
 				"Transportation Features": [
 					{
-						"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+						"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
 						"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/StateRoutes/MapServer",
 						"options": {
 							"id": "State Routes"
