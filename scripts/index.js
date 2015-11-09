@@ -237,7 +237,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                 for (var i = 0; i < servers.length; i++) {
                     esriConfig.defaults.io.corsEnabledServers.push(servers[i]);
                 }
-            }(["www.wsdot.wa.gov"]));
+            }(["www.wsdot.wa.gov", "data.wsdot.wa.gov"]));
             esriConfig.defaults.geometryService = new GeometryService(wsdot.config.geometryServer);
 
             function setupNorthArrow() {
@@ -527,6 +527,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                 }());
 
                 infoWindowHelper.addGoogleStreetViewLink(wsdot.map.infoWindow);
+                infoWindowHelper.makeDraggable(wsdot.map.infoWindow);
 
                 // Show the disclaimer if one has been defined.
                 showDisclaimer(wsdot.config.alwaysShowDisclaimer);

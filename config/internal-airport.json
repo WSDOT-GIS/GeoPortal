@@ -4,7 +4,7 @@
 	"enableIdentify": true,
 	"disclaimer": "disclaimers/airport/Internal.html",
 	"alwaysShowDisclaimer": true,
-	"printUrl":"http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Airport/ExportWebMap/GPServer/Export%20Web%20Map",
+	"printUrl":"http://data.wsdot.wa.gov/arcgis/rest/services/Airport/ExportWebMap/GPServer/Export%20Web%20Map",
 	"tabContainerOptions": {
 		"tabPosition": "left"
 	},
@@ -53,7 +53,7 @@
 	"queryTasks": {
 		"airport": {
 			"label": "Airport",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer/0",
+			"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/Airports/MapServer/0",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -115,13 +115,13 @@
 		}
 	],
 	"basemapsToRemove": ["Terrain with Labels", "Topographic", "Oceans"],
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+	"routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"tabbedLayerList": true,
 	"layers": {
 			"Airport": [
 					{
 						"layerType":"esri.layers.ArcGISDynamicMapServiceLayer",
-						"url":"http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer",
+						"url":"http://data.wsdot.wa.gov/arcgis/rest/services/Shared/Airports/MapServer",
 						"options": {
 							"id": "Airports"
 						}

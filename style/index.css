@@ -552,3 +552,9 @@ table.habitat-connectivity tr:nth-child(even)  {
     display: block;
 }
 
+.esriPopupWrapper .title {
+    cursor: move;
+}
+.esriPopup .pointer.hidden, .esriPopup .outerPointer.hidden {
+    display: none;
+}

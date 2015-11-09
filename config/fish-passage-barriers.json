@@ -4,7 +4,7 @@
 	"enableIdentify": true,
 	"disclaimer": "disclaimers/fish-passage-barriers/Public.html",
 	"alwaysShowDisclaimer": false,
-	"printUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
+	"printUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
 	"noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
 	"alternateTabTitles": {
 		"Tools": "Search"
@@ -82,7 +82,7 @@
 			]
 		}
 	],
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+	"routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 	"layers": {
 		"WSDOT Fish Passage Barriers": [
 			{
@@ -120,20 +120,6 @@
 				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/CaseAreaBoundary/MapServer",
 				"options": {
 					"id": "US v. WA Case Area Boundary"
-				}
-			},
-			{
-				"layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-				"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/InDesignBarriersCaseArea/MapServer",
-				"options": {
-					"id": "In Design Barriers Subject to Injunction"
-				},
-				"metadataOptions": {
-					"ignoreSoe":  true,
-					"additionalMetadata": {
-						"Fish Passage - WSDOT": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-						"WSDOT Fish Passage Inventory Status": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-					}
 				}
 			},
 			{

@@ -86,16 +86,18 @@
     <Content Include="bower_components\customevent-polyfill\customevent-polyfill.js" />
     <Content Include="bower_components\customevent-polyfill\customevent-polyfill.min.js" />
     <Content Include="bower_components\dms\dms.js" />
+    <Content Include="bower_components\elc\lrsTypeUtils.js" />
     <Content Include="bower_components\elc\Route.js" />
     <Content Include="bower_components\elc\RouteId.js" />
-    <Content Include="bower_components\elc\RouteList.js" />
     <Content Include="bower_components\elc\RouteLocation.js" />
     <Content Include="bower_components\elc\RouteLocator.js" />
+    <Content Include="bower_components\elc\routeTypeUtils.js" />
     <Content Include="bower_components\elc\routeUtils.js" />
     <Content Include="bower_components\fontawesome\.gitignore" />
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="bower_components\polyfills\html.js" />
     <Content Include="bower_components\polyfills\url.js" />
     <Content Include="bower_components\promise-polyfill\Promise.js" />
     <Content Include="bower_components\promise-polyfill\Promise.min.js" />
@@ -127,7 +129,6 @@
     <Content Include="help\milepost.html" />
     <Content Include="help\navigation.html" />
     <Content Include="help\zoom_controls.html" />
-    <Content Include="IdentifyTemplate.html" />
     <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
@@ -220,10 +221,7 @@
     <Content Include="bower_components\fontawesome\scss\_stacked.scss" />
     <Content Include="bower_components\fontawesome\scss\_variables.scss" />
     <Content Include="bower.json" />
-    <Content Include="bower_components\arcgis-query-string-utilities\.bower.json" />
-    <Content Include="bower_components\arcgis-query-string-utilities\bower.json" />
-    <Content Include="bower_components\arcgis-query-string-utilities\README.md" />
-    <Content Include="bower_components\arcgis-query-string-utilities\UNLICENSE" />
+    <Content Include="config\internal-test-fish-passage-barriers.json" />
     <Content Include="config\cpdm.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
@@ -353,7 +351,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

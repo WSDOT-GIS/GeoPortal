@@ -4,7 +4,7 @@
     "enableIdentify": true,
     "disclaimer": "disclaimers/habitat-connectivity/Internal.html",
     "alwaysShowDisclaimer": false,
-    "printUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
+    "printUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
     "noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
     "tools": [
         "lrs",
@@ -69,7 +69,7 @@
             ]
         }
     ],
-    "routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+    "routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
     "layers": {
         "Environmental": [
             {

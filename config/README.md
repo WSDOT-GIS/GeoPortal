@@ -158,7 +158,7 @@ The "queryTasks" properties are used to populate the drop-down lists of zoom ext
 	"queryTasks": {
 		"airport": {
 			"label": "Airport",
-			"url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/Airports/MapServer/0",
+			"url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/Airports/MapServer/0",
 			"query": {
 				"where": "1 = 1",
 				"returnGeometry": true,
@@ -229,7 +229,7 @@ This property is used to remove default basemaps from the basemap widget.
 ## routeLocatorUrl ##
 The URL of the ELC web service.
 
-	"routeLocatorUrl": "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+	"routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
 
 ## tabbedLayerList ##
 Set to `true` to use a tabbed layer list, `false` (or omit) to use the default style.

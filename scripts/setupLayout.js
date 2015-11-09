@@ -129,7 +129,7 @@ define([
         tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
         function setupAirspaceCalculator() {
-            wsdot.airspaceCalculator = new AirspaceCalculatorArcGisUI("http://hqolymgis99t/arcgis/rest/services/Airport/Airport_Surfaces_40ft_Int/ImageServer");
+            wsdot.airspaceCalculator = new AirspaceCalculatorArcGisUI("http://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirspaceCalculatorSurface/ImageServer");
             document.getElementById("airspaceCalculator").appendChild(wsdot.airspaceCalculator.form);
         }
 
