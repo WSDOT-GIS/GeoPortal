@@ -109,7 +109,7 @@
     <Content Include="config\internal-airport.json" />
     <Content Include="config\internal-Freight.json" />
     <Content Include="config\Release.json" />
-    <Content Include="config\TrafficPlanningTrends.json" />
+    <Content Include="config\traffic.json" />
     <Content Include="disclaimers\airport\Internal.html" />
     <Content Include="disclaimers\airport\Public.html" />
     <Content Include="disclaimers\fish-passage-barriers\Public.html" />
