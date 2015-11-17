@@ -2,8 +2,9 @@
 define([
     "esri/SpatialReference",
     "esri/geometry/webMercatorUtils",
-    "dojo/dnd/Moveable"
-], function (SpatialReference, webMercatorUtils, Moveable) {
+    "dojo/dnd/Moveable",
+    "dojo/text!./print.min.css"
+], function (SpatialReference, webMercatorUtils, Moveable, printCss) {
     var wgs84SR = new SpatialReference(4326);
 
     /**
@@ -129,9 +130,148 @@ define([
         }.bind(this));
     }
 
+    function groupFeaturesByLayer(features) {
+        var i, l, feature, output = {}, key;
+
+        for (var i = 0, l = features.length; i < l; i++) {
+            feature = features[i];
+            key = [feature.layer.id, feature.result.layerId];
+            if (!output.hasOwnProperty(key)) {
+                output[key] = [feature];
+            } else {
+                output[key].push(feature);
+            }
+        }
+
+        return output;
+    }
+
+    function createTable(features, doc) {
+        var table, attribNames, feature, row, tbody;
+        table = doc.createElement("table");
+        tbody = table.createTBody();
+
+        var ignoredAttributes = /(OBJECTID)|(Shape(\.STLength)?)/i;
+        var caption;
+
+        for (var i = 0, l = features.length; i < l; i++) {
+            feature = features[i];
+
+            // Create the table header.
+            if (!attribNames) {
+                attribNames = [];
+                for (var name in feature.attributes) {
+                    if (feature.attributes.hasOwnProperty(name) && !ignoredAttributes.test(name)) {
+                        attribNames.push(name);
+                    }
+                }
+                // Set the table's caption to the layer name.
+                caption = document.createElement("caption");
+                caption.textContent = feature.result.layerName;
+                table.appendChild(caption);
+
+                table.createTHead();
+                row = table.tHead.insertRow();
+                attribNames.forEach(function (name) {
+                    var cell = document.createElement("th");
+                    cell.textContent = name;
+                    row.appendChild(cell);
+                });
+            }
+
+            // Add body rows
+            row = tbody.insertRow(-1);
+
+            attribNames.forEach(function (name) {
+                var cell = document.createElement("td");
+                var value = feature.attributes[name];
+                cell.textContent = value != null ? value.toString() : "<null>";
+                row.appendChild(cell);
+            });
+        }
+
+        return table;
+    }
+
+    function groupedFeaturesToTables(groupedFeatures, doc) {
+        var frag, table, attribNames;
+
+        frag = doc.createDocumentFragment();
+        for (var key in groupedFeatures) {
+            if (groupedFeatures.hasOwnProperty(key)) {
+                table = createTable(groupedFeatures[key], doc);
+                frag.appendChild(table);
+            }
+        }
+        return frag;
+    }
+
+    function addPrintLink(infoWindow) {
+        var actionList = infoWindow.domNode.querySelector(".actionList");
+        var link = document.createElement("a");
+        var docFrag = document.createDocumentFragment();
+        link.textContent = "Print";
+        link.href = "#";
+        link.title = "Opens identify results in a new window for printing.";
+        link.classList.add("action");
+        link.classList.add("print");
+        link.classList.add("print");
+        // Add a space before adding link.
+        docFrag.appendChild(document.createTextNode(" "));
+        docFrag.appendChild(link);
+
+        link.onclick = function () {
+
+
+            var features = groupFeaturesByLayer(infoWindow.features);
+            var doc = document.implementation.createHTMLDocument("attributes");
+            var tables = groupedFeaturesToTables(features, doc);
+            console.log("infoWindow features", features);
+
+            // Create a new HTML document and add the tables to it.
+            doc.body.appendChild(tables);
+
+            var style = doc.createElement("style");
+            style.type = "text/css";
+            style.textContent = printCss;
+            doc.head.appendChild(style);
+            
+            var htmlMarkup = doc.documentElement.outerHTML;
+            htmlMarkup = encodeURI(htmlMarkup);
+            var url = ["data:text/html", htmlMarkup].join(",");
+
+            window.open(url, "geoportal_attribute_table");
+
+            ////// Get the currently selected feature.
+            ////var feature = infoWindow.features[infoWindow.selectedIndex];
+
+            ////// Get the currently selected feature's geometry.
+            ////var geometry = feature.geometry;
+
+            ////// If the geometry's type is not a point, get the point that
+            ////// the info window is currently pointing to.
+            ////if (geometry.type !== "point") {
+            ////    geometry = infoWindow.location;
+            ////}
+
+            ////// Project to WGS 84 if possible.
+            ////if (webMercatorUtils.canProject(geometry, wgs84SR)) {
+            ////    geometry = webMercatorUtils.project(geometry, wgs84SR);
+            ////}
+            ////var url = getGoogleStreetViewUrl(geometry);
+            ////window.open(url, "_blank");
+
+            return false;
+        };
+
+        actionList.appendChild(docFrag);
+        return link;
+    }
+
     return {
         addExportFeatureLink: addExportFeatureLink,
         addGoogleStreetViewLink: addGoogleStreetViewLink,
-        makeDraggable: makeDraggable
+        makeDraggable: makeDraggable,
+        addPrintLink: addPrintLink
     };
 });

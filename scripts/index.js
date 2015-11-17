@@ -528,6 +528,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
                 infoWindowHelper.addGoogleStreetViewLink(wsdot.map.infoWindow);
                 infoWindowHelper.makeDraggable(wsdot.map.infoWindow);
+                infoWindowHelper.addPrintLink(wsdot.map.infoWindow);
 
                 // Show the disclaimer if one has been defined.
                 showDisclaimer(wsdot.config.alwaysShowDisclaimer);
