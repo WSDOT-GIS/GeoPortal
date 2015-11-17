@@ -7,6 +7,19 @@
     "zoom",
     "lrs"
   ],
+  "tabOrder": [
+    "Legend",
+    "Layers",
+    "Tools",
+    "Basemap"
+  ],
+  "customLegend": {
+      "html": "TrafficLegend.html",
+      "basemapSpecificSections": { 
+        "functionalClassBasemap": "#trafficLegend" 
+      },
+      "htmlType": "url"
+  },
   "mapOptions": {
     "logo": false,
     "extent": {

@@ -294,6 +294,7 @@
     <Content Include="style\locationInfo.css" />
     <Content Include="style\rmec.css" />
     <Content Include="style\traffic.css" />
+    <Content Include="TrafficLegend.html" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
