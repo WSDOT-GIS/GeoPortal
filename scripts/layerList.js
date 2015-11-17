@@ -1,9 +1,6 @@
 /*global require,$, dojo*/
 /*jslint browser:true, windows:true, nomen:true, white:true*/
 
-/// <reference path="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4-vsdoc.js"/>
-/// <reference path="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.js"/>
-
 /**
  * A layer list that only creates a layer object when the user checks the associated checkbox.
  * @author Jeff Jacobson
@@ -859,7 +856,8 @@ require([
 				}
 				// Create "Basemap" group if it does not already exist.  Assign this group to parent.
 				if (!basemapGroupFound) {
-					parent = this._addGroup(this.options.basemapGroupName);
+				    parent = this._addGroup(this.options.basemapGroupName);
+				    parent.addClass("basemap-group");
 				}
 
 				parent = $("ul", parent);

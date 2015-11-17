@@ -293,6 +293,7 @@
     <Content Include="style\layerSorter.css" />
     <Content Include="style\locationInfo.css" />
     <Content Include="style\rmec.css" />
+    <Content Include="style\traffic.css" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -350,7 +351,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
