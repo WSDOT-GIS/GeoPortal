@@ -147,7 +147,7 @@ define([
     }
 
     function createTable(features, doc) {
-        var table, attribNames, feature, row, tbody;
+        var table, attribNames, feature, row, thead, tbody;
         table = doc.createElement("table");
         tbody = table.createTBody();
 
@@ -166,12 +166,11 @@ define([
                     }
                 }
                 // Set the table's caption to the layer name.
-                caption = document.createElement("caption");
+                caption = table.createCaption();
                 caption.textContent = feature.result.layerName;
-                table.appendChild(caption);
 
-                table.createTHead();
-                row = table.tHead.insertRow();
+                thead = table.createTHead();
+                row = thead.insertRow();
                 attribNames.forEach(function (name) {
                     var cell = document.createElement("th");
                     cell.textContent = name;
@@ -183,10 +182,11 @@ define([
             row = tbody.insertRow(-1);
 
             attribNames.forEach(function (name) {
-                var cell = document.createElement("td");
+                var cell = row.insertCell();
                 var value = feature.attributes[name];
-                cell.textContent = value != null ? value.toString() : "<null>";
-                row.appendChild(cell);
+                if (value != null) {
+                    cell.textContent = value.toString();
+                }
             });
         }
 
@@ -206,6 +206,10 @@ define([
         return frag;
     }
 
+    /**
+     * Adds a link to an InfoWindow that, when clicked, will show all the current features' attributes in tables.
+     * @param {InfoWindow} infoWindow
+     */
     function addPrintLink(infoWindow) {
         var actionList = infoWindow.domNode.querySelector(".actionList");
         var link = document.createElement("a");
@@ -221,8 +225,6 @@ define([
         docFrag.appendChild(link);
 
         link.onclick = function () {
-
-
             var features = groupFeaturesByLayer(infoWindow.features);
             var doc = document.implementation.createHTMLDocument("attributes");
             var tables = groupedFeaturesToTables(features, doc);
@@ -237,29 +239,10 @@ define([
             doc.head.appendChild(style);
             
             var htmlMarkup = doc.documentElement.outerHTML;
-            htmlMarkup = encodeURI(htmlMarkup);
-            var url = ["data:text/html", htmlMarkup].join(",");
+            // Encode markup to base-64 for Firefox compatibility.
+            var url = ["data:text/html;base64", btoa(htmlMarkup)].join(",");
 
             window.open(url, "geoportal_attribute_table");
-
-            ////// Get the currently selected feature.
-            ////var feature = infoWindow.features[infoWindow.selectedIndex];
-
-            ////// Get the currently selected feature's geometry.
-            ////var geometry = feature.geometry;
-
-            ////// If the geometry's type is not a point, get the point that
-            ////// the info window is currently pointing to.
-            ////if (geometry.type !== "point") {
-            ////    geometry = infoWindow.location;
-            ////}
-
-            ////// Project to WGS 84 if possible.
-            ////if (webMercatorUtils.canProject(geometry, wgs84SR)) {
-            ////    geometry = webMercatorUtils.project(geometry, wgs84SR);
-            ////}
-            ////var url = getGoogleStreetViewUrl(geometry);
-            ////window.open(url, "_blank");
 
             return false;
         };
