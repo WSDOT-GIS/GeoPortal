@@ -5,6 +5,8 @@
 table {
     border-collapse: collapse;
     margin-bottom: 1em;
+    border-radius: 0 0 3px 3px;
+    width: 100%;
 }
 
 table, td {

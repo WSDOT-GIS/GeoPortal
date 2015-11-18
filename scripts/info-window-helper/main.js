@@ -149,7 +149,8 @@ define([
     function createTable(features, doc) {
         var table, attribNames, feature, row, thead, tbody;
         table = doc.createElement("table");
-        tbody = table.createTBody();
+        //tbody = table.createTBody();
+        tbody = doc.createElement("tbody");
 
         var ignoredAttributes = /(OBJECTID)|(Shape(\.STLength)?)/i;
         var caption;
@@ -169,8 +170,11 @@ define([
                 caption = table.createCaption();
                 caption.textContent = feature.result.layerName;
 
-                thead = table.createTHead();
+                //thead = table.createTHead();
+                thead = doc.createElement("thead");
+                table.appendChild(thead);
                 row = thead.insertRow();
+
                 attribNames.forEach(function (name) {
                     var cell = document.createElement("th");
                     cell.textContent = name;
@@ -189,6 +193,9 @@ define([
                 }
             });
         }
+
+        table.appendChild(tbody);
+
 
         return table;
     }
@@ -209,8 +216,9 @@ define([
     /**
      * Adds a link to an InfoWindow that, when clicked, will show all the current features' attributes in tables.
      * @param {InfoWindow} infoWindow
+     * @param {string} [fallbackUrl] - Url on same domain to use for IE "Access is denied" workaround.
      */
-    function addPrintLink(infoWindow) {
+    function addPrintLink(infoWindow, fallbackUrl) {
         var actionList = infoWindow.domNode.querySelector(".actionList");
         var link = document.createElement("a");
         var docFrag = document.createDocumentFragment();
@@ -241,8 +249,19 @@ define([
             var htmlMarkup = doc.documentElement.outerHTML;
             // Encode markup to base-64 for Firefox compatibility.
             var url = ["data:text/html;base64", btoa(htmlMarkup)].join(",");
+            var newWindow;
 
-            window.open(url, "geoportal_attribute_table");
+            try {
+                window.open(url, "geoportal_attribute_table");
+            } catch (err) {
+                if ((err.number === -2147024891 || err.message.match(/Access is denied/i)) && fallbackUrl) {
+                    newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
+                    newWindow.document.write(htmlMarkup);
+                    newWindow.focus();
+                } else {
+                    throw err;
+                }
+            }
 
             return false;
         };
