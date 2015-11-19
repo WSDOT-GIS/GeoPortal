@@ -367,15 +367,14 @@
       "layers": [
         {
           "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer",
-          "displayLevels": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+          "displayLevels": [ 0, 1, 2, 3, 4, 5, 6  ]
         },
         {
           "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
-          "displayLevels": [ 18, 19, 20, 21, 22, 23 ]
+          "displayLevels": [ 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 ]
         },
         {
-          "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WSDOTPublicRoads/MapServer",
-          "displayLevels": [ 18, 19, 20, 21, 22, 23 ]
+          "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/LocalRoads/MapServer"
         }
       ]
     }
