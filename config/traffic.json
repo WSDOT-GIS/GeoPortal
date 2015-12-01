@@ -16,7 +16,7 @@
   "customLegend": {
       "html": "TrafficLegend.html",
       "basemapSpecificSections": { 
-        "functionalClassBasemap": "#trafficLegend" 
+        "trafficLegend": "#trafficLegend" 
       },
       "htmlType": "url"
   },
