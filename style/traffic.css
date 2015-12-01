@@ -1,4 +1,8 @@
-﻿.ui-layer-list .basemap-group {
+﻿button[id='saveButton'], span[widgetid='saveButton'] {
+    display: none;
+}
+
+.ui-layer-list .basemap-group {
     display: none;
 }
 

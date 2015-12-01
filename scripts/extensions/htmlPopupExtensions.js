@@ -39,7 +39,7 @@ require([
     /**
      * Gets the WDFW ID from a table.
      * @param {Node} node - An HTML Table node.
-     * @returns {(string|null)}
+     * @returns {(string|null)} WDFW ID
      */
     function getWdfwId(node) {
         var headers, wdfwId = null, current, re = /^WDFW\s?ID$/i;
@@ -58,13 +58,13 @@ require([
 
     /**
      * Gets the URL for a WDFW Image with the given ID.
-     * @param {string} wdfwId
-     * @param {string} [imageViewerUrl]
-     * @returns {string}
+     * @param {string} wdfwId - WDFW ID
+     * @param {string} [imageViewerUrl] - Image viewer URL
+     * @returns {string} Image URL
      */
     function getWdfwImageUrl(wdfwId, imageViewerUrl) {
         var output = null;
-        if (!!wdfwId) {
+        if (wdfwId) {
             if (!imageViewerUrl) {
                 imageViewerUrl = "./fish-barrier-images/";
             }
@@ -75,7 +75,7 @@ require([
 
     /** For all <a> children of the input node where the href is the same as the text content,
      * the text content is replaced with the word "link".
-     * @param {Node} node
+     * @param {Node} node - An HTML element cointaining <a> elements.
      */
     function shortenAnchorText(node) {
         var anchors, a, i, l;
@@ -91,8 +91,8 @@ require([
     }
 
     /** Tests to see if an object has an htmlPopupType property that is either HTML Text or a URL.
-     * @param {Object} layerInfo
-     * @returns {Boolean}
+     * @param {Object} layerInfo - A layer info object
+     * @returns {Boolean} Returns true if the HTML popup type is HTML Text or URL, false otherwise.
      */
     function htmlPopupTypeIsHtmlTextOrUrl(layerInfo) {
         return layerInfo.htmlPopupType !== undefined && layerInfo.htmlPopupType !== null && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType);
@@ -100,9 +100,9 @@ require([
 
     /**
      * Gets the IDs of the layers that have HTML popups.
-     * @param {(ArcGISDynamicMapServiceLayer|ArcGISTiledMapServiceLayer)} mapServiceLayer
+     * @param {(ArcGISDynamicMapServiceLayer|ArcGISTiledMapServiceLayer)} mapServiceLayer - a map service layer
      * @param {boolean} [returnUrls=undefined] - If truthy, an array of map service URLs will be returned. Otherwise, and array of ID integers will be returned.
-     * @returns {(number[]|string[])}
+     * @returns {(number[]|string[])} Returns either an array of ID numbers, or URLs, depending on the returnUrls parameter.
      */
     function getIdsOfLayersWithHtmlPopups(mapServiceLayer, returnUrls) {
         var ids = [], layerInfo, i, l, layerId;
