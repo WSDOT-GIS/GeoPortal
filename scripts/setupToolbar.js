@@ -3,8 +3,7 @@ define([
     "dijit/registry",
     "dijit/form/Button",
     "esri/request",
-    "esri/dijit/Measurement",
-    "scripts/printer.js"
+    "esri/dijit/Measurement"
 ], function (registry, Button, esriRequest, Measurement) {
     function setupToolbar() {
         var button;
@@ -168,129 +167,6 @@ define([
                 return false;
             }
         }, "measureButton");
-
-        function setupPrinter(resp) {
-            var printButton, printDialog, templateNames, pdfList;
-
-            function getTemplateNames() {
-                var layoutTemplateParam = resp.parameters.filter(function (param /*, idx*/) {
-                    return param.name === "Layout_Template";
-                });
-
-                if (layoutTemplateParam.length === 0) {
-                    console.log("print service parameters name for templates must be \"Layout_Template\"");
-                    return;
-                }
-                return layoutTemplateParam[0].choiceList;
-            }
-
-            function getExtraParameters() {
-                return resp.parameters.filter(function (param /*, idx*/) {
-                    return param.name !== "Web_Map_as_JSON" && param.name !== "Format" && param.name !== "Output_File" && param.name !== "Layout_Template";
-                });
-            }
-
-            templateNames = getTemplateNames();
-
-            printButton = document.getElementById("printButton");
-            pdfList = $("<ol class='printouts-list'>").appendTo("#toolbar").hide();
-
-            printButton = new Button({
-                label: "Print",
-                iconClass: "dijitIconPrint",
-                showLabel: false,
-                onClick: function () {
-                    // Create the print dialog if it does not already exist.
-                    if (!printDialog) {
-                        printDialog = $("<div>").dialog({
-                            modal: true,
-                            title: "Print"
-                        }).printer({
-                            map: wsdot.map,
-                            templates: templateNames,
-                            url: wsdot.config.printUrl,
-                            extraParameters: getExtraParameters(),
-                            async: resp.executionType === "esriExecutionTypeAsynchronous",
-                            printSubmit: function (/*e, data*/) {
-                                ////var parameters = data.parameters;
-                                printDialog.dialog("close");
-                                printButton.set({
-                                    disabled: true,
-                                    iconClass: "dijitIconBusy"
-                                });
-                                if (window.gaTracker) {
-                                    window.gaTracker.send("event", "print", "submit", wsdot.config.printUrl);
-                                }
-                            },
-                            printComplete: function (e, data) {
-                                var result = data.result, li;
-                                printButton.set({
-                                    disabled: false,
-                                    iconClass: "dijitIconPrint"
-                                });
-                                pdfList.show("fade");
-                                li = $("<li>").appendTo(pdfList).hide();
-                                $("<a>").attr({
-                                    href: result.url,
-                                    target: "_blank"
-                                }).text("Printout").appendTo(li);
-                                li.show("fade");
-
-                                if (window.gaTracker) {
-                                    window.gaTracker.send("event", "print", "complete", result.url);
-                                }
-                            },
-                            printError: function (e, data) {
-                                var error = data.error, message;
-                                printButton.set({
-                                    disabled: false,
-                                    iconClass: "dijitIconPrint"
-                                });
-                                message = error.dojoType === "timeout" ? "The print service is taking too long to respond." : error.message || "Unknown Error";
-                                $("<div>").text(message).dialog({
-                                    title: "Print Error",
-                                    modal: true,
-                                    close: function () {
-                                        $(this).dialog("destroy").remove();
-                                    },
-                                    buttons: {
-                                        OK: function () {
-                                            $(this).dialog("close");
-                                        }
-                                    }
-                                });
-                                if (window.gaTracker) {
-                                    window.gaTracker.send("event", "print", "error", [message, wsdot.config.printUrl].join("\n"));
-                                }
-                            }
-                        });
-                    } else {
-                        printDialog.dialog("open");
-                    }
-                }
-            }, printButton);
-        }
-
-        // If a print URL has been specified, add the print widget.
-        if (wsdot.config.printUrl) {
-            // get print templates from the export web map task
-            var printInfo = esriRequest({
-                "url": wsdot.config.printUrl,
-                "content": { "f": "json" }
-            });
-            printInfo.then(setupPrinter, function (error) {
-                if (console) {
-                    if (console.error) {
-                        console.error("Failed to load print service URL.", error);
-                    }
-                }
-            });
-        } else {
-            (function (printButton) {
-                var parent = printButton.parentElement;
-                parent.removeChild(printButton);
-            }(document.getElementById("printButton")));
-        }
     }
 
     return setupToolbar;
