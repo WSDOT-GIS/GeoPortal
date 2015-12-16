@@ -35,6 +35,7 @@
     "fontawesome": "~4.3.0",
     "arcgis-geolocate-button": "~1.0.0",
     "arcgis-query-string-utilities": "https://github.com/WSDOT-GIS/arcgis-query-string-utilities.git#~1.1.1",
-    "elc": "wsdot-route-locator#~2.6.0"
+    "elc": "wsdot-route-locator#~2.6.0",
+    "arcgis-print-ui": "~1.0.0"
   }
 }
