@@ -17,6 +17,7 @@ define([
     "RouteLocator/elc-ui/ArcGisElcUI",
     "BufferUI",
     "BufferUI/BufferUIHelper",
+    "ArcGisPrintUI",
 
     "geoportal/extentSelect",
 
@@ -40,6 +41,7 @@ define([
     ArcGisElcUI,
     BufferUI,
     BufferUIHelper,
+    ArcGisPrintUI,
 
     createExtentSelect
 ) {
@@ -413,6 +415,28 @@ define([
             div.appendChild(drawUI);
         }
 
+        /**
+         * Creates the print UI if the configuration contains a printUrl property.
+         * @returns {ArcGisPrintUI} - Returns the print UI, or null if there is no printUrl property in the configuration.
+         */
+        function setupPrintUI() {
+            var div, printForm;
+            if (wsdot.config.printUrl) {
+                // Create the DOM element that will become the accordion pane which will contain the print form.
+                div = document.createElement("div");
+                div.id = "printPane";
+                document.getElementById("toolsAccordion").appendChild(div);
+                // Create the print form and append the form to the div.
+                printForm = new ArcGisPrintUI(wsdot.config.printUrl);
+                div.appendChild(printForm.form);
+                // Create the content pane to the tools accordion.
+                toolsAccordion.addChild(new ContentPane({ title: "Print", id: "printPane" }, div));
+                // Create a variable in the wsdot namespace so that it can be accessed when the map is loaded.
+                wsdot.printForm = printForm;
+            }
+            return printForm || null;
+        }
+
         // Look in the configuration to determine which tools to add and in which order.
         (function (tools) {
             var i, l;
@@ -434,6 +458,8 @@ define([
                 }
             }
         }(wsdot.config.tools));
+
+        setupPrintUI();
 
         mapControlsPane.addChild(tabs);
         mainContainer.addChild(mapControlsPane);
