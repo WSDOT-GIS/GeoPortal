@@ -5,8 +5,18 @@ define([
 ], function (Deferred, esriRequest, InfoTemplate) {
     "use strict";
 
+    /**
+     * A custom InfoTemplate for the Traffic Info map service
+     * @module TrafficInfoTemplate
+     */
+
     var numberFormat = new Intl.NumberFormat();
 
+    /**
+     * Creates a table of attributes of a graphic.
+     * @param {esri/Graphic} graphic
+     * @returns {HTMLTableElement}
+     */
     function createTable(graphic) {
         var displayFieldName = graphic.result.displayFieldName;
         var layerName = graphic.result.layerName;
@@ -73,6 +83,10 @@ define([
         return table;
     }
 
+
+    /**
+     * @alias module:TrafficInfoTemplate
+     */
     return new InfoTemplate({
         content: createContent,
         title: function (graphic) {
