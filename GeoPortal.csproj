@@ -57,6 +57,8 @@
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisDrawUI.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\ArcGisHelper.js" />
     <Content Include="bower_components\arcgis-js-draw-ui\icons.png" />
+    <Content Include="bower_components\arcgis-print-ui\ArcGisPrintUI.js" />
+    <Content Include="bower_components\arcgis-print-ui\Templates\ArcGisPrintUI.html" />
     <Content Include="bower_components\arcgis-query-string-utilities\QueryStringManager.js" />
     <Content Include="bower_components\elc\elc-ui\ArcGisElcUI.js" />
     <Content Include="bower_components\elc\elc-ui\elc-ui-behavior.css" />
@@ -248,7 +250,6 @@
       <DependentUpon>polyfills.js</DependentUpon>
     </Content>
     <Content Include="scripts\polyfills\promise-6.1.0.js" />
-    <Content Include="scripts\printer.js" />
     <Content Include="scripts\QueryStringManagerHelper.js" />
     <Content Include="scripts\setupLayout.js" />
     <Content Include="scripts\setupToolbar.js" />
@@ -358,7 +359,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

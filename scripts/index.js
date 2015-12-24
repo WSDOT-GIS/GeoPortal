@@ -481,7 +481,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
                     var search = new Search({
                         map: wsdot.map,
-                        enableHighlight: false,
+                        enableHighlight: false
                     }, addressDiv);
 
                     search.on("load", function () {
@@ -573,6 +573,11 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                 qsManager = new QueryStringManager(wsdot.map);
 
                 QueryStringManagerHelper.setupLayerListForQueryString(wsdot.map);
+
+                // Attach the map to the print form (if config contains print URL).
+                if (wsdot.printForm) {
+                    wsdot.printForm.map = wsdot.map;
+                }
             });
 
             /**
