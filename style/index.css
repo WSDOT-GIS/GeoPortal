@@ -259,7 +259,7 @@ img[src="images/ajax-loader.gif"] {
     width: 16px;
 }
 
-img[src$="blank.gif"] {
+img[src="blank.gif"] {
     width: 1px;
     height: 1px;
 }
@@ -498,12 +498,29 @@ abbr {
     background-repeat: repeat;
 }
 
-table.habitat-connectivity {
+table.habitat-connectivity, table.traffic {
     border-collapse: collapse;
 }
 
-table.habitat-connectivity tr:nth-child(even)  {
+table.habitat-connectivity tr:nth-child(even), table.traffic tr:nth-child(even)  {
     background-color: #ccc;
+}
+
+.null {
+    text-align: center;
+    font-style: italic;
+}
+
+.null:after {
+    content: 'N/A';
+}
+
+.asterisk {
+    font-style: italic;
+}
+
+.asterisk:after {
+    content: '*';
 }
 
 .attachment-link-list {
@@ -558,3 +575,4 @@ table.habitat-connectivity tr:nth-child(even)  {
 .esriPopup .pointer.hidden, .esriPopup .outerPointer.hidden {
     display: none;
 }
+

@@ -17,10 +17,11 @@ require([
     "esri/geometry/jsonUtils",
     "esri/geometry/geometryEngineAsync",
     "esri/geometry/webMercatorUtils",
-    "geoportal/HabitatConnectivityInfoTemplate"
+    "geoportal/HabitatConnectivityInfoTemplate",
+    "geoportal/TrafficInfoTemplate"
 ], function (all, Deferred, lang, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, geometryEngineAsync,
-    webMercatorUtils, HabitatConnectivityInfoTemplate
+    webMercatorUtils, HabitatConnectivityInfoTemplate, TrafficInfoTemplate
 ) {
     "use strict";
 
@@ -662,6 +663,8 @@ require([
                         feature.result = result;
                         if (layerId === "Habitat Connectivity") {
                             feature.setInfoTemplate(HabitatConnectivityInfoTemplate);
+                        } else if (layerId === "Traffic Data") {
+                            feature.setInfoTemplate(TrafficInfoTemplate);
                         } else {
                             feature.setInfoTemplate(infoTemplate);
                         }

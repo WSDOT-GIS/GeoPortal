@@ -254,6 +254,7 @@
     <Content Include="scripts\setupLayout.js" />
     <Content Include="scripts\setupToolbar.js" />
     <Content Include="scripts\showDisclaimer.js" />
+    <Content Include="scripts\TrafficInfoTemplate.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
@@ -359,7 +360,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
