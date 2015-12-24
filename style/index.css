@@ -515,11 +515,11 @@ table.habitat-connectivity tr:nth-child(even), table.traffic tr:nth-child(even) 
     content: 'N/A';
 }
 
-.asterisk {
+.derived {
     font-style: italic;
 }
 
-.asterisk:after {
+.derived:after {
     content: '*';
 }
 

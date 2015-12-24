@@ -12,7 +12,7 @@ define([
         var layerName = graphic.result.layerName;
         var attr = graphic.attributes;
         var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
-        var asteriskedRe = /^(\d+)\*$/;
+        var derivedRe = /^(\d+)\*$/;
         var nullRe = /^Null$/i;
         var numberFieldNameRe = /^Year\s\d{4}$/i, numberRe = /^\d+$/;
         var table = document.createElement("table");
@@ -40,7 +40,7 @@ define([
 
                 // Apply formatting for special cases.
                 if (typeof value === "number") {
-                    //value = numberFormat.format(value);
+                    value = numberFormat.format(value);
                 }
                 else if (typeof value === "string") {
                     if (numberFieldNameRe.test(name) && numberRe.test(value)) {
@@ -49,9 +49,9 @@ define([
                         cell.classList.add("null");
                         handled = true;
                     } else {
-                        match = value.match(asteriskedRe);
+                        match = value.match(derivedRe);
                         if (match) {
-                            cell.classList.add("asterisk");
+                            cell.classList.add("derived");
                             cell.textContent = numberFormat.format(parseInt(match[1], 10));
                             handled = true;
                         }
