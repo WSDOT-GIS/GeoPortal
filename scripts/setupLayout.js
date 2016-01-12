@@ -420,7 +420,20 @@ define([
          * @returns {ArcGisPrintUI} - Returns the print UI, or null if there is no printUrl property in the configuration.
          */
         function setupPrintUI() {
-            var div, printForm;
+            var div, printForm, printPane;
+
+            function setupPrintButton() {
+                var toolbar = document.getElementById("toolbar");
+                var button = document.createElement("button");
+                button.type = "button";
+                button.textContent = "Print";
+                toolbar.appendChild(button);
+                button.onclick = function () {
+                    tabs.selectChild(toolsTab);
+                    toolsAccordion.selectChild(printPane);
+                };
+            }
+
             if (wsdot.config.printUrl) {
                 // Create the DOM element that will become the accordion pane which will contain the print form.
                 div = document.createElement("div");
@@ -430,9 +443,12 @@ define([
                 printForm = new ArcGisPrintUI(wsdot.config.printUrl);
                 div.appendChild(printForm.form);
                 // Create the content pane to the tools accordion.
-                toolsAccordion.addChild(new ContentPane({ title: "Print", id: "printPane" }, div));
+                printPane = new ContentPane({ title: "Print", id: "printPane" }, div);
+                toolsAccordion.addChild(printPane);
                 // Create a variable in the wsdot namespace so that it can be accessed when the map is loaded.
                 wsdot.printForm = printForm;
+
+                setupPrintButton();
             }
             return printForm || null;
         }
