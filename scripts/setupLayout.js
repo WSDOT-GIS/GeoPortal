@@ -6,6 +6,7 @@ define([
     "dijit/layout/ContentPane",
     "dijit/layout/AccordionContainer",
     "dijit/layout/BorderContainer",
+    "dijit/form/Button",
 
     "dojox/layout/ExpandoPane",
 
@@ -30,6 +31,7 @@ define([
     ContentPane,
     AccordionContainer,
     BorderContainer,
+    Button,
 
     ExpandoPane,
 
@@ -108,7 +110,7 @@ define([
         }
 
         function setupLegend() {
-            if (typeof (wsdot.config.customLegend) === "object") {
+            if (typeof wsdot.config.customLegend === "object") {
                 var basemapGallery = registry.byId("basemapGallery");
                 if (basemapGallery) {
                     wsdot.config.customLegend.basemapGallery = basemapGallery;
@@ -425,13 +427,21 @@ define([
             function setupPrintButton() {
                 var toolbar = document.getElementById("toolbar");
                 var button = document.createElement("button");
+                button.id = "openPrintPanelButton";
+                button.title = "Opens the print tool pane.";
                 button.type = "button";
                 button.textContent = "Print";
                 toolbar.appendChild(button);
-                button.onclick = function () {
-                    tabs.selectChild(toolsTab);
-                    toolsAccordion.selectChild(printPane);
-                };
+
+                button = new Button({
+                    label: "Print",
+                    showLabel: false,
+                    iconClass: "dijitEditorIcon dijitEditorIconPrint",
+                    onClick: function () {
+                        tabs.selectChild(toolsTab);
+                        toolsAccordion.selectChild(printPane);
+                    }
+                }, button).startup();
             }
 
             if (wsdot.config.printUrl) {
