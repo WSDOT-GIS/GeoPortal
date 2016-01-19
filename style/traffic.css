@@ -1,4 +1,4 @@
-﻿button[id='saveButton'], span[widgetid='saveButton'] {
+﻿button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'] {
     display: none;
 }
 
