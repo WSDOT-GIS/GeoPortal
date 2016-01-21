@@ -156,9 +156,18 @@ require([
     });
 
     /**
+     * @typedef {Object} HtmlPopupDetectResponse
+     * @property {Layer} mapService - map service
+     * @property {LayerInfo} layerInfo - info about the map service sublayer.
+     * @property {string} layerUrl - layer's URL.
+     * @property {Object} layerResponse - Response for the layer HTTP query, which contains the HTML popup type.
+     */
+
+    /**
      * Query the map service to see if any of the layers have HTML popups and store this data in the LayerInfos.
+     * This will add an "htmlPopupType" property to each LayerInfo object in the map service's layerInfos property.
      * @param {Function} [htmlPopupLayerFoundAction] - Optional.  A function that will be called whenever an HTML popup is found.
-     * @returns {dojo/Deferred}
+     * @returns {dojo/Deferred.<HtmlPopupDetectResponse[]>} - Deferred object with {@link HtmlPopupDetectResponse} objects.
      */
     detectHtmlPopups = function (htmlPopupLayerFoundAction) {
         var mapService = this, layerInfo, layerUrl, i, l, deferred, completedRequestCount = 0, responses = [];
@@ -190,7 +199,7 @@ require([
                     total: l,
                     data: progressObject
                 });
-                if (typeof (htmlPopupLayerFoundAction) === "function") {
+                if (typeof htmlPopupLayerFoundAction === "function") {
                     htmlPopupLayerFoundAction(mapService, layerInfo, layerUrl, layerResponse);
                 }
             } else {
@@ -243,7 +252,7 @@ require([
         /**
          * Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
          * @param {Function} [htmlPopupLayerFoundAction] - Function that will be called for each layer once it has been determined if it supports HTML popups.
-         * @returns {dojo/Deferred}
+         * @returns {dojo/Deferred} - Indicates progress of operation with currently completed count and total count.
          */
         detectHtmlPopups: function (htmlPopupLayerFoundAction) {
             var map = this;
@@ -274,12 +283,12 @@ require([
                 mapService = map.getLayer(id);
 
                 if (mapService.loaded) {
-                    if (typeof (mapService.detectHtmlPopups) === "function") {
+                    if (typeof mapService.detectHtmlPopups === "function") {
                         mapService.detectHtmlPopups(htmlPopupLayerFoundAction).then(onComplete);
                     }
                 } else {
                     mapService.on("load", function (/*layer*/) {
-                        if (typeof (mapService.detectHtmlPopups) === "function") {
+                        if (typeof mapService.detectHtmlPopups === "function") {
                             mapService.detectHtmlPopups(htmlPopupLayerFoundAction).then(onComplete);
                         }
                     });
@@ -325,8 +334,14 @@ require([
                 }
                 layer = map.getLayer(layerId);
                 if (layer.visible) {
-                    if (typeof (layer.getIdsOfLayersWithHtmlPopups) === "function") {
-                        sublayerIds = layer.getIdsOfLayersWithHtmlPopups();
+                    if (typeof layer.getIdsOfLayersWithHtmlPopups === "function") {
+                        //sublayerIds = layer.getIdsOfLayersWithHtmlPopups();
+                        sublayerIds = [];
+                        layer.layerInfos.forEach(function (layerInfo) {
+                            if (!(layerInfo.sublayerIds && layerInfo.sublayerIds.length > 0)) {
+                                sublayerIds.push(layerInfo.id);
+                            }
+                        });
                         // If there are sublayers defined, run an identify task.
                         if (sublayerIds && sublayerIds.length > 0) {
                             queryCount += 1;
@@ -479,8 +494,8 @@ require([
             map.on("click", function (event) {
                 /**
                  * Gets the name of the object ID field from a feature.
-                 * @param {esri/Graphic} feature
-                 * return {string}
+                 * @param {esri/Graphic} feature - a graphic
+                 * @returns {string} The name of the object ID field.
                  */
                 function getOid(feature) {
                     var output = null, re = /O(BJECT)ID/i;
@@ -507,9 +522,9 @@ require([
 
                 /** 
                  * Create a table to display attributes if no HTML popup is defined.
-                 * @param {esri/Graphic} feature
-                 * @param {esri/tasks/IdentifyResult} result
-                 * @returns {HTMLTableElement}
+                 * @param {esri/Graphic} feature - a graphic
+                 * @param {esri/tasks/IdentifyResult} result - an identify result
+                 * @returns {HTMLTableElement} An HTML table of results.
                  */
                 function createDefaultTable(feature, result) {
                     var table, name, value, ignoredAttributes = /^(?:(?:SHAPE(\.STLength\(\))?)|(?:O(?:BJECT)?ID))$/i, title, caption, tr;
@@ -539,16 +554,37 @@ require([
 
                 /**
                  * Creates InfoWindow content.
-                 * @param {external:Graphic} feature
-                 * @returns {(HTMLElement|string|function)}
+                 * @param {external:Graphic} feature - a graphic
+                 * @returns {(HTMLElement|string|function)} - the content for the info window
                  */
                 function loadContent(feature) {
-                    var div, layer, result, url, oid;
+                    var div, layer, result, url, oid, sublayerInfo;
                     div = null;
+
+                    function addWdfwId() {
+                        var url, a, wdfwLinkContainer;
+                        var wdfwId = getWdfwId(div);
+                        if (wdfwId) {
+                            wdfwLinkContainer = document.createElement("div");
+                            wdfwLinkContainer.setAttribute("class", "wdfw-photos wdfw-photos-link-container");
+                            url = getWdfwImageUrl(wdfwId);
+                            a = document.createElement("a");
+                            a.setAttribute("class", "wdfw-photos wdfw-photos-link");
+                            a.href = url;
+                            a.target = "_blank";
+                            a.appendChild(document.createTextNode("Photos"));
+                            wdfwLinkContainer.appendChild(a);
+                            div.insertBefore(wdfwLinkContainer, div.firstChild);
+                        }
+                    }
+
+                    layer = feature.layer;
+                    result = feature.result;
+                    sublayerInfo = layer.layerInfos[result.layerId];
+                    console.debug("htmlPopupType", sublayerInfo.htmlPopupType);
+
                     // Load the HTML popup content if it has not already been loaded.
-                    if (div === null) {
-                        layer = feature.layer;
-                        result = feature.result;
+                    if (sublayerInfo.htmlPopupType && !/None$/i.test(sublayerInfo.htmlPopupType)) {//div === null) {
 
                         div = document.createElement("div");
 
@@ -603,22 +639,8 @@ require([
                                     div.appendChild(node);
                                 }
 
-                                // Add WDFW URL;
-                                (function (wdfwId) {
-                                    var url, a, wdfwLinkContainer;
-                                    if (wdfwId) {
-                                        wdfwLinkContainer = document.createElement("div");
-                                        wdfwLinkContainer.setAttribute("class", "wdfw-photos wdfw-photos-link-container");
-                                        url = getWdfwImageUrl(wdfwId);
-                                        a = document.createElement("a");
-                                        a.setAttribute("class", "wdfw-photos wdfw-photos-link");
-                                        a.href = url;
-                                        a.target = "_blank";
-                                        a.appendChild(document.createTextNode("Photos"));
-                                        wdfwLinkContainer.appendChild(a);
-                                        div.insertBefore(wdfwLinkContainer, div.firstChild);
-                                    }
-                                }(getWdfwId(div)));
+                                addWdfwId(div);
+
                             }, function (error) {
                                 var p;
                                 p = document.createElement("p");
@@ -629,6 +651,10 @@ require([
                             div.appendChild(createDefaultTable(feature, result));
                         }
                         //feature.content = div;
+                    } else { // No HTML popup or Popup type is None...
+                        div = document.createElement("div");
+                        div.appendChild(createDefaultTable(feature, result));
+                        addWdfwId(div);
                     }
 
                     return div;
@@ -638,6 +664,10 @@ require([
 
                 map.identify(event.mapPoint, {
                     tolerance: 5
+                    /**
+                     * 
+                     * @param {Object.<string, IdentifyResult[]>} idResults - The propery names correspond to map layer IDs. Each of these properties is an array of identify results associated with that map layer.
+                     */
                 }).then(function (idResults) {
                     //console.debug(idResults);
                     var results, features = [];
@@ -646,7 +676,7 @@ require([
                     /**
                      * Adds a feature the the array of features.
                      * Intended for use with Array.prototype.forEach().
-                     * @param {Graphic} feature
+                     * @param {Graphic} feature - a graphic
                      */
                     function pushFeature(feature) {
                         features.push(feature);
@@ -655,7 +685,7 @@ require([
                     /**
                      * Gets a Graphic from an Identify result and adds it to the array of features.
                      * Intended for use with Array.prototype.forEach().
-                     * @param {IdentifyResult} result
+                     * @param {IdentifyResult} result - An identify result
                      */
                     function pushResult(result) {
                         var feature = result.feature;

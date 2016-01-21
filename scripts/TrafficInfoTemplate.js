@@ -14,8 +14,8 @@ define([
 
     /**
      * Creates a table of attributes of a graphic.
-     * @param {esri/Graphic} graphic
-     * @returns {HTMLTableElement}
+     * @param {esri/Graphic} graphic - a graphic
+     * @returns {HTMLTableElement} - An HTML table
      */
     function createTable(graphic) {
         var displayFieldName = graphic.result.displayFieldName;
