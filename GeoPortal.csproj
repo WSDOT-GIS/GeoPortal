@@ -156,6 +156,9 @@
     <Content Include="index.html" />
     <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
+    <Content Include="PtrSites\index.css" />
+    <Content Include="PtrSites\index.html" />
+    <Content Include="PtrSites\index.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\configUtils.js" />
     <Content Include="scripts\customLegend.js" />

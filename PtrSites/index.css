@@ -1,0 +1,12 @@
+﻿ul:empty:after {
+    font-style: italic;
+    content: 'No current jobs';
+}
+
+li > progress {
+    display: none;
+}
+
+.loading > progress {
+    display: inline-block;
+}
