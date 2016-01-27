@@ -42,6 +42,21 @@
         <h1>Jobs</h1>
         <ul id="jobsList" class="list-group"></ul>
     </section>
+    <script>
+        (function () {
+            var root = location.pathname.replace(/\/[^\/]*$/, "");
+            var dojoConfig = {
+                async: true,
+                packages: [
+                    {
+                        name: "ptrSites",
+                        location: root
+                    }
+                ]
+            };
+            window.dojoConfig = dojoConfig;
+        }());
+    </script>
     <script src="//js.arcgis.com/3.15/init.js" integrity="sha384-Zh5j59HJOGOiN5XDH9/HC98zIsqw49J3XxWeTgN7gsTUzGjKlPaXGs5ufnVngSAX" crossorigin="anonymous"></script>
     <script src="index.js"></script>
 </body>

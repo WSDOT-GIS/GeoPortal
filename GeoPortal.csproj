@@ -159,6 +159,7 @@
     <Content Include="PtrSites\index.css" />
     <Content Include="PtrSites\index.html" />
     <Content Include="PtrSites\index.js" />
+    <Content Include="PtrSites\JobListItem.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\configUtils.js" />
     <Content Include="scripts\customLegend.js" />
