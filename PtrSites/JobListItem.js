@@ -17,6 +17,9 @@ define(function () {
     /**
      * An object that manages a list item associated with a job.
      * @class
+     * @param {string} siteId - The site ID label on the link.
+     * @param {string} startDate - The start date label on the link.
+     * @param {string} endDate - The end date label on th elink.
      * @property {string} jopId - The identifier for the geoprocessing job.
      * @property {HTMLLIElement} listItem - The list item (<li>) associated with this object.
      * @property {Boolean} loading - Gets or sets the "loading" status of this object. Changing this value will toggle the "loading" class on the list item.
@@ -26,7 +29,7 @@ define(function () {
      * @property {string} endDate - Gets or sets the end date label on th elink.
      * @property {string} error - Gets or sets the error message on the list item.
      */
-    function JobListItem() {
+    function JobListItem(siteId, startDate, endDate) {
         var _jobId = null;
         var li = document.createElement("li");
         li.classList.add("list-group-item");
@@ -37,6 +40,7 @@ define(function () {
 
         
         var a = document.createElement("a");
+        a.setAttribute("type", "application/zip");
 
         var icon = document.createElement("span");
         icon.setAttribute("class", "glyphicon glyphicon-compressed");
@@ -127,7 +131,25 @@ define(function () {
                 }
             }
         });
+
+        // Set the values from parameters if provided.
+        if (siteId) {
+            this.siteId = siteId;
+        }
+        if (startDate) {
+            this.startDate = startDate;
+        }
+        if (endDate) {
+            this.endDate = endDate;
+        }
     }
+
+    JobListItem.prototype.updateDownloadAttribute = function () {
+        var a, fn;
+        a = this.listItem.querySelector("a");
+        fn = ["PTR ", this.siteId, " from ", this.startDate, " to ", this.endDate, ".zip"].join("");
+        a.setAttribute("download", fn);
+    };
 
     return JobListItem;
 });

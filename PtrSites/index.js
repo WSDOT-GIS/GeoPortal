@@ -1,5 +1,4 @@
 ﻿/// <reference path="../bower_components/polyfills/url.js" />
-/// <reference path="../bower_components/promise-polyfill/Promise.js" />
 
 /**
  * @external AllLayersAndTables
@@ -40,9 +39,6 @@ require(["esri/config", "esri/tasks/Geoprocessor", "ptrSites/JobListItem"], func
     // Convert the date strings into Date objects.
     startDate = startDate ? new Date(startDate) : null;
     endDate = endDate ? new Date(endDate) : null;
-
-    var dateFmt = new Intl.DateTimeFormat();
-
 
     // Populate the form with the values from the URL search.
     var form = document.forms[0];
@@ -89,10 +85,7 @@ require(["esri/config", "esri/tasks/Geoprocessor", "ptrSites/JobListItem"], func
         url.searchParams.set("enddate", form.enddate.value);
         window.history.replaceState(params, null, url.toString());
 
-        var li = new JobListItem();
-        li.siteId = params.Site_ID;
-        li.startDate = form.startdate.value;
-        li.endDate = form.enddate.value;
+        var li = new JobListItem(params.Site_ID, form.startdate.value, form.enddate.value);
 
         document.getElementById("jobsList").appendChild(li.listItem);
 
@@ -102,6 +95,7 @@ require(["esri/config", "esri/tasks/Geoprocessor", "ptrSites/JobListItem"], func
                 console.debug("get-result-data-complete", dataEvent);
                 li.loading = false;
                 li.link = dataEvent.value.url;
+                li.updateDownloadAttribute();
             }, null, function (error) {
                 li.error = error;
                 console.error(error);
@@ -114,6 +108,7 @@ require(["esri/config", "esri/tasks/Geoprocessor", "ptrSites/JobListItem"], func
         return false;
     };
 
+    // Clear the URL search parameters when the form is reset.
     form.onreset = function () {
         history.replaceState(null, null, "./");
     };
@@ -128,6 +123,7 @@ require(["esri/config", "esri/tasks/Geoprocessor", "ptrSites/JobListItem"], func
             if (self.status !== 200) {
                 throw new Error(self.statusText);
             }
+            // Parse the returned JSON into an Object using a custom reviver that trims excess spaces from strings.
             data = JSON.parse(self.responseText, function (k, v) {
                 if (typeof v === "string") {
                     return v.trim();
@@ -155,7 +151,12 @@ require(["esri/config", "esri/tasks/Geoprocessor", "ptrSites/JobListItem"], func
         request.send();
     }
 
-    populateSiteIdOptionList();
+    try {
+        populateSiteIdOptionList();
+    } catch (err) {
+        console.error("Error populating site ID suggestion list", err);
+    }
+
     if (form.checkValidity()) {
         submitJob();
     }
