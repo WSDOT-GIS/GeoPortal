@@ -14,9 +14,20 @@
 require(["esri/tasks/Geoprocessor"], function (Geoprocessor) {
     "use strict";
 
-    function JobListItem(jobId) {
+
+    var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
+    var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query?where=1%3D1&outFields=ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation&returnGeometry=false&orderByFields=ADCTraffic.DBO.PTRSites.SiteID&returnDistinctValues=true&f=json"
+
+    /**
+     * An object that manages a list item associated with a job.
+     * @class
+     * @property {HTMLLIElement} listItem - The list item (<li>) associated with this object.
+     * @property {Boolean} loading - Gets or sets the "loading" status of this object. Changing this value will toggle the "loading" class on the list item.
+     * @property {string} link - The URL inside of the <a> element.
+     */
+    function JobListItem() {
+        var _jobId = null;
         var li = document.createElement("li");
-        li.id = "job" + jobId;
         li.classList.add("loading");
         var progress = document.createElement("progress");
         progress.textContent = "Loading...";
@@ -24,9 +35,31 @@ require(["esri/tasks/Geoprocessor"], function (Geoprocessor) {
         
         var a = document.createElement("a");
         a.href = "";
+        //a.innerHTML = "<span></span> from <span></span> to <span></span>"
+        var siteIdSpan = document.createElement("span");
+        var startDateSpan = document.createElement("span");
+        var endDateSpan = document.createElement("span");
+        a.appendChild(siteIdSpan);
+        a.appendChild(document.createTextNode(" from "));
+        a.appendChild(startDateSpan);
+        a.appendChild(document.createTextNode(" to "));
+        a.appendChild(endDateSpan);
         li.appendChild(a);
 
+        var errorP = document.createElement("p");
+        errorP.classList.add("error");
+        li.appendChild(errorP);
+
         Object.defineProperties(this, {
+            jobId: {
+                get: function () {
+                    return _jobId;
+                }, 
+                set: function(value) {
+                    _jobId = value;
+                    li.dataset.jobId = value;
+                }
+            },
             listItem: {
                 get: function () {
                     return li;
@@ -46,38 +79,61 @@ require(["esri/tasks/Geoprocessor"], function (Geoprocessor) {
             },
             link: {
                 get: function () {
-                    return a;
+                    return a.href;
+                },
+                set: function (url) {
+                    a.href = url;
+                }
+            },
+            siteId: {
+                get: function () {
+                    return siteIdSpan.textContent;
+                },
+                set: function (value) {
+                    siteIdSpan.textContent = value;
+                }
+            },
+            startDate: {
+                get: function () {
+                    return startDateSpan.textContent;
+                },
+                set: function (value) {
+                    startDateSpan.textContent = value;
+                }
+            },
+            endDate: {
+                get: function () {
+                    return endDateSpan.textContent;
+                },
+                set: function (value) {
+                    endDateSpan.textContent = value;
+                }
+            }, error: {
+                set: function (value) {
+                    errorP.textContent = value || "";
+                    if (value) {
+                        li.classList.add("error");
+                    } else {
+                        li.classList.remove("error");
+                    }
                 }
             }
         });
     }
-
-    var jobListItems = {
-
-    };
-
-    var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
-
-    function writeError(message) {
-        var p = document.createElement("p");
-        p.setAttribute("class", "error");
-        p.textContent = message;
-        document.body.appendChild(p);
-    }
-
+    // Create a URL object for accessing the URL's search parameters.
     var url = new URL(window.location.href);
 
+    // Get the GP parameters from the URL search if available.
     var siteId = url.searchParams.get("siteid");
+    var startDate = url.searchParams.get("startdate");
+    var endDate = url.searchParams.get("enddate");
 
-    var startDate, endDate;
-
-    startDate = url.searchParams.get("startdate");
-    endDate = url.searchParams.get("enddate");
-
+    // Convert the date strings into Date objects.
     startDate = startDate ? new Date(startDate) : null;
     endDate = endDate ? new Date(endDate) : null;
 
 
+    // Populate the form with the values from the URL search.
     var form = document.forms[0];
     form.siteid.setAttribute("value", siteId);
     form.startdate.valueAsDate = startDate;
@@ -102,45 +158,11 @@ require(["esri/tasks/Geoprocessor"], function (Geoprocessor) {
      * @property {Geoprocessor} target - The Geoprocessor that is executing the task.
      */
 
+    // Create the Geoprocessor
     var gp = new Geoprocessor(gpUrl);
-
-    /**
-     * 
-     * @param {JobStatus} e - job status event
-     */
-    gp.on("status-update", function (e) {
-        var jobInfo = e.jobInfo;
-        var jobLI, list;
-        list = document.getElementById("jobsList");
-        if (jobInfo.jobStatus === "esriJobSubmitted") {
-            jobLI = new JobListItem(jobInfo.jobId);
-            list.appendChild(jobLI.listItem);
-            jobListItems[jobInfo.jobId] = jobLI;
-        } else {
-            jobLI = jobListItems[jobInfo.jobId];
-            if (jobInfo.jobStatus !== "esriJobExecuting") {
-                jobLI.loading = false;
-            }
-        }
-        console.debug("status-update", e);
-    });
-
-    gp.on("job-complete", function (e) {
-        console.debug("job-complete", e);
-        this.getResultData(e.jobInfo.jobId, "zip_file_path").then(function (dataEvent) {
-            console.debug("get-result-data-complete", dataEvent);
-            var jobLI = jobListItems[e.jobInfo.jobId];
-            jobLI.link.href = dataEvent.value.url;
-            jobLI.link.textContent = dataEvent.value.url;
-        });
-    });
 
     gp.on("job-cancel", function (e) {
         console.debug("job-cancel", e);
-    });
-
-    gp.on("error", function (e) {
-        console.error("GP error", e);
     });
 
     function submitJob() {
@@ -156,7 +178,24 @@ require(["esri/tasks/Geoprocessor"], function (Geoprocessor) {
 
         window.history.pushState(params, null, url.toString());
 
-        return gp.submitJob(params);
+        var li = new JobListItem();
+        li.siteId = params.Site_ID;
+        li.startDate = form.startdate.value;
+        li.endDate = form.enddate.value;
+
+        document.getElementById("jobsList").appendChild(li.listItem);
+
+        return gp.submitJob(params).then(function (e) {
+            var jobId = e.jobId;
+            gp.getResultData(jobId, "zip_file_path").then(function (dataEvent) {
+                console.debug("get-result-data-complete", dataEvent);
+                li.loading = false;
+                li.link = dataEvent.value.url;
+            }, null, function (error) {
+                li.error = error;
+                console.error(error);
+            });
+        });
     }
 
     form.onsubmit = function () {
@@ -164,6 +203,44 @@ require(["esri/tasks/Geoprocessor"], function (Geoprocessor) {
         return false;
     };
 
+    function populateSiteIdOptionList() {
+        // Populate site id option list.
+        var request = new XMLHttpRequest();
+        request.open("get", siteIdsUrl);
+        request.onloadend = function (e) {
+            var self = e.target;
+            var data;
+            if (self.status !== 200) {
+                throw new Error(self.statusText);
+            }
+            data = JSON.parse(self.responseText, function (k, v) {
+                if (typeof v === "string") {
+                    return v.trim();
+                }
+                return v;
+            });
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+
+            var field = data.displayFieldName; // "ADCTraffic.DBO.PTRSites.SiteID";
+            var descField = data.fields[1].name;
+            var siteIdList = document.getElementById("siteIdList");
+            var docFrag = document.createDocumentFragment();
+            data.features.forEach(function (feature) {
+                var siteId = feature.attributes[field];
+                var option = document.createElement("option");
+                option.value = siteId;
+                option.textContent = feature.attributes[descField];
+                docFrag.appendChild(option);
+            });
+            siteIdList.appendChild(docFrag);
+        };
+        request.send();
+    }
+
+    populateSiteIdOptionList();
     if (form.checkValidity()) {
         submitJob();
     }

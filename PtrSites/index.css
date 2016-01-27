@@ -10,3 +10,15 @@ li > progress {
 .loading > progress {
     display: inline-block;
 }
+
+.loading > a {
+    display: none
+}
+
+li > .error {
+    display: none;
+}
+
+li.error > .error {
+    display: block;
+}
