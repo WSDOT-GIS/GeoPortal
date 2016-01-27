@@ -3,12 +3,13 @@
 <head>
     <title></title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <link href="index.css" rel="stylesheet" async="async" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" async="async" />
     <!-- Optional theme -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" async="async" />
-    <script src="../bower_components/polyfills/url.js"></script>
+    <script src="../bower_components/polyfills/polyfill.min.js"></script>
 </head>
 <body>
     <form id="queryParametersForm">
@@ -39,9 +40,9 @@
 
     <section>
         <h1>Jobs</h1>
-        <ul id="jobsList"></ul>
+        <ul id="jobsList" class="list-group"></ul>
     </section>
-    <script src="//js.arcgis.com/3.15compact/init.js" integrity="sha384-mnCViwyy/EJJ/HLZevdLtgrKI52HQnn6uTlnVx1Vz1raWeMCND8R0FeeVnpdphyZ" crossorigin="anonymous"></script>
+    <script src="//js.arcgis.com/3.15/init.js" integrity="sha384-Zh5j59HJOGOiN5XDH9/HC98zIsqw49J3XxWeTgN7gsTUzGjKlPaXGs5ufnVngSAX" crossorigin="anonymous"></script>
     <script src="index.js"></script>
 </body>
 </html>

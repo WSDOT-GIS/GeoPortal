@@ -11,8 +11,9 @@ li > progress {
     display: inline-block;
 }
 
-.loading > a {
-    display: none
+.loading a {
+    pointer-events: none;
+    cursor: wait;
 }
 
 li > .error {
