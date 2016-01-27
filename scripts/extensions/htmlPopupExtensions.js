@@ -18,10 +18,11 @@ require([
     "esri/geometry/geometryEngineAsync",
     "esri/geometry/webMercatorUtils",
     "geoportal/HabitatConnectivityInfoTemplate",
-    "geoportal/TrafficInfoTemplate"
+    "geoportal/TrafficInfoTemplate",
+    "geoportal/PtrTemplate"
 ], function (all, Deferred, lang, esriRequest, InfoTemplate, Map, LayerInfo, ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer, FeatureLayer, IdentifyTask, IdentifyParameters, jsonUtils, geometryEngineAsync,
-    webMercatorUtils, HabitatConnectivityInfoTemplate, TrafficInfoTemplate
+    webMercatorUtils, HabitatConnectivityInfoTemplate, TrafficInfoTemplate, PtrTemplate
 ) {
     "use strict";
 
@@ -695,6 +696,8 @@ require([
                             feature.setInfoTemplate(HabitatConnectivityInfoTemplate);
                         } else if (layerId === "Traffic Data") {
                             feature.setInfoTemplate(TrafficInfoTemplate);
+                        } else if (layerId === "PTR Sites") {
+                            feature.setInfoTemplate(PtrTemplate);
                         } else {
                             feature.setInfoTemplate(infoTemplate);
                         }

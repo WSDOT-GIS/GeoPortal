@@ -2,21 +2,19 @@
 /// <reference path="../bower_components/promise-polyfill/Promise.js" />
 
 /**
- * @external AllLayersAndTables
- * @see {@link http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/All_Layers_and_Tables/02r3000000v0000000/|All Layers and Tables (Map Service)}
+ * List item representing a GP job.
+ * @module JobListItem
  */
-
-/**
- * @external MapServiceLayerQueryResult
- * @see {@link http://resources.arcgis.com/en/help/arcgis-rest-api/#/Query_Map_Service_Layer/02r3000000p1000000/|Query (Map Service\Layer)}
- */
-
 define(function () {
     "use strict";
 
+    var loadingClassName = "loading";
+    var errorClassName = "error";
+
     /**
      * An object that manages a list item associated with a job.
-     * @class
+     * @constructor
+     * @alias module:JobListItem
      * @param {string} siteId - The site ID label on the link.
      * @param {string} startDate - The start date label on the link.
      * @param {string} endDate - The end date label on th elink.
@@ -59,7 +57,7 @@ define(function () {
         li.appendChild(progress);
 
         var errorP = document.createElement("p");
-        errorP.classList.add("error");
+        errorP.classList.add(errorClassName);
         li.appendChild(errorP);
 
         Object.defineProperties(this, {
@@ -79,13 +77,13 @@ define(function () {
             },
             loading: {
                 get: function () {
-                    li.classList.contains("loading");
+                    li.classList.contains(loadingClassName);
                 },
                 set: function (isLoading) {
                     if (isLoading) {
-                        li.classList.add("loading");
+                        li.classList.add(loadingClassName);
                     } else {
-                        li.classList.remove("loading");
+                        li.classList.remove(loadingClassName);
                     }
                 }
             },
@@ -124,9 +122,9 @@ define(function () {
                 set: function (value) {
                     errorP.textContent = value || "";
                     if (value) {
-                        li.classList.add("error");
+                        li.classList.add(errorClassName);
                     } else {
-                        li.classList.remove("error");
+                        li.classList.remove(errorClassName);
                     }
                 }
             }
@@ -144,6 +142,9 @@ define(function () {
         }
     }
 
+    /**
+     * Updates the "download" attribute of the anchor element.
+     */
     JobListItem.prototype.updateDownloadAttribute = function () {
         var a, fn;
         a = this.listItem.querySelector("a");

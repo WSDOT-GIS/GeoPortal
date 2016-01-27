@@ -1,8 +1,6 @@
 define([
-    "dojo/Deferred",
-    "esri/request",
     "esri/InfoTemplate"
-], function (Deferred, esriRequest, InfoTemplate) {
+], function (InfoTemplate) {
     "use strict";
 
     /**
