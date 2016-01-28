@@ -5,10 +5,9 @@
  * List item representing a GP job.
  * @module JobListItem
  */
-define(function () {
+define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
     "use strict";
 
-    var loadingClassName = "loading";
     var errorClassName = "error";
 
     /**
@@ -29,7 +28,6 @@ define(function () {
         var _jobId = null;
         var li = document.createElement("li");
         li.classList.add("list-group-item");
-        li.classList.add("loading");
         var progress = document.createElement("progress");
         progress.textContent = "Loading...";
 
@@ -69,6 +67,10 @@ define(function () {
         li.appendChild(a);
         li.appendChild(progress);
 
+        var messagesList = document.createElement("ul");
+        messagesList.setAttribute("class", "message-list list-group");
+        li.appendChild(messagesList);
+
         var errorP = document.createElement("p");
         errorP.classList.add(errorClassName);
         li.appendChild(errorP);
@@ -88,16 +90,40 @@ define(function () {
                     return li;
                 }
             },
-            loading: {
+            messagesList: {
+                get: function() {
+                    return messagesList;
+                }
+            },
+            status: {
                 get: function () {
-                    li.classList.contains(loadingClassName);
-                },
-                set: function (isLoading) {
-                    if (isLoading) {
-                        li.classList.add(loadingClassName);
-                    } else {
-                        li.classList.remove(loadingClassName);
+                    // Loop through all of the "esriJob..." class names and get the first one.
+                    var current, output, re = /^esriJob(\w+)$/, match;
+                    for (var i = 0; i < li.classList.length; i++) {
+                        current = li.classList.item(i);
+                        match = current.match(re);
+                        if (match) {
+                            output = current;
+                            break;
+                        }
                     }
+                    return output;
+                }, 
+                set: function (value) {
+                    // Remove all "esriJob..." classes.
+                    var current, re = /^esriJob(\w+)$/, match;
+                    var toRemove = [];
+                    for (var i = 0; i < li.classList.length; i++) {
+                        current = li.classList.item(i);
+                        match = current.match(re);
+                        if (match) {
+                            toRemove.push(current);
+                        }
+                    }
+                    toRemove.forEach(function (cls) {
+                        li.classList.remove(cls);
+                    });
+                    li.classList.add(value);
                 }
             },
             link: {
@@ -139,6 +165,25 @@ define(function () {
         fn = ["PTR ", this.siteId, " from ", this.startDate, " to ", this.endDate, ".zip"].join("");
         a.setAttribute("download", fn);
     };
+
+    JobListItem.prototype.addMessages = function (messages) {
+        var self = this;
+        self.messagesList.innerHTML = "";
+        var docFrag = document.createDocumentFragment();
+        if (messages && Array.isArray(messages)) {
+            messages.forEach(function (message) {
+                var li = document.createElement("li");
+                li.setAttribute("class", [
+                    "list-group-item",
+                    message.type,
+                    gpToBootstrapUtils.getBootstrapClassName(message.type)
+                ].join(" "));
+                li.textContent = message.description;
+                docFrag.appendChild(li);
+            });
+            self.messagesList.appendChild(docFrag);
+        }
+    }
 
     return JobListItem;
 });

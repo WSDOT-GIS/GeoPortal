@@ -13,14 +13,10 @@
 require([
     "esri/config",
     "esri/tasks/Geoprocessor",
-    "ptrSites/JobListItem"
-], function (esriConfig, Geoprocessor, JobListItem) {
+    "ptrSites/JobListItem",
+    "ptrSites/gpToBootstrapUtils"
+], function (esriConfig, Geoprocessor, JobListItem, gpToBootstrapUtils) {
     "use strict";
-
-
-
-
-
 
     var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
     var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query?where=1%3D1&outFields=ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation&returnGeometry=false&orderByFields=ADCTraffic.DBO.PTRSites.SiteID&returnDistinctValues=true&f=json";
@@ -45,7 +41,13 @@ require([
         var paramName = searchParam[0];
         var paramValue = searchParam[1];
 
-        form[paramName].value = paramValue;
+        var element = form[paramName];
+
+        if (element) {
+            form[paramName].value = paramValue;
+        } else {
+            console.warn("Couldn't find matching control for parameter.", searchParam);
+        }
     });
 
     /**
@@ -75,9 +77,6 @@ require([
     });
 
     function submitJob() {
-
-
-
         // Create parameters object and update the URL search parameters.
         var paramNames = ["site_id", "start_year", "start_month", "end_year", "end_month"];
         var params = {};
@@ -100,13 +99,22 @@ require([
         return gp.submitJob(params).then(function (e) {
             var jobId = e.jobId;
             gp.getResultData(jobId, "zip_file").then(function (dataEvent) {
-                li.loading = false;
                 li.link = dataEvent.value.url;
                 li.updateDownloadAttribute();
-            }, null, function (error) {
+                li.listItem.classList.add("list-group-item-success");
+            }, function (statusEvent) {
+                console.debug("zip file status update", statusEvent);
+            }, function (error) {
                 li.error = error;
+                li.listItem.classList.add("list-group-item-danger");
                 console.error(error);
             });
+        }, function (errorEvent) {
+            console.error("GP error", errorEvent);
+        }, function (statusEvent) {
+            console.debug("status update", statusEvent);
+            li.addMessages(statusEvent.messages);
+            li.status = statusEvent.jobStatus;
         });
     }
 

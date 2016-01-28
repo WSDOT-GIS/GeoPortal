@@ -9,7 +9,7 @@ define(["esri/InfoTemplate"], function (InfoTemplate) {
      * @alias module:PtrTemplate
      */
     return new InfoTemplate({
-        content: "${SiteLocation}<p><a href='PtrSites/?siteid=${SiteID}' target='_blank'>Download CSV</a></p>", //createContent,
+        content: "${SiteLocation}<p><a href='PtrSites/?site_id=${SiteID}' target='_blank'>Download CSV</a></p>", //createContent,
         title: "PTR Site: ${SiteID}"
     });
 

@@ -156,6 +156,7 @@
     <Content Include="index.html" />
     <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
+    <Content Include="PtrSites\gpToBootstrapUtils.js" />
     <Content Include="PtrSites\index.css" />
     <Content Include="PtrSites\index.html" />
     <Content Include="PtrSites\index.js" />
@@ -362,7 +363,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

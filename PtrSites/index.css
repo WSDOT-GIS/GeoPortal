@@ -1,4 +1,4 @@
-﻿ul:empty:after {
+﻿#jobsList:empty:after {
     font-style: italic;
     content: 'No current jobs';
 }
@@ -7,11 +7,11 @@ li > progress {
     display: none;
 }
 
-.loading > progress {
+.esriJobExecuting > progress {
     display: inline-block;
 }
 
-.loading a {
+a:not([href]) {
     pointer-events: none;
     cursor: wait;
 }
@@ -22,4 +22,8 @@ li > .error {
 
 li.error > .error {
     display: block;
+}
+
+.message-list:empty {
+    display: none;
 }
