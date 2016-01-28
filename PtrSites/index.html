@@ -15,18 +15,52 @@
     <form id="queryParametersForm">
         <div class="form-group">
             <label>Site ID</label>
-            <input name="siteid" type="text" required="required" class="form-control" list="siteIdList" />
-            <datalist id="siteIdList">
-
-            </datalist>
+            <input name="site_id" type="text" required="required" class="form-control" list="siteIdList" title="PTR Site ID" />
+            <datalist id="siteIdList"></datalist>
         </div>
         <div class="form-group">
             <label>Start Date</label>
-            <input name="startdate" type="date" required="required" class="form-control" />
+            <div class="input-group">
+                <span class="input-group-addon">Month</span>
+                <select class="form-control" required="required" name="start_month">
+                    <option value='1'>January</option>
+                    <option value='2'>February</option>
+                    <option value='3'>March</option>
+                    <option value='4'>April</option>
+                    <option value='5'>May</option>
+                    <option value='6'>June</option>
+                    <option value='7'>July</option>
+                    <option value='8'>August</option>
+                    <option value='9'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
+                </select>
+                <span class="input-group-addon">Year</span>
+                <input name="start_year" type="number" class="form-control" required="required" title="Start Year" inputmode="numeric" step="1" min="2000" max="2100" />
+            </div>
         </div>
         <div class="form-group">
             <label>End Date</label>
-            <input name="enddate" type="date" required="required" class="form-control" />
+            <div class="input-group">
+                <span class="input-group-addon">Month</span>
+                <select class="form-control" required="required" name="end_month">
+                    <option value='1'>January</option>
+                    <option value='2'>February</option>
+                    <option value='3'>March</option>
+                    <option value='4'>April</option>
+                    <option value='5'>May</option>
+                    <option value='6'>June</option>
+                    <option value='7'>July</option>
+                    <option value='8'>August</option>
+                    <option value='9'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
+                </select>
+                <span class="input-group-addon">Year</span>
+                <input name="end_year" type="number" class="form-control" required="required" title="End Year" inputmode="numeric" step="1" min="2000" max="2100" />
+            </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="...">
             <div class="btn-group" role="group">

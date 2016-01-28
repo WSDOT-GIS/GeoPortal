@@ -15,10 +15,8 @@ define(function () {
      * An object that manages a list item associated with a job.
      * @constructor
      * @alias module:JobListItem
-     * @param {string} siteId - The site ID label on the link.
-     * @param {string} startDate - The start date label on the link.
-     * @param {string} endDate - The end date label on th elink.
-     * @property {string} jopId - The identifier for the geoprocessing job.
+     * @param {Object.<string, (string|number)>} options - Values for GP parameters.
+     * @property {string} jobId - The identifier for the geoprocessing job.
      * @property {HTMLLIElement} listItem - The list item (<li>) associated with this object.
      * @property {Boolean} loading - Gets or sets the "loading" status of this object. Changing this value will toggle the "loading" class on the list item.
      * @property {string} link - Gets or sets the URL inside of the <a> element.
@@ -27,7 +25,7 @@ define(function () {
      * @property {string} endDate - Gets or sets the end date label on th elink.
      * @property {string} error - Gets or sets the error message on the list item.
      */
-    function JobListItem(siteId, startDate, endDate) {
+    function JobListItem(options) {
         var _jobId = null;
         var li = document.createElement("li");
         li.classList.add("list-group-item");
@@ -44,15 +42,30 @@ define(function () {
         icon.setAttribute("class", "glyphicon glyphicon-compressed");
         a.appendChild(icon);
 
-        //a.innerHTML = "<span></span> from <span></span> to <span></span>"
+        // Create span placeholders for GP parameter values.
         var siteIdSpan = document.createElement("span");
-        var startDateSpan = document.createElement("span");
-        var endDateSpan = document.createElement("span");
+        var startYearSpan = document.createElement("span");
+        var startMonthSpan = document.createElement("span");
+        var endYearSpan = document.createElement("span");
+        var endMonthSpan = document.createElement("span");
+
+        var paramSpanDict = {
+            site_id: siteIdSpan,
+            start_year: startYearSpan,
+            start_month: startMonthSpan,
+            end_year: endYearSpan,
+            end_month: endMonthSpan
+        };
+
         a.appendChild(siteIdSpan);
         a.appendChild(document.createTextNode(" from "));
-        a.appendChild(startDateSpan);
+        a.appendChild(startYearSpan);
+        a.appendChild(document.createTextNode("-"));
+        a.appendChild(startMonthSpan);
         a.appendChild(document.createTextNode(" to "));
-        a.appendChild(endDateSpan);
+        a.appendChild(endYearSpan);
+        a.appendChild(document.createTextNode("-"));
+        a.appendChild(endMonthSpan);
         li.appendChild(a);
         li.appendChild(progress);
 
@@ -95,30 +108,7 @@ define(function () {
                     a.href = url;
                 }
             },
-            siteId: {
-                get: function () {
-                    return siteIdSpan.textContent;
-                },
-                set: function (value) {
-                    siteIdSpan.textContent = value;
-                }
-            },
-            startDate: {
-                get: function () {
-                    return startDateSpan.textContent;
-                },
-                set: function (value) {
-                    startDateSpan.textContent = value;
-                }
-            },
-            endDate: {
-                get: function () {
-                    return endDateSpan.textContent;
-                },
-                set: function (value) {
-                    endDateSpan.textContent = value;
-                }
-            }, error: {
+            error: {
                 set: function (value) {
                     errorP.textContent = value || "";
                     if (value) {
@@ -130,15 +120,13 @@ define(function () {
             }
         });
 
-        // Set the values from parameters if provided.
-        if (siteId) {
-            this.siteId = siteId;
-        }
-        if (startDate) {
-            this.startDate = startDate;
-        }
-        if (endDate) {
-            this.endDate = endDate;
+        // Assign input parameters
+        if (options) {
+            for (var pName in options) {
+                if (options.hasOwnProperty(pName)) {
+                    paramSpanDict[pName].textContent = options[pName];
+                }
+            }
         }
     }
 
