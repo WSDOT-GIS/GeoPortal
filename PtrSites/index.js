@@ -26,31 +26,8 @@ require([
     var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query?where=1%3D1&outFields=ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation&returnGeometry=false&orderByFields=ADCTraffic.DBO.PTRSites.SiteID&returnDistinctValues=true&f=json";
     esriConfig.defaults.io.corsEnabledServers.push("hqolymgis99t:6080");
 
-    /**
-     * Gets a number from a URL parameter.
-     * @param {URL} url - URL.
-     * @param {string} paramName - The name of the URL search parameter.
-     * @returns {Number} Returns a number if the search parameter contains a numerical value, null if no parameter is defined, and NaN if a non-numeric parameter was provided.
-     */
-    function getNumberFromUrl(url, paramName) {
-        var value = url.searchParams.get(paramName) || null;
-        if (value && typeof value === "string") {
-            value = parseInt(value, 10);
-        }
-        return value;
-    }
-
-
     // Create a URL object for accessing the URL's search parameters.
     var url = new URL(window.location.href);
-
-    // Get the GP parameters from the URL search if available.
-    var siteId = url.searchParams.get("site_id") || null;
-    var startYear = getNumberFromUrl(url, "start_year");
-    var startMonth = getNumberFromUrl(url, "start_month");
-    var endYear = getNumberFromUrl(url, "end_year");
-    var endMonth = getNumberFromUrl(url, "end_month");
-
 
     // Populate the form with the values from the URL search.
     var form = document.forms[0];
@@ -58,11 +35,12 @@ require([
     (function () {
         var now = new Date();
         var year = now.getFullYear();
-        Array.from(form.querySelectorAll("[name='start-year'], [name='end-year']")).forEach(function (input) {
+        [form.start_year, form.end_year].forEach(function (input) {
             input.setAttribute("max", year);
         });
     }());
 
+    // Populate the form values with corresponding search parameters.
     Array.from(url.searchParams).forEach(function (searchParam) {
         var paramName = searchParam[0];
         var paramValue = searchParam[1];
