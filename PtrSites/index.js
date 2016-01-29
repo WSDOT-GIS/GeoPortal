@@ -205,37 +205,6 @@ require([
         });
     }
 
-    function getMinMaxYearConstraints() {
-        var queryParams = {
-            f: "json",
-            outStatistics: [
-                {
-                    statisticType: "max",
-                    onStatisticField: "Year",
-                    outStatisticFieldName: "MaxYear"
-                },
-                {
-                    statisticType: "min",
-                    onStatisticField: "Year",
-                    outStatisticFieldName: "MinYear"
-                }
-            ]
-        };
-        executeQuery(minMaxYearsUrl, queryParams).then(function (queryResult) {
-            var attributes = queryResult.features[0].attributes;
-            var minYear = attributes.MinYear;
-            var maxYear = attributes.MaxYear;
-
-            var yearInputs = document.querySelectorAll("input[name$='year']");
-            Array.from(yearInputs, function (inp) {
-                inp.setAttribute("min", minYear);
-                inp.setAttribute("max", maxYear);
-            });
-        }, function (error) {
-            console.error(error);
-        });
-    }
-
     function getValidDateRange() {
         var validDateRangeSearchParams = {
             f: "json",
@@ -264,14 +233,19 @@ require([
         var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
         promise.then(function (results) {
             var attributes = results.features[0].attributes;
-            console.debug(attributes);
+            var minYear = attributes.minDate.getFullYear();
+            var maxYear = attributes.maxDate.getFullYear();
+            var yearInputs = document.querySelectorAll("input[name$='year']");
+            Array.from(yearInputs, function (inp) {
+                inp.setAttribute("min", minYear);
+                inp.setAttribute("max", maxYear);
+            });
         }, function (error) {
             console.error(error);
         });
     }
 
     populateSiteIdOptionList();
-    getMinMaxYearConstraints();
     getValidDateRange();
 
     if (form.checkValidity()) {
