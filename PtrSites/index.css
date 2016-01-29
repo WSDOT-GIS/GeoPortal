@@ -27,3 +27,7 @@ li.error > .error {
 .message-list:empty {
     display: none;
 }
+
+form :invalid {
+    border: 2px solid red;
+}

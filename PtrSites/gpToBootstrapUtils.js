@@ -8,7 +8,6 @@
          */
         getBootstrapClassName: function (esriType, bsPrefix) {
             bsPrefix = bsPrefix || "list-group-item-";
-            //var re = /esriJob(?:MessageType)?(\w+)$/i;
             var warningRe = /Warning$/i;
             var dangerRe = /((Error)|(Failed))$/i;
             var successRe = /Succe(?:(?:eded)|(?:ss))$/

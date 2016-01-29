@@ -1,4 +1,4 @@
-﻿/// <reference path="../bower_components/polyfills/url.js" />
+/// <reference path="../bower_components/polyfills/url.js" />
 
 /**
  * @external AllLayersAndTables
@@ -19,7 +19,10 @@ require([
     "use strict";
 
     var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
-    var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query?where=1%3D1&outFields=ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation&returnGeometry=false&orderByFields=ADCTraffic.DBO.PTRSites.SiteID&returnDistinctValues=true&f=json";
+    var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query";
+    var minMaxYearsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/3/query";
+    var getValidDateRangeUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/2/query";
+    
     esriConfig.defaults.io.corsEnabledServers.push("hqolymgis99t:6080");
 
     // Create a URL object for accessing the URL's search parameters.
@@ -111,6 +114,8 @@ require([
             });
         }, function (errorEvent) {
             console.error("GP error", errorEvent);
+            li.addMessages({ type: "error", description: errorEvent.messages });
+            li.status = "error";
         }, function (statusEvent) {
             console.debug("status update", statusEvent);
             li.addMessages(statusEvent.messages);
@@ -128,28 +133,61 @@ require([
         history.replaceState(null, null, "./");
     };
 
-    function populateSiteIdOptionList() {
-        // Populate site id option list.
-        var request = new XMLHttpRequest();
-        request.open("get", siteIdsUrl);
-        request.onloadend = function (e) {
-            var self = e.target;
-            var data;
-            if (self.status !== 200) {
-                throw new Error(self.statusText);
-            }
-            // Parse the returned JSON into an Object using a custom reviver that trims excess spaces from strings.
-            data = JSON.parse(self.responseText, function (k, v) {
-                if (typeof v === "string") {
-                    return v.trim();
+    /**
+     * Executes an HTTP request for a URL.
+     * @param {string} url - url
+     * @param {Object} searchParams - Object with search parameters.
+     * @param {Function} [jsonReviver] - Function for custom JSON deserialization.
+     * @returns {Promise.<(Object|string)>} - Returns the result of the query.
+     */
+    function executeQuery(url, searchParams, jsonReviver) {
+        var queryUrl = new URL(url), paramName, value;
+        if (searchParams) {
+            for (paramName in searchParams) {
+                value = searchParams[paramName];
+                if (value instanceof Object) {
+                    value = JSON.stringify(value);
                 }
-                return v;
-            });
-            if (data.error) {
-                throw new Error(data.error);
+                queryUrl.searchParams.set(paramName, value);
             }
+        }
+        return new Promise(function (resolve, reject) {
+            var request = new XMLHttpRequest();
+            request.open("get", queryUrl.toString());
+            request.onloadend = function (e) {
+                var queryResult;
+                if (e.target.status !== 200) {
+                    reject(e.target.statusText);
+                } else {
+                    queryResult = JSON.parse(e.target.response, jsonReviver);
+                    if (queryResult.error) {
+                        reject(queryResult.error);
+                    } else {
+                        resolve(queryResult);
+                    }
 
+                }
+            };
+            request.send();
+        });
+    }
 
+    function populateSiteIdOptionList() {
+        // Populate site id option list. JSON reviver trims excess space from strings.
+        var searchParams = {
+            where: "1=1",
+            outFields: "ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation",
+            returnGeometry: false,
+            orderByFields: "ADCTraffic.DBO.PTRSites.SiteID",
+            returnDistinctValues: true,
+            f: "json"
+        };
+        executeQuery(siteIdsUrl, searchParams, function (k, v) {
+            if (typeof v === "string") {
+                return v.trim();
+            }
+            return v;
+        }).then(function (data) {
             var field = data.displayFieldName; // "ADCTraffic.DBO.PTRSites.SiteID";
             var descField = data.fields[1].name;
             var siteIdList = document.getElementById("siteIdList");
@@ -162,15 +200,79 @@ require([
                 docFrag.appendChild(option);
             });
             siteIdList.appendChild(docFrag);
-        };
-        request.send();
+        }, function (error) {
+            console.error("Error getting site IDs", error);
+        });
     }
 
-    try {
-        populateSiteIdOptionList();
-    } catch (err) {
-        console.error("Error populating site ID suggestion list", err);
+    function getMinMaxYearConstraints() {
+        var queryParams = {
+            f: "json",
+            outStatistics: [
+                {
+                    statisticType: "max",
+                    onStatisticField: "Year",
+                    outStatisticFieldName: "MaxYear"
+                },
+                {
+                    statisticType: "min",
+                    onStatisticField: "Year",
+                    outStatisticFieldName: "MinYear"
+                }
+            ]
+        };
+        executeQuery(minMaxYearsUrl, queryParams).then(function (queryResult) {
+            var attributes = queryResult.features[0].attributes;
+            var minYear = attributes.MinYear;
+            var maxYear = attributes.MaxYear;
+
+            var yearInputs = document.querySelectorAll("input[name$='year']");
+            Array.from(yearInputs, function (inp) {
+                inp.setAttribute("min", minYear);
+                inp.setAttribute("max", maxYear);
+            });
+        }, function (error) {
+            console.error(error);
+        });
     }
+
+    function getValidDateRange() {
+        var validDateRangeSearchParams = {
+            f: "json",
+            outStatistics: [
+                {
+                    statisticType: "max",
+                    onStatisticField: "Date",
+                    outStatisticFieldName: "maxDate"
+                },
+                {
+                    statisticType: "min",
+                    onStatisticField: "Date",
+                    outStatisticFieldName: "minDate"
+                }
+            ]
+        };
+
+        var reviver = function (k, v) {
+            var re = /Date$/i;
+            if (re.test(k)) {
+                return new Date(v);
+            }
+            return v;
+        };
+
+        var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
+        promise.then(function (results) {
+            var attributes = results.features[0].attributes;
+            console.debug(attributes);
+        }, function (error) {
+            console.error(error);
+        });
+    }
+
+    populateSiteIdOptionList();
+    getMinMaxYearConstraints();
+    getValidDateRange();
 
     if (form.checkValidity()) {
         submitJob();
