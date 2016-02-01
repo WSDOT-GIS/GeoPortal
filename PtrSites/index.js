@@ -19,10 +19,6 @@ require([
     "use strict";
 
     var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
-    var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query";
-    var minMaxYearsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/3/query";
-    var getValidDateRangeUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/2/query";
-    
     esriConfig.defaults.io.corsEnabledServers.push("hqolymgis99t:6080");
 
     // Create a URL object for accessing the URL's search parameters.
@@ -133,120 +129,41 @@ require([
         history.replaceState(null, null, "./");
     };
 
-    /**
-     * Executes an HTTP request for a URL.
-     * @param {string} url - url
-     * @param {Object} searchParams - Object with search parameters.
-     * @param {Function} [jsonReviver] - Function for custom JSON deserialization.
-     * @returns {Promise.<(Object|string)>} - Returns the result of the query.
-     */
-    function executeQuery(url, searchParams, jsonReviver) {
-        var queryUrl = new URL(url), paramName, value;
-        if (searchParams) {
-            for (paramName in searchParams) {
-                value = searchParams[paramName];
-                if (value instanceof Object) {
-                    value = JSON.stringify(value);
+    var validDates = null;
+
+
+    if (window.Worker) {
+        var worker = new Worker("worker.js");
+        worker.onmessage = function (e) {
+            function createSiteIdsDataList(siteIds) {
+                var frag = document.createDocumentFragment();
+                var option;
+                var siteIdList = document.getElementById("siteIdList");
+                for (var siteId in siteIds) {
+                    option = document.createElement("option");
+                    option.value = siteId;
+                    option.textContent = [siteId, siteIds[siteId]].join(": ");
+                    frag.appendChild(option);
                 }
-                queryUrl.searchParams.set(paramName, value);
+                siteIdList.appendChild(frag);
             }
-        }
-        return new Promise(function (resolve, reject) {
-            var request = new XMLHttpRequest();
-            request.open("get", queryUrl.toString());
-            request.onloadend = function (e) {
-                var queryResult;
-                if (e.target.status !== 200) {
-                    reject(e.target.statusText);
-                } else {
-                    queryResult = JSON.parse(e.target.response, jsonReviver);
-                    if (queryResult.error) {
-                        reject(queryResult.error);
-                    } else {
-                        resolve(queryResult);
-                    }
 
-                }
-            };
-            request.send();
-        });
-    }
-
-    function populateSiteIdOptionList() {
-        // Populate site id option list. JSON reviver trims excess space from strings.
-        var searchParams = {
-            where: "1=1",
-            outFields: "ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation",
-            returnGeometry: false,
-            orderByFields: "ADCTraffic.DBO.PTRSites.SiteID",
-            returnDistinctValues: true,
-            f: "json"
-        };
-        executeQuery(siteIdsUrl, searchParams, function (k, v) {
-            if (typeof v === "string") {
-                return v.trim();
+            var data = e.data;
+            if (data.siteIds) {
+                createSiteIdsDataList(e.data.siteIds);
+            } else if (data.dates) {
+                validDates = data.dates;
+                [form.start_year, form.end_year].forEach(function (input) {
+                    input.setAttribute("min", validDates[0].getFullYear());
+                    input.setAttribute("max", validDates[1].getFullYear());
+                });
+            } else if (data.error) {
+                console.error(data.error);
             }
-            return v;
-        }).then(function (data) {
-            var field = data.displayFieldName; // "ADCTraffic.DBO.PTRSites.SiteID";
-            var descField = data.fields[1].name;
-            var siteIdList = document.getElementById("siteIdList");
-            var docFrag = document.createDocumentFragment();
-            data.features.forEach(function (feature) {
-                var siteId = feature.attributes[field];
-                var option = document.createElement("option");
-                option.value = siteId;
-                option.textContent = [siteId, feature.attributes[descField] || "[No description]"].join(": ");
-                docFrag.appendChild(option);
-            });
-            siteIdList.appendChild(docFrag);
-        }, function (error) {
-            console.error("Error getting site IDs", error);
-        });
-    }
-
-    function getValidDateRange() {
-        var validDateRangeSearchParams = {
-            f: "json",
-            outStatistics: [
-                {
-                    statisticType: "max",
-                    onStatisticField: "Date",
-                    outStatisticFieldName: "maxDate"
-                },
-                {
-                    statisticType: "min",
-                    onStatisticField: "Date",
-                    outStatisticFieldName: "minDate"
-                }
-            ]
         };
-
-        var reviver = function (k, v) {
-            var re = /Date$/i;
-            if (re.test(k)) {
-                return new Date(v);
-            }
-            return v;
-        };
-
-        var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
-        promise.then(function (results) {
-            var attributes = results.features[0].attributes;
-            var minYear = attributes.minDate.getFullYear();
-            var maxYear = attributes.maxDate.getFullYear();
-            var yearInputs = document.querySelectorAll("input[name$='year']");
-            Array.from(yearInputs, function (inp) {
-                inp.setAttribute("min", minYear);
-                inp.setAttribute("max", maxYear);
-            });
-        }, function (error) {
-            console.error(error);
-        });
+    } else {
+        console.warn("This browser does not support web workers.");
     }
-
-    populateSiteIdOptionList();
-    getValidDateRange();
 
     if (form.checkValidity()) {
         submitJob();

@@ -1,0 +1,156 @@
+"use strict";
+
+importScripts("../bower_components/promise-polyfill/Promise.min.js");
+
+////var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
+var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query";
+////var minMaxYearsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/3/query";
+var getValidDateRangeUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/2/query";
+
+/**
+ * Converts an object into a URL search.
+ * @param {Object} o - An object
+ * @returns {string} URL search 
+ */
+function objectToSearch(o) {
+    var value, output = [];
+    for (var pName in o) {
+        if (o.hasOwnProperty(pName)) {
+            value = o[pName];
+            if (value instanceof Object) {
+                value = JSON.stringify(value);
+            }
+            output.push([pName, value].map(encodeURIComponent).join("="));
+        }
+    }
+    output = output.join("&");
+    return output;
+}
+
+/**
+ * Executes an HTTP request for a URL.
+ * @param {string} url - url
+ * @param {Object} searchParams - Object with search parameters.
+ * @param {Function} [jsonReviver] - Function for custom JSON deserialization.
+ * @returns {Promise.<(Object|string)>} - Returns the result of the query.
+ */
+function executeQuery(url, searchParams, jsonReviver) {
+    var queryUrl = [url, objectToSearch(searchParams)].join("?");
+
+    return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.open("get", queryUrl.toString());
+        request.onloadend = function (e) {
+            var queryResult;
+            if (e.target.status !== 200) {
+                reject(e.target.statusText);
+            } else {
+                queryResult = JSON.parse(e.target.response, jsonReviver);
+                if (queryResult.error) {
+                    reject(queryResult.error);
+                } else {
+                    resolve(queryResult);
+                }
+
+            }
+        };
+        request.send();
+    });
+}
+
+/**
+ * Gets a list of valid site IDs.
+ * @returns {Promise.<Object.<string, string>>} Promise with list of site IDs.
+ */
+function getSiteIds() {
+    // Populate site id option list. JSON reviver trims excess space from strings.
+    var searchParams = {
+        where: "1=1",
+        outFields: "ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation",
+        returnGeometry: false,
+        orderByFields: "ADCTraffic.DBO.PTRSites.SiteID",
+        returnDistinctValues: true,
+        f: "json"
+    };
+    var reviver = function (k, v) {
+        if (typeof v === "string") {
+            return v.trim();
+        }
+        return v;
+    };
+    return new Promise(function (resolve, reject) {
+        executeQuery(siteIdsUrl, searchParams, reviver).then(function (data) {
+            var field = data.displayFieldName; // "ADCTraffic.DBO.PTRSites.SiteID";
+            var descField = data.fields[1].name;
+            var output = {};
+            data.features.forEach(function (feature) {
+                output[feature.attributes[field]] = feature.attributes[descField];
+            });
+            resolve(output);
+        }, function (error) {
+            reject({ "message": "Error getting site IDs", error: error });
+        });
+    });
+}
+
+function getValidDateRange() {
+    var validDateRangeSearchParams = {
+        f: "json",
+        outStatistics: [
+            {
+                statisticType: "max",
+                onStatisticField: "Date",
+                outStatisticFieldName: "maxDate"
+            },
+            {
+                statisticType: "min",
+                onStatisticField: "Date",
+                outStatisticFieldName: "minDate"
+            }
+        ]
+    };
+
+    var reviver = function (k, v) {
+        var re = /Date$/i;
+        if (re.test(k)) {
+            return new Date(v);
+        }
+        return v;
+    };
+
+    var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
+    return new Promise(function (resolve, reject) {
+        promise.then(function (results) {
+            var attributes = results.features[0].attributes;
+            var minYear = attributes.minDate;
+            var maxYear = attributes.maxDate;
+            resolve([minYear, maxYear]);
+        }, function (error) {
+            reject(error);
+        });
+    });
+}
+
+
+var siteIdsPromise = getSiteIds();
+
+siteIdsPromise.then(function (siteIds) {
+    postMessage({ messageType: "site ids", siteIds: siteIds });
+}, function (err) {
+    postMessage({ messageType: "site ids error", error: err });
+});
+
+var dateRangePromise = getValidDateRange();
+dateRangePromise.then(function (dates) {
+    postMessage({ dates: dates });
+}, function (err) {
+    postMessage({ messageType: "date range error", error: err });
+});
+
+function closeWorker() {
+    close();
+}
+
+Promise.all([siteIdsPromise, dateRangePromise]).then(closeWorker, closeWorker);
+
+

@@ -102,6 +102,7 @@
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
     <Content Include="bower_components\polyfills\polyfill.js" />
     <Content Include="bower_components\polyfills\polyfill.min.js" />
+    <Content Include="bower_components\polyfills\url.js" />
     <Content Include="bower_components\promise-polyfill\Promise.js" />
     <Content Include="bower_components\promise-polyfill\Promise.min.js" />
     <Content Include="bower_components\usgs-ned\usgsNed.js" />
@@ -161,6 +162,7 @@
     <Content Include="PtrSites\index.html" />
     <Content Include="PtrSites\index.js" />
     <Content Include="PtrSites\JobListItem.js" />
+    <Content Include="PtrSites\worker.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\configUtils.js" />
     <Content Include="scripts\customLegend.js" />
@@ -363,7 +365,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
