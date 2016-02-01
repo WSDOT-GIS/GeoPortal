@@ -1,11 +1,6 @@
 /// <reference path="../bower_components/polyfills/url.js" />
 
 /**
- * @external AllLayersAndTables
- * @see {@link http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/All_Layers_and_Tables/02r3000000v0000000/|All Layers and Tables (Map Service)}
- */
-
-/**
  * @external MapServiceLayerQueryResult
  * @see {@link http://resources.arcgis.com/en/help/arcgis-rest-api/#/Query_Map_Service_Layer/02r3000000p1000000/|Query (Map Service\Layer)}
  */

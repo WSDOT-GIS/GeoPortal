@@ -7,7 +7,7 @@ li > progress {
     display: none;
 }
 
-.esriJobExecuting > progress {
+.esriJobExecuting > progress, .esriJobSubmitted > progress {
     display: inline-block;
 }
 
