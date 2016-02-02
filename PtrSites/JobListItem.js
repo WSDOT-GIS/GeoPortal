@@ -167,6 +167,27 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
     };
 
     JobListItem.prototype.addMessages = function (messages) {
+
+        /**
+         * Creates an element with the message description. A system message will return an <a>; otherwise a text node will be returned.
+         * @param {string} messageDesc - The value from the message.description.
+         * @returns {(HTMLAnchorElement|Text)} - Either an anchor or a regular text node.
+         */
+        function createMessageNode(messageDesc) {
+            var systemRe = /((?:INFO)|(?:WARNING)|(?:ERROR))\s+(\d+)/i;
+            var match = messageDesc.match(systemRe);
+            var output;
+            if (match) {
+                output = document.createElement("a");
+                output.href = "//desktop.arcgis.com/search/?q=" + encodeURIComponent([match[1], match[2]].join(" "));
+                output.textContent = messageDesc;
+                output.target = "_blank";
+            } else {
+                output = document.createTextNode(messageDesc);
+            }
+            return output;
+        }
+
         var self = this;
         self.messagesList.innerHTML = "";
         var docFrag = document.createDocumentFragment();
@@ -178,7 +199,7 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
                     message.type,
                     gpToBootstrapUtils.getBootstrapClassName(message.type)
                 ].join(" "));
-                li.textContent = message.description;
+                li.appendChild(createMessageNode(message.description));
                 docFrag.appendChild(li);
             });
             self.messagesList.appendChild(docFrag);

@@ -27,6 +27,17 @@ function objectToSearch(o) {
     return output;
 }
 
+// JSON reviver that converts ArcGIS style date integers into dates and trims strings.
+var reviver = function (k, v) {
+    var re = /Date$/i;
+    if (re.test(k)) {
+        return new Date(v);
+    } else if (typeof v === "string") {
+        return v.trim();
+    }
+    return v;
+};
+
 /**
  * Executes an HTTP request for a URL.
  * @param {string} url - url
@@ -72,12 +83,6 @@ function getSiteIds() {
         returnDistinctValues: true,
         f: "json"
     };
-    var reviver = function (k, v) {
-        if (typeof v === "string") {
-            return v.trim();
-        }
-        return v;
-    };
     return new Promise(function (resolve, reject) {
         executeQuery(siteIdsUrl, searchParams, reviver).then(function (data) {
             var field = data.displayFieldName; // "ADCTraffic.DBO.PTRSites.SiteID";
@@ -114,15 +119,6 @@ function getValidDateRange() {
         ]
     };
 
-    // JSON reviver that converts integers into dates.
-    var reviver = function (k, v) {
-        var re = /Date$/i;
-        if (re.test(k)) {
-            return new Date(v);
-        }
-        return v;
-    };
-
     var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
     return new Promise(function (resolve, reject) {
         promise.then(function (results) {
@@ -136,6 +132,10 @@ function getValidDateRange() {
     });
 }
 
+/**
+ * Gets per-site valid date ranges.
+ * @returns {Promise.<Object.<string, Date[]>>} - A promise with date ranges grouped by site IDs.
+ */
 function getValidDateRangesForSiteIds() {
     var validDateRangeSearchParams = {
         outFields: "SiteID",
@@ -154,17 +154,6 @@ function getValidDateRangesForSiteIds() {
                 outStatisticFieldName: "maxDate"
             }
         ]
-    };
-
-    // JSON reviver that converts integers into dates.
-    var reviver = function (k, v) {
-        var re = /Date$/i;
-        if (re.test(k)) {
-            return new Date(v);
-        } else if (typeof v === "string") {
-            return v.trim();
-        }
-        return v;
     };
 
     var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
@@ -197,18 +186,18 @@ dateRangePromise.then(function (dates) {
     postMessage({ messageType: "date range error", error: err });
 });
 
-var validDateRangesPromise = getValidDateRangesForSiteIds();
-validDateRangesPromise.then(function (data) {
-    postMessage({ dateRanges: data });
-}, function (err) {
-    postMessage({ messageType: "date ranges error", error: err });
-})
+////var validDateRangesPromise = getValidDateRangesForSiteIds();
+////validDateRangesPromise.then(function (data) {
+////    postMessage({ dateRanges: data });
+////}, function (err) {
+////    postMessage({ messageType: "date ranges error", error: err });
+////});
 
 
 function closeWorker() {
     close();
 }
 
-Promise.all([siteIdsPromise, dateRangePromise, validDateRangesPromise]).then(closeWorker, closeWorker);
+Promise.all([siteIdsPromise, dateRangePromise]).then(closeWorker, closeWorker);
 
 
