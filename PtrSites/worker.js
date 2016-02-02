@@ -93,6 +93,10 @@ function getSiteIds() {
     });
 }
 
+/**
+ * Gets a valid date range for user input
+ * @returns {Date[]} An array with two dates: min and max.
+ */
 function getValidDateRange() {
     var validDateRangeSearchParams = {
         f: "json",
@@ -110,6 +114,7 @@ function getValidDateRange() {
         ]
     };
 
+    // JSON reviver that converts integers into dates.
     var reviver = function (k, v) {
         var re = /Date$/i;
         if (re.test(k)) {
@@ -125,6 +130,51 @@ function getValidDateRange() {
             var minYear = attributes.minDate;
             var maxYear = attributes.maxDate;
             resolve([minYear, maxYear]);
+        }, function (error) {
+            reject(error);
+        });
+    });
+}
+
+function getValidDateRangesForSiteIds() {
+    var validDateRangeSearchParams = {
+        outFields: "SiteID",
+        groupByFieldsForStatistics: "SiteID",
+        orderByFields: "SiteID",
+        f: "json",
+        outStatistics: [
+            {
+                statisticType: "min",
+                onStatisticField: "Date",
+                outStatisticFieldName: "minDate"
+            },
+            {
+                statisticType: "max",
+                onStatisticField: "Date",
+                outStatisticFieldName: "maxDate"
+            }
+        ]
+    };
+
+    // JSON reviver that converts integers into dates.
+    var reviver = function (k, v) {
+        var re = /Date$/i;
+        if (re.test(k)) {
+            return new Date(v);
+        } else if (typeof v === "string") {
+            return v.trim();
+        }
+        return v;
+    };
+
+    var promise = executeQuery(getValidDateRangeUrl, validDateRangeSearchParams, reviver);
+    return new Promise(function (resolve, reject) {
+        promise.then(function (results) {
+            var output = {};
+            var data = results.features.forEach(function (feature) {
+                output[feature.attributes.SiteID] = [feature.attributes.minDate, feature.attributes.maxDate];
+            });
+            resolve(output);
         }, function (error) {
             reject(error);
         });
@@ -147,10 +197,18 @@ dateRangePromise.then(function (dates) {
     postMessage({ messageType: "date range error", error: err });
 });
 
+var validDateRangesPromise = getValidDateRangesForSiteIds();
+validDateRangesPromise.then(function (data) {
+    postMessage({ dateRanges: data });
+}, function (err) {
+    postMessage({ messageType: "date ranges error", error: err });
+})
+
+
 function closeWorker() {
     close();
 }
 
-Promise.all([siteIdsPromise, dateRangePromise]).then(closeWorker, closeWorker);
+Promise.all([siteIdsPromise, dateRangePromise, validDateRangesPromise]).then(closeWorker, closeWorker);
 
 

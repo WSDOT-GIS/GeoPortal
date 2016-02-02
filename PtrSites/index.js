@@ -152,6 +152,8 @@ require([
                     input.setAttribute("min", validDates[0].getFullYear());
                     input.setAttribute("max", validDates[1].getFullYear());
                 });
+            } else if (data.dateRanges) {
+                console.debug("date ranges", data.dateRanges);
             } else if (data.error) {
                 console.error(data.error);
             }
