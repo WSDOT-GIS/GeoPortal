@@ -2,13 +2,18 @@
 /// <reference path="../bower_components/promise-polyfill/Promise.js" />
 
 /**
+ * @external GPMessage
+ * @property {string} type - The type of message
+ * @property {string} description - The text of the message
+ * @see {@link https://developers.arcgis.com/javascript/jsapi/gpmessage-amd.html|esri/tasks/GPMessage}
+ */
+
+/**
  * List item representing a GP job.
  * @module JobListItem
  */
 define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
     "use strict";
-
-    var errorClassName = "error";
 
     /**
      * An object that manages a list item associated with a job.
@@ -69,10 +74,6 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
         messagesList.setAttribute("class", "message-list list-group");
         li.appendChild(messagesList);
 
-        var errorP = document.createElement("p");
-        errorP.classList.add(errorClassName);
-        li.appendChild(errorP);
-
         Object.defineProperties(this, {
             jobId: {
                 get: function () {
@@ -131,16 +132,6 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
                 set: function (url) {
                     a.href = url;
                 }
-            },
-            error: {
-                set: function (value) {
-                    errorP.textContent = value || "";
-                    if (value) {
-                        li.classList.add(errorClassName);
-                    } else {
-                        li.classList.remove(errorClassName);
-                    }
-                }
             }
         });
 
@@ -163,12 +154,6 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
         fn = ["PTR ", this.siteId, " from ", this.startDate, " to ", this.endDate, ".zip"].join("");
         a.setAttribute("download", fn);
     };
-
-    /**
-     * @typedef {Object} GPMessage
-     * @property {string} type - The type of message
-     * @property {string} description - The text of the message
-     */
 
     /**
      * Updates the GP message list
@@ -215,7 +200,7 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
             });
             self.messagesList.appendChild(docFrag);
         }
-    }
+    };
 
     return JobListItem;
 });
