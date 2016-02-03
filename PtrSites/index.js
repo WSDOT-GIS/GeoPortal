@@ -54,7 +54,7 @@ require([
      * @typedef {Object} JobInfo
      * @property {string} jobId - Job ID
      * @property {string} jobStatus - Job Status
-     * @property {GPMessage[]} messages 
+     * @property {GPMessage[]} messages
      */
 
     /**
@@ -150,29 +150,41 @@ require([
         // Update the URL search parameters.
         window.history.replaceState(params, null, url.toString());
 
-
+        // Add a list item for this GP job.
         var li = new JobListItem(params);
-
         document.getElementById("jobsList").appendChild(li.listItem);
 
+        // Submit the job
         return gp.submitJob(params).then(function (e) {
             var jobId = e.jobId;
+            // Once the job has successfully completed, get the URL
+            // to the output ZIP file.
             gp.getResultData(jobId, "zip_file").then(function (dataEvent) {
+                // Update the link with the ZIP file URL.
                 li.link = dataEvent.value.url;
                 li.updateDownloadAttribute();
                 li.listItem.classList.add("list-group-item-success");
             }, function (statusEvent) {
+                // Status update event handler for getting the ZIP URL.
+                // Currently just logs to the console.
                 console.debug("zip file status update", statusEvent);
             }, function (error) {
+                // If there's an error getting the ZIP file's URL
+                // change the status of the list item by modifying
+                // the class attribute.
                 li.error = error;
                 li.listItem.classList.add("list-group-item-danger");
                 console.error(error);
             });
         }, function (errorEvent) {
+            // If the GP Job results in an error, update the CSS class
+            // and add an error list item.
             console.error("GP error", errorEvent);
             li.addMessages({ type: "error", description: errorEvent.messages });
             li.status = "error";
         }, function (statusEvent) {
+            // Upon status GP Job status updates,
+            // update the message list and status class.
             console.debug("status update", statusEvent);
             li.addMessages(statusEvent.messages);
             li.status = statusEvent.jobStatus;
@@ -189,12 +201,21 @@ require([
         history.replaceState(null, null, "./");
     };
 
+    // Create variable for holding valid start and end dates that the user can select.
     var validDates = null;
 
-
+    // Start a background thread that queries the map service for valid
+    // site IDs and date range.
     if (window.Worker) {
         var worker = new Worker("worker.js");
         worker.onmessage = function (e) {
+
+            /**
+             * Populates the data list of site IDs.
+             * @param {Object.<string, string>} siteIds - An object with property names
+             * corresponding to site IDs. The values of these properties are the
+             * descriptions of the corresponding site
+             */
             function createSiteIdsDataList(siteIds) {
                 var frag = document.createDocumentFragment();
                 var option;
@@ -212,7 +233,9 @@ require([
             if (data.siteIds) {
                 createSiteIdsDataList(e.data.siteIds);
             } else if (data.dates) {
+                // Sets the valid date range variables
                 validDates = data.dates;
+                // Sets min and max values for year selectors.
                 [form.start_year, form.end_year].forEach(function (input) {
                     input.setAttribute("min", validDates[0].getFullYear());
                     input.setAttribute("max", validDates[1].getFullYear());

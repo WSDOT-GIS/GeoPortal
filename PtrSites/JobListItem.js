@@ -31,8 +31,6 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
         var progress = document.createElement("progress");
         progress.textContent = "Loading...";
 
-
-        
         var a = document.createElement("a");
         a.setAttribute("type", "application/zip");
 
@@ -79,7 +77,7 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
             jobId: {
                 get: function () {
                     return _jobId;
-                }, 
+                },
                 set: function(value) {
                     _jobId = value;
                     li.dataset.jobId = value;
@@ -108,7 +106,7 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
                         }
                     }
                     return output;
-                }, 
+                },
                 set: function (value) {
                     // Remove all "esriJob..." classes.
                     var current, re = /^esriJob(\w+)$/, match;
@@ -166,6 +164,16 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
         a.setAttribute("download", fn);
     };
 
+    /**
+     * @typedef {Object} GPMessage
+     * @property {string} type - The type of message
+     * @property {string} description - The text of the message
+     */
+
+    /**
+     * Updates the GP message list
+     * @param {GPMessage[]} messages - Geoprocessing messages
+     */
     JobListItem.prototype.addMessages = function (messages) {
 
         /**
@@ -188,6 +196,9 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
             return output;
         }
 
+        // Create a document fragment.
+        // For each message, add a corresponding list item to the document fragment.
+        // Replace the existing items with the document fragment.
         var self = this;
         self.messagesList.innerHTML = "";
         var docFrag = document.createDocumentFragment();

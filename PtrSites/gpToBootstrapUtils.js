@@ -20,7 +20,6 @@
                 "info";
             output = bsPrefix + output;
             return output;
-            
         }
     }
 });
