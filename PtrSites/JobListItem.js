@@ -16,18 +16,24 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
     "use strict";
 
     /**
+     * @typedef {Object.<string, (string|number)>} JobListOptions
+     * @property {string} siteId - Site ID
+     * @property {number} startYear - Start Year
+     * @property {number} startMonth - Start Month
+     * @property {number} endYear - End Year
+     * @property {number} endMonth - End Month
+     */
+
+    /**
      * An object that manages a list item associated with a job.
      * @constructor
      * @alias module:JobListItem
-     * @param {Object.<string, (string|number)>} options - Values for GP parameters.
-     * @property {string} jobId - The identifier for the geoprocessing job.
-     * @property {HTMLLIElement} listItem - The list item (<li>) associated with this object.
-     * @property {Boolean} loading - Gets or sets the "loading" status of this object. Changing this value will toggle the "loading" class on the list item.
+     * @param {JobListOptions} options - Values for GP parameters.
+     * @property {string} jobId - Gets or sets the identifier for the geoprocessing job.
+     * @property {HTMLLIElement} listItem - Gets the list item (<li>) associated with this object.
+     * @property {HTMLUListElement} messagesList - Gets the GP messages list element.
+     * @property {string} status - Gets or sets the "esriJob..." status class in the class attribute.
      * @property {string} link - Gets or sets the URL inside of the <a> element.
-     * @property {string} siteId - Gets or sets the site ID label on the link.
-     * @property {string} startDate - Gets or sets the start date label on the link.
-     * @property {string} endDate - Gets or sets the end date label on th elink.
-     * @property {string} error - Gets or sets the error message on the list item.
      */
     function JobListItem(options) {
         var _jobId = null;
@@ -50,6 +56,7 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
         var endYearSpan = document.createElement("span");
         var endMonthSpan = document.createElement("span");
 
+        // Create lookup for placeholder spans.
         var paramSpanDict = {
             site_id: siteIdSpan,
             start_year: startYearSpan,
