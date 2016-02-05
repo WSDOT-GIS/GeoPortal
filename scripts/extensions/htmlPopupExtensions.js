@@ -39,6 +39,26 @@ require([
     var detectHtmlPopups;
 
     /**
+     * Determines if an array contains a given value.
+     * @param {Array} array - An array.
+     * @param {*} value - The value to search the array for.
+     * @returns {Boolean} Returns true if the array contains the value, false otherwise.
+     */
+    function arrayContains(array, value) {
+        if (!Array.isArray(array)) {
+            throw new TypeError("The array parameter must be an Array.");
+        }
+        var output = false;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === value) {
+                output = true;
+                break;
+            }
+        }
+        return output;
+    }
+
+    /**
      * Gets the WDFW ID from a table.
      * @param {Node} node - An HTML Table node.
      * @returns {(string|null)} WDFW ID
@@ -339,7 +359,7 @@ require([
                         //sublayerIds = layer.getIdsOfLayersWithHtmlPopups();
                         sublayerIds = [];
                         layer.layerInfos.forEach(function (layerInfo) {
-                            if (!(layerInfo.sublayerIds && layerInfo.sublayerIds.length > 0)) {
+                            if (!(layerInfo.sublayerIds && layerInfo.sublayerIds.length > 0) && arrayContains(layer.visibleLayers, layerInfo.id)) {
                                 sublayerIds.push(layerInfo.id);
                             }
                         });
