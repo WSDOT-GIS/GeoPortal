@@ -54,7 +54,7 @@ require([
      * @typedef {Object} JobInfo
      * @property {string} jobId - Job ID
      * @property {string} jobStatus - Job Status
-     * @property {GPMessage[]} messages
+     * @property {GPMessage[]} messages 
      */
 
     /**
@@ -69,6 +69,22 @@ require([
     gp.on("job-cancel", function (e) {
         console.debug("job-cancel", e);
     });
+
+    function validateSiteIdIsInList(e) {
+        var siteIdBox = document.getElementById("siteIdBox");
+        var siteIdList = document.getElementById("siteIdList");
+        var selectedOption;
+        // Clear custom errors
+        siteIdBox.setCustomValidity("");
+        // Check to make sure the entered value matches one of the valid site ID values from
+        // the dataset options.
+        if (siteIdBox.value) {
+            selectedOption = siteIdList.querySelector("option[value=" + siteIdBox.value + "]");
+            if (!selectedOption) {
+                siteIdBox.setCustomValidity("Please select one of the site IDs from the list");
+            }
+        }
+    }
 
     // Performs custom validation on date controls.
     function validateDates(e) {
@@ -231,7 +247,10 @@ require([
 
             var data = e.data;
             if (data.siteIds) {
+                // Create the list of site IDs.
                 createSiteIdsDataList(e.data.siteIds);
+                // Set up custom validation to make sure user-entered site ID is in the list.
+                document.getElementById("siteIdBox").addEventListener("blur", validateSiteIdIsInList);
             } else if (data.dates) {
                 // Sets the valid date range variables
                 validDates = data.dates;
