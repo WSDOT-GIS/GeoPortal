@@ -119,7 +119,6 @@ require([
                 return [date.getFullYear().toString(), date.getMonth() - 1].join("-");
             }
             if (validDates) {
-                console.debug("valid dates", validDates);
                 ctrl.setCustomValidity(["Please enter a date between", formatDate(validDates[0]), "and", formatDate(validDates[1])].join(" "));
             }
         };
@@ -201,7 +200,6 @@ require([
         }, function (statusEvent) {
             // Upon status GP Job status updates,
             // update the message list and status class.
-            console.debug("status update", statusEvent);
             li.addMessages(statusEvent.messages);
             li.status = statusEvent.jobStatus;
         });
