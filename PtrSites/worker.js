@@ -186,18 +186,14 @@ dateRangePromise.then(function (dates) {
     postMessage({ messageType: "date range error", error: err });
 });
 
-////var validDateRangesPromise = getValidDateRangesForSiteIds();
-////validDateRangesPromise.then(function (data) {
-////    postMessage({ dateRanges: data });
-////}, function (err) {
-////    postMessage({ messageType: "date ranges error", error: err });
-////});
-
-
-function closeWorker() {
-    close();
-}
-
-Promise.all([siteIdsPromise, dateRangePromise]).then(closeWorker, closeWorker);
+// Once all of the promises have been completed, send a final message
+// and close the worker.
+Promise.all([siteIdsPromise, dateRangePromise]).then(function (results) {
+    postMessage({ message: "worker closed", results: results, hasErrors: false});
+    self.close();
+}, function (results) {
+    postMessage({ message: "worker closed", results: results, hasErrors: true });
+    self.close();
+});
 
 

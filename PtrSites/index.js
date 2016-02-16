@@ -70,19 +70,30 @@ require([
         console.debug("job-cancel", e);
     });
 
-    function validateSiteIdIsInList(e) {
+    function validateSiteIdIsInList() {
         var siteIdBox = document.getElementById("siteIdBox");
         var siteIdList = document.getElementById("siteIdList");
         var selectedOption;
+        var descBox = document.getElementById("siteDescriptionPlaceholder");
         // Clear custom errors
         siteIdBox.setCustomValidity("");
+
+        // Force site ID value to be uppercase.
+        if (siteIdBox.value) {
+            siteIdBox.value = siteIdBox.value.toUpperCase().trim();
+        }
         // Check to make sure the entered value matches one of the valid site ID values from
         // the dataset options.
         if (siteIdBox.value) {
             selectedOption = siteIdList.querySelector("option[value=" + siteIdBox.value + "]");
             if (!selectedOption) {
                 siteIdBox.setCustomValidity("Please select one of the site IDs from the list");
+                descBox.textContent = "";
+            } else {
+                descBox.textContent = selectedOption.textContent;
             }
+        } else {
+            descBox.textContent = "";
         }
     }
 
@@ -146,7 +157,7 @@ require([
     function setupDateRangeValidation() {
         ["startMonthSelect", "startYearBox", "endMonthSelect", "endYearBox"].forEach(function (id) {
             var element = document.getElementById(id);
-            element.addEventListener("blur", validateDates);
+            element.addEventListener("input", validateDates);
         });
     }
 
@@ -213,6 +224,7 @@ require([
     // Clear the URL search parameters when the form is reset.
     form.onreset = function () {
         history.replaceState(null, null, "./");
+        document.getElementById("siteDescriptionPlaceholder").textContent = "";
     };
 
     // Create variable for holding valid start and end dates that the user can select.
@@ -248,7 +260,7 @@ require([
                 // Create the list of site IDs.
                 createSiteIdsDataList(e.data.siteIds);
                 // Set up custom validation to make sure user-entered site ID is in the list.
-                document.getElementById("siteIdBox").addEventListener("blur", validateSiteIdIsInList);
+                document.getElementById("siteIdBox").addEventListener("input", validateSiteIdIsInList);
             } else if (data.dates) {
                 // Sets the valid date range variables
                 validDates = data.dates;
@@ -262,6 +274,17 @@ require([
                 console.debug("date ranges", data.dateRanges);
             } else if (data.error) {
                 console.error(data.error);
+            } else if (data.message) {
+                if (data.message === "worker closed") {
+                    (function () {
+                        console.log("worker closed", data);
+                        Array.from(form.querySelectorAll("button:disabled"), function (btn) {
+                            btn.removeAttribute("disabled");
+                        });
+                        var progress = form.querySelector(".form-restriction-progress");
+                        progress.parentElement.removeChild(progress);
+                    }());
+                }
             }
         };
     } else {

@@ -29,3 +29,7 @@ a:not([href]) {
 form :invalid {
     border: 2px solid red;
 }
+
+.form-restriction-progress, .form-restriction-progress progress {
+    width: 100%;
+}
