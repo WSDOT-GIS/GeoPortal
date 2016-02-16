@@ -24,10 +24,6 @@ define([
         var nullRe = /^Null$/i;
         var numberFieldNameRe = /^Year\s\d{4}$/i, numberRe = /^\d+$/;
         var table = document.createElement("table");
-        var caption = document.createElement("caption");
-        caption.textContent = [layerName, attr[displayFieldName]].join(" - ");
-
-        table.appendChild(caption);
         table.classList.add("traffic");
 
         // Loop through all of the attributes and add

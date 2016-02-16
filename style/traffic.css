@@ -6,38 +6,6 @@
     display: none;
 }
 
-.traffic-legend td:first-child {
-    width: 1em;
-}
-
-.traffic-legend tr:first-child > td:first-child {
-    background-color: #1a30fa
-}
-
-.traffic-legend tr:nth-child(2) > td:first-child {
-    background-color: #497cfb
-}
-
-.traffic-legend tr:nth-child(3) > td:first-child {
-    background-color: #61ddfd
-}
-
-.traffic-legend tr:nth-child(4) > td:first-child {
-    background-color: #a0fec1
-}
-
-.traffic-legend tr:nth-child(5) > td:first-child {
-    background-color: #dffc6d
-}
-
-.traffic-legend tr:nth-child(6) > td:first-child {
-    background-color: #fade35
-}
-
-.traffic-legend tr:nth-child(7) > td:first-child {
-    background-color: #f28224
-}
-
-.traffic-legend tr:nth-child(8) > td:first-child {
-    background-color: #ee0018
+.esriLegendService > table:first-child {
+    display: none;
 }

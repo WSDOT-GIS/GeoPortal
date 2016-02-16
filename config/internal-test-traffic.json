@@ -8,12 +8,12 @@
     "lrs"
   ],
   "tabOrder": [
-    "Legend",
     "Layers",
+    "Legend",
     "Tools",
     "Basemap"
   ],
-  "customLegend": {
+  "customLegendDisable": {
       "html": "TrafficLegend.html",
       "basemapSpecificSections": { 
         "trafficLegend": "#trafficLegend" 
