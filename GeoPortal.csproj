@@ -100,6 +100,7 @@
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="bower_components\polyfills\html.js" />
     <Content Include="bower_components\polyfills\polyfill.js" />
     <Content Include="bower_components\polyfills\polyfill.min.js" />
     <Content Include="bower_components\polyfills\url.js" />

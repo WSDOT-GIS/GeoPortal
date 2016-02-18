@@ -143,9 +143,11 @@ require([
         }
     }
 
+    /**
+     * Toggles the visibility of a sublayer associated with a checkbox.
+     * @param {Event} evt - An event object.  Must have a data.list property defined.
+     */
     toggleSublayer = function (evt) {
-        /// <summary>Toggles the visibility of a sublayer associated with a checkbox.</summary>
-        /// <param name="evt" type="Object">An event object.  Must have a data.list property defined.</param>
         // Initialize variables.  The currentId is the ID corresponding to the checkbox (this).
         var layers, currentId = Number(this.value), layer = evt.data.layer, id, i, l, layerInfo;
 
@@ -171,11 +173,12 @@ require([
         layer.setVisibleLayers(layers);
     };
 
+    /**
+     * Adds either an "expanded" or "collaped" class to the specified elements based on the visibility of its child elements.
+     * @param {DOMElement} element - A list item element.
+     * @param {Boolean} [isCollapsed] - Optional.  Use this to explicitly specify what state the element is in.  If omitted, the expanded/collapsed state will be determined automatically.
+     */
     function setTreeIcon(element, isCollapsed) {
-        /// <summary>Adds either an "expanded" or "collaped" class to the specified elements based on the visibility of its child elements.</summary>
-        /// <param name="element" type="DOMElement">A list item element.</param>
-        /// <param name="isCollapsed" type="boolean">Optional.  Use this to explicitly specify what state the element is in.  If omitted, the expanded/collapsed state will be determined automatically.</param>
-        /// <returns type="undefined" />
         if (!element) {
             // Exit if element not specified.
             return;
@@ -194,9 +197,12 @@ require([
         }
     }
 
+    /**
+     * Toggles the child list of a list item on or off.
+     * @param {Object} evt - An event object.  The evt must have a data property that has a parent property.
+     * @returns {Boolean} Returns false.
+     */
     function toggleChildList(evt) {
-        /// <summary>Toggles the child list of a list item on or off.</summary>
-        /// <param name="evt" type="Object">An event object.  The evt must have a data property that has a parent property.</param>
         var parent, childLists, hidden;
         parent = evt.data.parent;
         childLists = $("> ul", parent);
@@ -293,10 +299,12 @@ require([
         return output;
     }
 
+    /**
+     * Creates an esri.layer.Layer based on information in layerInfo.
+     * @param {Object} layerInfo - An object containing parameters for a Layer constructor.
+     * @returns {esri/layer/Layer} - A layer.
+     */
     function createLayer(layerInfo) {
-        /// <summary>Creates an esri.layer.Layer based on information in layerInfo.</summary>
-        /// <param name="layerInfo" type="Object">An object containing parameters for a Layer constructor.</param>
-        /// <returns type="esri.layer.Layer" />
         var constructor, layer;
         // If layerInfo is already an Layer, just return it.
         if (typeof layerInfo !== "undefined" && typeof layerInfo.isInstanceOf !== "undefined" && layerInfo.isInstanceOf(Layer)) {
@@ -447,9 +455,11 @@ require([
         return false;
     }
 
+    /**
+     * Removes the "layer not loaded" class and (if appropriate) sets up controls for the child layers.
+     * @param {esri/layers/Layer} layer - A map service layer.
+     */
     onLayerLoad = function (layer) {
-        /// <summary>Removes the "layer not loaded" class and (if appropriate) sets up controls for the child layers.</summary>
-        /// <param name="layer" type="Layer">A map service layer.</param>
         // The "this" object is a ui.layerListItem widget.
         var $element = $(this.element), label, tools;
         this._hideLoading();
@@ -512,9 +522,12 @@ require([
         }
     };
 
+    /**
+     * Converts an error object into a string.
+     * @param {Error} error - An error that occurs when loading a layer.
+     * @returns {string} An error message
+     */
     function formatError(error) {
-        /// <summary>Converts an error object into a string.</summary>
-        /// <param name="error" type="Error">An error that occurs when loading a layer.</param>
         if (typeof error.details !== "undefined") {
             error = error.details.join("\n");
         } else if (typeof error.message !== "undefined") {
@@ -523,8 +536,11 @@ require([
         return error;
     }
 
+    /**
+     * Modify the control to show that an error has occured with this layer.
+     * @param {Error} error - an error
+     */
     onLayerError = function (error) {
-        /// <summary>Modify the control to show that an error has occured with this layer.</summary>
         // The "this" keyword will be a layerListItem widget.
         var layer = this._layer;
         if (!layer.loaded) {
@@ -567,8 +583,16 @@ require([
         }
     }
 
-    updateIsInScaleStatus = function (extent, delta, levelChange, lod) { // Although delta and extent parameters are not used, they are necessary for the method signature.
-        /// <summary>Update the "is in scale" status for each layerListItem in a layerList.  Note: "this" is the layer list widget.</summary>
+    /**
+     * Update the "is in scale" status for each layerListItem in a layerList.
+     * Although delta and extent parameters are not used, they are necessary for the method signature.
+     * @param {esri/geometry/Extent} extent - unused
+     * @param {number} delta - unused
+     * @param {number} levelChange - unused
+     * @param {number} lod - unused.
+     * @this {ui.layerList}
+     */
+    updateIsInScaleStatus = function (extent, delta, levelChange, lod) {
         // Get all of the layer list items in the current list.
         var layerListItems, layerListItem, i, l;
 
@@ -602,9 +626,12 @@ require([
             return this._layer;
         },
         _sublayerDiv: null,
+        /**
+         * Sets the "is in scale" status of this control
+         * @param {number} scale - The current scale of the map.
+         * @returns {ui.layerListItem} - Returns the calling layer list item.
+         */
         setIsInScale: function (scale) {
-            /// <summary>Sets the "is in scale" status of this control</summary>
-            /// <param name="scale" type="Number">The current scale of the map.</param>
             var layer, scales, minScale, maxScale, isInScale, outOfScaleClass = "ui-layer-list-out-of-scale";
 
             if (!this._layer) {
@@ -688,8 +715,11 @@ require([
             loadingIcon: _defaultLoadingIcon
         },
         _list: null,
+        /**
+         * Toggles the list of layers or subgroups on or off.
+         * @returns {ui.layerListGroup} the calling layer list group returns itself.
+         */
         toggle: function () {
-            /// <summary>Toggles the list of layers or subgroups on or off.</summary>
             // Get the list.  If called from a click event, "this" will not be referencing the widget, so we need to get the list an alternate way.
             var hidden = $("ul", this.element).css("display") === "none";
             // Expand the list if it is hidden, or collapse it if it is currently visible.  Then trigger the appropriate event.
@@ -704,9 +734,12 @@ require([
             }
             return this;
         },
+        /**
+         * Adds a layer to the layer list group.
+         * @param {esri/layers/Layer} layer - a layer to be added to the group
+         * @returns {ui.layerListGroup} the calling layer list group returns itself.
+         */
         _addLayer: function (layer) {
-            /// <summary>Adds a layer to the layer list group.</summary>
-            /// <param name="layer" type="Layer">A layer to be added to the group.</param>
             var layerListItem = $("<li>").appendTo(this._list).layerListItem({
                 layer: layer,
                 map: this.options.map,
@@ -719,10 +752,13 @@ require([
             });
             return this;
         },
+        /**
+         * Adds a child group to this group.
+         * @param {string} name - The name that will be given to the group.
+         * @param {Array} layers - An array of layer description objects that will be added to the new group.
+         * @returns {ui.layerListGroup} the calling layer list group returns itself.
+         */
         _addGroup: function (name, layers) {
-            /// <summary>Adds a child group to this group.</summary>
-            /// <param name="name" type="String">The name that will be given to the group.</param>
-            /// <param name="layers" type="Array">An array of layer description objects that will be added to the new group.</param>
             var group = $("<li>").appendTo(this._list).layerListGroup({
                 groupName: name,
                 startCollapsed: this.options.startCollapsed,
@@ -812,8 +848,12 @@ require([
             return this;
         },
 
+        /**
+         * Checks to see if a layer already exists in the layer list.
+         * @param {Object} layer - a layer
+         * @return {Boolean} Returns true if it exists, false otherwise.
+         */
         _layerExistsInToc: function (layer) {
-            /// <summary>Checks to see if a layer already exists in the layer list.</summary>
             var listItemElements, exists = false, i, l, currentLayer;
             listItemElements = $(".ui-layer-list-item");
             for (i = 0, l = listItemElements.length; i < l; i += 1) {
