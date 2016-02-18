@@ -8,6 +8,10 @@ button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'
     display: none;
 }
 
+.esriLegendLayerLabel {
+    font-weight: bold;
+}
+
 /* Hide layer names in legend. */
 .esriLegendService > table:first-child {
     display: none;
@@ -22,14 +26,17 @@ button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'
 [id="legend_Traffic Data_1"] > table:first-child:after {
     content: 'Provides Annual Average Daily Traffic (AADT) volumes for traffic counting locations.';
     font-style: italic;
+    font-weight: normal;
 }
 
 [id="legend_Traffic Data_2"] > table:first-child:after {
     content: 'Provides Annual Average Daily Traffic (AADT) volumes for roadway segments based on the data contained in the Traffic Count layer.';
     font-style: italic;
+    font-weight: normal;
 }
 
 [id="legend_PTR Sites_0"] > table:first-child:after {
     content: 'Provides access to a tool for downloading monthly and hourly traffic volumes from permanent traffic recorders.';
     font-style: italic;
+    font-weight: normal;
 }
