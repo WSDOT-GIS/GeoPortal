@@ -1,11 +1,12 @@
-﻿/* Hide buttons that aren't needed for this configuration. */
+/* Hide buttons that aren't needed for this configuration. */
 button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'] {
     display: none;
 }
 
-/* Hide the basemap layers in the layer list. */
 .ui-layer-list .basemap-group {
-    display: none;
+    border: 1px solid lightgray;
+    padding: 0.5em 1em;
+    border-radius: 10px;
 }
 
 .esriLegendLayerLabel {
