@@ -1,19 +1,24 @@
-﻿button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'] {
+﻿/* Hide buttons that aren't needed for this configuration. */
+button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'] {
     display: none;
 }
 
+/* Hide the basemap layers in the layer list. */
 .ui-layer-list .basemap-group {
     display: none;
 }
 
+/* Hide layer names in legend. */
 .esriLegendService > table:first-child {
     display: none;
 }
 
+/* Since two of the layers use the same symbols, hide one of the duplicate tables. */
 [id="legend_Traffic Data_0"] > table:nth-child(2) {
     display: none;
 }
 
+/* Add text descriptions in legend. */
 [id="legend_Traffic Data_1"] > table:first-child:after {
     content: 'Provides Annual Average Daily Traffic (AADT) volumes for traffic counting locations.';
     font-style: italic;
