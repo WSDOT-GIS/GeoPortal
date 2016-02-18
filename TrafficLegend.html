@@ -1,10 +1,426 @@
-﻿<table class="traffic-legend" id="trafficLegend">
-    <tr><td></td><td>0 - 2,500</td></tr>
-    <tr><td></td><td>2,501 - 5,000</td></tr>
-    <tr><td></td><td>5,001 - 10,000</td></tr>
-    <tr><td></td><td>10,001 - 20,000</td></tr>
-    <tr><td></td><td>20,001 - 40,000</td></tr>
-    <tr><td></td><td>40,001 - 80,000</td></tr>
-    <tr><td></td><td>80,001 - 160,000</td></tr>
-    <tr><td></td><td>160,001 - 999,999</td></tr>
-</table>
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="legend">
+        <div id="legend_PTR Sites" class="esriLegendService">
+            <div id="legend_PTR Sites_0" class="">
+                <table class="esriLegendLayerLabel">
+                    <tbody>
+                        <tr>
+                            <td>PTR Sites</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="esriLegendLayer">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAJ5JREFUSIntlUsOwCAIRMeEpHf2AL2zK7ophhDERuym6Wwd32PhhzAPB2sl2kgz6IljWKhoInYlHnwKlUhnJLHwx2ArqWiyvws0fAkcCcgWMlECaDhnwUbAAEp0WtIhbJxaItO/PvkP/xi8VLStx/G+pe9fImDj9DK1hveFjEA/WhZeAPCqQIHd93xZ4IE9eC/I1zX5Q11oBHclUWeUCzgSOs+/tbubAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>PTR Site</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="legend_Traffic Data" class="esriLegendService">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="esriLegendServiceLabel">Traffic Data</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="legend_Traffic Data_0" class="">
+                <table class="esriLegendLayerLabel">
+                    <tbody>
+                        <tr>
+                            <td>Traffic Counts</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="esriLegendLayer">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADhJREFUOI1jYaAyYBk1cGgZ+J8I/YykGEjATAyziDGQdDBq4NAzEHvSwCeJz0C8puECQz4MB4GBAGVNAlQ1Xiy8AAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>0 - 2,500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAD9JREFUOI1jYaAyYBk1cGgZ+J8I/YykGMhgXoLbzJM9GGYRNpAcMGrgUDMQV9KAAqyS+AzEaxouMMTDcFAYCACfyAWp+p9xuwAAAABJRU5ErkJggg==">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>2,501 - 5,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAD9JREFUOI1jYaAyYBk1cGgZ+J8I/YykGMigcge3mXdUMMwibCA5YNTAoWYgrqQBBVgl8RmI1zRcYIiH4aAwEAARvwVU8CPqjgAAAABJRU5ErkJggg==">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>5,001 - 10,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAEBJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMjQ+X8/TrlyRkes4kM7DEcNpIKBuJIGFGCkQUIGYtVACAzxMBwUBgIAmKsFDBoFmkgAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>10,001 - 20,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAEBJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMhw+38CTjlVxgVYxYd2GI4aSAUDcSUNKMBIg4QMxKqBEBjiYTgoDAQArbYFGejf6noAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>20,001 - 40,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADtJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMjw/yEek+Sxiw/tMBw1kAoG4koaMGlSDcSqgRAY4mE4KAwEAJpfA3Pj9zmiAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>40,001 - 80,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADtJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMjwvwWPSTXYxYd2GI4aSAUDcSUNmDSpBmLVQAgM8TAcFAYCADXqA9CzsyLoAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>80,001 - 160,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADhJREFUOI1jYaAyYBk1cGgZ+J8I/YykGIjXRAyTiDGQHDBq4FAzEFfSwCeNz0AC5mEHQzwMB4WBAGdPAlRU63IcAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>160,001 - 999,999</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="legend_Traffic Data_1" class="">
+                <table class="esriLegendLayerLabel">
+                    <tbody>
+                        <tr>
+                            <td>ATR Counts</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="esriLegendLayer">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADhJREFUOI1jYaAyYBk1cGgZ+J8I/YykGEjATAyziDGQdDBq4NAzEHvSwCeJz0C8puECQz4MB4GBAGVNAlQ1Xiy8AAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>0 - 2,500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAD9JREFUOI1jYaAyYBk1cGgZ+J8I/YykGMhgXoLbzJM9GGYRNpAcMGrgUDMQV9KAAqyS+AzEaxouMMTDcFAYCACfyAWp+p9xuwAAAABJRU5ErkJggg==">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>2,501 - 5,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAD9JREFUOI1jYaAyYBk1cGgZ+J8I/YykGMigcge3mXdUMMwibCA5YNTAoWYgrqQBBVgl8RmI1zRcYIiH4aAwEAARvwVU8CPqjgAAAABJRU5ErkJggg==">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>5,001 - 10,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAEBJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMjQ+X8vTrlyRmes4kM7DEcNpIKBuJIGFGCkQUIGYtVACAzxMBwUBgIAnAEFDuyETmQAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>10,001 - 20,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAEBJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMhw+38CTjlVxgVYxYd2GI4aSAUDcSUNKMBIg4QMxKqBEBjiYTgoDAQArbYFGejf6noAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>20,001 - 40,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADtJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMjw/yEek+Sxiw/tMBw1kAoG4koaMGlSDcSqgRAY4mE4KAwEAJpfA3Pj9zmiAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>40,001 - 80,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADtJREFUOI1jYaAyYBk1cGgZ+J8I/YykGMjwvwWPSTXYxYd2GI4aSAUDcSUNmDSpBmLVQAgM8TAcFAYCADXqA9CzsyLoAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>80,001 - 160,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADhJREFUOI1jYaAyYBk1cGgZ+J8I/YykGIjXRAyTiDGQHDBq4FAzEFfSwCeNz0AC5mEHQzwMB4WBAGdPAlRU63IcAAAAAElFTkSuQmCC">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>160,001 - 999,999</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="legend_Traffic Data_2" class="">
+                <table class="esriLegendLayerLabel">
+                    <tbody>
+                        <tr>
+                            <td>Traffic Sections</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="esriLegendLayer">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAACtJREFUOI1jYaAyYBk1cNTAwWPg///UMY6RkVYuZGSksoHUA6MGjhpIBgAA/JgCUzKg288AAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>0 - 2,500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADFJREFUOI1jYaAyYBk1cNTAwWKgecn//9Qw7GQPIyNtXHiyh5GRqgZSE4waOGogGQAATC0FqDEgoXEAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>2,501 - 5,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADFJREFUOI1jYaAyYBk1cNTAwWKgyp3//6lh2B0VRkbauPCOCiMjVQ2kJhg1cNRAMgAAdAoFU5PWZrkAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>5,001 - 10,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADFJREFUOI1jYaAyYBk1cNTAwWJg5//9/6lhWDmjIyNtXFjO6MhIVQOpCUYNHDWQDAAAvD4FC6irNIIAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>10,001 - 20,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADFJREFUOI1jYaAyYBk1cNTAwWLg7f8J/6lhmCrjAkbauFCVcQEjVQ2kJhg1cNRAMgAA3JwFGBqhBykAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>20,001 - 40,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADFJREFUOI1jYaAyYBk1cNTAwWLg/4cM/6lhGKM8AyNtXMgoz8BIVQOpCUYNHDWQDAAAwqsDcp+ClC8AAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>40,001 - 80,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADFJREFUOI1jYaAyYBk1cNTAwWLg/xaG/9QwjLGGgZE2LmSsYWCkqoHUBKMGjhpIBgAArzkDz2MbZqQAAAAASUVORK5CYII=">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>80,001 - 160,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADBJREFUOI3tzsEJAAAIw8AU3H9l3UEq+GgGOFKYq4ABv4AN7cAEujkUyAo6Cxhw0QD+mgJTAnjFcQAAAABJRU5ErkJggg==">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>160,001 - 999,999</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="legend_msg" class="esriLegendMsg">No legend</div>
+    </div>
+</body>
+</html>

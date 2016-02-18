@@ -9,3 +9,22 @@
 .esriLegendService > table:first-child {
     display: none;
 }
+
+[id="legend_Traffic Data_0"] > table:nth-child(2) {
+    display: none;
+}
+
+[id="legend_Traffic Data_1"] > table:first-child:after {
+    content: 'Provides Annual Average Daily Traffic (AADT) volumes for traffic counting locations.';
+    font-style: italic;
+}
+
+[id="legend_Traffic Data_2"] > table:first-child:after {
+    content: 'Provides Annual Average Daily Traffic (AADT) volumes for roadway segments based on the data contained in the Traffic Count layer.';
+    font-style: italic;
+}
+
+[id="legend_PTR Sites_0"] > table:first-child:after {
+    content: 'Provides access to a tool for downloading monthly and hourly traffic volumes from permanent traffic recorders.';
+    font-style: italic;
+}
