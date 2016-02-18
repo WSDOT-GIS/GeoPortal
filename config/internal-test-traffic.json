@@ -14,11 +14,11 @@
     "Basemap"
   ],
   "customLegendDisable": {
-      "html": "TrafficLegend.html",
-      "basemapSpecificSections": { 
-        "trafficLegend": "#trafficLegend" 
-      },
-      "htmlType": "url"
+    "html": "TrafficLegend.html",
+    "basemapSpecificSections": {
+      "trafficLegend": "#trafficLegend"
+    },
+    "htmlType": "url"
   },
   "mapOptions": {
     "logo": false,
@@ -134,10 +134,11 @@
     {
       "id": "Multilevel",
       "title": "Multilevel",
+      "thumbnailUrl": "images/MultilevelThumbnail.png",
       "layers": [
         {
-          "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer",
-          "displayLevels": [ 0, 1, 2, 3, 4, 5, 6  ]
+          "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer",
+          "displayLevels": [ 0, 1, 2, 3, 4, 5, 6 ]
         },
         {
           "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
