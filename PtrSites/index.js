@@ -260,7 +260,9 @@ require([
                 // Create the list of site IDs.
                 createSiteIdsDataList(e.data.siteIds);
                 // Set up custom validation to make sure user-entered site ID is in the list.
-                document.getElementById("siteIdBox").addEventListener("input", validateSiteIdIsInList);
+                ["input", "blur"].forEach(function (event) {
+                    this.addEventListener(event, validateSiteIdIsInList);
+                }, document.getElementById("siteIdBox"));
             } else if (data.dates) {
                 // Sets the valid date range variables
                 validDates = data.dates;

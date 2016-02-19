@@ -19,8 +19,14 @@ button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'
 }
 
 /* Since two of the layers use the same symbols, hide one of the duplicate tables. */
-[id="legend_Traffic Data_0"] > table:nth-child(2) {
+[id='legend_Milepost Values'], [id='legend_Milepost Values'] table,
+[id='legend_County Boundaries'], [id='legend_County Boundaries'] table,
+[id='legend_City Limits'] table,
+[id="legend_Traffic Data_0"] > table:nth-child(2)
+{
     display: none;
+    padding: 0;
+    margin: 0;
 }
 
 /* Add text descriptions in legend. */
