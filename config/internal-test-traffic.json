@@ -8,8 +8,8 @@
     "lrs"
   ],
   "tabOrder": [
-    "Legend",
     "Layers",
+    "Legend",
     "Tools",
     "Basemap"
   ],
@@ -187,6 +187,20 @@
       "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
       "options": {
         "id": "Milepost Values"
+      }
+    },
+    {
+      "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
+      "options": {
+        "id": "County Boundaries"
+      }
+    },
+    {
+      "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
+      "options": {
+        "id": "City Limits"
       }
     }
   ]
