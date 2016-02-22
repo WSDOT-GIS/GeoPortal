@@ -9,41 +9,6 @@ button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'
     border-radius: 10px;
 }
 
-.esriLegendLayerLabel {
-    font-weight: bold;
-}
-
-/* Hide layer names in legend. */
-.esriLegendService > table:first-child {
-    display: none;
-}
-
-/* Since two of the layers use the same symbols, hide one of the duplicate tables. */
-[id='legend_Milepost Values'], [id='legend_Milepost Values'] table,
-[id='legend_County Boundaries'], [id='legend_County Boundaries'] table,
-[id='legend_City Limits'] table,
-[id="legend_Traffic Data_0"] > table:nth-child(2)
-{
-    display: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Add text descriptions in legend. */
-[id="legend_Traffic Data_1"] > table:first-child:after {
-    content: 'Provides Annual Average Daily Traffic (AADT) volumes for traffic counting locations.';
-    font-style: italic;
-    font-weight: normal;
-}
-
-[id="legend_Traffic Data_2"] > table:first-child:after {
-    content: 'Provides Annual Average Daily Traffic (AADT) volumes for roadway segments based on the data contained in the Traffic Count layer.';
-    font-style: italic;
-    font-weight: normal;
-}
-
-[id="legend_PTR Sites_0"] > table:first-child:after {
-    content: 'Provides access to a tool for downloading monthly and hourly traffic volumes from permanent traffic recorders.';
-    font-style: italic;
-    font-weight: normal;
+.traffic-legend table {
+    border-collapse: collapse;
 }

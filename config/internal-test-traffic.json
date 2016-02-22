@@ -13,7 +13,7 @@
     "Tools",
     "Basemap"
   ],
-  "customLegendDisable": {
+  "customLegend": {
     "html": "TrafficLegend.html",
     "basemapSpecificSections": {
       "trafficLegend": "#trafficLegend"
