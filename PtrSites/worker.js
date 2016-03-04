@@ -85,7 +85,7 @@ function getSiteIds() {
     };
     return new Promise(function (resolve, reject) {
         executeQuery(siteIdsUrl, searchParams, reviver).then(function (data) {
-            var field = data.displayFieldName; // "ADCTrafficSDE.DBO.PTRSites.SiteID";
+            var field = data.fields[0].name;
             var descField = data.fields[1].name;
             var output = {};
             data.features.forEach(function (feature) {
