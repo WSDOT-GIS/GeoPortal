@@ -77,15 +77,15 @@ function getSiteIds() {
     // Populate site id option list. JSON reviver trims excess space from strings.
     var searchParams = {
         where: "1=1",
-        outFields: "ADCTraffic.DBO.PTRSites.SiteID,ADCTraffic.DBO.ADCTrafficSiteCurrentLocation.SiteLocation",
+        outFields: "ADCTrafficSDE.DBO.PTRSites.SiteID,ADCTrafficSDE.DBO.ADCTrafficSiteCurrentLocation.SiteLocation",
         returnGeometry: false,
-        orderByFields: "ADCTraffic.DBO.PTRSites.SiteID",
+        orderByFields: "ADCTrafficSDE.DBO.PTRSites.SiteID",
         returnDistinctValues: true,
         f: "json"
     };
     return new Promise(function (resolve, reject) {
         executeQuery(siteIdsUrl, searchParams, reviver).then(function (data) {
-            var field = data.displayFieldName; // "ADCTraffic.DBO.PTRSites.SiteID";
+            var field = data.displayFieldName; // "ADCTrafficSDE.DBO.PTRSites.SiteID";
             var descField = data.fields[1].name;
             var output = {};
             data.features.forEach(function (feature) {
