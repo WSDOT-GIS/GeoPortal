@@ -10,7 +10,7 @@ var getValidDateRangeUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffi
 /**
  * Converts an object into a URL search.
  * @param {Object} o - An object
- * @returns {string} URL search 
+ * @returns {string} URL search
  */
 function objectToSearch(o) {
     var value, output = [];

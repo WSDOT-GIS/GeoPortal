@@ -54,7 +54,7 @@ require([
      * @typedef {Object} JobInfo
      * @property {string} jobId - Job ID
      * @property {string} jobStatus - Job Status
-     * @property {GPMessage[]} messages 
+     * @property {GPMessage[]} messages
      */
 
     /**
@@ -127,7 +127,7 @@ require([
 
         var setDateRangeMessge = function (ctrl) {
             function formatDate(date) {
-                return [date.getFullYear().toString(), date.getMonth() - 1].join("-");
+                return [date.getUTCFullYear().toString(), date.getUTCMonth() - 1].join("-");
             }
             if (validDates) {
                 ctrl.setCustomValidity(["Please enter a date between", formatDate(validDates[0]), "and", formatDate(validDates[1])].join(" "));
@@ -268,8 +268,8 @@ require([
                 validDates = data.dates;
                 // Sets min and max values for year selectors.
                 [form.start_year, form.end_year].forEach(function (input) {
-                    input.setAttribute("min", validDates[0].getFullYear());
-                    input.setAttribute("max", validDates[1].getFullYear());
+                    input.setAttribute("min", validDates[0].getUTCFullYear());
+                    input.setAttribute("max", validDates[1].getUTCFullYear());
                 });
                 setupDateRangeValidation();
             } else if (data.dateRanges) {
@@ -279,7 +279,6 @@ require([
             } else if (data.message) {
                 if (data.message === "worker closed") {
                     (function () {
-                        console.log("worker closed", data);
                         Array.from(form.querySelectorAll("button:disabled"), function (btn) {
                             btn.removeAttribute("disabled");
                         });
