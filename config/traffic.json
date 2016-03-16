@@ -8,17 +8,17 @@
     "lrs"
   ],
   "tabOrder": [
-    "Legend",
     "Layers",
+    "Legend",
     "Tools",
     "Basemap"
   ],
   "customLegend": {
-      "html": "TrafficLegend.html",
-      "basemapSpecificSections": { 
-        "trafficLegend": "#trafficLegend" 
-      },
-      "htmlType": "url"
+    "html": "TrafficLegend.html",
+    "basemapSpecificSections": {
+      "trafficLegend": "#trafficLegend"
+    },
+    "htmlType": "url"
   },
   "mapOptions": {
     "logo": false,
@@ -100,7 +100,7 @@
     ]
   },
   "initialBasemap": "Multilevel",
-  "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+  "geometryServer": "http://data.wsdot.wa.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer",
   "queryTasks": {
     "county": {
       "label": "County",
@@ -113,7 +113,7 @@
     },
     "city": {
       "label": "City",
-      "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer/2",
+      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer/2",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -123,7 +123,7 @@
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -134,10 +134,11 @@
     {
       "id": "Multilevel",
       "title": "Multilevel",
+      "thumbnailUrl": "images/MultilevelThumbnail.png",
       "layers": [
         {
-          "url": "http://wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer",
-          "displayLevels": [ 0, 1, 2, 3, 4, 5, 6  ]
+          "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer",
+          "displayLevels": [ 0, 1, 2, 3, 4, 5, 6 ]
         },
         {
           "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
@@ -174,10 +175,32 @@
       }
     },
     {
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer",
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-      "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
+      "options": {
+        "id": "PTR Sites",
+        "visible": true
+      }
+    },
+    {
+      "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
       "options": {
         "id": "Milepost Values"
+      }
+    },
+    {
+      "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
+      "options": {
+        "id": "County Boundaries"
+      }
+    },
+    {
+      "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
+      "options": {
+        "id": "City Limits"
       }
     }
   ]
