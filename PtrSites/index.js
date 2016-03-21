@@ -263,6 +263,7 @@ require([
                 ["input", "blur"].forEach(function (event) {
                     this.addEventListener(event, validateSiteIdIsInList);
                 }, document.getElementById("siteIdBox"));
+                validateSiteIdIsInList();
             } else if (data.dates) {
                 // Sets the valid date range variables
                 validDates = data.dates;
