@@ -2,10 +2,8 @@
 
 importScripts("../bower_components/promise-polyfill/Promise.min.js");
 
-////var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
-var siteIdsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query";
-////var minMaxYearsUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/3/query";
-var getValidDateRangeUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/PTRSites/MapServer/2/query";
+var siteIdsUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query";
+var getValidDateRangeUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer/2/query";
 
 /**
  * Converts an object into a URL search.

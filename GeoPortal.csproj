@@ -134,6 +134,7 @@
     <Content Include="help\milepost.html" />
     <Content Include="help\navigation.html" />
     <Content Include="help\zoom_controls.html" />
+    <Content Include="images\acronymlogo.svg" />
     <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
@@ -141,7 +142,6 @@
     <Content Include="images\EsriHybridThumbnail.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\geolocate.png" />
-    <Content Include="images\greenlogo.png" />
     <Content Include="images\layerList\contextMenu.png" />
     <Content Include="images\layerList\sliderSprites.png" />
     <Content Include="images\layerList\treeMinus10.gif" />
@@ -365,7 +365,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

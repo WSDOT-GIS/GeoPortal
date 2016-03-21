@@ -13,7 +13,7 @@ require([
 ], function (esriConfig, Geoprocessor, JobListItem, gpToBootstrapUtils) {
     "use strict";
 
-    var gpUrl = "http://hqolymgis99t:6080/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get Filtered CSV";
+    var gpUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get%20Filtered%20CSV";
     esriConfig.defaults.io.corsEnabledServers.push("hqolymgis99t:6080");
 
     // Create a URL object for accessing the URL's search parameters.
@@ -138,7 +138,7 @@ require([
         // * End date is before or equal to start date
         // * Either start date or end date is out of the valid range of dates
         //   covered by the data. (If the valid dates have been loaded.)
-        if (startDate && endDate && startDate >= endDate) {
+        if (startDate && endDate && startDate > endDate) {
             [form.endYearBox, form.endMonthSelect].forEach(function (ctrl) {
                 ctrl.setCustomValidity("End date must occur after start date");
             });
