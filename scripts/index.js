@@ -10,7 +10,7 @@ jQuery UI
 
 var wsdot;
 
-require(["require", "dojo/ready", "dojo/on", "dijit/registry",
+require(["dojo/ready", "dojo/on", "dijit/registry",
     "QueryStringManager",
     "geoportal/QueryStringManagerHelper",
     "geoportal/showDisclaimer",
@@ -50,9 +50,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
     "BufferUI",
     "BufferUI/BufferUIHelper",
-    
+
     "GeolocateButton",
-    
+
 
     "info-window-helper",
     "esri/dijit/Search",
@@ -86,7 +86,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
     "scripts/layerList.js",
     "scripts/zoomToXY.js", "scripts/extentSelect.js", "scripts/layerSorter.js"
 ], function (
-    require,
     ready,
     on,
     registry,
@@ -128,7 +127,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
     BufferUI,
     BufferUIHelper,
     createGeolocateButton,
-    
+
 
     infoWindowHelper,
     Search
@@ -430,7 +429,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                         }
                     }
 
-                    // If an initial basemap was specified in the config file, 
+                    // If an initial basemap was specified in the config file,
                     // select that basemap now.
                     if (wsdot.config.initialBasemap) {
                         (function () {
