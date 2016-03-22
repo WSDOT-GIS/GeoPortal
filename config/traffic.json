@@ -137,7 +137,7 @@
       "thumbnailUrl": "images/MultilevelThumbnail.png",
       "layers": [
         {
-          "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer",
+          "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer",
           "displayLevels": [ 0, 1, 2, 3, 4, 5, 6 ]
         },
         {
