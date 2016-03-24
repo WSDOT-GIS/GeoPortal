@@ -50,11 +50,7 @@ define([
             feature = feature.toJson();
             // Convert to JSON string.
             feature = JSON.stringify(feature, null, "\t");
-
-            
-
             var uri = ["data:application/json", encodeURIComponent(feature)].join(",");
-
             this.href = uri;
             this.target = "_blank";
 
@@ -133,7 +129,7 @@ define([
     function groupFeaturesByLayer(features) {
         var i, l, feature, output = {}, key;
 
-        for (var i = 0, l = features.length; i < l; i++) {
+        for (i = 0, l = features.length; i < l; i++) {
             feature = features[i];
             key = [feature.layer.id, feature.result.layerId];
             if (!output.hasOwnProperty(key)) {
@@ -245,7 +241,7 @@ define([
             style.type = "text/css";
             style.textContent = printCss;
             doc.head.appendChild(style);
-            
+
             var htmlMarkup = doc.documentElement.outerHTML;
             // Encode markup to base-64 for Firefox compatibility.
             var url = ["data:text/html;base64", btoa(htmlMarkup)].join(",");

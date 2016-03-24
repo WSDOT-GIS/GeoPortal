@@ -58,11 +58,12 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
 
         // Create lookup for placeholder spans.
         var paramSpanDict = {
-            site_id: siteIdSpan,
-            start_year: startYearSpan,
-            start_month: startMonthSpan,
-            end_year: endYearSpan,
-            end_month: endMonthSpan
+
+            Site_ID: siteIdSpan,
+            Start_Year: startYearSpan,
+            Start_Month: startMonthSpan,
+            End_Year: endYearSpan,
+            End_Month: endMonthSpan
         };
 
         a.appendChild(siteIdSpan);
@@ -145,7 +146,7 @@ define(["./gpToBootstrapUtils"], function (gpToBootstrapUtils) {
         // Assign input parameters
         if (options) {
             for (var pName in options) {
-                if (options.hasOwnProperty(pName)) {
+                if (options.hasOwnProperty(pName) && paramSpanDict.hasOwnProperty(pName)) {
                     paramSpanDict[pName].textContent = options[pName];
                 }
             }

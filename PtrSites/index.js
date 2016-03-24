@@ -13,8 +13,8 @@ require([
 ], function (esriConfig, Geoprocessor, JobListItem, gpToBootstrapUtils) {
     "use strict";
 
-    var gpUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/GetFilteredCsv/GPServer/Get%20Filtered%20CSV";
-    esriConfig.defaults.io.corsEnabledServers.push("hqolymgis99t:6080");
+    var gpUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/ExportFilteredCsv/GPServer/Export%20Filtered%20CSV";
+    esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov");
 
     // Create a URL object for accessing the URL's search parameters.
     var url = new URL(window.location.href);
@@ -25,7 +25,7 @@ require([
     (function () {
         var now = new Date();
         var year = now.getFullYear();
-        [form.start_year, form.end_year].forEach(function (input) {
+        [form.Start_Year, form.End_Year].forEach(function (input) {
             input.setAttribute("max", year);
         });
     }());
@@ -163,16 +163,34 @@ require([
 
     function submitJob() {
         // Create parameters object and update the URL search parameters.
-        var paramNames = ["site_id", "start_year", "start_month", "end_year", "end_month"];
+        var paramNames = ["Input_Tables", "Site_ID", "Start_Year", "Start_Month", "End_Year", "End_Month"];
         var params = {};
+
+        function GetSelectedTables() {
+            var checkedOptions = form.Input_Tables.querySelectorAll("option:checked");
+            var option;
+            var output = [];
+            for (var i = 0; i < checkedOptions.length; i++) {
+                option = checkedOptions[i];
+                output.push(option.value);
+            }
+            return output;
+        }
+
         paramNames.forEach(function (pName) {
-            params[pName] = form[pName].value;
-            url.searchParams.set(pName, form[pName].value);
-            // Convert parameter values (except site_id) to numbers.
-            if (pName !== "site_id" && params[pName]) {
+            if (pName === "Input_Tables") {
+                // Get the selected tables as a JSON string[].
+                params.Input_Tables = GetSelectedTables();
+            } else {
+                params[pName] = form[pName].value;
+            }
+            url.searchParams.set(pName, params[pName]);
+            // Convert parameter values (except Site_ID) to numbers.
+            if (pName !== "Site_ID" && typeof params[pName] === "string") {
                 params[pName] = parseInt(params[pName], 10);
             }
         });
+        console.debug(params);
         // Update the URL search parameters.
         window.history.replaceState(params, null, url.toString());
 
@@ -185,7 +203,7 @@ require([
             var jobId = e.jobId;
             // Once the job has successfully completed, get the URL
             // to the output ZIP file.
-            gp.getResultData(jobId, "zip_file").then(function (dataEvent) {
+            gp.getResultData(jobId, "Output_ZIP").then(function (dataEvent) {
                 // Update the link with the ZIP file URL.
                 li.link = dataEvent.value.url;
                 li.updateDownloadAttribute();
@@ -268,7 +286,7 @@ require([
                 // Sets the valid date range variables
                 validDates = data.dates;
                 // Sets min and max values for year selectors.
-                [form.start_year, form.end_year].forEach(function (input) {
+                [form.Start_Year, form.End_Year].forEach(function (input) {
                     input.setAttribute("min", validDates[0].getUTCFullYear());
                     input.setAttribute("max", validDates[1].getUTCFullYear());
                 });
