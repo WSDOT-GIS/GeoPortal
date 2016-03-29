@@ -1,0 +1,24 @@
+﻿body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 1em;
+    border-radius: 0 0 3px 3px;
+    width: 100%;
+}
+
+table, td {
+    border: 1px solid black;
+}
+
+    table > caption {
+        border: 1px solid black;
+        border-bottom: none;
+        border-radius: 3px 3px 0 0;
+    }
+
+    table > tbody > tr:nth-child(odd) {
+        background-color: lightgray;
+    }

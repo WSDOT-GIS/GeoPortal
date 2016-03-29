@@ -10,7 +10,7 @@ jQuery UI
 
 var wsdot;
 
-require(["require", "dojo/ready", "dojo/on", "dijit/registry",
+require(["dojo/ready", "dojo/on", "dijit/registry",
     "QueryStringManager",
     "geoportal/QueryStringManagerHelper",
     "geoportal/showDisclaimer",
@@ -50,9 +50,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
     "BufferUI",
     "BufferUI/BufferUIHelper",
-    
+
     "GeolocateButton",
-    
+
 
     "info-window-helper",
     "esri/dijit/Search",
@@ -86,7 +86,6 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
     "scripts/layerList.js",
     "scripts/zoomToXY.js", "scripts/extentSelect.js", "scripts/layerSorter.js"
 ], function (
-    require,
     ready,
     on,
     registry,
@@ -128,7 +127,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
     BufferUI,
     BufferUIHelper,
     createGeolocateButton,
-    
+
 
     infoWindowHelper,
     Search
@@ -189,7 +188,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
         if (Date.toShortDateString === undefined) {
             /**
              * Returns a string representation of the date in the format Month-Date-Year.
-             * @returns {string}
+             * @returns {string} Short date representation of the date.
              */
             Date.prototype.toShortDateString = function () {
                 return String(this.getMonth()) + "-" + String(this.getDate()) + "-" + String(this.getFullYear());
@@ -251,6 +250,9 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
             /**
              * Adds a Google Analytics tracking event for the addition of a layer to the map.
+             * @param {Event} e - layer add event.
+             * @param {Layer} e.layer - layer that was added
+             * @param {Layer} e.error - Error that occured when trying to add layer.
              */
             gaTrackEvent = function (e) {
 
@@ -267,17 +269,18 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
             /**
              * Updates the scale level.
+             * @param {number} level - the new scale level.
              */
             function setScaleLabel(level) {
                 // Set the scale.
                 var scale = wsdot.map.getScale(level);
                 var scaleNode = document.getElementById("scaleText");
-                var nFormat = (window.Intl && window.Intl.NumberFormat) ? new window.Intl.NumberFormat() : null;
+                var nFormat = window.Intl && window.Intl.NumberFormat ? new window.Intl.NumberFormat() : null;
                 var value = nFormat ? nFormat.format(scale) : scale;
                 scaleNode.textContent = scale ? ["1", value].join(":") : "";
             }
 
-            setupLayout();
+            setupLayout.setupLayout();
 
             function setupExtents() {
                 var extentSpatialReference = new SpatialReference({ wkid: 102100 });
@@ -298,6 +301,8 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
             }
 
             wsdot.map = new Map("map", wsdot.config.mapOptions);
+
+            setupLayout.setupLegend();
 
             // Once the map loads, update the extent or zoom to match query string.
             (function (ops) {
@@ -393,7 +398,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                 // Remove the unwanted default basemaps as defined in config.js (if any are defined).
                 basemapGallery.on("load", function () {
                     /** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-                     * @returns {string[]}
+                     * @returns {string[]} The names of the basemaps.
                      */
                     function getBasemapsByLabel() {
                         var outputIds = [], bItem, rItem;
@@ -424,7 +429,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
                         }
                     }
 
-                    // If an initial basemap was specified in the config file, 
+                    // If an initial basemap was specified in the config file,
                     // select that basemap now.
                     if (wsdot.config.initialBasemap) {
                         (function () {
@@ -528,6 +533,7 @@ require(["require", "dojo/ready", "dojo/on", "dijit/registry",
 
                 infoWindowHelper.addGoogleStreetViewLink(wsdot.map.infoWindow);
                 infoWindowHelper.makeDraggable(wsdot.map.infoWindow);
+                infoWindowHelper.addPrintLink(wsdot.map.infoWindow, "blank.html");
 
                 // Show the disclaimer if one has been defined.
                 showDisclaimer(wsdot.config.alwaysShowDisclaimer);

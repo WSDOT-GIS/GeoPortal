@@ -47,79 +47,81 @@ define([
 
     createExtentSelect
 ) {
+
+    function getLayerInfos() {
+        var layerIds, layerInfos;
+        // Filter out basemap layers
+        layerIds = $.grep(wsdot.map.layerIds, isBasemap, true);
+
+        // Add the graphics layers to the array of layer IDs.
+        $.merge(layerIds, wsdot.map.graphicsLayerIds);
+
+        // Create layer info objects from the layer IDs, to be used with the Legend constructor.
+        layerInfos = $.map(layerIds, function (layerId) {
+            var layer = wsdot.map.getLayer(layerId);
+            return { layer: layer, title: layerId };
+        });
+
+        return layerInfos;
+    }
+
+    function isBasemap(layerId) {
+        /// <summary>Examines a layer ID and determines if it is a basemap.</summary>
+        var basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm)|(?:_bing))/i;
+        return layerId.match(basemapLayerIdRe);
+    }
+
+    /**
+     * Refreshes the legend using the layers currently in the map that are not basemap layers.
+     * @param {Object} layerInfo - Layer info
+     * @param {Layer} layerInfo.layer - layer
+     * @param {Map} layerInfo.target - target
+     */
+    function refreshLegend(/*layerInfo*/) {
+        var layerInfos, legend;
+        legend = registry.byId("legend");
+        layerInfos = getLayerInfos();
+        legend.refresh(layerInfos);
+    }
+
+    /**
+     * Creates the legend control.
+     */
+    function setupDefaultLegend() {
+        var legend, layerInfos;
+
+        layerInfos = getLayerInfos();
+
+        legend = registry.byId("legend");
+
+        // Create the legend dijit if it does not already exist.
+        if (!legend) {
+            legend = new Legend({
+                map: wsdot.map,
+                layerInfos: layerInfos
+            }, "legend");
+            legend.startup();
+        }
+
+        // Set the legend to refresh when a new layer is added to the map.
+        wsdot.map.on("layer-add-result", refreshLegend);
+    }
+
+    function setupLegend() {
+        if (typeof wsdot.config.customLegend === "object") {
+            var basemapGallery = registry.byId("basemapGallery");
+            if (basemapGallery) {
+                wsdot.config.customLegend.basemapGallery = basemapGallery;
+            }
+            $("#legend").customLegend(wsdot.config.customLegend);
+        } else {
+            setupDefaultLegend();
+        }
+    }
     function setupLayout() {
         var mainContainer, mapControlsPane, tabs, toolsTab, toolsAccordion, zoomControlsDiv;
 
-        function getLayerInfos() {
-            var layerIds, layerInfos;
-            // Filter out basemap layers
-            layerIds = $.grep(wsdot.map.layerIds, isBasemap, true);
 
-            // Add the graphics layers to the array of layer IDs.
-            $.merge(layerIds, wsdot.map.graphicsLayerIds);
-
-            // Create layer info objects from the layer IDs, to be used with the Legend constructor.
-            layerInfos = $.map(layerIds, function (layerId) {
-                var layer = wsdot.map.getLayer(layerId);
-                return { layer: layer, title: layerId };
-            });
-
-            return layerInfos;
-        }
-
-        function isBasemap(layerId) {
-            /// <summary>Examines a layer ID and determines if it is a basemap.</summary>
-            var basemapLayerIdRe = /layer(?:(?:\d+)|(?:_osm)|(?:_bing))/i;
-            return layerId.match(basemapLayerIdRe);
-        }
-
-        /**
-         * Refreshes the legend using the layers currently in the map that are not basemap layers.
-         * @param {Object} layerInfo
-         * @param {Layer} layerInfo.layer
-         * @param {Map} layerInfo.target
-         */
-        function refreshLegend(/*layerInfo*/) {
-            var layerInfos, legend;
-            legend = registry.byId("legend");
-            layerInfos = getLayerInfos();
-            legend.refresh(layerInfos);
-        }
-
-        /**
-         * Creates the legend control.
-         */
-        function setupDefaultLegend() {
-            var legend, layerInfos;
-
-            layerInfos = getLayerInfos();
-
-            legend = registry.byId("legend");
-
-            // Create the legend dijit if it does not already exist.
-            if (!legend) {
-                legend = new Legend({
-                    map: wsdot.map,
-                    layerInfos: layerInfos
-                }, "legend");
-                legend.startup();
-            }
-
-            // Set the legend to refresh when a new layer is added to the map.
-            wsdot.map.on("layer-add-result", refreshLegend);
-        }
-
-        function setupLegend() {
-            if (typeof wsdot.config.customLegend === "object") {
-                var basemapGallery = registry.byId("basemapGallery");
-                if (basemapGallery) {
-                    wsdot.config.customLegend.basemapGallery = basemapGallery;
-                }
-                $("#legend").customLegend(wsdot.config.customLegend);
-            } else {
-                setupDefaultLegend();
-            }
-        }
 
         mainContainer = new BorderContainer({ design: "headline", gutters: false }, "mainContainer");
         mainContainer.addChild(new ContentPane({ region: "top" }, "headerPane"));
@@ -176,8 +178,8 @@ define([
             /**
              * Gets the alternate title for this tab name from the config file.
              * If no alternative is available, the input string is returned.
-             * @param {string} title
-             * @returns {string}
+             * @param {string} title - The tab title.
+             * @returns {string} The alt title of the tab
              */
             function getTabTitle(title) {
                 var output;
@@ -207,7 +209,7 @@ define([
                 if (/Layers/i.test(name)) {
                     tabs.addChild(new ContentPane({ title: getTabTitle("Layers"), id: "layersTab" }, "layersTab"));
                 } else if (/Legend/i.test(name)) {
-                    tabs.addChild(new ContentPane({ title: getTabTitle("Legend"), onShow: setupLegend }, "legendTab"));
+                    tabs.addChild(new ContentPane({ title: getTabTitle("Legend"), id: "legendTab" }, "legendTab"));
                 } else if (/Basemap/i.test(name)) {
                     tabs.addChild(new ContentPane({ title: getTabTitle("Basemap"), id: "basemapTab" }, "basemapTab"));
                 } else if (/Tools/i.test(name)) {
@@ -310,6 +312,7 @@ define([
                 /**
                  * Creates a query task and query using settings from config.json.
                  * @param {string} qtName - The name of a query task from config.json.
+                 * @returns {Object.<string, (QueryTask|Query)>} returns an object with the properties "task" and "query".
                  */
                 function createQueryTask(qtName) {
                     var queryTaskSetting, qt, query, n;
@@ -492,5 +495,8 @@ define([
 
         mainContainer.startup();
     }
-    return setupLayout;
+    return {
+        setupLayout: setupLayout,
+        setupLegend: setupLegend
+    };
 });

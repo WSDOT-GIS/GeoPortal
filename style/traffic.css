@@ -1,0 +1,14 @@
+/* Hide buttons that aren't needed for this configuration. */
+button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'] {
+    display: none;
+}
+
+.ui-layer-list .basemap-group {
+    border: 1px solid lightgray;
+    padding: 0.5em 1em;
+    border-radius: 10px;
+}
+
+.traffic-legend table {
+    border-collapse: collapse;
+}

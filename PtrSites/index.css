@@ -1,0 +1,35 @@
+﻿/* Add placeholder text for empty jobs list. */
+#jobsList:empty:after {
+    font-style: italic;
+    content: 'No current jobs';
+}
+
+/* Hide job progress bars by default. */
+li > progress {
+    display: none;
+}
+
+/* Show the job progress bars when they are in submitted or executing state*/
+.esriJobExecuting > progress, .esriJobSubmitted > progress {
+    display: inline-block;
+}
+
+/* Disable links with no href attribute. */
+a:not([href]) {
+    pointer-events: none;
+    cursor: wait;
+}
+
+/* Hide empty messasge lists */
+.message-list:empty {
+    display: none;
+}
+
+/* Style input controls when they contain invalid values. */
+form :invalid {
+    border: 2px solid red;
+}
+
+.form-restriction-progress, .form-restriction-progress progress {
+    width: 100%;
+}

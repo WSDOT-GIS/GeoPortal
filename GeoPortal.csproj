@@ -45,6 +45,7 @@
     <None Include="AIS\config.json" />
     <Content Include="AIS\ReadMe.txt" />
     <Content Include="AIS\web.config" />
+    <Content Include="blank.html" />
     <Content Include="bower_components\arcgis-buffer-ui\BufferUI.js" />
     <Content Include="bower_components\arcgis-buffer-ui\BufferUIHelper.js" />
     <Content Include="bower_components\arcgis-buffer-ui\Templates\BufferUI.html" />
@@ -100,6 +101,8 @@
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
     <Content Include="bower_components\polyfills\html.js" />
+    <Content Include="bower_components\polyfills\polyfill.js" />
+    <Content Include="bower_components\polyfills\polyfill.min.js" />
     <Content Include="bower_components\polyfills\url.js" />
     <Content Include="bower_components\promise-polyfill\Promise.js" />
     <Content Include="bower_components\promise-polyfill\Promise.min.js" />
@@ -131,13 +134,14 @@
     <Content Include="help\milepost.html" />
     <Content Include="help\navigation.html" />
     <Content Include="help\zoom_controls.html" />
+    <Content Include="images\acronymlogo.svg" />
     <Content Include="images\Aeronautical Chart Thumb.jpg" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\camera.png" />
+    <Content Include="images\MultilevelThumbnail.png" />
     <Content Include="images\EsriHybridThumbnail.png" />
     <Content Include="images\FCBasemapThumbnail.png" />
     <Content Include="images\geolocate.png" />
-    <Content Include="images\greenlogo.png" />
     <Content Include="images\layerList\contextMenu.png" />
     <Content Include="images\layerList\sliderSprites.png" />
     <Content Include="images\layerList\treeMinus10.gif" />
@@ -155,6 +159,12 @@
     <Content Include="index.html" />
     <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
+    <Content Include="PtrSites\gpToBootstrapUtils.js" />
+    <Content Include="PtrSites\index.css" />
+    <Content Include="PtrSites\index.html" />
+    <Content Include="PtrSites\index.js" />
+    <Content Include="PtrSites\JobListItem.js" />
+    <Content Include="PtrSites\worker.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\configUtils.js" />
     <Content Include="scripts\customLegend.js" />
@@ -172,6 +182,10 @@
     <Content Include="scripts\info-window-helper\main.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="scripts\info-window-helper\print.css" />
+    <Content Include="scripts\info-window-helper\print.min.css">
+      <DependentUpon>print.css</DependentUpon>
+    </Content>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\layerSorter.js" />
     <Content Include="proxy.ashx" />
@@ -223,6 +237,7 @@
     <Content Include="bower_components\fontawesome\scss\_variables.scss" />
     <Content Include="bower.json" />
     <Content Include="config\internal-test-fish-passage-barriers.json" />
+    <None Include="bundleconfig.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
@@ -243,10 +258,12 @@
       <DependentUpon>polyfills.js</DependentUpon>
     </Content>
     <Content Include="scripts\polyfills\promise-6.1.0.js" />
+    <Content Include="scripts\PtrTemplate.js" />
     <Content Include="scripts\QueryStringManagerHelper.js" />
     <Content Include="scripts\setupLayout.js" />
     <Content Include="scripts\setupToolbar.js" />
     <Content Include="scripts\showDisclaimer.js" />
+    <Content Include="scripts\TrafficInfoTemplate.js" />
     <Content Include="scripts\zoomToXY.js" />
     <Content Include="style\addressLocator.css" />
     <None Include="style\FGDC Plus HTML5.xsl" />
@@ -289,6 +306,8 @@
     <Content Include="style\layerSorter.css" />
     <Content Include="style\locationInfo.css" />
     <Content Include="style\rmec.css" />
+    <Content Include="style\traffic.css" />
+    <Content Include="TrafficLegend.html" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
