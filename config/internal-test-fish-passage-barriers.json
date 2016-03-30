@@ -159,14 +159,14 @@
         }
       },
       {
-        "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
         "options": {
           "id": "Region Boundaries"
         }
       },
       {
-        "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
         "options": {
           "id": "County Boundaries"
@@ -187,7 +187,7 @@
         }
       },
       {
-        "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer",
         "options": {
           "id": "City Limits",
