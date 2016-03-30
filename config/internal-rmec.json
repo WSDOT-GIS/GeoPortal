@@ -33,7 +33,7 @@
             { "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
         ]
     },
-    "geometryServer": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+    "geometryServer": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer",
     "queryTasks": {
         "county": {
           "label": "County",
@@ -46,7 +46,7 @@
         },
         "city": {
             "label": "City",
-            "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
+            "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
             "query": {
                 "where": "1 = 1",
                 "returnGeometry": true,
@@ -56,7 +56,7 @@
         },
         "urbanArea": {
             "label": "Urban Area",
-            "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+            "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
             "query": {
                 "where": "1 = 1",
                 "returnGeometry": true
@@ -100,7 +100,7 @@
         "Environmental": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Environmental/EnvironmentalMapping/MapServer",
                 "options": {
                     "id": "Environmental Mapping"
                 }
@@ -131,7 +131,7 @@
         "Political Boundaries": [
             {
                 "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer",
                 "options": {
                     "id": "City Limits"
                 }
@@ -139,7 +139,7 @@
 
             {
                 "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
                 "options": {
                     "id": "County Boundaries"
                 }
@@ -147,21 +147,21 @@
 
             {
                 "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
                 "options": {
                     "id": "Township / Section"
                 }
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
                 "options": {
                     "id": "Tribal Lands"
                 }
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Environmental/MajorPublicLands/MapServer",
                 "options": {
                     "id": "Major Public Lands"
                 }
@@ -170,14 +170,14 @@
         "WSDOT Boundaries": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
                 "options": {
                     "id": "Maintenance Areas"
                 }
             },
             {
                 "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
                 "options": {
                     "id": "Region Boundaries"
                 }
@@ -186,21 +186,21 @@
         "Transportation Features": [
             {
                 "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
                 "options": {
                     "id": "State Routes"
                 }
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WSDOTPublicRoads/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/WSDOTPublicRoads/MapServer",
                 "options": {
                     "id": "Public Roads"
                 }
             },
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
+                "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
                 "options": {
                     "id": "Milepost Values"
                 }

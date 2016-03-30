@@ -143,7 +143,7 @@ define([
             $("#faaFar77").faaFar77RunwaySelector({
                 map: wsdot.map,
                 // TODO: put this URL and layer ID in the app. options.
-                identifyUrl: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
+                identifyUrl: "http://data.wsdot.wa.gov/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
                 identifyLayerId: 0,
                 identifyComplete: function (event, data) {
                     var identifyResults, noFeaturesDialog;

@@ -128,7 +128,7 @@ define([
 		getAttributeData(featureUrl).then(function (response) {
 			linkCell.removeChild(linkProgress);
 			var link, list;
-			if (response.attachmentInfos && response.attachmentInfos.length > 0) {
+			if (response && response.attachmentInfos && response.attachmentInfos.length > 0) {
 				link = createGalleryLink(featureUrl);
 				link.classList.add("gallery-link");
 				linkCell.appendChild(link);
@@ -144,13 +144,13 @@ define([
 		});
 
 		row.appendChild(cell);
-		
+
 		for (var i = 0, l = attributeOrder.length; i < l; i++) {
 			name = attributeOrder[i];
 			if (attr.hasOwnProperty(name) && !ignoreRe.test(name) && name !== displayFieldName) {
 				value = attr[name];
 				row = table.insertRow(-1);
-			
+
 				cell = document.createElement("th");
 				cell.textContent = name;
 				row.appendChild(cell);

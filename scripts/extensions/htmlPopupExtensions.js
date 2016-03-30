@@ -143,7 +143,7 @@ require([
                 // Get the layerInfo corresponding to the current layer ID.
                 layerInfo = mapServiceLayer.layerInfos[layerId];
 
-                // Add to the output array the ID of any sublayer that has an html popup defined 
+                // Add to the output array the ID of any sublayer that has an html popup defined
                 // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
                 if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
                     if (returnUrls) {
@@ -156,7 +156,7 @@ require([
         } else {
             for (i = 0, l = mapServiceLayer.layerInfos.length; i < l; i += 1) {
                 layerInfo = mapServiceLayer.layerInfos[i];
-                // Add to the output array the ID of any sublayer that has an html popup defined 
+                // Add to the output array the ID of any sublayer that has an html popup defined
                 // (and in the case of layers with a visibleLayers property, the sublayer is currently visible).
                 if (htmlPopupTypeIsHtmlTextOrUrl(layerInfo)) { //if (Boolean(layerInfo.htmlPopupType) && /esriServerHTMLPopupTypeAs(?:(?:HTMLText)|(?:URL))/i.test(layerInfo.htmlPopupType)) {
                     if (layerInfo.visibleLayers === undefined || layerInfo.visibleLayers.indexOf(layerInfo.id) >= 0) {
@@ -271,7 +271,7 @@ require([
          */
         detectHtmlPopupsHasRun: false,
         /**
-         * Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined. 
+         * Queries all of the map service layers in a map determines which of the layers' sublayers have an HTML Popup defined.
          * @param {Function} [htmlPopupLayerFoundAction] - Function that will be called for each layer once it has been determined if it supports HTML popups.
          * @returns {dojo/Deferred} - Indicates progress of operation with currently completed count and total count.
          */
@@ -541,7 +541,7 @@ require([
                     return;
                 }
 
-                /** 
+                /**
                  * Create a table to display attributes if no HTML popup is defined.
                  * @param {esri/Graphic} feature - a graphic
                  * @param {esri/tasks/IdentifyResult} result - an identify result
@@ -686,7 +686,7 @@ require([
                 map.identify(event.mapPoint, {
                     tolerance: 5
                     /**
-                     * 
+                     *
                      * @param {Object.<string, IdentifyResult[]>} idResults - The propery names correspond to map layer IDs. Each of these properties is an array of identify results associated with that map layer.
                      */
                 }).then(function (idResults) {
@@ -712,7 +712,7 @@ require([
                         var feature = result.feature;
                         feature.layer = map.getLayer(layerId);
                         feature.result = result;
-                        if (layerId === "Habitat Connectivity") {
+                        if (layerId === "Habitat Connectivity" && result.layerId !== 2) {
                             feature.setInfoTemplate(HabitatConnectivityInfoTemplate);
                         } else if (layerId === "Traffic Data") {
                             feature.setInfoTemplate(TrafficInfoTemplate);
