@@ -13,15 +13,24 @@ require([
 ], function (esriConfig, Geoprocessor, JobListItem, gpToBootstrapUtils) {
     "use strict";
 
+    /**
+     * Tests a link and returns a promise that will resolve when the URL is accessible.
+     * @param {string} url - URL to be tested.
+     * @returns {Promise}
+     */
     function testLink(url) {
-        var worker = new Worker("IsFileReadyWorker.js");
-        worker.addEventListener("message", function (e) {
-            console.debug("test " + url, e.data);
+        return new Promise(function (resolve, reject) {
+            var worker = new Worker("IsFileReadyWorker.js");
+            worker.addEventListener("message", function (e) {
+                if (e.data && e.data.status === "OK") {
+                    resolve("OK");
+                }
+            });
+            worker.addEventListener("error", function (e) {
+                reject(e);
+            });
+            worker.postMessage({ url: url });
         });
-        worker.addEventListener("error", function (error) {
-            console.error("test " + url, error);
-        });
-        worker.postMessage({ url: url });
     }
 
     var gpUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/ExportFilteredCsv/GPServer/Export%20Filtered%20CSV";
@@ -216,10 +225,12 @@ require([
             // to the output ZIP file.
             gp.getResultData(jobId, "Output_ZIP").then(function (dataEvent) {
                 // Update the link with the ZIP file URL.
-                li.link = dataEvent.value.url;
-                testLink(dataEvent.value.url);
-                li.updateDownloadAttribute();
-                li.listItem.classList.add("list-group-item-success");
+                var zipUrl = dataEvent.value.url;
+                li.link = zipUrl;
+                testLink(zipUrl).then(function () {
+                    li.updateDownloadAttribute();
+                    li.listItem.classList.add("list-group-item-success");
+                });
             }, function (statusEvent) {
                 // Status update event handler for getting the ZIP URL.
                 // Currently just logs to the console.
