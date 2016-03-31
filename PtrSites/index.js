@@ -13,6 +13,17 @@ require([
 ], function (esriConfig, Geoprocessor, JobListItem, gpToBootstrapUtils) {
     "use strict";
 
+    function testLink(url) {
+        var worker = new Worker("IsFileReadyWorker.js");
+        worker.addEventListener("message", function (e) {
+            console.debug("test " + url, e.data);
+        });
+        worker.addEventListener("error", function (error) {
+            console.error("test " + url, error);
+        });
+        worker.postMessage({ url: url });
+    }
+
     var gpUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/ExportFilteredCsv/GPServer/Export%20Filtered%20CSV";
     esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov");
 
@@ -206,6 +217,7 @@ require([
             gp.getResultData(jobId, "Output_ZIP").then(function (dataEvent) {
                 // Update the link with the ZIP file URL.
                 li.link = dataEvent.value.url;
+                testLink(dataEvent.value.url);
                 li.updateDownloadAttribute();
                 li.listItem.classList.add("list-group-item-success");
             }, function (statusEvent) {

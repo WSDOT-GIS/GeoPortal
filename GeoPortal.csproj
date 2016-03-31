@@ -96,6 +96,7 @@
     <Content Include="bower_components\elc\RouteLocator.js" />
     <Content Include="bower_components\elc\routeTypeUtils.js" />
     <Content Include="bower_components\elc\routeUtils.js" />
+    <Content Include="bower_components\fetch\fetch.js" />
     <Content Include="bower_components\fontawesome\.gitignore" />
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
@@ -163,6 +164,7 @@
     <Content Include="PtrSites\index.css" />
     <Content Include="PtrSites\index.html" />
     <Content Include="PtrSites\index.js" />
+    <Content Include="PtrSites\IsFileReadyWorker.js" />
     <Content Include="PtrSites\JobListItem.js" />
     <Content Include="PtrSites\worker.js" />
     <Content Include="scripts\ais\faaFar77.js" />
@@ -365,7 +367,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
