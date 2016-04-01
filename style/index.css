@@ -493,7 +493,12 @@ abbr {
 }
 
 /* Add background for blank map where tiles are not present*/
-.map[data-zoom='11'] > .esriMapContainer > .esriMapContainer > .esriMapLayers, .map[data-zoom='12'] > .esriMapContainer > .esriMapContainer > .esriMapLayers {
+.map[data-zoom='18'] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom='19'] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom='20'] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom='21'] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom='22'] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom='23'] > .esriMapContainer > .esriMapContainer > .esriMapLayers {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNCSVQI5gpbmQAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAO+SURBVFjDvZdZEqIwEIa5/9EIQRAUBNlBtktM7E5IGoKONVWTJ5X40f33ljjrPy7n7MHSFWkU+J7nB1FadMtvgKmImEsWi4vprwFtvPu3YrR/BahD93SFzVfAK9q9dmdM9PoIWHK9n8d5N85vQYY6u+rf8w+ASb8+bsbSWNNcbs+i6QwwcGV3Nq3jxbT8Mgrv7tIMf7ADOk/tFoZPF+r75f3aUVrBexug026K57d9AG4YIjSS9UfA4BnRWutjCCvYNmKQ+bAHTBKd4ebgCOCo3RKjDhMFLJFyDp7z0pJFsdyaYCwoIIcfPWHYCFJktnSsVtOGpwkYUMB6GMcRnbCI4PKmhdUh/WUA0IECPC9AjVtyXhFu42mXAICvu91RngLt9c4BPkrUbAAwiVfy8QO+BvkHE9IIoy0BLTrgq0RGgwrIRc6traEB0VoJAFXDh066BEMZ5oPoZMvwPIYkTpQKAjCxvc8V/JIaPeqAaMCQGQAgmm+6jP4zo+iWxw6QgAoFAODjk1Qf6hGZdV/scqKQOwQAPaCPKx0ntXY2gJtsEYAOjKbJH2Bt+KTdUR3KEAvfQdtSCuhkcpP+11JAhiI4awpfCeAqtsPPHml/VwKoMFIOatgTgBB3nSGD7ibgSQA9quisUEETAQxa9t5sugQwgVgCABFbTQBD0YIt35WMBLCgzM7qwV9MADdFqwyCWRclhJ8LAD8DYI34xmD3rABwYSEayP+8sLtpF5jVhTMRVfKx0S7iqEQEQwcCkP1ShvJmLQcdRsiYmgA26UsSSpLLmHqpSuWMpvJ2FAnQTlg9TeW7SmUopisFhEr6TipuKaZAFRNoy2g5uw9lAgxZ/j5nZLtydlU5o4rlrosXEoCD6nFoKEGmGwr2lv0geUgvYCN77d7vPn3d0ma2dUnyDlRy8XUX1ssDzdhktPUkPvTuK7T1yjao8kBlyBvQGLPiMFB5ZhlUsgO2ZLRFqX2MyUH1NM8ceNLZRhua4Ja+nYBDlxuBzmKdbsZ495qTUYr+p9tBMS6MMwoCXph/XWtdAw6q7XvJjCp1zH4Zn90KyKCS58GcntLQvuSEgM7V+JnZDlnr5H+0QQ+qAv/vz4eDJnbMcLQC1KCa7+7JQVOUO6K92krAQVXLSNuOuoIgu3b8st2izJZuP2wLOxU/sSCMcj477ovXbAUVVTP9/6hrIZo/3Jn0NhZmVQ9bp65K9PmF5V8uXfGXS9f49drXfLj2XZv/cfGEkXS8+kY/XH2xF/bi8h36nPuhuHz3P16+f1h/AEK5j0HCcSIyAAAAAElFTkSuQmCC') /*../images/no-image.png*/;
     background-repeat: repeat;
 }
