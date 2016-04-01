@@ -6,6 +6,7 @@
   "alwaysShowDisclaimer": false,
   "printUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivityExportWebMap/GPServer/Export%20Web%20Map",
   "noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
+  "additionalStylesheets": [ "style/internal-habitat-connectivity.css" ],
   "tools": [
     "lrs",
     "zoom"

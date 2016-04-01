@@ -114,6 +114,7 @@
     <Content Include="config\FunctionalClass.json" />
     <Content Include="config\internal-airport.json" />
     <Content Include="config\internal-Freight.json" />
+    <Content Include="style\internal-habitat-connectivity.css" />
     <Content Include="config\Release.json" />
     <Content Include="config\traffic.json" />
     <Content Include="disclaimers\airport\Internal.html" />
@@ -367,7 +368,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
+      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
