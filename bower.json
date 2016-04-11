@@ -37,6 +37,7 @@
     "arcgis-query-string-utilities": "https://github.com/WSDOT-GIS/arcgis-query-string-utilities.git#~1.1.1",
     "elc": "wsdot-route-locator#~2.6.0",
     "arcgis-print-ui": "~1.2.0",
-    "fetch": "^0.11.0"
+    "fetch": "^0.11.0",
+    "layer-metadata-soe-client": "https://github.com/WSDOT-GIS/Layer-Metadata-SOE-JS-Client.git#~v2.0.1"
   }
 }
