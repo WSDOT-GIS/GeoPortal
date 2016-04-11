@@ -101,6 +101,8 @@
     <Content Include="bower_components\fontawesome\css\font-awesome.css" />
     <Content Include="bower_components\fontawesome\css\font-awesome.min.css" />
     <Content Include="bower_components\fontawesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="bower_components\layer-metadata-soe-client\MetadataClient.js" />
+    <Content Include="bower_components\layer-metadata-soe-client\metadataExtensions.js" />
     <Content Include="bower_components\polyfills\html.js" />
     <Content Include="bower_components\polyfills\polyfill.js" />
     <Content Include="bower_components\polyfills\polyfill.min.js" />
@@ -177,7 +179,6 @@
     <Content Include="scripts\extensions\graphicsLayer.js" />
     <Content Include="scripts\extensions\htmlPopupExtensions.js" />
     <Content Include="scripts\extensions\map.js" />
-    <Content Include="scripts\extensions\metadataExtensions.js" />
     <Content Include="scripts\extentSelect.js" />
     <Content Include="scripts\fgdcPlus.js" />
     <Content Include="scripts\HabitatConnectivityInfoTemplate.js" />
@@ -368,7 +369,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
