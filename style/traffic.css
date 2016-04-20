@@ -1,5 +1,5 @@
 /* Hide buttons that aren't needed for this configuration. */
-button[id='saveButton'], span[widgetid='saveButton'], span[widgetid='sortButton'] {
+button[id='saveButton'], span[widgetid='saveButton'] {
     display: none;
 }
 

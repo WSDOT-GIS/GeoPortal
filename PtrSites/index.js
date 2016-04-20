@@ -88,6 +88,9 @@ require([
 
     gp.on("job-cancel", function (e) {
         console.debug("job-cancel", e);
+        if (window.gaTracker) {
+            gaTracker.send('event', 'job', 'cancel', e && e.jobId ? e.jobId : null);
+        }
     });
 
     function validateSiteIdIsInList() {

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>PTR Sites Data Download</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <link href="index.css" rel="stylesheet" async="async" />
@@ -11,6 +11,29 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" async="async" />
     <script src="../bower_components/polyfills/polyfill.min.js"></script>
     <script src="../bower_components/promise-polyfill/Promise.min.js"></script>
+    <script>
+        // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
+        (function (dnt) {
+            if (dnt !== "yes" && dnt !== "1") {
+                window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+                ga('create', {
+                    trackingId: 'UA-970887-21',
+                    cookieDomain: "wsdot.wa.gov" // Using "auto" here will set the cookie domain to "wa.gov".
+                });
+                ga(function (tracker) {
+                    tracker.set("appName", "WSDOT GeoPortal - PTR Sites Data Download");
+                    tracker.send('pageview');
+                    // Set a global variable containing the Google Analytics tracker.
+                    window.gaTracker = tracker;
+                });
+
+                var script = document.createElement("script");
+                script.async = true;
+                script.src = "//www.google-analytics.com/analytics.js";
+                document.head.appendChild(script);
+            }
+        }(navigator.doNotTrack || navigator.msDoNotTrack || null));
+    </script>
 </head>
 <body>
     <div class="header">
@@ -18,31 +41,28 @@
     </div>
     <div class="container-fluid">
         <p>
-            Select the permanent recorder and the time period for which data is to be returned.
-            (The recorder field will default to the site you were directed to this page from.)
-            Once done, click on the query button and a link will be generated to download available
-            directional hourly volume data, hourly volume by vehicle classification data and
-            monthly roll-ups.  You will receive a message if one or more of these data types
-            are unavailable for the period specified.
+            <ol>
+                <li>
+                    Select the traffic recorder and the time period for which data is to be returned.
+                    (The recorder field will default to the site you were directed to this page from.)
+                </li>
+                <li>Next, select the data type(s) you are interested in.</li>
+                <li>
+                    Once done, click on the query button and a link will be generated to download available data meeting these criteria.
+                    If no data is available within the specified parameters, you will receive a message indicating so.
+                </li>
+            </ol>
         </p>
         <p>
-            In the datasets, <em>single-unit trucks</em> reflect buses and heavy trucks on a single frame,
-            <em>double-unit trucks</em> reflect a tractor connected to a trailer, and <em>triple-unit trucks</em>
-            reflect a tractor connected to two trailers.
-            Within the hourly datasets, <em>Hour1</em> reflects <time>midnight</time> to <time>1 AM</time>.
-            Within the monthly summary dataset, figures reflect average daily totals.
+            In the datasets, single-unit trucks reflect buses and heavy trucks on a single frame, double-unit trucks reflect a
+            tractor connected to a trailer, and triple-unit trucks reflect a tractor connected to two trailers.
+            Within the hourly datasets, Hour1 reflects <time>midnight</time> to <time>1 AM</time>. Within the monthly summary
+            dataset, figures reflect average daily totals.
         </p>
         <div class="row">
             <div class="col-md-6">
                 <form id="queryParametersForm">
-                    <div class="form-group">
-                        <label class="control-label" for="tableSelect">Tables</label>
-                        <select name="Input_Tables" class="form-control" id="tableSelect" multiple="multiple" required="required">
-                            <option value="ADC_Traffic_By_Hour" label="ADC_Traffic_By_Hour" selected="selected">ADC_Traffic_By_Hour</option>
-                            <option value="ADC_Traffic_Classification_By_Hour" label="ADC_Traffic_Classification_By_Hour" selected="selected">ADC_Traffic_Classification_By_Hour</option>
-                            <option value="Monthly_ADC_Traffic" label="Monthly_ADC_Traffic" selected="selected">Monthly_ADC_Traffic</option>
-                        </select>
-                    </div>
+
 
                     <div class="form-group">
                         <label for="siteIdBox">Site ID</label>
@@ -97,6 +117,14 @@
                             <label for="endYearBox" class="input-group-addon">Year</label>
                             <input id="endYearBox" name="End_Year" type="number" class="form-control" required="required" title="End Year" inputmode="numeric" step="1" min="2000" max="2100" />
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="tableSelect">Tables</label>
+                        <select name="Input_Tables" class="form-control" id="tableSelect" multiple="multiple" required="required">
+                            <option value="ADC_Traffic_By_Hour" label="Traffic Volume by Hour" selected="selected">Traffic Volume by Hour</option>
+                            <option value="ADC_Traffic_Classification_By_Hour" label="Traffic Volume by Vehicle Type and Hour" selected="selected">Traffic Volume by Vehicle Type and Hour</option>
+                            <option value="Monthly_ADC_Traffic" label="Monthly Traffic Statistics" selected="selected">Monthly Traffic Statistics</option>
+                        </select>
                     </div>
                     <div class="form-restriction-progress">
                         <p>Please wait. Loading form restrictions from map service.</p>
