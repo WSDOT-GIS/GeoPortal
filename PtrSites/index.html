@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>PTR Sites Data Download</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <link href="index.css" rel="stylesheet" async="async" />
@@ -11,6 +11,29 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" async="async" />
     <script src="../bower_components/polyfills/polyfill.min.js"></script>
     <script src="../bower_components/promise-polyfill/Promise.min.js"></script>
+    <script>
+        // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
+        (function (dnt) {
+            if (dnt !== "yes" && dnt !== "1") {
+                window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+                ga('create', {
+                    trackingId: 'UA-970887-21',
+                    cookieDomain: "wsdot.wa.gov" // Using "auto" here will set the cookie domain to "wa.gov".
+                });
+                ga(function (tracker) {
+                    tracker.set("appName", "WSDOT GeoPortal - PTR Sites Data Download");
+                    tracker.send('pageview');
+                    // Set a global variable containing the Google Analytics tracker.
+                    window.gaTracker = tracker;
+                });
+
+                var script = document.createElement("script");
+                script.async = true;
+                script.src = "//www.google-analytics.com/analytics.js";
+                document.head.appendChild(script);
+            }
+        }(navigator.doNotTrack || navigator.msDoNotTrack || null));
+    </script>
 </head>
 <body>
     <div class="header">

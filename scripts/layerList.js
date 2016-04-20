@@ -56,7 +56,7 @@ require([
     _defaultLoadingIcon = "<img src='images/ajax-loader.gif' height='16' width='16' alt='Loading icon' />";
 
     /**
-     * 
+     *
      * @param {Object} jsonObject - An object.
      * @param {boolean} jsonObject.ignoreSoe - Specifies that the metadata list provided by the Layer Metadata SOE is to be ignored. Only the "additionalMetadata" links will be used.
      * @param {Object.<string, string>} jsonObject.additionalMetadata - A dictionary of metadata URLs.
@@ -312,7 +312,7 @@ require([
         }
 
         constructor = getLayerConstructor(layerInfo.type || layerInfo.layerType);
-        
+
         /*jshint newcap:false*/
         layer = new constructor(layerInfo.url, processLayerOptions(layerInfo.options));
         /*jshint newcap:true*/
@@ -465,28 +465,37 @@ require([
         this._hideLoading();
         $element.removeClass("ui-layer-list-not-loaded");
 
-        // Check to see if layer supports metadata by attempting to retrieve a list of feature layers from the Metadata SOE.  
-        // Add a "metadataLayers" property and set the value appropriately.
-        // Add a "metadataUrl property to each layerInfo.
-        if (typeof layer.getIdsOfLayersWithMetadata === "function") {
-            layer.getIdsOfLayersWithMetadata(function (layerIds) {
-                var id, i, l, layerInfo;
+        try {
+            // Check to see if layer supports metadata by attempting to retrieve a list of feature layers from the Metadata SOE.
+            // Add a "metadataLayers" property and set the value appropriately.
+            // Add a "metadataUrl property to each layerInfo.
+            if (typeof layer.getIdsOfLayersWithMetadata === "function") {
+                layer.getIdsOfLayersWithMetadata(function (layerIds) {
+                    var id, i, l, layerInfo;
 
-                layer.metadataLayers = layerIds;
+                    layer.metadataLayers = layerIds;
 
-                for (i = 0, l = layerIds.length; i < l; i += 1) {
-                    id = layerIds[i];
-                    layerInfo = layer.layerInfos[id];
-                    layerInfo.metadataUrl = layer.getMetadataUrl(id);
-                }
-            }, function (/*error*/) {
-                layer.metadataLayers = null;
-            });
-        } else if (typeof layer.supportsMetadata === "function") {
-            layer.supportsMetadata(function (metadataSupportInfo) {
-                console.log("supports metadata", metadataSupportInfo);
-            }, function (error) {
-                console.error(error);
+                    if (layerIds && layerIds.length) {
+                        for (i = 0, l = layerIds.length; i < l; i += 1) {
+                            id = layerIds[i];
+                            layerInfo = layer.layerInfos[id];
+                            layerInfo.metadataUrl = layer.getMetadataUrl(id);
+                        }
+                    }
+                }, function (/*error*/) {
+                    layer.metadataLayers = null;
+                });
+            } else if (typeof layer.supportsMetadata === "function") {
+                layer.supportsMetadata(function (metadataSupportInfo) {
+                    console.log("supports metadata", metadataSupportInfo);
+                }, function (error) {
+                    console.error(error);
+                });
+            }
+        } catch (e) {
+            console.error("Error creating metadata list for layer", {
+                error: e,
+                layer: layer
             });
         }
 
