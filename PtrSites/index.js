@@ -133,7 +133,7 @@ require([
             var y, m, d;
             if (yearBox.validity.valid && monthSelect.validity.valid) {
                 y = parseInt(yearBox.value, 10);
-                m = parseInt(monthSelect.value, 10);
+                m = parseInt(monthSelect.value, 10) - 1;
                 d = new Date(y, m);
             }
             return d || null;
@@ -150,7 +150,7 @@ require([
 
         var setDateRangeMessge = function (ctrl) {
             function formatDate(date) {
-                return [date.getUTCFullYear().toString(), date.getUTCMonth() - 1].join("-");
+                return [date.getUTCFullYear().toString(), date.getUTCMonth() + 1].join("-");
             }
             if (validDates) {
                 ctrl.setCustomValidity(["Please enter a date between", formatDate(validDates[0]), "and", formatDate(validDates[1])].join(" "));
