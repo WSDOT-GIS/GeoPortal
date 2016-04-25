@@ -15,6 +15,7 @@ require([
     "esri/layers/LabelLayer",
     "esri/layers/KMLLayer",
     "esri/layers/ImageParameters",
+    "geoportal/layerUtils",
 
     "extensions/map"
 ], function (
@@ -25,31 +26,10 @@ require([
     FeatureLayer,
     LabelLayer,
     KMLLayer,
-    ImageParameters
+    ImageParameters,
+    layerUtils
 ) {
     "use strict";
-
-    /**
-     * Creates a label for a layer based on its URL.
-     * @param {esri/layers/Layer} layer - A layer.
-     * @returns {string} A label for the layer base on the layer's URL.
-     */
-    function createLayerNameFromUrl(layer) {
-        var svcNameRe = /\/(\w+)\/MapServer/i;
-        var match;
-        var output = null;
-        // Get the layer name from the URL.
-        if (layer && layer.url) {
-            match = layer.url.match(svcNameRe);
-            if (match) {
-                output = match[1];
-            }
-        }
-        var re = /([a-z])([A-Z])([a-z])/g;
-        output = output.replace(re, "$1 $2$3");
-        output = output.replace("_", " ");
-        return output;
-    }
 
     var _defaultContextMenuIcon, _defaultLoadingIcon, onLayerLoad, onLayerError, updateIsInScaleStatus, toggleSublayer;
     _defaultContextMenuIcon = "<span style='cursor:pointer'>&Rrightarrow;</span>"; //"<img src='images/layerList/contextMenu.png' style='cursor:pointer' height='11' width='11' alt='context menu icon' title='Layer Options' />";
@@ -945,7 +925,7 @@ require([
                 } else if (this.options.osmRe.test(layerId)) {
                     label = this.options.osmLabel;
                 } else {
-                    label = createLayerNameFromUrl(layer) || this.options.defaultBasemapLabel;
+                    label = layerUtils.createLayerNameFromUrl(layer) || this.options.defaultBasemapLabel;
                 }
             }
             if (!error && !this._layerExistsInToc(layer)) {
