@@ -1,6 +1,6 @@
 ﻿{
   "pageTitle": "Traffic GeoPortal",
-  "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "helpUrl": "help/traffic.pdf",
   "enableIdentify": true,
   "additionalStylesheets": [ "style/traffic.css" ],
   "tools": [
