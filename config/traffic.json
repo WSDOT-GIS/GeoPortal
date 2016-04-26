@@ -10,8 +10,7 @@
   "tabOrder": [
     "Layers",
     "Legend",
-    "Tools",
-    "Basemap"
+    "Tools"
   ],
   "customLegend": {
     "html": "TrafficLegend.html",

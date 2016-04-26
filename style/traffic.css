@@ -1,5 +1,5 @@
 /* Hide buttons that aren't needed for this configuration. */
-button[id='saveButton'], span[widgetid='saveButton'] {
+button[id='saveButton'], span[widgetid='saveButton'], #basemapTab {
     display: none;
 }
 
