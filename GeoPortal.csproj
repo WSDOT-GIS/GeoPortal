@@ -112,10 +112,8 @@
     <Content Include="bower_components\usgs-ned\usgsNed.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
-    <Content Include="config\Freight.json" />
     <Content Include="config\FunctionalClass.json" />
     <Content Include="config\internal-airport.json" />
-    <Content Include="config\internal-Freight.json" />
     <Content Include="scripts\layerUtils.js" />
     <Content Include="style\internal-habitat-connectivity.css" />
     <Content Include="config\Release.json" />
@@ -123,17 +121,12 @@
     <Content Include="disclaimers\airport\Internal.html" />
     <Content Include="disclaimers\airport\Public.html" />
     <Content Include="disclaimers\fish-passage-barriers\Public.html" />
-    <Content Include="disclaimers\Freight\Internal.html" />
-    <Content Include="disclaimers\Freight\Public.html" />
     <Content Include="disclaimers\habitat-connectivity\Internal.html" />
     <Content Include="disclaimers\internal-rmec\Internal.html" />
     <Content Include="error\GenericError.html" />
     <Content Include="fish-barrier-images\index.html" />
     <Content Include="fish-barrier-images\scripts\index.js" />
     <Content Include="FunctionalClassLegend.html" />
-    <Content Include="help\Freight\internal\help.html" />
-    <Content Include="help\Freight\public\help.html" />
-    <Content Include="help\internal-freight.html" />
     <Content Include="help\location_info.html" />
     <Content Include="help\measure.html" />
     <Content Include="help\milepost.html" />
@@ -195,12 +188,6 @@
     <Content Include="scripts\layerSorter.js" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
-    <Content Include="help\Freight\internal\FAQ.pdf" />
-    <Content Include="help\Freight\internal\Help.pdf" />
-    <Content Include="help\Freight\public\FAQ.pdf" />
-    <Content Include="help\Freight\public\Help.pdf" />
-    <Content Include="help\Freight\internal\Tutorial.pdf" />
-    <Content Include="help\Freight\public\Tutorial.pdf" />
     <Content Include="config\fish-passage-barriers.json" />
     <Content Include="config\internal-habitat-connectivity.json" />
     <Content Include="config\internal-rmec.json" />
@@ -371,7 +358,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
