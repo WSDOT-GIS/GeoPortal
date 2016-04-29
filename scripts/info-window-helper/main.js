@@ -9,8 +9,8 @@ define([
 
     /**
      * Creates a Google Street View URL from a geometry.
-     * @param {esri/geometry/Point} point
-     * @returns {string}
+     * @param {esri/geometry/Point} point - A point.
+     * @returns {string} - A Google street view URL.
      */
     function getGoogleStreetViewUrl(point) {
         var xy, output = null;
@@ -105,6 +105,7 @@ define([
 
     /**
      * Makes an InfoWindow draggable.
+     * @param {esri/InfoWindow} infoWindow - an info window.
      */
     function makeDraggable(infoWindow) {
         if (!infoWindow) {
@@ -184,7 +185,7 @@ define([
             attribNames.forEach(function (name) {
                 var cell = row.insertCell();
                 var value = feature.attributes[name];
-                if (value != null) {
+                if (value != null) { // eslint-disable-line
                     cell.textContent = value.toString();
                 }
             });
@@ -211,8 +212,9 @@ define([
 
     /**
      * Adds a link to an InfoWindow that, when clicked, will show all the current features' attributes in tables.
-     * @param {InfoWindow} infoWindow
+     * @param {InfoWindow} infoWindow - an info window
      * @param {string} [fallbackUrl] - Url on same domain to use for IE "Access is denied" workaround.
+     * @returns {HTMLAnchorElement} - Returns the HTML anchor element.
      */
     function addPrintLink(infoWindow, fallbackUrl) {
         var actionList = infoWindow.domNode.querySelector(".actionList");
@@ -242,20 +244,28 @@ define([
             style.textContent = printCss;
             doc.head.appendChild(style);
 
-            var htmlMarkup = doc.documentElement.outerHTML;
+            var htmlMarkup = "<!DOCTYPE html>" + doc.documentElement.outerHTML;
             // Encode markup to base-64 for Firefox compatibility.
             var url = ["data:text/html;base64", btoa(htmlMarkup)].join(",");
             var newWindow;
 
-            try {
-                window.open(url, "geoportal_attribute_table");
-            } catch (err) {
-                if ((err.number === -2147024891 || err.message.match(/Access is denied/i)) && fallbackUrl) {
-                    newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
-                    newWindow.document.write(htmlMarkup);
-                    newWindow.focus();
-                } else {
-                    throw err;
+            // Detect IE via user agent string. Don't know of any other way to detect support for opening data URIs.
+            if (window.navigator.userAgent && window.navigator.userAgent.match(/\b(?:(?:MSIE)|(?:Trident))\b/i)) {
+                newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
+                newWindow.document.write(htmlMarkup);
+                newWindow.focus();
+            }
+            else {
+                try {
+                    window.open(url, "geoportal_attribute_table");
+                } catch (err) {
+                    if ((err.number === -2147024891 || err.message.match(/Access is denied/i)) && fallbackUrl) {
+                        newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
+                        newWindow.document.write(htmlMarkup);
+                        newWindow.focus();
+                    } else {
+                        throw err;
+                    }
                 }
             }
 

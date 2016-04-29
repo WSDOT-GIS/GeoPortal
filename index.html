@@ -37,16 +37,14 @@
     <script src="bower_components/polyfills/url.js"></script>
     <script src="bower_components/polyfills/html.js"></script>
     <script src="bower_components/fetch/fetch.js"></script>
+
+    <script src="bower_components/intl/dist/Intl.min.js"></script>
+    <script src="bower_components/intl/locale-data/jsonp/en-US.js"></script>
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
             if (dnt !== "yes" && dnt !== "1") {
-                (function (i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+                window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
 
                 ga('create', {
                     trackingId: 'UA-970887-21',
@@ -58,6 +56,11 @@
                     // Set a global variable containing the Google Analytics tracker.
                     window.gaTracker = tracker;
                 });
+
+                var script = document.createElement("script");
+                script.async = true;
+                script.src = "//www.google-analytics.com/analytics.js";
+                document.head.appendChild(script);
             }
         }(navigator.doNotTrack || navigator.msDoNotTrack || null));
     </script>
