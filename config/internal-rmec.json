@@ -158,14 +158,6 @@
         }
       },
       {
-        "layerType": "esri.layers.FeatureLayer",
-        "url": "http://services.arcgis.com/6lCKYNJLvwTXqrmp/ArcGIS/rest/services/Municipal_Stormwater_Permit_Areas/FeatureServer/0",
-        "options": {
-          "id": "Municipal Stormwater Permit Areas",
-          "outFields": [ "OBJECTID", "PERMIT", "JURISDICTION", "CITY_NAME", "UGA_NAME", "INCORPORATED", "COUNTY_NAME", "UA_NAME", "UA_TYPE", "SYMBOLOGY" ]
-        }
-      },
-      {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
         "url": "https://fortress.wa.gov/ecy/ecyprodgislb/arcgis/rest/services/NHD/NHD_Hydro_Cache/MapServer",
         "options": {
