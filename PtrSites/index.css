@@ -33,3 +33,10 @@ form :invalid {
 .form-restriction-progress, .form-restriction-progress progress {
     width: 100%;
 }
+
+.date-note {
+    font-style: normal;
+    font-weight: normal;
+    margin-left: 1em;
+    color: blue;
+}

@@ -186,6 +186,17 @@ require([
     ////    });
     ////}
 
+    function setupDateRangeLabels() {
+        var fmt = new Intl.DateTimeFormat(undefined, {
+            year: 'numeric',
+            month: 'long',
+        });
+        var startLabel = document.getElementById("startDateRangeNote");
+        startLabel.textContent = "Earliest data available: " + fmt.format(validDates[0]);
+        var endLabel = document.getElementById("endDateRangeNote");
+        endLabel.textContent = "Latest data available: " + fmt.format(validDates[1]);
+    }
+
     function submitJob() {
         // Create parameters object and update the URL search parameters.
         var paramNames = ["Input_Tables", "Site_ID", "Start_Year", "Start_Month", "End_Year", "End_Month"];
@@ -318,7 +329,8 @@ require([
                     input.setAttribute("min", validDates[0].getUTCFullYear());
                     input.setAttribute("max", validDates[1].getUTCFullYear());
                 });
-                setupDateRangeValidation();
+                ////setupDateRangeValidation();
+                setupDateRangeLabels();
             } else if (data.dateRanges) {
                 console.debug("date ranges", data.dateRanges);
             } else if (data.error) {
