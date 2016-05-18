@@ -16,13 +16,13 @@ require([
     var dateFmt = new Intl.DateTimeFormat(undefined, {
         timeZone: "UTC",
         year: 'numeric',
-        month: 'long',
+        month: 'long'
     });
 
     /**
      * Tests a link and returns a promise that will resolve when the URL is accessible.
      * @param {string} url - URL to be tested.
-     * @returns {Promise}
+     * @returns {Promise} - Resolves to the string "OK" if the link is valid. Rejects with an Error otheriwse.
      */
     function testLink(url) {
         return new Promise(function (resolve, reject) {
@@ -211,6 +211,10 @@ require([
         var paramNames = ["Input_Tables", "Site_ID", "Start_Year", "Start_Month", "End_Year", "End_Month"];
         var params = {};
 
+        /**
+         * Gets an array of table names that the user has selected.
+         * @returns {string[]} - An array of the table names that are currently selected.
+         */
         function GetSelectedTables() {
             var checkedOptions = form.Input_Tables.querySelectorAll("option:checked");
             var option;
