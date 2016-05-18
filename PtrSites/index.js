@@ -13,6 +13,12 @@ require([
 ], function (esriConfig, Geoprocessor, JobListItem, gpToBootstrapUtils) {
     "use strict";
 
+    var dateFmt = new Intl.DateTimeFormat(undefined, {
+        timeZone: "UTC",
+        year: 'numeric',
+        month: 'long',
+    });
+
     /**
      * Tests a link and returns a promise that will resolve when the URL is accessible.
      * @param {string} url - URL to be tested.
@@ -122,79 +128,82 @@ require([
 
     // Client-side date validation disabled due to buggyness.
 
-    ////// Performs custom validation on date controls.
-    ////function validateDates(e) {
+    // Performs custom validation on date controls.
+    function validateDates(e) {
 
-    ////    /**
-    ////     * Gets the date selected by the user from month and year controls.
-    ////     * @param {HTMLInputElement} yearBox - The year control.
-    ////     * @param {HTMLSelectElement} monthSelect - The month control.
-    ////     * @returns {?Date} Returns the date specified in the boxes, or null if not all controls have values selected.
-    ////     */
-    ////    function getDateFromControls(yearBox, monthSelect) {
-    ////        var y, m, d;
-    ////        if (yearBox.validity.valid && monthSelect.validity.valid) {
-    ////            y = parseInt(yearBox.value, 10);
-    ////            m = parseInt(monthSelect.value, 10) - 1;
-    ////            d = new Date(y, m);
-    ////        }
-    ////        return d || null;
-    ////    }
+        /**
+         * Gets the date selected by the user from month and year controls.
+         * @param {HTMLInputElement} yearBox - The year control.
+         * @param {HTMLSelectElement} monthSelect - The month control.
+         * @returns {?Date} Returns the date specified in the boxes, or null if not all controls have values selected.
+         */
+        function getDateFromControls(yearBox, monthSelect) {
+            var y, m, d, isEnd = /^end/i.test(monthSelect.id);
+            if (yearBox.validity.valid && monthSelect.validity.valid) {
+                y = parseInt(yearBox.value, 10);
+                if (isEnd) {
+                    // Set to last day of month.
+                    m = parseInt(monthSelect.value, 10);
+                    d = new Date(Date.UTC(y, m, 0, 0, 0, 0, 0));
+                } else {
+                    // Set to first day of month.
+                    m = parseInt(monthSelect.value, 10) - 1;
+                    d = new Date(Date.UTC(y, m, 9, 0, 0, 0, 0));
+                }
+            }
+            return d || null;
+        }
 
-    ////    // Get the currently selected start and end dates from the year and month controls.
-    ////    var startDate = getDateFromControls(form.startYearBox, form.startMonthSelect);
-    ////    var endDate = getDateFromControls(form.endYearBox, form.endMonthSelect);
+        // Get the currently selected start and end dates from the year and month controls.
+        var startDate = getDateFromControls(form.startYearBox, form.startMonthSelect);
+        var endDate = getDateFromControls(form.endYearBox, form.endMonthSelect);
 
-    ////    // Clear custom validity messages from the date controls.
-    ////    [form.startYearBox, form.startMonthSelect, form.endYearBox, form.endMonthSelect].forEach(function (ctrl) {
-    ////        ctrl.setCustomValidity("");
-    ////    });
+        // Clear custom validity messages from the date controls.
+        [form.startYearBox, form.startMonthSelect, form.endYearBox, form.endMonthSelect].forEach(function (ctrl) {
+            ctrl.setCustomValidity("");
+        });
 
-    ////    var setDateRangeMessge = function (ctrl) {
-    ////        function formatDate(date) {
-    ////            return [date.getUTCFullYear().toString(), date.getUTCMonth() + 1].join("-");
-    ////        }
-    ////        if (validDates) {
-    ////            ctrl.setCustomValidity(["Please enter a date between", formatDate(validDates[0]), "and", formatDate(validDates[1])].join(" "));
-    ////        }
-    ////    };
+        var setDateRangeMessge = function (ctrl) {
+            function formatDate(date) {
+                return [date.getUTCFullYear().toString(), date.getUTCMonth() + 1].join("-");
+            }
+            if (validDates) {
+                ctrl.setCustomValidity(["Please enter a date between", dateFmt.format(validDates[0]), "and", dateFmt.format(validDates[1])].join(" "));
+            }
+        };
 
-    ////    // Set custom errors for the following conditions.
-    ////    // * End date is before or equal to start date
-    ////    // * Either start date or end date is out of the valid range of dates
-    ////    //   covered by the data. (If the valid dates have been loaded.)
-    ////    if (startDate && endDate && startDate > endDate) {
-    ////        [form.endYearBox, form.endMonthSelect].forEach(function (ctrl) {
-    ////            ctrl.setCustomValidity("End date must occur after start date");
-    ////        });
-    ////    } else if (validDates) {
-    ////        if (startDate && !(startDate >= validDates[0] && startDate <= validDates[1])) {
-    ////            [form.startYearBox, form.startMonthSelect].forEach(setDateRangeMessge);
-    ////        }
-    ////        if (endDate && !(endDate >= validDates[0] && endDate <= validDates[1])) {
-    ////            [form.endYearBox, form.endMonthSelect].forEach(setDateRangeMessge);
-    ////        }
-    ////    }
+        // Set custom errors for the following conditions.
+        // * End date is before or equal to start date
+        // * Either start date or end date is out of the valid range of dates
+        //   covered by the data. (If the valid dates have been loaded.)
+        if (startDate && endDate && startDate > endDate) {
+            [form.endYearBox, form.endMonthSelect].forEach(function (ctrl) {
+                ctrl.setCustomValidity("End date must occur after start date");
+            });
+        } else if (validDates) {
+            if (startDate && !(startDate >= validDates[0] && startDate <= validDates[1])) {
+                [form.startYearBox, form.startMonthSelect].forEach(setDateRangeMessge);
+            }
+            if (endDate && !(endDate >= validDates[0] && endDate <= validDates[1])) {
+                [form.endYearBox, form.endMonthSelect].forEach(setDateRangeMessge);
+            }
+        }
 
-    ////}
+    }
 
-    ////// Setup validation
-    ////function setupDateRangeValidation() {
-    ////    ["startMonthSelect", "startYearBox", "endMonthSelect", "endYearBox"].forEach(function (id) {
-    ////        var element = document.getElementById(id);
-    ////        element.addEventListener("input", validateDates);
-    ////    });
-    ////}
+    // Setup validation
+    function setupDateRangeValidation() {
+        ["startMonthSelect", "startYearBox", "endMonthSelect", "endYearBox"].forEach(function (id) {
+            var element = document.getElementById(id);
+            element.addEventListener("input", validateDates);
+        });
+    }
 
     function setupDateRangeLabels() {
-        var fmt = new Intl.DateTimeFormat(undefined, {
-            year: 'numeric',
-            month: 'long',
-        });
         var startLabel = document.getElementById("startDateRangeNote");
-        startLabel.textContent = "Earliest data available: " + fmt.format(validDates[0]);
+        startLabel.textContent = "Earliest data available: " + dateFmt.format(validDates[0]);
         var endLabel = document.getElementById("endDateRangeNote");
-        endLabel.textContent = "Latest data available: " + fmt.format(validDates[1]);
+        endLabel.textContent = "Latest data available: " + dateFmt.format(validDates[1]);
     }
 
     function submitJob() {
@@ -329,7 +338,7 @@ require([
                     input.setAttribute("min", validDates[0].getUTCFullYear());
                     input.setAttribute("max", validDates[1].getUTCFullYear());
                 });
-                ////setupDateRangeValidation();
+                setupDateRangeValidation();
                 setupDateRangeLabels();
             } else if (data.dateRanges) {
                 console.debug("date ranges", data.dateRanges);
