@@ -40,3 +40,11 @@ form :invalid {
     margin-left: 1em;
     color: blue;
 }
+
+.date-note:before {
+    content: '(';
+}
+
+.date-note:after {
+    content: ')';
+}
