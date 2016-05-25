@@ -201,9 +201,9 @@ require([
 
     function setupDateRangeLabels() {
         var startLabel = document.getElementById("startDateRangeNote");
-        startLabel.textContent = "Earliest data available: " + dateFmt.format(validDates[0]);
+        startLabel.textContent = "(Earliest data available: " + dateFmt.format(validDates[0]) + ")";
         var endLabel = document.getElementById("endDateRangeNote");
-        endLabel.textContent = "Latest data available: " + dateFmt.format(validDates[1]);
+        endLabel.textContent = "(Latest data available: " + dateFmt.format(validDates[1]) + ")";
     }
 
     function submitJob() {

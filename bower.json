@@ -40,5 +40,8 @@
     "fetch": "^1.0.0",
     "layer-metadata-soe-client": "https://github.com/WSDOT-GIS/Layer-Metadata-SOE-JS-Client.git#~v2.2.2",
     "intl": "^1.1.0"
+  },
+  "resolutions": {
+    "fontawesome": "^4.6.3"
   }
 }
