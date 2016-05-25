@@ -195,7 +195,9 @@ require([
     function setupDateRangeValidation() {
         ["startMonthSelect", "startYearBox", "endMonthSelect", "endYearBox"].forEach(function (id) {
             var element = document.getElementById(id);
-            element.addEventListener("input", validateDates);
+            ["input", "change"].forEach(function (eventName) {
+                element.addEventListener(eventName, validateDates);
+            });
         });
     }
 
