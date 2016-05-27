@@ -28,7 +28,6 @@
     <link href="style/layerSorter.css" rel="stylesheet" />
     <link href="bower_components/elc/elc-ui/elc-ui.css" rel="stylesheet" />
     <link href="bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
-    <link href="bower_components/arcgis-geolocate-button/GeolocateButton.css" rel="stylesheet" />
     <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
     <script src="bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
@@ -113,7 +112,6 @@
             <div id="map">
                 <div id="locationButtons">
                     <div id="homeButton"></div>
-                    <button id="geolocateButton" class="geolocate" title="Geolocate" type="button"></button>
                 </div>
                 <div id="toolbar">
                     <button id="previousExtentButton" type="button">Previous Extent</button>
@@ -169,11 +167,6 @@
                     {
                         name: "info-window-helper",
                         location: root + "/scripts/info-window-helper"
-                    },
-                    {
-                        name: "GeolocateButton",
-                        location: root + "/bower_components/arcgis-geolocate-button",
-                        main: "GeolocateButton"
                     },
                     {
                         name: "BufferUI",

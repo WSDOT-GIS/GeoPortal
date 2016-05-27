@@ -50,10 +50,6 @@ require(["dojo/ready", "dojo/on", "dijit/registry",
 
     "BufferUI",
     "BufferUI/BufferUIHelper",
-
-    "GeolocateButton",
-
-
     "info-window-helper",
     "esri/dijit/Search",
 
@@ -126,8 +122,6 @@ require(["dojo/ready", "dojo/on", "dijit/registry",
 
     BufferUI,
     BufferUIHelper,
-    createGeolocateButton,
-
 
     infoWindowHelper,
     Search
@@ -472,8 +466,6 @@ require(["dojo/ready", "dojo/on", "dijit/registry",
             (new HomeButton({ map: wsdot.map }, "homeButton")).startup();
 
             // Setup Zoom Button
-            createGeolocateButton(document.getElementById("geolocateButton"), wsdot.map);
-
             wsdot.map.on("load", function () {
 
                 function setupSearchControls() {
