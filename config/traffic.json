@@ -3,6 +3,7 @@
   "helpUrl": "help/traffic.pdf",
   "enableIdentify": true,
   "additionalStylesheets": [ "style/traffic.css" ],
+  "noPopupLayerRe": "^Milepost\\sValues$",
   "tools": [
     "zoom",
     "lrs"
@@ -199,7 +200,8 @@
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
       "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
       "options": {
-        "id": "City Limits"
+        "id": "City Limits",
+        "opacity": 0.4
       }
     }
   ]
