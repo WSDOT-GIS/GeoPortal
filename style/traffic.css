@@ -12,3 +12,11 @@ button[id='saveButton'], span[widgetid='saveButton'], #basemapTab {
 .traffic-legend table {
     border-collapse: collapse;
 }
+
+[data-layer-id='Milepost Values'] + label {
+    text-decoration: none;
+}
+
+[data-layer-id='Milepost Values'] + label + img + span + ul {
+    display: none !important;
+}

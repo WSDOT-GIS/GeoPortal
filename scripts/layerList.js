@@ -16,7 +16,7 @@ require([
     "esri/layers/KMLLayer",
     "esri/layers/ImageParameters",
     "geoportal/layerUtils",
-
+    "dojo/_base/connect",
     "extensions/map"
 ], function (
     Layer,
@@ -27,7 +27,8 @@ require([
     LabelLayer,
     KMLLayer,
     ImageParameters,
-    layerUtils
+    layerUtils,
+    connect
 ) {
     "use strict";
 
@@ -1005,12 +1006,12 @@ require([
             }
 
             // Setup zoom events to show if layer is out of scale.
-            dojo.connect(map, "onExtentChange", this, updateIsInScaleStatus);
+            connect.connect(map, "extent-change", this, updateIsInScaleStatus);
 
             if ($this.options.addAdditionalLayers === true) {
                 // Add an event to add layers to the TOC as they are added to the map.
-                dojo.connect(map, "onLayerAddResult", $this, this._addLayer);
-                dojo.connect(map, "onLayerRemove", $this, this._removeLayer);
+                connect.connect(map, "onLayerAddResult", $this, this._addLayer);
+                connect.connect(map, "onLayerRemove", $this, this._removeLayer);
 
                 // Add layers already in map to the TOC.
                 $this._addLayersAlreadyInMap();
