@@ -354,7 +354,7 @@
     "Additional Features": [
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "http://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+        "url": "https://fortress.wa.gov/ecy/ecyprodgislb/arcgis/rest/services/NHD/NHD_Cache/MapServer",
         "options": {
           "id": "Rivers and Lakes"
         }
