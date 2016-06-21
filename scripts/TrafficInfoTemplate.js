@@ -11,6 +11,32 @@ define([
     var numberFormat = new Intl.NumberFormat();
 
     /**
+     * Get attribute names in a custom sort order. Years are listed in descending order.
+     * @param {Object} attr - Graphic's attributes object.
+     * @returns {string[]} an array of property names.
+     */
+    function getAttributeNames(attr) {
+        var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
+        var yearRe = /^Year[\s_]\d{4}$/i;
+        var yearNames = [], otherNames = [];
+        for (name in attr) {
+            if (attr.hasOwnProperty(name) && !ignoreRe.test(name)) {
+                if (yearRe.test(name)) {
+                    yearNames.push(name);
+                } else {
+                    otherNames.push(name);
+                }
+            }
+        }
+        console.group("names");
+        console.log("year names", yearNames);
+        var output = otherNames.concat(yearNames.sort().reverse());
+        console.log("attribute names", output);
+        console.groupEnd();
+        return output;
+    }
+
+    /**
      * Creates a table of attributes of a graphic.
      * @param {esri/Graphic} graphic - a graphic
      * @returns {HTMLTableElement} - An HTML table
@@ -19,7 +45,7 @@ define([
         var displayFieldName = graphic.result.displayFieldName;
         var layerName = graphic.result.layerName;
         var attr = graphic.attributes;
-        var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
+        //var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
         var derivedRe = /^(\d+)\*$/;
         var nullRe = /^Null$/i;
         var numberFieldNameRe = /^Year\s\d{4}$/i, numberRe = /^\d+$/;
@@ -30,44 +56,44 @@ define([
         // corresponding table rows.
         var value, name, row, cell, handled, match;
 
-        for (name in attr) {
-            if (attr.hasOwnProperty(name) && !ignoreRe.test(name)) {
-                handled = false;
-                value = attr[name];
-                row = table.insertRow(-1);
+        var attrNames = getAttributeNames(attr);
 
-                cell = document.createElement("th");
-                cell.textContent = name;
-                row.appendChild(cell);
+        attrNames.forEach(function (name) {
+            handled = false;
+            value = attr[name];
+            row = table.insertRow(-1);
 
-                cell = document.createElement("td");
+            cell = document.createElement("th");
+            cell.textContent = name;
+            row.appendChild(cell);
 
-                // Apply formatting for special cases.
-                if (typeof value === "number") {
+            cell = document.createElement("td");
+
+            // Apply formatting for special cases.
+            if (typeof value === "number") {
+                value = numberFormat.format(value);
+            }
+            else if (typeof value === "string") {
+                if (numberFieldNameRe.test(name) && numberRe.test(value)) {
                     value = numberFormat.format(value);
-                }
-                else if (typeof value === "string") {
-                    if (numberFieldNameRe.test(name) && numberRe.test(value)) {
-                        value = numberFormat.format(value);
-                    } else if (nullRe.test(value)) {
-                        cell.classList.add("null");
+                } else if (nullRe.test(value)) {
+                    cell.classList.add("null");
+                    handled = true;
+                } else {
+                    match = value.match(derivedRe);
+                    if (match) {
+                        cell.classList.add("derived");
+                        cell.textContent = numberFormat.format(parseInt(match[1], 10));
                         handled = true;
-                    } else {
-                        match = value.match(derivedRe);
-                        if (match) {
-                            cell.classList.add("derived");
-                            cell.textContent = numberFormat.format(parseInt(match[1], 10));
-                            handled = true;
-                        }
                     }
                 }
-
-                if (!handled) {
-                    cell.textContent = value;
-                }
-                row.appendChild(cell);
             }
-        }
+
+            if (!handled) {
+                cell.textContent = value;
+            }
+            row.appendChild(cell);
+        });
 
         return table;
     }
