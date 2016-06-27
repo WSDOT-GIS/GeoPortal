@@ -3,7 +3,7 @@ define([
     "esri/SpatialReference",
     "esri/geometry/webMercatorUtils",
     "dojo/dnd/Moveable",
-    "dojo/text!./print.min.css"
+    "dojo/text!./print.css"
 ], function (SpatialReference, webMercatorUtils, Moveable, printCss) {
     var wgs84SR = new SpatialReference(4326);
 

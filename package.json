@@ -1,0 +1,13 @@
+{
+  "name": "wsdot-geoportal",
+  "version": "1.0.0",
+  "description": "WSDOT GeoPortal",
+  "main": "index.html",
+  "scripts": {
+    "prepublish": "bower prune && bower install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "WSDOT",
+  "license": "Unlicense",
+  "private": true
+}

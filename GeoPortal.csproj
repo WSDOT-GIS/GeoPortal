@@ -184,9 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\info-window-helper\print.css" />
-    <Content Include="scripts\info-window-helper\print.min.css">
-      <DependentUpon>print.css</DependentUpon>
-    </Content>
     <Content Include="scripts\layerList.js" />
     <Content Include="scripts\layerSorter.js" />
     <Content Include="proxy.ashx" />
@@ -233,11 +230,11 @@
     <Content Include="bower.json" />
     <Content Include="config\internal-test-fish-passage-barriers.json" />
     <Content Include="bower_components\intl\dist\Intl.js.map" />
-    <None Include="bundleconfig.json" />
     <None Include="config\README.md" />
     <Content Include="packages.config" />
     <Content Include="help\fish-passage-barriers\fish-bassage-barriers-help.md" />
     <Content Include="help\traffic.pdf" />
+    <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\Production Deployment Area.pubxml" />
     <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
@@ -362,7 +359,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
