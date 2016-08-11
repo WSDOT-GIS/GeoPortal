@@ -1,9 +1,12 @@
 "use strict";
 
-importScripts("../bower_components/promise-polyfill/Promise.min.js");
+if (typeof Promise === "undefined") {
+    importScripts("../bower_components/promise-polyfill/Promise.min.js");
+}
 
-var siteIdsUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer/0/query";
-var getValidDateRangeUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer/2/query";
+var siteIdsMapServiceUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer";
+var siteFeatureLayerIds = [0, 1];
+var getValidDateRangeUrl = siteIdsMapServiceUrl + "/2/query";
 
 /**
  * Converts an object into a URL search.
@@ -81,18 +84,34 @@ function getSiteIds() {
         returnDistinctValues: true,
         f: "json"
     };
-    return new Promise(function (resolve, reject) {
-        executeQuery(siteIdsUrl, searchParams, reviver).then(function (data) {
-            var field = data.fields[0].name;
-            var descField = data.fields[1].name;
-            var output = {};
-            data.features.forEach(function (feature) {
-                output[feature.attributes[field]] = feature.attributes[descField];
+
+    var promises = siteFeatureLayerIds.map(function (layerId) {
+        var siteIdsUrl = [siteIdsMapServiceUrl, layerId, "query"].join("/");
+        return new Promise(function (resolve, reject) {
+            executeQuery(siteIdsUrl, searchParams, reviver).then(function (data) {
+                var field = data.fields[0].name;
+                var descField = data.fields[1].name;
+                var output = {};
+                data.features.forEach(function (feature) {
+                    output[feature.attributes[field]] = feature.attributes[descField];
+                });
+                resolve(output);
+            }, function (error) {
+                reject({ "message": "Error getting site IDs", error: error });
             });
-            resolve(output);
-        }, function (error) {
-            reject({ "message": "Error getting site IDs", error: error });
         });
+    });
+
+    return Promise.all(promises).then(function(siteIdLists){
+        var output = {};
+
+        siteIdLists.forEach(function(siteIdsObj) {
+            for (let name in siteIdsObj) {
+                output[name] = siteIdsObj[name];
+            }
+        });
+
+        return output;
     });
 }
 
@@ -187,7 +206,7 @@ dateRangePromise.then(function (dates) {
 // Once all of the promises have been completed, send a final message
 // and close the worker.
 Promise.all([siteIdsPromise, dateRangePromise]).then(function (results) {
-    postMessage({ message: "worker closed", results: results, hasErrors: false});
+    postMessage({ message: "worker closed", results: results, hasErrors: false });
     self.close();
 }, function (results) {
     postMessage({ message: "worker closed", results: results, hasErrors: true });
