@@ -204,7 +204,7 @@
       "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
       "options": {
         "id": "Milepost Values",
-        "visible": false,
+        "visible": true,
         "imageParameters": {
           "layerIds": [ 0,1,2 ],
           "layerOption": "show"
