@@ -41,7 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="AirportPowerUser.aspx" />
     <None Include="AIS\config.json" />
     <Content Include="AIS\ReadMe.txt" />
     <Content Include="AIS\web.config" />
@@ -159,7 +158,6 @@
     <Content Include="images\USA_TopoThumbnail.png" />
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
-    <Content Include="Login.aspx" />
     <Content Include="lrsToolsTemplate.html" />
     <Content Include="PtrSites\gpToBootstrapUtils.js" />
     <Content Include="PtrSites\index.css" />
@@ -182,6 +180,13 @@
     <Content Include="scripts\HabitatConnectivityInfoTemplate.js" />
     <Content Include="scripts\index.js" />
     <Content Include="scripts\info-window-helper\main.js" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="scripts\info-window-helper\print.css" />
@@ -302,26 +307,8 @@
     <Content Include="style\rmec.css" />
     <Content Include="style\traffic.css" />
     <Content Include="TrafficLegend.html" />
-    <Content Include="web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AirportPowerUser.aspx.cs">
-      <DependentUpon>AirportPowerUser.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="ConversionUtilities.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GraphicExport.ashx.cs">
@@ -359,7 +346,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties config_2config_1json__JSONSchema="" AIS_2config_1json__JSONSchema="" />
+      <UserProperties AIS_2config_1json__JSONSchema="" config_2config_1json__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
