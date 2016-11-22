@@ -4,8 +4,8 @@
   "enableIdentify": true,
   "additionalStylesheets": [ "style/traffic.css" ],
   "tools": [
-    "zoom",
-    "lrs"
+    "lrs",
+    "zoom"
   ],
   "tabOrder": [
     "Layers",
@@ -101,6 +101,24 @@
   "initialBasemap": "Multilevel",
   "geometryServer": "http://data.wsdot.wa.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer",
   "queryTasks": {
+    "wim": {
+      "label": "PTR (WIM)",
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer/0",
+      "query": {
+        "where": "1 = 1",
+        "returnGeometry": true,
+        "outFields": [ "ADCTrafficSDE.DBO.PTRSites.SiteID" ]
+      }
+    },
+    "noWim": {
+      "label": "PTR (non-WIM)",
+      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer/1",
+      "query": {
+        "where": "1 = 1",
+        "returnGeometry": true,
+        "outFields": [ "ADCTrafficSDE.DBO.PTRSites.SiteID" ]
+      }
+    },
     "county": {
       "label": "County",
       "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
@@ -186,6 +204,7 @@
       "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
       "options": {
         "id": "Milepost Values",
+        "visible": false,
         "imageParameters": {
           "layerIds": [ 0,1,2 ],
           "layerOption": "show"

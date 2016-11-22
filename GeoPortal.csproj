@@ -41,9 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="AIS\config.json" />
-    <Content Include="AIS\ReadMe.txt" />
-    <Content Include="AIS\web.config" />
     <Content Include="blank.html" />
     <Content Include="bower_components\arcgis-buffer-ui\BufferUI.js" />
     <Content Include="bower_components\arcgis-buffer-ui\BufferUIHelper.js" />
