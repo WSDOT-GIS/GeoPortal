@@ -1,0 +1,6 @@
+bower_components
+bin
+obj
+PublishProfiles
+.vs
+*.user
