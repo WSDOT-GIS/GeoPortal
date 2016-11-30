@@ -88,7 +88,7 @@ require([
         var output = null;
         if (wdfwId) {
             if (!imageViewerUrl) {
-                imageViewerUrl = "./fish-barrier-images/";
+              imageViewerUrl = "//webpub4qa.wsdot.wa.gov/environmental/biology/fishpassage/";
             }
             output = [imageViewerUrl, "?id=", wdfwId].join("");
         }
