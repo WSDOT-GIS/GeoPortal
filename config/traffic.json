@@ -1,8 +1,9 @@
-﻿{
+{
   "pageTitle": "Traffic GeoPortal",
   "helpUrl": "help/traffic.pdf",
   "enableIdentify": true,
   "additionalStylesheets": [ "style/traffic.css" ],
+  "noPopupLayerRe": "^(?:(?:Milepost Values)|(?:County Boundaries)|(?:City Limits)|(?:Web Base Map Web Mercator)|(?:World Imagery)|(?:Local Roads)|(?:layer\\d+))$",
   "tools": [
     "lrs",
     "zoom"
