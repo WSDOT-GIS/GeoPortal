@@ -1,6 +1,6 @@
 ﻿/*global blueimp*/
 (function () {
-	var imagesRootUrl = "http://data.wsdot.wa.gov/Environmental/FishPassage/Images/";
+	var imagesRootUrl = "//data.wsdot.wa.gov/Environmental/FishPassage/Images/";
 	var wdfwId;
 
 
