@@ -1,9 +1,8 @@
-{
+﻿{
   "pageTitle": "Traffic GeoPortal",
   "helpUrl": "help/traffic.pdf",
   "enableIdentify": true,
   "additionalStylesheets": [ "style/traffic.css" ],
-  "noPopupLayerRe": "^(?:(?:Milepost Values)|(?:County Boundaries)|(?:City Limits)|(?:Web Base Map Web Mercator)|(?:World Imagery)|(?:Local Roads)|(?:layer\\d+))$",
   "tools": [
     "lrs",
     "zoom"
@@ -205,7 +204,7 @@
       "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
       "options": {
         "id": "Milepost Values",
-        "visible": true,
+        "visible": false,
         "imageParameters": {
           "layerIds": [ 0,1,2 ],
           "layerOption": "show"
