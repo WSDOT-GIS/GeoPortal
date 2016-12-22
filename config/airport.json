@@ -1,4 +1,4 @@
-﻿{
+{
   "pageTitle": "Airport",
   "helpUrl": "help/navigation.html",
   "enableIdentify": true,
@@ -156,7 +156,7 @@
       "thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
       "layers": [
         {
-          "url": "http://maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
+          "url": "//maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
           "visibleLayers": [ 4 ]
         }
       ]
@@ -191,7 +191,7 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "http://maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
+        "url": "//maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
         "options": {
           "id": "FAA Obstacles"
         }

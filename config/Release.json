@@ -1,4 +1,4 @@
-﻿{
+{
   "mapOptions": {
     "logo": false,
     "extent": {
@@ -79,7 +79,7 @@
     ]
   },
   "initialBasemap": "WSDOT Basemap",
-  "locationInfoUrl": "http://www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+  "locationInfoUrl": "//www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
   "geometryServer": "//data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer",
   "queryTasks": {
     "city": {
@@ -121,14 +121,14 @@
   ],
   "basemapsToRemove": [ "basemap_4", "basemap_6" ],
   "locateMileposts": {
-    "url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
+    "url": "//www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
     "options": {
       "useProxy": false,
       "usePost": true
     }
   },
   "locateNearestMileposts": {
-    "url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
+    "url": "//www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
     "options": {
       "useProxy": false,
       "usePost": true
@@ -220,7 +220,7 @@
         },
         {
           "layerType": "esri.layers.FeatureLayer",
-          "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
+          "url": "//www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
           "options": {
             "id": "Survey Monuments (NGS)",
             "outFields": [ "*" ],
@@ -250,7 +250,7 @@
       "Other": [
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "http://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
+          "url": "//www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
           "options": {
             "id": "Traffic Flow"
           }

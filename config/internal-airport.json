@@ -1,4 +1,4 @@
-﻿{
+{
   "pageTitle": "Airport",
   "helpUrl": "help/navigation.html",
   "enableIdentify": true,
@@ -155,8 +155,8 @@
       "title": "USA Topo Maps",
       "thumbnailUrl": "images/USA_TopoThumbnail.png",
       "layers": [
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer" }
+        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer" },
+        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer" }
       ]
     },
     {
@@ -165,7 +165,7 @@
       "thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
       "layers": [
         {
-          "url": "http://maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
+          "url": "//maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
           "visibleLayers": [ 4 ]
         }
       ]
@@ -200,7 +200,7 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "http://maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
+        "url": "//maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
         "options": {
           "id": "FAA Obstacles"
         }

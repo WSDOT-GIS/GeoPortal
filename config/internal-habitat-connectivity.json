@@ -1,6 +1,6 @@
-﻿{
+{
   "pageTitle": "Habitat Connectivity Support Structures",
-  "helpUrl": "http://wwwi.wsdot.wa.gov/NR/rdonlyres/38F7285F-0A7C-4609-8851-D6FF419BD2FA/0/HabitatConnectivityStructureWebAppHelpDocument.pdf",
+  "helpUrl": "//wwwi.wsdot.wa.gov/NR/rdonlyres/38F7285F-0A7C-4609-8851-D6FF419BD2FA/0/HabitatConnectivityStructureWebAppHelpDocument.pdf",
   "enableIdentify": true,
   "disclaimer": "disclaimers/habitat-connectivity/Internal.html",
   "alwaysShowDisclaimer": false,
@@ -53,9 +53,9 @@
       "title": "Hybrid",
       "thumbnailUrl": "images/EsriHybridThumbnail.png",
       "layers": [
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
       ]
     },
     {
@@ -354,7 +354,7 @@
     "Additional Features": [
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "http://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+        "url": "//gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
         "options": {
           "id": "Rivers and Lakes"
         }
