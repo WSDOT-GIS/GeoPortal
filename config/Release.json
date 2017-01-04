@@ -79,12 +79,12 @@
     ]
   },
   "initialBasemap": "WSDOT Basemap",
-  "locationInfoUrl": "//www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
-  "geometryServer": "//data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer",
+  "locationInfoUrl": "https://www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+  "geometryServer": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer",
   "queryTasks": {
     "city": {
       "label": "City",
-      "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
+      "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -94,7 +94,7 @@
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+      "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -107,7 +107,7 @@
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
       "layers": [
-        { "url": "//data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
       ]
     },
     {
@@ -115,20 +115,20 @@
       "title": "Functional Class",
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
       "layers": [
-        { "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
       ]
     }
   ],
   "basemapsToRemove": [ "basemap_4", "basemap_6" ],
   "locateMileposts": {
-    "url": "//www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
+    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
     "options": {
       "useProxy": false,
       "usePost": true
     }
   },
   "locateNearestMileposts": {
-    "url": "//www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
+    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
     "options": {
       "useProxy": false,
       "usePost": true
@@ -139,56 +139,56 @@
       "Political Boundaries": [
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer",
           "options": {
             "id": "City Limits"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CongressionalDistricts/MapServer",
           "options": {
             "id": "Congressional Districts"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
           "options": {
             "id": "County Boundaries"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
           "options": {
             "id": "Legislative Districts"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
           "options": {
             "id": "MPA"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
           "options": {
             "id": "RTPO"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TownshipSection/MapServer",
           "options": {
             "id": "Township / Section"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer",
           "options": {
             "id": "Tribal Lands"
           }
@@ -197,7 +197,7 @@
       "Design": [
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/InterchangeDrawings/MapServer",
           "options": {
             "id": "Interchange Drawings"
           }
@@ -206,21 +206,21 @@
       "WSDOT Boundaries": [
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MaintenanceAreas/MapServer",
           "options": {
             "id": "Maintenance Areas"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
           "options": {
             "id": "Region Boundaries"
           }
         },
         {
           "layerType": "esri.layers.FeatureLayer",
-          "url": "//www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
+          "url": "https://www.wsdot.wa.gov/ArcGIS/rest/services/monuments4ngs/MapServer/0",
           "options": {
             "id": "Survey Monuments (NGS)",
             "outFields": [ "*" ],
@@ -234,14 +234,14 @@
       "Transportation Features": [
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/StateRoutes/MapServer",
           "options": {
             "id": "State Routes"
           }
         },
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+          "url": "https://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
           "options": {
             "id": "Functional Class"
           }
@@ -250,7 +250,7 @@
       "Other": [
         {
           "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-          "url": "//www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
+          "url": "https://www.wsdot.wa.gov/ArcGIS/rest/services/TrafficSegments_2D/MapServer",
           "options": {
             "id": "Traffic Flow"
           }

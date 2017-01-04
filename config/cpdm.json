@@ -1,6 +1,6 @@
 {
   "pageTitle": "Projects",
-  "helpUrl": "//www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
   "enableIdentify": true,
   "tools": [
     "zoom",
@@ -85,11 +85,11 @@
       }
     ]
   },
-  "geometryServer": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
+  "geometryServer": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer",
   "queryTasks": {
     "projects": {
       "label": "WSDOT Projects",
-      "url": "//hqolymgis98d:6080/arcgis/rest/services/TransportationProjects/SixYearPlan/MapServer/0",
+      "url": "https://hqolymgis98d:6080/arcgis/rest/services/TransportationProjects/SixYearPlan/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -98,7 +98,7 @@
     },
     "county": {
       "label": "County",
-      "url": "//data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -107,7 +107,7 @@
     },
     "city": {
       "label": "City",
-      "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
+      "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -117,7 +117,7 @@
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+      "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -130,9 +130,9 @@
       "title": "Hybrid",
       "thumbnailUrl": "images/EsriHybridThumbnail.png",
       "layers": [
-        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
-        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
-        { "url": "//services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
       ]
     },
     {
@@ -140,7 +140,7 @@
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
       "layers": [
-        { "url": "//data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
       ]
     },
     {
@@ -148,17 +148,17 @@
       "title": "Functional Class",
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
       "layers": [
-        { "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
+        { "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
       ]
     }
   ],
   "initialBasemap": "WSDOT Basemap",
-  "routeLocatorUrl": "//www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+  "routeLocatorUrl": "https://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
     "Projects": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "//hqolymgis98d:6080/arcgis/rest/services/TransportationProjects/SixYearPlan/MapServer",
+        "url": "https://hqolymgis98d:6080/arcgis/rest/services/TransportationProjects/SixYearPlan/MapServer",
         "options": {
           "id": "Six Year Plan (2015)"
         }
@@ -167,7 +167,7 @@
     "WSDOT Boundaries": [
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
         "options": {
           "id": "Region Boundaries"
         }
@@ -176,7 +176,7 @@
     "Political Boundaries": [
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer",
         "options": {
           "id": "City Limits",
           "opacity": 0.75
@@ -184,21 +184,21 @@
       },
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
         "options": {
           "id": "County Boundaries"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
         "options": {
           "id": "Legislative Districts"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
         "options": {
           "id": "MPA",
           "opacity": 0.75
@@ -206,7 +206,7 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
         "options": {
           "id": "RTPO"
         }
@@ -215,7 +215,7 @@
     "Transportation Features": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "//www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
+        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MilepostValues/MapServer",
         "options": {
           "id": "Milepost Values"
         }
