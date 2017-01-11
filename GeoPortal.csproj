@@ -124,8 +124,6 @@
     <Content Include="disclaimers\habitat-connectivity\Internal.html" />
     <Content Include="disclaimers\internal-rmec\Internal.html" />
     <Content Include="error\GenericError.html" />
-    <Content Include="fish-barrier-images\index.html" />
-    <Content Include="fish-barrier-images\scripts\index.js" />
     <Content Include="FunctionalClassLegend.html" />
     <Content Include="help\location_info.html" />
     <Content Include="help\measure.html" />
