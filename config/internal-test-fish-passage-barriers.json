@@ -1,5 +1,5 @@
 {
-  "pageTitle": "WSDOT Fish Passage Barriers",
+  "pageTitle": "WSDOT Fish Passage Inventory",
   "corsEnabledServers": [ "hqolymgis98d:6080", "hqolymgis98d" ],
   "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/fishpassagehelp.htm",
   "enableIdentify": true,
@@ -52,7 +52,7 @@
     },
     "fishPassageBarriers": {
       "label": "Fish Passage Barriers",
-      "url": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
+      "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -90,56 +90,49 @@
   ],
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
-    "WSDOT Fish Passage Barriers": [
+    "WSDOT Fish Passage Sites": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CulvertsWithFishUse/MapServer",
+        "options": {
+          "id": "Culverts with Fish Use"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
         "options": {
           "id": "Uncorrected Barriers Statewide",
           "visible": true
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CorrectedBarriersStatewide/MapServer",
         "options": {
           "id": "Corrected Barriers Statewide",
           "visible": true
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CaseAreaBoundary/MapServer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CorrectionPlan/MapServer",
+        "options": {
+          "id": "Fish Passage Barrier Correction Plan"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CaseAreaBoundary/MapServer",
         "options": {
           "id": "US v. WA Case Area Boundary"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
         "options": {
           "id": "Uncorrected Barriers Subject to Injunction"
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       }
     ],
@@ -152,8 +145,8 @@
         }
       },
       {
-        "layerType": "esri.layers.FeatureLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/23",
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WashingtonState/MapServer",
         "options": {
           "id": "State Boundary"
         }
@@ -181,7 +174,7 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://hqolymgis98d:6080/arcgis/rest/services/FishPassage/WRIABoundaries/MapServer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/WRIABoundaries/MapServer",
         "options": {
           "id": "Water Resource Inventory Area (WRIA)"
         }
