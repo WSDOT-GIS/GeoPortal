@@ -135,7 +135,7 @@ define([
         tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
 
         function setupAirspaceCalculator() {
-            wsdot.airspaceCalculator = new AirspaceCalculatorArcGisUI("http://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirspaceCalculatorSurface/ImageServer");
+            wsdot.airspaceCalculator = new AirspaceCalculatorArcGisUI("//data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirspaceCalculatorSurface/ImageServer");
             document.getElementById("airspaceCalculator").appendChild(wsdot.airspaceCalculator.form);
         }
 
@@ -143,7 +143,7 @@ define([
             $("#faaFar77").faaFar77RunwaySelector({
                 map: wsdot.map,
                 // TODO: put this URL and layer ID in the app. options.
-                identifyUrl: "http://data.wsdot.wa.gov/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
+                identifyUrl: "//data.wsdot.wa.gov/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
                 identifyLayerId: 0,
                 identifyComplete: function (event, data) {
                     var identifyResults, noFeaturesDialog;

@@ -39,7 +39,7 @@ require([
         });
     }
 
-    var gpUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/ExportFilteredCsv/GPServer/Export%20Filtered%20CSV";
+    var gpUrl = "//data.wsdot.wa.gov/arcgis/rest/services/Traffic/ExportFilteredCsv/GPServer/Export%20Filtered%20CSV";
     esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov");
 
     // Create a URL object for accessing the URL's search parameters.

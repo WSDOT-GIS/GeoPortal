@@ -4,7 +4,7 @@ if (typeof Promise === "undefined") {
     importScripts("../bower_components/promise-polyfill/Promise.min.js");
 }
 
-var siteIdsMapServiceUrl = "http://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer";
+var siteIdsMapServiceUrl = "//data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer";
 var siteFeatureLayerIds = [0, 1];
 var getValidDateRangeUrl = siteIdsMapServiceUrl + "/2/query";
 

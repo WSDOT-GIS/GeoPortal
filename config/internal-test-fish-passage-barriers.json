@@ -1,11 +1,11 @@
-﻿{
-  "pageTitle": "WSDOT Fish Passage Barriers",
+{
+  "pageTitle": "WSDOT Fish Passage Inventory",
   "corsEnabledServers": [ "hqolymgis98d:6080", "hqolymgis98d" ],
-  "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/fishpassagehelp.htm",
+  "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/fishpassagehelp.htm",
   "enableIdentify": true,
   "disclaimer": "disclaimers/fish-passage-barriers/Public.html",
   "alwaysShowDisclaimer": false,
-  "printUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
+  "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageExportWebMap/GPServer/Export%20Web%20Map",
   "noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
   "alternateTabTitles": {
     "Tools": "Search"
@@ -21,11 +21,11 @@
     "center": [ -120.80566406246835, 47.41322033015946 ],
     "zoom": 7
   },
-  "geometryServer": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer",
+  "geometryServer": "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
   "queryTasks": {
     "county": {
       "label": "County",
-      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -34,7 +34,7 @@
     },
     "city": {
       "label": "City",
-      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -44,7 +44,7 @@
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -66,9 +66,9 @@
       "title": "Hybrid",
       "thumbnailUrl": "images/EsriHybridThumbnail.png",
       "layers": [
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
       ]
     },
     {
@@ -76,7 +76,7 @@
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
       "layers": [
-        { "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
       ]
     },
     {
@@ -84,26 +84,26 @@
       "title": "Functional Class",
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
       "layers": [
-        { "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
       ]
     }
   ],
-  "routeLocatorUrl": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+  "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
-    "WSDOT Fish Passage Barriers": [
+    "WSDOT Fish Passage Sites": [
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CulvertsWithFishUse/MapServer",
+        "options": {
+          "id": "Culverts with Fish Use"
+        }
+      },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
         "options": {
           "id": "Uncorrected Barriers Statewide",
           "visible": true
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       },
       {
@@ -112,13 +112,13 @@
         "options": {
           "id": "Corrected Barriers Statewide",
           "visible": true
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/CorrectionPlan/MapServer",
+        "options": {
+          "id": "Fish Passage Barrier Correction Plan"
         }
       },
       {
@@ -133,48 +133,41 @@
         "url": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
         "options": {
           "id": "Uncorrected Barriers Subject to Injunction"
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "http://hqolymgis98d:6080/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       }
     ],
     "Additional Features": [
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "http://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+        "url": "https://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
         "options": {
           "id": "Rivers and Lakes"
         }
       },
       {
-        "layerType": "esri.layers.FeatureLayer",
-        "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/23",
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WashingtonState/MapServer",
         "options": {
           "id": "State Boundary"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionBoundaries/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/RegionBoundaries/MapServer",
         "options": {
           "id": "Region Boundaries"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
         "options": {
           "id": "County Boundaries"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/LegislativeDistricts/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/LegislativeDistricts/MapServer",
         "options": {
           "id": "Legislative Districts"
         }
@@ -188,7 +181,7 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
         "options": {
           "id": "City Limits",
           "opacity": 0.7

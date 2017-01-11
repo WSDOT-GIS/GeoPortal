@@ -1,6 +1,6 @@
-﻿{
+{
   "pageTitle": "WSDOT Functional Classification Map",
-  "helpUrl": "http://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
   "additionalStylesheets": [ "style/functionalClass.css" ],
   "customLegend": {
     "html": "FunctionalClassLegend.html",
@@ -101,13 +101,13 @@
     "sliderStyle": "small"
   },
   "initialBasemap": "WSDOT Basemap",
-  "locationInfoUrl": "http://www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
+  "locationInfoUrl": "https://www.wsdot.wa.gov/Geospatial/Geoprocessing/Intersection/coordinatearea",
 
-  "geometryServer": "http://data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer",
+  "geometryServer": "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
   "queryTasks": {
     "county": {
       "label": "County",
-      "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -116,7 +116,7 @@
     },
     "city": {
       "label": "City",
-      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -126,7 +126,7 @@
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -139,9 +139,9 @@
       "title": "Hybrid",
       "thumbnailUrl": "images/EsriHybridThumbnail.png",
       "layers": [
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
-        { "url": "http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
+        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
       ]
     },
     {
@@ -149,7 +149,7 @@
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
       "layers": [
-        { "url": "http://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
       ]
     },
     {
@@ -157,7 +157,7 @@
       "title": "Functional Class",
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
       "layers": [
-        { "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
+        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer" }
       ]
     }
   ],
@@ -171,14 +171,14 @@
     "OpenStreetMap"
   ],
   "locateMileposts": {
-    "url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
+    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
     "options": {
       "useProxy": false,
       "usePost": true
     }
   },
   "locateNearestMileposts": {
-    "url": "http://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
+    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
     "options": {
       "useProxy": false,
       "usePost": true
@@ -187,7 +187,7 @@
   "layers": [
     {
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-      "url": "http://data.wsdot.wa.gov/ArcGIS/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassMap/MapServer",
       "options": {
         "id": "Functional Class",
         "visible": true
