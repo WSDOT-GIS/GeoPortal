@@ -88,7 +88,7 @@ require([
         var output = null;
         if (wdfwId) {
             if (!imageViewerUrl) {
-              imageViewerUrl = "//webpub4qa.wsdot.wa.gov/environmental/biology/fishpassage/";
+              imageViewerUrl = "//www.wsdot.wa.gov/environmental/biology/fishpassage/";
             }
             output = [imageViewerUrl, "?id=", wdfwId].join("");
         }
