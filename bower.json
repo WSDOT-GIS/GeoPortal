@@ -25,12 +25,12 @@
   ],
   "private": true,
   "dependencies": {
-    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~1.1.0",
+    "AirspaceCalculator": "https://github.com/WSDOT-GIS/airspace-calculator.git#~2.0.0",
     "arcgis-buffer-ui": "~1.0.0",
     "arcgis-js-draw-ui": "https://github.com/WSDOT-GIS/arcgis-js-draw-ui.git#~1.1.1",
     "blueimp-gallery": "^2.21.2",
-    "dms": "~1.0.2",
-    "usgs-ned": "~1.0.2",
+    "dms": "~2.0.1",
+    "usgs-ned": "~3.0.2",
     "customevent-polyfill": "~1.0.0",
     "fontawesome": "^4.6.3",
     "arcgis-geolocate-button": "~1.0.0",
@@ -42,6 +42,8 @@
     "intl": "^1.1.0"
   },
   "resolutions": {
-    "fontawesome": "^4.6.3"
+    "fontawesome": "^4.6.3",
+    "dms": "~2.0.1",
+    "usgs-ned": "~3.0.2"
   }
 }
