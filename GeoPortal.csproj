@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,6 +23,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +44,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="blank.html" />
+    <Content Include="bower_components\AirspaceCalculator\ac-worker.js" />
+    <Content Include="bower_components\AirspaceCalculator\AirspaceCalculator.css" />
+    <Content Include="bower_components\AirspaceCalculator\AirspaceCalculator.js" />
+    <Content Include="bower_components\AirspaceCalculator\AirspaceCalculator.min.css">
+      <DependentUpon>AirspaceCalculator.css</DependentUpon>
+    </Content>
+    <Content Include="bower_components\AirspaceCalculator\ArcGisUI.js" />
+    <Content Include="bower_components\AirspaceCalculator\SurfacePenetrationInfo.js" />
+    <Content Include="bower_components\AirspaceCalculator\UI.js" />
     <Content Include="bower_components\arcgis-buffer-ui\BufferUI.js" />
     <Content Include="bower_components\arcgis-buffer-ui\BufferUIHelper.js" />
     <Content Include="bower_components\arcgis-buffer-ui\Templates\BufferUI.html" />
@@ -76,12 +87,6 @@
     <Content Include="bower_components\blueimp-gallery\img\video-play.svg" />
     <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.js" />
     <Content Include="bower_components\blueimp-gallery\js\blueimp-gallery.min.js" />
-    <Content Include="bower_components\AirspaceCalculator\ac-worker.js" />
-    <Content Include="bower_components\AirspaceCalculator\AirspaceCalculator.css" />
-    <Content Include="bower_components\AirspaceCalculator\AirspaceCalculator.js" />
-    <Content Include="bower_components\AirspaceCalculator\AirspaceCalculator.min.css" />
-    <Content Include="bower_components\AirspaceCalculator\ArcGisUI.js" />
-    <Content Include="bower_components\AirspaceCalculator\UI.js" />
     <Content Include="bower_components\customevent-polyfill\customevent-polyfill.js" />
     <Content Include="bower_components\customevent-polyfill\customevent-polyfill.min.js" />
     <Content Include="bower_components\dms\dms.js" />
@@ -108,6 +113,7 @@
     <Content Include="bower_components\polyfills\url.js" />
     <Content Include="bower_components\promise-polyfill\Promise.js" />
     <Content Include="bower_components\promise-polyfill\Promise.min.js" />
+    <Content Include="bower_components\usgs-ned\ElevationQueryResult.js" />
     <Content Include="bower_components\usgs-ned\usgsNed.js" />
     <Content Include="config\airport.json" />
     <Content Include="config\config.json" />
@@ -192,7 +198,6 @@
     <Content Include="config\fish-passage-barriers.json" />
     <Content Include="config\internal-habitat-connectivity.json" />
     <Content Include="config\internal-rmec.json" />
-    <Content Include="bower_components\AirspaceCalculator\bower.json" />
     <Content Include="bower_components\fontawesome\.bower.json" />
     <Content Include="bower_components\fontawesome\.npmignore" />
     <Content Include="bower_components\fontawesome\bower.json" />
@@ -326,12 +331,15 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
