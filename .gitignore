@@ -8,3 +8,4 @@ PublishProfiles
 *.user
 *.bak
 iisexpress.json
+iis-e-settings.json

@@ -48,7 +48,7 @@ define([
         //var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
         var derivedRe = /^(\d+)\*$/;
         var nullRe = /^Null$/i;
-        var numberFieldNameRe = /^Year\s\d{4}$/i, numberRe = /^\d+$/;
+        var numberFieldNameRe = /^(?:(?:Year)|(?:AADT))[\s_]\d{4}$/i, numberRe = /^\d+$/;
         var table = document.createElement("table");
         table.classList.add("traffic");
 
