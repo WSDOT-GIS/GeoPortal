@@ -119,7 +119,7 @@
     <Content Include="config\config.json" />
     <Content Include="config\FunctionalClass.json" />
     <Content Include="config\internal-airport.json" />
-    <Content Include="config\internal-test-fish-passage-barriers.json" />
+    <Content Include="config\fish-passage-barriers.json" />
     <Content Include="scripts\layerUtils.js" />
     <Content Include="style\internal-habitat-connectivity.css" />
     <Content Include="config\Release.json" />
@@ -196,7 +196,6 @@
     <Content Include="scripts\layerSorter.js" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
-    <Content Include="config\fish-passage-barriers.json" />
     <Content Include="config\internal-habitat-connectivity.json" />
     <Content Include="config\internal-rmec.json" />
     <Content Include="bower_components\fontawesome\.bower.json" />

@@ -1,5 +1,5 @@
 {
-  "pageTitle": "WSDOT Fish Passage Barriers",
+  "pageTitle": "WSDOT Fish Passage Inventory",
   "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/fishpassagehelp.htm",
   "enableIdentify": true,
   "disclaimer": "disclaimers/fish-passage-barriers/Public.html",
@@ -22,7 +22,7 @@
   },
   "geometryServer": "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
   "queryTasks": {
-    "county":{
+    "county": {
       "label": "County",
       "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
       "query": {
@@ -89,20 +89,13 @@
   ],
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
-    "WSDOT Fish Passage Barriers": [
+    "WSDOT Fish Passage Inventory": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/UncorrectedBarriersStatewide/MapServer",
         "options": {
           "id": "Uncorrected Barriers Statewide",
           "visible": true
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       },
       {
@@ -111,13 +104,6 @@
         "options": {
           "id": "Corrected Barriers Statewide",
           "visible": true
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
         }
       },
       {
@@ -132,13 +118,20 @@
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/UncorrectedBarriersCaseArea/MapServer",
         "options": {
           "id": "Uncorrected Barriers Subject to Injunction"
-        },
-        "metadataOptions": {
-          "ignoreSoe":  true,
-          "additionalMetadata": {
-            "Fish Passage - WSDOT": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=1&f=html",
-            "WSDOT Fish Passage Inventory Status": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/exts/LayerMetadata/getMetadata?layer=2&f=html"
-          }
+        }
+      },
+            {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/CulvertsWithFishUse/MapServer",
+        "options": {
+          "id": "Culverts with Fish Use"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/CorrectionPlan/MapServer",
+        "options": {
+          "id": "Fish Passage Barrier Correction Plan"
         }
       }
     ],
