@@ -50,7 +50,7 @@
       }
     },
     "fishPassageBarriers": {
-      "label": "Fish Passage Barriers",
+      "label": "Fish Passage Sites",
       "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FishPassage/FishPassageBarriersAllPoints/MapServer/0",
       "query": {
         "where": "1 = 1",
