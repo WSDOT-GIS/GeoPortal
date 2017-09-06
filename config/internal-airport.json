@@ -124,17 +124,17 @@
     },
     "city": {
       "label": "City",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/10",
+			"url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-        "outFields": [ "NAME" ]
+				"outFields": ["CityName"]
       }
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer/11",
+            "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
