@@ -16,7 +16,7 @@ define([
      * @returns {string[]} an array of property names.
      */
     function getAttributeNames(attr) {
-        var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
+        var ignoreRe = /^(?:ESRI_)?((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
         var yearRe = /^Year[\s_]\d{4}$/i;
         var yearNames = [], otherNames = [];
         for (name in attr) {
@@ -45,10 +45,11 @@ define([
         var displayFieldName = graphic.result.displayFieldName;
         var layerName = graphic.result.layerName;
         var attr = graphic.attributes;
-        //var ignoreRe = /^((O(BJECT)?ID(_\d+)?)|(Shape(\.STLength\(\))?))$/i;
-        var derivedRe = /^(\d+)\*$/;
+        var derivedRe = /^([\d,]+)\*$/;
         var nullRe = /^Null$/i;
-        var numberFieldNameRe = /^(?:(?:Year)|(?:AADT))[\s_]\d{4}$/i, numberRe = /^\d+$/;
+        var numberFieldNameRe = /^(?:(?:Year)|(?:AADT))([\s_]\d{4})?$/i;
+        var numberRe = /^\d+$/;
+        var percentFieldNameRe = /P(?:er)?c(?:en)?t$/i;
         var table = document.createElement("table");
         table.classList.add("traffic");
 
@@ -58,13 +59,13 @@ define([
 
         var attrNames = getAttributeNames(attr);
 
-        attrNames.forEach(function (name) {
+        attrNames.forEach(function (fieldLabel) {
             handled = false;
-            value = attr[name];
+            value = attr[fieldLabel];
             row = table.insertRow(-1);
 
             cell = document.createElement("th");
-            cell.textContent = name;
+            cell.textContent = fieldLabel;
             row.appendChild(cell);
 
             cell = document.createElement("td");
@@ -74,16 +75,18 @@ define([
                 value = numberFormat.format(value);
             }
             else if (typeof value === "string") {
-                if (numberFieldNameRe.test(name) && numberRe.test(value)) {
-                    value = numberFormat.format(value);
+                if (numberFieldNameRe.test(fieldLabel) && numberRe.test(value)) {
+                    value = numberFormat.format(value.replace(",", ""));
                 } else if (nullRe.test(value)) {
                     cell.classList.add("null");
                     handled = true;
+                } else if (percentFieldNameRe.test(fieldLabel)) {
+                    cell.classList.add("percent");
                 } else {
                     match = value.match(derivedRe);
                     if (match) {
                         cell.classList.add("derived");
-                        cell.textContent = numberFormat.format(parseInt(match[1], 10));
+                        cell.textContent = numberFormat.format(parseInt(match[1].replace(",", ""), 10));
                         handled = true;
                     }
                 }

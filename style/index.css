@@ -528,6 +528,14 @@ table.habitat-connectivity tr:nth-child(even), table.traffic tr:nth-child(even) 
     content: '*';
 }
 
+table.traffic tr > th:first-child {
+    text-align: left;
+}
+
+table.traffic td.percent:after {
+    content: '%';
+}
+
 .attachment-link-list {
     list-style: none;
     text-align: left;
