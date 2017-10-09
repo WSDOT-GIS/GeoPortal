@@ -46,7 +46,7 @@ define([
         var layerName = graphic.result.layerName;
         var attr = graphic.attributes;
         var derivedRe = /^([\d,]+)\*$/;
-        var nullRe = /^Null$/i;
+        var nullRe = /^(?:Null)?$/i;
         var numberFieldNameRe = /^(?:(?:Year)|(?:AADT))([\s_]\d{4})?$/i;
         var numberRe = /^\d+$/;
         var percentFieldNameRe = /P(?:er)?c(?:en)?t$/i;
