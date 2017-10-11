@@ -120,20 +120,6 @@
     }
   ],
   "basemapsToRemove": [ "basemap_4", "basemap_6" ],
-  "locateMileposts": {
-    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
-    "options": {
-      "useProxy": false,
-      "usePost": true
-    }
-  },
-  "locateNearestMileposts": {
-    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
-    "options": {
-      "useProxy": false,
-      "usePost": true
-    }
-  },
   "layers": {
     "Main": {
       "Political Boundaries": [

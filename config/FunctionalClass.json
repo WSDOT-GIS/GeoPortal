@@ -116,12 +116,12 @@
     },
     "city": {
       "label": "City",
-			"url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-				"outFields": ["CityName"]
+        "outFields": ["CityName"]
       }
     },
     "urbanArea": {
@@ -170,20 +170,6 @@
     "Oceans",
     "OpenStreetMap"
   ],
-  "locateMileposts": {
-    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/LocateMileposts.ashx",
-    "options": {
-      "useProxy": false,
-      "usePost": true
-    }
-  },
-  "locateNearestMileposts": {
-    "url": "https://www.wsdot.wa.gov/geospatial/transformation/coordinate/GetRouteCoordinatesNearestXYs.ashx",
-    "options": {
-      "useProxy": false,
-      "usePost": true
-    }
-  },
   "layers": [
     {
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
