@@ -160,13 +160,6 @@
     <Content Include="images\WsdotBasemapThumbnail.jpg" />
     <Content Include="index.html" />
     <Content Include="lrsToolsTemplate.html" />
-    <Content Include="PtrSites\gpToBootstrapUtils.js" />
-    <Content Include="PtrSites\index.css" />
-    <Content Include="PtrSites\index.html" />
-    <Content Include="PtrSites\index.js" />
-    <Content Include="PtrSites\IsFileReadyWorker.js" />
-    <Content Include="PtrSites\JobListItem.js" />
-    <Content Include="PtrSites\worker.js" />
     <Content Include="scripts\ais\faaFar77.js" />
     <Content Include="scripts\configUtils.js" />
     <Content Include="scripts\customLegend.js" />
