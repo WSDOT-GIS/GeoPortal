@@ -1,18 +1,13 @@
-﻿WSDOT GeoPortal 
+﻿WSDOT GeoPortal
 ===============
 
 ## Development Environment ##
 
-Visual Studio 2013
-
-### Recommended Visual Studio Extensions ###
-* [Package Intellisense](https://visualstudiogallery.msdn.microsoft.com/65748cdb-4087-497e-a394-2e3449c8e61e) - Loads Bower components
-* [Web Essentials](http://vswebessentials.com/)
+Visual Studio Code
 
 ### Development Tools ###
 
-* [Bower](http://bower.io/)
-    * [NodeJS](https://nodejs.org/)
+* [NodeJS](https://nodejs.org/)
 
 ## Configuration ##
 
@@ -30,7 +25,7 @@ Use the *config* parameter to specify a configuration other than the default. Th
 * internal-RFIP
 
 ##### layers #####
-The *layers* parameter is used to specify which layers will be turned on when the map is loaded.  
+The *layers* parameter is used to specify which layers will be turned on when the map is loaded.
 The value of this parameter is a comma-separated list of layer IDs.
 
 ##### extent #####
@@ -39,10 +34,6 @@ The format of this parameter is four comma-separated numbers in this order: xmin
 
 
 ### Configuration ###
-
-#### `web.config` ####
-The `web.config` file contains server-side settings.  Each Visual Studio project configuration will have its own [web.config transformation file].
-The following settings are contained in the `/configuration/appSettings` section of the `web.config` file.
 
 #### `config.js` files ####
 This application supports a number of configurations that can be selected via the *config* query string parameter.
