@@ -9,5 +9,9 @@
   "author": "WSDOT",
   "license": "Unlicense",
   "private": true,
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/arcgis-js-api": "^4.6.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
+  }
 }
