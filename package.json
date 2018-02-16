@@ -4,10 +4,13 @@
   "description": "WSDOT GeoPortal",
   "main": "index.html",
   "scripts": {
-    "prepublish": "bower prune && bower install",
+    "prepare": "bower prune && bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "WSDOT",
   "license": "Unlicense",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "bower": "^1.8.2"
+  }
 }
