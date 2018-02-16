@@ -1,4 +1,0 @@
-/** Hide copyright input on print form */
-#printPane fieldset[name=layoutOptions] > .form-group:nth-child(4) {
-    display: none;
-}
