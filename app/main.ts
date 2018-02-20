@@ -7,6 +7,7 @@ import BasemapGallery = require("esri/widgets/BasemapGallery");
 import Expand = require("esri/widgets/Expand");
 import Home = require("esri/widgets/Home");
 import LayerList = require("esri/widgets/LayerList");
+import Legend = require("esri/widgets/Legend");
 import Search = require("esri/widgets/Search");
 
 const waExtent = new Extent({
@@ -38,6 +39,11 @@ const view = new MapView({
 
 // #region Add controls
 
+const home = new Home({
+  view
+});
+view.ui.add(home, "top-left");
+
 // Add Search
 const searchWidget = new Search({
   view,
@@ -64,19 +70,9 @@ searchWidget.sources.add({
 const searchExpand = new Expand({
   content: searchWidget.container,
   expandIconClass: "esri-icon-search",
+  group: "top-right",
   view
 });
-
-// Add expander to the UI.
-view.ui.add(searchExpand, {
-  position: "top-right",
-  index: 1
-});
-
-const home = new Home({
-  view
-});
-view.ui.add(home, { position: "top-left", index: 3 });
 
 // Create the layer list.
 const layerList = new LayerList({
@@ -86,28 +82,41 @@ const layerList = new LayerList({
 
 // Add the layer list to an expander
 const layerListExpand = new Expand({
+  content: layerList.container,
   expandIconClass: "esri-icon-layer-list",
-  view,
-  content: layerList.container
+  group: "top-right",
+  view
 });
 
-// Add expander to the UI.
-view.ui.add(layerListExpand, {
-  position: "top-right",
-  index: 2
-});
-
-// Create basemap gallery, add to expander, add expander to view UI.
+// Create basemap gallery, add to expander.
 const basemapGallery = new BasemapGallery({
   container: document.createElement("div"),
   view
 });
 
 const basemapExpand = new Expand({
+  content: basemapGallery.container,
   expandIconClass: "esri-icon-basemap",
-  view,
-  content: basemapGallery.container
+  group: "top-right",
+  view
 });
 
-view.ui.add(basemapExpand, "top-right");
+// Add legend
+const legend = new Legend({
+  container: document.createElement("div"),
+  view
+});
+
+const legendExpand = new Expand({
+  content: legend.container,
+  expandIconClass: "custom-icon-legend",
+  group: "top-right",
+  view
+});
+
+view.ui.add(
+  [searchExpand, layerListExpand, legendExpand, basemapExpand],
+  "top-right"
+);
+
 // #endregion

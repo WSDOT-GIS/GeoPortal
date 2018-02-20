@@ -1,1 +1,5 @@
 *.md
+tsconfig.json
+tslint.json
+package.json
+yarn.lock
