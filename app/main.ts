@@ -5,6 +5,7 @@ import Locator = require("esri/tasks/Locator");
 import MapView = require("esri/views/MapView");
 import BasemapGallery = require("esri/widgets/BasemapGallery");
 import Expand = require("esri/widgets/Expand");
+import Home = require("esri/widgets/Home");
 import LayerList = require("esri/widgets/LayerList");
 import Search = require("esri/widgets/Search");
 
@@ -71,6 +72,11 @@ view.ui.add(searchExpand, {
   position: "top-right",
   index: 1
 });
+
+const home = new Home({
+  view
+});
+view.ui.add(home, { position: "top-left", index: 3 });
 
 // Create the layer list.
 const layerList = new LayerList({
