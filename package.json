@@ -9,5 +9,8 @@
   },
   "author": "WSDOT",
   "license": "Unlicense",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "bower": "^1.8.2"
+  }
 }
