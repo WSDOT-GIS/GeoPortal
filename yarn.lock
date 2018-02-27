@@ -9,9 +9,9 @@
     dms-conversion "^3.0.0"
     usgs-ned "~3.0.2"
 
-"@bower_components/arcgis-buffer-ui@WSDOT-GIS/arcgis-js-buffer#~1.0.0":
-  version "0.0.0"
-  resolved "https://codeload.github.com/WSDOT-GIS/arcgis-js-buffer/tar.gz/b5791a9d4e4124a7cf93b21d5e9c938ee500fa93"
+"@bower_components/arcgis-buffer-ui@WSDOT-GIS/arcgis-js-buffer#~1.1.0":
+  version "1.1.0"
+  resolved "https://codeload.github.com/WSDOT-GIS/arcgis-js-buffer/tar.gz/c28346d83e2076d84f551dff290d9159052a6e56"
 
 "@bower_components/arcgis-geolocate-button@WSDOT-GIS/arcgis-geolocate-button#~1.0.0":
   version "0.0.0"

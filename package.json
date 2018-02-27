@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "@bower_components/AirspaceCalculator": "WSDOT-GIS/airspace-calculator#~2.0.0",
-    "@bower_components/arcgis-buffer-ui": "WSDOT-GIS/arcgis-js-buffer#~1.0.0",
+    "@bower_components/arcgis-buffer-ui": "WSDOT-GIS/arcgis-js-buffer#~1.1.0",
     "@bower_components/arcgis-geolocate-button": "WSDOT-GIS/arcgis-geolocate-button#~1.0.0",
     "@bower_components/arcgis-js-draw-ui": "WSDOT-GIS/arcgis-js-draw-ui#~1.1.1",
     "@bower_components/arcgis-print-ui": "WSDOT-GIS/arcgis-print-ui#~1.2.0",
