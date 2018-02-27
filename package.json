@@ -17,16 +17,10 @@
     "@bower_components/arcgis-print-ui": "WSDOT-GIS/arcgis-print-ui#~1.2.0",
     "@bower_components/arcgis-query-string-utilities": "WSDOT-GIS/arcgis-query-string-utilities#~1.1.1",
     "@bower_components/blueimp-gallery": "blueimp/Gallery#^2.21.2",
-    "@bower_components/customevent-polyfill": "kaesetoast/customevent-polyfill#~1.0.0",
     "@bower_components/dms": "WSDOT-GIS/dms-js#~2.0.1",
     "@bower_components/elc": "WSDOT-GIS/elc-js#~2.6.4",
-    "@bower_components/fetch": "github/fetch#^1.0.0",
     "@bower_components/fontawesome": "FortAwesome/Font-Awesome#^4.6.3",
-    "@bower_components/intl": "andyearnshaw/Intl.js#^1.1.0",
     "@bower_components/layer-metadata-soe-client": "WSDOT-GIS/Layer-Metadata-SOE-JS-Client#~v2.2.2",
-    "@bower_components/polyfills": "inexorabletash/polyfill#~0.1.6",
-    "@bower_components/promises": "Octane/Promise#~1.0.10",
-    "@bower_components/setImmediate": "Octane/setImmediate#*",
     "@bower_components/usgs-ned": "WSDOT-GIS/usgs-ned#~3.0.2"
   },
   "engines": {

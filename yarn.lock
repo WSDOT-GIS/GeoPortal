@@ -33,10 +33,6 @@
   version "2.30.0"
   resolved "https://codeload.github.com/blueimp/Gallery/tar.gz/a72bda76136b0d66e940c4df9fdb3f6e493b26f9"
 
-"@bower_components/customevent-polyfill@kaesetoast/customevent-polyfill#~1.0.0":
-  version "1.0.0"
-  resolved "https://codeload.github.com/kaesetoast/customevent-polyfill/tar.gz/ba95768284351e2682ec4f3b1ecd2652c17b4036"
-
 "@bower_components/dms@WSDOT-GIS/dms-js#~2.0.1":
   version "2.0.4"
   resolved "https://codeload.github.com/WSDOT-GIS/dms-js/tar.gz/b57bb9fe9751fdb024b576b848d87687b0873173"
@@ -45,33 +41,13 @@
   version "2.6.4"
   resolved "https://codeload.github.com/WSDOT-GIS/elc-js/tar.gz/1ba1b4f004f48528f29910a8756ebb7aa5873557"
 
-"@bower_components/fetch@github/fetch#^1.0.0":
-  version "1.1.1"
-  resolved "https://codeload.github.com/github/fetch/tar.gz/f7a514829820fc77c0f884c74cf2d36356a781c0"
-
 "@bower_components/fontawesome@FortAwesome/Font-Awesome#^4.6.3":
   version "4.7.0"
   resolved "https://codeload.github.com/FortAwesome/Font-Awesome/tar.gz/a8386aae19e200ddb0f6845b5feeee5eb7013687"
 
-"@bower_components/intl@andyearnshaw/Intl.js#^1.1.0":
-  version "1.2.5"
-  resolved "https://codeload.github.com/andyearnshaw/Intl.js/tar.gz/9ad9a125ecf6ee695e23f8f976e98d3be3733aec"
-
 "@bower_components/layer-metadata-soe-client@WSDOT-GIS/Layer-Metadata-SOE-JS-Client#~v2.2.2":
   version "2.2.2"
   resolved "https://codeload.github.com/WSDOT-GIS/Layer-Metadata-SOE-JS-Client/tar.gz/139f3f3bbe50047de857c05905e2692d407f9d8f"
-
-"@bower_components/polyfills@inexorabletash/polyfill#~0.1.6":
-  version "0.1.41"
-  resolved "https://codeload.github.com/inexorabletash/polyfill/tar.gz/fb46f09639a38779720e17a4ef06ce888c3bd272"
-
-"@bower_components/promises@Octane/Promise#~1.0.10":
-  version "1.0.10"
-  resolved "https://codeload.github.com/Octane/Promise/tar.gz/739778a0ecc8640e05ead90d3e758adccbc2469c"
-
-"@bower_components/setImmediate@Octane/setImmediate#*":
-  version "0.0.0"
-  resolved "https://codeload.github.com/Octane/setImmediate/tar.gz/460141f1aee19d77eab7f96fc332f26aa27f445b"
 
 "@bower_components/usgs-ned@WSDOT-GIS/usgs-ned#~3.0.2":
   version "3.0.2"
