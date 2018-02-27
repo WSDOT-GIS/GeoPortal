@@ -4,6 +4,8 @@
   "description": "WSDOT GeoPortal",
   "main": "index.html",
   "scripts": {
+    "prepare": "yarn build",
+    "build": " tsc -p arcgis-rest-lrs-ui",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "WSDOT",
@@ -21,9 +23,18 @@
     "@bower_components/elc": "WSDOT-GIS/elc-js#~2.6.4",
     "@bower_components/fontawesome": "FortAwesome/Font-Awesome#^4.6.3",
     "@bower_components/layer-metadata-soe-client": "WSDOT-GIS/Layer-Metadata-SOE-JS-Client#~v2.2.2",
-    "@bower_components/usgs-ned": "WSDOT-GIS/usgs-ned#~3.0.2"
+    "@bower_components/usgs-ned": "WSDOT-GIS/usgs-ned#~3.0.2",
+    "@esri/arcgis-rest-request": "^1.0.3",
+    "@wsdot/arcgis-rest-lrs": "^1.0.0-beta.3"
   },
   "engines": {
     "yarn": ">= 1.0.0"
+  },
+  "devDependencies": {
+    "@types/arcgis-js-api": "^3.23.0 <4",
+    "prettier": "^1.11.0",
+    "tslint": "^5.9.1",
+    "tslint-plugin-prettier": "^1.3.0",
+    "typescript": "^2.7.2"
   }
 }

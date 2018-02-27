@@ -1,0 +1,15 @@
+{
+    "defaultSeverity": "warn",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "prettier": true,
+        "trailing-comma": false,
+        "arrow-parens": false
+    },
+    "rulesDirectory": [
+        "tslint-plugin-prettier"
+    ]
+}
