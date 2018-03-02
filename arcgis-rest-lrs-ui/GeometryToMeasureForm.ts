@@ -138,16 +138,27 @@ export default class GeometryToMeasureForm {
 
       const wkid = e.geometry.spatialReference.wkid;
 
-      const result = await this.lrsClient.geometryToMeasure(
-        this.layerId,
-        [[point.x, point.y]],
-        this.tolerance,
-        this.temporalViewDate,
-        wkid,
-        wkid
-      );
-
-      console.debug("geometryToMeasure result", result);
+      // Call the API.
+      // Dispatch an event, differing depending on success or failure
+      try {
+        const result = await this.lrsClient.geometryToMeasure(
+          this.layerId,
+          [[point.x, point.y]],
+          this.tolerance,
+          this.temporalViewDate,
+          wkid,
+          wkid
+        );
+        const g2mEvent = new CustomEvent("geometryToMeasure", {
+          detail: result
+        });
+        this.form.dispatchEvent(g2mEvent);
+      } catch (ex) {
+        const errorEvent = new CustomEvent("geometryToMeasureError", {
+          detail: ex
+        });
+        this.form.dispatchEvent(errorEvent);
+      }
     });
   }
 }
