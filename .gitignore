@@ -1,5 +1,6 @@
-arcgis-rest-lrs-ui/*.js
-arcgis-rest-lrs-ui/*.js.map
+src/**/*.js
+src/**/*.js.map
+scripts/arcgis-rest-lrs-ui
 
 # Logs
 logs

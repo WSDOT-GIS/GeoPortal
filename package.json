@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "prepare": "yarn build",
-    "build": " tsc -p arcgis-rest-lrs-ui",
+    "build": " tsc -p src/arcgis-rest-lrs-ui",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "WSDOT",
