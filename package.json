@@ -25,7 +25,8 @@
     "@bower_components/layer-metadata-soe-client": "WSDOT-GIS/Layer-Metadata-SOE-JS-Client#~v2.2.2",
     "@bower_components/usgs-ned": "WSDOT-GIS/usgs-ned#~3.0.2",
     "@esri/arcgis-rest-request": "^1.0.3",
-    "@wsdot/arcgis-rest-lrs": "^1.0.0-beta.3"
+    "@wsdot/arcgis-rest-lrs": "^1.0.0-beta.3",
+    "tslib": "^1.9.0"
   },
   "engines": {
     "yarn": ">= 1.0.0"

@@ -131,6 +131,7 @@ export default class GeometryToMeasureForm {
 
     this.draw.on("draw-complete", async e => {
       this.draw.deactivate();
+      // Exit if there is no geometry or if the drawn geometry is not a point.
       if (!(e.geometry && e.geometry.type.match(/point/gi))) {
         return;
       }
