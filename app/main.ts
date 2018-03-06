@@ -1,7 +1,6 @@
 import Extent = require("esri/geometry/Extent");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import EsriMap = require("esri/Map");
-import Locator = require("esri/tasks/Locator");
 import MapView = require("esri/views/MapView");
 import BasemapGallery = require("esri/widgets/BasemapGallery");
 import Compass = require("esri/widgets/Compass");
@@ -20,6 +19,7 @@ const waExtent = new Extent({
   ymax: 49.05
 });
 
+// Get the webmap parameter from the search string, if present.
 const searchParams = new URL(location.href).searchParams;
 const webmapId = searchParams.get("webmap");
 
@@ -34,7 +34,7 @@ const countyLayer = new FeatureLayer({
 if (webmapId) {
   map = new WebMap({
     portalItem: {
-      id: webmapId // "5ae6ee17e6124a17854c715d995dc55b",
+      id: webmapId // e.g., "5ae6ee17e6124a17854c715d995dc55b",
     }
   });
 } else {

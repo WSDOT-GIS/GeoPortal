@@ -3,7 +3,8 @@
   "files.exclude": {
     "**/.git": true,
     "app/**/*.js": true,
-    "app/**/*.js.map": true
+    "app/**/*.js.map": true,
+    "**/*.css": { "when": "$(basename).less" }
   },
   "editor.formatOnSave": true,
   "tslint.autoFixOnSave": true,
