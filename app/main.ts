@@ -10,6 +10,8 @@ import LayerList = require("esri/widgets/LayerList");
 import Legend = require("esri/widgets/Legend");
 import Search = require("esri/widgets/Search");
 
+import WebMap = require("esri/WebMap");
+
 const waExtent = new Extent({
   xmin: -116.91,
   ymin: 45.54,
@@ -17,10 +19,10 @@ const waExtent = new Extent({
   ymax: 49.05
 });
 
-// Create the map
-const map = new EsriMap({
-  basemap: "streets-night-vector"
-});
+const searchParams = new URL(location.href).searchParams;
+const webmapId = searchParams.get("webmap");
+
+let map: EsriMap;
 
 const countyLayerUrl =
   "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0";
@@ -28,7 +30,19 @@ const countyLayer = new FeatureLayer({
   url: countyLayerUrl
 });
 
-map.add(countyLayer);
+if (webmapId) {
+  map = new WebMap({
+    portalItem: {
+      id: webmapId // "5ae6ee17e6124a17854c715d995dc55b",
+    }
+  });
+} else {
+  // Create the map
+  map = new EsriMap({
+    basemap: "streets-night-vector"
+  });
+  map.add(countyLayer);
+}
 
 // Create the view.
 const view = new MapView({
@@ -91,6 +105,11 @@ const layerListExpand = new Expand({
 // Create basemap gallery, add to expander.
 const basemapGallery = new BasemapGallery({
   container: document.createElement("div"),
+  source: {
+    query: {
+      id: "30de8da907d240a0bccd5ad3ff25ef4a" // Esri vector basemap group ID.
+    }
+  },
   view
 });
 
