@@ -8,6 +8,7 @@
     "build:less": "lessc ./style/index.less ./style/index.css",
     "build:ts": "tsc",
     "lint": "prettier ./**/*.less ./**/*.ts --write",
+    "publish": "npm run prepare && node tools/publish.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "WSDOT",
@@ -15,6 +16,7 @@
   "private": true,
   "devDependencies": {
     "@types/arcgis-js-api": "^4.6.0",
+    "gh-pages": "^1.1.0",
     "less": "^3.0.1",
     "prettier": "^1.11.1",
     "tslint": "^5.9.1",
