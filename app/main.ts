@@ -146,3 +146,50 @@ view.ui.add(
 view.ui.add(compass, "bottom-left");
 
 // #endregion
+
+// #region title sizing
+// from sample: https://developers.arcgis.com/javascript/latest/sample-code/view-breakpoints-css/index.html
+// Load
+
+const isResponsiveSize = view.widthBreakpoint === "xsmall";
+updateView(isResponsiveSize);
+
+// Breakpoints
+
+view.watch("widthBreakpoint", breakpoint => {
+  switch (breakpoint) {
+    case "xsmall":
+      updateView(true);
+      break;
+    case "small":
+    case "medium":
+    case "large":
+    case "xlarge":
+      updateView(false);
+      break;
+    default:
+  }
+});
+
+function updateView(isMobile: boolean) {
+  setTitleMobile(isMobile);
+}
+
+function setTitleMobile(isMobile: boolean) {
+  const titleDiv = document.querySelector("#titleDiv");
+  if (titleDiv) {
+    if (isMobile) {
+      titleDiv.classList.add("invisible");
+      view.padding = {
+        top: 0
+      };
+    } else {
+      titleDiv.classList.remove("invisible");
+      view.padding = {
+        top: 55
+      };
+    }
+  }
+}
+
+// #endregion
