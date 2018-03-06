@@ -2,6 +2,7 @@ import Extent = require("esri/geometry/Extent");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import EsriMap = require("esri/Map");
 import MapView = require("esri/views/MapView");
+import WebMap = require("esri/WebMap");
 import BasemapGallery = require("esri/widgets/BasemapGallery");
 import Compass = require("esri/widgets/Compass");
 import Expand = require("esri/widgets/Expand");
@@ -9,8 +10,6 @@ import Home = require("esri/widgets/Home");
 import LayerList = require("esri/widgets/LayerList");
 import Legend = require("esri/widgets/Legend");
 import Search = require("esri/widgets/Search");
-
-import WebMap = require("esri/WebMap");
 
 const waExtent = new Extent({
   xmin: -116.91,
