@@ -1,5 +1,6 @@
 app/*.js
 app/*.js.map
+style/*.css
 
 # Logs
 logs
