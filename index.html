@@ -7,11 +7,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GeoPortal</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css" integrity="sha384-NZq2yuFvpp0aY+Sm88gf/RYycjWjdc+75vnHjrWn17uBlJyIpl86pymB0ygPRf7B"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="style/index.css">
     <script>
         const locationPath = location.href.replace(/\/[^\/]+$/, "");
         window.dojoConfig = {
+            // See https://blogs.esri.com/esri/arcgis/2017/12/14/making-better-promises/
+            has: {
+                "esri-promise-compatibility": 1
+            },
             packages: [
                 {
                     name: "app",
@@ -20,7 +25,8 @@
             ]
         };
     </script>
-    <script src="https://js.arcgis.com/4.6/"></script>
+    <script src="https://js.arcgis.com/4.6/init.js" integrity="sha384-MdQ78HMAAbU6p458SpTEVhRNnTmGIMpzhWrYGm76cKM+PnDzLtuXzoLDMsJ4A6rL"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
