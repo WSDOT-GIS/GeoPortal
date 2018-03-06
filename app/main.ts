@@ -4,6 +4,7 @@ import EsriMap = require("esri/Map");
 import Locator = require("esri/tasks/Locator");
 import MapView = require("esri/views/MapView");
 import BasemapGallery = require("esri/widgets/BasemapGallery");
+import Compass = require("esri/widgets/Compass");
 import Expand = require("esri/widgets/Expand");
 import Home = require("esri/widgets/Home");
 import LayerList = require("esri/widgets/LayerList");
@@ -97,7 +98,7 @@ const layerList = new LayerList({
 // Add the layer list to an expander
 const layerListExpand = new Expand({
   content: layerList.container,
-  expandIconClass: "esri-icon-layer-list",
+  expandIconClass: "esri-icon-layers",
   group: "top-right",
   view
 });
@@ -128,8 +129,12 @@ const legend = new Legend({
 
 const legendExpand = new Expand({
   content: legend.container,
-  expandIconClass: "custom-icon-legend",
+  expandIconClass: "esri-icon-layer-list",
   group: "top-right",
+  view
+});
+
+const compass = new Compass({
   view
 });
 
@@ -137,5 +142,7 @@ view.ui.add(
   [searchExpand, layerListExpand, legendExpand, basemapExpand],
   "top-right"
 );
+
+view.ui.add(compass, "bottom-left");
 
 // #endregion
