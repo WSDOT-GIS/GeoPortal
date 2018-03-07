@@ -1,3 +1,4 @@
+import esriConfig = require("esri/config");
 import Extent = require("esri/geometry/Extent");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import EsriMap = require("esri/Map");
@@ -9,7 +10,22 @@ import Expand = require("esri/widgets/Expand");
 import Home = require("esri/widgets/Home");
 import LayerList = require("esri/widgets/LayerList");
 import Legend = require("esri/widgets/Legend");
+import ScaleBar = require("esri/widgets/ScaleBar");
 import Search = require("esri/widgets/Search");
+
+// Inform the API about additional sites that are CORS enabled
+// and support HTTPS.
+const { corsEnabledServers, httpsDomains } = esriConfig.request;
+if (corsEnabledServers) {
+  corsEnabledServers.push(
+    "data.wsdot.wa.gov",
+    "www.wsdot.wa.gov",
+    "wsdot.wa.gov"
+  );
+}
+if (httpsDomains) {
+  httpsDomains.push("wsdot.wa.gov");
+}
 
 const waExtent = new Extent({
   xmin: -116.91,
@@ -18,11 +34,14 @@ const waExtent = new Extent({
   ymax: 49.05
 });
 
+const hexRe = /^[a-f0-9]+$/i;
+
 // Get the webmap parameter from the search string, if present.
 const searchParams = new URL(location.href).searchParams;
 const webmapId = searchParams.get("webmap");
+const webmapIdIsValid = webmapId ? hexRe.test(webmapId) : null;
 
-let map: EsriMap;
+let map: EsriMap | WebMap;
 
 const countyLayerUrl =
   "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0";
@@ -30,12 +49,28 @@ const countyLayer = new FeatureLayer({
   url: countyLayerUrl
 });
 
-if (webmapId) {
-  map = new WebMap({
+// If there's a webmapID provided, load the webmap from AGOL.
+// Otherwise, use the default.
+if (webmapId && webmapIdIsValid) {
+  const webmap = new WebMap({
     portalItem: {
       id: webmapId // e.g., "5ae6ee17e6124a17854c715d995dc55b",
     }
   });
+  // When the webmap has loaded, update the title of the page
+  // in the header and on the browser tab.
+  webmap.when((wm: WebMap) => {
+    const titleSpan = document.getElementById("mapTitle");
+    const title = wm.portalItem.title;
+
+    if (title) {
+      if (titleSpan) {
+        titleSpan.textContent = title;
+      }
+      document.title = title;
+    }
+  });
+  map = webmap;
 } else {
   // Create the map
   map = new EsriMap({
@@ -60,6 +95,8 @@ view.ui.add(home, "top-left");
 
 // Add Search
 const searchWidget = new Search({
+  activeSourceIndex: -1,
+  locationEnabled: true,
   view,
   container: document.createElement("div")
 });
@@ -136,13 +173,16 @@ const legendExpand = new Expand({
 const compass = new Compass({
   view
 });
+const scalebar = new ScaleBar({
+  view
+});
 
 view.ui.add(
   [searchExpand, layerListExpand, legendExpand, basemapExpand],
   "top-right"
 );
 
-view.ui.add(compass, "bottom-left");
+view.ui.add([compass, scalebar], "bottom-left");
 
 // #endregion
 
