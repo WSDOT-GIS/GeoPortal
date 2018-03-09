@@ -1,5 +1,7 @@
-﻿WSDOT GeoPortal
+WSDOT GeoPortal
 ===============
+
+[Try it out](https://wsdot-gis.github.io/GeoPortal/)
 
 Development Environment
 -----------------------

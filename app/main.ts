@@ -115,11 +115,10 @@ loaderPromise.then(
       ymax: 49.05
     });
 
-    const hexRe = /^[a-f0-9]+$/i;
-
     // Get the webmap parameter from the search string, if present.
     const searchParams = new URL(location.href).searchParams;
     const webmapId = searchParams.get("webmap");
+    const hexRe = /^[a-f0-9]+$/i;
     const webmapIdIsValid = webmapId ? hexRe.test(webmapId) : null;
 
     let map: __esri.Map | __esri.WebMap;
@@ -167,7 +166,7 @@ loaderPromise.then(
       extent: waExtent
     });
 
-    view.when((e: any) => {
+    view.when(() => {
       view.constraints.minZoom = view.zoom - 2;
     });
 
