@@ -27,6 +27,7 @@ if (httpsDomains) {
   httpsDomains.push("wsdot.wa.gov");
 }
 
+// This extend comes from https://epsg.io/1416-area
 const waExtent = new Extent({
   xmin: -116.91,
   ymin: 45.54,
@@ -34,11 +35,14 @@ const waExtent = new Extent({
   ymax: 49.05
 });
 
-const hexRe = /^[a-f0-9]+$/i;
-
 // Get the webmap parameter from the search string, if present.
 const searchParams = new URL(location.href).searchParams;
 const webmapId = searchParams.get("webmap");
+
+// Webmap ID should only contain characters that are used to make up
+// a hexadecimal value (0-9,a-f). If the given webmap ID doesn't meet
+// this criteria, ignore it by setting it to null.
+const hexRe = /^[a-f0-9]+$/i;
 const webmapIdIsValid = webmapId ? hexRe.test(webmapId) : null;
 
 let map: EsriMap | WebMap;
@@ -88,6 +92,7 @@ const view = new MapView({
 
 // #region Add controls
 
+// Add the home button
 const home = new Home({
   view
 });
@@ -109,7 +114,7 @@ worldLocator.countryCode = "US";
 worldLocator.filter = {
   geometry: waExtent,
   where: "1 = 1"
-} as __esri.LocatorSourceFilter;
+};
 
 // Add the county Feature Layer as a search source.
 searchWidget.sources.add({
