@@ -17,10 +17,11 @@ const dojoOptions: ILoadScriptOptions = {
  * Since esri-loader is being used to load the modules rather than
  * the standard *import* method, this type definition is used to
  * force the typescript compiler to use the correct types for the
- * modules instead of *any*.
+ * modules instead of *any*. This also aids in code-completion in
+ * Visual Studio Code.
  *
  * If the list of modules in the call to *loadModules* is modified,
- * this type definition must be modified accordingly.
+ * this type definition must also be modified accordingly.
  */
 declare type moduleArray = [
   __esri.config,
@@ -103,7 +104,10 @@ loaderPromise.then(
       httpsDomains.push("wsdot.wa.gov");
     }
 
-    /** https://epsg.io/1416-area */
+    /**
+     * Extent of WA.
+     * @see https://epsg.io/1416-area
+     */
     const waExtent = new Extent({
       xmin: -116.91,
       ymin: 45.54,
@@ -161,6 +165,10 @@ loaderPromise.then(
       map,
       container: "viewDiv",
       extent: waExtent
+    });
+
+    view.when((e: any) => {
+      view.constraints.minZoom = view.zoom - 2;
     });
 
     // #region Add controls
