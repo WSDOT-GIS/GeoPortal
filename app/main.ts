@@ -1,5 +1,8 @@
 import { ILoadScriptOptions, loadModules } from "esri-loader";
 
+/**
+ * esri-loader options, including dojoConfig.
+ */
 const dojoOptions: ILoadScriptOptions = {
   dojoConfig: {
     async: true,
@@ -10,6 +13,15 @@ const dojoOptions: ILoadScriptOptions = {
   }
 };
 
+/**
+ * Since esri-loader is being used to load the modules rather than
+ * the standard *import* method, this type definition is used to
+ * force the typescript compiler to use the correct types for the
+ * modules instead of *any*.
+ *
+ * If the list of modules in the call to *loadModules* is modified,
+ * this type definition must be modified accordingly.
+ */
 declare type moduleArray = [
   __esri.config,
   __esri.ExtentConstructor,
@@ -27,11 +39,17 @@ declare type moduleArray = [
   __esri.SearchConstructor
 ];
 
+/**
+ * This custom type allows the *loadModules* function
+ * (which normally returns *any[]*) to return the
+ * specific types for the imported modules.
+ */
 declare type customLoadModules = (
   modules: string[],
   loadScriptOptions?: ILoadScriptOptions
 ) => Promise<moduleArray>;
 
+// Start loading the ArcGIS API modules.
 const loaderPromise = (loadModules as customLoadModules)(
   [
     "esri/config",
@@ -52,6 +70,8 @@ const loaderPromise = (loadModules as customLoadModules)(
   dojoOptions
 );
 
+// After the loader has loaded all of the ArcGIS API modules
+// set up the map application.
 loaderPromise.then(
   ([
     esriConfig,
@@ -83,6 +103,7 @@ loaderPromise.then(
       httpsDomains.push("wsdot.wa.gov");
     }
 
+    /** https://epsg.io/1416-area */
     const waExtent = new Extent({
       xmin: -116.91,
       ymin: 45.54,
