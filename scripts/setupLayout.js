@@ -21,7 +21,7 @@ define([
     "ArcGisPrintUI",
 
     "geoportal/extentSelect",
-
+    "arcgis-rest-lrs-ui/GeometryToMeasureForm",
     "scripts/customLegend.js",
     "scripts/ais/faaFar77.js"
 ], function (
@@ -45,7 +45,8 @@ define([
     BufferUIHelper,
     ArcGisPrintUI,
 
-    createExtentSelect
+    createExtentSelect,
+    GeometryToMeasureForm
 ) {
 
     function getLayerInfos() {

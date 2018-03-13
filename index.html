@@ -31,8 +31,8 @@
     <link href="node_modules/@bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="node_modules/@bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
 
-    <script src="node_modules/@bower_components/polyfills/url.js"></script>
-    <script src="node_modules/@bower_components/polyfills/html.js"></script>
+    <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
+    <script src="node_modules/@bower_components/polyfills/html.js"></script> -->
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -144,6 +144,10 @@
         (function (root) {
             var dojoConfig = {
                 async: true,
+                debug: true,
+                paths: {
+                    "node_modules": root + "/node_modules"
+                },
                 packages: [
                     {
                         name: "geoportal",
@@ -212,6 +216,15 @@
                         name: "ArcGisPrintUI",
                         location: root + "/node_modules/@bower_components/arcgis-print-ui",
                         main: "ArcGisPrintUI"
+                    },
+                    {
+                        name: "arcgis-rest-lrs-ui",
+                        location: root + "/scripts/arcgis-rest-lrs-ui"
+                    },
+                    {
+                        name: "@wsdot/arcgis-rest-lrs",
+                        location: "node_modules/@wsdot/arcgis-rest-lrs/dist/umd",
+                        main: "lrs"
                     }
                 ]
             };
