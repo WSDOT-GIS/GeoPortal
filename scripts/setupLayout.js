@@ -421,6 +421,18 @@ define([
             div.appendChild(drawUI);
         }
 
+        function setupCrab() {
+            const toolsAccordianDiv = document.getElementById("toolsAccordion");
+            const paneDiv = document.createElement("div");
+            paneDiv.textContent = "CRAB!"
+            paneDiv.id = "crabPane";
+            toolsAccordianDiv.appendChild(paneDiv);
+            toolsAccordion.addChild(new ContentPane({ title: "CRAB", id: "crabPane" }, paneDiv));
+            const crabUI = document.createElement("div");
+            crabUI.id = "drawUI";
+            paneDiv.appendChild(crabUI);
+        }
+
         /**
          * Creates the print UI if the configuration contains a printUrl property.
          * @returns {ArcGisPrintUI} - Returns the print UI, or null if there is no printUrl property in the configuration.
@@ -472,7 +484,7 @@ define([
             var i, l;
             // Setup a default value for tools if it hasn't been specified.
             if (!tools) {
-                tools = ["lrs", "zoom", "search", "buffer", "draw"];
+                tools = ["lrs", "zoom", "search", "buffer", "draw", "crab"];
             }
             for (i = 0, l = tools.length; i < l; i += 1) {
                 if (/zoom/i.test(tools[i])) {
@@ -485,6 +497,8 @@ define([
                     setupBuffer();
                 } else if (/draw/i.test(tools[i])) {
                     setupDraw();
+                } else if (/crab/i.test(tools[i])) {
+                    setupCrab();
                 }
             }
         }(wsdot.config.tools));

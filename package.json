@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "prepare": "yarn build",
-    "build": " tsc -p src/arcgis-rest-lrs-ui",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "WSDOT",
@@ -24,7 +24,7 @@
     "@bower_components/fontawesome": "FortAwesome/Font-Awesome#^4.6.3",
     "@bower_components/layer-metadata-soe-client": "WSDOT-GIS/Layer-Metadata-SOE-JS-Client#~v2.2.2",
     "@bower_components/usgs-ned": "WSDOT-GIS/usgs-ned#~3.0.2",
-    "@esri/arcgis-rest-request": "^1.0.3",
+    "@esri/arcgis-rest-request": "^1.1.1",
     "@wsdot/arcgis-rest-lrs": "^1.0.0-beta.3"
   },
   "engines": {
@@ -32,9 +32,13 @@
   },
   "devDependencies": {
     "@types/arcgis-js-api": "^3.23.0 <4",
-    "prettier": "^1.11.0",
+    "@types/dojo": "^1.9.40 <2",
+    "prettier": "^1.11.1",
+    "ts-loader": "^4.0.1",
     "tslint": "^5.9.1",
     "tslint-plugin-prettier": "^1.3.0",
-    "typescript": "^2.7.2"
+    "typescript": "^2.7.2",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12"
   }
 }
