@@ -4,7 +4,7 @@ module.exports = {
     mode: "production",
     target: "web",
     externals: /^((esri)|(dojox?)|(dijit))/,
-    // devtool: "inline-source-map",
+    devtool: "source-map",
     entry: "./src/arcgis-rest-lrs-ui/GeometryToMeasureForm.ts",
     output: {
       libraryTarget: "amd",
