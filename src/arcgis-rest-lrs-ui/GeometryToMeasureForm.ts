@@ -6,7 +6,7 @@ import EsriMap = require("esri/map");
 import Draw = require("esri/toolbars/draw");
 
 const defaultLrsSvcUrl =
-  "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer";
+  "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer/exts/LRSServer";
 const defaultLayerId = 0;
 
 /**
@@ -63,7 +63,7 @@ function createForm(
 ) {
   const form = document.createElement("form");
   form.id = generateId("geometryToMeasureForm");
-  form.action = `${url}/exts/LRSServer/networkLayers/${layerId}/geometryToMeasure`;
+  form.action = `${url}/networkLayers/${layerId}/geometryToMeasure`;
 
   const toleranceControl = document.createElement("input");
   toleranceControl.type = "number";
@@ -79,6 +79,11 @@ function createForm(
   dateControl.id = generateId("temporalViewDateInput");
 
   addToFormWithLabel(form, dateControl);
+
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.textContent = "Locate";
+  form.appendChild(submitButton);
 
   return form;
 }
@@ -119,18 +124,29 @@ export default class GeometryToMeasureForm {
     public readonly url: string = defaultLrsSvcUrl,
     public readonly layerId: number = defaultLayerId
   ) {
+    if (!map || !(map instanceof EsriMap)) {
+      throw TypeError(`Invalid map: ${map}`);
+    }
     this.form = createForm(url, layerId);
     this.draw = new Draw(this.map);
     this.lrsClient = new LrsClient(url);
 
+    const self = this;
+
     // Setup the form's submit event.
     this.form.addEventListener("submit", e => {
-      this.draw.activate(Draw.POINT);
+      try {
+        self.draw.activate(Draw.POINT);
+      } catch (error) {
+        alert("Error: Could not activate the draw toolbar.");
+        // tslint:disable-next-line:no-console
+        console.error("Error activating the draw toolbar", error);
+      }
       e.preventDefault();
     });
 
     this.draw.on("draw-complete", async e => {
-      this.draw.deactivate();
+      self.draw.deactivate();
       // Exit if there is no geometry or if the drawn geometry is not a point.
       if (!(e.geometry && e.geometry.type.match(/point/gi))) {
         return;
@@ -143,22 +159,22 @@ export default class GeometryToMeasureForm {
       // Dispatch an event, differing depending on success or failure
       try {
         const result = await this.lrsClient.geometryToMeasure(
-          this.layerId,
+          self.layerId,
           [[point.x, point.y]],
-          this.tolerance,
-          this.temporalViewDate,
+          self.tolerance,
+          self.temporalViewDate,
           wkid,
           wkid
         );
         const g2mEvent = new CustomEvent("geometryToMeasure", {
           detail: result
         });
-        this.form.dispatchEvent(g2mEvent);
+        self.form.dispatchEvent(g2mEvent);
       } catch (ex) {
         const errorEvent = new CustomEvent("geometryToMeasureError", {
           detail: ex
         });
-        this.form.dispatchEvent(errorEvent);
+        self.form.dispatchEvent(errorEvent);
       }
     });
   }

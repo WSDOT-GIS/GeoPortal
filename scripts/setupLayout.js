@@ -424,12 +424,17 @@ define([
         function setupCrab() {
             const toolsAccordianDiv = document.getElementById("toolsAccordion");
             const paneDiv = document.createElement("div");
-            paneDiv.textContent = "CRAB!"
             paneDiv.id = "crabPane";
             toolsAccordianDiv.appendChild(paneDiv);
-            toolsAccordion.addChild(new ContentPane({ title: "CRAB", id: "crabPane" }, paneDiv));
+            const contentPane = new ContentPane({ title: "CRAB", id: "crabPane" }, paneDiv);
+            toolsAccordion.addChild(contentPane);
             const crabUI = document.createElement("div");
-            crabUI.id = "drawUI";
+            on.once("show", () => {
+                crabUI.id = "drawUI";
+                // const g2mForm = new GeometryToMeasureForm.default(wsdot.map);
+                // crabUI.appendChild(g2mForm.form);
+            })
+
             paneDiv.appendChild(crabUI);
         }
 

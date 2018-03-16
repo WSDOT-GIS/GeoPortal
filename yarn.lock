@@ -69,19 +69,13 @@
   version "3.23.0"
   resolved "https://registry.yarnpkg.com/@types/arcgis-js-api/-/arcgis-js-api-3.23.0.tgz#89dfdca9b56ffbb69f54d593e72fc8f9c6c8a119"
 
-"@types/arcgis-rest-api@^10.4.3":
-  version "10.4.3"
-  resolved "https://registry.yarnpkg.com/@types/arcgis-rest-api/-/arcgis-rest-api-10.4.3.tgz#c64f71821dfcb08a0d1225ea18a841f1d6af4902"
-
 "@types/dojo@^1.9.40 <2":
   version "1.9.40"
   resolved "https://registry.yarnpkg.com/@types/dojo/-/dojo-1.9.40.tgz#368749557671a28aa2dd16b3d868d24f2f520f3f"
 
 "@wsdot/arcgis-rest-lrs@^1.0.0-beta.3":
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@wsdot/arcgis-rest-lrs/-/arcgis-rest-lrs-1.0.0-beta.3.tgz#6a49c2c9be1942dd252138a84495606029844a1a"
-  dependencies:
-    "@types/arcgis-rest-api" "^10.4.3"
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@wsdot/arcgis-rest-lrs/-/arcgis-rest-lrs-1.0.0-beta.4.tgz#8c74c71328112236aba6aafaffaaae8a75206a16"
 
 abbrev@1:
   version "1.1.1"
@@ -4024,6 +4018,10 @@ source-map@^0.5.6, source-map@^0.5.7:
 source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
+source-map@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.2.tgz#115c3e891aaa9a484869fd2b89391a225feba344"
 
 spdx-correct@^3.0.0:
   version "3.0.0"
