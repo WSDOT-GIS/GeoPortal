@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "object-literal-sort-keys": false,
         "prettier": true,
         "trailing-comma": false,
         "arrow-parens": false
