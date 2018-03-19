@@ -5,44 +5,13 @@ import EsriMap = require("esri/map");
 // import SnappingManager = require("esri/SnappingManager");
 import Draw = require("esri/toolbars/draw");
 
-const defaultLrsSvcUrl =
-  "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer/exts/LRSServer";
-const defaultLayerId = 0;
-
-/**
- * Creates a unique ID by appending numbers to the proposed ID until
- * an ID that is not already in use is found.
- * @param id Proposed ID
- */
-function generateId(id: string) {
-  let outId = id;
-  let i = 0;
-  while (document.getElementById(outId)) {
-    outId = `${id}${i}`;
-    i++;
-  }
-  return outId;
-}
-
-/**
- * Splits a camel- or Pascal-cased name into separate words.
- * @param name camel- or Pascal-cased name
- */
-function splitName(name?: string | null) {
-  if (!name) {
-    return null;
-  }
-  const re = /[A-Z]?[a-z]+/g;
-  let match = re.exec(name);
-  const parts = new Array<string>();
-  while (match) {
-    const part = match[0].toLowerCase();
-    parts.push(part);
-    match = re.exec(name);
-  }
-
-  return parts.join(" ");
-}
+import {
+  createCrabRoutesLayer,
+  defaultLayerId,
+  defaultLrsSvcUrl,
+  generateId,
+  splitName
+} from "./utils";
 
 function addToFormWithLabel(
   form: HTMLElement,
@@ -88,7 +57,7 @@ function createForm(
   return form;
 }
 
-export default class GeometryToMeasureForm {
+export class GeometryToMeasureForm {
   public readonly form: HTMLFormElement;
   public readonly draw: Draw;
   public readonly lrsClient: LrsClient;
@@ -122,11 +91,13 @@ export default class GeometryToMeasureForm {
   constructor(
     public readonly map: EsriMap,
     public readonly url: string = defaultLrsSvcUrl,
-    public readonly layerId: number = defaultLayerId
+    public readonly layerId: number = defaultLayerId,
+    public readonly routesLayer = createCrabRoutesLayer()
   ) {
     if (!map || !(map instanceof EsriMap)) {
       throw TypeError(`Invalid map: ${map}`);
     }
+    this.map.addLayers([this.routesLayer]);
     this.form = createForm(url, layerId);
     this.draw = new Draw(this.map);
     this.lrsClient = new LrsClient(url);
@@ -137,6 +108,7 @@ export default class GeometryToMeasureForm {
     this.form.addEventListener("submit", e => {
       try {
         self.draw.activate(Draw.POINT);
+        self.map.setInfoWindowOnClick(false);
       } catch (error) {
         alert("Error: Could not activate the draw toolbar.");
         // tslint:disable-next-line:no-console
@@ -147,6 +119,7 @@ export default class GeometryToMeasureForm {
 
     this.draw.on("draw-complete", async e => {
       self.draw.deactivate();
+      self.map.setInfoWindowOnClick(true);
       // Exit if there is no geometry or if the drawn geometry is not a point.
       if (!(e.geometry && e.geometry.type.match(/point/gi))) {
         return;

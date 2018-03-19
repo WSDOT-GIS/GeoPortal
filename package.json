@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/arcgis-js-api": "^3.23.0 <4",
+    "@types/arcgis-rest-api": "^10.4.3",
     "@types/dojo": "^1.9.40 <2",
     "@types/jquery": "^1.10.34",
     "@types/jqueryui": "^1.12.2",

@@ -69,6 +69,10 @@
   version "3.23.0"
   resolved "https://registry.yarnpkg.com/@types/arcgis-js-api/-/arcgis-js-api-3.23.0.tgz#89dfdca9b56ffbb69f54d593e72fc8f9c6c8a119"
 
+"@types/arcgis-rest-api@^10.4.3":
+  version "10.4.3"
+  resolved "https://registry.yarnpkg.com/@types/arcgis-rest-api/-/arcgis-rest-api-10.4.3.tgz#c64f71821dfcb08a0d1225ea18a841f1d6af4902"
+
 "@types/dojo@^1.9.40 <2":
   version "1.9.40"
   resolved "https://registry.yarnpkg.com/@types/dojo/-/dojo-1.9.40.tgz#368749557671a28aa2dd16b3d868d24f2f520f3f"

@@ -13,6 +13,7 @@ define([
   "esri/dijit/Legend",
   "esri/tasks/QueryTask",
   "esri/tasks/query",
+  "esri/layers/GraphicsLayer",
 
   "AirspaceCalculator/ArcGisUI",
   "RouteLocator/elc-ui/ArcGisElcUI",
@@ -21,7 +22,7 @@ define([
   "ArcGisPrintUI",
 
   "geoportal/extentSelect",
-  "arcgis-rest-lrs-ui/GeometryToMeasureForm",
+  "arcgis-rest-lrs-ui",
   "scripts/customLegend.js",
   "scripts/ais/faaFar77.js"
 ], function(
@@ -36,13 +37,14 @@ define([
   Legend,
   QueryTask,
   Query,
+  GraphicsLayer,
   AirspaceCalculatorArcGisUI,
   ArcGisElcUI,
   BufferUI,
   BufferUIHelper,
   ArcGisPrintUI,
   createExtentSelect,
-  GeometryToMeasureForm
+  arcgisRestLrsUI
 ) {
   function getLayerInfos() {
     var layerIds, layerInfos;
@@ -494,6 +496,8 @@ define([
     }
 
     function setupCrab() {
+      const g2mOutputToFeatures = arcgisRestLrsUI.g2mOutputToFeatures;
+      const GeometryToMeasureForm = arcgisRestLrsUI.GeometryToMeasureForm;
       const toolsAccordianDiv = document.getElementById("toolsAccordion");
       const paneDiv = document.createElement("div");
       paneDiv.id = "crabPane";
@@ -504,12 +508,30 @@ define([
       );
       toolsAccordion.addChild(contentPane);
       const crabUI = document.createElement("div");
-      on.once("show", () => {
-        crabUI.id = "drawUI";
-        window.addEventListener("mapload", e => {
-          const map = e.detail;
-          const g2mForm = new GeometryToMeasureForm.default(wsdot.map);
-          crabUI.appendChild(g2mForm.form);
+
+      crabUI.id = "drawUI";
+      window.addEventListener("mapload", e => {
+        const crabPointLayer = new GraphicsLayer({
+          id: "CRAB Points"
+        });
+
+        wsdot.map.addLayer(crabPointLayer);
+        const map = e.detail;
+        const g2mForm = new GeometryToMeasureForm(wsdot.map);
+        crabUI.appendChild(g2mForm.form);
+
+        // TODO: add graphic instead of writing to console.
+        g2mForm.form.addEventListener("geometryToMeasure", e => {
+          const result = e.detail;
+          const features = g2mOutputToFeatures(result);
+          console.log("geometry to measure", [e.detail, features]);
+          features.forEach(f => crabPointLayer.add(f));
+        });
+
+        g2mForm.form.addEventListener("geometryToMeasureError", e => {
+          const error = e.detail;
+          console.error("geometry to measure error", e.detail);
+          alert("Geometry to measure error. See console for details.");
         });
       });
 
