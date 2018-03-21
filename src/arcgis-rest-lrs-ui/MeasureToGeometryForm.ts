@@ -29,10 +29,8 @@ export class MeasureToGeometryForm {
     }
   }
 
-  constructor(public readonly url: string, public readonly layerId: number) {
+  constructor() {
     const frag = document.createDocumentFragment();
-
-    this.form.action = url;
 
     const routeIdInput = document.createElement("input");
     routeIdInput.id = generateId("m2gRouteIdInput");
@@ -93,12 +91,12 @@ export class MeasureToGeometryForm {
         ? this.temporalViewDateInput.valueAsDate
         : undefined;
       try {
-        const m2gOutput = await client.measureToGeometry(
-          this.layerId,
-          this.locations,
-          viewDate,
-          3857
-        );
+        // const m2gOutput = await client.measureToGeometry(
+        //   this.layerId,
+        //   this.locations,
+        //   viewDate,
+        //   3857
+        // );
       } catch (err) {
         const errorEvent = new CustomEvent("measureToGeometryError", {
           detail: err

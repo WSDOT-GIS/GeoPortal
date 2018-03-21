@@ -79,17 +79,6 @@ export function addToFormWithLabel(
   return label;
 }
 
-export function createCrabRoutesLayer(
-  url: string = `${defaultLrsMapServiceUrl}/0`
-) {
-  const featureLayer = new FeatureLayer(url, {
-    id: "CRAB Routes",
-    outFields: ["RouteId"]
-  });
-
-  return featureLayer;
-}
-
 /**
  * Converts output from the geometryToMeasure operation into
  * an array of Graphic objects.
@@ -107,8 +96,8 @@ export function* IterateG2MOutputToFeatures(g2mOutput: IG2MOutput) {
       const { routeId, measure, geometry, geometryType } = r;
       const attributes = { status, routeId, measure };
       const point = new Point(geometry.x, geometry.y, sr);
-      const symbol = new TextSymbol(`${routeId} @ ${format.format(measure)}`);
-      const graphic = new Graphic(point, symbol, attributes);
+      // const symbol = new TextSymbol(`${routeId} @ ${format.format(measure)}`);
+      const graphic = new Graphic({ geometry: point, attributes });
       yield graphic;
     }
   }

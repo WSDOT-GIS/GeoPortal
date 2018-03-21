@@ -7,7 +7,6 @@ import Draw = require("esri/toolbars/draw");
 
 import {
   addToFormWithLabel,
-  createCrabRoutesLayer,
   defaultLayerId,
   defaultLrsSvcUrl,
   generateId,
@@ -79,13 +78,11 @@ export class GeometryToMeasureForm {
   constructor(
     public readonly map: EsriMap,
     public readonly url: string = defaultLrsSvcUrl,
-    public readonly layerId: number = defaultLayerId,
-    public readonly routesLayer = createCrabRoutesLayer()
+    public readonly layerId: number = defaultLayerId
   ) {
     if (!map || !(map instanceof EsriMap)) {
       throw TypeError(`Invalid map: ${map}`);
     }
-    this.map.addLayers([this.routesLayer]);
     this.form = createForm(url, layerId);
     this.draw = new Draw(this.map);
     this.lrsClient = new LrsClient(url);
