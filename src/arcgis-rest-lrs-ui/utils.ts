@@ -1,5 +1,11 @@
-import { IG2MOutput } from "@wsdot/arcgis-rest-lrs";
+import { IG2MOutput, IM2GOutput } from "@wsdot/arcgis-rest-lrs";
+import {
+  Point as IRestPoint,
+  Polyline as IRestPolyline
+} from "arcgis-rest-api";
+import geometryJsonUtils = require("esri/geometry/jsonUtils");
 import Point = require("esri/geometry/Point");
+import Polyline = require("esri/geometry/Polyline");
 import Graphic = require("esri/graphic");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import SpatialReference = require("esri/SpatialReference");
@@ -46,6 +52,33 @@ export function splitName(name?: string | null) {
   return parts.join(" ");
 }
 
+export function addNamedControlsToElement(
+  root: HTMLElement | DocumentFragment,
+  elements: {
+    [name: string]: HTMLInputElement;
+  }
+) {
+  for (const name in elements) {
+    if (elements.hasOwnProperty(name)) {
+      const element = elements[name];
+      addToFormWithLabel(root, element, name);
+    }
+  }
+}
+
+export function addToFormWithLabel(
+  form: HTMLElement | DocumentFragment,
+  control: HTMLInputElement,
+  labelText?: string
+) {
+  const label = document.createElement("label");
+  label.htmlFor = control.id;
+  label.textContent = labelText || splitName(control.name);
+  form.appendChild(label);
+  form.appendChild(control);
+  return label;
+}
+
 export function createCrabRoutesLayer(
   url: string = `${defaultLrsMapServiceUrl}/0`
 ) {
@@ -62,13 +95,12 @@ export function createCrabRoutesLayer(
  * an array of Graphic objects.
  * @param g2mOutput Output from geometryToMeasure operation.
  */
-export function g2mOutputToFeatures(g2mOutput: IG2MOutput) {
+export function* IterateG2MOutputToFeatures(g2mOutput: IG2MOutput) {
   const format = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 3
   });
   const { locations, spatialReference } = g2mOutput;
   const sr = new SpatialReference(spatialReference);
-  const output = new Array<Graphic>();
   for (const loc of locations) {
     const { results, status } = loc;
     for (const r of results) {
@@ -77,8 +109,47 @@ export function g2mOutputToFeatures(g2mOutput: IG2MOutput) {
       const point = new Point(geometry.x, geometry.y, sr);
       const symbol = new TextSymbol(`${routeId} @ ${format.format(measure)}`);
       const graphic = new Graphic(point, symbol, attributes);
-      output.push(graphic);
+      yield graphic;
     }
   }
-  return output;
+}
+
+function* flattenPathsToPoints(paths: number[][][]) {
+  for (const path of paths) {
+    for (const point of path) {
+      yield point;
+    }
+  }
+}
+
+export function* m2gOutputToFeatures(m2gOutput: IM2GOutput) {
+  const { locations, spatialReference } = m2gOutput;
+
+  const sro = new SpatialReference(spatialReference);
+
+  for (const loc of locations) {
+    const { routeId, status } = loc;
+    if (loc.geometryType === "esriGeometryPoint") {
+      const { x, y, m } = loc.geometry as IRestPoint;
+      const geometry = new Point(x, y, sro);
+      const attributes = {
+        routeId,
+        status,
+        measure: m
+      };
+      yield new Graphic({ geometry, attributes });
+    } else if (loc.geometryType === "esriGeometryPolyline") {
+      const { paths, hasM } = loc.geometry as IRestPolyline;
+      const geometry = new Polyline(paths);
+      const points = flattenPathsToPoints(paths);
+
+      geometry.setSpatialReference(sro);
+    } else {
+      throw TypeError(`Unexpected geometry type: ${loc.geometryType}`);
+    }
+    // const geometry = geometryJsonUtils.fromJson(loc.geometry);
+    // const attributes = { routeId: loc.routeId, measure: loc.status };
+    // const feature = new Graphic(geometry, undefined, attributes);
+    // yield feature;
+  }
 }

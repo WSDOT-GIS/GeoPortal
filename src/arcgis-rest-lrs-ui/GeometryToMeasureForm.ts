@@ -6,25 +6,13 @@ import EsriMap = require("esri/map");
 import Draw = require("esri/toolbars/draw");
 
 import {
+  addToFormWithLabel,
   createCrabRoutesLayer,
   defaultLayerId,
   defaultLrsSvcUrl,
   generateId,
   splitName
 } from "./utils";
-
-function addToFormWithLabel(
-  form: HTMLElement,
-  control: HTMLInputElement,
-  labelText?: string
-) {
-  const label = document.createElement("label");
-  label.htmlFor = control.id;
-  label.textContent = labelText || splitName(control.name);
-  form.appendChild(label);
-  form.appendChild(control);
-  return label;
-}
 
 function createForm(
   url: string = defaultLrsSvcUrl,

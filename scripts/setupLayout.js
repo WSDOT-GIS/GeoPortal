@@ -495,49 +495,6 @@ define([
       div.appendChild(drawUI);
     }
 
-    function setupCrab() {
-      const g2mOutputToFeatures = arcgisRestLrsUI.g2mOutputToFeatures;
-      const GeometryToMeasureForm = arcgisRestLrsUI.GeometryToMeasureForm;
-      const toolsAccordianDiv = document.getElementById("toolsAccordion");
-      const paneDiv = document.createElement("div");
-      paneDiv.id = "crabPane";
-      toolsAccordianDiv.appendChild(paneDiv);
-      const contentPane = new ContentPane(
-        { title: "CRAB", id: "crabPane" },
-        paneDiv
-      );
-      toolsAccordion.addChild(contentPane);
-      const crabUI = document.createElement("div");
-
-      crabUI.id = "drawUI";
-      window.addEventListener("mapload", e => {
-        const crabPointLayer = new GraphicsLayer({
-          id: "CRAB Points"
-        });
-
-        wsdot.map.addLayer(crabPointLayer);
-        const map = e.detail;
-        const g2mForm = new GeometryToMeasureForm(wsdot.map);
-        crabUI.appendChild(g2mForm.form);
-
-        // TODO: add graphic instead of writing to console.
-        g2mForm.form.addEventListener("geometryToMeasure", e => {
-          const result = e.detail;
-          const features = g2mOutputToFeatures(result);
-          console.log("geometry to measure", [e.detail, features]);
-          features.forEach(f => crabPointLayer.add(f));
-        });
-
-        g2mForm.form.addEventListener("geometryToMeasureError", e => {
-          const error = e.detail;
-          console.error("geometry to measure error", e.detail);
-          alert("Geometry to measure error. See console for details.");
-        });
-      });
-
-      paneDiv.appendChild(crabUI);
-    }
-
     /**
      * Creates the print UI if the configuration contains a printUrl property.
      * @returns {ArcGisPrintUI} - Returns the print UI, or null if there is no printUrl property in the configuration.
@@ -606,7 +563,7 @@ define([
         } else if (/draw/i.test(tools[i])) {
           setupDraw();
         } else if (/crab/i.test(tools[i])) {
-          setupCrab();
+          arcgisRestLrsUI.setupCrab(toolsAccordion);
         }
       }
     })(wsdot.config.tools);
