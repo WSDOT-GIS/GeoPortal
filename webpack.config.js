@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   mode: "production",
   target: "web",
-  externals: /^((esri)|(dojox?)|(dijit))/,
+  externals: /^(?:(?:esri)|(?:dojox?)|(?:dijit))/,
   devtool: "source-map",
   entry: "./src/arcgis-rest-lrs-ui/main.ts",
   output: {
