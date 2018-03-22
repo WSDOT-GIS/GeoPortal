@@ -1,4 +1,4 @@
-import LrsClient from "@wsdot/arcgis-rest-lrs";
+import { LrsClient } from "@wsdot/arcgis-rest-lrs";
 // import { SnappingManagerOptions } from "esri";
 import Point = require("esri/geometry/Point");
 import EsriMap = require("esri/map");

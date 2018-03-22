@@ -1,27 +1,43 @@
-import LrsClient, {
+import {
   IG2MInputLocation,
   IM2GLineLocation,
-  IM2GPointLocation
+  IM2GPointLocation,
+  LrsClient
 } from "@wsdot/arcgis-rest-lrs";
 import EsriMap = require("esri/map");
-import { addNamedControlsToElement, generateId } from "./utils";
+import { crabRouteIdRe } from "./crabUtils";
+import {
+  addNamedControlsToElement,
+  generateId,
+  getLrsServerEndpointUrl
+} from "./utils";
 
 /**
  * Encapsulates the form used for measureToGeometry operation.
  */
 export class MeasureToGeometryForm {
-  public readonly form = document.createElement("form");
+  public readonly form: HTMLFormElement;
   public readonly routeIdInput: HTMLInputElement;
   public readonly fromMeasureInput: HTMLInputElement;
   public readonly toMeasureInput: HTMLInputElement;
   public readonly temporalViewDateInput: HTMLInputElement;
 
+  public get temporalViewDate() {
+    return this.temporalViewDateInput.value
+      ? this.temporalViewDateInput.valueAsDate
+      : undefined;
+  }
+
+  /**
+   * Gets the locations from the user's input.
+   */
   public get locations(): Array<IM2GPointLocation | IM2GLineLocation> {
     const routeId = this.routeIdInput.value;
     const fromMeasure = this.fromMeasureInput.valueAsNumber;
     const toMeasure = this.toMeasureInput.value
       ? this.toMeasureInput.valueAsNumber
       : null;
+
     if (toMeasure === null) {
       return [{ routeId, measure: fromMeasure }];
     } else {
@@ -29,13 +45,29 @@ export class MeasureToGeometryForm {
     }
   }
 
-  constructor() {
+  /**
+   *
+   * @param mapServiceUrl measureToGeometry endpoint
+   * @param layerId Layer ID
+   * @example https://data.example.com/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer/"
+   * @throws Error is thrown if operationUrl is invalidly formatted.
+   */
+  constructor(public mapServiceUrl: string, public layerId: number) {
+    this.form = document.createElement("form");
+    this.form.classList.add("measure-to-geometry-form");
+    this.form.action = getLrsServerEndpointUrl(
+      mapServiceUrl,
+      layerId,
+      "measureToGeometry"
+    );
+
     const frag = document.createDocumentFragment();
 
     const routeIdInput = document.createElement("input");
     routeIdInput.id = generateId("m2gRouteIdInput");
     routeIdInput.name = "routeId";
     routeIdInput.required = true;
+    routeIdInput.pattern = crabRouteIdRe.source;
 
     const fromMeasureInput = document.createElement("input");
     fromMeasureInput.id = generateId("m2gFromMeasureInput");
@@ -85,26 +117,24 @@ export class MeasureToGeometryForm {
 
     // Setup form submit event.
 
-    this.form.addEventListener("submit", async ev => {
+    this.form.addEventListener("submit", ev => {
+      const form = ev.target;
       const client = new LrsClient(this.form.action);
       const viewDate = this.temporalViewDateInput.value
         ? this.temporalViewDateInput.valueAsDate
         : undefined;
-      try {
-        // const m2gOutput = await client.measureToGeometry(
-        //   this.layerId,
-        //   this.locations,
-        //   viewDate,
-        //   3857
-        // );
-      } catch (err) {
-        const errorEvent = new CustomEvent("measureToGeometryError", {
-          detail: err
-        });
-        this.form.dispatchEvent(errorEvent);
-      }
+      const promise = client.measureToGeometry(
+        this.layerId,
+        this.locations,
+        viewDate,
+        3857
+      );
+      const customEvt = new CustomEvent("m2gsubmit", {
+        detail: promise
+      });
+      form.dispatchEvent(customEvt);
 
-      ev.stopImmediatePropagation();
+      ev.preventDefault();
     });
   }
 }

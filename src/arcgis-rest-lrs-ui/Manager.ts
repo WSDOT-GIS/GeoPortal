@@ -1,12 +1,11 @@
-import { IG2MOutput } from "@wsdot/arcgis-rest-lrs";
+import { IG2MOutput, IM2GOutput } from "@wsdot/arcgis-rest-lrs";
 import ContentPane = require("dijit/layout/ContentPane");
-import Color = require("esri/Color");
-import PopupTemplate = require("esri/dijit/PopupTemplate");
-import FeatureLayer = require("esri/layers/FeatureLayer");
+import Graphic = require("esri/graphic");
+import ArcGISDynamicMapServiceLayer = require("esri/layers/ArcGISDynamicMapServiceLayer");
 import EsriMap = require("esri/map");
-import SimpleRenderer = require("esri/renderers/SimpleRenderer");
-import SimpleMarkerSymbol = require("esri/symbols/SimpleMarkerSymbol");
+
 import { GeometryToMeasureForm } from "./GeometryToMeasureForm";
+import { crabLinesLayer, crabPointsLayer } from "./layers";
 import { MeasureToGeometryForm } from "./MeasureToGeometryForm";
 import {
   defaultLayerId,
@@ -15,18 +14,11 @@ import {
   m2gOutputToFeatures
 } from "./utils";
 
-export function createCrabRoutesLayer(
-  url: string = `${defaultLrsMapServiceUrl}/${defaultLayerId}`
+export function setupCrab(
+  toolsAccordion: any,
+  serviceUrl: string = defaultLrsMapServiceUrl,
+  layerId: number = defaultLayerId
 ) {
-  const featureLayer = new FeatureLayer(url, {
-    id: "CRAB Routes",
-    outFields: ["RouteId"]
-  });
-
-  return featureLayer;
-}
-
-export function setupCrab(toolsAccordion: any) {
   const toolsAccordianDiv = document.getElementById("toolsAccordion");
   if (!toolsAccordianDiv) {
     throw Error("#toolsAccordion element not found.");
@@ -48,44 +40,9 @@ export function setupCrab(toolsAccordion: any) {
     // Get the map object from the event.
     const map = (e as any).detail as EsriMap;
 
-    const crabRoutesLayer = createCrabRoutesLayer();
-
-    const pointSymbol = new SimpleMarkerSymbol();
-    pointSymbol.setColor(new Color("red"));
-    const pointRenderer = new SimpleRenderer(pointSymbol);
-    const layerDefinition = {
-      geometryType: "esriGeometryPoint",
-      fields: [
-        {
-          name: "measure",
-          type: "esriFieldTypeDouble"
-        },
-        {
-          name: "routeId",
-          type: "esriFieldTypeString"
-        }
-      ]
-    };
-
-    // Create the layer for located points and add to map.
-    const crabPointsLayer = new FeatureLayer(
-      {
-        layerDefinition,
-        featureSet: null
-      },
-      {
-        id: "CRAB Points"
-      }
+    const crabRoutesLayer = new ArcGISDynamicMapServiceLayer(
+      defaultLrsMapServiceUrl
     );
-    crabPointsLayer.setRenderer(pointRenderer);
-
-    const pointsPopupTemplate = new PopupTemplate({
-      title: "{measure} @ {routeId}",
-      description:
-        "<dl><dt>Route ID</dt><dd>{routeId}</dd><dt>Measure</dt><dd>{measure}</dd></dl>"
-    });
-
-    crabPointsLayer.setInfoTemplate(pointsPopupTemplate);
 
     map.addLayers([crabRoutesLayer, crabPointsLayer]);
 
@@ -115,7 +72,33 @@ export function setupCrab(toolsAccordion: any) {
     });
 
     // Add Measure to Geometry form.
-    const m2gForm = new MeasureToGeometryForm();
+    const m2gForm = new MeasureToGeometryForm(serviceUrl, layerId);
+
+    crabUI.appendChild(m2gForm.form);
+    m2gForm.form.addEventListener("m2gsubmit", async evt => {
+      const promise = (evt as CustomEvent<Promise<IM2GOutput>>).detail;
+      let output: IM2GOutput;
+      try {
+        output = await promise;
+      } catch (err) {
+        console.error("measureToGeometry", err);
+        return;
+      }
+      const iterator = m2gOutputToFeatures(output);
+
+      let current = iterator.next();
+
+      while (!current.done) {
+        const graphic = current.value;
+        if (/Point$/i.test(graphic.geometry.type)) {
+          crabPointsLayer.add(graphic);
+        } else {
+          crabLinesLayer.add(graphic);
+        }
+
+        current = iterator.next();
+      }
+    });
   });
 
   paneDiv.appendChild(crabUI);

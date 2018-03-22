@@ -87,9 +87,9 @@
   dependencies:
     "@types/jquery" "*"
 
-"@wsdot/arcgis-rest-lrs@^1.0.0-beta.3":
-  version "1.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@wsdot/arcgis-rest-lrs/-/arcgis-rest-lrs-1.0.0-beta.4.tgz#8c74c71328112236aba6aafaffaaae8a75206a16"
+"@wsdot/arcgis-rest-lrs@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@wsdot/arcgis-rest-lrs/-/arcgis-rest-lrs-1.0.0-rc.1.tgz#aa56f444af053419867438d1e359fbf12537866e"
 
 abbrev@1:
   version "1.1.1"
@@ -4340,7 +4340,7 @@ ts-loader@^4.1.0:
     micromatch "^3.1.4"
     semver "^5.0.1"
 
-tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1:
+tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
 

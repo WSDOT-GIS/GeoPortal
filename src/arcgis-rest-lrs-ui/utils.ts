@@ -10,12 +10,34 @@ import Graphic = require("esri/graphic");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import SpatialReference = require("esri/SpatialReference");
 import TextSymbol = require("esri/symbols/TextSymbol");
+import CountyLookup from "./CountyLookup";
+import { parseCrabRouteId } from "./crabUtils";
 
 export const defaultLrsMapServiceUrl =
   "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer";
 
 export const defaultLrsSvcUrl = `${defaultLrsMapServiceUrl}/exts/LRSServer`;
 export const defaultLayerId = 0;
+
+/**
+ *
+ * @param mapServiceUrl URL to map service or feature service
+ * @param layerId Layer ID
+ * @param endpointName The name of the operation. E.g., "measureToGeometry".
+ * @throws Error Throws an error if the mapServiceUrl is not in the correct format.
+ */
+export function getLrsServerEndpointUrl(
+  mapServiceUrl: string,
+  layerId: number,
+  endpointName: "geometryToMeasure" | "measureToGeometry" | string
+) {
+  const urlRe = /^(?:https?:)?\/\/.+\/(Map|Feature)Server\b/i;
+  const match = mapServiceUrl.match(urlRe);
+  if (!match) {
+    throw Error(`URL is not in expected format: "${mapServiceUrl}".`);
+  }
+  return `${mapServiceUrl}/exts/LRSServer/${layerId}/${endpointName}`;
+}
 
 /**
  * Creates a unique ID by appending numbers to the proposed ID until
@@ -103,13 +125,34 @@ export function* IterateG2MOutputToFeatures(g2mOutput: IG2MOutput) {
   }
 }
 
+// export type PointCoords =
+//   | [number, number, number | null, number | null]
+//   | [number, number, number | null]
+//   | [number, number];
+
 function* flattenPathsToPoints(paths: number[][][]) {
   for (const path of paths) {
     for (const point of path) {
-      yield point;
+      const [x, y] = point;
+      const z = point.length > 2 ? point[2] : null;
+      const m = point.length > 3 ? point[3] : null;
+      yield { x, y, z, m };
     }
   }
 }
+
+// function getStartAndEndMeasures(paths: number[][][]) {
+//   const iterator = flattenPathsToPoints(paths);
+//   const array = new Array<number>();
+//   let current = iterator.next();
+//   while (!current.done) {
+//     if (current.value && current.value.m != null) {
+//       array.push(current.value.m as number);
+//     }
+//     current = iterator.next();
+//   }
+//   return [array[0], array[array.length - 1]];
+// }
 
 export function* m2gOutputToFeatures(m2gOutput: IM2GOutput) {
   const { locations, spatialReference } = m2gOutput;
@@ -118,27 +161,35 @@ export function* m2gOutputToFeatures(m2gOutput: IM2GOutput) {
 
   for (const loc of locations) {
     const { routeId, status } = loc;
+    const { countyFipsCode, direction, roadNumber } = parseCrabRouteId(routeId);
+    const county = CountyLookup.get(countyFipsCode);
     if (loc.geometryType === "esriGeometryPoint") {
       const { x, y, m } = loc.geometry as IRestPoint;
       const geometry = new Point(x, y, sro);
       const attributes = {
         routeId,
         status,
+        county,
+        direction,
+        roadNumber,
         measure: m
       };
       yield new Graphic({ geometry, attributes });
-    } else if (loc.geometryType === "esriGeometryPolyline") {
-      const { paths, hasM } = loc.geometry as IRestPolyline;
-      const geometry = new Polyline(paths);
-      const points = flattenPathsToPoints(paths);
-
-      geometry.setSpatialReference(sro);
     } else {
-      throw TypeError(`Unexpected geometry type: ${loc.geometryType}`);
+      const { paths, hasM } = loc.geometry as IRestPolyline;
+      const geometry = geometryJsonUtils.fromJson(loc.geometry);
+      geometry.setSpatialReference(sro);
+      // const measures = getStartAndEndMeasures(paths);
+      const attributes = {
+        routeId,
+        status,
+        county,
+        direction,
+        roadNumber
+        // beginMeasure: measures && measures.length > 0 ? measures[0] : null,
+        // endMeasure: measures && measures.length > 1 ? measures[1] : null
+      };
+      yield new Graphic({ geometry, attributes });
     }
-    // const geometry = geometryJsonUtils.fromJson(loc.geometry);
-    // const attributes = { routeId: loc.routeId, measure: loc.status };
-    // const feature = new Graphic(geometry, undefined, attributes);
-    // yield feature;
   }
 }
