@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Milepost locator help</title>
+</head>
+<body>
+    <h2>Milepost tools</h2>
+    <div id="milepostToolsHelpTabs">
+        <ul>
+            <li><a href="#findMilepostHelp">Find Milepost</a></li>
+            <li><a href="#findNearestMilepostHelp">Find Nearest Milepost</a></li>
+        </ul>
+        <div id="findMilepostHelp">
+            <h3>Find Milepost</h3>
+            <p>This tool can be used to locate a specific state route and milepost combination.</p>
+            <ol>
+                <li>Enter a Washington State Route Identifier.  (Route numbers are always three digits.  E.g., State route 5 should be entered as "005".)</li>
+                <li>Specify whether this location lies on the increasing or decreasing side of the route.</li>
+                <li>Select the milepost type: <abbr title="Accumulated Route Mileage">ARM</abbr> or <abbr title="State Route Milepost">SRMP</abbr>.</li>
+                <li>Enter a value into the <em>Milepost</em> box.</li>
+                <li>If you have specified SRMP, check the <em>Back</em> checkbox if you are using back mileage, or uncheck it if you are not.</li>
+                <li>Select a Reference Date.</li>
+                <li>Click the <em>Find Milepost</em> button.</li>
+            </ol>
+        </div>
+        <div id="findNearestMilepostHelp">
+            <h3>Find Nearest Milepost</h3>
+            <p>This tool will find the nearest point on a state route to a mouse click.</p>
+            <ol>
+                <li>Enter a search radius into the <em>Radius</em> box.</li>
+                <li>Click the <em>Find</em> button.</li>
+            </ol>
+        </div>
+    </div>
+    <script type="text/javascript">
+        // Setup the jQuery tabs if jQuery has been loaded.
+        if (typeof(jQuery) !== "undefined") {
+            (function ($) {
+                if ($ && $.fn && $.fn.tabs) {
+                    $("#milepostToolsHelpTabs").tabs();
+                }
+            } (jQuery))
+        }
+    </script>
+</body>
+</html>
