@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" src="../node_modules/jasmine-core/images/jasmine_favicon.png" />
+    <link href="../node_modules/jasmine-core/lib/jasmine-core/jasmine.css" rel="stylesheet" />
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+</head>
+<body>
+    <script>
+        var dojoConfig = (function (root) {
+            return {
+                packages: [
+                    {
+                        name: "MetadataClient",
+                        location: root,
+                        main: "MetadataClient"
+                    }
+                ]
+            };
+        }(location.href.replace(/\/spec\/[^\/]+/i, "")));
+    </script>
+    <script src="//js.arcgis.com/3.16/init.js" integrity="sha384-2s5+rUZ76AotlHFbaNYRLAgIXMo10+lUZ4ivztOmQXk3CnL3htLDzG62hiYb0dS0" crossorigin="anonymous"></script>
+    <script src="jasmineMetadataExtensions.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="//js.arcgis.com/3.15/esri/css/esri.css" rel="stylesheet" />
+    <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="../../elc-ui/elc-ui-behavior.css" rel="stylesheet" />
+    <link href="Style/index.css" rel="stylesheet" />
+    <script src="../../bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
+    <script src="../../bower_components/es6-shim/es6-shim.js"></script>
+    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="flexcontainer">
+        <div id="map"></div>
+        <div id="elcUI"></div>
+    </div>
+    <div id="modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <script>
+        (function (root) {
+            var dojoConfig = {
+                async: true,
+                packages: [
+                    {
+                        name: "RouteLocator",
+                        location: root + "../../..",
+                        main: "RouteLocator"
+                    },
+                ]
+            };
+            window.dojoConfig = dojoConfig;
+        }(location.href.replace(/\?.+$/i, "").replace(/\/[^\/]*$/, "")));
+    </script>
+    <script src="//js.arcgis.com/3.15/init.js" integrity="sha384-q6MfUBWGKtML65ieXFuzf+nX2/ylnvnDgiFPgIMFfpYduqJ4T6twwq3vqhMu29Mt" crossorigin="anonymous"></script>
+    <script src="Script/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+@import "elc-ui-behavior.css";
+
+.elc-ui-root .flex-row {
+    width: 100%;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.elc-ui-root .flex-row > input {
+    flex-grow: 1;
+}
+
+
+.elc-ui-root .button-group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.5em;
+}
+
+.elc-ui-root .button-group > button {
+    flex-grow: 1;
+    padding-top: 0.5em;
+}
+
+.elc-ui-root .button-group > button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.elc-ui-root .button-group > button:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.elc-ui-root .radio-group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.elc-ui-root .radio-group  > :first-child {
+    flex-grow: 1;
+}
+
+.elc-ui-root button[type=submit] {
+    background-color: green;
+    color: white;
+}
+
+.elc-ui-root button[type=reset] {
+    background-color: red;
+    color: white;
+}
+
+.elc-ui-root input[type=date] {
+    width: 100%;
+}
+
+.elc-ui-root section {
+    border: 1px solid gray;
+    padding: 0.3em 1em 1em 1em;
+    margin: 1em 0.2em;
+}
+
+.elc-ui-root section > h1 {
+    font-size: 12pt;
+    text-align: center;
+}
+
+.elc-ui-root button[type=submit]:hover {
+    background-color: darkgreen;
+}
+
+.elc-ui-root button[type=reset]:hover {
+    background-color: darkred;
+}
+
+.elc-ui-root button:only-of-type {
+    padding: 0.3em 0.5em;
+}
+
+.elc-ui-root button:only-of-type, .find-nearest-route-location-section input {
+    width: 100%;
+}
+
+.route-selector {
+    flex-flow: row wrap;
+}
+
+.route-selector > input:first-child {
+    flex: 1;
+}
+
+.route-selector > :nth-child(2) {
+    flex: 3;
+}
+
+.route-selector > :last-child {
+    flex: 2;
+}
