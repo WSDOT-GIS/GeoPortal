@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -28,7 +29,8 @@
     <link href="style/layerSorter.css" rel="stylesheet" />
     <link href="node_modules/@bower_components/elc/elc-ui/elc-ui.css" rel="stylesheet" />
     <link href="node_modules/@bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
-    <link href="node_modules/@bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w="
+        crossorigin="anonymous" />
     <link href="node_modules/@bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
 
     <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
@@ -59,6 +61,7 @@
     </script>
 
 </head>
+
 <body class="claro">
     <noscript>
         You need to have JavaScript enabled on your browser to view this page.
@@ -68,14 +71,26 @@
             <div class="table">
                 <div class="topNav">
                     <!-- row -->
-                    <div><!-- blank --></div>
+                    <div>
+                        <!-- blank -->
+                    </div>
                     <div>
                         <ul>
-                            <li><a href="//www.wsdot.wa.gov/news/" target="_blank">News</a></li>
-                            <li><a href="//www.wsdot.wa.gov/employment/" target="_blank">Employment</a></li>
-                            <li><a href="//www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a></li>
-                            <li><a href="//www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a></li>
-                            <li><a href="//www.wsdot.wa.gov/" target="_blank">WSDOT Home</a></li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/news/" target="_blank">News</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/employment/" target="_blank">Employment</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/" target="_blank">WSDOT Home</a>
+                            </li>
                             <li>
                                 <form id="otherGeoportalsForm" action="">
                                     <label>Other GeoPortals</label>
@@ -97,8 +112,13 @@
                 </div>
                 <div>
                     <!-- row -->
-                    <span class="wsdot-link"><a href="//www.wsdot.wa.gov/" target="_blank"><img id="wsdotLogo" src="images/acronymlogo.svg" alt="WSDOT Logo" width="240" height="39" /></a></span>
-                    <span class="page-title"><abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
+                    <span class="wsdot-link">
+                        <a href="//www.wsdot.wa.gov/" target="_blank">
+                            <img id="wsdotLogo" src="images/acronymlogo.svg" alt="WSDOT Logo" width="240" height="39" />
+                        </a>
+                    </span>
+                    <span class="page-title">
+                        <abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
                 </div>
             </div>
         </header>
@@ -222,9 +242,13 @@
             window.dojoConfig = dojoConfig;
         }(location.pathname.replace(/\/[^\/]*$/, "")));
     </script>
-    <script src="https://js.arcgis.com/3.23/init.js" integrity="sha384-QUGOO+2tHNKvwiXmNxaAzPzil0WHtRgz63LF0xFQ7yhF9HK2lFTjFWhwWukyVZzA" crossorigin="anonymous"></script>
-    <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4" crossorigin="anonymous"></script>
-    <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd" crossorigin="anonymous"></script>
+    <script src="https://js.arcgis.com/3.23/init.js" integrity="sha384-QUGOO+2tHNKvwiXmNxaAzPzil0WHtRgz63LF0xFQ7yhF9HK2lFTjFWhwWukyVZzA"
+        crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
+        crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd"
+        crossorigin="anonymous"></script>
     <script src="scripts/index.js"></script>
 </body>
+
 </html>
