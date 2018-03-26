@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="//js.arcgis.com/3.14/esri/css/esri.css" rel="stylesheet" />
+    <link href="../GeolocateButton.css" rel="stylesheet" />
+    <link href="index.css" rel="stylesheet" />
+    <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+    <div id="map">
+        <div id="locationButtons">
+            <div id="homeButton"></div>
+            <button type="button" title="Geolocate" class="geolocate" id="geolocateButton"></button>
+        </div>
+    </div>
+    <script>
+       (function () {
+            var root = location.pathname.replace(/\/[^\/]*$/, "");
+            var dojoConfig = {
+                async: true,
+                packages: [{
+                    name: "GeolocateButton",
+                    location: root + "/..",
+                    main: "GeolocateButton"
+                }]
+            };
+            window.dojoConfig = dojoConfig;
+        }());
+    </script>
+    <script src="//js.arcgis.com/3.14/"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

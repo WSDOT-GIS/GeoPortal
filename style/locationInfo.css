@@ -1,0 +1,7 @@
+.iconLine, .iconPoint, .iconPolygon {
+   background: url(../images/locationInfo/sprites.png) no-repeat top left;
+}
+
+.iconLine{ background-position: 0 0; width: 32px; height: 32px; } 
+.iconPoint{ background-position: -37px 0; width: 32px; height: 32px; } 
+.iconPolygon{ background-position: -74px 0; width: 32px; height: 32px; } 

@@ -1,0 +1,36 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#map, #mapContainer {
+    height: 100%;
+}
+
+#flexcontainer {
+    height: 100%;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+}
+
+    #flexcontainer > div:first-child {
+        /*flex-grow: 1;*/
+        -ms-flex: 3;
+        flex: 3;
+    }
+
+    #flexcontainer > div:nth-child(2) {
+        padding: 0 1em 1em 1em;
+        -ms-flex: 1;
+        flex: 1;
+        overflow: auto;
+    }

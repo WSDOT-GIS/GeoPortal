@@ -1,0 +1,629 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: white;
+  color: #525252;
+  font-size: 10pt;
+}
+
+html,
+body,
+.ui-widget {
+  font-family: "Segoe UI", Verdana, "Arial", Helvetica, sans-serif;
+}
+
+.page-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18pt;
+  font-weight: 900;
+  display: inline;
+}
+
+#headerPane > div.table {
+  width: 100%;
+}
+
+div.table div,
+div.table ul,
+div.table a,
+div.table span,
+div.table img {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+}
+
+div.table {
+  display: table;
+}
+
+div.table > div {
+  display: table-row;
+}
+
+div.table > div > div,
+div.table > div > span {
+  display: table-cell;
+}
+
+div.table > div > div > h1,
+div.table > div > span > h1 {
+  text-align: center;
+}
+
+.ui-tabs-nav {
+  font-family: "Segoe Condensed", "Arial Narrow";
+}
+
+.topNav > div > ul > li > form {
+  display: inline-block;
+}
+
+#headerPane {
+  padding: 0;
+}
+
+#mainContainer {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#mapContentPane {
+  border: 1px solid #000;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+#mapControlsPane {
+  width: 500px;
+}
+
+#northArrow {
+  position: absolute;
+  bottom: 40px;
+  left: 20px;
+  z-index: 10;
+  width: 43px;
+  height: 52px;
+}
+
+#toolbar {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  z-index: 10;
+}
+
+#toolbar > div,
+#toolbar > span,
+#toolbar > ol {
+  margin: 0;
+}
+
+#toolbar .esriPrint,
+#printButton {
+  display: inline;
+}
+
+#linkTextBox {
+  width: 100%;
+}
+
+#wsdotLogo {
+  vertical-align: middle;
+  padding: 9.6px;
+}
+
+.topNav {
+  color: #ffffff;
+  background-color: #017359;
+  /* padding-right: 50px */
+}
+
+.topNav ul {
+  text-align: right;
+  padding: 0;
+  margin-top: 0;
+  font-size: 10px;
+}
+
+.topNav li {
+  border-left-width: 1px;
+  border-left-style: dotted;
+  border-left-color: #ffffff;
+  padding: 0 5px 0 5px;
+  display: inline;
+}
+
+.topNav li:first-child {
+  border: none;
+}
+
+.topNav a {
+  color: White;
+  text-decoration: none;
+}
+
+.topNav a:hover {
+  text-decoration: underline;
+}
+
+h3,
+h4 {
+  color: inherit; /* This is to support jQueryUI theming. */
+  font-weight: bold;
+  font-size: inherit;
+}
+
+#zoomInstructions li {
+  font-size: 10pt;
+  font-family: "Arial Narrow", Sans-Serif;
+}
+
+#zoomInstructions ul > li {
+  list-style-type: circle;
+}
+
+#zoomControls label {
+  font-family: "Arial Narrow", Sans-Serif;
+}
+
+.zoomfullextIcon,
+.zoomprevIcon,
+.zoomnextIcon,
+.helpIcon,
+.linkIcon,
+.exportIcon,
+.starIcon,
+.sortIcon {
+  background: url("data:image/png;base64,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")
+    /*../images/navigation/sprites.png*/ no-repeat top left;
+}
+
+.helpIcon {
+  background-position: 0 0;
+  width: 16px;
+  height: 16px;
+}
+
+.linkIcon {
+  background-position: -21px 0;
+  width: 18px;
+  height: 7px;
+}
+
+.zoomfullextIcon {
+  background-position: -44px 0;
+  width: 16px;
+  height: 16px;
+}
+
+.zoomnextIcon {
+  background-position: -65px 0;
+  width: 16px;
+  height: 16px;
+}
+
+.zoomprevIcon {
+  background-position: -86px 0;
+  width: 16px;
+  height: 16px;
+}
+
+.exportIcon {
+  background-position: -107px 0;
+  width: 16px;
+  height: 16px;
+}
+
+.starIcon {
+  background-position: -128px 0;
+  width: 16px;
+  height: 16px;
+}
+
+.sortIcon {
+  background-position: -149px 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* Ruler icon on measure button*/
+#measureButton:nth-child(1) {
+  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Symbola";
+  color: darkgoldenrod;
+}
+
+#scaleText {
+  position: absolute;
+  bottom: 1em;
+  left: 25px;
+  z-index: 10;
+  color: #666666;
+  font-size: 11px;
+  font-weight: bolder;
+  text-shadow: 0 0 20px #ffffff;
+}
+
+/* Change the background color of alternating rows */
+.alternate-row {
+  background-color: #eeeeee;
+  color: #525252;
+}
+
+img[src="images/ajax-loader.gif"] {
+  width: 16px;
+  height: 16px;
+}
+
+.distanceIcon:before {
+  content: "\1F4CF";
+  color: darkgoldenrod;
+  font-family: "Segoe UI Symbol", "Segoe Marker", Symbol;
+  font-size: 12pt;
+}
+
+.dijitIconBusy {
+  background-position: 0 0;
+  background-image: url("data:image/gif;base64,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")
+    /*../images/ajax-loader.gif*/;
+  height: 16px;
+  width: 16px;
+}
+
+img[src="blank.gif"] {
+  width: 1px;
+  height: 1px;
+}
+
+.hidden {
+  display: none;
+}
+
+#map_infowindow table {
+  border: 1px solid #525252;
+  border-collapse: collapse;
+}
+
+#map_infowindow table td {
+  border: 1px solid #525252;
+}
+
+.ui-esri-layer-list h3 {
+  font-size: 10pt;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.ui-widget-content table {
+  border: 1px solid #525252;
+  font-size: 10pt;
+}
+
+.ui-widget-content td,
+.ui-widget-content th {
+  border: 1px solid #525252;
+}
+
+.ui-esri-layer-list .ui-widget-content table,
+.ui-esri-layer-list .ui-widget-content td {
+  border: none;
+}
+
+.metadata-list:before {
+  content: "Metadata: ";
+}
+
+.metadata-list {
+  display: block;
+  padding: 0;
+  margin: 0;
+  margin-left: 20px;
+}
+
+.metadata-list li {
+  display: inline;
+}
+
+.metadata-list li:before {
+  content: ", ";
+}
+
+.metadata-list li:first-of-type:before {
+  content: "";
+}
+
+.loading-bar {
+  width: 220px;
+  height: 19px;
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  z-index: 100;
+}
+
+.map:not([data-updating]) .loading-bar {
+  display: none;
+}
+
+#measureWidgetContainer {
+  width: 250px;
+  position: absolute;
+  top: 100px;
+  right: 5px;
+}
+
+.disclaimer a,
+a.disclaimer {
+  text-decoration: underline;
+}
+
+.esriAttributionItem,
+.esriAttributionLastItem {
+  background-color: White;
+  background-color: RGBA(255, 255, 255, 0.7);
+}
+
+#zoomControls .tool-header {
+  text-decoration: underline;
+  margin-bottom: 0.1em;
+}
+
+#zoomToXY {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
+}
+
+#zoomToXY input[type="number"] {
+  width: 90%;
+}
+
+#zoomToXY button {
+  vertical-align: top;
+}
+
+#zoomToXY label {
+  padding-right: 0.5em;
+}
+
+#airspaceCalculator label.error {
+  font-size: 0.7em;
+  color: Red;
+  display: block;
+}
+
+#airspaceCalculator input.error {
+  border-color: Red;
+}
+
+.placeholder {
+  color: #aaa;
+}
+
+abbr {
+  text-decoration: underline;
+}
+
+.tabLabel,
+.ui-tabs-nav {
+  font-family: "Segoe Condensed", "Arial Narrow", "Nimbus Sans", "Lucida Sans",
+    sans-serif;
+}
+
+.tabLabel {
+  font-size: 0.8em;
+}
+
+.ui-disclaimer {
+  font-size: 0.5em;
+}
+
+.ui-faa-far-77 label {
+  display: block;
+}
+
+.ui-printer-layout-options > input,
+.ui-printer-extra-parameters > input,
+.ui-printer-extra-parameters > select {
+  display: block;
+  width: 100%;
+}
+
+.airport-disclaimer {
+  font-family: Century Gothic, sans-serif;
+  font-size: 12pt;
+}
+
+.airport-disclaimer .important,
+.airport-disclaimer h1 {
+  text-align: center;
+}
+
+.airport-disclaimer em {
+  font-style: normal;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.airport-disclaimer h1 {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.airport-disclaimer .important {
+  font-family: Arial, sans-serif;
+  font-family: 14pt;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+#locationButtons {
+  position: absolute;
+  top: 95px;
+  left: 20px;
+  z-index: 1;
+}
+
+.wdfw-photos-link-container {
+  text-align: center;
+  font-size: 2em;
+}
+
+.wdfw-photos-link:before,
+.u-email:before,
+.p-tel:before {
+  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "LastResort", "Symbola";
+  font-size: 1em;
+}
+
+/* Put a camera icon before the link. */
+.wdfw-photos-link:before {
+  content: "\1F3A5";
+}
+
+.u-email:before {
+  content: "\2709";
+}
+
+.p-tel:before {
+  content: "\260E";
+}
+
+.printouts-list {
+  background-color: white;
+  padding: 0.5em 1em 0.5em 2em;
+  border-radius: 0 0 10px 10px;
+}
+
+.printouts-list:empty {
+  display: none;
+}
+
+.symbol {
+  font-family: "Symbola", "Segoe UI Symbol", "Segoe UI Emoji";
+}
+
+.fc-info {
+  border: 1px solid darkblue;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  color: darkblue;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+/* Add background for blank map where tiles are not present*/
+.map[data-zoom="18"] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom="19"] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom="20"] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom="21"] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom="22"] > .esriMapContainer > .esriMapContainer > .esriMapLayers,
+.map[data-zoom="23"] > .esriMapContainer > .esriMapContainer > .esriMapLayers {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNCSVQI5gpbmQAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAO+SURBVFjDvZdZEqIwEIa5/9EIQRAUBNlBtktM7E5IGoKONVWTJ5X40f33ljjrPy7n7MHSFWkU+J7nB1FadMtvgKmImEsWi4vprwFtvPu3YrR/BahD93SFzVfAK9q9dmdM9PoIWHK9n8d5N85vQYY6u+rf8w+ASb8+bsbSWNNcbs+i6QwwcGV3Nq3jxbT8Mgrv7tIMf7ADOk/tFoZPF+r75f3aUVrBexug026K57d9AG4YIjSS9UfA4BnRWutjCCvYNmKQ+bAHTBKd4ebgCOCo3RKjDhMFLJFyDp7z0pJFsdyaYCwoIIcfPWHYCFJktnSsVtOGpwkYUMB6GMcRnbCI4PKmhdUh/WUA0IECPC9AjVtyXhFu42mXAICvu91RngLt9c4BPkrUbAAwiVfy8QO+BvkHE9IIoy0BLTrgq0RGgwrIRc6traEB0VoJAFXDh066BEMZ5oPoZMvwPIYkTpQKAjCxvc8V/JIaPeqAaMCQGQAgmm+6jP4zo+iWxw6QgAoFAODjk1Qf6hGZdV/scqKQOwQAPaCPKx0ntXY2gJtsEYAOjKbJH2Bt+KTdUR3KEAvfQdtSCuhkcpP+11JAhiI4awpfCeAqtsPPHml/VwKoMFIOatgTgBB3nSGD7ibgSQA9quisUEETAQxa9t5sugQwgVgCABFbTQBD0YIt35WMBLCgzM7qwV9MADdFqwyCWRclhJ8LAD8DYI34xmD3rABwYSEayP+8sLtpF5jVhTMRVfKx0S7iqEQEQwcCkP1ShvJmLQcdRsiYmgA26UsSSpLLmHqpSuWMpvJ2FAnQTlg9TeW7SmUopisFhEr6TipuKaZAFRNoy2g5uw9lAgxZ/j5nZLtydlU5o4rlrosXEoCD6nFoKEGmGwr2lv0geUgvYCN77d7vPn3d0ma2dUnyDlRy8XUX1ssDzdhktPUkPvTuK7T1yjao8kBlyBvQGLPiMFB5ZhlUsgO2ZLRFqX2MyUH1NM8ceNLZRhua4Ja+nYBDlxuBzmKdbsZ495qTUYr+p9tBMS6MMwoCXph/XWtdAw6q7XvJjCp1zH4Zn90KyKCS58GcntLQvuSEgM7V+JnZDlnr5H+0QQ+qAv/vz4eDJnbMcLQC1KCa7+7JQVOUO6K92krAQVXLSNuOuoIgu3b8st2izJZuP2wLOxU/sSCMcj477ovXbAUVVTP9/6hrIZo/3Jn0NhZmVQ9bp65K9PmF5V8uXfGXS9f49drXfLj2XZv/cfGEkXS8+kY/XH2xF/bi8h36nPuhuHz3P16+f1h/AEK5j0HCcSIyAAAAAElFTkSuQmCC")
+    /*../images/no-image.png*/;
+  background-repeat: repeat;
+}
+
+table.habitat-connectivity,
+table.traffic {
+  border-collapse: collapse;
+}
+
+table.habitat-connectivity tr:nth-child(even),
+table.traffic tr:nth-child(even) {
+  background-color: #ccc;
+}
+
+.null {
+  text-align: left;
+  font-style: italic;
+}
+
+.null:after {
+  content: "N/A";
+}
+
+.derived:after {
+  content: "*";
+}
+
+table.traffic tr > th:first-child {
+  text-align: left;
+}
+
+table.traffic td.percent:after {
+  content: "%";
+}
+
+.attachment-link-list {
+  list-style: none;
+  text-align: left;
+  padding: 0;
+  padding-left: 0.3em;
+}
+
+.attachment-link-list .image-link-item {
+  display: none;
+}
+
+.buffer-options-list {
+  list-style: none;
+  padding: 0;
+  margin: auto;
+}
+
+.geometry-list:empty:after {
+  content: 'Select a geometry on the map, then click the "Buffer" link in the info window.';
+  width: 100px;
+  font-style: oblique;
+  color: #bb0707;
+}
+
+.buffer-ui label + input,
+.buffer-ui label + select {
+  display: block;
+}
+
+.buffer-ui button[type="submit"] {
+  width: 100%;
+  padding: 1em;
+}
+
+.buffer-ui .clear-result-graphics-button {
+  display: block;
+}
+
+.metadata-list-container {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.airspace-calculator label {
+  display: block;
+}
+
+.esriPopupWrapper .title {
+  cursor: move;
+}
+.esriPopup .pointer.hidden,
+.esriPopup .outerPointer.hidden {
+  display: none;
+}
+
+#geometryToMeasureForm,
+.measure-to-geometry-form {
+  border: black 1px solid;
+  padding: 1em;
+  display: grid;
+}
