@@ -20,11 +20,11 @@
     <link href="style/identify.css" rel="stylesheet" />
     <link href="style/addressLocator.css" rel="stylesheet" />
     <link href="style/layerSorter.css" rel="stylesheet" />
-    <link href="node_modules/@bower_components/elc/elc-ui/elc-ui.css" rel="stylesheet" />
-    <link href="node_modules/@bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/gh/WSDOT-GIS/elc-js@2.6.4/elc-ui/elc-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/arcgis-draw-ui.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
         crossorigin="anonymous" />
-    <link href="node_modules/@bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0/AirspaceCalculator.min.css" rel="stylesheet" />
 
     <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
     <script src="node_modules/@bower_components/polyfills/html.js"></script> -->
@@ -93,6 +93,7 @@
                                         <option value="fish-passage-barriers">Fish Passage Barriers</option>
                                         <option value="FunctionalClass">Functional Class</option>
                                         <option value="traffic">Traffic</option>
+                                        <option value="crab">CRAB</option>
                                         <optgroup label="internal">
                                             <option value="internal-habitat-connectivity">Habitat Connectivity</option>
                                             <option value="internal-rmec">Maintenance Environmental Mapping</option>
@@ -155,6 +156,13 @@
     </div>
     <script>
         (function (root) {
+            function getJsDelivrUrl(userOrOrg, repo, version, provider) {
+                provider = provider || "gh";
+                version = version ? `@${version}` : "";
+                userOrOrg = userOrOrg || provider === "gh" ? "WSDOT-GIS" : "@wsdot";
+                return `https://cdn.jsdelivr.net/${provider}/${userOrOrg}/${repo}${version}`
+            }
+
             var dojoConfig = {
                 async: true,
                 packages: [
@@ -168,7 +176,7 @@
                     },
                     {
                         name: "MetadataClient",
-                        location: root + "/node_modules/@bower_components/layer-metadata-soe-client",
+                        location: "https://cdn.jsdelivr.net/npm/@wsdot/layer-metadata-soe-client@2.2.2",
                         main: "MetadataClient"
                     },
                     {
@@ -177,53 +185,53 @@
                     },
                     {
                         name: "BufferUI",
-                        location: root + "/node_modules/@bower_components/arcgis-buffer-ui",
+                        location: "https://cdn.jsdelivr.net/npm/@wsdot/arcgis-buffer-ui@1.1.0/",
                         main: "BufferUI"
                     },
                     {
                         name: "RouteLocator",
-                        location: root + "/node_modules/@bower_components/elc",
+                        location: getJsDelivrUrl("WSDOT-GIS", "elc-js", "2.6.4", "gh"), //root + "/node_modules/@bower_components/elc",
                         main: "RouteLocator"
                     },
                     {
                         name: "ArcGisDrawUI",
-                        location: root + "/node_modules/@bower_components/arcgis-js-draw-ui",
+                        location: "https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/",
                         main: "ArcGisDrawUI"
                     },
 
                     {
                         name: "QueryStringManager",
-                        location: root + "/node_modules/@bower_components/arcgis-query-string-utilities",
+                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-query-string-utilities", "1.1.1", "gh"),
                         main: "QueryStringManager"
                     },
                     {
                         name: "usgsNed",
-                        location: root + "/node_modules/@bower_components/usgs-ned",
+                        location: "https://cdn.jsdelivr.net/npm/usgs-ned@3.0.2/",
                         main: "usgsNed"
                     },
                     {
                         name: "usgs-ned",
-                        location: root + "/node_modules/@bower_components/usgs-ned",
+                        location: "https://cdn.jsdelivr.net/npm/usgs-ned@3.0.2",
                         main: "usgsNed"
                     },
                     {
                         name: "AirspaceCalculator",
-                        location: root + "/node_modules/@bower_components/AirspaceCalculator",
-                        main: "AirspaceCalculator"
+                        location: "https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0",
+                        main: "AirspaceCalculator.min"
                     },
                     {
                         name: "dms",
-                        location: root + "/node_modules/@bower_components/dms",
+                        location: "https://cdn.jsdelivr.net/npm/dms-conversion@3.0.0",
                         main: "dms"
                     },
                     {
                         name: "dms-conversion",
-                        location: root + "/node_modules/@bower_components/dms",
+                        location: "https://cdn.jsdelivr.net/npm/dms-conversion@3.0.0",
                         main: "dms"
                     },
                     {
                         name: "ArcGisPrintUI",
-                        location: root + "/node_modules/@bower_components/arcgis-print-ui",
+                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-print-ui", "1.2.0", "gh"),
                         main: "ArcGisPrintUI"
                     },
                     {

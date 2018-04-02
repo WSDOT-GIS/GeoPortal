@@ -486,11 +486,10 @@ define([
     function setupDraw() {
       var div = document.createElement("div");
       div.id = "drawPane";
+      contentPane = new ContentPane({ title: "Draw", id: "drawPane" }, div);
       document.getElementById("toolsAccordion").appendChild(div);
-      toolsAccordion.addChild(
-        new ContentPane({ title: "Draw", id: "drawPane" }, div)
-      );
       var drawUI = document.createElement("div");
+      toolsAccordion.addChild(contentPane);
       drawUI.id = "drawUI";
       div.appendChild(drawUI);
     }
@@ -546,23 +545,22 @@ define([
 
     // Look in the configuration to determine which tools to add and in which order.
     (function(tools) {
-      var i, l;
       // Setup a default value for tools if it hasn't been specified.
       if (!tools) {
-        tools = ["lrs", "zoom", "search", "buffer", "draw", "crab"];
+        tools = ["lrs", "zoom", "search", "buffer", "draw"];
       }
-      for (i = 0, l = tools.length; i < l; i += 1) {
-        if (/zoom/i.test(tools[i])) {
+      for (tool of tools) {
+        if (/zoom/i.test(tool)) {
           setupZoomControls();
-        } else if (/lrs/i.test(tools[i])) {
+        } else if (/lrs/i.test(tool)) {
           setupLrsControls();
-        } else if (/airspace\s?Calculator/i.test(tools[i])) {
+        } else if (/airspace\s?Calculator/i.test(tool)) {
           setupAirspaceCalculator();
-        } else if (/buffer/i.test(tools[i])) {
+        } else if (/buffer/i.test(tool)) {
           setupBuffer();
-        } else if (/draw/i.test(tools[i])) {
+        } else if (/draw/i.test(tool)) {
           setupDraw();
-        } else if (/crab/i.test(tools[i])) {
+        } else if (/crab/i.test(tool)) {
           arcgisRestLrsUI.setupCrab(toolsAccordion);
         }
       }

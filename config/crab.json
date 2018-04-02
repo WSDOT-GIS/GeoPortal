@@ -1,7 +1,9 @@
 {
-  "pageTitle": "WSDOT GeoPortal",
+  "pageTitle": "CRAB",
   "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
   "enableIdentify": true,
+  "disclaimer": "disclaimers/crab/index.html",
+  "alwaysShowDislaimer": false,
   "mapOptions": {
     "logo": false,
     "extent": {
@@ -29,40 +31,10 @@
       { "level": 12, "resolution": 0.298582141647617, "scale": 1128.497176 }
     ]
   },
+  "tabOrder": ["Tools", "Layers", "Legend", "Basemap"],
+  "tools": ["crab"],
   "geometryServer":
     "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
-  "queryTasks": {
-    "county": {
-      "label": "County",
-      "url":
-        "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
-      "query": {
-        "where": "1 = 1",
-        "returnGeometry": true,
-        "outFields": ["JURNM"]
-      }
-    },
-    "city": {
-      "label": "City",
-      "url":
-        "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
-      "query": {
-        "where": "1 = 1",
-        "returnGeometry": true,
-        "maxAllowableOffset": 50,
-        "outFields": ["CityName"]
-      }
-    },
-    "urbanArea": {
-      "label": "Urban Area",
-      "url":
-        "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
-      "query": {
-        "where": "1 = 1",
-        "returnGeometry": true
-      }
-    }
-  },
   "basemaps": [
     {
       "id": "esriHybrid",
@@ -235,6 +207,14 @@
           "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MilepostValues/MapServer",
         "options": {
           "id": "Milepost Values"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url":
+          "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer/",
+        "options": {
+          "id": "CRAB Routes"
         }
       }
     ]
