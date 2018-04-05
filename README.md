@@ -1,20 +1,15 @@
-﻿WSDOT GeoPortal 
+﻿WSDOT GeoPortal
 ===============
 
-## Development Environment ##
+Development Environment
+-----------------------
 
-Visual Studio 2013
+Visual Studio Code
 
-### Recommended Visual Studio Extensions ###
-* [Package Intellisense](https://visualstudiogallery.msdn.microsoft.com/65748cdb-4087-497e-a394-2e3449c8e61e) - Loads Bower components
-* [Web Essentials](http://vswebessentials.com/)
+The GeoPortal was originally developed using plain JavaScript, but newer components are [written in TypeScript and transpiled to JavaScript using Webpack](https://webpack.js.org/guides/typescript/).
 
-### Development Tools ###
-
-* [Bower](http://bower.io/)
-    * [NodeJS](https://nodejs.org/)
-
-## Configuration ##
+Configuration
+-------------
 
 ### Query String Parameters ###
 
@@ -30,7 +25,7 @@ Use the *config* parameter to specify a configuration other than the default. Th
 * internal-RFIP
 
 ##### layers #####
-The *layers* parameter is used to specify which layers will be turned on when the map is loaded.  
+The *layers* parameter is used to specify which layers will be turned on when the map is loaded.
 The value of this parameter is a comma-separated list of layer IDs.
 
 ##### extent #####
@@ -39,10 +34,6 @@ The format of this parameter is four comma-separated numbers in this order: xmin
 
 
 ### Configuration ###
-
-#### `web.config` ####
-The `web.config` file contains server-side settings.  Each Visual Studio project configuration will have its own [web.config transformation file].
-The following settings are contained in the `/configuration/appSettings` section of the `web.config` file.
 
 #### `config.js` files ####
 This application supports a number of configurations that can be selected via the *config* query string parameter.
@@ -59,8 +50,11 @@ Converts ArcGIS Server JSON representations of graphics to other formats.  This 
 
 ### Dependencies ###
 
-* [ArcGIS JavaScript API](http://links.esri.com/javascript)
-* [JQuery](http://jquery.com)
-* [jQuery UI](http://jqueryui.com)
+* [ArcGIS JavaScript API]
+* [JQuery]
+* [jQuery UI]
 
-[web.config transformation file]:(http://go.microsoft.com/fwlink/?LinkId=125889)
+[ArcGIS JavaScript API]:http://links.esri.com/javascript
+[JQuery]:http://jquery.com
+[jQuery UI]:http://jqueryui.com
+[NodeJS]https://nodejs.org/

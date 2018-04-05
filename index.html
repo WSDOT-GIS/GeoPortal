@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -7,16 +8,9 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>WSDOT GeoPortal</title>
-    <script>
-        // Redirect www.wsdot.wa.gov to wsdot.wa.gov
-        // if (/^www\./.test(document.location.host)) { window.open(document.location.href.replace(/\/\/www\./, "//"), "_self"); }
-        if (/^wsdot.wa.gov/i.test(document.location.host)) {
-            window.open(document.location.href.replace(/\/\/wsdot.wa.gov/, "//www.wsdot.wa.gov"), "_self");
-        }
-    </script>
-    <link rel="stylesheet" href="//js.arcgis.com/3.17/esri/css/esri.css" />
-    <link rel="stylesheet" href="//js.arcgis.com/3.17/dijit/themes/claro/claro.css" />
-    <link href="//js.arcgis.com/3.17/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//js.arcgis.com/3.23/esri/css/esri.css" />
+    <link rel="stylesheet" href="//js.arcgis.com/3.23/dijit/themes/claro/claro.css" />
+    <link href="//js.arcgis.com/3.23/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
     <link href="//code.jquery.com/ui/1.9.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 
     <link rel="shortcut icon" href="//images.wsdot.wa.gov/favicon.ico" />
@@ -26,19 +20,14 @@
     <link href="style/identify.css" rel="stylesheet" />
     <link href="style/addressLocator.css" rel="stylesheet" />
     <link href="style/layerSorter.css" rel="stylesheet" />
-    <link href="bower_components/elc/elc-ui/elc-ui.css" rel="stylesheet" />
-    <link href="bower_components/arcgis-js-draw-ui/arcgis-draw-ui.css" rel="stylesheet" />
-    <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="bower_components/AirspaceCalculator/AirspaceCalculator.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/gh/WSDOT-GIS/elc-js@2.6.4/elc-ui/elc-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/arcgis-draw-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
+        crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0/AirspaceCalculator.min.css" rel="stylesheet" />
 
-    <script src="bower_components/customevent-polyfill/customevent-polyfill.min.js"></script>
-    <script src="bower_components/promise-polyfill/Promise.min.js"></script>
-    <script src="bower_components/polyfills/url.js"></script>
-    <script src="bower_components/polyfills/html.js"></script>
-    <script src="bower_components/fetch/fetch.js"></script>
-
-    <script src="bower_components/intl/dist/Intl.min.js"></script>
-    <script src="bower_components/intl/locale-data/jsonp/en-US.js"></script>
+    <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
+    <script src="node_modules/@bower_components/polyfills/html.js"></script> -->
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -65,6 +54,7 @@
     </script>
 
 </head>
+
 <body class="claro">
     <noscript>
         You need to have JavaScript enabled on your browser to view this page.
@@ -74,14 +64,26 @@
             <div class="table">
                 <div class="topNav">
                     <!-- row -->
-                    <div><!-- blank --></div>
+                    <div>
+                        <!-- blank -->
+                    </div>
                     <div>
                         <ul>
-                            <li><a href="//www.wsdot.wa.gov/news/" target="_blank">News</a></li>
-                            <li><a href="//www.wsdot.wa.gov/employment/" target="_blank">Employment</a></li>
-                            <li><a href="//www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a></li>
-                            <li><a href="//www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a></li>
-                            <li><a href="//www.wsdot.wa.gov/" target="_blank">WSDOT Home</a></li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/news/" target="_blank">News</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/employment/" target="_blank">Employment</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a>
+                            </li>
+                            <li>
+                                <a href="//www.wsdot.wa.gov/" target="_blank">WSDOT Home</a>
+                            </li>
                             <li>
                                 <form id="otherGeoportalsForm" action="">
                                     <label>Other GeoPortals</label>
@@ -91,6 +93,7 @@
                                         <option value="fish-passage-barriers">Fish Passage Barriers</option>
                                         <option value="FunctionalClass">Functional Class</option>
                                         <option value="traffic">Traffic</option>
+                                        <option value="crab">CRAB</option>
                                         <optgroup label="internal">
                                             <option value="internal-habitat-connectivity">Habitat Connectivity</option>
                                             <option value="internal-rmec">Maintenance Environmental Mapping</option>
@@ -103,8 +106,13 @@
                 </div>
                 <div>
                     <!-- row -->
-                    <span class="wsdot-link"><a href="//www.wsdot.wa.gov/" target="_blank"><img id="wsdotLogo" src="images/acronymlogo.svg" alt="WSDOT Logo" width="240" height="39" /></a></span>
-                    <span class="page-title"><abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
+                    <span class="wsdot-link">
+                        <a href="//www.wsdot.wa.gov/" target="_blank">
+                            <img id="wsdotLogo" src="images/acronymlogo.svg" alt="WSDOT Logo" width="240" height="39" />
+                        </a>
+                    </span>
+                    <span class="page-title">
+                        <abbr title="GIS and Roadway Data Office">GRDO</abbr> Map Application</span>
                 </div>
             </div>
         </header>
@@ -148,6 +156,22 @@
     </div>
     <script>
         (function (root) {
+            /**
+             * Creates a URL for a resource on https://cdn.jsdelivr.net.
+             * @param {string} userOrOrg - The name of either a Github repository user or organization,
+             * or an NPM scope (including "@"" sign).
+             * @param {string} repo - The name of a Github repository or NPM package.
+             * @param {string} [version] - Version number (e.g., "1.2.0")
+             * @param {string} [provider="gh"] - "gh" for Github, "npm" for NPM.
+             * @returns {string} Returns a URL.
+             */
+            function getJsDelivrUrl(userOrOrg, repo, version, provider) {
+                provider = provider || "gh";
+                version = version ? `@${version}` : "";
+                userOrOrg = userOrOrg || provider === "gh" ? "WSDOT-GIS" : "@wsdot";
+                return `https://cdn.jsdelivr.net/${provider}/${userOrOrg}/${repo}${version}`
+            }
+
             var dojoConfig = {
                 async: true,
                 packages: [
@@ -161,7 +185,7 @@
                     },
                     {
                         name: "MetadataClient",
-                        location: root + "/bower_components/layer-metadata-soe-client",
+                        location: "https://cdn.jsdelivr.net/npm/@wsdot/layer-metadata-soe-client@2.2.2",
                         main: "MetadataClient"
                     },
                     {
@@ -170,63 +194,81 @@
                     },
                     {
                         name: "BufferUI",
-                        location: root + "/bower_components/arcgis-buffer-ui",
+                        location: "https://cdn.jsdelivr.net/npm/@wsdot/arcgis-buffer-ui@1.1.0/",
                         main: "BufferUI"
                     },
                     {
                         name: "RouteLocator",
-                        location: root + "/bower_components/elc",
+                        location: getJsDelivrUrl("WSDOT-GIS", "elc-js", "2.6.4", "gh"),
                         main: "RouteLocator"
                     },
                     {
                         name: "ArcGisDrawUI",
-                        location: root + "/bower_components/arcgis-js-draw-ui",
+                        location: "https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/",
                         main: "ArcGisDrawUI"
                     },
 
                     {
                         name: "QueryStringManager",
-                        location: root + "/bower_components/arcgis-query-string-utilities",
+                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-query-string-utilities", "1.1.1", "gh"),
                         main: "QueryStringManager"
                     },
                     {
                         name: "usgsNed",
-                        location: root + "/bower_components/usgs-ned",
+                        location: "https://cdn.jsdelivr.net/npm/usgs-ned@3.0.2/",
                         main: "usgsNed"
                     },
                     {
                         name: "usgs-ned",
-                        location: root + "/bower_components/usgs-ned",
+                        location: "https://cdn.jsdelivr.net/npm/usgs-ned@3.0.2",
                         main: "usgsNed"
                     },
                     {
                         name: "AirspaceCalculator",
-                        location: root + "/bower_components/AirspaceCalculator",
-                        main: "AirspaceCalculator"
+                        location: "https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0",
+                        main: "AirspaceCalculator.min"
                     },
                     {
                         name: "dms",
-                        location: root + "/bower_components/dms",
+                        location: "https://cdn.jsdelivr.net/npm/dms-conversion@3.0.0",
                         main: "dms"
                     },
                     {
                         name: "dms-conversion",
-                        location: root + "/bower_components/dms",
+                        location: "https://cdn.jsdelivr.net/npm/dms-conversion@3.0.0",
                         main: "dms"
                     },
                     {
                         name: "ArcGisPrintUI",
-                        location: root + "/bower_components/arcgis-print-ui",
+                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-print-ui", "1.2.0", "gh"),
                         main: "ArcGisPrintUI"
+                    },
+                    {
+                        name: "arcgis-rest-lrs-ui",
+                        location: root + "/scripts/arcgis-rest-lrs-ui"
+                    },
+                    {
+                        name: "jquery",
+                        location: "//code.jquery.com",
+                        main: "jquery-1.8.2.min"
+                    },
+                    {
+                        name: "jquery-ui",
+                        location: "//code.jquery.com/ui/1.9.0",
+                        main: "jquery-ui.min"
                     }
                 ]
             };
             window.dojoConfig = dojoConfig;
         }(location.pathname.replace(/\/[^\/]*$/, "")));
     </script>
-    <script src="//js.arcgis.com/3.17/init.js" integrity="sha384-UIiMVdEutbM8Gw8aZAdy+9v4h7ySqcjaF9yVIsFiTLCSBUtw6DRZDnbUIn3lqcD+" crossorigin="anonymous"></script>
-    <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4" crossorigin="anonymous"></script>
-    <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd" crossorigin="anonymous"></script>
+    <script src="https://js.arcgis.com/3.23/init.js" integrity="sha384-QUGOO+2tHNKvwiXmNxaAzPzil0WHtRgz63LF0xFQ7yhF9HK2lFTjFWhwWukyVZzA"
+        crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
+        crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd"
+        crossorigin="anonymous"></script>
     <script src="scripts/index.js"></script>
 </body>
+
 </html>
