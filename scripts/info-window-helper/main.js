@@ -247,27 +247,10 @@ define([
             var htmlMarkup = "<!DOCTYPE html>" + doc.documentElement.outerHTML;
             // Encode markup to base-64 for Firefox compatibility.
             var url = ["data:text/html;base64", btoa(htmlMarkup)].join(",");
-            var newWindow;
 
-            // Detect IE via user agent string. Don't know of any other way to detect support for opening data URIs.
-            if (window.navigator.userAgent && window.navigator.userAgent.match(/\b(?:(?:MSIE)|(?:Trident))\b/i)) {
-                newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
-                newWindow.document.write(htmlMarkup);
-                newWindow.focus();
-            }
-            else {
-                try {
-                    window.open(url, "geoportal_attribute_table");
-                } catch (err) {
-                    if ((err.number === -2147024891 || err.message.match(/Access is denied/i)) && fallbackUrl) {
-                        newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
-                        newWindow.document.write(htmlMarkup);
-                        newWindow.focus();
-                    } else {
-                        throw err;
-                    }
-                }
-            }
+            const newWindow = window.open(fallbackUrl, "geoportal_attribute_table");
+            newWindow.document.write(htmlMarkup);
+            newWindow.focus();
 
             return false;
         };
