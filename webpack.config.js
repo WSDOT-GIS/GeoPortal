@@ -34,6 +34,7 @@ function getFolderAndFileName(entry) {
  */
 function createConfig(entry) {
   const [folder, filename] = getFolderAndFileName(entry);
+  const libraryTarget = /dataUrlViewer/g.test(folder) ? undefined : "amd";
 
   const config = {
     mode: "production",
@@ -42,7 +43,7 @@ function createConfig(entry) {
     devtool: "source-map",
     entry,
     output: {
-      libraryTarget: "amd",
+      libraryTarget,
       path: folder
         ? path.resolve(__dirname, "scripts", folder)
         : path.resolve(__dirname, "scripts"),
@@ -72,5 +73,6 @@ module.exports = [
   "./src/InfoTemplates/PtrTemplate.ts",
   "./src/InfoTemplates/TrafficInfoTemplate.ts",
   "./src/setup/setupBasemapGallery.ts",
-  "./src/utils/layerUtils.ts"
+  "./src/utils/layerUtils.ts",
+  "./src/dataUrlViewer/main.ts"
 ].map(createConfig);

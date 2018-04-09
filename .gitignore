@@ -5,7 +5,7 @@ scripts/InfoTemplates
 scripts/setup
 scripts/utils
 scripts/extensions
-
+scripts/dataUrlViewer
 # Logs
 logs
 *.log
