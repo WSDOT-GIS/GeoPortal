@@ -1,4 +1,4 @@
-import { parseDataUrl } from "./conversionUtils";
+import FormatError from "./FormatError";
 
 /**
  * An object with no values that should be turned into tables.
@@ -14,7 +14,7 @@ interface IAttributes {
  * @param array An array of objects
  * @returns {Set.<string>}
  */
-function getProperties(array: IAttributes[]): Set<string> {
+export function getProperties(array: IAttributes[]): Set<string> {
   const output = new Set<string>();
   for (const name in array) {
     if (array.hasOwnProperty(name)) {
@@ -24,7 +24,7 @@ function getProperties(array: IAttributes[]): Set<string> {
   return output;
 }
 
-function toTable(array: IAttributes[]) {
+export function toTable(array: IAttributes[]) {
   const propertyNames = getProperties(array);
   const table = document.createElement("table");
   const thead = table.createTHead();
@@ -55,7 +55,7 @@ function toTable(array: IAttributes[]) {
  * Converts a JavaScript object or value into an HTML table.
  * @param o any value or object.
  */
-function toElement(o: any) {
+export function toElement(o: any) {
   if (typeof o !== "object") {
     const text = document.createTextNode(`${o}`);
     return text;
@@ -84,7 +84,7 @@ function toElement(o: any) {
   return table;
 }
 
-function convertToHtml(dataUrl: string) {
+export function convertToHtml(dataUrl: string) {
   const { mediaType, base64, data } = parseDataUrl(dataUrl);
 
   if (mediaType) {
@@ -100,13 +100,43 @@ function convertToHtml(dataUrl: string) {
   return pre;
 }
 
-if (window.location.hash) {
-  try {
-    const element = convertToHtml(window.location.hash.replace(/^#/, ""));
-    document.body.appendChild(element);
-  } catch (err) {
-    document.body.innerHTML = `<p class="error">${err}</p>`;
+/**
+ * Represents the components that make up a data URL.
+ */
+export interface IDataUrlParts {
+  /** The media type, aka MIME type. */
+  mediaType?: string;
+  /** Indicates if the data in the URL was base64 encoded. */
+  base64: boolean;
+  /** The unencoded data */
+  data: string;
+}
+
+/**
+ * Parses a data URL into a string.
+ * @param {string} dataUrl A data URL
+ * @throws {FormatError} Thrown if dataUrl is not a correctly formatted data URL.
+ */
+export function parseDataUrl(dataUrl: string): IDataUrlParts {
+  // data:[<mediatype>][;base64],<data>
+  const re = /^data:([^;]+)?(?:;([^,]+))?,(.+)$/;
+  const match = dataUrl.match(re);
+  if (match) {
+    const [mediaType, base64, data] = match.slice(1);
+    let text: string;
+    if (base64) {
+      text = btoa(data);
+    } else {
+      text = decodeURIComponent(data);
+    }
+    return {
+      mediaType,
+      base64: Boolean(base64),
+      data: text
+    };
+  } else {
+    // const text = dataUrl;
+    // return { mediaType: null, base64: null, text };
+    throw new FormatError(dataUrl, re);
   }
-} else {
-  document.body.innerHTML = "<p class='warning'>No data URL in hash.</p>";
 }

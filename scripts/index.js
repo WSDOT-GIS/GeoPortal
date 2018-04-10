@@ -54,7 +54,7 @@ require([
   "BufferUI/BufferUIHelper",
   "info-window-helper",
   "esri/dijit/Search",
-  "geoportal/setup/setupBasemapGallery",
+  "setup",
 
   "dijit/form/RadioButton",
   "dijit/form/Select",
@@ -124,7 +124,7 @@ require([
   BufferUIHelper,
   infoWindowHelper,
   Search,
-  setupBasemapGallery
+  setup
 ) {
   "use strict";
 
@@ -236,7 +236,8 @@ require([
         });
       }
 
-      esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+      // esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+
       // Specify list of CORS enabled servers.
       (function(servers) {
         if (wsdot.config.corsEnabledServers) {
@@ -421,7 +422,7 @@ require([
       });
 
       // Setup the basemap gallery
-      setupBasemapGallery(wsdot.map, wsdot.config);
+      setup.setupBasemapGallery(wsdot.map, wsdot.config);
 
       new HomeButton({ map: wsdot.map }, "homeButton").startup();
 
@@ -546,6 +547,8 @@ require([
         if (wsdot.printForm) {
           wsdot.printForm.map = wsdot.map;
         }
+
+        setup.setupExportButton(wsdot.map);
       });
 
       /**

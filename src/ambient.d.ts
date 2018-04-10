@@ -6,3 +6,11 @@ declare module "dijit/layout/ContentPane" {
   }
   export = ContentPane;
 }
+
+declare module "dijit/form/Button" {
+  class Button {
+    constructor(...args: any[]);
+    startup(): Button;
+  }
+  export = Button;
+}

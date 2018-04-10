@@ -72,7 +72,6 @@ module.exports = [
   "./src/InfoTemplates/HabitatConnectivityInfoTemplate.ts",
   "./src/InfoTemplates/PtrTemplate.ts",
   "./src/InfoTemplates/TrafficInfoTemplate.ts",
-  "./src/setup/setupBasemapGallery.ts",
-  "./src/utils/layerUtils.ts",
-  "./src/dataUrlViewer/main.ts"
+  "./src/setup/main.ts",
+  "./src/utils/main.ts"
 ].map(createConfig);
