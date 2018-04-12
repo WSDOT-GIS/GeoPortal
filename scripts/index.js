@@ -16,7 +16,7 @@ require([
   "dijit/registry",
   "QueryStringManager",
   "geoportal/QueryStringManagerHelper",
-  "geoportal/showDisclaimer",
+  "utils",
   "geoportal/setupToolbar",
   "geoportal/setupLayout",
   "geoportal/configUtils",
@@ -90,7 +90,7 @@ require([
   registry,
   QueryStringManager,
   QueryStringManagerHelper,
-  showDisclaimer,
+  utils,
   setupToolbar,
   setupLayout,
   configUtils,
@@ -495,7 +495,7 @@ require([
         infoWindowHelper.addPrintLink(wsdot.map.infoWindow, "blank.html");
 
         // Show the disclaimer if one has been defined.
-        showDisclaimer(wsdot.config.alwaysShowDisclaimer);
+        utils.showDisclaimer(wsdot.config.disclaimer, wsdot.config.alwaysShowDisclaimer);
 
         setupNorthArrow();
         setupToolbar();
