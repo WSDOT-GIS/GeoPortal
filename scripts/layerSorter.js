@@ -1,4 +1,4 @@
-require(["geoportal/utils/layerUtils"], function(layerUtils) {
+require(["utils"], function(utils) {
   "use strict";
 
   $.widget("ui.layerSorter", {
@@ -51,7 +51,7 @@ require(["geoportal/utils/layerUtils"], function(layerUtils) {
             '<li class="ui-state-default" title="',
             layer.description,
             '"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>',
-            layerUtils.createLayerNameFromUrl(layer),
+            utils.createLayerNameFromUrl(layer),
             "</li>"
           ].join("")
         )

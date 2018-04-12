@@ -15,7 +15,7 @@ require([
   "esri/layers/LabelLayer",
   "esri/layers/KMLLayer",
   "esri/layers/ImageParameters",
-  "geoportal/utils/layerUtils",
+  "utils",
   "dojo/_base/connect",
   "extensions/map"
 ], function(
@@ -27,7 +27,7 @@ require([
   LabelLayer,
   KMLLayer,
   ImageParameters,
-  layerUtils,
+  utils,
   connect
 ) {
   "use strict";
@@ -1111,7 +1111,7 @@ require([
           label = this.options.osmLabel;
         } else {
           label =
-            layerUtils.createLayerNameFromUrl(layer) ||
+            utils.createLayerNameFromUrl(layer) ||
             this.options.defaultBasemapLabel;
         }
       }
