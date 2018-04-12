@@ -80,7 +80,6 @@ require([
   "MetadataClient/metadataExtensions",
   "extensions/extent",
   "extensions/graphicsLayer",
-  "extensions/map",
   "scripts/layerList.js",
   "scripts/zoomToXY.js",
   "scripts/extentSelect.js",

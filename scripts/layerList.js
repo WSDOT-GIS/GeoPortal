@@ -16,8 +16,7 @@ require([
   "esri/layers/KMLLayer",
   "esri/layers/ImageParameters",
   "utils",
-  "dojo/_base/connect",
-  "extensions/map"
+  "dojo/_base/connect"
 ], function(
   Layer,
   ArcGISTiledMapServiceLayer,
