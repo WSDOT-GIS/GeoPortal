@@ -116,7 +116,16 @@ function groupFeaturesByLayer(graphics: Graphic[]) {
   return output;
 }
 
-export function graphicsToTables(doc: Document, graphics: Graphic[]) {
+/**
+ * Creates HTML tables displaying the attributes of the input graphics.
+ * @param doc A Document element.
+ * @param graphics An array of Graphics.
+ * @returns Returns a document fragment containing table elements.
+ */
+export function graphicsToTables(
+  doc: Document,
+  graphics: Graphic[]
+): DocumentFragment {
   const groupedGraphics = groupFeaturesByLayer(graphics);
   const tableMap = new Map<GraphicsLayer, HTMLTableElement>();
   const frag = doc.createDocumentFragment();
