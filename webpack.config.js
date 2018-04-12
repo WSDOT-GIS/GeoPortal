@@ -73,5 +73,6 @@ module.exports = [
   "./src/InfoTemplates/PtrTemplate.ts",
   "./src/InfoTemplates/TrafficInfoTemplate.ts",
   "./src/setup/main.ts",
-  "./src/utils/main.ts"
+  "./src/utils/main.ts",
+  "./src/controls/layerList/layerList.ts"
 ].map(createConfig);

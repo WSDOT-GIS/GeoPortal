@@ -1,6 +1,7 @@
 src/**/*.js
 src/**/*.js.map
 scripts/arcgis-rest-lrs-ui
+scripts/controls
 scripts/InfoTemplates
 scripts/setup
 scripts/utils
