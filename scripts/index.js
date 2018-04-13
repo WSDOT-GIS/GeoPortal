@@ -81,7 +81,7 @@ require([
   "controls/layerList/layerList",
   "scripts/zoomToXY.js",
   "scripts/extentSelect.js",
-  "scripts/layerSorter.js"
+  "controls/layerSorter"
 ], function(
   ready,
   on,
