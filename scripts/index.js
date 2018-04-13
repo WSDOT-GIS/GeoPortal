@@ -19,7 +19,6 @@ require([
   "utils",
   "geoportal/setupToolbar",
   "geoportal/setupLayout",
-  "geoportal/configUtils",
   "geoportal/drawUIHelper",
 
   "esri/Color",
@@ -92,7 +91,6 @@ require([
   utils,
   setupToolbar,
   setupLayout,
-  configUtils,
   geoportalDrawUIHelper,
   Color,
   esriConfig,
@@ -177,7 +175,8 @@ require([
     });
   })(document.getElementById("otherGeoportalsForm"));
 
-  function doPostConfig() {
+  function doPostConfig(config) {
+    wsdot.config = config;
     var button;
 
     // Add a method to the Date object that will return a short date string.
@@ -511,7 +510,7 @@ require([
           $("#layerList")
             .tabbedLayerList({
               layers: wsdot.config.layers,
-              startLayers: configUtils.getVisibleLayerIdsFromConfig().concat(),
+              startLayers: utils.getVisibleLayerIdsFromConfig(wsdot.config.layers).concat(),
               startCollapsed: false,
               map: wsdot.map
             })
@@ -523,7 +522,7 @@ require([
         } else {
           $("#layerList").layerList({
             layers: wsdot.config.layers,
-            startLayers: configUtils.getVisibleLayerIdsFromConfig().concat(),
+            startLayers: utils.getVisibleLayerIdsFromConfig(wsdot.config.layers).concat(),
             startCollapsed: false,
             map: wsdot.map
           });
@@ -598,7 +597,7 @@ require([
     ready(init);
   }
 
-  configUtils.getConfig().then(doPostConfig, function(error) {
+  utils.getConfig().then(doPostConfig, function(error) {
     console.error(error);
   });
 });
