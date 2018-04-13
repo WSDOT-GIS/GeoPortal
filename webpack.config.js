@@ -67,7 +67,6 @@ function createConfig(entry) {
 module.exports = [
   "./src/arcgis-rest-lrs-ui/main.ts",
   "./src/extensions/esriApiExtensions.ts",
-  "./src/extensions/extent.ts",
   "./src/extensions/graphicsLayer.ts",
   "./src/InfoTemplates/HabitatConnectivityInfoTemplate.ts",
   "./src/InfoTemplates/PtrTemplate.ts",

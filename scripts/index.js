@@ -78,7 +78,6 @@ require([
   "extensions/esriApiExtensions",
   "extensions/htmlPopupExtensions",
   "MetadataClient/metadataExtensions",
-  "extensions/extent",
   "extensions/graphicsLayer",
   "controls/layerList/layerList",
   "scripts/zoomToXY.js",
