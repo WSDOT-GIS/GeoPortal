@@ -41,7 +41,6 @@ require([
 
   "BufferUI",
   "BufferUI/BufferUIHelper",
-  "info-window-helper",
   "esri/dijit/Search",
   "setup",
 
@@ -106,7 +105,6 @@ require([
   SimpleRenderer,
   BufferUI,
   BufferUIHelper,
-  infoWindowHelper,
   Search,
   setup
 ) {
@@ -453,9 +451,9 @@ require([
           }
         })();
 
-        infoWindowHelper.addGoogleStreetViewLink(wsdot.map.infoWindow);
-        infoWindowHelper.makeDraggable(wsdot.map.infoWindow);
-        infoWindowHelper.addPrintLink(wsdot.map.infoWindow, "blank.html");
+        utils.addGoogleStreetViewLink(wsdot.map.infoWindow);
+        utils.makeDraggable(wsdot.map.infoWindow);
+        utils.addPrintLink(wsdot.map.infoWindow, "blank.html");
 
         // Show the disclaimer if one has been defined.
         utils.showDisclaimer(wsdot.config.disclaimer, wsdot.config.alwaysShowDisclaimer);

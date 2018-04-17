@@ -4,7 +4,9 @@ scripts/arcgis-rest-lrs-ui
 scripts/controls
 scripts/InfoTemplates
 scripts/setup
-scripts/utils
+scripts/utils/*.js
+scripts/utils/*.js.map
+
 scripts/extensions
 scripts/dataUrlViewer
 # Logs

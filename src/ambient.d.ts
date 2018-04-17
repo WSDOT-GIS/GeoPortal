@@ -14,3 +14,8 @@ declare module "dijit/form/Button" {
   }
   export = Button;
 }
+
+declare module "dojo/text!*" {
+  const s: string;
+  export = s;
+}
