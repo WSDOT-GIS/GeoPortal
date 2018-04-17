@@ -21,7 +21,6 @@ define([
   "BufferUI/BufferUIHelper",
   "ArcGisPrintUI",
 
-  "geoportal/extentSelect",
   "arcgis-rest-lrs-ui",
   "scripts/customLegend.js",
   "scripts/ais/faaFar77.js"
@@ -43,7 +42,6 @@ define([
   BufferUI,
   BufferUIHelper,
   ArcGisPrintUI,
-  createExtentSelect,
   arcgisRestLrsUI
 ) {
   function getLayerInfos() {
@@ -336,123 +334,6 @@ define([
       });
     }
 
-    function setupZoomControls() {
-      //var button;
-      // Zoom tools
-      var zoomControlsPaneDiv = document.createElement("div");
-      zoomControlsPaneDiv.id = "zoomControlsPane";
-      document
-        .getElementById("toolsAccordion")
-        .appendChild(zoomControlsPaneDiv);
-
-      toolsAccordion.addChild(
-        new ContentPane({ title: "Zoom to" }, "zoomControlsPane")
-      );
-      on.once(registry.byId("zoomControlsPane"), "show", function() {
-        var extentTable;
-        zoomControlsDiv = $("<div>")
-          .attr({ id: "zoomControls" })
-          .appendTo("#zoomControlsPane");
-
-        $("<div class='tool-header'>Zoom to Long./Lat.</div>").appendTo(
-          zoomControlsDiv
-        );
-        $("<div id='zoomToXY'>")
-          .appendTo(zoomControlsDiv)
-          .zoomToXY({
-            map: wsdot.map,
-            xLabel: "Long.",
-            yLabel: "Lat."
-          });
-
-        extentTable = $("<table>").appendTo(zoomControlsDiv);
-
-        /**
-         * Creates a query task and query using settings from config.json.
-         * @param {string} qtName - The name of a query task from config.json.
-         * @returns {Object.<string, (QueryTask|Query)>} returns an object with the properties "task" and "query".
-         */
-        function createQueryTask(qtName) {
-          var queryTaskSetting, qt, query, n;
-          queryTaskSetting = wsdot.config.queryTasks[qtName];
-          qt = new QueryTask(queryTaskSetting.url);
-          query = new Query();
-
-          for (n in queryTaskSetting.query) {
-            if (queryTaskSetting.query.hasOwnProperty(n)) {
-              query[n] = queryTaskSetting.query[n];
-            }
-          }
-          return { task: qt, query: query };
-        }
-
-        // Set up the zoom select boxes.
-        // Setup the zoom controls.
-
-        /**
-         * Creates the HTML elments that will later be used to create Dojo dijits.
-         */
-        function createZoomControls() {
-          var body, data;
-
-          function createZoomControl(qtName, data) {
-            var row, cell, selectName, labelName, queryTask, label;
-            row = $("<tr>").appendTo(body);
-            cell = $("<td>").appendTo(row);
-            selectName = qtName + "ZoomSelect";
-            labelName = qtName + "ZoomLabel";
-            //$("<label>").attr({ id: labelName }).text(data.label).appendTo(cell);
-            label = document.createElement(label);
-            label.id = labelName;
-            label.textContent = data.label;
-            cell[0].appendChild(label);
-            cell = $("<td>").appendTo(row);
-            if (data.url) {
-              $("<progress>")
-                .attr({
-                  id: selectName,
-                  src: "images/ajax-loader.gif",
-                  alt: "Loading..."
-                })
-                .appendTo(cell);
-              queryTask = createQueryTask(qtName);
-              queryTask.task.execute(queryTask.query, function(featureSet) {
-                createExtentSelect(
-                  selectName,
-                  featureSet,
-                  wsdot.map,
-                  data.levelOrFactor
-                );
-              });
-            } else if (data.extents) {
-              createExtentSelect(
-                $("<div>")
-                  .attr("id", selectName)
-                  .appendTo(cell)[0],
-                data.extents,
-                wsdot.map
-              );
-              label.htmlFor = selectName;
-            }
-          }
-
-          body = $("<tbody>").appendTo(extentTable);
-
-          (function() {
-            var qtName;
-            for (qtName in wsdot.config.queryTasks) {
-              if (wsdot.config.queryTasks.hasOwnProperty(qtName)) {
-                data = wsdot.config.queryTasks[qtName];
-                createZoomControl(qtName, data);
-              }
-            }
-          })();
-        }
-
-        createZoomControls();
-      });
-    }
-
     function setupBuffer() {
       function removeUnits() {
         // Remove unwanted units
@@ -547,12 +428,10 @@ define([
     (function(tools) {
       // Setup a default value for tools if it hasn't been specified.
       if (!tools) {
-        tools = ["lrs", "zoom", "search", "buffer", "draw"];
+        tools = ["lrs", "search", "buffer", "draw"];
       }
       for (tool of tools) {
-        if (/zoom/i.test(tool)) {
-          setupZoomControls();
-        } else if (/lrs/i.test(tool)) {
+        if (/lrs/i.test(tool)) {
           setupLrsControls();
         } else if (/airspace\s?Calculator/i.test(tool)) {
           setupAirspaceCalculator();

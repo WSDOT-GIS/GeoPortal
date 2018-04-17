@@ -34,8 +34,14 @@ declare namespace config {
     outFields: string[];
   }
 
+  export interface QueryTask {
+    label: string;
+    url: string;
+    query: Query;
+  }
+
   export interface QueryTasks {
-    [key: string]: Query;
+    [key: string]: QueryTask;
   }
 
   export interface Layer {

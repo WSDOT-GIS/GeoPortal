@@ -1,13 +1,3 @@
-/*global require, gaTracker, $ */
-// jscs: disable
-
-/*
-Prerequisites:
-ArcGIS JavaScript API
-jQuery
-jQuery UI
-*/
-
 var wsdot;
 
 require([
@@ -79,8 +69,6 @@ require([
   "MetadataClient/metadataExtensions",
   "extensions/graphicsLayer",
   "controls/layerList/layerList",
-  "scripts/zoomToXY.js",
-  "scripts/extentSelect.js",
   "controls/layerSorter"
 ], function(
   ready,
@@ -425,30 +413,7 @@ require([
 
       // Setup Zoom Button
       wsdot.map.on("load", function() {
-        function setupSearchControls() {
-          // Address Search
-          var toolbar = document.getElementById("toolbar");
-          var addressDiv = document.createElement("div");
-          addressDiv.id = "search";
-          toolbar.insertBefore(addressDiv, toolbar.firstChild);
 
-          var search = new Search(
-            {
-              map: wsdot.map,
-              enableHighlight: false
-            },
-            addressDiv
-          );
-
-          search.on("load", function() {
-            var source = search.sources[0];
-            source.countryCode = "US";
-            // Set the extent to WA. Values from http://epsg.io/1416-area.
-            source.searchExtent = extents.fullExtent;
-          });
-
-          search.startup();
-        }
 
         if (wsdot.airspaceCalculator) {
           wsdot.airspaceCalculator.map = wsdot.map;
@@ -468,7 +433,7 @@ require([
           );
         }
 
-        setupSearchControls();
+        setup.setupSearchControls(wsdot.map, config.queryTasks);
 
         // Set the scale.
         setScaleLabel();
