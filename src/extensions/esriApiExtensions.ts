@@ -37,12 +37,16 @@ lang.extend(LayerInfo, {
 });
 
 lang.extend(Layer, {
+  /**
+   * Returns only the layerInfos that are visible at the given scale.
+   * @param {Layer} this Layer
+   * @param {number} scale
+   * @returns {LayerInfo[]}
+   */
   getVisibleLayerInfos(
     this: Layer & { layerInfos?: LayerInfo[] },
     scale: number
   ) {
-    /// <summary>Returns only the layerInfos that are visible at the given scale.</summary>
-    /// <returns type="LayerInfo[]" />
     if (typeof this.layerInfos === "undefined") {
       return null;
     }
