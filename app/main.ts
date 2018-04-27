@@ -8,7 +8,8 @@ const dojoOptions: ILoadScriptOptions = {
     async: true,
     // See https://blogs.esri.com/esri/arcgis/2017/12/14/making-better-promises/
     has: {
-      "esri-promise-compatibility": 1
+      "esri-promise-compatibility": 1,
+      "esri-featurelayer-webgl": 1
     }
   }
 };
