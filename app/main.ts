@@ -194,7 +194,7 @@ loaderPromise.then(
     worldLocator.filter = {
       geometry: waExtent,
       where: "1 = 1"
-    } as __esri.LocatorSourceFilter;
+    };
 
     // Add the county Feature Layer as a search source.
     searchWidget.sources.add({

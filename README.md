@@ -6,7 +6,7 @@ WSDOT GeoPortal
 Development Environment
 -----------------------
 
-Visual Studio Code
+[Visual Studio Code]
 
 ### Development Tools ###
 
@@ -20,3 +20,4 @@ Visual Studio Code
 [ArcGIS JavaScript API]:https://developers.arcgis.com/javascript/
 [nodejs]:https://nodejs.org/
 [yarn]:https://yarnpkg.com/
+[Visual Studio Code]:https://code.visualstudio.com/
