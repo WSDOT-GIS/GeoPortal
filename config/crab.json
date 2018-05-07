@@ -1,6 +1,7 @@
 {
   "pageTitle": "County Road Milepost Locator Map",
   "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "noPopupLayerRe": "(CRAB Routes)",
   "enableIdentify": true,
   "disclaimer": "disclaimers/crab/index.html",
   "alwaysShowDislaimer": false,
