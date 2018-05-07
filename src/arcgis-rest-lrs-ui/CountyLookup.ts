@@ -378,6 +378,7 @@ export function createCountyOptions() {
     const option = document.createElement("option");
     option.value = id.toString(10);
     option.label = name;
+    option.textContent = name;
     frag.appendChild(option);
   }
   return frag;
