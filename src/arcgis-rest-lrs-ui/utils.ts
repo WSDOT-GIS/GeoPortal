@@ -99,6 +99,9 @@ export function addToFormWithLabel(
   const label = document.createElement("label");
   label.htmlFor = control.id;
   label.textContent = labelText || splitName(control.name);
+  if (control.required) {
+    label.classList.add("required");
+  }
   form.appendChild(label);
   form.appendChild(control);
   return label;

@@ -137,8 +137,8 @@ export class MeasureToGeometryControl {
     addNamedControlsToElement(frag, {
       County: countySelect,
       "Road No.": roadNoInput,
-      "From Measure (miles)": fromMeasureInput,
-      "To Measure (miles)": toMeasureInput,
+      "From Milepost": fromMeasureInput,
+      "To Milepost": toMeasureInput,
       "Temporal View Date": temporalViewDateInput
     });
 

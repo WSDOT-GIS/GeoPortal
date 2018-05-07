@@ -642,3 +642,7 @@ label[for="temporalViewDateInput"],
 label[for="m2gTemporalViewDate"] {
   display: none;
 }
+
+label.required:after {
+  content: " (Required)";
+}

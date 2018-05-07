@@ -63,13 +63,20 @@ export function setupCrab(
     const crabToolLabelClass = "crab-tool-label";
 
     const g2mLabel = document.createElement("div");
-    g2mLabel.textContent = "Geometry to Measure";
+    g2mLabel.textContent = "Locate a point on a County Road";
     g2mLabel.classList.add(crabToolLabelClass);
     crabUI.appendChild(g2mLabel);
+
+    const descriptionP = document.createElement("p");
 
     // Setup Geometry to Measure form.
     const g2mForm = new GeometryToMeasureControl(map);
     g2mForm.tolerance = 50;
+
+    descriptionP.innerHTML = `Select <b>${
+      g2mForm.form.querySelector("button[type=submit]")!.textContent
+    } </b> then click on a country road`;
+    crabUI.appendChild(descriptionP);
     crabUI.appendChild(g2mForm.form);
 
     g2mForm.form.addEventListener("geometryToMeasure", g2mEvt => {
@@ -114,7 +121,7 @@ export function setupCrab(
 
     const m2gLabel = document.createElement("div");
     m2gLabel.classList.add(crabToolLabelClass);
-    m2gLabel.textContent = "Measure to Geometry";
+    m2gLabel.textContent = "Locate a County Road and Milepost";
     crabUI.appendChild(m2gLabel);
 
     // Add Measure to Geometry form.
@@ -174,7 +181,9 @@ export function setupCrab(
       // Value will be null if no graphics were added this time.
       const firstGraphic = pointGraphics.length
         ? pointGraphics[0]
-        : polylineGraphics.length ? polylineGraphics[0] : null;
+        : polylineGraphics.length
+          ? polylineGraphics[0]
+          : null;
 
       if (firstGraphic) {
         // Change the map view so the first graphic is visible.
