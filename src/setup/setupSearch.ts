@@ -21,7 +21,7 @@ function queryToFeatureLayer(queryTask: config.QueryTask) {
 
 export function setupSearchControls(
   map: EsriMap,
-  queryTasks: config.QueryTasks
+  queryTasks?: config.QueryTasks
 ) {
   // Address Search
   const toolbar = document.getElementById("toolbar");
@@ -53,21 +53,22 @@ export function setupSearchControls(
       new SpatialReference(4326)
     );
 
-    const sources = search.get("sources") as any[];
+    if (queryTasks) {
+      const sources = search.get("sources") as any[];
 
-    for (const qt of iterateQueryTasks(queryTasks)) {
-      const layer = queryToFeatureLayer(qt);
-      const searchSource: any = {
-        name: qt.label,
-        featureLayer: layer,
-        searchFields: qt.query.outFields,
-        exactMatch: false
-      };
-      sources.push(searchSource);
+      for (const qt of iterateQueryTasks(queryTasks)) {
+        const layer = queryToFeatureLayer(qt);
+        const searchSource: any = {
+          name: qt.label,
+          featureLayer: layer,
+          searchFields: qt.query.outFields,
+          exactMatch: false
+        };
+        sources.push(searchSource);
+      }
+
+      search.set("sources", sources);
     }
-
-    console.debug("sources", sources);
-    search.set("sources", sources);
   });
 
   search.startup();
