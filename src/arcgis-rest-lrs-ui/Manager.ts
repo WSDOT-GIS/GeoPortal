@@ -128,6 +128,19 @@ export function setupCrab(
     const m2gForm = new MeasureToGeometryControl(serviceUrl, layerId);
 
     crabUI.appendChild(m2gForm.form);
+
+    // Add clear graphics button
+    const clearGraphicsDiv = document.createElement("div");
+    clearGraphicsDiv.id = "crabClearControls";
+    const clearGraphicsButton = document.createElement("button");
+    clearGraphicsDiv.appendChild(clearGraphicsButton);
+    clearGraphicsButton.textContent = "Clear user's CRAB features";
+    clearGraphicsButton.onclick = () => {
+      crabLinesLayer.clear();
+      crabPointsLayer.clear();
+    };
+    crabUI.appendChild(clearGraphicsDiv);
+
     // Handle the custom event for when the user submits parameters for
     // measureToGeometry operation. This event is defined in
     // MeasureToGeometryControl.ts

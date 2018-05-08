@@ -622,7 +622,8 @@ table.traffic td.percent:after {
 }
 
 #geometryToMeasureForm,
-.measure-to-geometry-form {
+.measure-to-geometry-form,
+#crabClearControls {
   border: black 1px solid;
   padding: 1em;
   display: grid;
