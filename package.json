@@ -8,7 +8,7 @@
     "build:less": "lessc ./style/index.less ./style/index.css",
     "build:ts": "webpack",
     "lint": "prettier ./**/*.less ./**/*.ts --write",
-    "publish": "npm run prepare && node tools/publish.js"
+    "deploy": "npm run prepare && node tools/publish.js"
   },
   "author": "WSDOT",
   "license": "Unlicense",
