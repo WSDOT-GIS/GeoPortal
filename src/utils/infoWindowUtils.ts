@@ -154,6 +154,11 @@ export function addPrintLink(
     const doc = document.implementation.createHTMLDocument("attributes");
     const frag = graphicsToTables(doc, infoWindow.features);
 
+    if (!frag) {
+      alert("Error creating table.");
+      return false;
+    }
+
     // Create a new HTML document and add the tables to it.
     doc.body.appendChild(frag);
 

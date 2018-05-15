@@ -1,6 +1,7 @@
 import Graphic = require("esri/graphic");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import GraphicsLayer = require("esri/layers/GraphicsLayer");
+import Layer = require("esri/layers/layer");
 import { getProperties } from "./conversionUtils";
 
 /**
@@ -56,39 +57,29 @@ function getFieldNames(layer: FeatureLayer | GraphicsLayer) {
  */
 export function featureAttributesToTable(
   doc: Document,
-  layer: FeatureLayer | GraphicsLayer,
+  graphics: Graphic[],
+  tableName: string,
   omitData?: boolean
 ) {
   const table = document.createElement("table");
-  table.createCaption().textContent = layer.id;
+  table.createCaption().textContent = tableName;
   const thead = table.createTHead();
   const tbody = table.createTBody();
 
-  let fieldNames: Set<string>;
+  const fieldNames = getDistinctAttributeNames(graphics);
 
   // Create the table header row.
   let row = thead.insertRow(-1);
-  if (layer instanceof FeatureLayer) {
-    fieldNames = new Set<string>();
-    for (const field of layer.fields) {
-      const cell = document.createElement("th");
-      cell.scope = "col";
-      cell.textContent = field.alias || field.name;
-      cell.dataset.fieldName = field.name;
-      row.appendChild(cell);
-    }
-  } else {
-    fieldNames = getFieldNames(layer);
-    for (const field of fieldNames) {
-      const cell = document.createElement("th");
-      cell.scope = "col";
-      cell.textContent = field;
-      cell.dataset.fieldName = field;
-      row.appendChild(cell);
-    }
+
+  for (const field of fieldNames) {
+    const cell = document.createElement("th");
+    cell.scope = "col";
+    cell.textContent = field;
+    cell.dataset.fieldName = field;
+    row.appendChild(cell);
   }
 
-  for (const attributes of layer.graphics.map(g => g.attributes)) {
+  for (const attributes of graphics.map(g => g.attributes)) {
     row = tbody.insertRow(-1);
     for (const fieldName of fieldNames) {
       const value = attributes[fieldName];
@@ -101,9 +92,14 @@ export function featureAttributesToTable(
 }
 
 function groupFeaturesByLayer(graphics: Graphic[]) {
-  const output = new Map<GraphicsLayer, Graphic[]>();
+  const output = new Map<Layer, Graphic[]>();
   for (const g of graphics) {
-    const layer = g.getLayer() as GraphicsLayer;
+    const layer = g.getLayer() || ((g as any).layer as Layer);
+    if (!layer) {
+      // tslint:disable-next-line:no-console
+      console.warn("graphic has no associated layer", g);
+      continue;
+    }
     let arr: Graphic[];
     if (output.has(layer)) {
       arr = output.get(layer)!;
@@ -113,7 +109,20 @@ function groupFeaturesByLayer(graphics: Graphic[]) {
     }
     arr.push(g);
   }
-  return output;
+  return output.size ? output : null;
+}
+
+function getDistinctAttributeNames(graphics: Graphic[]) {
+  const fieldNames = new Set<string>();
+  for (const g of graphics) {
+    const { attributes } = g;
+    for (const name in attributes) {
+      if (attributes.hasOwnProperty(name)) {
+        fieldNames.add(name);
+      }
+    }
+  }
+  return fieldNames;
 }
 
 /**
@@ -122,34 +131,17 @@ function groupFeaturesByLayer(graphics: Graphic[]) {
  * @param graphics An array of Graphics.
  * @returns Returns a document fragment containing table elements.
  */
-export function graphicsToTables(
-  doc: Document,
-  graphics: Graphic[]
-): DocumentFragment {
+export function graphicsToTables(doc: Document, graphics: Graphic[]) {
   const groupedGraphics = groupFeaturesByLayer(graphics);
-  const tableMap = new Map<GraphicsLayer, HTMLTableElement>();
+  if (!groupedGraphics) {
+    return null;
+  }
   const frag = doc.createDocumentFragment();
-  for (const [layer, layerGraphics] of groupedGraphics) {
-    let table: HTMLTableElement;
-    if (tableMap.has(layer)) {
-      table = tableMap.get(layer)!;
-    } else {
-      table = featureAttributesToTable(doc, layer, true);
-      tableMap.set(layer, table);
-    }
-    const fields = Array.from(table.querySelectorAll("th")).map(
-      h => h.dataset.fieldName!
-    );
-    const tbody = table.tBodies[0];
 
-    for (const g of layerGraphics) {
-      const row = tbody.insertRow(-1);
-      fields.map(f => g.attributes[f]).forEach(v => {
-        const cell = row.insertCell(-1);
-        cell.textContent = v;
-      });
-    }
+  for (const [layer, gArray] of groupedGraphics.entries()) {
+    const table = featureAttributesToTable(doc, gArray, layer.id, false);
     frag.appendChild(table);
   }
+
   return frag;
 }
