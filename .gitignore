@@ -9,6 +9,9 @@ scripts/utils/*.js.map
 
 scripts/extensions
 scripts/dataUrlViewer
+
+.awcache
+
 # Logs
 logs
 *.log

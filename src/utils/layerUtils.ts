@@ -41,7 +41,7 @@ function getFieldNames(layer: FeatureLayer | GraphicsLayer) {
   }
 
   const output = new Set<string>();
-  for (const attributes of layer.graphics.map(g => g.attributes)) {
+  for (const { attributes } of layer.graphics) {
     for (const name in attributes) {
       if (attributes.hasOwnProperty(name)) {
         output.add(name);
@@ -61,7 +61,7 @@ export function featureAttributesToTable(
   tableName: string,
   omitData?: boolean
 ) {
-  const table = document.createElement("table");
+  const table = doc.createElement("table");
   table.createCaption().textContent = tableName;
   const thead = table.createTHead();
   const tbody = table.createTBody();
@@ -72,7 +72,7 @@ export function featureAttributesToTable(
   let row = thead.insertRow(-1);
 
   for (const field of fieldNames) {
-    const cell = document.createElement("th");
+    const cell = doc.createElement("th");
     cell.scope = "col";
     cell.textContent = field;
     cell.dataset.fieldName = field;
