@@ -26,6 +26,7 @@
     "awesome-typescript-loader": "^5.0.0",
     "dojo-typings": "^1.11.9",
     "gh-pages": "^1.1.0",
+    "hard-source-webpack-plugin": "^0.6.7",
     "jquery": "3.3.1",
     "jquery-ui": "^1.12.1",
     "prettier": "^1.12.1",

@@ -3,6 +3,7 @@ const path = require("path");
 // We need this plugin to detect a `--watch` mode. It may be removed later
 // after https://github.com/webpack/webpack/issues/3460 will be resolved.
 const { CheckerPlugin } = require("awesome-typescript-loader");
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 /**
  *
@@ -63,7 +64,7 @@ function createConfig(entry) {
         { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
       ]
     },
-    plugins: [new CheckerPlugin()]
+    plugins: [new CheckerPlugin(), new HardSourceWebpackPlugin()]
   };
 
   return config;
