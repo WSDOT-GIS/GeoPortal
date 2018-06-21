@@ -43,7 +43,7 @@ export function setupCrab(
   paneDiv.id = "crabPane";
   toolsAccordianDiv.appendChild(paneDiv);
   const contentPane = new ContentPane(
-    { title: "CRAB", id: "crabPane" },
+    { title: "CRMP", id: "crabPane" },
     paneDiv
   );
   toolsAccordion.addChild(contentPane);
@@ -133,8 +133,10 @@ export function setupCrab(
     const clearGraphicsDiv = document.createElement("div");
     clearGraphicsDiv.id = "crabClearControls";
     const clearGraphicsButton = document.createElement("button");
+    clearGraphicsButton.classList.add("clear-crab-button");
     clearGraphicsDiv.appendChild(clearGraphicsButton);
-    clearGraphicsButton.textContent = "Clear user's CRAB features";
+    clearGraphicsButton.textContent =
+      "Remove graphics created by CRMP tools from the map";
     clearGraphicsButton.onclick = () => {
       crabLinesLayer.clear();
       crabPointsLayer.clear();

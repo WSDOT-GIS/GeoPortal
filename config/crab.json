@@ -225,10 +225,11 @@
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer/",
+          "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CRABRoutes/MapServer",
         "options": {
           "id": "CRAB Routes",
-          "visible": true
+          "visible": true,
+          "minScale": 750000
         }
       }
     ]
