@@ -3,7 +3,7 @@
   "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
   "noPopupLayerRe": "(CRAB Routes)",
   "enableIdentify": true,
-  "disclaimer": "disclaimers/crab/index.html",
+  "disclaimer": "disclaimers/crmp/index.html",
   "alwaysShowDislaimer": false,
   "mapOptions": {
     "logo": false,
@@ -91,7 +91,7 @@
       ]
     }
   ],
-  "initialBasemap": "Light Gray Canvas",
+  "initialBasemap": "WSDOT Basemap",
   "routeLocatorUrl":
     "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
