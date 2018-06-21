@@ -7,7 +7,7 @@ import connect = require("dojo/_base/connect");
 import Extent = require("esri/geometry/Extent");
 import Layer = require("esri/layers/layer");
 import { createLayerNameFromUrl } from "../../utils/layerUtils";
-import LayerOptionsWidget from "./layerOptionsWidget";
+import "./layerOptionsWidget";
 import { createLayer, formatError, makeIdSafeString } from "./utils";
 
 // tslint:disable:variable-name comment-format only-arrow-functions no-console
