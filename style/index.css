@@ -647,3 +647,7 @@ label[for="m2gTemporalViewDate"] {
 label.required:after {
   content: " (Required)";
 }
+
+#zoomToContainer > label, #zoomToContainer > select {
+  display: block;
+}

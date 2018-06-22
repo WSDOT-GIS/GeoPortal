@@ -11,6 +11,7 @@ define([
   "dojox/layout/ExpandoPane",
 
   "esri/dijit/Legend",
+  "setup",
   "esri/tasks/QueryTask",
   "esri/tasks/query",
   "esri/layers/GraphicsLayer",
@@ -34,6 +35,7 @@ define([
   Button,
   ExpandoPane,
   Legend,
+  setup,
   QueryTask,
   Query,
   GraphicsLayer,
@@ -47,15 +49,15 @@ define([
   function getLayerInfos() {
     var layerIds, layerInfos;
     // Filter out basemap layers
-    layerIds = $.grep(wsdot.map.layerIds, isBasemap, true);
+    layerIds = wsdot.map.layerIds.filter(layerId => !isBasemap(layerId));
 
     // Add the graphics layers to the array of layer IDs.
-    $.merge(layerIds, wsdot.map.graphicsLayerIds);
+    layerIds.concat(wsdot.map.graphicsLayerIds);
 
     // Create layer info objects from the layer IDs, to be used with the Legend constructor.
-    layerInfos = $.map(layerIds, function(layerId) {
-      var layer = wsdot.map.getLayer(layerId);
-      return { layer: layer, title: layerId };
+    layerInfos = layerIds.map(layerId => {
+      const layer = wsdot.map.getLayer(layerId);
+      return {layer: layer, title: layerId};
     });
 
     return layerInfos;
@@ -424,6 +426,22 @@ define([
       return printForm || null;
     }
 
+    function setupFeatureSelects() {
+      const container = document.createElement("div");
+      container.id = "zoomToContainer"
+      document.getElementById("toolsAccordion").appendChild(container);
+      const contentPane = new ContentPane({title: "Zoom To", id: "zoomToContainer"}, container);
+      toolsAccordion.addChild(contentPane);
+
+      if (wsdot.map) {
+        setup.setupFeatureSelects(wsdot.map, wsdot.config, container);
+      } else {
+        window.addEventListener("mapload", (evt) => {
+          setup.setupFeatureSelects(evt.detail, wsdot.config, container);
+        });
+      }
+    }
+
     // Look in the configuration to determine which tools to add and in which order.
     (function(tools) {
       // Setup a default value for tools if it hasn't been specified.
@@ -433,6 +451,8 @@ define([
       for (tool of tools) {
         if (/lrs/i.test(tool)) {
           setupLrsControls();
+        } else if (/search/i.test(tool)) {
+          setupFeatureSelects();
         } else if (/airspace\s?Calculator/i.test(tool)) {
           setupAirspaceCalculator();
         } else if (/buffer/i.test(tool)) {
