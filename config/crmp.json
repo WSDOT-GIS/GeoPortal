@@ -33,7 +33,7 @@
     ]
   },
   "tabOrder": ["Tools", "Layers", "Legend", "Basemap"],
-  "tools": ["crab"],
+  "tools": ["crab", "search"],
   "geometryServer":
     "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
   "queryTasks": {
