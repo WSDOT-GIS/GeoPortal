@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "prepare": "webpack",
+    "watch": "webpack -w",
     "start": "webpack-dev-server --open",
     "gh-pages": "node build/gh-pages.js"
   },

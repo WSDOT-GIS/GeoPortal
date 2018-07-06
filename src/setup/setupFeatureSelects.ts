@@ -1,7 +1,16 @@
 import { IFeature, IFeatureSet } from "@esri/arcgis-rest-common-types";
-import { createFeatureSelect } from "@wsdot/arcgis-feature-select";
+import {
+  createFeatureSelect,
+  IFeatureSelect
+} from "@wsdot/arcgis-feature-select";
+import Popup from "esri/dijit/Popup";
+import Extent from "esri/geometry/Extent";
+import Multipoint from "esri/geometry/Multipoint";
+import Point from "esri/geometry/Point";
 import Polygon from "esri/geometry/Polygon";
+import Polyline from "esri/geometry/Polyline";
 import Graphic from "esri/graphic";
+import InfoTemplate from "esri/InfoTemplate";
 import EsriMap from "esri/map";
 
 /**
@@ -63,16 +72,53 @@ export async function setupFeatureSelects(
   const { queryTasks } = config;
   const promises = new Array<Promise<IFeatureSet>>();
 
-  function handleEvent(ev: CustomEvent<IFeature[]>) {
+  const zoomTemplate = new InfoTemplate("Zoom", (g: Graphic) => {
+    let output: any;
+    for (const name in g.attributes) {
+      if (g.attributes.hasOwnProperty(name)) {
+        const value = g.attributes[name];
+        output = value;
+        break;
+      }
+    }
+    return output;
+  });
+
+  function zoomToFeatures(this: IFeatureSelect, ev: CustomEvent<IFeature[]>) {
+    if (!ev.detail || !ev.detail.filter(f => !!f.geometry).length) {
+      return;
+    }
     const features = ev.detail;
     const graphics = features.map(f => {
       const g = new Graphic(f);
+      g.setInfoTemplate(zoomTemplate);
       g.geometry.setSpatialReference(map.spatialReference);
       return g;
     });
     const graphic = graphics[0];
-    const polygon = graphic.geometry as Polygon;
-    map.setExtent(polygon.getExtent(), true);
+    const { geometry } = graphic;
+
+    const popup = map.infoWindow as Popup;
+    popup.setFeatures(graphics);
+
+    // Zoom operation will differ depending on geometry type.
+    if (geometry instanceof Point) {
+      map.centerAndZoom(geometry, 14);
+      popup.show(geometry);
+    } else if (geometry instanceof Extent) {
+      map.setExtent(geometry, true);
+      popup.show(geometry.getCenter());
+    } else {
+      const castGeometry = geometry as Polyline | Polygon | Multipoint;
+      map.setExtent(castGeometry.getExtent(), true);
+      if (castGeometry instanceof Polygon) {
+        popup.show(castGeometry.getCentroid());
+      } else {
+        castGeometry.getExtent().getCenter();
+      }
+    }
+    this.selectedIndex = 0;
+    ev.stopPropagation();
   }
 
   // Loop through all of the query tasks.
@@ -95,7 +141,7 @@ export async function setupFeatureSelects(
         .then(response => response.json() as Promise<IFeatureSet>)
         .then(featureSet => {
           const featureSelect = createFeatureSelect(selectElement, featureSet);
-          featureSelect.addEventListener("featureselect", handleEvent);
+          featureSelect.addEventListener("featureselect", zoomToFeatures);
           featureSelect.disabled = false;
           return featureSet;
         });
