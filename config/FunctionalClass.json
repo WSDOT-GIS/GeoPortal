@@ -126,7 +126,8 @@
         "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
       "query": {
         "where": "1 = 1",
-        "returnGeometry": true
+        "returnGeometry": true,
+        "outFields": ["Name"]
       }
     }
   },
