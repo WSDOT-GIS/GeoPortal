@@ -1,34 +1,8 @@
-import { arcgisToGeoJSON } from "@esri/arcgis-to-geojson-utils";
+// import { IFeature, IFeatureSet } from "@esri/arcgis-rest-common-types";
 import Button = require("dijit/form/Button");
-import {
-  canProject,
-  webMercatorToGeographic
-} from "esri/geometry/webMercatorUtils";
 import GraphicsLayer = require("esri/layers/GraphicsLayer");
 import EsriMap = require("esri/map");
-import SpatialReference from "esri/SpatialReference";
-import { FeatureCollection } from "geojson";
-
-function layerToGeoJsonFeatureCollection(
-  layer: GraphicsLayer
-): FeatureCollection {
-  const mapWkid = 3857;
-  const outWkid = 4326;
-  const outSR = new SpatialReference(outerWidth);
-  const features = layer.graphics.map(g => {
-    const graphic = g.clone();
-    // Project from map spatial reference to WGS 84.
-    const projectedGeometry = webMercatorToGeographic(g.geometry);
-    graphic.geometry = projectedGeometry;
-    // Convert to GeoJSON feature.
-    const output = arcgisToGeoJSON(graphic as any) as any;
-    return output as GeoJSON.Feature;
-  });
-  return {
-    type: "FeatureCollection",
-    features
-  };
-}
+import { layerToGeoJsonFeatureCollection } from "../exporter/exportUtils";
 
 /**
  * Adds the Export Graphics button to the toolbar.
@@ -50,8 +24,8 @@ export function setupExportButton(map: EsriMap) {
 
   /**
    * The export button click event handler.
-   * Exports the features on the map to JSON, then
-   * dumps the JSON string to a new window.
+   * Exports the features on the map to GeoJSON,
+   * then sends the GeoJSON export form in new window.
    */
   function exportFeatures() {
     const featureSets = map.graphicsLayerIds
@@ -65,10 +39,26 @@ export function setupExportButton(map: EsriMap) {
     }
 
     const json = JSON.stringify(featureSets);
-    const url = `https://mapbox.github.io/geojson.io#data=data:application/json,${encodeURIComponent(
-      json
-    )}`;
-    window.open(url, "_blank");
+    const url = "./export";
+    const windowName = "_blank";
+    const exportWindow = window.open(url, windowName)!;
+    if (!exportWindow) {
+      alert(`Couldn't open "${url}"`);
+    }
+    exportWindow.addEventListener("load", () => {
+      exportWindow.dispatchEvent(
+        new CustomEvent("geojsonexport", {
+          detail: {
+            geojson: featureSets
+          }
+        })
+      );
+    });
+    // // Alternate option: send GeoJSON to geojson.io via query string.
+    // const url = `https://mapbox.github.io/geojson.io#data=data:application/json,${encodeURIComponent(
+    //   json
+    // )}`;
+    // window.open(url, "_blank");
   }
 
   toolbarDiv.appendChild(exportButton);

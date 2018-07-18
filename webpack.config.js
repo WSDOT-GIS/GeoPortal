@@ -39,7 +39,11 @@ function getFolderAndFileName(entry) {
  */
 function createConfig(entry) {
   const [folder, filename] = getFolderAndFileName(entry);
-  const libraryTarget = /dataUrlViewer/g.test(folder) ? undefined : "amd";
+  // Most of the output files will need to be AMD modules, but a few will
+  // need to be non-modules.
+  const libraryTarget = /(?:(?:dataUrlViewer)|(?:\bexporter\b))/g.test(folder)
+    ? undefined
+    : "amd";
 
   const config = {
     mode: "production",
@@ -71,6 +75,7 @@ function createConfig(entry) {
 }
 
 module.exports = [
+  "./src/exporter/exportPage.ts",
   "./src/arcgis-rest-lrs-ui/main.ts",
   "./src/extensions/esriApiExtensions.ts",
   "./src/extensions/graphicsLayer.ts",

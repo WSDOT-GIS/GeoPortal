@@ -1,0 +1,40 @@
+.hidden {
+  display: none;
+}
+
+body {
+  font-family: "Lato", "Franklin Gothic Medium", "Arial Narrow", Arial,
+    sans-serif;
+  margin: 0 1em 0 1em;
+  padding: 0;
+  display: grid;
+  grid-template-rows: min-content auto;
+  height: 100vh;
+}
+
+code,
+pre {
+  font-family: "Inconsolata", "Lucida Sans", "Lucida Sans Regular",
+    "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+header,
+h1 {
+  padding: 0;
+  margin: 0;
+}
+
+main,
+form {
+  height: calc(100% - 1em);
+}
+
+form {
+  display: grid;
+  grid-template-rows: min-content auto;
+}
+
+button[type="submit"]:before {
+  content: "💾";
+  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Symbola";
+}

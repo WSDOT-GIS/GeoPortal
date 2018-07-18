@@ -6,6 +6,7 @@ scripts/InfoTemplates
 scripts/setup
 scripts/utils/*.js
 scripts/utils/*.js.map
+scripts/exporter/*
 
 scripts/extensions
 scripts/dataUrlViewer
