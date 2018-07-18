@@ -1,17 +1,31 @@
-import { Feature, FeatureSet } from "arcgis-rest-api";
+import { arcgisToGeoJSON } from "@esri/arcgis-to-geojson-utils";
 import Button = require("dijit/form/Button");
-import FeatureLayer = require("esri/layers/FeatureLayer");
+import {
+  canProject,
+  webMercatorToGeographic
+} from "esri/geometry/webMercatorUtils";
 import GraphicsLayer = require("esri/layers/GraphicsLayer");
 import EsriMap = require("esri/map");
+import SpatialReference from "esri/SpatialReference";
+import { FeatureCollection } from "geojson";
 
-function layerToFeatureSet(layer: GraphicsLayer): FeatureSet {
-  // If the input is a FeatureLayer, use the built-in toJson function of that class.
-  if (layer instanceof FeatureLayer) {
-    return layer.toJson() as FeatureSet;
-  }
-
-  const features = layer.graphics.map(g => g.toJson() as Feature);
+function layerToGeoJsonFeatureCollection(
+  layer: GraphicsLayer
+): FeatureCollection {
+  const mapWkid = 3857;
+  const outWkid = 4326;
+  const outSR = new SpatialReference(outerWidth);
+  const features = layer.graphics.map(g => {
+    const graphic = g.clone();
+    // Project from map spatial reference to WGS 84.
+    const projectedGeometry = webMercatorToGeographic(g.geometry);
+    graphic.geometry = projectedGeometry;
+    // Convert to GeoJSON feature.
+    const output = arcgisToGeoJSON(graphic as any) as any;
+    return output as GeoJSON.Feature;
+  });
   return {
+    type: "FeatureCollection",
     features
   };
 }
@@ -43,7 +57,7 @@ export function setupExportButton(map: EsriMap) {
     const featureSets = map.graphicsLayerIds
       .map(id => map.getLayer(id) as GraphicsLayer)
       .filter(gl => gl.graphics.length > 0)
-      .map(layerToFeatureSet);
+      .map(layerToGeoJsonFeatureCollection);
 
     if (featureSets.length < 1) {
       alert("No features to export");
@@ -51,25 +65,10 @@ export function setupExportButton(map: EsriMap) {
     }
 
     const json = JSON.stringify(featureSets);
-    const url = "blank.html";
-    const newWindow = window.open(url, "_blank");
-
-    if (newWindow) {
-      const doc = document.implementation.createHTMLDocument(
-        "exported features"
-      );
-
-      const pre = doc.createElement("pre");
-      pre.textContent = json;
-      doc.body.appendChild(pre);
-      newWindow.document.write(
-        "<!DOCTYPE html>" + doc.documentElement.outerHTML
-      );
-      newWindow.document.close();
-      newWindow.focus();
-    } else {
-      alert("Couldn't open new window");
-    }
+    const url = `https://mapbox.github.io/geojson.io#data=data:application/json,${encodeURIComponent(
+      json
+    )}`;
+    window.open(url, "_blank");
   }
 
   toolbarDiv.appendChild(exportButton);
