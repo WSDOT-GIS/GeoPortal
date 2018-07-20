@@ -1,3 +1,22 @@
+/*
+
+# Layout
+
+## body
+
+| Header |
+|:------:|
+|  main  |
+
+## main
+
+The textboxes are layed out using CSS flex, with each box being 500px.
+As many text boxes as can fit in a row will be placed horizontally, and
+will take up multiple rows if necessary. The final box will fill stretch
+to fill the remaining horizontal space on the page.
+
+*/
+
 .hidden {
   display: none;
 }
@@ -24,17 +43,25 @@ h1 {
   margin: 0;
 }
 
-main,
-form {
+main {
   height: calc(100% - 1em);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
-form {
-  display: grid;
-  grid-template-rows: min-content auto;
+.text-container {
+  flex: 1 1 500px;
+  margin: 0.2rem;
 }
 
-button[type="submit"]:before {
-  content: "💾";
-  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Symbola";
+textarea {
+  width: 100%;
+  height: 100%;
+}
+
+/* If no GeoJSON has been added to the page, a message is displayed. */
+main:empty:after {
+  content: "No features have been added to this export page.";
+  font-style: italic;
 }

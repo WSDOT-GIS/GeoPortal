@@ -7,12 +7,31 @@ import EsriMap = require("esri/map");
 import { FeatureCollection } from "geojson";
 
 /**
+ * Additional foreign members for a feature collection
+ * containing info about the graphics layer or feature layer
+ * that the FeatureCollection was exported from.
+ */
+export interface IExportedLayerProps {
+  /**
+   * The "id" property of the source layer.
+   */
+  layerid?: string;
+}
+
+/**
+ * A GeoJSON FeatureCollection with additional foreign members.
+ * @see {@link https://tools.ietf.org/html/rfc7946#section-6.1 Foreign Members}
+ */
+export type IExportedFeatureCollection = FeatureCollection &
+  IExportedLayerProps;
+
+/**
  * Converts a graphics layer into a GeoJSON FeatureCollection.
  * @param layer A graphics layer or feature layer.
  */
 export function layerToGeoJsonFeatureCollection(
   layer: GraphicsLayer
-): FeatureCollection {
+): IExportedFeatureCollection {
   const features = layer.graphics.map(g => {
     const graphic = g.clone();
     // Project from map spatial reference to WGS 84.
@@ -23,6 +42,7 @@ export function layerToGeoJsonFeatureCollection(
     return output as GeoJSON.Feature;
   });
   return {
+    layerid: layer.id,
     type: "FeatureCollection",
     features
   };
