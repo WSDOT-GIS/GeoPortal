@@ -39,7 +39,7 @@ type GraphicWithResults = Graphic & { [key: string]: any };
  * @param {esri/Graphic} graphic - a graphic
  * @returns {HTMLTableElement} - An HTML table
  */
-function createTable(graphic: GraphicWithResults) {
+function createDefinitionList(graphic: GraphicWithResults) {
   const displayFieldName = graphic.result.displayFieldName;
   const layerName = graphic.result.layerName;
   const attr = graphic.attributes;
@@ -48,23 +48,20 @@ function createTable(graphic: GraphicWithResults) {
   const numberFieldNameRe = /^(?:(?:Year)|(?:AADT))([\s_]\d{4})?$/i;
   const numberRe = /^\d+$/;
   const percentFieldNameRe = /P(?:er)?c(?:en)?t$/i;
-  const table = document.createElement("table");
-  table.classList.add("traffic");
+  const dl = document.createElement("dl");
+  dl.classList.add("traffic");
 
   // Loop through all of the attributes and add
   // corresponding table rows.
   const attrNames = getAttributeNames(attr);
 
-  attrNames.forEach(fieldLabel => {
+  for (const fieldLabel of attrNames) {
     let handled = false;
     let value = attr[fieldLabel];
-    const row = table.insertRow(-1);
+    const dt = document.createElement("dt");
+    dt.textContent = fieldLabel;
 
-    let cell = document.createElement("th");
-    cell.textContent = fieldLabel;
-    row.appendChild(cell);
-
-    cell = document.createElement("td");
+    const dd = document.createElement("dd");
 
     // Apply formatting for special cases.
     if (typeof value === "number") {
@@ -73,15 +70,15 @@ function createTable(graphic: GraphicWithResults) {
       if (numberFieldNameRe.test(fieldLabel) && numberRe.test(value)) {
         value = numberFormat.format(value.replace(",", "") as any);
       } else if (nullRe.test(value)) {
-        cell.classList.add("null");
+        dd.classList.add("null");
         handled = true;
       } else if (percentFieldNameRe.test(fieldLabel)) {
-        cell.classList.add("percent");
+        dd.classList.add("percent");
       } else {
         const match = value.match(derivedRe);
         if (match) {
-          cell.classList.add("derived");
-          cell.textContent = numberFormat.format(
+          dd.classList.add("derived");
+          dd.textContent = numberFormat.format(
             parseInt(match[1].replace(",", ""), 10)
           );
           handled = true;
@@ -90,17 +87,18 @@ function createTable(graphic: GraphicWithResults) {
     }
 
     if (!handled) {
-      cell.textContent = value;
+      dd.textContent = value;
     }
-    row.appendChild(cell);
-  });
 
-  return table;
+    dl.appendChild(dt);
+    dl.appendChild(dd);
+  }
+
+  return dl;
 }
 
 function createContent(graphic: Graphic) {
-  const table = createTable(graphic);
-  return table;
+  return createDefinitionList(graphic);
 }
 
 /**
