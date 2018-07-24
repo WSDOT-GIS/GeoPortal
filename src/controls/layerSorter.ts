@@ -20,6 +20,15 @@ export = $.widget("ui.layerSorter", {
   },
   _populateList() {
     const $this = this;
+    // Write an error to the console if the options property is not present, then exit.
+    if (!this.options) {
+      // tslint:disable-next-line:no-console
+      console.error(
+        "layerSorter._populateList: this.options not present.",
+        this
+      );
+      return;
+    }
     const map = this.options.map;
     // Create the list if it does not already exist.
     if (!this._list) {
@@ -70,7 +79,7 @@ export = $.widget("ui.layerSorter", {
 
     // Add event handing to reorganize layers when layer's list item has been moved.
     // // dojo.connect(this.options.map, "onLayerReorder", $this, $this._populateList);
-    this.options.map.on("layers-reordered", $this._populateList);
+    this.options.map.on("layers-reordered", () => $this._populateList());
 
     return this;
   },
