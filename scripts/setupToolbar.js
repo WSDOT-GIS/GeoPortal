@@ -151,8 +151,10 @@ define([
               });
           }
           layerSorter.dialog("open");
-          if (window.gaTracker) {
-            window.gaTracker.send("event", "button", "click", "layer sorter");
+          if (window.ga) {
+            ga((tracker) => {
+              tracker.send("event", "button", "click", "layer sorter");
+            })
           }
         }
       },
