@@ -132,14 +132,25 @@ export function setupCrab(
     // Add clear graphics button
     const clearGraphicsDiv = document.createElement("div");
     clearGraphicsDiv.id = "crabClearControls";
+    clearGraphicsDiv.classList.add("danger");
     const clearGraphicsButton = document.createElement("button");
     clearGraphicsButton.classList.add("clear-crab-button");
     clearGraphicsDiv.appendChild(clearGraphicsButton);
     clearGraphicsButton.textContent =
-      "Remove graphics created by CRMP tools from the map";
+      "🗑️❌ Remove graphics created by CRMP tools from the map ❌🗑️";
     clearGraphicsButton.onclick = () => {
-      crabLinesLayer.clear();
-      crabPointsLayer.clear();
+      if (crabLinesLayer.graphics.length || crabPointsLayer.graphics.length) {
+        if (
+          confirm(
+            "Are you sure you want to delete all graphics you created with the CRMP tool?"
+          )
+        ) {
+          crabLinesLayer.clear();
+          crabPointsLayer.clear();
+        }
+      } else {
+        alert("There are currently no graphics to remove.");
+      }
     };
     crabUI.appendChild(clearGraphicsDiv);
 

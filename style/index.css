@@ -656,3 +656,7 @@ label.required:after {
 #zoomToContainer > select {
   display: block;
 }
+
+div.danger {
+  background-color: darkred;
+}
