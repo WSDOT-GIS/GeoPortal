@@ -1,5 +1,10 @@
 // TODO get dijit type defs from other source.
 
+declare module "dijit/registry" {
+  function byId<T>(id: string): T;
+  export { byId };
+}
+
 declare module "dijit/layout/ContentPane" {
   class ContentPane {
     constructor(...args: any[]);

@@ -5,12 +5,12 @@ import EsriMap = require("esri/map");
 // import SnappingManager = require("esri/SnappingManager");
 import Draw = require("esri/toolbars/draw");
 
+import { createSearchLink } from "./SearchLink";
 import {
   addToFormWithLabel,
   defaultLayerId,
   defaultLrsSvcUrl,
-  generateId,
-  splitName
+  generateId
 } from "./utils";
 
 function createForm(
@@ -20,6 +20,11 @@ function createForm(
   const form = document.createElement("form");
   form.id = generateId("geometryToMeasureForm");
   form.action = `${url}/networkLayers/${layerId}/geometryToMeasure`;
+
+  const link = createSearchLink(/County/i);
+  const p = document.createElement("p");
+  p.appendChild(link);
+  form.appendChild(p);
 
   const toleranceControl = document.createElement("input");
   toleranceControl.type = "number";
@@ -44,8 +49,6 @@ function createForm(
   submitButton.type = "submit";
   submitButton.textContent = "Locate";
   form.appendChild(submitButton);
-
-  const layerUrl = form.action.replace(/\/geometryToMeasure\/?$/, "?f=json");
 
   return form;
 }
