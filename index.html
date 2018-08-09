@@ -8,6 +8,18 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>WSDOT GeoPortal</title>
+    <script>
+        // Test for old browsers which lack modern features required for this app (e.g., IE).
+        if ((function () {
+            return !(window.fetch);
+        })()) {
+            alert("Obsolete browser detected. Please use a modern browser.");
+            window.isObsolete = true;
+            if (window.stop) {
+                window.stop();
+            }
+        }
+    </script>
     <link rel="stylesheet" href="//js.arcgis.com/3.23/esri/css/esri.css" />
     <link rel="stylesheet" href="//js.arcgis.com/3.23/dijit/themes/claro/claro.css" />
     <link href="//js.arcgis.com/3.23/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
@@ -168,9 +180,12 @@
              */
             function getJsDelivrUrl(userOrOrg, repo, version, provider) {
                 provider = provider || "gh";
-                version = version ? `@${version}` : "";
+                // version = version ? `@${version}` : "";
+                version = version ? "@" + version : "";
                 userOrOrg = userOrOrg || provider === "gh" ? "WSDOT-GIS" : "@wsdot";
-                return `https://cdn.jsdelivr.net/${provider}/${userOrOrg}/${repo}${version}`
+                // return `https://cdn.jsdelivr.net/${provider}/${userOrOrg}/${repo}${version}`
+                return "https://cdn.jsdelivr.net/" + [provider, userOrOrg, repo + version].join("/");
+
             }
 
             var dojoConfig = {
