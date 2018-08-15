@@ -13,8 +13,9 @@
         if ((function () {
             return !(window.fetch);
         })()) {
-            alert("Obsolete browser detected. Please use a modern browser.");
+            // alert("Obsolete browser detected. Please use a modern browser.");
             window.isObsolete = true;
+            window.open("unsupportedBrowser.html", "_top");
             if (window.stop) {
                 window.stop();
             }
