@@ -9,7 +9,7 @@ function setOpacity(event: any, ui: any) {
 const LayerOptionsWidget = $.widget("ui.layerOptions", {
   options: {
     layer: null
-  },
+  } as any,
   /**
    * Adds a metadata link if the layer has metadata ids specified.
    */

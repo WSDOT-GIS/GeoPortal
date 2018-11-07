@@ -1,10 +1,11 @@
+import EsriMap from "esri/map";
 import { createLayerNameFromUrl } from "../utils/layerUtils";
 
 export = $.widget("ui.layerSorter", {
   options: {
-    map: null
+    map: null as EsriMap | null
   },
-  _list: null,
+  _list: null as JQuery<HTMLUListElement> | null,
   /**
    * Moves the layer corresponding list item to the same position in the map.
    * @param {HTMLLIElement} listItem - HTML list item element.
@@ -36,22 +37,22 @@ export = $.widget("ui.layerSorter", {
         .appendTo(this.element)
         .sortable({
           stop(event, ui) {
-            const item = ui.item;
+            const item = ui.item as JQuery<HTMLLIElement>;
             $this._moveLayer(item);
           }
         })
-        .disableSelection();
+        .disableSelection() as JQuery<HTMLUListElement>;
     }
-    this._list.empty();
+    this._list!.empty();
 
     // Loop through the layers in reverse order, so topmost layer is on the top of the list.
-    for (let l = map.layerIds.length, i = l - 1; i >= 0; i -= 1) {
-      const layerId = map.layerIds[i];
-      const layer = map.getLayer(layerId);
+    for (let l = map!.layerIds.length, i = l - 1; i >= 0; i -= 1) {
+      const layerId = map!.layerIds[i];
+      const layer = map!.getLayer(layerId);
       $(
         [
           '<li class="ui-state-default" title="',
-          layer.description,
+          (layer as any).description,
           '"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>',
           createLayerNameFromUrl(layer),
           "</li>"
@@ -79,7 +80,7 @@ export = $.widget("ui.layerSorter", {
 
     // Add event handing to reorganize layers when layer's list item has been moved.
     // // dojo.connect(this.options.map, "onLayerReorder", $this, $this._populateList);
-    this.options.map.on("layers-reordered", () => $this._populateList());
+    this.options.map!.on("layers-reordered", () => $this._populateList());
 
     return this;
   },

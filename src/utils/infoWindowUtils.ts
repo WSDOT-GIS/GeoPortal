@@ -21,7 +21,7 @@ function getGoogleStreetViewUrl(point: Point) {
   // http://maps.google.com/maps?q=&layer=c&cbll=47.15976,-122.48359&cbp=11,0,0,0,0
   return `http://maps.google.com/maps?q=&layer=c&cbll=${xy[1]},${
     xy[0]
-  }&cbp=11,0,0,0,0`;
+    }&cbp=11,0,0,0,0`;
 }
 
 export function addExportFeatureLink(infoWindow: Popup) {
@@ -165,9 +165,9 @@ export function addPrintLink(
     const style = doc.createElement("style");
     style.type = "text/css";
     style.textContent = printCss;
-    doc.head.appendChild(style);
+    doc.head!.appendChild(style);
 
-    const htmlMarkup = "<!DOCTYPE html>" + doc.documentElement.outerHTML;
+    const htmlMarkup = "<!DOCTYPE html>" + doc.documentElement!.outerHTML;
 
     const newWindow = window.open(fallbackUrl, "geoportal_attribute_table")!;
     newWindow.document.write(htmlMarkup);

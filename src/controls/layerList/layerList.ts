@@ -3,9 +3,10 @@
  * @author Jeff Jacobson
  */
 
-import connect = require("dojo/_base/connect");
-import Extent = require("esri/geometry/Extent");
-import Layer = require("esri/layers/layer");
+import connect from "dojo/_base/connect";
+import Extent from "esri/geometry/Extent";
+import Layer from "esri/layers/layer";
+import EsriMap from "esri/map";
 import { createLayerNameFromUrl } from "../../utils/layerUtils";
 import "./layerOptionsWidget";
 import { createLayer, formatError, makeIdSafeString } from "./utils";
@@ -125,13 +126,13 @@ function createSublayerControls(layer: Layer & ILayerExtensions) {
       layerInfo.subLayerIds !== null
         ? null
         : $("<input>")
-            .attr({
-              type: "checkbox",
-              value: layerInfo.id,
-              checked: layerInfo.defaultVisibility
-            })
-            .appendTo(li)
-            .addClass("ui-layer-list-sublayer");
+          .attr({
+            type: "checkbox",
+            value: layerInfo.id,
+            checked: layerInfo.defaultVisibility
+          })
+          .appendTo(li)
+          .addClass("ui-layer-list-sublayer");
     if (layerInfo.subLayerIds === null) {
       $("<label>")
         .text(layerInfo.name)
@@ -232,7 +233,7 @@ function onLayerLoad(this: any, layer: Layer & ILayerExtensions) {
     // Add a "metadataUrl property to each layerInfo.
     if (typeof layer.getIdsOfLayersWithMetadata === "function") {
       layer.getIdsOfLayersWithMetadata(
-        function(layerIds: number[]) {
+        function (layerIds: number[]) {
           layer.metadataLayers = layerIds;
 
           if (layerIds && layerIds.length) {
@@ -243,16 +244,16 @@ function onLayerLoad(this: any, layer: Layer & ILayerExtensions) {
             }
           }
         },
-        function(/*error*/) {
+        function (/*error*/) {
           layer.metadataLayers = null;
         }
       );
     } else if (typeof layer.supportsMetadata === "function") {
       layer.supportsMetadata(
-        function(metadataSupportInfo: any) {
+        function (metadataSupportInfo: any) {
           console.log("supports metadata", metadataSupportInfo);
         },
-        function(error: Error) {
+        function (error: Error) {
           console.error(error);
         }
       );
@@ -332,7 +333,7 @@ function onLayerError(this: any, error: Error) {
       .attr("title", "Error\n" + formatError(error));
   }
   // Trigger an event that can be used by consumers of this control..
-  this._trigger("layerError", {
+  (this as any)._trigger("layerError", {
     error
   });
 }
@@ -393,8 +394,8 @@ function updateIsInScaleStatus(
 
 $.widget("ui.layerListItem", {
   options: {
-    layer: null, // An object that is used to create an layer.  Has an id, url, and layerType.
-    map: null,
+    layer: null as Layer | null, // An object that is used to create an layer.  Has an id, url, and layerType.
+    map: null as EsriMap | null,
     label: null, // The label to be used instead of the layer's "id" property.
     contextMenuIcon: _defaultContextMenuIcon,
     loadingIcon: _defaultLoadingIcon
@@ -405,8 +406,8 @@ $.widget("ui.layerListItem", {
   _hideLoading() {
     $(".ui-layer-list-item-loading-icon", this.element).hide();
   },
-  _checkbox: null,
-  _layer: null, // This is where the Layer object will be stored.
+  _checkbox: null as JQuery<HTMLInputElement> | null,
+  _layer: null as Layer | null, // This is where the Layer object will be stored.
   getLayer() {
     return this._layer;
   },
@@ -427,11 +428,11 @@ $.widget("ui.layerListItem", {
 
     // If scale is not provided, get it from the map.
     if (scale === null || typeof scale === "undefined") {
-      scale = this.options.map.__LOD.scale;
+      scale = (this.options.map as any).__LOD.scale;
     }
 
     // Check to see if the layer has a scales property that is an array.
-    const scales = this._layer.scales;
+    const scales = (this._layer as any).scales;
     if (typeof scales !== "undefined" && $.isArray(scales)) {
       const minScale = scales[0];
       const maxScale = scales[scales.length - 1];
@@ -458,18 +459,18 @@ $.widget("ui.layerListItem", {
       .attr({
         type: "checkbox",
         "data-layer-id":
-          $this.options.layer.id || $this.options.layer.options.id
+          $this.options.layer!.id || ($this.options.layer as any).options.id
       })
       .appendTo($this.element)
-      .change({ widget: $this }, toggleLayer);
+      .change({ widget: $this }, toggleLayer) as JQuery<HTMLInputElement>;
 
     // Add the label for the checkbox.
     $("<label>")
       .text(
         $this.options.label ||
-          $this.options.layer.id ||
-          $this.options.layer.options.id ||
-          "Unnamed"
+        $this.options.layer!.id ||
+        ($this.options.layer as any).options.id ||
+        "Unnamed"
       )
       .appendTo($this.element);
 
@@ -487,11 +488,11 @@ $.widget("ui.layerListItem", {
     if (
       typeof $this.options.layer !== "undefined" &&
       $this.options.layer !== null &&
-      typeof $this.options.layer.isInstanceOf === "function" &&
-      $this.options.layer.isInstanceOf(Layer)
+      typeof ($this.options.layer as any).isInstanceOf === "function" &&
+      ($this.options.layer as any).isInstanceOf(Layer)
     ) {
       $this._layer = $this.options.layer;
-      $this._addInfoFromLoadedLayer($this._layer);
+      $this._addInfoFromLoadedLayer($this._layer as any);
       // Set the checkbox to match the layer's visibility.
 
       $this._checkbox[0].checked = $this._layer.visible;
@@ -502,7 +503,7 @@ $.widget("ui.layerListItem", {
   },
   disable() {
     // Remove the change event handler, disable and uncheck the checkbox.
-    this._checkbox.change(null).attr("disabled", true)[0].checked = false;
+    this._checkbox!.change(null as any).attr("disabled", true as any)[0].checked = false;
     $.Widget.prototype.disable.apply(this, arguments);
   },
   _destroy() {
@@ -513,14 +514,14 @@ $.widget("ui.layerListItem", {
 
 $.widget("ui.layerListGroup", {
   options: {
-    map: null,
-    groupName: null,
-    layers: null,
+    map: null as EsriMap | null,
+    groupName: null as string | null,
+    layers: null as Layer[] | null,
     startCollapsed: false,
     contextMenuIcon: _defaultContextMenuIcon,
     loadingIcon: _defaultLoadingIcon
   },
-  _list: null,
+  _list: null as JQuery<HTMLUListElement> | null,
   /**
    * Toggles the list of layers or subgroups on or off.
    * @returns {ui.layerListGroup} the calling layer list group returns itself.
@@ -531,13 +532,13 @@ $.widget("ui.layerListGroup", {
     const hidden = $("ul", this.element).css("display") === "none";
     // Expand the list if it is hidden, or collapse it if it is currently visible.  Then trigger the appropriate event.
     if (hidden) {
-      this._list.show("blind");
+      this._list!.show("blind");
       $(this.element).removeClass("collapsed");
-      this._trigger("collapse", this);
+      (this as any)._trigger("collapse", this);
     } else {
-      this._list.hide("blind");
+      this._list!.hide("blind");
       $(this.element).addClass("collapsed");
-      this._trigger("expand", this);
+      (this as any)._trigger("expand", this);
     }
     return this;
   },
@@ -547,7 +548,7 @@ $.widget("ui.layerListGroup", {
    * @returns {ui.layerListGroup} the calling layer list group returns itself.
    */
   _addLayer(layer: Layer) {
-    const layerListItem = ($("<li>").appendTo(this._list) as any).layerListItem(
+    const layerListItem = ($("<li>").appendTo(this._list!) as any).layerListItem(
       {
         layer,
         map: this.options.map,
@@ -555,7 +556,7 @@ $.widget("ui.layerListGroup", {
         loadingIcon: this.options.loadingIcon
       }
     );
-    this._trigger("layerAdd", this, {
+    (this as any)._trigger("layerAdd", this, {
       layer,
       layerListItem: layerListItem.data("layerListItem")
     });
@@ -568,7 +569,7 @@ $.widget("ui.layerListGroup", {
    * @returns {ui.layerListGroup} the calling layer list group returns itself.
    */
   _addGroup(name: string, layers: any[]) {
-    const group = ($("<li>").appendTo(this._list) as any).layerListGroup({
+    const group = ($("<li>").appendTo(this._list!) as any).layerListGroup({
       groupName: name,
       startCollapsed: this.options.startCollapsed,
       layers,
@@ -576,7 +577,7 @@ $.widget("ui.layerListGroup", {
       contextMenuIcon: this.options.contextMenuIcon,
       loadingIcon: this.options.loadingIcon
     });
-    this._trigger("groupAdd", this, {
+    (this as any)._trigger("groupAdd", this, {
       name,
       layers,
       group: group.data("layerListGroup")
@@ -595,10 +596,10 @@ $.widget("ui.layerListGroup", {
       .appendTo($this.element);
 
     // Add a list to hold the child elements or arrays.
-    $this._list = $("<ul>").appendTo($this.element);
+    $this._list = $("<ul>").appendTo($this.element) as JQuery<HTMLUListElement>;
 
     // Add the click event to the link which will toggle the list.
-    link.click(function() {
+    link.click(function () {
       $this.toggle();
       return false;
     });
@@ -606,14 +607,14 @@ $.widget("ui.layerListGroup", {
     // If layers is an array, it contains layers.  Otherwise it contains groups of layers.
     if ($.type(layers) === "array") {
       // For each layer in layers, add a list item and turn it into a layerListItem.
-      for (let i = 0, l = layers.length; i < l; i += 1) {
-        $this._addLayer(layers[i]);
+      for (let i = 0, l = layers!.length; i < l; i += 1) {
+        $this._addLayer(layers![i]);
       }
     } else if ($.type(layers) === "object") {
       // Add layer list groups for each property in the layers object.
-      for (const name in layers) {
-        if (layers.hasOwnProperty(name)) {
-          $this._addGroup(name, layers[name]);
+      for (const name in layers!) {
+        if (layers!.hasOwnProperty(name)) {
+          $this._addGroup(name, (layers as any)[name]);
         }
       }
     }
@@ -658,7 +659,7 @@ $.widget("ui.layerList", {
     defaultBasemapLabel: "Basemap Layer",
     basemapGroupName: "Basemap",
     addAdditionalLayers: true
-  },
+  } as any,
   getWidget() {
     return this;
   },
@@ -711,7 +712,7 @@ $.widget("ui.layerList", {
       }
     }
   },
-  _childNodeType: null,
+  _childNodeType: null as any,
   _addGroup(name: string) {
     const group = ($(this._childNodeType).appendTo(
       this.element
@@ -723,7 +724,7 @@ $.widget("ui.layerList", {
       contextMenuIcon: this.options.contextMenuIcon,
       loadingIcon: this.options.loadingIcon
     });
-    this._trigger("groupAdd", this, {
+    (this as any)._trigger("groupAdd", this, {
       group
     });
     return group;
@@ -745,7 +746,7 @@ $.widget("ui.layerList", {
           typeof groupWidget.options.groupName === "string" &&
           groupWidget.options.groupName === this.options.basemapGroupName
         ) {
-          parent = group[0];
+          parent = group[0] as any;
           basemapGroupFound = true;
           break;
         }
@@ -781,7 +782,7 @@ $.widget("ui.layerList", {
       });
 
       // Trigger an event.
-      this._trigger("layerAdd", this, {
+      (this as any)._trigger("layerAdd", this, {
         layer,
         layerListItem: layerListItem.data("layerListItem")
       });
@@ -809,7 +810,7 @@ $.widget("ui.layerList", {
         break;
       }
     }
-    this._trigger("layerRemove", this, {
+    (this as any)._trigger("layerRemove", this, {
       layer
     });
   },
@@ -818,7 +819,7 @@ $.widget("ui.layerList", {
     const layerIds = map.layerIds.concat(map.graphicsLayerIds);
     // Add layers already in map to the TOC.
     for (let i = 0, l = layerIds.length; i < l; i += 1) {
-      this._addLayer(map.getLayer(layerIds[i]));
+      (this._addLayer as any)(map.getLayer(layerIds[i]));
     }
   },
   _create() {
@@ -829,15 +830,15 @@ $.widget("ui.layerList", {
     $($this.element).addClass("ui-layer-list");
 
     // Get the base node DOM element.
-    const baseNode = this.element.nodeName ? this.element : this.element[0];
+    const baseNode = (this.element as any).nodeName ? this.element : this.element[0];
     // Determine the type of DOM element.  If the baseNode is either an OL or UL, we will be adding LI elements.
     // Otherwise we will be adding DIV elements.
-    $this._childNodeType = /[uo]l/i.test(baseNode.nodeName) ? "<li>" : "<div>";
+    $this._childNodeType = /[uo]l/i.test((baseNode as any).nodeName) ? "<li>" : "<div>";
 
     if ($.isArray($this.options.layers)) {
       // If the "layers" option is an array, add a layerListItem for each element in the array.
       for (let i = 0, l = $this.options.layers.length; i < l; i += 1) {
-        $this._addLayer($this.options.layers[i]);
+        ($this as any)._addLayer($this.options.layers[i]);
       }
     } else {
       // For each property in the "layers" object, add a layerListGroup.
@@ -885,12 +886,12 @@ $.widget("ui.tabbedLayerList", {
     basemapRe: /layer((?:\d+)|(?:_osm)|(?:_bing))/i,
     basemapGroupName: "Basemap",
     addAdditionalLayers: true
-  },
+  } as any,
   _create() {
     const $this = this;
 
     function createTabDiv(tabName: string, addAdditionalLayers?: boolean) {
-      const layers: any[] = $this.options.layers[tabName] || [];
+      const layers: any[] = $this.options.layers![tabName] || [];
       // Create the ID for the current tab.
       const tabId = makeIdSafeString(
         tabName,
@@ -906,16 +907,16 @@ $.widget("ui.tabbedLayerList", {
       const tabDiv = ($("<div>")
         .attr("id", tabId)
         .appendTo($this.element) as any).layerList({
-        map: $this.options.map,
-        layers,
-        startCollapsed: $this.options.startCollapsed,
-        contextMenuIcon: $this.options.contextMenuIcon,
-        loadingIcon: $this.options.loadingIcon,
-        startLayers: $this.options.startLayers,
-        basemapRe: $this.options.basemapRe,
-        basemapGroupName: $this.options.basemapGroupName,
-        addAdditionalLayers: Boolean(addAdditionalLayers)
-      });
+          map: $this.options.map,
+          layers,
+          startCollapsed: $this.options.startCollapsed,
+          contextMenuIcon: $this.options.contextMenuIcon,
+          loadingIcon: $this.options.loadingIcon,
+          startLayers: $this.options.startLayers,
+          basemapRe: $this.options.basemapRe,
+          basemapGroupName: $this.options.basemapGroupName,
+          addAdditionalLayers: Boolean(addAdditionalLayers)
+        });
     }
 
     const tabList = $("<ul>").appendTo($this.element);
