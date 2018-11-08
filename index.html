@@ -1,48 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+    />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>GeoPortal</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
-    <link rel="stylesheet" href="style/index.css" async="async" />
-</head>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.9/esri/css/main.css"
+      integrity="sha384-xyO3ilv1t2/VLiMgrNED++aRhZn+d2CHBzL+sctmKxUaqhRu1Hxap/SopvHCOLn+"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style/index.css" />
+  </head>
 
-<body>
+  <body>
     <div id="titleDiv">
-
-        <div id="title">
-            <img src="images/acronymlogo.svg" alt="WSDOT Logo" height="20px">
-            <span id="mapTitle">GeoPortal</span>
-        </div>
+      <div id="title">
+        <img src="images/acronymlogo.svg" alt="WSDOT Logo" height="20px" />
+        <span id="mapTitle">GeoPortal</span>
+      </div>
     </div>
     <div id="viewDiv"></div>
     <script>
-        (function () {
-            const root = location.pathname.replace(/\/[^\/]*$/, "");
-            const dojoConfig = {
-                async: true,
-                // See https://blogs.esri.com/esri/arcgis/2017/12/14/making-better-promises/
-                has: {
-                    "esri-promise-compatibility": 1,
-                    "esri-featurelayer-webgl": 1
-                },
-                packages: [{
-                    name: "app",
-                    location: `${root}/dist`
-                }]
+      (function() {
+        const root = location.pathname.replace(/\/[^\/]*$/, "");
+        const dojoConfig = {
+          async: true,
+          // See https://blogs.esri.com/esri/arcgis/2017/12/14/making-better-promises/
+          has: {
+            "esri-promise-compatibility": 1,
+            "esri-featurelayer-webgl": 1
+          },
+          packages: [
+            {
+              name: "app",
+              location: `${root}/dist`
             }
-            window.dojoConfig = dojoConfig;
-        })();
+          ]
+        };
+        window.dojoConfig = dojoConfig;
+      })();
     </script>
-    <script src="https://js.arcgis.com/4.7/dojo/dojo.js" integrity="sha384-9Ny576IyEFauOfetOprinQCPVDdzLxYSSBXkzniGe7uSBpSAIcdTr3GNXlcpaou1"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://js.arcgis.com/4.9/dojo/dojo.js"
+      integrity="sha384-n7UZzmTqxih99Z1jcuOxznL9frdF67XJ9/q5Oz+v8Q0aUuojWvaz/CfvYeyouNF4"
+      crossorigin="anonymous"
+    ></script>
     <script>
-        require(["app"]);
+      require(["app"]);
     </script>
-</body>
-
+  </body>
 </html>

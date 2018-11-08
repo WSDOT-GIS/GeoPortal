@@ -15,14 +15,7 @@ import Search = require("esri/widgets/Search");
 
 // Inform the API about additional sites that are CORS enabled
 // and support HTTPS.
-const { corsEnabledServers, httpsDomains } = esriConfig.request;
-if (corsEnabledServers) {
-  corsEnabledServers.push(
-    "data.wsdot.wa.gov",
-    "www.wsdot.wa.gov",
-    "wsdot.wa.gov"
-  );
-}
+const { httpsDomains } = esriConfig.request;
 if (httpsDomains) {
   httpsDomains.push("wsdot.wa.gov");
 }
@@ -102,27 +95,28 @@ view.ui.add(home, "top-left");
 
 // Add Search
 const searchWidget = new Search({
-  activeSourceIndex: -1,
+  includeDefaultSources: false,
   locationEnabled: true,
   view,
+  sources: [
+    {
+      locator: {
+        url:
+          "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+        countryCode: "US"
+      },
+      filter: {
+        geometry: waExtent,
+        where: "1=1"
+      }
+    },
+    {
+      featureLayer: countyLayer,
+      name: "County Boundaries"
+    }
+  ],
   container: document.createElement("div")
 });
-
-// Modifiy the default World Locator:
-// * Restrict to US
-// * Restrict search extent to WA extent.
-const worldLocator = searchWidget.defaultSource as __esri.LocatorSource;
-worldLocator.countryCode = "US";
-worldLocator.filter = {
-  geometry: waExtent,
-  where: "1 = 1"
-};
-
-// Add the county Feature Layer as a search source.
-searchWidget.sources.add({
-  featureLayer: countyLayer,
-  name: "County Boundaries"
-} as __esri.FeatureLayerSource);
 
 // Place the search control into an expander.
 const searchExpand = new Expand({
