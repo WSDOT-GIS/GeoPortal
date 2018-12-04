@@ -4,7 +4,7 @@
   "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/EnvironmentalMappingExportWebMap/GPServer/Export Web Map",
   "enableIdentify": true,
   "disclaimer": "disclaimers/internal-rmec/Internal.html",
-  "additionalStylesheets": [ "style/rmec.css" ],
+  "additionalStylesheets": ["style/rmec.css"],
   "alwaysShowDisclaimer": true,
   "mapOptions": {
     "logo": false,
@@ -93,22 +93,22 @@
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": [ "JURLBL" ]
+        "outFields": ["JURLBL"]
       }
     },
     "city": {
       "label": "City",
-			"url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-				"outFields": ["CityName"]
+        "outFields": ["CityName"]
       }
     },
     "urbanArea": {
       "label": "Urban Area",
-            "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -121,7 +121,9 @@
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
       "layers": [
-        { "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer" }
+        {
+          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+        }
       ]
     },
     {
@@ -129,9 +131,15 @@
       "title": "Hybrid",
       "thumbnailUrl": "images/EsriHybridThumbnail.png",
       "layers": [
-        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
-        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer" },
-        { "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer" }
+        {
+          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+        },
+        {
+          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
+        },
+        {
+          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
+        }
       ]
     }
   ],
@@ -159,14 +167,14 @@
       },
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "https://fortress.wa.gov/ecy/ecyprodgislb/arcgis/rest/services/NHD/NHD_Cache/MapServer",
+        "url": "https://fortress.wa.gov/ecy/gisprod/arcgis/rest/services/NHD/NHD_Cache/MapServer",
         "options": {
           "id": "National Hydrology Dataset (NHD)"
         }
       },
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "https://fortress.wa.gov/ecy/ecyprodgislb/arcgis/rest/services/NHD/NHD_Label_Cache/MapServer",
+        "url": "https://fortress.wa.gov/ecy/gisprod/arcgis/rest/services/NHD/NHD_Label_Cache/MapServer",
         "options": {
           "id": "National Hydrology Dataset (NHD) Labels"
         }
