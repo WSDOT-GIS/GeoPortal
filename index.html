@@ -8,9 +8,22 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>WSDOT GeoPortal</title>
-    <link rel="stylesheet" href="//js.arcgis.com/3.23/esri/css/esri.css" />
-    <link rel="stylesheet" href="//js.arcgis.com/3.23/dijit/themes/claro/claro.css" />
-    <link href="//js.arcgis.com/3.23/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
+    <script>
+        // Test for old browsers which lack modern features required for this app (e.g., IE).
+        if ((function () {
+            return !(window.fetch);
+        })()) {
+            // alert("Obsolete browser detected. Please use a modern browser.");
+            window.isObsolete = true;
+            window.open("unsupportedBrowser.html", "_top");
+            if (window.stop) {
+                window.stop();
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="//js.arcgis.com/3.26/esri/css/esri.css" />
+    <link rel="stylesheet" href="//js.arcgis.com/3.26/dijit/themes/claro/claro.css" />
+    <link href="//js.arcgis.com/3.26/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
     <link href="//code.jquery.com/ui/1.9.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 
     <link rel="shortcut icon" href="//images.wsdot.wa.gov/favicon.ico" />
@@ -25,6 +38,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
         crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0/AirspaceCalculator.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/url-polyfill@1.0.13/url-polyfill.js" integrity="sha256-e+hAGufphbbuCqIYU4lboVyYAcGqJavUrUkCyAx30zw="
+        crossorigin="anonymous"></script>
 
     <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
     <script src="node_modules/@bower_components/polyfills/html.js"></script> -->
@@ -93,7 +108,7 @@
                                         <option value="fish-passage-barriers">Fish Passage Barriers</option>
                                         <option value="FunctionalClass">Functional Class</option>
                                         <option value="traffic">Traffic</option>
-                                        <option value="crab">CRAB</option>
+                                        <!-- <option value="crmp">CRMP</option> -->
                                         <optgroup label="internal">
                                             <option value="internal-habitat-connectivity">Habitat Connectivity</option>
                                             <option value="internal-rmec">Maintenance Environmental Mapping</option>
@@ -127,7 +142,6 @@
                     <button id="measureButton" type="button">Measure</button>
                     <button id="sortButton" type="button">Arrange Layers</button>
                     <button id="helpButton" type="button">Help</button>
-                    <button id="saveButton" type="button">Save</button>
                 </div>
                 <div id="scaleText"></div>
                 <progress class="loading-bar">Loading...</progress>
@@ -156,11 +170,23 @@
     </div>
     <script>
         (function (root) {
+            /**
+             * Creates a URL for a resource on https://cdn.jsdelivr.net.
+             * @param {string} userOrOrg - The name of either a Github repository user or organization,
+             * or an NPM scope (including "@"" sign).
+             * @param {string} repo - The name of a Github repository or NPM package.
+             * @param {string} [version] - Version number (e.g., "1.2.0")
+             * @param {string} [provider="gh"] - "gh" for Github, "npm" for NPM.
+             * @returns {string} Returns a URL.
+             */
             function getJsDelivrUrl(userOrOrg, repo, version, provider) {
                 provider = provider || "gh";
-                version = version ? `@${version}` : "";
+                // version = version ? `@${version}` : "";
+                version = version ? "@" + version : "";
                 userOrOrg = userOrOrg || provider === "gh" ? "WSDOT-GIS" : "@wsdot";
-                return `https://cdn.jsdelivr.net/${provider}/${userOrOrg}/${repo}${version}`
+                // return `https://cdn.jsdelivr.net/${provider}/${userOrOrg}/${repo}${version}`
+                return "https://cdn.jsdelivr.net/" + [provider, userOrOrg, repo + version].join("/");
+
             }
 
             var dojoConfig = {
@@ -173,6 +199,18 @@
                     {
                         name: "extensions",
                         location: root + "/scripts/extensions"
+                    },
+                    {
+                        name: "setup",
+                        location: root + "/scripts/setup"
+                    },
+                    {
+                        name: "utils",
+                        location: root + "/scripts/utils"
+                    },
+                    {
+                        name: "controls",
+                        location: root + "/scripts/controls"
                     },
                     {
                         name: "MetadataClient",
@@ -190,7 +228,7 @@
                     },
                     {
                         name: "RouteLocator",
-                        location: getJsDelivrUrl("WSDOT-GIS", "elc-js", "2.6.4", "gh"), //root + "/node_modules/@bower_components/elc",
+                        location: getJsDelivrUrl("WSDOT-GIS", "elc-js", "2.6.4", "gh"),
                         main: "RouteLocator"
                     },
                     {
@@ -237,14 +275,23 @@
                     {
                         name: "arcgis-rest-lrs-ui",
                         location: root + "/scripts/arcgis-rest-lrs-ui"
+                    },
+                    {
+                        name: "jquery",
+                        location: "//code.jquery.com",
+                        main: "jquery-1.8.2.min"
+                    },
+                    {
+                        name: "jquery-ui",
+                        location: "//code.jquery.com/ui/1.9.0",
+                        main: "jquery-ui.min"
                     }
                 ]
             };
             window.dojoConfig = dojoConfig;
         }(location.pathname.replace(/\/[^\/]*$/, "")));
     </script>
-    <script src="https://js.arcgis.com/3.23/init.js" integrity="sha384-QUGOO+2tHNKvwiXmNxaAzPzil0WHtRgz63LF0xFQ7yhF9HK2lFTjFWhwWukyVZzA"
-        crossorigin="anonymous"></script>
+    <script src="https://js.arcgis.com/3.26/init.js" integrity="sha384-D1iv00Mf4a+GIKA7HeI+e8kKP7C0LfJDn3EJGMMWwwwcUC11eZzCPUHXpd/6/HbM" crossorigin="anonymous"></script>
     <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
         crossorigin="anonymous"></script>
     <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd"

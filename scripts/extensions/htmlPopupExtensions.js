@@ -17,9 +17,9 @@ require([
   "esri/geometry/jsonUtils",
   "esri/geometry/geometryEngineAsync",
   "esri/geometry/webMercatorUtils",
-  "geoportal/HabitatConnectivityInfoTemplate",
-  "geoportal/TrafficInfoTemplate",
-  "geoportal/PtrTemplate"
+  "geoportal/InfoTemplates/HabitatConnectivityInfoTemplate",
+  "geoportal/InfoTemplates/TrafficInfoTemplate",
+  "geoportal/InfoTemplates/PtrTemplate"
 ], function(
   all,
   Deferred,

@@ -1,13 +1,3 @@
-/*global require, gaTracker, $ */
-// jscs: disable
-
-/*
-Prerequisites:
-ArcGIS JavaScript API
-jQuery
-jQuery UI
-*/
-
 var wsdot;
 
 require([
@@ -16,10 +6,9 @@ require([
   "dijit/registry",
   "QueryStringManager",
   "geoportal/QueryStringManagerHelper",
-  "geoportal/showDisclaimer",
+  "utils",
   "geoportal/setupToolbar",
   "geoportal/setupLayout",
-  "geoportal/configUtils",
   "geoportal/drawUIHelper",
 
   "esri/Color",
@@ -52,8 +41,8 @@ require([
 
   "BufferUI",
   "BufferUI/BufferUIHelper",
-  "info-window-helper",
   "esri/dijit/Search",
+  "setup",
 
   "dijit/form/RadioButton",
   "dijit/form/Select",
@@ -77,23 +66,18 @@ require([
   "extensions/esriApiExtensions",
   "extensions/htmlPopupExtensions",
   "MetadataClient/metadataExtensions",
-  "extensions/extent",
   "extensions/graphicsLayer",
-  "extensions/map",
-  "scripts/layerList.js",
-  "scripts/zoomToXY.js",
-  "scripts/extentSelect.js",
-  "scripts/layerSorter.js"
+  "controls/layerList/layerList",
+  "controls/layerSorter"
 ], function(
   ready,
   on,
   registry,
   QueryStringManager,
   QueryStringManagerHelper,
-  showDisclaimer,
+  utils,
   setupToolbar,
   setupLayout,
-  configUtils,
   geoportalDrawUIHelper,
   Color,
   esriConfig,
@@ -121,8 +105,8 @@ require([
   SimpleRenderer,
   BufferUI,
   BufferUIHelper,
-  infoWindowHelper,
-  Search
+  Search,
+  setup
 ) {
   "use strict";
 
@@ -177,7 +161,8 @@ require([
     });
   })(document.getElementById("otherGeoportalsForm"));
 
-  function doPostConfig() {
+  function doPostConfig(config) {
+    wsdot.config = config;
     var button;
 
     // Add a method to the Date object that will return a short date string.
@@ -234,7 +219,8 @@ require([
         });
       }
 
-      esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+      // esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+
       // Specify list of CORS enabled servers.
       (function(servers) {
         if (wsdot.config.corsEnabledServers) {
@@ -419,162 +405,13 @@ require([
       });
 
       // Setup the basemap gallery
-      (function() {
-        var basemaps = wsdot.config.basemaps,
-          i,
-          l,
-          layeri,
-          basemapGallery,
-          customLegend;
-
-        for (i = 0, l = basemaps.length; i < l; i += 1) {
-          for (layeri in basemaps.layers) {
-            if (basemaps.layers.hasOwnProperty(layeri)) {
-              basemaps.layers[layeri] = new BasemapLayer(
-                basemaps.layers[layeri]
-              );
-            }
-          }
-        }
-
-        basemapGallery = new BasemapGallery(
-          {
-            showArcGISBasemaps: true,
-            map: wsdot.map,
-            basemaps: basemaps,
-            basemapLayers: wsdot.map.layerIds
-          },
-          "basemapGallery"
-        );
-
-        basemapGallery.startup();
-
-        // Remove the unwanted default basemaps as defined in config.js (if any are defined).
-        basemapGallery.on("load", function() {
-          /** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-           * @returns {string[]} The names of the basemaps.
-           */
-          function getBasemapsByLabel() {
-            var outputIds = [],
-              bItem,
-              rItem;
-            if (wsdot.config.basemapsToRemove) {
-              for (
-                var i = 0, l = wsdot.config.basemapsToRemove.length;
-                i < l;
-                i += 1
-              ) {
-                rItem = wsdot.config.basemapsToRemove[i];
-                for (
-                  var b = 0, bl = basemapGallery.basemaps.length;
-                  b < bl;
-                  b += 1
-                ) {
-                  bItem = basemapGallery.basemaps[b];
-                  if (bItem.title === rItem) {
-                    outputIds.push(bItem.id);
-                    break;
-                  }
-                }
-              }
-            }
-            return outputIds;
-          }
-
-          if (wsdot.config.basemapsToRemove) {
-            var i,
-              removed,
-              toRemove = getBasemapsByLabel();
-            for (i = 0; i < toRemove.length; i += 1) {
-              removed = basemapGallery.remove(toRemove[i]);
-              if (console && console.warn) {
-                if (removed === null) {
-                  console.warn(
-                    "Basemap removal failed: basemap not found: " + toRemove[i]
-                  );
-                }
-              }
-            }
-          }
-
-          // If an initial basemap was specified in the config file,
-          // select that basemap now.
-          if (wsdot.config.initialBasemap) {
-            (function() {
-              var firstBasemap, currentBasemap;
-              for (
-                var i = 0, l = basemapGallery.basemaps.length;
-                i < l;
-                i += 1
-              ) {
-                currentBasemap = basemapGallery.basemaps[i];
-                if (currentBasemap.title === wsdot.config.initialBasemap) {
-                  firstBasemap = currentBasemap;
-                  break;
-                }
-              }
-              if (firstBasemap) {
-                basemapGallery.select(firstBasemap.id);
-              }
-            })();
-          }
-        });
-
-        on(basemapGallery, "error", function(msg) {
-          // Show error message
-          if (console) {
-            if (console.error) {
-              console.error(msg);
-            }
-          }
-        });
-
-        // Check for an existing customLegend
-        customLegend = $("#legend").data("customLegend");
-        if (customLegend) {
-          customLegend.setBasemapGallery(basemapGallery);
-        }
-      })();
-
-      if (
-        wsdot.config.mapInitialLayer &&
-        wsdot.config.mapInitialLayer.layerType ===
-          "esri.layers.ArcGISTiledMapServiceLayer"
-      ) {
-        initBasemap = new ArcGISTiledMapServiceLayer(
-          wsdot.config.mapInitialLayer.url
-        );
-        wsdot.map.addLayer(initBasemap);
-      }
+      setup.setupBasemapGallery(wsdot.map, wsdot.config);
 
       new HomeButton({ map: wsdot.map }, "homeButton").startup();
 
       // Setup Zoom Button
       wsdot.map.on("load", function() {
-        function setupSearchControls() {
-          // Address Search
-          var toolbar = document.getElementById("toolbar");
-          var addressDiv = document.createElement("div");
-          addressDiv.id = "search";
-          toolbar.insertBefore(addressDiv, toolbar.firstChild);
 
-          var search = new Search(
-            {
-              map: wsdot.map,
-              enableHighlight: false
-            },
-            addressDiv
-          );
-
-          search.on("load", function() {
-            var source = search.sources[0];
-            source.countryCode = "US";
-            // Set the extent to WA. Values from http://epsg.io/1416-area.
-            source.searchExtent = extents.fullExtent;
-          });
-
-          search.startup();
-        }
 
         if (wsdot.airspaceCalculator) {
           wsdot.airspaceCalculator.map = wsdot.map;
@@ -594,7 +431,7 @@ require([
           );
         }
 
-        setupSearchControls();
+        setup.setupSearchControls(wsdot.map, config.queryTasks);
 
         // Set the scale.
         setScaleLabel();
@@ -614,12 +451,12 @@ require([
           }
         })();
 
-        infoWindowHelper.addGoogleStreetViewLink(wsdot.map.infoWindow);
-        infoWindowHelper.makeDraggable(wsdot.map.infoWindow);
-        infoWindowHelper.addPrintLink(wsdot.map.infoWindow, "blank.html");
+        utils.addGoogleStreetViewLink(wsdot.map.infoWindow);
+        utils.makeDraggable(wsdot.map.infoWindow);
+        utils.addPrintLink(wsdot.map.infoWindow, "blank.html");
 
         // Show the disclaimer if one has been defined.
-        showDisclaimer(wsdot.config.alwaysShowDisclaimer);
+        utils.showDisclaimer(wsdot.config.disclaimer, wsdot.config.alwaysShowDisclaimer);
 
         setupNorthArrow();
         setupToolbar();
@@ -636,7 +473,7 @@ require([
           $("#layerList")
             .tabbedLayerList({
               layers: wsdot.config.layers,
-              startLayers: configUtils.getVisibleLayerIdsFromConfig().concat(),
+              startLayers: utils.getVisibleLayerIdsFromConfig(wsdot.config.layers).concat(),
               startCollapsed: false,
               map: wsdot.map
             })
@@ -648,7 +485,7 @@ require([
         } else {
           $("#layerList").layerList({
             layers: wsdot.config.layers,
-            startLayers: configUtils.getVisibleLayerIdsFromConfig().concat(),
+            startLayers: utils.getVisibleLayerIdsFromConfig(wsdot.config.layers).concat(),
             startCollapsed: false,
             map: wsdot.map
           });
@@ -670,6 +507,8 @@ require([
         if (wsdot.printForm) {
           wsdot.printForm.map = wsdot.map;
         }
+
+        setup.setupExportButton(wsdot.map);
       });
 
       /**
@@ -721,7 +560,7 @@ require([
     ready(init);
   }
 
-  configUtils.getConfig().then(doPostConfig, function(error) {
+  utils.getConfig().then(doPostConfig, function(error) {
     console.error(error);
   });
 });

@@ -535,14 +535,20 @@ abbr {
   background-repeat: repeat;
 }
 
-table.habitat-connectivity,
-table.traffic {
+table.habitat-connectivity {
   border-collapse: collapse;
 }
-
-table.habitat-connectivity tr:nth-child(even),
-table.traffic tr:nth-child(even) {
+table.habitat-connectivity tr:nth-child(even) {
   background-color: #ccc;
+}
+/* Traffic config info template styling */
+
+.traffic dt {
+  font-weight: bold;
+}
+
+.traffic dd {
+  margin: 0 0 0.4rem 1.2rem;
 }
 
 .null {
@@ -558,13 +564,11 @@ table.traffic tr:nth-child(even) {
   content: "*";
 }
 
-table.traffic tr > th:first-child {
-  text-align: left;
-}
-
-table.traffic td.percent:after {
+.traffic .percent:after {
   content: "%";
 }
+
+/* End traffic config */
 
 .attachment-link-list {
   list-style: none;
@@ -622,7 +626,8 @@ table.traffic td.percent:after {
 }
 
 #geometryToMeasureForm,
-.measure-to-geometry-form {
+.measure-to-geometry-form,
+#crabClearControls {
   border: black 1px solid;
   padding: 1em;
   display: grid;
@@ -633,4 +638,25 @@ table.traffic td.percent:after {
   padding-top: 0.5em;
   padding-bottom: 0.2em;
   text-align: center;
+}
+
+/** Hide the temporal view date fields */
+#temporalViewDateInput,
+label[for="temporalViewDateInput"],
+#m2gTemporalViewDate,
+label[for="m2gTemporalViewDate"] {
+  display: none;
+}
+
+label.required:after {
+  content: " (Required)";
+}
+
+#zoomToContainer > label,
+#zoomToContainer > select {
+  display: block;
+}
+
+div.danger {
+  background-color: darkred;
 }
