@@ -154,10 +154,10 @@ function getStartAndEndMeasures(
     return [null, null];
   }
 
-  const beginM = polyline.paths[0][0][3];
+  const beginM = polyline.paths[0][0][3] || null;
   const lastPath = polyline.paths[polyline.paths.length - 1];
   const lastPoint = lastPath[lastPath.length - 1];
-  const endM = lastPoint[3];
+  const endM = lastPoint[3] || null;
 
   return [beginM, endM];
 }
