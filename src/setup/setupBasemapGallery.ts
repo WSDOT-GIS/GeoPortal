@@ -52,8 +52,10 @@ function setupBasemapGallery(map: EsriMap, config: any) {
       const basemapsToRemove = getBasemapsByLabel();
       for (const item of basemapsToRemove) {
         removed = basemapGallery.remove(item);
+        // tslint:disable-next-line:no-console
         if (console && console.warn) {
           if (removed === null) {
+            // tslint:disable-next-line:no-console
             console.warn(
               `Basemap removal failed: basemap not found: ${basemapsToRemove}`
             );

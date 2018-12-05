@@ -208,8 +208,8 @@ export function setupCrab(
       const firstGraphic = pointGraphics.length
         ? pointGraphics[0]
         : polylineGraphics.length
-          ? polylineGraphics[0]
-          : null;
+        ? polylineGraphics[0]
+        : null;
 
       if (firstGraphic) {
         // Change the map view so the first graphic is visible.
@@ -224,8 +224,8 @@ export function setupCrab(
           firstGraphic.geometry instanceof Point
             ? firstGraphic.geometry
             : firstGraphic.geometry instanceof Polyline
-              ? firstGraphic.geometry.getPoint(0, 0)
-              : null;
+            ? firstGraphic.geometry.getPoint(0, 0)
+            : null;
 
         // Open the popup at the first graphic.
         if (popupPoint) {
