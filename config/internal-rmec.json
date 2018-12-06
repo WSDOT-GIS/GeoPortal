@@ -166,6 +166,13 @@
         }
       },
       {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/FEMAFloodInformation/MapServer",
+        "options": {
+          "id": "FEMA Flood Information"
+        }
+      },
+      {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
         "url": "https://fortress.wa.gov/ecy/gisprod/arcgis/rest/services/NHD/NHD_Cache/MapServer",
         "options": {
