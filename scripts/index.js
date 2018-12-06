@@ -4,8 +4,6 @@ require([
   "dojo/ready",
   "dojo/on",
   "dijit/registry",
-  "QueryStringManager",
-  "geoportal/QueryStringManagerHelper",
   "utils",
   "geoportal/setupToolbar",
   "geoportal/setupLayout",
@@ -67,14 +65,11 @@ require([
   "extensions/htmlPopupExtensions",
   "MetadataClient/metadataExtensions",
   "extensions/graphicsLayer",
-  "controls/layerList/layerList",
   "controls/layerSorter"
 ], function(
   ready,
   on,
   registry,
-  QueryStringManager,
-  QueryStringManagerHelper,
   utils,
   setupToolbar,
   setupLayout,
@@ -181,19 +176,6 @@ require([
         );
       };
     }
-
-    (function() {
-      var match = location.search.match(/\btree(=((?:1)|(?:true)|(?:on)))?\b/i),
-        link;
-
-      // If the "tree" query string parameter is set to true, replace the stylesheet for the layer list.
-      if (match) {
-        link = document.querySelector("link[href='style/layerList.css']");
-        if (link) {
-          link.href = "style/layerListPlusMinus.css";
-        }
-      }
-    })();
 
     document.getElementById("mainContainer").style.display = "";
 
@@ -323,14 +305,14 @@ require([
 
       setupLayout.setupLegend();
 
-      // Once the map loads, update the extent or zoom to match query string.
-      (function(ops) {
-        if (ops.zoom && ops.center) {
-          wsdot.map.on("load", function() {
-            wsdot.map.centerAndZoom(ops.center, ops.zoom);
-          });
-        }
-      })(QueryStringManager.getMapInitOptions());
+      // // Once the map loads, update the extent or zoom to match query string.
+      // (function(ops) {
+      //   if (ops.zoom && ops.center) {
+      //     wsdot.map.on("load", function() {
+      //       wsdot.map.centerAndZoom(ops.center, ops.zoom);
+      //     });
+      //   }
+      // })(QueryStringManager.getMapInitOptions());
 
       /**
        * @typedef {Object} LabelingInfoItem
@@ -340,69 +322,69 @@ require([
        * @property {Boolean} useCodedValues
        */
 
-      /** Add a LabelLayer if a text layer has that defined.
-       * @param {Object} result
-       * @param {Layer} result.layer
-       * @param {LabelingInfoItem[]} result.layer.labelingInfo
-       * @param {Map} result.target
-       * @param {Error} [result.error]
-       */
-      wsdot.map.on("layer-add-result", function(result) {
-        var layer, labelingInfo, liItem, labelLayer, renderer;
+      // /** Add a LabelLayer if a text layer has that defined.
+      //  * @param {Object} result
+      //  * @param {Layer} result.layer
+      //  * @param {LabelingInfoItem[]} result.layer.labelingInfo
+      //  * @param {Map} result.target
+      //  * @param {Error} [result.error]
+      //  */
+      // wsdot.map.on("layer-add-result", function(result) {
+      //   var layer, labelingInfo, liItem, labelLayer, renderer;
 
-        /**
-         * Moves the label layer's list item below that of the layer it is labelling.
-         */
-        function moveLabelLayerListItem() {
-          var labelLayerCB, labelLayerLI, layerCB, layerLI;
-          labelLayerCB = document.querySelector(
-            "[data-layer-id='" + labelLayer.id + "']"
-          );
-          labelLayerLI = labelLayerCB.parentElement;
-          layerCB = document.querySelector(
-            "[data-layer-id='" + layer.id + "']"
-          );
-          layerLI = layerCB.parentElement;
-          layerLI.parentElement.insertBefore(labelLayerLI, layerLI.nextSibling);
-        }
+      //   /**
+      //    * Moves the label layer's list item below that of the layer it is labelling.
+      //    */
+      //   function moveLabelLayerListItem() {
+      //     var labelLayerCB, labelLayerLI, layerCB, layerLI;
+      //     labelLayerCB = document.querySelector(
+      //       "[data-layer-id='" + labelLayer.id + "']"
+      //     );
+      //     labelLayerLI = labelLayerCB.parentElement;
+      //     layerCB = document.querySelector(
+      //       "[data-layer-id='" + layer.id + "']"
+      //     );
+      //     layerLI = layerCB.parentElement;
+      //     layerLI.parentElement.insertBefore(labelLayerLI, layerLI.nextSibling);
+      //   }
 
-        /**
-         * @param {string} labelExpression - E.g., "[WRIA_NR]"
-         * @returns {string} - E.g., "${WRIA_NR}"
-         */
-        function labelExpressionToTextExpression(labelExpression) {
-          var re = /\[([^\]]+)/i,
-            match,
-            output;
-          match = labelExpression.match(re);
-          if (match) {
-            output = "${" + match[1] + "}";
-          }
-          return output;
-        }
+      //   /**
+      //    * @param {string} labelExpression - E.g., "[WRIA_NR]"
+      //    * @returns {string} - E.g., "${WRIA_NR}"
+      //    */
+      //   function labelExpressionToTextExpression(labelExpression) {
+      //     var re = /\[([^\]]+)/i,
+      //       match,
+      //       output;
+      //     match = labelExpression.match(re);
+      //     if (match) {
+      //       output = "${" + match[1] + "}";
+      //     }
+      //     return output;
+      //   }
 
-        if (result.layer && result.layer.labelingInfo) {
-          layer = result.layer;
-          labelingInfo = layer.labelingInfo;
-          if (labelingInfo.length) {
-            if (labelingInfo.length >= 1) {
-              liItem = labelingInfo[0];
-              labelLayer = new LabelLayer({
-                id: [layer.id, "(label)"].join(" ")
-              });
-              renderer = new SimpleRenderer(liItem.symbol);
-              labelLayer.addFeatureLayer(
-                layer,
-                renderer,
-                labelExpressionToTextExpression(liItem.labelExpression),
-                liItem
-              );
-              wsdot.map.addLayer(labelLayer);
-              moveLabelLayerListItem();
-            }
-          }
-        }
-      });
+      //   if (result.layer && result.layer.labelingInfo) {
+      //     layer = result.layer;
+      //     labelingInfo = layer.labelingInfo;
+      //     if (labelingInfo.length) {
+      //       if (labelingInfo.length >= 1) {
+      //         liItem = labelingInfo[0];
+      //         labelLayer = new LabelLayer({
+      //           id: [layer.id, "(label)"].join(" ")
+      //         });
+      //         renderer = new SimpleRenderer(liItem.symbol);
+      //         labelLayer.addFeatureLayer(
+      //           layer,
+      //           renderer,
+      //           labelExpressionToTextExpression(liItem.labelExpression),
+      //           liItem
+      //         );
+      //         wsdot.map.addLayer(labelLayer);
+      //         moveLabelLayerListItem();
+      //       }
+      //     }
+      //   }
+      // });
 
       // Setup the basemap gallery
       setup.setupBasemapGallery(wsdot.map, wsdot.config);
@@ -468,29 +450,6 @@ require([
           on(wsdot.map, "layer-add-result", gaTrackEvent);
         }
 
-        // Setup either a tabbed layer list or a normal one depending on the config setting.
-        if (wsdot.config.tabbedLayerList) {
-          $("#layerList")
-            .tabbedLayerList({
-              layers: wsdot.config.layers,
-              startLayers: utils.getVisibleLayerIdsFromConfig(wsdot.config.layers).concat(),
-              startCollapsed: false,
-              map: wsdot.map
-            })
-            .css({
-              padding: [0, 0, 0, 0],
-              margin: [0, 0, 0, 0]
-            });
-          // Setting the padding and margin to 0 is required for IE.
-        } else {
-          $("#layerList").layerList({
-            layers: wsdot.config.layers,
-            startLayers: utils.getVisibleLayerIdsFromConfig(wsdot.config.layers).concat(),
-            startCollapsed: false,
-            map: wsdot.map
-          });
-        }
-
         wsdot.map.setupIdentifyPopups({
           ignoredLayerRE: wsdot.config.noPopupLayerRe
             ? new RegExp(wsdot.config.noPopupLayerRe, "i")
@@ -499,9 +458,7 @@ require([
 
         geoportalDrawUIHelper(wsdot.map);
 
-        qsManager = new QueryStringManager(wsdot.map);
-
-        QueryStringManagerHelper.setupLayerListForQueryString(wsdot.map);
+        // qsManager = new QueryStringManager(wsdot.map);
 
         // Attach the map to the print form (if config contains print URL).
         if (wsdot.printForm) {
