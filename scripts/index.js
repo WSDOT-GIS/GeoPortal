@@ -7,8 +7,6 @@ require([
   "utils",
   "geoportal/setupToolbar",
   "geoportal/setupLayout",
-  "geoportal/drawUIHelper",
-
   "esri/Color",
   "esri/config",
   "esri/map",
@@ -73,7 +71,6 @@ require([
   utils,
   setupToolbar,
   setupLayout,
-  geoportalDrawUIHelper,
   Color,
   esriConfig,
   Map,
@@ -285,6 +282,14 @@ require([
 
       wsdot.map = new Map("map", wsdot.config.mapOptions);
 
+      // Create the layer list once the map has loaded.
+      wsdot.map.on("load", function() {
+        const layerList = setup.setupLayerList(document.getElementById("layerList"), wsdot.map, wsdot.config.layers);
+        layerList.startup();
+        const layerLink = setup.createLayerLink(layerList);
+      })
+
+
       // Add event to page that other scripts can listen for
       // so they can know when the map has loaded.
       wsdot.map.on("load", () => {
@@ -446,7 +451,7 @@ require([
             : /^layer\d+$/i
         });
 
-        geoportalDrawUIHelper(wsdot.map);
+        setup.setupDrawUI(wsdot.map);
 
         // qsManager = new QueryStringManager(wsdot.map);
 

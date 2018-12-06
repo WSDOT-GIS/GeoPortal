@@ -651,3 +651,40 @@ label.required:after {
 div.danger {
   background-color: darkred;
 }
+
+.layer-link {
+  display: block;
+  text-align: center;
+  position: absolute;
+  font-size: 16pt;
+  top: 135px;
+  left: 20px;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  border-radius: 5px;
+  background-color: #666;
+  background-color: rgba(102, 102, 102, 0.8);
+}
+
+.layer-link:hover {
+  background-color: rgba(102, 102, 102, 0.9);
+}
+
+.layer-link__anchor {
+  text-decoration: none;
+}
+
+.layer-link--disabled {
+  display: none;
+}
+
+.layer-link--copied {
+  background-color: green;
+  background-color: rgba(0, 128, 0, 0.8);
+}
+
+.layer-link--copied:hover {
+  background-color: rgba(0, 128, 0, 0.9);
+}

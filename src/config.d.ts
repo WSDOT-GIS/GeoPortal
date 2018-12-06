@@ -45,6 +45,7 @@ declare namespace config {
   }
 
   export interface Layer {
+    layerType: string;
     url: string;
     visibleLayers: number[];
     options: {
