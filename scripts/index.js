@@ -216,15 +216,6 @@ require([
         wsdot.config.geometryServer
       );
 
-      function setupNorthArrow() {
-        // Create the north arrow.
-        var img = document.createElement("img");
-        img.id = "northArrow";
-        img.src = "images/NorthArrow.png";
-        img.alt = "North Arrow";
-        document.getElementById("map_root").appendChild(img);
-      }
-
       /**
        * Adds a Google Analytics tracking event for the addition of a layer to the map.
        * @param {Event} e - layer add event.
@@ -440,7 +431,6 @@ require([
         // Show the disclaimer if one has been defined.
         utils.showDisclaimer(wsdot.config.disclaimer, wsdot.config.alwaysShowDisclaimer);
 
-        setupNorthArrow();
         setupToolbar();
 
         Scalebar({ map: wsdot.map, attachTo: "bottom-left" });

@@ -88,15 +88,6 @@ div.table > div > span > h1 {
   width: 500px;
 }
 
-#northArrow {
-  position: absolute;
-  bottom: 40px;
-  left: 20px;
-  z-index: 10;
-  width: 43px;
-  height: 52px;
-}
-
 #toolbar {
   position: absolute;
   top: 5px;
