@@ -7,10 +7,17 @@ import ArcGISDynamicMapServiceLayer from "esri/layers/ArcGISDynamicMapServiceLay
 import ArcGISTiledMapServiceLayer from "esri/layers/ArcGISTiledMapServiceLayer";
 import EsriMap from "esri/map";
 
+/**
+ * Replaces non-alphanumeric characters with underscores.
+ */
 function titleToId(title: string) {
   return title.replace(/[^a-z0-9]+/gi, "_");
 }
 
+/**
+ * Creates an esri/layers/layer object using config settings.
+ * @param configLayer layer specification from config file.
+ */
 function createLayer(configLayer: config.Layer) {
   const { layerType, url, visibleLayers } = configLayer;
   const visible = configLayer.options.visible || false;
@@ -31,6 +38,10 @@ function createLayer(configLayer: config.Layer) {
   throw new Error(`Unexpected layer type: "${layerType}"`);
 }
 
+/**
+ * Converts a layer from the config file into an Operational Layer.
+ * @param configLayer layer spec from config file
+ */
 function configLayerToOperationLayer(configLayer: config.Layer) {
   const title = configLayer.options.id;
   const id = titleToId(title);
@@ -46,14 +57,29 @@ function configLayerToOperationLayer(configLayer: config.Layer) {
   return opLayer;
 }
 
-function getLayerGroupsFromConfig(map: EsriMap, config: config.Layers) {
+/**
+ * Converts the layers section of a config file into a groupings of Operational Layers.
+ * @param map
+ * @param configLayers
+ */
+function getLayerGroupsFromConfig(
+  map: EsriMap,
+  configLayers: config.Layers | config.Layer[]
+) {
+  if (Array.isArray(configLayers)) {
+    return {
+      groups: undefined,
+      layers: configLayers.map(configLayerToOperationLayer)
+    };
+  }
+
   const groups: LayerPropGroups = {};
   const layers = new Array<LayerListOperationalLayer>();
 
-  for (const groupName in config) {
-    if (config.hasOwnProperty(groupName)) {
-      const configLayers = config[groupName];
-      const opLayers = configLayers.map(configLayerToOperationLayer);
+  for (const groupName in configLayers) {
+    if (configLayers.hasOwnProperty(groupName)) {
+      const layerSpecs = configLayers[groupName];
+      const opLayers = layerSpecs.map(configLayerToOperationLayer);
       for (const layer of opLayers) {
         layers.push(layer);
       }
@@ -64,14 +90,20 @@ function getLayerGroupsFromConfig(map: EsriMap, config: config.Layers) {
   return { groups, layers };
 }
 
+/**
+ *
+ * @param root Element that will host the Layer List control
+ * @param map Esri Map object.
+ * @param configLayers The "layers" section from the config file.
+ */
 export function setupLayerList(
   root: HTMLElement,
   map: EsriMap,
-  config: config.Layers
+  configLayers: config.Layers
 ) {
-  const { groups, layers } = getLayerGroupsFromConfig(map, config);
+  const { groups, layers } = getLayerGroupsFromConfig(map, configLayers);
 
-  console.debug({ groups, layers });
+  console.debug("parsed from config file", { groups, layers });
 
   // Add the layers to the map
   const mapLayers = layers.filter(l => l.layer).map(l => l.layer!);
