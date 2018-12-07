@@ -136,9 +136,9 @@ require([
 
     syncSelectedWithQSSetting();
 
-    // If config/internal-airport.json cannot be reached, remove internal options.
+    // If config/internal-rmec.json cannot be reached, remove internal options.
     var request = new XMLHttpRequest();
-    request.open("head", "config/internal-airport.json");
+    request.open("head", "config/internal-rmec.json");
     request.onloadend = function(e) {
       var internalGroup;
       if (e.target.status !== 200) {

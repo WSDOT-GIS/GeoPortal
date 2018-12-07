@@ -20,7 +20,6 @@ Use the *config* parameter to specify a configuration other than the default. Th
 * config
 * Freight
 * FunctionalClass
-* internal-airport
 * internal-Freight
 * internal-RFIP
 
