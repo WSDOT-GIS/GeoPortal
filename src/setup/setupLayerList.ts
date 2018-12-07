@@ -21,8 +21,10 @@ function titleToId(title: string) {
 function createLayer(configLayer: config.Layer) {
   const { layerType, url, visibleLayers } = configLayer;
   const visible = configLayer.options.visible || false;
+  const { id } = configLayer.options;
   if (/Dynamic/i.test(layerType)) {
     const layer = new ArcGISDynamicMapServiceLayer(url, {
+      id,
       visible
     });
     if (visibleLayers != null) {
@@ -32,6 +34,7 @@ function createLayer(configLayer: config.Layer) {
   }
   if (/Tiled/i.test(layerType)) {
     return new ArcGISTiledMapServiceLayer(url, {
+      id,
       visible
     });
   }

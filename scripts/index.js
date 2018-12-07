@@ -286,7 +286,7 @@ require([
       wsdot.map.on("load", function() {
         const layerList = setup.setupLayerList(document.getElementById("layerList"), wsdot.map, wsdot.config.layers);
         layerList.startup();
-        const layerLink = setup.createLayerLink(layerList);
+        setup.createLayerLink(layerList);
       })
 
 
