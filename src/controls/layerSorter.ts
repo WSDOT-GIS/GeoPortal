@@ -1,5 +1,12 @@
+import ArcGISTiledMapServiceLayer from "esri/layers/ArcGISTiledMapServiceLayer";
+import ArcGISDynamicMapServiceLayer from "esri/layers/ArcGISDynamicMapServiceLayer";
+import Layer from "esri/layers/layer";
 import EsriMap from "esri/map";
 import { createLayerNameFromUrl } from "../utils/layerUtils";
+
+declare type LayerWithDescription =
+  | ArcGISTiledMapServiceLayer
+  | ArcGISDynamicMapServiceLayer;
 
 export = $.widget("ui.layerSorter", {
   options: {
@@ -49,15 +56,9 @@ export = $.widget("ui.layerSorter", {
     for (let l = map!.layerIds.length, i = l - 1; i >= 0; i -= 1) {
       const layerId = map!.layerIds[i];
       const layer = map!.getLayer(layerId);
-      $(
-        [
-          '<li class="ui-state-default" title="',
-          (layer as any).description,
-          '"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>',
-          createLayerNameFromUrl(layer),
-          "</li>"
-        ].join("")
-      )
+
+      const li = createLayerSorterListItem(layer);
+      $(li)
         .data("layer", layer)
         .appendTo(this._list);
     }
@@ -89,3 +90,16 @@ export = $.widget("ui.layerSorter", {
     $.Widget.prototype.destroy.apply(this, arguments);
   }
 });
+
+function createLayerSorterListItem(layer: Layer) {
+  const li = document.createElement("li");
+  li.classList.add("ui-state-default");
+  if (layer.hasOwnProperty("description")) {
+    li.title = (layer as LayerWithDescription).description || "";
+  }
+  const iconSpan = document.createElement("span");
+  iconSpan.classList.add("ui-icon", "ui-icon-arrowthick-2-n-s");
+  li.appendChild(iconSpan);
+  li.appendChild(document.createTextNode(createLayerNameFromUrl(layer)!));
+  return li;
+}
