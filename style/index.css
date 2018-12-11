@@ -688,3 +688,15 @@ div.danger {
 .layer-link--copied:hover {
   background-color: rgba(0, 128, 0, 0.9);
 }
+
+.layer-list-group-start .esriTitleContainer {
+  border-top: none;
+}
+
+.layer-list-group-start::before {
+  background: rgb(114, 114, 114);
+  color: white;
+  display: block;
+  text-align: center;
+  padding: 3px 0;
+}

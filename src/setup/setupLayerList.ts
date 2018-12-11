@@ -5,7 +5,7 @@ import GroupedLayerList, {
 import EsriMap from "esri/map";
 
 /**
- *
+ * Sets up the layer list for the layers in the config file.
  * @param root Element that will host the Layer List control
  * @param map Esri Map object.
  * @param configLayers The "layers" section from the config file.
@@ -25,16 +25,17 @@ export function setupLayerList(
 
   const layerList = new GroupedLayerList(
     {
-      map,
-      groups,
       groupProperty: "title",
+      groups,
       layers,
+      map,
       metadata: true,
-      showSubLayers: true,
       showLegend: true,
-      showOpacitySlider: true
+      showOpacitySlider: true,
+      showSubLayers: true,
+      throwOnGroupNotFound: false
     },
-    root
+    root.id
   );
 
   return layerList;
