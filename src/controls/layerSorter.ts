@@ -1,5 +1,5 @@
-import ArcGISTiledMapServiceLayer from "esri/layers/ArcGISTiledMapServiceLayer";
 import ArcGISDynamicMapServiceLayer from "esri/layers/ArcGISDynamicMapServiceLayer";
+import ArcGISTiledMapServiceLayer from "esri/layers/ArcGISTiledMapServiceLayer";
 import Layer from "esri/layers/layer";
 import EsriMap from "esri/map";
 import { createLayerNameFromUrl } from "../utils/layerUtils";

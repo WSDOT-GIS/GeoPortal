@@ -80,7 +80,8 @@ function setupBasemapGallery(map: EsriMap, config: any) {
     }
   });
 
-  basemapGallery.on("error", console.error);
+  // tslint:disable-next-line:no-console
+  basemapGallery.on("basemap gallery error", console.error);
 
   // Check for an existing customLegend
   const customLegend = $("#legend").data("customLegend");
