@@ -283,9 +283,11 @@ require([
       wsdot.map = new Map("map", wsdot.config.mapOptions);
 
       // Create the layer list once the map has loaded.
-      const layerList = setup.setupLayerList(document.getElementById("layerList"), wsdot.map, wsdot.config.layers);
-      layerList.startup();
-      setup.createLayerLink(layerList);
+      wsdot.map.on("load", function () {
+        const layerList = setup.setupLayerList(document.getElementById("layerList"), wsdot.map, wsdot.config.layers);
+        layerList.startup();
+        setup.createLayerLink(layerList);
+      });
 
 
       // Add event to page that other scripts can listen for
