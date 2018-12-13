@@ -23,8 +23,7 @@ define([
   "ArcGisPrintUI",
 
   "arcgis-rest-lrs-ui",
-  "scripts/customLegend.js",
-  "scripts/ais/faaFar77.js"
+  "scripts/customLegend.js"
 ], function(
   on,
   registry,
@@ -124,8 +123,7 @@ define([
       mapControlsPane,
       tabs,
       toolsTab,
-      toolsAccordion,
-      zoomControlsDiv;
+      toolsAccordion;
 
     mainContainer = new BorderContainer(
       { design: "headline", gutters: false },
@@ -155,42 +153,6 @@ define([
         .appendChild(wsdot.airspaceCalculator.form);
     }
 
-    function setupFaaFar77() {
-      $("#faaFar77").faaFar77RunwaySelector({
-        map: wsdot.map,
-        // TODO: put this URL and layer ID in the app. options.
-        identifyUrl:
-          "//data.wsdot.wa.gov/ArcGIS/rest/services/AirportMapApplication/AirspaceFeatures/MapServer",
-        identifyLayerId: 0,
-        identifyComplete: function(event, data) {
-          var identifyResults, noFeaturesDialog;
-          identifyResults = data.identifyResults;
-          if (identifyResults.length < 1) {
-            noFeaturesDialog = $("#faaFar77NoRunwaysDialog");
-            if (noFeaturesDialog.length < 1) {
-              $("<div>")
-                .text("No runway features were found in this vicinity.")
-                .dialog({
-                  title: "FAA FAR 77",
-                  buttons: {
-                    OK: function() {
-                      $(this).dialog("close");
-                    }
-                  }
-                });
-            } else {
-              noFeaturesDialog.dialog("open");
-            }
-          }
-        },
-        identifyError: function(event, data) {
-          if (console !== undefined && console.error !== undefined) {
-            console.error(data.error);
-          }
-        }
-      });
-    }
-
     (function(tabOrder) {
       var i, l, name, contentPane;
 
@@ -218,14 +180,6 @@ define([
         div.innerHTML =
           "<section><h1>Airspace Calculator</h1><div id='airspaceCalculator'></div></section>";
         document.getElementById("tabs").appendChild(div);
-      }
-
-      function createFaaFar77Tab() {
-        var tabDiv = document.createElement("div");
-        tabDiv.id = "faaFar77Tab";
-        var innerDiv = document.createElement("div");
-        tabDiv.appendChild(innerDiv);
-        document.getElementById("tabs").appendChild(tabDiv);
       }
 
       for (i = 0, l = tabOrder.length; i < l; i += 1) {
@@ -270,17 +224,6 @@ define([
           );
           tabs.addChild(contentPane);
           setupAirspaceCalculator();
-        } else if (/FAA\s*FAR\s*77/i.test(name)) {
-          createFaaFar77Tab();
-          contentPane = new ContentPane(
-            {
-              title: "FAA FAR 77",
-              id: "faaFar77Tab"
-            },
-            "faaFar77Tab"
-          );
-          on.once(contentPane, "show", setupFaaFar77);
-          tabs.addChild(contentPane);
         }
       }
     })(wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]);

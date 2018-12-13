@@ -29,7 +29,6 @@
     <link rel="shortcut icon" href="//images.wsdot.wa.gov/favicon.ico" />
     <link href="style/locationInfo.css" rel="stylesheet" />
     <link href="style/index.css" rel="stylesheet" />
-    <link href="style/layerList.css" rel="stylesheet" />
     <link href="style/identify.css" rel="stylesheet" />
     <link href="style/addressLocator.css" rel="stylesheet" />
     <link href="style/layerSorter.css" rel="stylesheet" />
@@ -232,17 +231,6 @@
                         main: "RouteLocator"
                     },
                     {
-                        name: "ArcGisDrawUI",
-                        location: "https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/",
-                        main: "ArcGisDrawUI"
-                    },
-
-                    {
-                        name: "QueryStringManager",
-                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-query-string-utilities", "1.1.1", "gh"),
-                        main: "QueryStringManager"
-                    },
-                    {
                         name: "usgsNed",
                         location: "https://cdn.jsdelivr.net/npm/usgs-ned@3.0.2/",
                         main: "usgsNed"
@@ -291,7 +279,7 @@
             window.dojoConfig = dojoConfig;
         }(location.pathname.replace(/\/[^\/]*$/, "")));
     </script>
-    <script src="https://js.arcgis.com/3.26/init.js" integrity="sha384-D1iv00Mf4a+GIKA7HeI+e8kKP7C0LfJDn3EJGMMWwwwcUC11eZzCPUHXpd/6/HbM" crossorigin="anonymous"></script>
+    <script src="https://js.arcgis.com/3.26/"></script>
     <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
         crossorigin="anonymous"></script>
     <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd"
