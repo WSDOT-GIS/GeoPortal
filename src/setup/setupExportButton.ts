@@ -39,26 +39,11 @@ export function setupExportButton(map: EsriMap) {
     }
 
     const json = JSON.stringify(featureSets);
-    const url = "./export";
+    const url = "./export/";
     const windowName = "_blank";
+
+    localStorage.setItem("geoportal_export", json);
     const exportWindow = window.open(url, windowName)!;
-    if (!exportWindow) {
-      alert(`Couldn't open "${url}"`);
-    }
-    exportWindow.addEventListener("load", () => {
-      exportWindow.dispatchEvent(
-        new CustomEvent("geojsonexport", {
-          detail: {
-            geojson: featureSets
-          }
-        })
-      );
-    });
-    // // Alternate option: send GeoJSON to geojson.io via query string.
-    // const url = `https://mapbox.github.io/geojson.io#data=data:application/json,${encodeURIComponent(
-    //   json
-    // )}`;
-    // window.open(url, "_blank");
   }
 
   toolbarDiv.appendChild(exportButton);

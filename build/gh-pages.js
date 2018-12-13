@@ -11,6 +11,7 @@ const validExtensions = "{css,html,js,json,svg,png,jpg,gif}";
 const folders = [
   "config",
   "disclaimers",
+  "export",
   "error",
   "help",
   "images",
@@ -23,7 +24,7 @@ let src = folders.map(name => `${name}`).join(",");
 src = `./{${src}}/**/*.${validExtensions}`;
 src = [
   src,
-  `./node_modules/@bower_components/**/*${validExtensions}`,
+  // `./node_modules/@bower_components/**/*${validExtensions}`,
   "./*.html",
   "!*.md"
 ];
