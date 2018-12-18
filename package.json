@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "webpack",
     "watch": "webpack -w",
-    "start": "webpack-dev-server --open",
+    "serve": "serve",
     "gh-pages": "node build/gh-pages.js"
   },
   "author": "WSDOT",
