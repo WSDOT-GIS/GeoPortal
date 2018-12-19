@@ -378,12 +378,12 @@ require([
 
       return deferred;
     },
-    /*
-         * Runs an identify task for each map service that has HTML Popup sublayers.
-         * @param {esri.geometry.Geometry} geometry
-         * @param {Object} options - Use this parameter to override the default identify task options: layerOption, tolerance, and maxAllowableOffset.
-         * @returns {dojo/promise/Promise}
-         */
+    /**
+     * Runs an identify task for each map service that has HTML Popup sublayers.
+     * @param {esri.geometry.Geometry} geometry
+     * @param {Object} options - Use this parameter to override the default identify task options: layerOption, tolerance, and maxAllowableOffset.
+     * @returns {dojo/promise/Promise}
+     */
     identify: function(geometry, options) {
       var map = this,
         queryCount = 0,
