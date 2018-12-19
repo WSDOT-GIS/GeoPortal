@@ -810,13 +810,12 @@ require([
                 feature.layer = map.getLayer(layerId);
                 feature.result = result;
                 if (
-                  layerId === "Habitat Connectivity" &&
-                  result.layerId !== 2
+                  /Habitat_Connectivity/.test(layerId) && result.layerId !== 2
                 ) {
                   feature.setInfoTemplate(HabitatConnectivityInfoTemplate);
-                } else if (layerId === "Traffic Data") {
+                } else if (/Traffic_Data/.test(layerId)) {
                   feature.setInfoTemplate(TrafficInfoTemplate);
-                } else if (layerId === "PTR Sites") {
+                } else if (/PTR_Sites/.test(layerId)) {
                   feature.setInfoTemplate(PtrTemplate);
                 } else {
                   feature.setInfoTemplate(infoTemplate);
