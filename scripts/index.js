@@ -74,6 +74,9 @@ require([
 
   // Sanitize URL of old style parameters
   (function() {
+    if (!(window.URL && window.URLSearchParams && window.history)) {
+      return;
+    }
     const url = new URL(location.href);
     const sp = url.searchParams;
     ["layers", "center", "zoom"].forEach(function(s) {
