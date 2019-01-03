@@ -72,6 +72,18 @@ require([
   wsdot = { config: {} };
   wsdot.map = null;
 
+  // Sanitize URL of old style parameters
+  (function() {
+    const url = new URL(location.href);
+    const sp = url.searchParams;
+    ["layers", "center", "zoom"].forEach(function(s) {
+      if (sp.has(s)) {
+        sp.delete(s);
+      }
+    });
+    history.replaceState(null, window.title, url.toString());
+  })();
+
   // Setup other geoportals links
   (function(form) {
     var select = form.querySelector("select[name=config]");
@@ -129,7 +141,7 @@ require([
        */
       Date.prototype.toShortDateString = function() {
         return (
-          String(this.getMonth()) +
+          String(this.getMonth() + 1) +
           "-" +
           String(this.getDate()) +
           "-" +
