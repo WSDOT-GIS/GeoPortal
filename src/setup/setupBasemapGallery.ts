@@ -1,3 +1,5 @@
+import { BasemapLayerOptions } from "esri";
+import esriBasemaps from "esri/basemaps";
 import Basemap = require("esri/dijit/Basemap");
 import BasemapGallery = require("esri/dijit/BasemapGallery");
 import BasemapLayer = require("esri/dijit/BasemapLayer");
@@ -8,14 +10,17 @@ function setupBasemapGallery(map: EsriMap, config: any) {
   const basemaps = config.basemaps as any[];
 
   basemaps.forEach(bm => {
-    bm.layers = bm.layers.map((l: any) => {
+    bm.layers = bm.layers.map((l: BasemapLayerOptions) => {
       return new BasemapLayer(l);
     });
   });
 
   const basemapGallery = new BasemapGallery(
     {
-      showArcGISBasemaps: true,
+      // Default "showArcGISBasemaps" to true if omitted in config.
+      showArcGISBasemaps: config.hasOwnProperty("showArcGISBasemaps")
+        ? config.showArcGISBasemaps
+        : true,
       map,
       basemaps,
       basemapIds: map.layerIds
