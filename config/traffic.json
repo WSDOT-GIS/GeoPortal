@@ -182,17 +182,18 @@
     },
     {
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Traffic/TrafficData/MapServer",
       "options": {
-        "id": "City Limits",
-        "opacity": 0.4
+        "id": "Traffic Data",
+        "visible": true
       }
     },
     {
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer",
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
       "options": {
-        "id": "County Boundaries"
+        "id": "PTR Sites",
+        "visible": true
       }
     },
     {
@@ -208,19 +209,18 @@
       }
     },
     {
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Traffic/PTRSites/MapServer",
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
       "options": {
-        "id": "PTR Sites",
-        "visible": true
+        "id": "County Boundaries"
       }
     },
     {
       "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Traffic/TrafficData/MapServer",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
       "options": {
-        "id": "Traffic Data",
-        "visible": true
+        "id": "City Limits",
+        "opacity": 0.4
       }
     }
   ]
