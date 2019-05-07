@@ -74,7 +74,7 @@ function createContent(graphic: ICrabGraphic) {
 
   const values: any = {
     County: county,
-    "County Road Number": roadNumber
+    "County Road #": roadNumber
   };
 
   const table = document.createElement("table");
@@ -82,7 +82,9 @@ function createContent(graphic: ICrabGraphic) {
     if (values.hasOwnProperty(label)) {
       const value = values[label];
       const row = table.insertRow();
-      row.insertCell().innerText = label;
+      const th = document.createElement("th");
+      th.innerText = label;
+      row.appendChild(th);
       row.insertCell().innerText = value;
     }
   }
@@ -95,7 +97,7 @@ function createContent(graphic: ICrabGraphic) {
  */
 function createTitle(graphic: ICrabGraphic) {
   const { county, roadNumber } = parseRouteId(graphic.attributes.RouteId);
-  return `${county} County Route #${roadNumber}`;
+  return `${county} #${roadNumber}`;
 }
 
 export = new InfoTemplate(createTitle, createContent);

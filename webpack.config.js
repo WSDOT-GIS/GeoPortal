@@ -73,7 +73,7 @@ module.exports = [
   "./src/arcgis-rest-lrs-ui/main.ts",
   "./src/extensions/esriApiExtensions.ts",
   "./src/extensions/graphicsLayer.ts",
-  "./src/InfoTemplates/CrmpTemplate.ts",
+  "./src/InfoTemplates/CrabTemplate.ts",
   "./src/InfoTemplates/HabitatConnectivityInfoTemplate.ts",
   "./src/InfoTemplates/PtrTemplate.ts",
   "./src/InfoTemplates/TrafficInfoTemplate.ts",

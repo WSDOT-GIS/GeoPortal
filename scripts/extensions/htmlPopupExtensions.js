@@ -20,7 +20,7 @@ require([
   "geoportal/InfoTemplates/HabitatConnectivityInfoTemplate",
   "geoportal/InfoTemplates/TrafficInfoTemplate",
   "geoportal/InfoTemplates/PtrTemplate",
-  "geoportal/InfoTemplates/CrmpTemplate"
+  "geoportal/InfoTemplates/CrabTemplate"
 ], function (
   all,
   Deferred,
