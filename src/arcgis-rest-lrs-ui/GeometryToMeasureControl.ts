@@ -72,7 +72,8 @@ export class GeometryToMeasureControl {
    */
   public get tolerance(): number | undefined {
     const input = this.toleranceInput;
-    return input.valueAsNumber;
+    // return input.valueAsNumber; // Doesn't work in Edge 17.
+    return Number(input.value);
   }
 
   /**
