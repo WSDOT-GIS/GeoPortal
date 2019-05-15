@@ -25,7 +25,7 @@ export class MeasureToGeometryControl {
 
   public get temporalViewDate() {
     return this.temporalViewDateInput.value
-      ? this.temporalViewDateInput.valueAsDate
+      ? new Date(this.temporalViewDateInput.value)
       : undefined;
   }
 
@@ -34,9 +34,9 @@ export class MeasureToGeometryControl {
    */
   public get locations(): Array<IM2GPointLocation | IM2GLineLocation> {
     const routeId = this.routeIdInput.value;
-    const fromMeasure = this.fromMeasureInput.valueAsNumber;
+    const fromMeasure = parseFloat(this.fromMeasureInput.value);
     const toMeasure = this.toMeasureInput.value
-      ? this.toMeasureInput.valueAsNumber
+      ? parseFloat(this.toMeasureInput.value)
       : null;
 
     const directions = ["i", "d"];
