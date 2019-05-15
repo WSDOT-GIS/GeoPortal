@@ -1,14 +1,11 @@
 {
   "pageTitle": "Habitat Connectivity Support Structures",
-  "helpUrl":
-    "https://wwwi.wsdot.wa.gov/NR/rdonlyres/38F7285F-0A7C-4609-8851-D6FF419BD2FA/0/HabitatConnectivityStructureWebAppHelpDocument.pdf",
+  "helpUrl": "https://wwwi.wsdot.wa.gov/NR/rdonlyres/38F7285F-0A7C-4609-8851-D6FF419BD2FA/0/HabitatConnectivityStructureWebAppHelpDocument.pdf",
   "enableIdentify": true,
   "disclaimer": "disclaimers/habitat-connectivity/Internal.html",
   "alwaysShowDisclaimer": false,
-  "printUrl":
-    "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivityExportWebMap/GPServer/Export%20Web%20Map",
-  "noPopupLayerRe":
-    "^(?:(?:layer\\d+)|(?:Rivers\\sand\\sLakes)|(?:.+Boundary))$",
+  "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivityExportWebMap/GPServer/Export%20Web%20Map",
+  "noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers_and_Lakes)|(?:.+Boundary))$",
   "additionalStylesheets": ["style/internal-habitat-connectivity.css"],
   "tools": ["lrs", "zoom"],
   "mapOptions": {
@@ -17,13 +14,11 @@
     "center": [-120.80566406246835, 47.41322033015946],
     "zoom": 7
   },
-  "geometryServer":
-    "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
+  "geometryServer": "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
   "queryTasks": {
     "county": {
       "label": "County",
-      "url":
-        "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -32,8 +27,7 @@
     },
     "city": {
       "label": "City",
-      "url":
-        "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer/2",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -43,8 +37,7 @@
     },
     "urbanArea": {
       "label": "Urban Area",
-      "url":
-        "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/HighwayUrbanUrbanized/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true
@@ -58,16 +51,13 @@
       "thumbnailUrl": "images/EsriHybridThumbnail.png",
       "layers": [
         {
-          "url":
-            "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
         },
         {
-          "url":
-            "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
+          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
         },
         {
-          "url":
-            "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
+          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
         }
       ]
     },
@@ -77,8 +67,7 @@
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
       "layers": [
         {
-          "url":
-            "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
         }
       ]
     },
@@ -88,20 +77,17 @@
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
       "layers": [
         {
-          "url":
-            "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer"
+          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/FunctionalClass/WSDOTFunctionalClassBaseMap/MapServer"
         }
       ]
     }
   ],
-  "routeLocatorUrl":
-    "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+  "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
     "Environmental": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivity/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivity/MapServer",
         "options": {
           "id": "Habitat Connectivity",
           "visible": true
@@ -375,48 +361,42 @@
     "Additional Features": [
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url":
-          "https://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
+        "url": "https://gispublic.dfw.wa.gov/arcgis/rest/services/ApplicationServices/NHD_Hydro_Cache/MapServer",
         "options": {
           "id": "Rivers and Lakes"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WashingtonState/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WashingtonState/MapServer",
         "options": {
           "id": "State Boundary"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/RegionBoundaries/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/RegionBoundaries/MapServer",
         "options": {
           "id": "Region Boundaries"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
         "options": {
           "id": "County Boundaries"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/LegislativeDistricts/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/LegislativeDistricts/MapServer",
         "options": {
           "id": "Legislative Districts"
         }
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url":
-          "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
         "options": {
           "id": "City Limits",
           "opacity": 0.7

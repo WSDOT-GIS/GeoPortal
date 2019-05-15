@@ -7,37 +7,17 @@ require([
   "utils",
   "geoportal/setupToolbar",
   "geoportal/setupLayout",
-  "esri/Color",
   "esri/config",
   "esri/map",
   "esri/geometry/jsonUtils",
-  "esri/geometry/Point",
   "esri/geometry/Extent",
   "esri/tasks/GeometryService",
-  "esri/layers/ArcGISTiledMapServiceLayer",
   "esri/toolbars/navigation",
-  "esri/layers/GraphicsLayer",
   "esri/dijit/HomeButton",
-
   "dijit/form/Button",
-
-  "dijit/layout/TabContainer",
   "esri/dijit/Scalebar",
-  "esri/graphic",
-  "esri/geometry/webMercatorUtils",
-  "esri/InfoTemplate",
-
-  "esri/dijit/BasemapGallery",
-  "esri/dijit/BasemapLayer",
   "esri/SpatialReference",
-  "esri/dijit/Measurement",
-  "esri/request",
-  "esri/layers/LabelLayer",
-  "esri/renderers/SimpleRenderer",
-
-  "BufferUI",
   "BufferUI/BufferUIHelper",
-  "esri/dijit/Search",
   "setup",
 
   "dijit/form/RadioButton",
@@ -71,33 +51,17 @@ require([
   utils,
   setupToolbar,
   setupLayout,
-  Color,
   esriConfig,
   Map,
   jsonUtils,
-  Point,
   Extent,
   GeometryService,
-  ArcGISTiledMapServiceLayer,
   Navigation,
-  GraphicsLayer,
   HomeButton,
   Button,
-  TabContainer,
   Scalebar,
-  Graphic,
-  webMercatorUtils,
-  InfoTemplate,
-  BasemapGallery,
-  BasemapLayer,
   SpatialReference,
-  Measurement,
-  esriRequest,
-  LabelLayer,
-  SimpleRenderer,
-  BufferUI,
   BufferUIHelper,
-  Search,
   setup
 ) {
   "use strict";
@@ -107,6 +71,21 @@ require([
     qsManager;
   wsdot = { config: {} };
   wsdot.map = null;
+
+  // Sanitize URL of old style parameters
+  (function() {
+    if (!(window.URL && window.URLSearchParams && window.history)) {
+      return;
+    }
+    const url = new URL(location.href);
+    const sp = url.searchParams;
+    ["layers", "center", "zoom"].forEach(function(s) {
+      if (sp.has(s)) {
+        sp.delete(s);
+      }
+    });
+    history.replaceState(null, window.title, url.toString());
+  })();
 
   // Setup other geoportals links
   (function(form) {
@@ -165,7 +144,7 @@ require([
        */
       Date.prototype.toShortDateString = function() {
         return (
-          String(this.getMonth()) +
+          String(this.getMonth() + 1) +
           "-" +
           String(this.getDate()) +
           "-" +

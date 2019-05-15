@@ -1,22 +1,17 @@
 /* Hide buttons that aren't needed for this configuration. */
-button[id='saveButton'], span[widgetid='saveButton'], #basemapTab {
-    display: none;
-}
-
-.ui-layer-list .basemap-group {
-    border: 1px solid lightgray;
-    padding: 0.5em 1em;
-    border-radius: 10px;
+button[id="saveButton"],
+span[widgetid="saveButton"] {
+  display: none;
 }
 
 .traffic-legend table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
-[data-layer-id='Milepost Values'] + label {
-    text-decoration: none;
+[data-layer-id="Milepost Values"] + label {
+  text-decoration: none;
 }
 
-[data-layer-id='Milepost Values'] + label + img + span + ul {
-    display: none !important;
+[data-layer-id="Milepost Values"] + label + img + span + ul {
+  display: none !important;
 }

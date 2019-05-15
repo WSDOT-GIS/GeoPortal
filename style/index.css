@@ -700,3 +700,11 @@ div.danger {
   text-align: center;
   padding: 3px 0;
 }
+
+.metadata-source-name__db:after {
+  content: ".";
+}
+
+.metadata-source-name__schema {
+  display: none;
+}
