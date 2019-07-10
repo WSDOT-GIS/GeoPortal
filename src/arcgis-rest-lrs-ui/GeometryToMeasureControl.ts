@@ -90,7 +90,7 @@ export class GeometryToMeasureControl {
     if (!(input && input.value)) {
       return;
     }
-    return input.valueAsDate;
+    return input.valueAsDate || undefined;
   }
 
   /**

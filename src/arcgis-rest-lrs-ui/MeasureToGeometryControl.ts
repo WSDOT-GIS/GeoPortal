@@ -167,7 +167,7 @@ export class MeasureToGeometryControl {
       const form = ev.target as HTMLFormElement;
       const client = new LrsClient(this.form.action);
       const viewDate = this.temporalViewDateInput.value
-        ? this.temporalViewDateInput.valueAsDate
+        ? this.temporalViewDateInput.valueAsDate || undefined
         : undefined;
       const promise = client.measureToGeometry(
         this.layerId,
