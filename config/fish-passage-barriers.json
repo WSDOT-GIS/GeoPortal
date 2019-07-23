@@ -57,22 +57,6 @@
   },
   "basemaps": [
     {
-      "id": "esriHybrid",
-      "title": "Hybrid",
-      "thumbnailUrl": "images/EsriHybridThumbnail.png",
-      "layers": [
-        {
-          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
-        },
-        {
-          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
-        },
-        {
-          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
-        }
-      ]
-    },
-    {
       "id": "wsdotBasemap",
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
@@ -92,6 +76,22 @@
         }
       ]
     }
+  ],
+  "basemapsToRemove": [
+    "Navigation",
+    "Streets (Night)",
+    "Oceans",
+    "National Geographic Style Map",
+    "Charted Territory Map",
+    "Navigation (Dark Mode)",
+    "Newspaper Map",
+    "Human Geography Map",
+    "Human Geography Dark Map",
+    "Modern Antique Map",
+    "Mid-Century Map",
+    "Nova Map",
+    "Colored Pencil Map",
+    "Watercolor Map"
   ],
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {

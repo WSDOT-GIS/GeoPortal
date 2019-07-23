@@ -154,7 +154,24 @@
       ]
     }
   ],
-  "basemapsToRemove": ["Terrain with Labels", "Topographic", "Oceans"],
+  "basemapsToRemove": [
+    "Terrain with Labels",
+    "Topographic",
+    "Navigation",
+    "Streets (Night)",
+    "Oceans",
+    "National Geographic Style Map",
+    "Charted Territory Map",
+    "Navigation (Dark Mode)",
+    "Newspaper Map",
+    "Human Geography Map",
+    "Human Geography Dark Map",
+    "Modern Antique Map",
+    "Mid-Century Map",
+    "Nova Map",
+    "Colored Pencil Map",
+    "Watercolor Map"
+  ],
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "tabbedLayerList": true,
   "layers": {
