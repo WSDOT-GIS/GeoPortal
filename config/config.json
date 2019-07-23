@@ -82,7 +82,7 @@
       ]
     }
   ],
-  "basmeapsToRemove": [
+  "basemapsToRemove": [
     "Navigation",
     "Streets (Night)",
     "Oceans",
@@ -96,7 +96,7 @@
     "Mid-Century Map",
     "Nova Map",
     "Colored Pencil Map",
-    "Watercolor Map"
+    "Watercolour Map"
   ],
   "initialBasemap": "WSDOT Basemap",
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",

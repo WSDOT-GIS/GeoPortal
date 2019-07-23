@@ -158,7 +158,7 @@
     "Mid-Century Map",
     "Nova Map",
     "Colored Pencil Map",
-    "Watercolor Map"
+    "Watercolour Map"
   ],
   "routeLocatorUrl": "https://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
