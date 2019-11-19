@@ -4,7 +4,9 @@
   "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/EnvironmentalMappingExportWebMap/GPServer/Export Web Map",
   "enableIdentify": true,
   "disclaimer": "disclaimers/internal-rmec/Internal.html",
-  "additionalStylesheets": ["style/rmec.css"],
+  "additionalStylesheets": [
+    "style/rmec.css"
+  ],
   "alwaysShowDisclaimer": true,
   "mapOptions": {
     "logo": false,
@@ -93,7 +95,9 @@
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": ["JURLBL"]
+        "outFields": [
+          "JURLBL"
+        ]
       }
     },
     "city": {
@@ -103,7 +107,9 @@
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-        "outFields": ["CityName"]
+        "outFields": [
+          "CityName"
+        ]
       }
     },
     "urbanArea": {
@@ -180,6 +186,13 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://gis.dnr.wa.gov/site2/rest/services/Public_Water/WADNR_PUBLIC_FP_Water_Types/MapServer",
+        "options": {
+          "id": "DNR Public Forest Practices Water Types"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/FEMAFloodInformation/MapServer",
         "options": {
           "id": "FEMA Flood Information"
@@ -208,7 +221,6 @@
           "id": "City Limits"
         }
       },
-
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
@@ -216,7 +228,6 @@
           "id": "County Boundaries"
         }
       },
-
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TownshipSection/MapServer",
