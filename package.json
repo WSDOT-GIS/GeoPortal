@@ -29,7 +29,7 @@
     "@wsdot/grouped-layer-list": "^0.0.14",
     "dojo-typings": "^1.11.9",
     "gh-pages": "^2.0.1",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "jquery-ui": "^1.12.1",
     "prettier": "^1.18.2",
     "source-map": "^0.7.3",
