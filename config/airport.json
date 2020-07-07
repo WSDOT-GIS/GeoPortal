@@ -8,7 +8,13 @@
   "tabContainerOptions": {
     "tabPosition": "left"
   },
-  "tabOrder": ["Layers", "Airspace Calculator", "Tools", "Basemap", "Legend"],
+  "tabOrder": [
+    "Layers",
+    "Airspace Calculator",
+    "Tools",
+    "Basemap",
+    "Legend"
+  ],
   "mapOptions": {
     "logo": false,
     "extent": {
@@ -91,15 +97,21 @@
   },
   "initialBasemap": "Imagery with Labels",
   "geometryServer": "https://data.wsdot.wa.gov/arcgis/rest/services/Geometry/GeometryServer",
-  "tools": ["zoom", "lrs", "search"],
+  "tools": [
+    "zoom",
+    "lrs",
+    "search"
+  ],
   "queryTasks": {
     "airport": {
       "label": "Airport",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/Airports/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/AviationData/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": ["Name"]
+        "outFields": [
+          "NAME"
+        ]
       },
       "levelOrFactor": 5
     },
@@ -109,7 +121,9 @@
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": ["JURLBL"]
+        "outFields": [
+          "JURLBL"
+        ]
       }
     },
     "city": {
@@ -119,7 +133,9 @@
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-        "outFields": ["CityName"]
+        "outFields": [
+          "CityName"
+        ]
       }
     },
     "urbanArea": {
@@ -149,7 +165,9 @@
       "layers": [
         {
           "url": "https://maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
-          "visibleLayers": [4]
+          "visibleLayers": [
+            4
+          ]
         }
       ]
     }
@@ -178,9 +196,15 @@
     "Airport": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/Airports/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/AviationData/MapServer",
         "options": {
-          "id": "Airports"
+          "id": "Airports",
+          "imageParameters": {
+            "layerIds": [
+              0
+            ],
+            "layerOption": "show"
+          }
         }
       },
       {
@@ -203,13 +227,6 @@
         "url": "https://maps6.arcgisonline.com/ArcGIS/rest/services/A-16/FAA_Obstacles/MapServer",
         "options": {
           "id": "FAA Obstacles"
-        }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirportInformationSystem/MapServer",
-        "options": {
-          "id": "Airport Information System"
         }
       }
     ],
@@ -271,7 +288,6 @@
         }
       }
     ],
-
     "WSDOT Boundaries": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
