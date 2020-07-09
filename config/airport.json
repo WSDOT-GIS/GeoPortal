@@ -105,7 +105,7 @@
   "queryTasks": {
     "airport": {
       "label": "Airport",
-      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/AviationData/MapServer/0",
+      "url": "https://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/Airports/MapServer/0",
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
@@ -195,16 +195,10 @@
   "layers": {
     "Airport": [
       {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/AviationData/MapServer",
+        "layerType": "esri.layers.FeatureLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/Airports/MapServer",
         "options": {
-          "id": "Airports",
-          "imageParameters": {
-            "layerIds": [
-              0
-            ],
-            "layerOption": "show"
-          }
+          "id": "Airports"
         }
       },
       {
