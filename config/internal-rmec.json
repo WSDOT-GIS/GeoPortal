@@ -211,6 +211,13 @@
         "options": {
           "id": "National Hydrology Dataset (NHD) Labels"
         }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://gis.dnr.wa.gov/site2/rest/services/Public_Forest_Practices/WADNR_PUBLIC_FP_Hydro/MapServer",
+        "options": {
+          "id": "DNR Hydrography"
+        }
       }
     ],
     "Political Boundaries": [
