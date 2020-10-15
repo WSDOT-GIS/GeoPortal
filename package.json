@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "webpack",
     "watch": "webpack -w",
-    "serve": "serve",
+    "serve": "dotnet serve -S -o",
     "gh-pages": "node build/gh-pages.js"
   },
   "author": "WSDOT",

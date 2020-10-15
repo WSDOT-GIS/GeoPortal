@@ -466,11 +466,6 @@ abbr {
   z-index: 1;
 }
 
-.wdfw-photos-link-container {
-  text-align: center;
-  font-size: 2em;
-}
-
 .wdfw-photos-link:before,
 .u-email:before,
 .p-tel:before {
@@ -481,6 +476,10 @@ abbr {
 /* Put a camera icon before the link. */
 .wdfw-photos-link:before {
   content: "\1F3A5";
+}
+
+.wdfw-monitoring-reports-link:before {
+  content: '📃';
 }
 
 .u-email:before {

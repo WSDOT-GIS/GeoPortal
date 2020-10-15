@@ -8,7 +8,8 @@ scripts/utils/*.js
 scripts/utils/*.js.map
 scripts/exporter/*
 
-scripts/extensions
+scripts/extensions/*
+!scripts/extensions/htmlPopupExtensions.js
 scripts/dataUrlViewer
 
 .awcache
