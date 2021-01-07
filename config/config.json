@@ -215,13 +215,6 @@
         "options": {
           "id": "Tribal Lands"
         }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/BridgeData/MapServer",
-        "options": {
-          "id": "Bridges"
-        }
       }
     ],
     "Design": [
@@ -276,6 +269,13 @@
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MilepostValues/MapServer",
         "options": {
           "id": "Milepost Values"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/BridgeData/MapServer",
+        "options": {
+          "id": "Bridges"
         }
       }
     ]
