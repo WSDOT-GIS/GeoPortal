@@ -291,13 +291,6 @@ This value can either be an object or an array.  If an object is provided, each 
 					"options": {
 						"id": "Township / Section"
 					}
-				},
-				{
-					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-					"url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TribalReservationLands/MapServer",
-					"options": {
-						"id": "Tribal Lands"
-					}
 				}
 		  ],
 			"Design": [

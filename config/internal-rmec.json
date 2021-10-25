@@ -244,13 +244,6 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TribalReservationLands/MapServer",
-        "options": {
-          "id": "Tribal Lands"
-        }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/MajorPublicLands/MapServer",
         "options": {
           "id": "Major Public Lands"

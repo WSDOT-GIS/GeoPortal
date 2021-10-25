@@ -135,13 +135,6 @@
         "options": {
           "id": "Township / Section"
         }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TribalReservationLands/MapServer",
-        "options": {
-          "id": "Tribal Lands"
-        }
       }
     ],
     "Design": [
