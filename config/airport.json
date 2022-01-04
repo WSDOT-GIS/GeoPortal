@@ -157,19 +157,6 @@
           "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
         }
       ]
-    },
-    {
-      "id": "aeronauticalChart",
-      "title": "Aeronautical Chart",
-      "thumbnailUrl": "images/Aeronautical Chart Thumb.jpg",
-      "layers": [
-        {
-          "url": "https://maps7.arcgisonline.com/arcgis/rest/services/FAA_Sectional_Charts/MapServer",
-          "visibleLayers": [
-            4
-          ]
-        }
-      ]
     }
   ],
   "basemapsToRemove": [
