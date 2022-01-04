@@ -1,6 +1,6 @@
 {
   "pageTitle": "Maintenance Environmental Mapping",
-  "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "helpUrl": "https://data.wsdot.wa.gov/geospatial/userguides/GeoPortalUserGuide.pdf",
   "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/EnvironmentalMappingExportWebMap/GPServer/Export Web Map",
   "enableIdentify": true,
   "disclaimer": "disclaimers/internal-rmec/Internal.html",
