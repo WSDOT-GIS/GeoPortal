@@ -155,7 +155,7 @@ export function addPrintLink(
     const frag = graphicsToTables(doc, infoWindow.features);
 
     if (!frag) {
-      alert("Error creating table.");
+      alert("Sorry, the print function is not supported for this feature.");
       return false;
     }
 
