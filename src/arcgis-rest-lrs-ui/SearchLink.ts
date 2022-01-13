@@ -80,7 +80,7 @@ export function createSearchLink(searchName?: SearchName) {
         }
       }
       search.focus();
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof NoMatchingSourceError) {
         alert(error.message);
       } else {
