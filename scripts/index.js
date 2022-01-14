@@ -127,8 +127,14 @@ require([
     };
     request.send();
 
-    select.addEventListener("change", function() {
-      form.submit();
+    select.addEventListener("change", function (e) {
+      let option = form.config.selectedOptions[0];
+      if (option.dataset.url) {
+        open(option.dataset.url, "_top");
+        e.preventDefault();
+      } else {
+        form.submit();
+      }
     });
   })(document.getElementById("otherGeoportalsForm"));
 
