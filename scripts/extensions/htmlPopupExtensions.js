@@ -18,8 +18,6 @@ require([
   "esri/geometry/geometryEngineAsync",
   "esri/geometry/webMercatorUtils",
   "geoportal/InfoTemplates/HabitatConnectivityInfoTemplate",
-  "geoportal/InfoTemplates/TrafficInfoTemplate",
-  "geoportal/InfoTemplates/PtrTemplate",
   "geoportal/InfoTemplates/CrabTemplate"
 ], function (
   all,
@@ -38,8 +36,6 @@ require([
   geometryEngineAsync,
   webMercatorUtils,
   HabitatConnectivityInfoTemplate,
-  TrafficInfoTemplate,
-  PtrTemplate,
   CrmpTemplate
 ) {
   "use strict";
@@ -837,10 +833,6 @@ require([
                   /Habitat_Connectivity/.test(layerId) && result.layerId !== 2
                 ) {
                   feature.setInfoTemplate(HabitatConnectivityInfoTemplate);
-                } else if (/Traffic_Data/.test(layerId)) {
-                  feature.setInfoTemplate(TrafficInfoTemplate);
-                } else if (/PTR_Sites/.test(layerId)) {
-                  feature.setInfoTemplate(PtrTemplate);
                 } else if (/CRAB_Routes/.test(layerId)) {
                   feature.setInfoTemplate(CrmpTemplate);
                 } else {

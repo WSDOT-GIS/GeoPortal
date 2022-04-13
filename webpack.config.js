@@ -75,8 +75,6 @@ module.exports = [
   "./src/extensions/graphicsLayer.ts",
   "./src/InfoTemplates/CrabTemplate.ts",
   "./src/InfoTemplates/HabitatConnectivityInfoTemplate.ts",
-  "./src/InfoTemplates/PtrTemplate.ts",
-  "./src/InfoTemplates/TrafficInfoTemplate.ts",
   "./src/setup/main.ts",
   "./src/utils/main.ts",
   "./src/controls/layerSorter.ts"

@@ -1,0 +1,7 @@
+[serve]
+	tls
+	gzip
+	brotli
+	cors
+	open-browser
+	quiet
