@@ -9,11 +9,24 @@ words:
   - CRMP
   - dojox
   - GeoPortal
+  - geoportals
   - GRDO
   - JsDelivr
   - RMEC
+  - scalebar
   - USGS
+  - WKID
+  - WRIA
+  - xmin
+  - xmax
+  - ymin
+  - ymax
 ignoreWords:
+  - ashx
   - dijit
+  - jqueryui
+  - mapload
   - pageview
+  - zoomnextIcon
+  - zoomprevIcon
 import: []

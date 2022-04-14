@@ -32,24 +32,23 @@ function getLayerArray(layers: layerInput) {
   return output;
 }
 
+/** Info about a configuration */
+interface ConfigResult {
+  name: string | undefined;
+  url: string;
+}
+
 /**
  * Gets the config file specified by the query string.
- * @returns {string}
+ * @returns Config name (may be undefined if URL search param not provided) and URL.
  */
-function getConfigUrl(): string {
+function getConfigNameAndUrl(): ConfigResult {
   // Get the query string parameters.
-  let output = defaultConfigUrl;
-  const qsconfigMatch = location.search.match(/\bconfig=([^=&]+)/);
-  const qsconfig = qsconfigMatch ? qsconfigMatch[1] : null;
+  const configName = new URLSearchParams(location.search).get("config") || undefined;
+
   // If the config parameter has not been specified, return the default.
-  if (qsconfig) {
-    if (/\//g.test(qsconfig)) {
-      output = `${qsconfig}.json`;
-    } else {
-      output = `config/${qsconfig}.json`;
-    }
-  }
-  return output;
+  const configUrl = configName ? `${configName}.json` : defaultConfigUrl;
+  return { name: configName, url: configUrl }
 }
 
 /**
@@ -72,11 +71,27 @@ export function getVisibleLayerIdsFromConfig(layers: layerInput): string[] {
 }
 
 /**
+ * An error that occurs while attempting to read a configuration
+ * from the config URL parameter.
+ */
+export class ConfigError extends Error {
+  /**
+   * 
+   * @param configName Name of the configuration. This will be the value of the "config" url search parameter, if present.
+   * @param configUrl 
+   */
+  constructor(public configName?: string, public configUrl?: string) {
+    super(`Invalid config parameter: ${configName || "[no name]"}. ${(configUrl ? `url: ${configUrl}` : "")
+      }`);
+  }
+}
+
+/**
  * Gets the configuration data from either the file specified in the URL search
  * or from the default config file.
  */
 export async function getConfig(): Promise<config.Config> {
-  const url = getConfigUrl();
+  const { name, url } = getConfigNameAndUrl();
   const response = await fetch(url);
   if (response.ok) {
     return await response.json();
@@ -84,21 +99,9 @@ export async function getConfig(): Promise<config.Config> {
     // Detect the error that occurs if the user tries to access the airport
     // power user setting via config query string parameter.
     // Redirect to the aspx page which will prompt for a log in.
-    const textStatus = response.statusText;
-    let bodyText: string;
-    if (
-      /parsererror/i.test(textStatus) &&
-      /^AIS\/config.js(?:on)?$/i.test(url)
-    ) {
-      bodyText =
-        "<p>You need to <a href='AirportPowerUser.aspx'>log in</a> to access this page.</p>";
-      // location.replace("AirportPowerUser.aspx");
-    } else {
-      bodyText =
-        "<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>";
-    }
+    const bodyText = "<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>";
     document.body.removeAttribute("class");
     document.body.innerHTML = bodyText;
-    throw new Error(bodyText);
+    throw new ConfigError(name, url);
   }
 }
