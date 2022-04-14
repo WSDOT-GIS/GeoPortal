@@ -6,11 +6,13 @@ words:
   - ArcGIS
   - Basemap
   - CRMP
+  - dojox
   - GeoPortal
   - GRDO
   - JsDelivr
   - RMEC
   - USGS
 ignoreWords:
+  - dijit
   - pageview
 import: []

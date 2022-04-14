@@ -18,7 +18,7 @@ const path = require("path");
  * console.log(filename); // "main"
  */
 function getFolderAndFileName(entry) {
-  /** Matches path and captures 1. folder name and 2. file name w/o extention. */
+  /** Matches path and captures 1. folder name and 2. file name w/o extension. */
   const re = /\.\/src\/(?:(.+)\/)*([^/]+).ts/;
   const match = entry.match(re);
   if (!match) {
@@ -51,18 +51,18 @@ function createConfig(entry) {
       path: folder
         ? path.resolve(__dirname, "scripts", folder)
         : path.resolve(__dirname, "scripts"),
-      filename: `${filename}.js`
+      filename: `${filename}.js`,
     },
     resolve: {
       // Add `.ts` and `.tsx` as a resolvable extension.
-      extensions: [".ts", ".tsx", ".js"]
+      extensions: [".ts", ".tsx", ".js"],
     },
     module: {
       rules: [
         // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-        { test: /\.tsx?$/, loader: "ts-loader" }
-      ]
-    }
+        { test: /\.tsx?$/, loader: "ts-loader" },
+      ],
+    },
   };
 
   return config;
@@ -77,5 +77,5 @@ module.exports = [
   "./src/InfoTemplates/HabitatConnectivityInfoTemplate.ts",
   "./src/setup/main.ts",
   "./src/utils/main.ts",
-  "./src/controls/layerSorter.ts"
+  "./src/controls/layerSorter.ts",
 ].map(createConfig);
