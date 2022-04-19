@@ -47,7 +47,7 @@ function getConfigNameAndUrl(): ConfigResult {
   const configName = new URLSearchParams(location.search).get("config") || undefined;
 
   // If the config parameter has not been specified, return the default.
-  const configUrl = configName ? `${configName}.json` : defaultConfigUrl;
+  const configUrl = configName ? `config/${configName}.json` : defaultConfigUrl;
   return { name: configName, url: configUrl }
 }
 
