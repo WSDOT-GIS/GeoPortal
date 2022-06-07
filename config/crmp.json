@@ -1,6 +1,6 @@
 {
   "pageTitle": "County Road Milepost Locator Map",
-  "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "helpUrl": "https://data.wsdot.wa.gov/geospatial/userguides/GeoPortalUserGuide.pdf",
   "enableIdentify": true,
   "disclaimer": "disclaimers/crmp/index.html",
   "alwaysShowDislaimer": false,
@@ -47,22 +47,6 @@
   },
   "basemaps": [
     {
-      "id": "esriHybrid",
-      "title": "Hybrid",
-      "thumbnailUrl": "images/EsriHybridThumbnail.png",
-      "layers": [
-        {
-          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
-        },
-        {
-          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
-        },
-        {
-          "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
-        }
-      ]
-    },
-    {
       "id": "wsdotBasemap",
       "title": "WSDOT Basemap",
       "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
@@ -84,6 +68,22 @@
     }
   ],
   "initialBasemap": "WSDOT Basemap",
+  "basemapsToRemove": [
+    "Navigation",
+    "Streets (Night)",
+    "Oceans",
+    "National Geographic Style Map",
+    "Charted Territory Map",
+    "Navigation (Dark Mode)",
+    "Newspaper Map",
+    "Human Geography Map",
+    "Human Geography Dark Map",
+    "Modern Antique Map",
+    "Mid-Century Map",
+    "Nova Map",
+    "Colored Pencil Map",
+    "Watercolour Map"
+  ],
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
     "Political Boundaries": [
@@ -134,13 +134,6 @@
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TownshipSection/MapServer",
         "options": {
           "id": "Township / Section"
-        }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TribalReservationLands/MapServer",
-        "options": {
-          "id": "Tribal Lands"
         }
       }
     ],

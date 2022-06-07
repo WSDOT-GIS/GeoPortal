@@ -21,8 +21,8 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="//js.arcgis.com/3.28/esri/css/esri.css" />
-    <link rel="stylesheet" href="//js.arcgis.com/3.28/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="//js.arcgis.com/3.29/esri/css/esri.css" />
+    <link rel="stylesheet" href="//js.arcgis.com/3.29/dijit/themes/claro/claro.css" />
     <link href="//js.arcgis.com/3.28/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
     <link href="//code.jquery.com/ui/1.9.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 
@@ -34,11 +34,11 @@
     <link href="style/layerSorter.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/gh/WSDOT-GIS/elc-js@2.6.4/elc-ui/elc-ui.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/arcgis-draw-ui.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
-        crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0/AirspaceCalculator.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/url-polyfill@1.0.13/url-polyfill.js" integrity="sha256-e+hAGufphbbuCqIYU4lboVyYAcGqJavUrUkCyAx30zw="
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/url-polyfill@1.0.13/url-polyfill.js"
+        integrity="sha256-e+hAGufphbbuCqIYU4lboVyYAcGqJavUrUkCyAx30zw=" crossorigin="anonymous"></script>
 
     <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
     <script src="node_modules/@bower_components/polyfills/html.js"></script> -->
@@ -105,10 +105,15 @@
                                         <option value="" selected="selected">Default</option>
                                         <option value="airport">Airport</option>
                                         <option value="crmp">County Road Milepost Locator Map</option>
-                                        <option value="fish-passage-barriers">Fish Passage Barriers</option>
                                         <option value="FunctionalClass">Functional Class</option>
-                                        <option value="traffic">Traffic</option>
-                                        <!-- <option value="crmp">CRMP</option> -->
+                                        <!-- Options with a 'data-url' attribute will redirect to the specified URL. -->
+                                        <option value="fish-passage-barriers"
+                                            data-url="https://wsdot.maps.arcgis.com/apps/webappviewer/index.html?id=c2850f301118480fbb576f1ccfda7f47">
+                                            Fish
+                                            Passage Barriers</option>
+                                        <option value="traffic"
+                                            data-url="https://wsdot.wa.gov/about/transportation-data/travel-data/traffic-count-data">
+                                            Traffic</option>
                                         <optgroup label="internal">
                                             <option value="internal-habitat-connectivity">Habitat Connectivity</option>
                                             <option value="internal-rmec">Maintenance Environmental Mapping</option>
@@ -258,7 +263,7 @@
                     },
                     {
                         name: "ArcGisPrintUI",
-                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-print-ui", "1.2.0", "gh"),
+                        location: getJsDelivrUrl("WSDOT-GIS", "arcgis-print-ui", "1.3.2", "gh"),
                         main: "ArcGisPrintUI"
                     },
                     {
@@ -280,10 +285,12 @@
             window.dojoConfig = dojoConfig;
         }(location.pathname.replace(/\/[^\/]*$/, "")));
     </script>
-    <script src="https://js.arcgis.com/3.28/"></script>
-    <script src="//code.jquery.com/jquery-1.8.2.min.js" integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
+    <script src="https://js.arcgis.com/3.29/"></script>
+    <script src="//code.jquery.com/jquery-1.8.2.min.js"
+        integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
         crossorigin="anonymous"></script>
-    <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js" integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd"
+    <script src="//code.jquery.com/ui/1.9.0/jquery-ui.min.js"
+        integrity="sha384-FDrX1jtDy5JpCqaG5CpUaKWA0Pve9AFym0L3ypoz71eO0neiIRkiKd8SjWXaYacd"
         crossorigin="anonymous"></script>
     <script src="scripts/index.js"></script>
 </body>

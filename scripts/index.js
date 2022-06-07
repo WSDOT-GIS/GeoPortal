@@ -92,24 +92,44 @@ require([
     var select = form.querySelector("select[name=config]");
 
     /**
-     * When a config query string parameter has been specified,
+     * When a "config" query string parameter has been specified,
      * set the default selected option to match.
      */
     function syncSelectedWithQSSetting() {
-      var currentConfig, selectedOption;
-      currentConfig = location.search.match("config=([^=&]+)");
-      if (currentConfig) {
-        currentConfig = currentConfig[1];
-        selectedOption = select.querySelector("option[selected]");
-        if (selectedOption) {
-          selectedOption.removeAttribute("selected");
-        }
-        selectedOption = select.querySelector(
-          "option[value='" + currentConfig + "']"
+      const searchParams = new URLSearchParams(location.search);
+      
+      // Test for presence of "config" URL param.
+      if (searchParams.has("config")) {
+        // Get the current "config" param from URL
+        let currentConfig = searchParams.get("config");
+
+        // Get the option element with a value matching the
+        // current config param.
+        const configOption = select.querySelector(
+          `option[value='${currentConfig}']`
         );
-        if (selectedOption) {
-          selectedOption.setAttribute("selected", "selected");
-        }
+
+       if (configOption) {
+          // If the option has a data-url attribute, redirect
+          // to that URL.
+          if (configOption.dataset.url) {
+            window.stop();
+            open(configOption.dataset.url, "_top");
+          }
+  
+          // Get the currently selected option.
+          const selectedOption = select.querySelector("option[selected]");
+          // Remove the "selected" attribute.
+          if (selectedOption) {
+            selectedOption.removeAttribute("selected");
+          }
+          // Set the "selected" attribute for the option
+          // matching the config specified in the URL
+          // parameter.
+          if (configOption) {
+            configOption.setAttribute("selected", "selected");
+          }
+       }
       }
     }
 
@@ -127,8 +147,14 @@ require([
     };
     request.send();
 
-    select.addEventListener("change", function() {
-      form.submit();
+    select.addEventListener("change", function (e) {
+      let option = form.config.selectedOptions[0];
+      if (option.dataset.url) {
+        open(option.dataset.url, "_top");
+        e.preventDefault();
+      } else {
+        form.submit();
+      }
     });
   })(document.getElementById("otherGeoportalsForm"));
 
@@ -196,7 +222,7 @@ require([
        * Adds a Google Analytics tracking event for the addition of a layer to the map.
        * @param {Event} e - layer add event.
        * @param {Layer} e.layer - layer that was added
-       * @param {Layer} e.error - Error that occured when trying to add layer.
+       * @param {Layer} e.error - Error that occurred when trying to add layer.
        */
       gaTrackEvent = function(e) {
         var label,
@@ -491,7 +517,13 @@ require([
     ready(init);
   }
 
-  utils.getConfig().then(doPostConfig, function(error) {
-    console.error(error);
-  });
+  (async () => {
+    try {
+      const config = await utils.getConfig();
+      doPostConfig(config);
+    } catch (error) {
+      console.error(error.message || error);
+    }
+  })();
+
 });

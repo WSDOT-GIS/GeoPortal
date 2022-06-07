@@ -1,10 +1,12 @@
 {
   "pageTitle": "Maintenance Environmental Mapping",
-  "helpUrl": "https://www.wsdot.wa.gov/mapsdata/tools/geoportal_extHelp.htm",
+  "helpUrl": "https://data.wsdot.wa.gov/geospatial/userguides/GeoPortalUserGuide.pdf",
   "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/EnvironmentalMappingExportWebMap/GPServer/Export Web Map",
   "enableIdentify": true,
   "disclaimer": "disclaimers/internal-rmec/Internal.html",
-  "additionalStylesheets": ["style/rmec.css"],
+  "additionalStylesheets": [
+    "style/rmec.css"
+  ],
   "alwaysShowDisclaimer": true,
   "mapOptions": {
     "logo": false,
@@ -93,7 +95,9 @@
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": ["JURLBL"]
+        "outFields": [
+          "JURLBL"
+        ]
       }
     },
     "city": {
@@ -103,7 +107,9 @@
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-        "outFields": ["CityName"]
+        "outFields": [
+          "CityName"
+        ]
       }
     },
     "urbanArea": {
@@ -145,6 +151,19 @@
   ],
   "initialBasemap": "WSDOT Basemap",
   "basemapsToRemove": [
+    "Navigation",
+    "Streets (Night)",
+    "National Geographic Style Map",
+    "Charted Territory Map",
+    "Navigation (Dark Mode)",
+    "Newspaper Map",
+    "Human Geography Map",
+    "Human Geography Dark Map",
+    "Modern Antique Map",
+    "Mid-Century Map",
+    "Nova Map",
+    "Colored Pencil Map",
+    "Watercolour Map",
     "Imagery",
     "Imagery w/ Labels",
     "Streets",
@@ -167,6 +186,13 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://gis.dnr.wa.gov/site2/rest/services/Public_Water/WADNR_PUBLIC_FP_Water_Types/MapServer",
+        "options": {
+          "id": "DNR Public Forest Practices Water Types"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/FEMAFloodInformation/MapServer",
         "options": {
           "id": "FEMA Flood Information"
@@ -185,6 +211,13 @@
         "options": {
           "id": "National Hydrology Dataset (NHD) Labels"
         }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://gis.dnr.wa.gov/site2/rest/services/Public_Forest_Practices/WADNR_PUBLIC_FP_Hydro/MapServer",
+        "options": {
+          "id": "DNR Hydrography"
+        }
       }
     ],
     "Political Boundaries": [
@@ -195,7 +228,6 @@
           "id": "City Limits"
         }
       },
-
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
@@ -203,19 +235,11 @@
           "id": "County Boundaries"
         }
       },
-
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TownshipSection/MapServer",
         "options": {
           "id": "Township / Section"
-        }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/TribalReservationLands/MapServer",
-        "options": {
-          "id": "Tribal Lands"
         }
       },
       {
