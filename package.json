@@ -25,7 +25,7 @@
     "@wsdot/arcgis-feature-select": "0.0.0",
     "@wsdot/arcgis-js-draw-ui": "^2.0.0",
     "@wsdot/arcgis-rest-lrs": "^1.0.0-rc.1",
-    "@wsdot/grouped-layer-list": "^0.0.14",
+    "@wsdot/grouped-layer-list": "^1.0.0",
     "dojo-typings": "^1.11.11",
     "gh-pages": "^3.2.3",
     "jquery": "^3.6.0",
