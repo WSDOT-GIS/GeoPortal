@@ -382,9 +382,9 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CountyBoundaries/MapServer",
+        "url": "https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Public_Land_Survey/MapServer",
         "options": {
-          "id": "County Boundaries"
+          "id": "Public Land Survey (WADNR)"
         }
       },
       {
