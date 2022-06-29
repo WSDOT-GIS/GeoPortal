@@ -2,6 +2,7 @@ version: "0.2"
 ignorePaths: []
 dictionaryDefinitions: []
 dictionaries: []
+allowCompoundWords: true
 words:
   - ArcGIS
   - Basemap
@@ -12,15 +13,17 @@ words:
   - geoportals
   - GRDO
   - JsDelivr
+  - lods
   - RMEC
   - scalebar
   - USGS
+  - WADNR
   - WKID
   - WRIA
-  - xmin
   - xmax
-  - ymin
+  - xmin
   - ymax
+  - ymin
 ignoreWords:
   - ashx
   - dijit
@@ -29,4 +32,6 @@ ignoreWords:
   - pageview
   - zoomnextIcon
   - zoomprevIcon
+  - JURLBL
+  - RTPO
 import: []

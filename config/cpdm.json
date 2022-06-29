@@ -2,7 +2,10 @@
   "pageTitle": "Projects",
   "helpUrl": "https://data.wsdot.wa.gov/geospatial/userguides/GeoPortalUserGuide.pdf",
   "enableIdentify": true,
-  "tools": ["zoom", "lrs"],
+  "tools": [
+    "zoom",
+    "lrs"
+  ],
   "mapOptions": {
     "logo": false,
     "extent": {
@@ -90,7 +93,9 @@
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": ["PIN"]
+        "outFields": [
+          "PIN"
+        ]
       }
     },
     "county": {
@@ -99,7 +104,9 @@
       "query": {
         "where": "1 = 1",
         "returnGeometry": true,
-        "outFields": ["JURLBL"]
+        "outFields": [
+          "JURLBL"
+        ]
       }
     },
     "city": {
@@ -109,7 +116,9 @@
         "where": "1 = 1",
         "returnGeometry": true,
         "maxAllowableOffset": 50,
-        "outFields": ["CityName"]
+        "outFields": [
+          "CityName"
+        ]
       }
     },
     "urbanArea": {
@@ -190,10 +199,10 @@
         }
       },
       {
-        "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer",
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Public_Land_Survey/MapServer",
         "options": {
-          "id": "County Boundaries"
+          "id": "Public Land Survey (WADNR)"
         }
       },
       {
