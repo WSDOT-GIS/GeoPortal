@@ -5,16 +5,13 @@ import {
 } from "arcgis-rest-api";
 import geometryJsonUtils = require("esri/geometry/jsonUtils");
 import Point = require("esri/geometry/Point");
-import Polyline = require("esri/geometry/Polyline");
 import Graphic = require("esri/graphic");
-import FeatureLayer = require("esri/layers/FeatureLayer");
 import SpatialReference = require("esri/SpatialReference");
-import TextSymbol = require("esri/symbols/TextSymbol");
 
 export const defaultLrsMapServiceUrl =
   "https://data.wsdot.wa.gov/arcgis/rest/services/CountyRoutes/CRAB_Routes/MapServer";
 
-export const defaultLrsSvcUrl = `${defaultLrsMapServiceUrl}/exts/LRSServer`;
+export const defaultLrsSvcUrl = `${defaultLrsMapServiceUrl}/exts/LRServer`;
 export const defaultLayerId = 0;
 
 /**
@@ -27,14 +24,16 @@ export const defaultLayerId = 0;
 export function getLrsServerEndpointUrl(
   mapServiceUrl: string,
   layerId: number,
-  endpointName: "geometryToMeasure" | "measureToGeometry" | string
+  endpointName: "geometryToMeasure" | "measureToGeometry" | string,
+  isArcGisProSvc: boolean = true
 ) {
   const urlRe = /^(?:https?:)?\/\/.+\/(Map|Feature)Server\b/i;
   const match = mapServiceUrl.match(urlRe);
   if (!match) {
     throw Error(`URL is not in expected format: "${mapServiceUrl}".`);
   }
-  return `${mapServiceUrl}/exts/LRSServer/${layerId}/${endpointName}`;
+  const extName = isArcGisProSvc ? "LRServer" : "LRSServer"
+  return `${mapServiceUrl}/exts/${extName}/${layerId}/${endpointName}`;
 }
 
 /**
@@ -113,15 +112,12 @@ export function addToFormWithLabel(
  * @param g2mOutput Output from geometryToMeasure operation.
  */
 export function* IterateG2MOutputToFeatures(g2mOutput: IG2MOutput) {
-  const format = new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: 3
-  });
   const { locations, spatialReference } = g2mOutput;
   const sr = new SpatialReference(spatialReference);
   for (const loc of locations) {
     const { results, status } = loc;
     for (const r of results) {
-      const { routeId, measure, geometry, geometryType } = r;
+      const { routeId, measure, geometry } = r;
       const attributes = { status, routeId, measure };
       const point = new Point(geometry.x, geometry.y, sr);
       // const symbol = new TextSymbol(`${routeId} @ ${format.format(measure)}`);
@@ -136,16 +132,6 @@ export function* IterateG2MOutputToFeatures(g2mOutput: IG2MOutput) {
 //   | [number, number, number | null]
 //   | [number, number];
 
-function* flattenPathsToPoints(paths: number[][][]) {
-  for (const path of paths) {
-    for (const point of path) {
-      const [x, y] = point;
-      const z = point.length > 2 ? point[2] : null;
-      const m = point.length > 3 ? point[3] : null;
-      yield { x, y, z, m };
-    }
-  }
-}
 
 function getStartAndEndMeasures(
   polyline: IRestPolyline
