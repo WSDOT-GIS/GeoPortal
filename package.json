@@ -30,7 +30,7 @@
     "dojo-typings": "^1.11.9",
     "gh-pages": "^2.0.1",
     "jquery": "3.4.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.2",
     "prettier": "^1.18.2",
     "source-map": "^0.7.3",
     "ts-loader": "^6.0.4",
