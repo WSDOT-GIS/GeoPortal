@@ -177,7 +177,7 @@
     "Colored Pencil Map",
     "Watercolour Map"
   ],
-  "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
+  "routeLocatorUrl": "https://hqolymgis39t:6443/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "tabbedLayerList": true,
   "layers": {
     "Airport": [
