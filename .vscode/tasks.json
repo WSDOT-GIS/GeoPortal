@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "install",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "install dependencies from package"
+		},
+		{
+			"label": "Serve",
+			"detail": "Serves the website using dotnet-serve",
+			"icon": {
+				"id": "browser",
+				"color": "terminal.ansiBlue"
+			},
+			"type": "shell",
+			"command": "dotnet serve",
+			"problemMatcher": []
+		}
+	]
+}
