@@ -239,7 +239,9 @@ define([
         new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div)
       );
       on.once(registry.byId("lrsTools"), "show", function() {
-        var elcUI = new ArcGisElcUI(div);
+        var elcUI = new ArcGisElcUI(div, {
+          url: wsdot.config.routeLocatorUrl
+        });
         elcUI.setMap(wsdot.map);
 
         elcUI.on("elc-results-not-found", function() {
