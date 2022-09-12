@@ -44,11 +44,12 @@ interface ConfigResult {
  */
 function getConfigNameAndUrl(): ConfigResult {
   // Get the query string parameters.
-  const configName = new URLSearchParams(location.search).get("config") || undefined;
+  const configName =
+    new URLSearchParams(location.search).get("config") || undefined;
 
   // If the config parameter has not been specified, return the default.
   const configUrl = configName ? `config/${configName}.json` : defaultConfigUrl;
-  return { name: configName, url: configUrl }
+  return { name: configName, url: configUrl };
 }
 
 /**
@@ -76,13 +77,16 @@ export function getVisibleLayerIdsFromConfig(layers: layerInput): string[] {
  */
 export class ConfigError extends Error {
   /**
-   * 
+   *
    * @param configName Name of the configuration. This will be the value of the "config" url search parameter, if present.
-   * @param configUrl 
+   * @param configUrl
    */
   constructor(public configName?: string, public configUrl?: string) {
-    super(`Invalid config parameter: ${configName || "[no name]"}. ${(configUrl ? `url: ${configUrl}` : "")
-      }`);
+    super(
+      `Invalid config parameter: ${configName || "[no name]"}. ${
+        configUrl ? `url: ${configUrl}` : ""
+      }`
+    );
   }
 }
 
@@ -99,7 +103,8 @@ export async function getConfig(): Promise<config.Config> {
     // Detect the error that occurs if the user tries to access the airport
     // power user setting via config query string parameter.
     // Redirect to the aspx page which will prompt for a log in.
-    const bodyText = "<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>";
+    const bodyText =
+      "<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>";
     document.body.removeAttribute("class");
     document.body.innerHTML = bodyText;
     throw new ConfigError(name, url);

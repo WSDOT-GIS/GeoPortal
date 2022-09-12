@@ -132,7 +132,7 @@ export function parseDataUrl(dataUrl: string): IDataUrlParts {
     return {
       mediaType,
       base64: Boolean(base64),
-      data: text
+      data: text,
     };
   } else {
     // const text = dataUrl;

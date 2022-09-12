@@ -20,7 +20,7 @@ import TextSymbol from "esri/symbols/TextSymbol";
 export function setupDrawUI(map: EsriMap) {
   function createInfoWindowContent(this: InfoWindow, graphic: Graphic) {
     const btn = document.createElement("button");
-    const deleteButtonGraphic = function(this: any) {
+    const deleteButtonGraphic = function (this: any) {
       if (this.graphic) {
         map.infoWindow.hide();
         drawHelper.layer.remove(this.graphic);
@@ -61,7 +61,7 @@ export function setupDrawUI(map: EsriMap) {
 
     drawHelper = new DrawUIHelper(map, drawToolsNode, symbolOptions, {
       id: "Drawn Features",
-      infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent)
+      infoTemplate: new InfoTemplate("Drawn Graphic", createInfoWindowContent),
     });
 
     drawHelper.on("draw-activate", () => {

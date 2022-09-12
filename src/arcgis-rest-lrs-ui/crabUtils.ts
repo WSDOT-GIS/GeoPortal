@@ -42,7 +42,7 @@ export function parseCrabRouteId(routeId: string): IParsedCrabRouteId {
   }
 
   // Parse the FIPS code and Road number into integers (number type).
-  const [countyFipsCode, roadNumber] = match.slice(1, 3).map(s => {
+  const [countyFipsCode, roadNumber] = match.slice(1, 3).map((s) => {
     if (s) {
       const int = parseInt(s, 10);
       if (!isNaN(int)) {
@@ -56,6 +56,6 @@ export function parseCrabRouteId(routeId: string): IParsedCrabRouteId {
   return {
     countyFipsCode,
     roadNumber,
-    direction
+    direction,
   };
 }

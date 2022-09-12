@@ -11,7 +11,7 @@ export default function showDisclaimer(
 ) {
   // Get the configuration name from the query string.
   const re = /\bconfig=([^&]+)/i;
-  let configName: string = "";
+  let configName = "";
   if (location.search) {
     const match = location.search.match(re);
     if (match) {
@@ -31,11 +31,11 @@ export default function showDisclaimer(
     disclaimerUrl !== undefined &&
     (showEvenIfAlreadyAgreed || disclaimerUrl !== null)
   ) {
-    const deferred = new Promise<string | null>(function(resolve, reject) {
+    const deferred = new Promise<string | null>(function (resolve, reject) {
       try {
         const request = new XMLHttpRequest();
         request.open("get", disclaimerUrl);
-        request.onloadend = function() {
+        request.onloadend = function () {
           if (this.status === 200) {
             if (
               !showEvenIfAlreadyAgreed &&
@@ -56,7 +56,7 @@ export default function showDisclaimer(
     });
 
     deferred.then(
-      function(disclaimerHtml) {
+      function (disclaimerHtml) {
         if (disclaimerHtml) {
           const parser = new DOMParser();
           const doc = parser.parseFromString(disclaimerHtml, "text/html");
@@ -74,7 +74,7 @@ export default function showDisclaimer(
               buttons: {
                 Accept() {
                   $(this).dialog("close");
-                }
+                },
               },
               open(/*event, ui*/) {
                 // Remove the close button from the disclaimer form.
@@ -84,14 +84,12 @@ export default function showDisclaimer(
               close(/*event, ui*/) {
                 // Store the current date with the setting.
                 window.localStorage.setItem(settingName, disclaimerHtml);
-                $(this)
-                  .dialog("destroy")
-                  .remove();
-              }
+                $(this).dialog("destroy").remove();
+              },
             } as any);
         }
       },
-      function(error) {
+      function (error) {
         console.error("Error creating disclaimer", error);
       }
     );

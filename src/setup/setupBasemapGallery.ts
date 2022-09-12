@@ -9,7 +9,7 @@ import EsriMap = require("esri/map");
 function setupBasemapGallery(map: EsriMap, config: any) {
   const basemaps = config.basemaps as any[];
 
-  basemaps.forEach(bm => {
+  basemaps.forEach((bm) => {
     bm.layers = bm.layers.map((l: BasemapLayerOptions) => {
       return new BasemapLayer(l);
     });
@@ -23,7 +23,7 @@ function setupBasemapGallery(map: EsriMap, config: any) {
         : true,
       map,
       basemaps,
-      basemapIds: map.layerIds
+      basemapIds: map.layerIds,
     },
     "basemapGallery"
   );

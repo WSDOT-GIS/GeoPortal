@@ -5,7 +5,7 @@ const exportPropName = "geoportal_export";
 // This is the main element where programmatically generated HTML elements will be added.
 const mainElement = document.querySelector("main")!;
 
-window.addEventListener("load", ev => {
+window.addEventListener("load", (ev) => {
   const geojson = localStorage.getItem(exportPropName);
   if (geojson) {
     addGeoJsonToTextArea(geojson);

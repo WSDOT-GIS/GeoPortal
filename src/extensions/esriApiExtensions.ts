@@ -33,7 +33,7 @@ lang.extend(LayerInfo, {
       );
     }
   },
-  supportsHtmlPopup: null
+  supportsHtmlPopup: null,
 });
 
 lang.extend(Layer, {
@@ -64,7 +64,7 @@ lang.extend(Layer, {
       const visibleLayerInfos = this.getVisibleLayerInfos();
       return visibleLayerInfos.length > 0;
     }
-  }
+  },
 });
 
 lang.extend(FeatureLayer, {
@@ -87,5 +87,5 @@ lang.extend(FeatureLayer, {
         (this.maxScale === 0 || this.maxScale <= scale)
       );
     }
-  }
+  },
 });

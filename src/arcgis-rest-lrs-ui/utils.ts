@@ -1,7 +1,7 @@
 import { IG2MOutput, IM2GOutput } from "@wsdot/arcgis-rest-lrs";
 import {
   Point as IRestPoint,
-  Polyline as IRestPolyline
+  Polyline as IRestPolyline,
 } from "arcgis-rest-api";
 import geometryJsonUtils = require("esri/geometry/jsonUtils");
 import Point = require("esri/geometry/Point");
@@ -25,14 +25,14 @@ export function getLrsServerEndpointUrl(
   mapServiceUrl: string,
   layerId: number,
   endpointName: "geometryToMeasure" | "measureToGeometry" | string,
-  isArcGisProSvc: boolean = true
+  isArcGisProSvc = true
 ) {
   const urlRe = /^(?:https?:)?\/\/.+\/(Map|Feature)Server\b/i;
   const match = mapServiceUrl.match(urlRe);
   if (!match) {
     throw Error(`URL is not in expected format: "${mapServiceUrl}".`);
   }
-  const extName = isArcGisProSvc ? "LRServer" : "LRSServer"
+  const extName = isArcGisProSvc ? "LRServer" : "LRSServer";
   return `${mapServiceUrl}/exts/${extName}/${layerId}/${endpointName}`;
 }
 
@@ -132,7 +132,6 @@ export function* IterateG2MOutputToFeatures(g2mOutput: IG2MOutput) {
 //   | [number, number, number | null]
 //   | [number, number];
 
-
 function getStartAndEndMeasures(
   polyline: IRestPolyline
 ): [number | null, number | null] {
@@ -172,7 +171,7 @@ export function* m2gOutputToFeatures(m2gOutput: IM2GOutput) {
     if (!loc.geometry) {
       const attributes = {
         routeId,
-        status
+        status,
       };
       yield new Graphic({ attributes });
     } else if (loc.geometryType === "esriGeometryPoint") {
@@ -181,7 +180,7 @@ export function* m2gOutputToFeatures(m2gOutput: IM2GOutput) {
       const attributes = {
         routeId,
         status,
-        measure: m
+        measure: m,
       };
       yield new Graphic({ geometry, attributes });
     } else if (loc.geometryType === "esriGeometryPolyline") {
@@ -195,7 +194,7 @@ export function* m2gOutputToFeatures(m2gOutput: IM2GOutput) {
         routeId,
         status,
         fromMeasure,
-        toMeasure
+        toMeasure,
       };
       yield new Graphic({ geometry, attributes });
     }

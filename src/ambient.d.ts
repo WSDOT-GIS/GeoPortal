@@ -28,5 +28,5 @@ declare module "dojo/text!*" {
 declare module "@esri/arcgis-to-geojson-utils" {
   const arcgisToGeoJSON: (...args: any[]) => any;
   const geojsonToArcGIS: (...args: any[]) => any;
-  export{ arcgisToGeoJSON, geojsonToArcGIS };
+  export { arcgisToGeoJSON, geojsonToArcGIS };
 }

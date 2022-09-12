@@ -27,7 +27,7 @@ function createGalleryLink(featureUrl: string) {
   const a = document.createElement("a");
   const qs = [
     ["url", encodeURIComponent(featureUrl)].join("="),
-    ["fields", encodeURIComponent(attributeOrder.join(","))].join("=")
+    ["fields", encodeURIComponent(attributeOrder.join(","))].join("="),
   ].join("&");
   a.href = [galleryUrl, qs].join("?");
   a.textContent = "View attached images in carousel";
@@ -41,8 +41,8 @@ function getAttributeData(featureUrl: string) {
   esriRequest({
     url: attributesUrl,
     content: {
-      f: "json"
-    }
+      f: "json",
+    },
   }).then(
     (response: IGetAttributeDataResponse & IErrorResponse) => {
       if (response) {
@@ -113,7 +113,7 @@ const attributeOrder = [
   "I-4 Program",
   "Permeability Ranked",
   "Bridge Structure ID",
-  "Bridge Number"
+  "Bridge Number",
 ];
 
 function createTable(graphic: any) {
@@ -131,7 +131,7 @@ function createTable(graphic: any) {
   const featureUrl = [
     graphic.layer.url,
     graphic.result.layerId,
-    attr.OBJECTID
+    attr.OBJECTID,
   ].join("/");
 
   let row = document.createElement("tr");
@@ -202,5 +202,5 @@ function createContent(graphic: Graphic) {
 }
 
 export = new InfoTemplate({
-  content: createContent
+  content: createContent,
 });

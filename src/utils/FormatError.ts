@@ -9,9 +9,7 @@ export default class FormatError extends Error {
    */
   constructor(public readonly input: string, public readonly format: RegExp) {
     super(
-      `Input string was not in expected format.\nExpected ${
-        format.source
-      }\nGot ${input}`
+      `Input string was not in expected format.\nExpected ${format.source}\nGot ${input}`
     );
   }
 }

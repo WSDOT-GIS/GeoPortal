@@ -14,7 +14,7 @@ function* iterateQueryTasks(queryTasks: config.QueryTasks) {
 function queryToFeatureLayer(queryTask: config.QueryTask) {
   const { url, label, query } = queryTask;
   const layer = new FeatureLayer(url, {
-    outFields: query.outFields || ["*"]
+    outFields: query.outFields || ["*"],
   });
   return layer;
 }
@@ -35,7 +35,7 @@ export function setupSearchControls(
   const search = new Search(
     {
       map,
-      enableHighlight: false
+      enableHighlight: false,
     },
     addressDiv
   );
@@ -62,7 +62,7 @@ export function setupSearchControls(
           name: qt.label,
           featureLayer: layer,
           searchFields: qt.query.outFields,
-          exactMatch: false
+          exactMatch: false,
         };
         sources.push(searchSource);
       }

@@ -1,7 +1,7 @@
 import { IFeature, IFeatureSet } from "@esri/arcgis-rest-common-types";
 import {
   createFeatureSelect,
-  IFeatureSelect
+  IFeatureSelect,
 } from "@wsdot/arcgis-feature-select";
 import Popup from "esri/dijit/Popup";
 import Extent from "esri/geometry/Extent";
@@ -85,11 +85,11 @@ export async function setupFeatureSelects(
   });
 
   function zoomToFeatures(this: IFeatureSelect, ev: CustomEvent<IFeature[]>) {
-    if (!ev.detail || !ev.detail.filter(f => !!f.geometry).length) {
+    if (!ev.detail || !ev.detail.filter((f) => !!f.geometry).length) {
       return;
     }
     const features = ev.detail;
-    const graphics = features.map(f => {
+    const graphics = features.map((f) => {
       const g = new Graphic(f);
       g.setInfoTemplate(zoomTemplate);
       g.geometry.setSpatialReference(map.spatialReference);
@@ -131,15 +131,14 @@ export async function setupFeatureSelects(
       }
       const fullUrl = createURL(url, query);
 
-      const [frag, labelElement, selectElement] = createLabelAndControl(
-        queryTask
-      );
+      const [frag, labelElement, selectElement] =
+        createLabelAndControl(queryTask);
       container.appendChild(frag);
 
       // Query the feature layer for its features.
       const promise = fetch(fullUrl.toString())
-        .then(response => response.json() as Promise<IFeatureSet>)
-        .then(featureSet => {
+        .then((response) => response.json() as Promise<IFeatureSet>)
+        .then((featureSet) => {
           const featureSelect = createFeatureSelect(selectElement, featureSet);
           featureSelect.addEventListener("featureselect", zoomToFeatures);
           featureSelect.disabled = false;

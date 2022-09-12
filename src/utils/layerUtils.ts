@@ -37,7 +37,7 @@ export function createLayerNameFromUrl(layer: { url: string }) {
  */
 function getFieldNames(layer: FeatureLayer | GraphicsLayer) {
   if (layer instanceof FeatureLayer) {
-    return new Set(layer.fields.map(f => f.name));
+    return new Set(layer.fields.map((f) => f.name));
   }
 
   const output = new Set<string>();
@@ -79,7 +79,7 @@ export function featureAttributesToTable(
     row.appendChild(cell);
   }
 
-  for (const attributes of graphics.map(g => g.attributes)) {
+  for (const attributes of graphics.map((g) => g.attributes)) {
     row = tbody.insertRow(-1);
     for (const fieldName of fieldNames) {
       const value = attributes[fieldName];

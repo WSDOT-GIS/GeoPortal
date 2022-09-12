@@ -10,7 +10,7 @@ import {
   addToFormWithLabel,
   defaultLayerId,
   defaultLrsSvcUrl,
-  generateId
+  generateId,
 } from "./utils";
 
 function createForm(
@@ -114,7 +114,7 @@ export class GeometryToMeasureControl {
     const self = this;
 
     // Setup the form's submit event.
-    this.form.addEventListener("submit", e => {
+    this.form.addEventListener("submit", (e) => {
       try {
         self.draw.activate(Draw.POINT);
         self.map.setInfoWindowOnClick(false);
@@ -127,7 +127,7 @@ export class GeometryToMeasureControl {
       e.preventDefault();
     });
 
-    this.draw.on("draw-complete", async e => {
+    this.draw.on("draw-complete", async (e) => {
       self.draw.deactivate();
       self.map.setInfoWindowOnClick(true);
       (self.map as any).enablePopups();
@@ -151,12 +151,12 @@ export class GeometryToMeasureControl {
           wkid
         );
         const g2mEvent = new CustomEvent("geometryToMeasure", {
-          detail: result
+          detail: result,
         });
         self.form.dispatchEvent(g2mEvent);
       } catch (ex) {
         const errorEvent = new CustomEvent("geometryToMeasureError", {
-          detail: ex
+          detail: ex,
         });
         self.form.dispatchEvent(errorEvent);
       }

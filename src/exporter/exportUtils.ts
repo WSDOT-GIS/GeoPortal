@@ -32,7 +32,7 @@ export type IExportedFeatureCollection = FeatureCollection &
 export function layerToGeoJsonFeatureCollection(
   layer: GraphicsLayer
 ): IExportedFeatureCollection {
-  const features = layer.graphics.map(g => {
+  const features = layer.graphics.map((g) => {
     const graphic = g.clone();
     // Project from map spatial reference to WGS 84.
     const projectedGeometry = webMercatorToGeographic(g.geometry);
@@ -44,7 +44,7 @@ export function layerToGeoJsonFeatureCollection(
   return {
     layerid: layer.id,
     type: "FeatureCollection",
-    features
+    features,
   };
 }
 
@@ -64,7 +64,7 @@ export function* getMapFeatures(map: EsriMap) {
     if (gl instanceof FeatureLayer) {
       yield gl.toJson() as IFeatureSet;
     } else {
-      yield gl.graphics.map(g => g.toJson() as IFeature);
+      yield gl.graphics.map((g) => g.toJson() as IFeature);
     }
   }
 }

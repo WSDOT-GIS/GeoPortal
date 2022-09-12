@@ -10,7 +10,7 @@ declare type LayerWithDescription =
 
 export = $.widget("ui.layerSorter", {
   options: {
-    map: null as EsriMap | null
+    map: null as EsriMap | null,
   },
   _list: null as JQuery<HTMLUListElement> | null,
   /**
@@ -46,11 +46,11 @@ export = $.widget("ui.layerSorter", {
           stop(event, ui) {
             const item = ui.item as JQuery<HTMLLIElement>;
             $this._moveLayer(item);
-          }
+          },
         })
         .disableSelection() as JQuery<HTMLUListElement>;
     }
-    this._list!.empty();
+    this._list?.empty();
 
     // Loop through the layers in reverse order, so topmost layer is on the top of the list.
     for (let l = map!.layerIds.length, i = l - 1; i >= 0; i -= 1) {
@@ -58,9 +58,7 @@ export = $.widget("ui.layerSorter", {
       const layer = map!.getLayer(layerId);
 
       const li = createLayerSorterListItem(layer);
-      $(li)
-        .data("layer", layer)
-        .appendTo(this._list);
+      $(li).data("layer", layer).appendTo(this._list);
     }
   },
   _refresh() {
@@ -88,13 +86,13 @@ export = $.widget("ui.layerSorter", {
   _destroy() {
     // Call the base destroy method.
     $.Widget.prototype.destroy.apply(this, arguments);
-  }
+  },
 });
 
 function createLayerSorterListItem(layer: Layer) {
   const li = document.createElement("li");
   li.classList.add("ui-state-default");
-  if (layer.hasOwnProperty("description")) {
+  if (Object.prototype.hasOwnProperty.call(layer, "description")) {
     li.title = (layer as LayerWithDescription).description || "";
   }
   const iconSpan = document.createElement("span");

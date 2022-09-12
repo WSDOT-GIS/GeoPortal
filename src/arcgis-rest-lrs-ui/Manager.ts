@@ -20,7 +20,7 @@ import {
   defaultLayerId,
   defaultLrsMapServiceUrl,
   IterateG2MOutputToFeatures,
-  m2gOutputToFeatures
+  m2gOutputToFeatures,
 } from "./utils";
 
 /**
@@ -53,7 +53,7 @@ export function setupCrab(
 
   // When the map loads, add event handling code for the form.
   // "mapload" is a custom event on the window setup in main.js.
-  window.addEventListener("mapload", e => {
+  window.addEventListener("mapload", (e) => {
     // Get the map object from the event.
     const map = (e as any).detail as EsriMap;
 
@@ -79,7 +79,7 @@ export function setupCrab(
     crabUI.appendChild(descriptionP);
     crabUI.appendChild(g2mForm.form);
 
-    g2mForm.form.addEventListener("geometryToMeasure", g2mEvt => {
+    g2mForm.form.addEventListener("geometryToMeasure", (g2mEvt) => {
       const result = (g2mEvt as CustomEvent<IG2MOutput>).detail;
       const features = Array.from(IterateG2MOutputToFeatures(result));
 
@@ -105,14 +105,14 @@ export function setupCrab(
         const firstPoint = firstFeature.geometry as Point;
         popup.show(firstPoint!);
       } else {
-        const statuses = result.locations.map(l => l.status);
+        const statuses = result.locations.map((l) => l.status);
         const msg = `No locations found: ${statuses.join(", ")}`;
         alert(msg);
       }
     });
 
     // Handle custom error event from the GeometryToMeasure HTMLFormElement.
-    g2mForm.form.addEventListener("geometryToMeasureError", errorEvt => {
+    g2mForm.form.addEventListener("geometryToMeasureError", (errorEvt) => {
       const error = (errorEvt as CustomEvent).detail;
       // tslint:disable-next-line:no-console
       console.error("geometry to measure error", error);
@@ -157,7 +157,7 @@ export function setupCrab(
     // Handle the custom event for when the user submits parameters for
     // measureToGeometry operation. This event is defined in
     // MeasureToGeometryControl.ts
-    m2gForm.form.addEventListener("m2gsubmit", async evt => {
+    m2gForm.form.addEventListener("m2gsubmit", async (evt) => {
       // Event detail is a Promise that will return the measureToGeometry results.
       const promise = (evt as CustomEvent<Promise<IM2GOutput>>).detail;
       const popup = map.infoWindow as Popup;
@@ -192,16 +192,16 @@ export function setupCrab(
       // Add points and lines to corresponding layers.
       // Suspend the layers while adding features, then resume
       // when finished.
-      [crabPointsLayer, crabLinesLayer].forEach(l => l.suspend());
+      [crabPointsLayer, crabLinesLayer].forEach((l) => l.suspend());
 
       if (pointGraphics.length) {
-        pointGraphics.forEach(g => crabPointsLayer.add(g));
+        pointGraphics.forEach((g) => crabPointsLayer.add(g));
       }
       if (polylineGraphics.length) {
-        polylineGraphics.forEach(g => crabLinesLayer.add(g));
+        polylineGraphics.forEach((g) => crabLinesLayer.add(g));
       }
 
-      [crabPointsLayer, crabLinesLayer].forEach(l => l.resume());
+      [crabPointsLayer, crabLinesLayer].forEach((l) => l.resume());
 
       // Get the first graphic of point, or if no points, polyline.
       // Value will be null if no graphics were added this time.
@@ -243,7 +243,7 @@ export function setupCrab(
       // Show a message to the user if no results were found.
       if (nullGeoGraphics && nullGeoGraphics.length) {
         const message = nullGeoGraphics
-          .map(g => {
+          .map((g) => {
             const { routeId, status } = g.attributes;
             return `${routeId}: ${status}`;
           })

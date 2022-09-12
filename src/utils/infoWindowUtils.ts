@@ -19,9 +19,7 @@ function getGoogleStreetViewUrl(point: Point) {
   const xy = [point.x, point.y];
   // Create the output URL, inserting the xy coordinates.
   // http://maps.google.com/maps?q=&layer=c&cbll=47.15976,-122.48359&cbp=11,0,0,0,0
-  return `http://maps.google.com/maps?q=&layer=c&cbll=${xy[1]},${
-    xy[0]
-  }&cbp=11,0,0,0,0`;
+  return `http://maps.google.com/maps?q=&layer=c&cbll=${xy[1]},${xy[0]}&cbp=11,0,0,0,0`;
 }
 
 export function addExportFeatureLink(infoWindow: Popup) {
@@ -37,7 +35,7 @@ export function addExportFeatureLink(infoWindow: Popup) {
   docFrag.appendChild(document.createTextNode(" "));
   docFrag.appendChild(link);
 
-  link.onclick = evt => {
+  link.onclick = (evt) => {
     // Get the currently selected feature.
     let feature = infoWindow.features[infoWindow.selectedIndex];
 
@@ -112,7 +110,7 @@ export function makeDraggable(infoWindow: InfoWindow) {
   }
   const handle = infoWindow.domNode.querySelector(".title");
   const dnd = new Moveable(infoWindow.domNode, {
-    handle
+    handle,
   });
 
   const firstMoveFunc = () => {

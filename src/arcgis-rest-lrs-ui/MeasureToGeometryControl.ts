@@ -2,7 +2,7 @@ import {
   IG2MInputLocation,
   IM2GLineLocation,
   IM2GPointLocation,
-  LrsClient
+  LrsClient,
 } from "@wsdot/arcgis-rest-lrs";
 import EsriMap = require("esri/map");
 import { createCountyOptions } from "./CountyLookup";
@@ -10,7 +10,7 @@ import { crabRouteIdRe } from "./crabUtils";
 import {
   addNamedControlsToElement,
   generateId,
-  getLrsServerEndpointUrl
+  getLrsServerEndpointUrl,
 } from "./utils";
 
 /**
@@ -41,7 +41,7 @@ export class MeasureToGeometryControl {
 
     const directions = ["i", "d"];
 
-    return directions.map(d => {
+    return directions.map((d) => {
       if (toMeasure === null) {
         return { routeId: routeId + d, measure: fromMeasure };
       } else {
@@ -98,7 +98,7 @@ export class MeasureToGeometryControl {
     roadNoInput.pattern = roadNoRe.source;
     roadNoInput.title = "Enter a one- to five-digit road number";
 
-    [countySelect, roadNoInput].forEach(element => {
+    [countySelect, roadNoInput].forEach((element) => {
       element.addEventListener("change", updateRouteIdInput);
     });
 
@@ -139,7 +139,7 @@ export class MeasureToGeometryControl {
       "Road No.": roadNoInput,
       "From Milepost": fromMeasureInput,
       "To Milepost": toMeasureInput,
-      "Temporal View Date": temporalViewDateInput
+      "Temporal View Date": temporalViewDateInput,
     });
 
     this.routeIdInput = routeIdInput;
@@ -163,7 +163,7 @@ export class MeasureToGeometryControl {
 
     // Setup form submit event.
 
-    this.form.addEventListener("submit", ev => {
+    this.form.addEventListener("submit", (ev) => {
       const form = ev.target as HTMLFormElement;
       const client = new LrsClient(this.form.action);
       const viewDate = this.temporalViewDateInput.value
@@ -176,7 +176,7 @@ export class MeasureToGeometryControl {
         3857
       );
       const customEvt = new CustomEvent("m2gsubmit", {
-        detail: promise
+        detail: promise,
       });
       form.dispatchEvent(customEvt);
 

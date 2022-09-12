@@ -29,8 +29,8 @@ export function setupExportButton(map: EsriMap) {
    */
   function exportFeatures() {
     const featureSets = map.graphicsLayerIds
-      .map(id => map.getLayer(id) as GraphicsLayer)
-      .filter(gl => gl.graphics.length > 0)
+      .map((id) => map.getLayer(id) as GraphicsLayer)
+      .filter((gl) => gl.graphics.length > 0)
       .map(layerToGeoJsonFeatureCollection);
 
     if (featureSets.length < 1) {
@@ -55,7 +55,7 @@ export function setupExportButton(map: EsriMap) {
       label: "Export Graphics",
       showLabel: false,
       iconClass: "dijitEditorIcon dijitEditorIconSave",
-      onClick: exportFeatures
+      onClick: exportFeatures,
     },
     exportButton.id
   );

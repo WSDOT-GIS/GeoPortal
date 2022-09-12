@@ -1,7 +1,7 @@
 import GroupedLayerList, {
   createLayerLink,
   fromGeoportalLayers,
-  setOperationalLayers
+  setOperationalLayers,
 } from "@wsdot/grouped-layer-list";
 import Extent from "esri/geometry/Extent";
 import EsriMap from "esri/map";
@@ -30,7 +30,7 @@ export function setupLayerList(
       // Split to strings then convert strings to numbers.
       const [xmin, ymin, xmax, ymax] = mapExtent
         .split(/[\s,]+/g)
-        .map(s => parseFloat(s));
+        .map((s) => parseFloat(s));
 
       // Extent coords are WGS 84
       const sr = new SpatialReference(4326);
@@ -40,7 +40,7 @@ export function setupLayerList(
   }
 
   // Add the layers to the map
-  const mapLayers = layers.filter(l => l.layer).map(l => l.layer!);
+  const mapLayers = layers.filter((l) => l.layer).map((l) => l.layer!);
   if (mapLayers && mapLayers.length) {
     map.addLayers(mapLayers);
   }
@@ -55,7 +55,7 @@ export function setupLayerList(
       showLegend: true,
       showOpacitySlider: true,
       showSubLayers: true,
-      throwOnGroupNotFound: false
+      throwOnGroupNotFound: false,
     },
     root.id
   );

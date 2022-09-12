@@ -41,7 +41,7 @@ const countyMap = new Map([
   [71, "Walla Walla"],
   [73, "Whatcom"],
   [75, "Whitman"],
-  [77, "Yakima"]
+  [77, "Yakima"],
 ]);
 
 interface ICrabGraphic extends Graphic {
@@ -74,7 +74,7 @@ function createContent(graphic: ICrabGraphic) {
 
   const values: any = {
     County: county,
-    "County Road #": roadNumber
+    "County Road #": roadNumber,
   };
 
   const table = document.createElement("table");

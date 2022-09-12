@@ -138,31 +138,31 @@ const countyExpression: IExpressionInfo = {
   )`,
   name: "county",
   returnType: "string",
-  title: "County"
+  title: "County",
 };
 
 const countyRdNoExpression: IExpressionInfo = {
   name: "roadNumber",
   expression: "Mid($feature.RouteId, 5, 5)",
   title: "County Road Number",
-  returnType: "string"
+  returnType: "string",
 };
 
 const pointLayerFields = new Array<IField>(
   {
     name: "routeId",
     type: "esriFieldTypeString",
-    alias: "Route ID"
+    alias: "Route ID",
   },
   {
     name: "status",
     type: "esriFieldTypeString",
-    alias: "Locating Status"
+    alias: "Locating Status",
   },
   {
     name: "measure",
     type: "esriFieldTypeDouble",
-    alias: "Measure"
+    alias: "Measure",
   }
 );
 
@@ -170,7 +170,7 @@ function fieldToFieldInfo(field: IField): IFieldInfo {
   const output: IFieldInfo = {
     fieldName: field.name,
     label: field.alias || field.name,
-    visible: field.name !== "routeId"
+    visible: field.name !== "routeId",
   };
   if (/Double$/i.test(field.type)) {
     output.format = { places: 3 };
@@ -182,7 +182,7 @@ function expressionToFieldInfo(expressionInfo: IExpressionInfo): IFieldInfo {
   const output: IFieldInfo = {
     fieldName: `expression/${expressionInfo.name}`,
     label: expressionInfo.title || expressionInfo.name,
-    visible: true
+    visible: true,
   };
   return output;
 }
@@ -192,7 +192,7 @@ function expressionToFieldInfo(expressionInfo: IExpressionInfo): IFieldInfo {
 // 2. Rename measure to fromMeasure.
 // 3. Add endMeasure field.
 const lineLayerFields = pointLayerFields
-  .map(f => {
+  .map((f) => {
     let { name, alias } = f;
     const { type } = f;
     if (name === "measure") {
@@ -206,18 +206,18 @@ const lineLayerFields = pointLayerFields
     {
       name: "toMeasure",
       type: "esriFieldTypeDouble",
-      alias: "To Measure"
-    }
+      alias: "To Measure",
+    },
   ]);
 
 const pointLayerDefinition = {
   geometryType: "esriGeometryPoint",
-  fields: pointLayerFields
+  fields: pointLayerFields,
 };
 
 const lineLayerDefinition = {
   geometry: "esriGeometryLine",
-  fields: lineLayerFields
+  fields: lineLayerFields,
 };
 
 const expressionInfos = [countyExpression, countyRdNoExpression];
@@ -228,7 +228,7 @@ const pointsPopupTemplate = new PopupTemplate({
   fieldInfos: expressionFieldInfos.concat(
     pointLayerFields.map(fieldToFieldInfo)
   ),
-  expressionInfos
+  expressionInfos,
 });
 
 const linePopupTempate = new PopupTemplate({
@@ -236,17 +236,17 @@ const linePopupTempate = new PopupTemplate({
   fieldInfos: expressionFieldInfos.concat(
     lineLayerFields.map(fieldToFieldInfo)
   ),
-  expressionInfos
+  expressionInfos,
 });
 
 // Create the layer for located points and add to map.
 const crabPointsLayer = new FeatureLayer(
   {
     layerDefinition: pointLayerDefinition,
-    featureSet: null
+    featureSet: null,
   },
   {
-    id: "CRAB Points"
+    id: "CRAB Points",
   }
 );
 crabPointsLayer.setInfoTemplate(pointsPopupTemplate);
@@ -255,10 +255,10 @@ crabPointsLayer.setRenderer(pointRenderer);
 const crabLinesLayer = new FeatureLayer(
   {
     layerDefinition: lineLayerDefinition,
-    featureSet: null
+    featureSet: null,
   },
   {
-    id: "CRAB Lines"
+    id: "CRAB Lines",
   }
 );
 crabLinesLayer.setInfoTemplate(linePopupTempate);
