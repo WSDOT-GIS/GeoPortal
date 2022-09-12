@@ -4,7 +4,7 @@
 
 console.log("Publishing files to gh-pages...");
 
-const ghpages = require("gh-pages");
+import { publish } from "gh-pages";
 
 const validExtensions = "{css,html,js,json,svg,png,jpg,gif}";
 
@@ -17,27 +17,27 @@ const folders = [
   "images",
   // "node_modules/@bower_components",
   "scripts",
-  "style"
+  "style",
 ];
 
-let src = folders.map(name => `${name}`).join(",");
+let src = folders.map((name) => `${name}`).join(",");
 src = `./{${src}}/**/*.${validExtensions}`;
 src = [
   src,
   // `./node_modules/@bower_components/**/*${validExtensions}`,
   "./*.html",
-  "!*.md"
+  "!*.md",
 ];
 
 console.log("src", src);
 
-ghpages.publish(
+publish(
   ".",
   {
     repo: "https://github.com/WSDOT-GIS/GeoPortal.git",
-    src
+    src,
   },
-  err => {
+  (err) => {
     if (err) {
       console.error("gh-pages error", err);
     }
