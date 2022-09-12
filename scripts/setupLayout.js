@@ -167,7 +167,7 @@ define([
         if (
           wsdot.config &&
           wsdot.config.alternateTabTitles &&
-          wsdot.config.alternateTabTitles.hasOwnProperty(title)
+          Object.prototype.hasOwnProperty.call(wsdot.config.alternateTabTitles, "title")
         ) {
           output = wsdot.config.alternateTabTitles[title];
         }
@@ -314,7 +314,7 @@ define([
     function setupDraw() {
       var div = document.createElement("div");
       div.id = "drawPane";
-      contentPane = new ContentPane({ title: "Draw", id: "drawPane" }, div);
+      const contentPane = new ContentPane({ title: "Draw", id: "drawPane" }, div);
       document.getElementById("toolsAccordion").appendChild(div);
       var drawUI = document.createElement("div");
       toolsAccordion.addChild(contentPane);
@@ -393,7 +393,7 @@ define([
       if (!tools) {
         tools = ["lrs", "search", "buffer", "draw"];
       }
-      for (tool of tools) {
+      for (const tool of tools) {
         if (/lrs/i.test(tool)) {
           setupLrsControls();
         } else if (/search/i.test(tool)) {
