@@ -227,8 +227,7 @@ require([
    * @returns {dojo/Deferred.<HtmlPopupDetectResponse[]>} - Deferred object with {@link HtmlPopupDetectResponse} objects.
    */
   detectHtmlPopups = function (htmlPopupLayerFoundAction) {
-    var mapService = this,
-      layerInfo,
+    let layerInfo,
       layerUrl,
       i,
       l,
@@ -240,10 +239,9 @@ require([
 
     // Query the map service to get the list of layers.
 
-    function handleHtmlPopupResponse(layerResponse) {
-      var layerInfo, progressObject;
+    const handleHtmlPopupResponse = function(layerResponse) {
       completedRequestCount += 1;
-      layerInfo = mapService.layerInfos[layerResponse.id];
+      const layerInfo = this.layerInfos[layerResponse.id];
       // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
       if (
         layerResponse.htmlPopupType !== undefined &&
@@ -253,11 +251,11 @@ require([
       ) {
         // Add this URL to the list of URLs that supports HTML popups.
         layerInfo.htmlPopupType = layerResponse.htmlPopupType;
-        progressObject = {
-          mapService: mapService,
-          layerInfo: layerInfo,
-          layerUrl: layerUrl,
-          layerResponse: layerResponse
+        const progressObject = {
+          mapService: this,
+          layerInfo,
+          layerUrl,
+          layerResponse
         };
         responses.push(progressObject);
         // Update deferred progress
@@ -268,7 +266,7 @@ require([
         });
         if (typeof htmlPopupLayerFoundAction === "function") {
           htmlPopupLayerFoundAction(
-            mapService,
+            this,
             layerInfo,
             layerUrl,
             layerResponse
@@ -286,9 +284,9 @@ require([
       }
     }
 
-    for (i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
-      layerInfo = mapService.layerInfos[i];
-      layerUrl = [mapService.url, String(layerInfo.id)].join("/");
+    for (i = 0, l = this.layerInfos.length; i < l; i += 1) {
+      layerInfo = this.layerInfos[i];
+      layerUrl = [this.url, String(layerInfo.id)].join("/");
 
       // Query the layers to see if they support html Popups
       esriRequest({
@@ -302,7 +300,7 @@ require([
     return deferred;
   };
 
-  // Extend each of the types in the array with the same proerties and methods.
+  // Extend each of the types in the array with the same properties and methods.
   [ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer].forEach(function (
     ctor
   ) {
@@ -329,11 +327,9 @@ require([
      * @returns {dojo/Deferred} - Indicates progress of operation with currently completed count and total count.
      */
     detectHtmlPopups: function (htmlPopupLayerFoundAction) {
-      var map = this;
-
       var deferred = new Deferred();
 
-      var layerIdCount = map.layerIds.length;
+      var layerIdCount = this.layerIds.length;
       var completedCount = 0;
 
       function onComplete() {
@@ -346,15 +342,15 @@ require([
       }
 
       // Loop through each of the map service layers.
-      map.layerIds.forEach(function (id) {
+      this.layerIds.forEach(function (id) {
         var mapService;
 
         // Skip layers with an ID that matches the ignore regex.
-        if (map._ignoredLayerRE.test(id)) {
+        if (this._ignoredLayerRE.test(id)) {
           return;
         }
 
-        mapService = map.getLayer(id);
+        mapService = this.getLayer(id);
 
         if (mapService.loaded) {
           if (typeof mapService.detectHtmlPopups === "function") {
@@ -384,10 +380,6 @@ require([
      * @returns {dojo/promise/Promise}
      */
     identify: function (geometry, options) {
-      var map = this,
-        queryCount = 0,
-        graphicsTestResults;
-
       // Detect which layers have HTML popups.
       if (!this.detectHtmlPopupsHasRun) {
         this.detectHtmlPopups();
@@ -403,15 +395,15 @@ require([
 
       var deferreds = {};
 
-      // Loop through all of the map services.
-      map.layerIds.forEach(function (layerId) {
+      // Loop through all of the this services.
+      this.layerIds.forEach(function (layerId) {
         var layer, sublayerIds, idTask, idParams, deferred;
 
         // Skip any layers that match the ignored layers regular expression (if one has been specified).
-        if (map._ignoredLayerRE && map._ignoredLayerRE.test(layerId)) {
+        if (this._ignoredLayerRE && this._ignoredLayerRE.test(layerId)) {
           return;
         }
-        layer = map.getLayer(layerId);
+        layer = this.getLayer(layerId);
         if (layer.visible) {
           if (typeof layer.getIdsOfLayersWithHtmlPopups === "function") {
             //sublayerIds = layer.getIdsOfLayersWithHtmlPopups();
@@ -426,14 +418,13 @@ require([
             });
             // If there are sublayers defined, run an identify task.
             if (sublayerIds && sublayerIds.length > 0) {
-              queryCount += 1;
               idTask = new IdentifyTask(layer.url);
               idParams = new IdentifyParameters();
               idParams.geometry = geometry;
               idParams.layerIds = sublayerIds;
-              idParams.mapExtent = map.extent;
-              idParams.width = map.width;
-              idParams.height = map.height;
+              idParams.mapExtent = this.extent;
+              idParams.width = this.width;
+              idParams.height = this.height;
               // The following settings are configurable via the 'options' parameter.
               idParams.returnGeometry = options.returnGeometry || true;
               idParams.layerOption =
@@ -453,9 +444,9 @@ require([
       // Tests a graphic to see if it is <= 50 ft from where the user clicked.
       // Results of the async distance test are added to the graphicsTestResults
       // array.
-      function testGraphic(graphic) {
+      const testGraphic = function(graphic) {
         var g = graphic.geometry;
-        g = webMercatorUtils.project(g, map);
+        g = webMercatorUtils.project(g, this);
         var promise = new Deferred();
         geometryEngineAsync.distance(geometry, g, "feet").then(
           function (distance) {
@@ -477,12 +468,12 @@ require([
 
       // Loop through all graphics layers' graphics to see if the clicked point
       // intersects.
-      graphicsTestResults = [];
+      const graphicsTestResults = [];
 
-      map.graphicsLayerIds.forEach(function (layerId) {
+      this.graphicsLayerIds.forEach(function (layerId) {
         var layer;
 
-        layer = map.getLayer(layerId);
+        layer = this.getLayer(layerId);
 
         layer.graphics.forEach(testGraphic);
       });
@@ -540,25 +531,23 @@ require([
      * @param {RegExp} options.ignoredLayerRE - A regular expression.  Any layer with an ID that matches this expression will be ignored by the identify tool.
      */
     setupIdentifyPopups: function (options) {
-      var map = this;
-
-      map.popupsEnabled = true;
+      this.popupsEnabled = true;
 
       if (options.ignoredLayerRE) {
-        map._ignoredLayerRE = options.ignoredLayerRE;
+        this._ignoredLayerRE = options.ignoredLayerRE;
       }
 
       // Load the HTML Popup data from each of the layers.
-      map.detectHtmlPopups();
+      this.detectHtmlPopups();
 
       // Set up an event handler that will update the HTML popup data when a new layer is added.
-      map.on("layer-add-result", function (event) {
+      this.on("layer-add-result", function (event) {
         // If there was an error loading the layer, there is nothing to do here.
         if (event.error) {
           return;
         }
 
-        if (map._ignoredLayerRE.test(event.layer.id)) {
+        if (this._ignoredLayerRE.test(event.layer.id)) {
           return;
         }
 
@@ -572,22 +561,23 @@ require([
         }
       });
 
-      map.on("click", function (event) {
+      this.on("click", function (event) {
         /**
          * Gets the name of the object ID field from a feature.
          * @param {esri/Graphic} feature - a graphic
          * @returns {string} The name of the object ID field.
          */
         function getOid(feature) {
-          var output = null,
-            re = /O(BJECT)ID/i;
+          let output = null;
+          const re = /O(BJECT)ID/i; // cspell:disable-line
           if (feature && feature.attributes) {
             if (feature.attributes.OBJECTID) {
               output = feature.attributes.OBJECTID;
             } else {
               for (var propName in feature.attributes) {
                 if (
-                  feature.attributes.hasOwnProperty(propName) &&
+                  Object.prototype.hasOwnProperty.call(
+                    feature.attributes, propName) &&
                   re.test(propName)
                 ) {
                   output = feature.attributes[propName];
@@ -601,7 +591,7 @@ require([
         }
 
         // If popups are disabled, exit instead of showing the popup.
-        if (!map.popupsEnabled) {
+        if (!this.popupsEnabled) {
           return;
         }
 
@@ -615,7 +605,7 @@ require([
           var table,
             name,
             value,
-            ignoredAttributes = /^(?:(?:SHAPE(\.STLength\(\))?)|(?:O(?:BJECT)?ID))$/i,
+            ignoredAttributes = /^(?:(?:SHAPE(\.STLength\(\))?)|(?:O(?:BJECT)?ID))$/i, // cspell:disable-line
             title,
             caption,
             tr;
@@ -636,7 +626,7 @@ require([
           for (name in feature.attributes) {
             if (
               !ignoredAttributes.test(name) &&
-              feature.attributes.hasOwnProperty(name)
+              Object.prototype.hasOwnProperty.call(feature.attributes, name)
             ) {
               value = feature.attributes[name];
               tr = document.createElement("tr");
@@ -719,7 +709,7 @@ require([
             // If there is an object ID field, load the HTML popup.
             // TODO: Get the layer's ObjectID field setting instead of using hard-coded "OBJECTID". Sometimes the ObjectID field has a different name.
             if (oid !== null) {
-              // Get the map service url.
+              // Get the this service url.
               url = layer.url;
               // Append the layer ID (except for feature layers, which have the layer id as part of the url).
               if (!layer.isInstanceOf(FeatureLayer)) {
@@ -794,14 +784,14 @@ require([
           return div;
         }
 
-        map.infoWindow.clearFeatures();
+        this.infoWindow.clearFeatures();
 
-        map
+        this
           .identify(event.mapPoint, {
             tolerance: 5
             /**
              *
-             * @param {Object.<string, IdentifyResult[]>} idResults - The propery names correspond to map layer IDs. Each of these properties is an array of identify results associated with that map layer.
+             * @param {Object.<string, IdentifyResult[]>} idResults - The property names correspond to this layer IDs. Each of these properties is an array of identify results associated with that this layer.
              */
           })
           .then(
@@ -827,7 +817,7 @@ require([
                */
               function pushResult(result) {
                 var feature = result.feature;
-                feature.layer = map.getLayer(layerId);
+                feature.layer = this.getLayer(layerId);
                 feature.result = result;
                 if (
                   /Habitat_Connectivity/.test(layerId) && result.layerId !== 2
@@ -842,7 +832,7 @@ require([
               }
 
               for (var layerId in idResults) {
-                if (idResults.hasOwnProperty(layerId)) {
+                if (Object.prototype.hasOwnProperty.call(idResults, layerId)) {
                   results = idResults[layerId];
 
                   if (results.features) {
@@ -856,17 +846,13 @@ require([
               }
 
               // Add the features to the InfoWindow.
-              map.infoWindow.setFeatures(features);
-              map.infoWindow.show(event.mapPoint, {
+              this.infoWindow.setFeatures(features);
+              this.infoWindow.show(event.mapPoint, {
                 closetFirst: true
               });
             },
             function (error) {
-              /*global console:true */
-              if (console !== undefined) {
-                console.error(error);
-              }
-              /*global console:false*/
+              console.error(error);
             }
           );
       });
