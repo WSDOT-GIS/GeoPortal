@@ -227,23 +227,22 @@ require([
    * @returns {dojo/Deferred.<HtmlPopupDetectResponse[]>} - Deferred object with {@link HtmlPopupDetectResponse} objects.
    */
   detectHtmlPopups = function (htmlPopupLayerFoundAction) {
-    var mapService = this,
-      layerInfo,
-      layerUrl,
-      i,
-      l,
-      deferred,
-      completedRequestCount = 0,
-      responses = [];
+    var mapService = this;
+    let layerUrl;
+    const l = mapService.layerInfos.length;
+    let completedRequestCount = 0;
+    const responses = [];
 
-    deferred = new Deferred();
+    let deferred = new Deferred();
 
     // Query the map service to get the list of layers.
 
     function handleHtmlPopupResponse(layerResponse) {
-      var layerInfo, progressObject;
+      let layerInfo = null;
       completedRequestCount += 1;
-      layerInfo = mapService.layerInfos[layerResponse.id];
+      if (layerResponse.id in mapService.layerInfos) {
+        layerInfo = mapService.layerInfos[layerResponse.id];
+      }
       // If the map supports HTML popups, add the layer to the list.  (Do not add any annotation layers, though.)
       if (
         layerResponse.htmlPopupType !== undefined &&
@@ -252,8 +251,10 @@ require([
         !/Annotation/gi.test(layerResponse.type)
       ) {
         // Add this URL to the list of URLs that supports HTML popups.
-        layerInfo.htmlPopupType = layerResponse.htmlPopupType;
-        progressObject = {
+        if (layerInfo) {
+          layerInfo.htmlPopupType = layerResponse.htmlPopupType;
+        }
+        const progressObject = {
           mapService: mapService,
           layerInfo: layerInfo,
           layerUrl: layerUrl,
@@ -286,8 +287,7 @@ require([
       }
     }
 
-    for (i = 0, l = mapService.layerInfos.length; i < l; i += 1) {
-      layerInfo = mapService.layerInfos[i];
+    for (const layerInfo of mapService.layerInfos) {
       layerUrl = [mapService.url, String(layerInfo.id)].join("/");
 
       // Query the layers to see if they support html Popups
@@ -302,7 +302,7 @@ require([
     return deferred;
   };
 
-  // Extend each of the types in the array with the same proerties and methods.
+  // Extend each of the types in the array with the same properties and methods.
   [ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer].forEach(function (
     ctor
   ) {
@@ -801,7 +801,7 @@ require([
             tolerance: 5
             /**
              *
-             * @param {Object.<string, IdentifyResult[]>} idResults - The propery names correspond to map layer IDs. Each of these properties is an array of identify results associated with that map layer.
+             * @param {Object.<string, IdentifyResult[]>} idResults - The property names correspond to map layer IDs. Each of these properties is an array of identify results associated with that map layer.
              */
           })
           .then(
@@ -862,11 +862,7 @@ require([
               });
             },
             function (error) {
-              /*global console:true */
-              if (console !== undefined) {
-                console.error(error);
-              }
-              /*global console:false*/
+              console.error(error);
             }
           );
       });
