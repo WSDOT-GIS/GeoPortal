@@ -9,7 +9,24 @@
         "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended"
     ],
-    "overrides": [],
+    "overrides": [
+        {
+            "extends": [
+                "eslint:recommended",
+                "plugin:prettier/recommended"
+            ],
+            "parser": "default",
+            "files": [
+                "webpack.config.js"
+            ],
+            "env": {
+                "node": true
+            },
+            "ecmaFeatures": {
+                "modules": false
+            }
+        }
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",

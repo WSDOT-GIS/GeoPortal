@@ -6,7 +6,5 @@
     "**/.hg": true,
     "**/.DS_Store": true
   },
-  "editor.formatOnSave": true,
-  "typescript.tsdk": "node_modules\\typescript\\lib",
-  "editor.formatOnSaveMode": "modificationsIfAvailable"
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
