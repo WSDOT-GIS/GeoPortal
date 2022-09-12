@@ -1,31 +1,13 @@
 version: "0.2"
 ignorePaths: []
-dictionaryDefinitions: []
-dictionaries: []
+dictionaryDefinitions:
+  - name: custom-dictionary
+    path: ./.cspell/custom-dictionary.txt
+    addWords: true
+dictionaries:
+  - custom-dictionary
 allowCompoundWords: true
-words:
-  - ArcGIS
-  - Basemap
-  - Brotli
-  - CRMP
-  - dojox
-  - GeoPortal
-  - geoportals
-  - GRDO
-  - JsDelivr
-  - lods
-  - RMEC
-  - scalebar
-  - topo
-  - USGS
-  - WADNR
-  - WDFW
-  - WKID
-  - WRIA
-  - xmax
-  - xmin
-  - ymax
-  - ymin
+words: []
 ignoreWords:
   - ashx
   - dijit
