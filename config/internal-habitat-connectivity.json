@@ -4,7 +4,7 @@
   "enableIdentify": true,
   "disclaimer": "disclaimers/habitat-connectivity/Internal.html",
   "alwaysShowDisclaimer": false,
-  "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivityExportWebMap/GPServer/Export%20Web%20Map",
+  "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/HabitatConnectivityPrintService/GPServer/Export Web Map",
   "noPopupLayerRe": "^(?:(?:layer\\d+)|(?:Rivers_and_Lakes)|(?:.+Boundary))$",
   "additionalStylesheets": ["style/internal-habitat-connectivity.css"],
   "tools": ["lrs", "zoom"],
