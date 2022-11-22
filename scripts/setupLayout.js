@@ -167,7 +167,7 @@ define([
         if (
           wsdot.config &&
           wsdot.config.alternateTabTitles &&
-          wsdot.config.alternateTabTitles.hasOwnProperty(title)
+          Object.prototype.hasOwnProperty.call(wsdot.config.alternateTabTitles, "title")
         ) {
           output = wsdot.config.alternateTabTitles[title];
         }
@@ -314,7 +314,7 @@ define([
     function setupDraw() {
       var div = document.createElement("div");
       div.id = "drawPane";
-      contentPane = new ContentPane({ title: "Draw", id: "drawPane" }, div);
+      const contentPane = new ContentPane({ title: "Draw", id: "drawPane" }, div);
       document.getElementById("toolsAccordion").appendChild(div);
       var drawUI = document.createElement("div");
       toolsAccordion.addChild(contentPane);
@@ -327,11 +327,12 @@ define([
      * @returns {ArcGisPrintUI} - Returns the print UI, or null if there is no printUrl property in the configuration.
      */
     function setupPrintUI() {
-      var div, printForm, printPane;
+      let printPane;
+      let printForm;
 
       function setupPrintButton() {
-        var toolbar = document.getElementById("toolbar");
-        var button = document.createElement("button");
+        const toolbar = document.getElementById("toolbar");
+        let button = document.createElement("button");
         button.id = "openPrintPanelButton";
         button.title = "Opens the print tool pane.";
         button.type = "button";
@@ -354,7 +355,7 @@ define([
 
       if (wsdot.config.printUrl) {
         // Create the DOM element that will become the accordion pane which will contain the print form.
-        div = document.createElement("div");
+        const div = document.createElement("div");
         div.id = "printPane";
         document.getElementById("toolsAccordion").appendChild(div);
         // Create the print form and append the form to the div.
@@ -393,7 +394,7 @@ define([
       if (!tools) {
         tools = ["lrs", "search", "buffer", "draw"];
       }
-      for (tool of tools) {
+      for (const tool of tools) {
         if (/lrs/i.test(tool)) {
           setupLrsControls();
         } else if (/search/i.test(tool)) {
