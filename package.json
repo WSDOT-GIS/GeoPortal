@@ -7,7 +7,7 @@
     "prepare": "webpack",
     "watch": "webpack -w",
     "serve": "dotnet serve",
-    "gh-pages": "node build/gh-pages.js"
+    "gh-pages": "node build/gh-pages.mjs"
   },
   "author": "WSDOT",
   "license": "Unlicense",
