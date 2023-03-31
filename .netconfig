@@ -1,5 +1,4 @@
 [serve]
-	tls
 	gzip
 	brotli
 	cors
