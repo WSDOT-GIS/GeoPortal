@@ -1,6 +1,5 @@
-﻿/*jslint white: true, nomen: true */
-/*global dojo, jQuery */
-
+﻿/* global dojo */
+/* eslint-env jquery */
 (function ($) {
 	"use strict";
 

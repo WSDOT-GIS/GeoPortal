@@ -19,6 +19,19 @@
 			"type": "shell",
 			"command": "dotnet serve",
 			"problemMatcher": []
+		},
+		{
+			"type": "npm",
+			"script": "lint",
+			"icon": {
+				"id": "checklist",
+				"color": "terminal.ansiYellow"
+			},
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"label": "lint",
+			"detail": "Runs linters"
 		}
 	]
 }

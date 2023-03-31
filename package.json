@@ -7,6 +7,7 @@
     "prepare": "webpack",
     "watch": "webpack -w",
     "serve": "dotnet serve",
+    "lint": "npx eslint --ignore-path .gitignore **/*.ts **/*.js",
     "gh-pages": "node build/gh-pages.mjs"
   },
   "author": "WSDOT",
@@ -22,6 +23,7 @@
     "@types/geojson": "^7946.0.10",
     "@types/jquery": "^3.5.16",
     "@types/jqueryui": "^1.12.16",
+    "@types/node": "^18.11.17",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "@wsdot/arcgis-feature-select": "0.0.0",
@@ -42,8 +44,5 @@
     "typescript": "^5.0.2",
     "webpack": "^5.77.0",
     "webpack-cli": "^5.0.1"
-  },
-  "dependencies": {
-    "@types/node": "^18.15.11"
   }
 }

@@ -1,4 +1,4 @@
-/*global define, wsdot*/
+/*global $, wsdot*/
 define([
   "dojo/on",
   "dijit/registry",

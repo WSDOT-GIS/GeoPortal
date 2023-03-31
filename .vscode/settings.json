@@ -6,5 +6,7 @@
     "**/.hg": true,
     "**/.DS_Store": true
   },
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "eslint.lintTask.enable": true,
+  "eslint.useESLintClass": true
 }

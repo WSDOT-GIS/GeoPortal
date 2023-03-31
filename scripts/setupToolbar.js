@@ -1,4 +1,4 @@
-/*global define, wsdot*/
+/*global wsdot, ga, $ */
 define([
   "dijit/registry",
   "dijit/form/Button",

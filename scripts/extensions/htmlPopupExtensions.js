@@ -1,6 +1,3 @@
-/*global require */
-/*jslint nomen: true, white: true, browser: true */
-
 require([
   "dojo/promise/all",
   "dojo/Deferred",
