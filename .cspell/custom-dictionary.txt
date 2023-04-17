@@ -13,6 +13,7 @@ Expando
 GeoPortal
 geoportals
 GRDO
+Ison
 JsDelivr
 JURDSG
 JURFIPSDSG
