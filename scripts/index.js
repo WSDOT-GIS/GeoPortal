@@ -1,3 +1,6 @@
+/* eslint-env amd */
+/* global gaTracker */
+
 var wsdot;
 
 require([

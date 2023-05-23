@@ -147,18 +147,6 @@
       }
     }
   },
-  "basemaps": [
-    {
-      "id": "wsdotBasemap",
-      "title": "WSDOT Basemap",
-      "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
-      "layers": [
-        {
-          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-        }
-      ]
-    }
-  ],
   "basemapsToRemove": [
     "Terrain with Labels",
     "Topographic",

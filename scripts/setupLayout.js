@@ -1,4 +1,4 @@
-/*global define, wsdot*/
+/*global $, wsdot*/
 define([
   "dojo/on",
   "dijit/registry",
@@ -24,7 +24,7 @@ define([
 
   "arcgis-rest-lrs-ui",
   "scripts/customLegend.js"
-], function(
+], function (
   on,
   registry,
   TabContainer,
@@ -56,7 +56,7 @@ define([
     // Create layer info objects from the layer IDs, to be used with the Legend constructor.
     layerInfos = layerIds.map(layerId => {
       const layer = wsdot.map.getLayer(layerId);
-      return {layer: layer, title: layerId};
+      return { layer: layer, title: layerId };
     });
 
     return layerInfos;
@@ -143,19 +143,37 @@ define([
       "mapControlsPane"
     );
     tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
-
+    
     function setupAirspaceCalculator() {
-      wsdot.airspaceCalculator = new AirspaceCalculatorArcGisUI.default(
-        "//data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirspaceCalculatorSurface/ImageServer"
-      );
-      document
-        .getElementById("airspaceCalculator")
-        .appendChild(wsdot.airspaceCalculator.form);
+      function createEmailAnchor() {
+        const email = ["David.Ison", "wsdot.wa.gov"].join("@");
+  
+        const a = document.createElement("a");
+        a.text = email;
+        a.href = `mailto:${email}`;
+        const mailtoSearch = [
+          ["subject", "Airspace Calculator"],
+          ["body", "Write your message here."]
+        ].map(([key, value]) => [key, encodeURIComponent(value)].join("=")).join("&");
+        a.href = [a.href, mailtoSearch].join("?");
+        return a;
+      }
+      const acElement = document.getElementById("airspaceCalculator");
+      const frag = document.createDocumentFragment();
+
+      frag.append("The USGS elevation service that this tool relied upon has been discontinued, therefore this tool is out of order until further notice. ",
+      "For assistance with airspace and obstacle concerns in the vicinity of airports, ",
+      "please contact David Ison, Aviation Planner, ",
+      "WSDOT Aviation Division at ", createEmailAnchor());
+
+      const p = document.createElement("p");
+      p.append(frag);
+
+      acElement.append(p);
+
     }
 
-    (function(tabOrder) {
-      var i, l, name, contentPane;
-
+    (function (tabOrder) {
       /**
        * Gets the alternate title for this tab name from the config file.
        * If no alternative is available, the input string is returned.
@@ -182,8 +200,8 @@ define([
         document.getElementById("tabs").appendChild(div);
       }
 
-      for (i = 0, l = tabOrder.length; i < l; i += 1) {
-        name = tabOrder[i];
+      for (let i = 0, l = tabOrder.length; i < l; i += 1) {
+        const name = tabOrder[i];
         if (/Layers/i.test(name)) {
           tabs.addChild(
             new ContentPane(
@@ -211,10 +229,11 @@ define([
             "toolsTab"
           );
           tabs.addChild(toolsTab);
-        } else if (/Airspace\s*Calculator/i.test(name)) {
+        }
+        else if (/Airspace\s*Calculator/i.test(name)) {
           // Add elements that will become the tab to the dom.
           createAirspaceCalcDom();
-          contentPane = new ContentPane(
+          const contentPane = new ContentPane(
             {
               title: "Airspc. Calc.",
               tooltip: "Airspace Calculator (Prototype)",
@@ -238,17 +257,17 @@ define([
       toolsAccordion.addChild(
         new ContentPane({ title: "State Route Milepost", id: "lrsTools" }, div)
       );
-      on.once(registry.byId("lrsTools"), "show", function() {
+      on.once(registry.byId("lrsTools"), "show", function () {
         var elcUI = new ArcGisElcUI(div, {
           url: wsdot.config.routeLocatorUrl
         });
         elcUI.setMap(wsdot.map);
 
-        elcUI.on("elc-results-not-found", function() {
+        elcUI.on("elc-results-not-found", function () {
           alert("No results found");
         });
 
-        elcUI.on("non-geometry-results-returned", function(e) {
+        elcUI.on("non-geometry-results-returned", function (e) {
           console.log("non geometry results found", e);
           var elcResult = e.elcResults[0];
           var output = [];
@@ -257,7 +276,7 @@ define([
             "ArmCalcReturnMessage",
             "ArmCalcEndReturnMessage"
           ];
-          properties.forEach(function(name) {
+          properties.forEach(function (name) {
             if (elcResult[name]) {
               output.push([name, elcResult[name]].join(": "));
             }
@@ -266,7 +285,7 @@ define([
           alert(output);
         });
 
-        elcUI.on("elc-results-found", function(e) {
+        elcUI.on("elc-results-found", function (e) {
           var point;
           if (e && e.graphics && e.graphics.length > 0) {
             point = e.graphics[0].geometry;
@@ -344,7 +363,7 @@ define([
             label: "Print",
             showLabel: false,
             iconClass: "dijitEditorIcon dijitEditorIconPrint",
-            onClick: function() {
+            onClick: function () {
               tabs.selectChild(toolsTab);
               toolsAccordion.selectChild(printPane);
             }
@@ -376,7 +395,7 @@ define([
       const container = document.createElement("div");
       container.id = "zoomToContainer"
       document.getElementById("toolsAccordion").appendChild(container);
-      const contentPane = new ContentPane({title: "Zoom To", id: "zoomToContainer"}, container);
+      const contentPane = new ContentPane({ title: "Zoom To", id: "zoomToContainer" }, container);
       toolsAccordion.addChild(contentPane);
 
       if (wsdot.map) {
@@ -389,7 +408,7 @@ define([
     }
 
     // Look in the configuration to determine which tools to add and in which order.
-    (function(tools) {
+    (function (tools) {
       // Setup a default value for tools if it hasn't been specified.
       if (!tools) {
         tools = ["lrs", "search", "buffer", "draw"];

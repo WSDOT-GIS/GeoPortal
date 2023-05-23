@@ -120,16 +120,6 @@
   },
   "basemaps": [
     {
-      "id": "wsdotBasemap",
-      "title": "WSDOT Basemap",
-      "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
-      "layers": [
-        {
-          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
-        }
-      ]
-    },
-    {
       "id": "functionalClassBasemap",
       "title": "Functional Class",
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
@@ -156,7 +146,6 @@
     "Colored Pencil Map",
     "Watercolour Map"
   ],
-  "initialBasemap": "WSDOT Basemap",
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
     "Political Boundaries": [

@@ -391,6 +391,7 @@ a.disclaimer {
   padding-right: 0.5em;
 }
 
+/*
 #airspaceCalculator label.error {
   font-size: 0.7em;
   color: Red;
@@ -400,6 +401,7 @@ a.disclaimer {
 #airspaceCalculator input.error {
   border-color: Red;
 }
+*/
 
 .placeholder {
   color: #aaa;
