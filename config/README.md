@@ -275,7 +275,7 @@ This value can either be an object or an array.  If an object is provided, each 
 					"layerType": "esri.layers.ArcGISTiledMapServiceLayer",
 					"url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MetroPlanningAreas/MapServer",
 					"options": {
-						"id": "MPA"
+						"id": "MPO – Planning Area Boundary"
 					}
 				},
 				{

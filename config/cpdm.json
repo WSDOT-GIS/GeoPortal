@@ -216,7 +216,7 @@
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
         "options": {
-          "id": "MPA",
+          "id": "MPO – Planning Area Boundary",
           "opacity": 0.75
         }
       },
