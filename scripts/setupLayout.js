@@ -18,8 +18,6 @@ define([
 
   "AirspaceCalculator/ArcGisUI",
   "RouteLocator/elc-ui/ArcGisElcUI",
-  "BufferUI",
-  "BufferUI/BufferUIHelper",
   "ArcGisPrintUI",
 
   "arcgis-rest-lrs-ui",
@@ -40,8 +38,6 @@ define([
   GraphicsLayer,
   AirspaceCalculatorArcGisUI,
   ArcGisElcUI,
-  BufferUI,
-  BufferUIHelper,
   ArcGisPrintUI,
   arcgisRestLrsUI
 ) {
@@ -300,36 +296,6 @@ define([
       });
     }
 
-    function setupBuffer() {
-      function removeUnits() {
-        // Remove unwanted units
-        var select = wsdot.bufferUI.root.querySelector("select[name=unit]");
-        var unitOptions = select.querySelectorAll("option");
-        var keepUnitsRe = /^((Meter)|(SurveyMile)|(SurveyFoot))$/i;
-        var option, i, l;
-        for (i = 0, l = unitOptions.length; i < l; i += 1) {
-          option = unitOptions[i];
-          if (!keepUnitsRe.test(option.dataset.name)) {
-            option.parentElement.removeChild(option);
-          }
-        }
-      }
-
-      var div = document.createElement("div");
-      div.id = "bufferPane";
-      // Do not create the BufferUI unless dataset is supported.
-      if (div.dataset) {
-        wsdot.bufferUI = new BufferUI(div);
-        removeUnits();
-      } else {
-        div.textContent = "Buffer tool not available in this browser.";
-      }
-      document.getElementById("toolsAccordion").appendChild(div);
-      toolsAccordion.addChild(
-        new ContentPane({ title: "Buffer", id: "bufferPane" }, div)
-      );
-    }
-
     function setupDraw() {
       var div = document.createElement("div");
       div.id = "drawPane";
@@ -411,7 +377,7 @@ define([
     (function (tools) {
       // Setup a default value for tools if it hasn't been specified.
       if (!tools) {
-        tools = ["lrs", "search", "buffer", "draw"];
+        tools = ["lrs", "search", "draw"];
       }
       for (const tool of tools) {
         if (/lrs/i.test(tool)) {
@@ -420,8 +386,6 @@ define([
           setupFeatureSelects();
         } else if (/airspace\s?Calculator/i.test(tool)) {
           setupAirspaceCalculator();
-        } else if (/buffer/i.test(tool)) {
-          setupBuffer();
         } else if (/draw/i.test(tool)) {
           setupDraw();
         } else if (/crab/i.test(tool)) {

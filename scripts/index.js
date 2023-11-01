@@ -20,7 +20,6 @@ require([
   "dijit/form/Button",
   "esri/dijit/Scalebar",
   "esri/SpatialReference",
-  "BufferUI/BufferUIHelper",
   "setup",
 
   "dijit/form/RadioButton",
@@ -64,7 +63,6 @@ require([
   Button,
   Scalebar,
   SpatialReference,
-  BufferUIHelper,
   setup
 ) {
   "use strict";
@@ -421,21 +419,6 @@ require([
 
         // Set the scale.
         setScaleLabel();
-
-        // Show the buffer tools form when the buffer link is clicked.
-        (function() {
-          var bufferLink;
-          if (wsdot.bufferUI) {
-            BufferUIHelper.attachBufferUIToMap(wsdot.map, wsdot.bufferUI);
-            bufferLink = wsdot.map.infoWindow.domNode.querySelector("a.buffer");
-            bufferLink.addEventListener("click", function() {
-              registry.byId("toolsAccordion").selectChild("bufferPane");
-              registry.byId("tabs").selectChild("toolsTab");
-
-              document.querySelector(".buffer-ui [name=distances]").focus();
-            });
-          }
-        })();
 
         utils.addGoogleStreetViewLink(wsdot.map.infoWindow);
         utils.makeDraggable(wsdot.map.infoWindow);
