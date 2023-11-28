@@ -1,7 +1,7 @@
-import { IFeature, IFeatureSet } from "@esri/arcgis-rest-common-types";
+import type { IFeature, IFeatureSet } from "@esri/arcgis-rest-types";
 import {
   createFeatureSelect,
-  IFeatureSelect,
+  type IFeatureSelect,
 } from "@wsdot/arcgis-feature-select";
 import Popup from "esri/dijit/Popup";
 import Extent from "esri/geometry/Extent";

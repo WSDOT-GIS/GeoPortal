@@ -1,4 +1,3 @@
-// import { IFeature, IFeatureSet } from "@esri/arcgis-rest-common-types";
 import Button = require("dijit/form/Button");
 import GraphicsLayer = require("esri/layers/GraphicsLayer");
 import EsriMap = require("esri/map");

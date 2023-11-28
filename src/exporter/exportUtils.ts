@@ -1,4 +1,4 @@
-import { IFeature, IFeatureSet } from "@esri/arcgis-rest-common-types";
+import type { IFeature, IFeatureSet } from "@esri/arcgis-rest-types";
 import { arcgisToGeoJSON } from "@esri/arcgis-to-geojson-utils";
 import { webMercatorToGeographic } from "esri/geometry/webMercatorUtils";
 import FeatureLayer from "esri/layers/FeatureLayer";
