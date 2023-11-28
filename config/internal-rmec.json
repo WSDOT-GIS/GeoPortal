@@ -200,14 +200,14 @@
       },
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "https://fortress.wa.gov/ecy/gisprod/arcgis/rest/services/NHD/NHD_Cache/MapServer",
+        "url": "https://gis.ecology.wa.gov/hosting/rest/services/Hosted/TileLayer_NHD/MapServer",
         "options": {
           "id": "National Hydrology Dataset (NHD)"
         }
       },
       {
         "layerType": "esri.layers.ArcGISTiledMapServiceLayer",
-        "url": "https://fortress.wa.gov/ecy/gisprod/arcgis/rest/services/NHD/NHD_Label_Cache/MapServer",
+        "url": "https://gis.ecology.wa.gov/hosting/rest/services/Hosted/TileLayer_NHD_Label/MapServer",
         "options": {
           "id": "National Hydrology Dataset (NHD) Labels"
         }
