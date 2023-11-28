@@ -109,6 +109,16 @@
   },
   "basemaps": [
     {
+      "id": "wsdotBasemap",
+      "title": "WSDOT Basemap",
+      "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
+      "layers": [
+        {
+          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+        }
+      ]
+    },
+    {
       "id": "functionalClassBasemap",
       "title": "Functional Class",
       "thumbnailUrl": "images/FCBasemapThumbnail.png",
@@ -119,6 +129,7 @@
       ]
     }
   ],
+  "initialBasemap": "WSDOT Basemap",
   "basemapsToRemove": [
     "Navigation",
     "Streets (Night)",
@@ -170,7 +181,7 @@
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MetroPlanningAreas/MapServer",
         "options": {
-          "id": "MPA"
+          "id": "MPO – Planning Area Boundary"
         }
       },
       {

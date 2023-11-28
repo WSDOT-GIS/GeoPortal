@@ -147,6 +147,18 @@
       }
     }
   },
+  "basemaps": [
+    {
+      "id": "wsdotBasemap",
+      "title": "WSDOT Basemap",
+      "thumbnailUrl": "images/WsdotBasemapThumbnail.jpg",
+      "layers": [
+        {
+          "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+        }
+      ]
+    }
+  ],
   "basemapsToRemove": [
     "Terrain with Labels",
     "Topographic",
@@ -232,7 +244,7 @@
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MetroPlanningAreas/MapServer",
         "options": {
-          "id": "MPA"
+          "id": "MPO – Planning Area Boundary"
         }
       },
       {

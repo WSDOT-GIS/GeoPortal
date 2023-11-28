@@ -1,5 +1,5 @@
 {
-  "pageTitle": "Maintenance Environmental Mapping",
+  "pageTitle": "Maintenance Environmental Mapping (test)",
   "helpUrl": "https://data.wsdot.wa.gov/geospatial/userguides/GeoPortalUserGuide.pdf",
   "printUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/EnvironmentalMappingPrintService/GPServer/Export Web Map",
   "enableIdentify": true,
@@ -179,7 +179,7 @@
     "Environmental": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/EnvironmentalMapping/MapServer",
+        "url": "https://hqolymgis30s.wsdot.loc:6443/arcgis/rest/services/Environmental/EnvironmentalMapping/MapServer",
         "options": {
           "id": "Environmental Mapping"
         }
@@ -237,7 +237,7 @@
       },
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Environmental/MajorPublicLands/MapServer",
+        "url": "https://hqolymgis30s.wsdot.loc:6443/arcgis/rest/services/Environmental/MajorPublicLands/MapServer",
         "options": {
           "id": "Major Public Lands"
         }
