@@ -246,6 +246,13 @@
     "WSDOT Boundaries": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/FacilitiesData/MapServer",
+        "options": {
+          "id": "Facilities"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MaintenanceAreas/MapServer",
         "options": {
           "id": "Maintenance Areas"
