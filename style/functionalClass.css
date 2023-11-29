@@ -63,3 +63,12 @@ img[src$="blank.gif"]
 {
     display: none;
 }
+
+table.legend {
+    margin-bottom: 1em;
+}
+
+table.legend > caption {
+    border-bottom: 1px solid black;
+    font-weight: bold;
+}

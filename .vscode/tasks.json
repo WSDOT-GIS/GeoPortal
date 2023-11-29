@@ -32,6 +32,20 @@
 			],
 			"label": "lint",
 			"detail": "Runs linters"
+		},
+		{
+			"type": "npm",
+			"script": "watch",
+			"group": "build",
+			"icon": {
+				"id": "eye-watch",
+				"color": "terminal.ansiGreen"
+			},
+			"problemMatcher": [
+				"$ts-webpack-watch"
+			],
+			"label": "Webpack watch",
+			"detail": "webpack -w"
 		}
 	]
 }
