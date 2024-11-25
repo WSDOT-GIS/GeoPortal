@@ -1,26 +1,35 @@
 import { BasemapLayerOptions } from "esri";
-import esriBasemaps from "esri/basemaps";
 import Basemap = require("esri/dijit/Basemap");
 import BasemapGallery = require("esri/dijit/BasemapGallery");
 import BasemapLayer = require("esri/dijit/BasemapLayer");
 import EsriMap = require("esri/map");
 
-// Setup the basemap gallery
-function setupBasemapGallery(map: EsriMap, config: any) {
-  const basemaps = config.basemaps as any[];
 
-  basemaps.forEach((bm) => {
-    bm.layers = bm.layers.map((l: BasemapLayerOptions) => {
-      return new BasemapLayer(l);
-    });
-  });
+/**
+ * @function setupBasemapGallery
+ * @description Sets up the BasemapGallery control.
+ * @param {EsriMap} map The Esri map object.
+ * @param {config.Config} config The application's configuration object.
+ * @returns {void} Nothing.
+ */
+function setupBasemapGallery(map: EsriMap, config: config.Config) {
+  const f = ({
+    layers: layerPropertiesList,
+    ...basemapProperties
+  }: config.Basemap) => {
+    // Create BasemapLayer objects from config.
+    const layers = layerPropertiesList.map(
+      (l: BasemapLayerOptions) => new BasemapLayer(l)
+    );
+    return new Basemap({ ...basemapProperties, layers });
+  };
+  
+  // Create basemap definitions in config into Basemap objects.
+  const basemaps = config.basemaps.map(f);
 
   const basemapGallery = new BasemapGallery(
     {
-      // Default "showArcGISBasemaps" to true if omitted in config.
-      showArcGISBasemaps: config.hasOwnProperty("showArcGISBasemaps")
-        ? config.showArcGISBasemaps
-        : true,
+      showArcGISBasemaps: true,
       map,
       basemaps,
       basemapIds: map.layerIds,
@@ -33,7 +42,7 @@ function setupBasemapGallery(map: EsriMap, config: any) {
   // Remove the unwanted default basemaps as defined in config.js (if any are defined).
   basemapGallery.on("load", () => {
     /** Gets a list IDs corresponding to basemaps that should be removed, as defined in the config file.
-     * @returns {string[]} The names of the basemaps.
+     * @returns The names of the basemaps.
      */
     function getBasemapsByLabel() {
       const outputIds = new Array<string>();
@@ -85,7 +94,6 @@ function setupBasemapGallery(map: EsriMap, config: any) {
     }
   });
 
-  // tslint:disable-next-line:no-console
   basemapGallery.on("basemap gallery error", console.error);
 
   // Check for an existing customLegend
@@ -93,6 +101,8 @@ function setupBasemapGallery(map: EsriMap, config: any) {
   if (customLegend) {
     customLegend.setBasemapGallery(basemapGallery);
   }
+
+  return basemapGallery;
 }
 
 export = setupBasemapGallery;

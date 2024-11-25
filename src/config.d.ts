@@ -49,7 +49,7 @@ declare namespace config {
     url: string;
     visibleLayers: number[];
     options: {
-      [key: string]: any;
+      [key: string]: unknown;
       visible?: boolean;
       id: string;
     };

@@ -8,10 +8,10 @@ type layerInput = config.Layer[] | { [key: string]: config.Layer[] };
  * into an array of layer definitions.
  *
  * If the input is an array, the output will simply be the input.
- * @param {(Object)|(Object[])} layers
- * @returns {Object[]}
+ * @param layers - layer definitions
+ * @returns an array of layers
  */
-function getLayerArray(layers: layerInput) {
+function getLayerArray(layers: layerInput): config.Layer[] | null {
   let output: config.Layer[] | null = null;
   if (layers) {
     if (layers instanceof Array) {
@@ -19,7 +19,7 @@ function getLayerArray(layers: layerInput) {
     } else if (typeof layers === "object") {
       output = [];
       for (const propName in layers) {
-        if (layers.hasOwnProperty(propName)) {
+        if (Object.prototype.hasOwnProperty.call(layers, propName)) {
           let value = layers[propName];
           value = getLayerArray(value)!;
           if (value) {
