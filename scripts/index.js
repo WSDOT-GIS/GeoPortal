@@ -3,6 +3,29 @@
 
 var wsdot;
 
+(() => {
+
+  if (window.localStorage.getItem("doNotShowDeprecationDialog") === "true") {
+    return;
+  }
+
+  const dialog = document.getElementById("deprecationDialog");
+  if (!dialog || !(dialog instanceof HTMLDialogElement)) {
+    console.error("The dialog element could not be found.", dialog ?? "null");
+    return;
+  }
+
+  dialog.addEventListener("close", () => {
+    const doNotShowAgain = dialog.querySelector("#doNotShowAgain");
+    if (doNotShowAgain.checked) {
+      window.localStorage.setItem("doNotShowDeprecationDialog", "true");
+    }
+  });
+
+  dialog.showModal();
+
+})();
+
 require([
   "dojo/ready",
   "dojo/on",

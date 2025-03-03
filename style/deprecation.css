@@ -1,0 +1,12 @@
+#deprecationDialog {
+    h1 {
+        margin: 0;
+    }
+    form {
+        text-align: center;
+
+        button {
+            width: 100%
+        }
+    }
+}

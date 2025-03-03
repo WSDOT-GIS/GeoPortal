@@ -21,12 +21,13 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="//js.arcgis.com/3.29/esri/css/esri.css" />
-    <link rel="stylesheet" href="//js.arcgis.com/3.29/dijit/themes/claro/claro.css" />
-    <link href="//js.arcgis.com/3.28/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
-    <link href="//code.jquery.com/ui/1.9.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://js.arcgis.com/3.29/esri/css/esri.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/3.29/dijit/themes/claro/claro.css" />
+    <link href="https://js.arcgis.com/3.29/dojox/layout/resources/ExpandoPane.css" rel="stylesheet" />
+    <link href="https://code.jquery.com/ui/1.9.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 
-    <link rel="shortcut icon" href="//images.wsdot.wa.gov/favicon.ico" />
+    <link rel="shortcut icon" href="https://images.wsdot.wa.gov/favicon.ico" />
+    <link rel="stylesheet" href="style/deprecation.css" />
     <link href="style/locationInfo.css" rel="stylesheet" />
     <link href="style/index.css" rel="stylesheet" />
     <link href="style/identify.css" rel="stylesheet" />
@@ -37,11 +38,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0/AirspaceCalculator.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/url-polyfill@1.0.13/url-polyfill.js"
-        integrity="sha256-e+hAGufphbbuCqIYU4lboVyYAcGqJavUrUkCyAx30zw=" crossorigin="anonymous"></script>
-
-    <!-- <script src="node_modules/@bower_components/polyfills/url.js"></script>
-    <script src="node_modules/@bower_components/polyfills/html.js"></script> -->
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -73,6 +69,22 @@
     <noscript>
         You need to have JavaScript enabled on your browser to view this page.
     </noscript>
+
+    <dialog id="deprecationDialog">
+        <h1>Deprecation Notice</h1>
+        <p>
+            The framework that this application is based on has been
+            <a
+                href="https://www.esri.com/arcgis-blog/products/js-api-arcgis/developers/arcgis-api-for-javascript-version-3-x-retirement/">retired
+                by its vendor</a>,
+            so please be aware that certain features may no longer function correctly.
+        </p>
+        <p>We are currently working on creating updated apps to replace this one.</p>
+        <form method="dialog">
+            <input type="checkbox" id="doNotShowAgain" /><label for="doNotShowAgain">Do not show again</label>
+            <button autofocus>OK</button>
+        </form>
+    </dialog>
     <div id="mainContainer" style="display: none">
         <header id="headerPane">
             <div class="table">
@@ -84,19 +96,19 @@
                     <div>
                         <ul>
                             <li>
-                                <a href="//www.wsdot.wa.gov/news/" target="_blank">News</a>
+                                <a href="https://www.wsdot.wa.gov/news/" target="_blank">News</a>
                             </li>
                             <li>
-                                <a href="//www.wsdot.wa.gov/employment/" target="_blank">Employment</a>
+                                <a href="https://www.wsdot.wa.gov/employment/" target="_blank">Employment</a>
                             </li>
                             <li>
-                                <a href="//www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a>
+                                <a href="https://www.wsdot.wa.gov/goodtogo/" target="_blank">Good To Go!</a>
                             </li>
                             <li>
-                                <a href="//www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a>
+                                <a href="https://www.wsdot.wa.gov/contact/" target="_blank">Contact Us</a>
                             </li>
                             <li>
-                                <a href="//www.wsdot.wa.gov/" target="_blank">WSDOT Home</a>
+                                <a href="https://www.wsdot.wa.gov/" target="_blank">WSDOT Home</a>
                             </li>
                             <li>
                                 <form id="otherGeoportalsForm" action="">
@@ -124,7 +136,7 @@
                 <div>
                     <!-- row -->
                     <span class="wsdot-link">
-                        <a href="//www.wsdot.wa.gov/" target="_blank">
+                        <a href="https://www.wsdot.wa.gov/" target="_blank">
                             <img id="wsdotLogo" src="images/acronymlogo.svg" alt="WSDOT Logo" width="240" height="39" />
                         </a>
                     </span>
@@ -171,9 +183,6 @@
         </div>
     </div>
     <script>
-        alert(
-            "The framework that this application is based on has been retired by its vendor, so please be aware that certain features may no longer function correctly.\n\nWe are currently working on creating updated apps to replace this one."
-        );
         (function (root) {
             /**
              * Creates a URL for a resource on https://cdn.jsdelivr.net.
@@ -280,7 +289,9 @@
             window.dojoConfig = dojoConfig;
         }(location.pathname.replace(/\/[^\/]*$/, "")));
     </script>
-    <script src="https://js.arcgis.com/3.29/"></script>
+    <script src="https://js.arcgis.com/3.29/"
+        integrity="sha512-vUVn4kw6uFPA7SQrD7XlqvijUugcRh0JV99wddIGGP7mWlsosR8w9O7dZ9H0HqKvzuWa6+3r8WX1GBP72RFwCA=="
+        crossorigin="anonymous"></script>
     <script src="//code.jquery.com/jquery-1.8.2.min.js"
         integrity="sha384-l10q0KevFKaWjM51a48/4kN/8K9eceNwDujvaLruHFQb0DaXS+ZPIsocHad/G5f4"
         crossorigin="anonymous"></script>
