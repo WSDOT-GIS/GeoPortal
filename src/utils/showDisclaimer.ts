@@ -22,7 +22,7 @@ export default function showDisclaimer(
     configName = "";
   }
 
-  const settingName = "GeoportalAggreedToDisclaimer" + configName;
+  const settingName = "GeoportalAgreedToDisclaimer" + configName;
 
   const previousDisclaimerText = window.localStorage.getItem(settingName);
 
@@ -31,68 +31,34 @@ export default function showDisclaimer(
     disclaimerUrl !== undefined &&
     (showEvenIfAlreadyAgreed || disclaimerUrl !== null)
   ) {
-    const deferred = new Promise<string | null>(function (resolve, reject) {
-      try {
-        const request = new XMLHttpRequest();
-        request.open("get", disclaimerUrl);
-        request.onloadend = function () {
-          if (this.status === 200) {
-            if (
-              !showEvenIfAlreadyAgreed &&
-              this.response === previousDisclaimerText
-            ) {
-              resolve(null);
-            } else {
-              resolve(this.response);
-            }
-          } else {
-            reject(this.statusText);
-          }
-        };
-        request.send();
-      } catch (err) {
-        reject(err);
-      }
-    });
+    (async () => {
+      const disclaimerHtml = await fetch(disclaimerUrl).then((response) =>
+        response.text()
+      );
 
-    deferred.then(
-      function (disclaimerHtml) {
-        if (disclaimerHtml) {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(disclaimerHtml, "text/html");
-          const titleElement = doc.querySelector("head > title");
-          const title = titleElement ? titleElement.textContent : "Disclaimer";
-          const bodyElement = doc.querySelector("body");
-          const body = bodyElement!.innerHTML;
-          $("<div>")
-            .html(body)
-            .dialog({
-              title,
-              modal: true,
-              closeOnEscape: false,
-              width: 600,
-              buttons: {
-                Accept() {
-                  $(this).dialog("close");
-                },
-              },
-              open(/*event, ui*/) {
-                // Remove the close button from the disclaimer form.
-                const form = $(this).parent();
-                $("a.ui-dialog-titlebar-close", form).remove();
-              },
-              close(/*event, ui*/) {
-                // Store the current date with the setting.
-                window.localStorage.setItem(settingName, disclaimerHtml);
-                $(this).dialog("destroy").remove();
-              },
-            } as any);
-        }
-      },
-      function (error) {
-        console.error("Error creating disclaimer", error);
+      if (disclaimerHtml && disclaimerHtml !== previousDisclaimerText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(disclaimerHtml, "text/html");
+        const titleElement = doc.querySelector("head > title");
+        const title = titleElement?.textContent ?? "Disclaimer";
+        const body = doc.querySelector("body")?.innerHTML;
+
+        const innerHtml = `
+              <h1>${title}</h1>
+              ${body}
+                <form method="dialog">
+                    <input type="checkbox" id="doNotShowAgain" /><label for="doNotShowAgain">Do not show again</label>
+                    <button autofocus>OK</button>
+                </form>`;
+
+        const dialog = document.createElement("dialog");
+        dialog.innerHTML = innerHtml;
+
+        document.body.appendChild(dialog);
+
+        dialog.showModal();
       }
-    );
+    })();
 
     // Load the content into a div.  Only when the source page has loaded do invoke the dialog constructor.
     // This is to ensure that the dialog is centered on the page.

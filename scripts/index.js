@@ -301,7 +301,6 @@ require([
       setupExtents();
 
       // Create the map, using options defined in the query string (if available).
-      ////wsdot.config.mapOptions = QueryStringManager.getMapInitOptions(wsdot.config.mapOptions);
       if (wsdot.config.mapOptions.extent) {
         // Convert the extent definition in the options into an Extent object.
         wsdot.config.mapOptions.extent = new jsonUtils.fromJson(
@@ -330,87 +329,6 @@ require([
 
       setupLayout.setupLegend();
 
-      // // Once the map loads, update the extent or zoom to match query string.
-      // (function(ops) {
-      //   if (ops.zoom && ops.center) {
-      //     wsdot.map.on("load", function() {
-      //       wsdot.map.centerAndZoom(ops.center, ops.zoom);
-      //     });
-      //   }
-      // })(QueryStringManager.getMapInitOptions());
-
-      /**
-       * @typedef {Object} LabelingInfoItem
-       * @property {string} labelExpression - JSON string representation of array of field names.
-       * @property {string} labelPlacement - e.g., "always-horizontal"
-       * @property {TextSymbol} symbol
-       * @property {Boolean} useCodedValues
-       */
-
-      // /** Add a LabelLayer if a text layer has that defined.
-      //  * @param {Object} result
-      //  * @param {Layer} result.layer
-      //  * @param {LabelingInfoItem[]} result.layer.labelingInfo
-      //  * @param {Map} result.target
-      //  * @param {Error} [result.error]
-      //  */
-      // wsdot.map.on("layer-add-result", function(result) {
-      //   var layer, labelingInfo, liItem, labelLayer, renderer;
-
-      //   /**
-      //    * Moves the label layer's list item below that of the layer it is labelling.
-      //    */
-      //   function moveLabelLayerListItem() {
-      //     var labelLayerCB, labelLayerLI, layerCB, layerLI;
-      //     labelLayerCB = document.querySelector(
-      //       "[data-layer-id='" + labelLayer.id + "']"
-      //     );
-      //     labelLayerLI = labelLayerCB.parentElement;
-      //     layerCB = document.querySelector(
-      //       "[data-layer-id='" + layer.id + "']"
-      //     );
-      //     layerLI = layerCB.parentElement;
-      //     layerLI.parentElement.insertBefore(labelLayerLI, layerLI.nextSibling);
-      //   }
-
-      //   /**
-      //    * @param {string} labelExpression - E.g., "[WRIA_NR]"
-      //    * @returns {string} - E.g., "${WRIA_NR}"
-      //    */
-      //   function labelExpressionToTextExpression(labelExpression) {
-      //     var re = /\[([^\]]+)/i,
-      //       match,
-      //       output;
-      //     match = labelExpression.match(re);
-      //     if (match) {
-      //       output = "${" + match[1] + "}";
-      //     }
-      //     return output;
-      //   }
-
-      //   if (result.layer && result.layer.labelingInfo) {
-      //     layer = result.layer;
-      //     labelingInfo = layer.labelingInfo;
-      //     if (labelingInfo.length) {
-      //       if (labelingInfo.length >= 1) {
-      //         liItem = labelingInfo[0];
-      //         labelLayer = new LabelLayer({
-      //           id: [layer.id, "(label)"].join(" ")
-      //         });
-      //         renderer = new SimpleRenderer(liItem.symbol);
-      //         labelLayer.addFeatureLayer(
-      //           layer,
-      //           renderer,
-      //           labelExpressionToTextExpression(liItem.labelExpression),
-      //           liItem
-      //         );
-      //         wsdot.map.addLayer(labelLayer);
-      //         moveLabelLayerListItem();
-      //       }
-      //     }
-      //   }
-      // });
-
       // Setup the basemap gallery
       setup.setupBasemapGallery(wsdot.map, wsdot.config);
 
@@ -418,8 +336,6 @@ require([
 
       // Setup Zoom Button
       wsdot.map.on("load", function() {
-
-
         if (wsdot.airspaceCalculator) {
           wsdot.airspaceCalculator.map = wsdot.map;
 
