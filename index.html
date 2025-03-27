@@ -37,7 +37,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@wsdot/arcgis-js-draw-ui@1.2.0/arcgis-draw-ui.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.0/AirspaceCalculator.min.css" rel="stylesheet" />
     <script>
         // Setup Google Analytics, but not if user has specified that they don't want to be tracked.
         (function (dnt) {
@@ -76,9 +75,6 @@
         <p>Please use <a href="https://forms.office.com/g/4ysCwMKHQc">this survey</a> to let us know how the WSDOT
             GeoPortal supports the work you do.</p>
         <p>Your help is greatly appreciated!</p>
-
-        <h2>Removal of Airport and Habitat Connectivity configurations</h2>
-        <p>The Airport and Habitat Connectivity configurations will be removed on April 7, 2025.</p>
         <form method="dialog">
             <input type="checkbox" id="doNotShowAgain" /><label for="doNotShowAgain">Do not show again</label>
             <button autofocus>OK</button>
@@ -114,7 +110,6 @@
                                     <label>Other GeoPortals</label>
                                     <select name="config">
                                         <option value="" selected="selected">Default</option>
-                                        <option value="airport">Airport</option>
                                         <option value="crmp">County Road Milepost Locator Map</option>
                                         <option value="FunctionalClass">Functional Class</option>
                                         <!-- Options with a 'data-url' attribute will redirect to the specified URL. -->
@@ -123,7 +118,6 @@
                                             Fish
                                             Passage Barriers</option>
                                         <optgroup label="internal">
-                                            <option value="internal-habitat-connectivity">Habitat Connectivity</option>
                                             <option value="internal-rmec">Maintenance Environmental Mapping</option>
                                         </optgroup>
                                     </select>
@@ -248,11 +242,6 @@
                         name: "usgs-ned",
                         location: "https://cdn.jsdelivr.net/npm/usgs-ned@3.0.2",
                         main: "usgsNed"
-                    },
-                    {
-                        name: "AirspaceCalculator",
-                        location: "https://cdn.jsdelivr.net/npm/airspace-calculator@2.1.1",
-                        main: "AirspaceCalculator.min"
                     },
                     {
                         name: "dms",

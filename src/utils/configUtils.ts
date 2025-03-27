@@ -72,41 +72,11 @@ export function getVisibleLayerIdsFromConfig(layers: layerInput): string[] {
 }
 
 /**
- * An error that occurs while attempting to read a configuration
- * from the config URL parameter.
- */
-export class ConfigError extends Error {
-  /**
-   *
-   * @param configName Name of the configuration. This will be the value of the "config" url search parameter, if present.
-   * @param configUrl
-   */
-  constructor(public configName?: string, public configUrl?: string) {
-    super(
-      `Invalid config parameter: ${configName || "[no name]"}. ${
-        configUrl ? `url: ${configUrl}` : ""
-      }`
-    );
-  }
-}
-
-/**
  * Gets the configuration data from either the file specified in the URL search
  * or from the default config file.
  */
 export async function getConfig(): Promise<config.Config> {
-  const { name, url } = getConfigNameAndUrl();
+  const { url } = getConfigNameAndUrl();
   const response = await fetch(url);
-  if (response.ok) {
-    return await response.json();
-  } else {
-    // Detect the error that occurs if the user tries to access the airport
-    // power user setting via config query string parameter.
-    // Redirect to the aspx page which will prompt for a log in.
-    const bodyText =
-      "<p class='ui-state-error ui-corner-all'>Error: Invalid <em>config</em> parameter.</p>";
-    document.body.removeAttribute("class");
-    document.body.innerHTML = bodyText;
-    throw new ConfigError(name, url);
-  }
+  return await response.json();
 }

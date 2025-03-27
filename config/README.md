@@ -2,9 +2,9 @@
 
 The configuration files for the GeoPortal are located in the `config` folder.  A configuration can be specified from the URL using the `config` query string parameter. If the `config` parameter is absent, `config/config.js` will be used.
 
-In the following example, the configuration file that will be used is `config/airport.js`.
+In the following example, the configuration file that will be used is `config/crmp.js`.
 
-```http://www.wsdot.wa.gov/data/tools/geoportal/?config=airport```
+```http://www.wsdot.wa.gov/data/tools/geoportal/?config=crmp```
 
 ## Showing a disclaimer
 
@@ -46,14 +46,6 @@ The location of the help page.
 "helpUrl": "help/navigation.html",
 ```
 
-## airspaceCalculatorUrl
-
-Provide this value if you want the Airspace Calculator to be available.
-
-```json
-"airspaceCalculatorUrl":"https://data.wsdot.wa.gov/arcgis/rest/services/AirportMapApplication/AirspaceCalculator/GPServer/Calculate%20Penetrations",
-```
-
 ## tabContainerOptions
 
 Used to control the layout of the tab container. This value is optional. ([More info](http://dojotoolkit.org/api/jsdoc/HEAD/dijit.layout.TabContainer)).
@@ -71,7 +63,6 @@ Determines the order that the tabs will appear in. The example below shows all a
 ```json
 "tabOrder": [
     "Layers",
-    "Airspace Calculator",
     "Tools",
     "Basemap",
     "Legend"
@@ -206,4 +197,3 @@ The ArcGIS Server Geometry server that will be used when a geometry server is re
 ## queryTasks
 
 The "queryTasks" properties are used to populate the drop-down lists of zoom extents.
-

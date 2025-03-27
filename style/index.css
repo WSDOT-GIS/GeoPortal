@@ -391,18 +391,6 @@ a.disclaimer {
   padding-right: 0.5em;
 }
 
-/*
-#airspaceCalculator label.error {
-  font-size: 0.7em;
-  color: Red;
-  display: block;
-}
-
-#airspaceCalculator input.error {
-  border-color: Red;
-}
-*/
-
 .placeholder {
   color: #aaa;
 }
@@ -434,34 +422,6 @@ abbr {
 .ui-printer-extra-parameters>select {
   display: block;
   width: 100%;
-}
-
-.airport-disclaimer {
-  font-family: Century Gothic, sans-serif;
-  font-size: 12pt;
-}
-
-.airport-disclaimer .important,
-.airport-disclaimer h1 {
-  text-align: center;
-}
-
-.airport-disclaimer em {
-  font-style: normal;
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-.airport-disclaimer h1 {
-  font-size: 14pt;
-  font-weight: bold;
-}
-
-.airport-disclaimer .important {
-  font-family: Arial, sans-serif;
-  font-family: 14pt;
-  text-transform: uppercase;
-  font-weight: bold;
 }
 
 #locationButtons {
@@ -553,10 +513,6 @@ table.habitat-connectivity tr:nth-child(even) {
 .metadata-list-container {
   max-height: 300px;
   overflow: auto;
-}
-
-.airspace-calculator label {
-  display: block;
 }
 
 .esriPopupWrapper .title {

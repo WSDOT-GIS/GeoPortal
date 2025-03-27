@@ -336,24 +336,6 @@ require([
 
       // Setup Zoom Button
       wsdot.map.on("load", function() {
-        if (wsdot.airspaceCalculator) {
-          wsdot.airspaceCalculator.map = wsdot.map;
-
-          wsdot.airspaceCalculator.form.addEventListener(
-            "add-from-map",
-            function() {
-              wsdot.map.disablePopups();
-            }
-          );
-
-          wsdot.airspaceCalculator.form.addEventListener(
-            "draw-complete",
-            function() {
-              wsdot.map.enablePopups();
-            }
-          );
-        }
-
         setup.setupSearchControls(wsdot.map, config.queryTasks);
 
         // Set the scale.

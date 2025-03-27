@@ -16,7 +16,6 @@ define([
   "esri/tasks/query",
   "esri/layers/GraphicsLayer",
 
-  "AirspaceCalculator/ArcGisUI",
   "RouteLocator/elc-ui/ArcGisElcUI",
   "ArcGisPrintUI",
 
@@ -36,7 +35,6 @@ define([
   QueryTask,
   Query,
   GraphicsLayer,
-  AirspaceCalculatorArcGisUI,
   ArcGisElcUI,
   ArcGisPrintUI,
   arcgisRestLrsUI
@@ -140,35 +138,6 @@ define([
     );
     tabs = new TabContainer(wsdot.config.tabContainerOptions || null, "tabs");
     
-    function setupAirspaceCalculator() {
-      function createEmailAnchor() {
-        const email = ["David.Ison", "wsdot.wa.gov"].join("@");
-  
-        const a = document.createElement("a");
-        a.text = email;
-        a.href = `mailto:${email}`;
-        const mailtoSearch = [
-          ["subject", "Airspace Calculator"],
-          ["body", "Write your message here."]
-        ].map(([key, value]) => [key, encodeURIComponent(value)].join("=")).join("&");
-        a.href = [a.href, mailtoSearch].join("?");
-        return a;
-      }
-      const acElement = document.getElementById("airspaceCalculator");
-      const frag = document.createDocumentFragment();
-
-      frag.append("The USGS elevation service that this tool relied upon has been discontinued, therefore this tool is out of order until further notice. ",
-      "For assistance with airspace and obstacle concerns in the vicinity of airports, ",
-      "please contact David Ison, Aviation Planner, ",
-      "WSDOT Aviation Division at ", createEmailAnchor());
-
-      const p = document.createElement("p");
-      p.append(frag);
-
-      acElement.append(p);
-
-    }
-
     (function (tabOrder) {
       /**
        * Gets the alternate title for this tab name from the config file.
@@ -186,14 +155,6 @@ define([
           output = wsdot.config.alternateTabTitles[title];
         }
         return output || title;
-      }
-
-      function createAirspaceCalcDom() {
-        var div = document.createElement("div");
-        div.id = "airspaceCalculatorTab";
-        div.innerHTML =
-          "<section><h1>Airspace Calculator</h1><div id='airspaceCalculator'></div></section>";
-        document.getElementById("tabs").appendChild(div);
       }
 
       for (let i = 0, l = tabOrder.length; i < l; i += 1) {
@@ -225,20 +186,6 @@ define([
             "toolsTab"
           );
           tabs.addChild(toolsTab);
-        }
-        else if (/Airspace\s*Calculator/i.test(name)) {
-          // Add elements that will become the tab to the dom.
-          createAirspaceCalcDom();
-          const contentPane = new ContentPane(
-            {
-              title: "Airspc. Calc.",
-              tooltip: "Airspace Calculator (Prototype)",
-              id: "airspaceCalculatorTab"
-            },
-            "airspaceCalculatorTab"
-          );
-          tabs.addChild(contentPane);
-          setupAirspaceCalculator();
         }
       }
     })(wsdot.config.tabOrder || ["Layers", "Legend", "Basemap", "Tools"]);
@@ -384,8 +331,6 @@ define([
           setupLrsControls();
         } else if (/search/i.test(tool)) {
           setupFeatureSelects();
-        } else if (/airspace\s?Calculator/i.test(tool)) {
-          setupAirspaceCalculator();
         } else if (/draw/i.test(tool)) {
           setupDraw();
         } else if (/crab/i.test(tool)) {

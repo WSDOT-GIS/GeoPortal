@@ -16,7 +16,6 @@ Configuration
 #### config ####
 Use the *config* parameter to specify a configuration other than the default. The currently supported configurations are listed below.  This value is case-insensitive.
 
-* airport
 * config
 * Freight
 * FunctionalClass
