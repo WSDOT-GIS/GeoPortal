@@ -1,7 +1,10 @@
-#deprecationDialog {
+.disclaimer-dialog {
     h1 {
         margin: 0;
+        text-align: center;
     }
+
+
     form {
         text-align: center;
 
