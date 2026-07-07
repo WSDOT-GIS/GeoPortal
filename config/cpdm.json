@@ -211,21 +211,6 @@
         "options": {
           "id": "Legislative Districts"
         }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer",
-        "options": {
-          "id": "MPO – Planning Area Boundary",
-          "opacity": 0.75
-        }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer",
-        "options": {
-          "id": "RTPO"
-        }
       }
     ],
     "Transportation Features": [
