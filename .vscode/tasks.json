@@ -2,6 +2,20 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Build",
+			"detail": "Run npm \"prepare\" script",
+			"type": "npm",
+			"script": "prepare",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"icon": {
+				"id": "build",
+				"color": "terminal.ansiCyan"
+			}
+		},
+		{
 			"type": "npm",
 			"script": "install",
 			"group": "build",
