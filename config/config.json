@@ -159,12 +159,12 @@
   "initialBasemap": "WSDOT Basemap",
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
-    "Political Boundaries": [
+    "Boundaries": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
+        "url": "https://hqolymgis43p:6443/arcgis/rest/services/Shared/PoliAdminBndryData/MapServer",
         "options": {
-          "id": "City Limits"
+          "id": "Political Administrative Boundaries"
         }
       },
       {
@@ -195,22 +195,6 @@
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/InterchangeDrawings/MapServer",
         "options": {
           "id": "Interchange Drawings"
-        }
-      }
-    ],
-    "WSDOT Boundaries": [
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MaintenanceAreas/MapServer",
-        "options": {
-          "id": "Maintenance Areas"
-        }
-      },
-      {
-        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/RegionBoundaries/MapServer",
-        "options": {
-          "id": "Region Boundaries"
         }
       }
     ],
