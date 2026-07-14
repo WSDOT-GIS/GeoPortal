@@ -159,12 +159,12 @@
   "initialBasemap": "WSDOT Basemap",
   "routeLocatorUrl": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe",
   "layers": {
-    "Boundaries": [
+    "Political Boundaries": [
       {
         "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-        "url": "https://hqolymgis43p:6443/arcgis/rest/services/Shared/PoliAdminBndryData/MapServer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/CityLimits/MapServer",
         "options": {
-          "id": "Political Administrative Boundaries"
+          "id": "City Limits"
         }
       },
       {
@@ -187,6 +187,20 @@
         "options": {
           "id": "Legislative Districts"
         }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/PoliAdminBndryData/MapServer/4",
+        "options": {
+          "id": "MPO – Planning Area Boundary"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/PoliAdminBndryData/MapServer/3",
+        "options": {
+          "id": "RTPO"
+        }
       }
     ],
     "Design": [
@@ -195,6 +209,22 @@
         "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/InterchangeDrawings/MapServer",
         "options": {
           "id": "Interchange Drawings"
+        }
+      }
+    ],
+    "WSDOT Boundaries": [
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/MaintenanceAreas/MapServer",
+        "options": {
+          "id": "Maintenance Areas"
+        }
+      },
+      {
+        "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
+        "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/RegionBoundaries/MapServer",
+        "options": {
+          "id": "Region Boundaries"
         }
       }
     ],
