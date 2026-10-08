@@ -163,7 +163,7 @@
         "Context Classification": [
             {
                 "layerType": "esri.layers.ArcGISDynamicMapServiceLayer",
-                "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Scratch/Context_Classification/MapServer",
+                "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Active_Transportation/Land_Use_Context_Classification/MapServer",
                 "options": {
                     "id": "Context Classification",
                     "visible": true
