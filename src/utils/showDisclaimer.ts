@@ -1,12 +1,14 @@
 // tslint:disable:only-arrow-functions max-line-length no-console
 
 /**
- * Shows the disclaimer dialog if the configuration contains a disclaimer.  If the dialog is shown, a jQuery object containing the dialog is returned.
+ * Shows the disclaimer dialog if the configuration contains a disclaimer.
+ * If the dialog is shown, a jQuery object containing the dialog is returned.
+ * @param disclaimerUrl - URL of the disclaimer HTML
  * @param showEvenIfAlreadyAgreed - Set this to true if you want to force the disclaimer to be shown even if there is a cookie indicating the user has already agreed.
  */
 export default async function showDisclaimer(
   disclaimerUrl: string,
-  showEvenIfAlreadyAgreed?: boolean
+  showEvenIfAlreadyAgreed?: boolean,
 ) {
   // Get the configuration name from the query string.
   const re = /\bconfig=([^&]+)/i;
@@ -25,13 +27,17 @@ export default async function showDisclaimer(
 
   const previousDisclaimerText = window.localStorage.getItem(settingName);
 
+  if (!disclaimerUrl) {
+    disclaimerUrl = "disclaimers/config/index.html"
+  }
+
   // Show the disclaimer if there is no cookie indicating that the user has seen it before.
   if (
     disclaimerUrl !== undefined &&
     (showEvenIfAlreadyAgreed || disclaimerUrl !== null)
   ) {
     const disclaimerHtml = await fetch(disclaimerUrl).then((response) =>
-      response.text()
+      response.text(),
     );
 
     if (disclaimerHtml && disclaimerHtml !== previousDisclaimerText) {

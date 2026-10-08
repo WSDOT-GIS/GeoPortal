@@ -1,5 +1,6 @@
 {
     "pageTitle": "WSDOT GeoPortal",
+    "disclaimer": "disclaimers/context-classification/index.html",
     "helpUrl": "https://data.wsdot.wa.gov/geospatial/userguides/GeoPortalUserGuide.pdf",
     "enableIdentify": true,
     "mapOptions": {
